@@ -95,7 +95,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.isVerifyingSendBack}}
-  @title={{t "delete-agendaitem"}}
+  @title={{t "send-back-to-submitter"}}
   @message={{this.deleteWarningText}}
   @onConfirm={{fn this.verifySendBackToSubmitter @agendaitem}}
   @onCancel={{this.toggleIsVerifyingSendBack}}
@@ -104,7 +104,21 @@
   @alert={{true}}
   @disabled={{this.isSendingBackToSubmitter}}
   @loading={{this.isSendingBackToSubmitter}}
-/>
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-send-back"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "sendBackToSubmitterComment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>
 
 {{#if this.showVPModal}}
   <Agenda::Agendaitem::SendToVpModal

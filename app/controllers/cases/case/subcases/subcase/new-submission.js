@@ -62,6 +62,19 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     addObject(this.newDraftPieces, newVersion);
   };
 
+  onDeletePiece = async (piece, previousPiece) => {
+    const index = this.pieces.indexOf(piece);
+    if (index > -1) {
+      if (previousPiece) {
+        this.pieces[index] = previousPiece;
+      } else {
+        this.pieces.splice(index, 1);
+      }
+      this.pieces = [...this.pieces];
+      removeObject(this.newDraftPieces, piece);
+    }
+  };
+
   uploadPiece = async (file) => {
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
@@ -209,7 +222,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     if (this.originalSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
       meeting = await this.store.queryOne('meeting', {
-        'filter[:has:plannedStart]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+        'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
         'filter[submissions][:id:]': this.originalSubmission.id
       });
     }

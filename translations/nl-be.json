@@ -1399,8 +1399,8 @@
   "add-new-case": "Nieuw dossier toevoegen",
   "search-on-case-name": "Zoek op dossier naam",
   "notifications-submission": "Notificaties",
-  "notification-for-submission-and-approval": "Notificatie voor indiening en goedkeuring",
-  "notification-for-ikw-group": "Notificatie naar de IKW-groep",
+  "notification-for-submission-and-approval": "Notificatie voor de secretarie en de kabinetschefs",
+  "notification-for-ikw-group": "Notificatie naar de IKW/KC-groep",
   "add-emails": "E-mailadressen toevoegen",
   "additional-information": "Aanvullende informatie",
   "additional-information-for-ikw-group": "Aanvullende informatie voor de IKW-groep",
@@ -1445,5 +1445,7 @@
   "no-submission-notification-addresses-selected": "Geen notificatieadressen gekozen",
   "submission-history": "Historiek",
   "this-submission-is-an-update-title": "Deze indiening betreft een update",
-  "this-submission-is-an-update": "Bij aanvaarding zullen de documenten en ministers van de bestaande procedurestap worden aangepast."
+  "this-submission-is-an-update": "Bij aanvaarding zullen de documenten en ministers van de bestaande procedurestap worden aangepast.",
+  "draft-piece-delete": "Ingediend document verwijderen",
+  "delete-draft-piece-message": "Bent u zeker dat u dit document wilt verwijderen? Deze actie verwijdert enkel het nieuwe document, eventuele vorige versies blijven ongewijzigd."
 }

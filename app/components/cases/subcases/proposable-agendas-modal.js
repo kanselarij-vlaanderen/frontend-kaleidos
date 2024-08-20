@@ -24,6 +24,17 @@ export default class ProposableAgendasModal extends Component {
     this.selectedAgenda = this.args.defaultAgenda;
   }
 
+  get disablePutOnAgenda() {
+    if (this.selectedAgenda && this.agendas) {
+      for (const agenda of this.agendas) {
+        if (agenda.id === this.selectedAgenda.id) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   @task
   *loadAgendas() {
     const dateOfToday = subWeeks(new Date, 1).toISOString();
