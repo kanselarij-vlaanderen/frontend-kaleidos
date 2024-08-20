@@ -11,8 +11,10 @@
         @itemStructure={{hash label="fullName"}}
         @selectedItems={{this.selectedCurrentMinisters}}
         @didUpdate={{this.onChangeSelectedCurrentMinisters}}
+        @mandatoryItem={{if @disableMinisterCheckbox (await this.submitterMandatee.person)}}
         @layout="grid"
         @disabled={{@disabled}}
+        @itemDisabled={{@disableMinisterCheckbox}}
       />
       {{#if (user-may "add-past-mandatees")}}
         <AuButton
@@ -55,7 +57,7 @@
                   data-test-mandatee-selector-panel-submitter-radio
                   @name="submitter"
                   @checked={{eq this.submitterMandatee.id mandatee.id}}
-                  @disabled={{@disabled}}
+                  @disabled={{or @disableSubmitter @disabled}}
                   {{on "click" (fn this.onChangeSubmitter mandatee)}}
                 />
                 <AuLabel class="au-u-padding-bottom-none">

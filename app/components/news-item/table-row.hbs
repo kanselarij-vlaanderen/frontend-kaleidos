@@ -1,13 +1,12 @@
 <tr data-test-table-row-news-item-row class={{this.class}}>
   <td
     data-test-table-row-news-item-row-agendaitem-number
-    class="lt-cell align-left"
   >
     {{@agendaitem.number}}
   </td>
   <td
     data-test-table-row-news-item-row-title-content
-    class="lt-cell align-left auk-table__col--7"
+    class="auk-table__col--7"
   >
     {{#if @newsItem}}
       <div class="auk-u-mb-2">
@@ -31,7 +30,7 @@
       </p>
     {{/if}}
   </td>
-  <td class="lt-cell align-left">
+  <td>
     {{#each (await @agendaitem.mandatees) as |mandatee|}}
       {{mandatee.person.fullName}}<br />
     {{else}}
@@ -40,7 +39,7 @@
       </p>
     {{/each}}
   </td>
-  <td class="lt-cell align-left">
+  <td>
     <AuCheckbox
       data-test-table-row-news-item-row-checkbox-in-newsletter={{true}}
       @checked={{@newsItem.inNewsletter}}
@@ -52,14 +51,14 @@
       @onChange={{perform this.toggleInNewsletterFlag}}
     />
   </td>
-  <td class="lt-cell align-left">
+  <td>
     {{#if @newsItem.modified}}
       {{datetime @newsItem.modified}}
     {{else}}
       -
     {{/if}}
   </td>
-  <td class="lt-cell align-left">
+  <td>
     <AuButtonGroup class="auk-o-flex--no-wrap">
       <AuButton
         @skin="naked"
@@ -124,7 +123,7 @@
 </tr>
 
 {{#if this.isOpenEditView}}
-  <tr class="lt-row lt-expanded-row">
+  <tr class="auk-table__row--expanded">
     <td colspan="6">
       <div class="auk-container auk-container--center">
         <NewsItem::EditPanel

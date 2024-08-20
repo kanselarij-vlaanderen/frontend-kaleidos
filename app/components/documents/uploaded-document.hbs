@@ -27,6 +27,19 @@
             @selected={{this.selectedDocumentType}}
           />
         </AuFormRow>
+        {{#if @allowEditPieceAccessLevel}}
+          <AuFormRow>
+            <AuLabel>{{t "confidentiality-level"}}</AuLabel>
+            <Utils::AccessLevelSelector
+              @selected={{@piece.accessLevel}}
+              @allowClear={{false}}
+              @disableInternSecretarie={{@disableInternSecretarie}}
+              @onChange={{set @piece "accessLevel"}}
+              @displayField="label"
+              @sortField="position"
+            />
+          </AuFormRow>
+        {{/if}}
       {{/unless}}
     </div>
   {{/if}}

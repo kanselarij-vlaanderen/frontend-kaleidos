@@ -110,6 +110,7 @@
     @didDeletePiece={{this.setPreviousPiecesFromAgendaitem}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
+    @allowEditing={{user-may "manage-documents"}}
   />
 {{/if}}
 
@@ -142,6 +143,7 @@
       <div class="upload-container">
         {{#each this.sortedNewPieces as |piece|}}
           <Documents::UploadedDocument
+            @allowEditPieceAccessLevel={{true}}
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @onDelete={{perform this.deletePiece piece}}

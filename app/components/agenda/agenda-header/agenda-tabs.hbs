@@ -32,4 +32,9 @@
       {{t "minutes"}}
     </Auk::Tab>
   {{/if}}
+  {{#if (and (user-may "treat-and-accept-submissions") this.isEnabledCabinetSubmissions)}}
+    <Auk::Tab @route="agenda.submissions">
+      {{t "submissions"}}
+    </Auk::Tab>
+  {{/if}}
 </Auk::Tabs>

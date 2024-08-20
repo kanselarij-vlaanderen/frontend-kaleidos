@@ -79,6 +79,10 @@
       <AuButton
         data-test-proposable-agendas-modal-save-without-agenda
         @skin="secondary"
+        @loading={{or
+          this.loadAgendas.isRunning
+          (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)
+        }}
         {{on "click" this.saveSubcase}}
       >
         {{t "save-without-agenda"}}
@@ -87,7 +91,7 @@
     <AuButton
       data-test-proposable-agendas-modal-place-on-agenda
       @skin="primary"
-      @disabled={{not this.selectedAgenda}}
+      @disabled={{this.disablePutOnAgenda}}
       @loading={{or
         this.loadAgendas.isRunning
         (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)

@@ -2,14 +2,15 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { debounce } from '@ember/runloop';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class CasesIndexController extends Controller {
   // Services
   @service router;
   @service store;
+  @service currentSession;
 
   queryParams = [
     {
@@ -57,18 +58,10 @@ export default class CasesIndexController extends Controller {
   @tracked submitters = [];
   @tracked caseFilter = null;
   @tracked isLoadingModel;
-  @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
 
   constructor() {
     super(...arguments);
-    window.addEventListener('resize', () => debounce(this, this.updateToggleableFilters, 150));
-    this.updateToggleableFilters();
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    window.removeEventListener('resize', this.updateToggleableFilters);
   }
 
   @action
@@ -86,13 +79,13 @@ export default class CasesIndexController extends Controller {
   }
 
   @action
-  updateToggleableFilters() {
-    this.hasToggleableFilters = (window.innerWidth < 768) ? true : false;
-  }
-
-  @action
   onToggleFilters(open) {
     this.filtersOpen = open;
+  }
+
+  get mayShowSubmissionsTab() {
+    const canView = this.currentSession.may('view-submissions');
+    return isEnabledCabinetSubmissions() && canView;
   }
 
   setCaseFilter = (value) => (this.caseFilter = value);

@@ -6,6 +6,17 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
+      {{#if (and this.loadData.isIdle this.maySubmitNewDocuments)}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @icon="plus"
+            @route="cases.case.subcases.subcase.new-submission"
+          >
+            {{t "submit-new-documents"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
           {{#if this.hasActions}}
