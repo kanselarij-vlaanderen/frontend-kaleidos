@@ -228,14 +228,12 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     }
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
-    const title = this.originalSubmission ? this.originalSubmission.title : this.model.title;
-    const subcaseName = this.originalSubmission ? this.originalSubmission.subcaseName : this.model.subcaseName;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
       shortTitle: trimText(this.model.shortTitle),
-      title: trimText(title),
-      subcaseName,
+      title: trimText(this.model.title),
+      subcaseName: this.model.subcaseName,
       confidential: this.model.confidential,
       subcase: this.model,
       type,

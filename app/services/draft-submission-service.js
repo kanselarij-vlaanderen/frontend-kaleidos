@@ -41,8 +41,12 @@ export default class DraftSubmissionService extends Service {
       .reverse();
   };
 
-  getLatestTreatedBy = async(submission) => {
-    const statusChangeActivities = await this.getStatusChangeActivities(submission);
+  getLatestTreatedBy = async(submission, currentlyBeingTreated=false) => {
+    let statusChangeActivities = await this.getStatusChangeActivities(submission);
+    if (currentlyBeingTreated) {
+      // use only the latest activity
+      statusChangeActivities = [statusChangeActivities.at(0)];
+    }
     const treatedByActivity = statusChangeActivities?.filter((a) => a.status.get('uri') === constants.SUBMISSION_STATUSES.IN_BEHANDELING)
       .at(0);
     const user = await treatedByActivity?.startedBy;

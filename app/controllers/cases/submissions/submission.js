@@ -116,7 +116,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
   reloadHistory = task(async () => {
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(this.model);
-    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(this.model);
+    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(this.model, true);
   });
 
   reloadPieces = task(async () => {

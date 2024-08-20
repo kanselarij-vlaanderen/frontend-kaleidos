@@ -18,7 +18,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('view-submissions')) {
-      this.router.transitionTo('cases');
+      this.router.transitionTo('cases.index');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
@@ -111,7 +111,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.newDraftPieces = sortedNewPieces;
 
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
-    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission);
+    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
 
     return submission;
   }

@@ -348,7 +348,7 @@ export default class SubmissionHeaderComponent extends Component {
     const pieces = await this.args.submission.pieces;
     await Promise.all(pieces.map(async (piece) => deletePiece(piece)));
 
-    const statusChangeActivities = await this.args.submission.hasMany('statusChangeActivities').reload();
+    const statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(this.args.submission);
     await statusChangeActivities?.map(async (activity) => {
       await activity.destroyRecord();
     });
