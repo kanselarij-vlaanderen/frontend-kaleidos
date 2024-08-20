@@ -2,6 +2,7 @@ import ApplicationSerializer from './application';
 
 const SKIP_SERIALIZED = [
   'meeting', // if design agenda A, this gets set to null by dossierbeheerder
+  'statusChangeActivities',
 ];
 
 const SKIP_ATTRIBUTES = [

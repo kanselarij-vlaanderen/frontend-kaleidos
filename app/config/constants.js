@@ -204,7 +204,7 @@ export default {
     TERUGGESTUURD: "http://themis.vlaanderen.be/id/indieningstatus/b6e33771-665b-4af2-9f1d-41405d1a24d3",
     OPNIEUW_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b27cd825-72ae-44b0-b1ea-9dafdebe4e85",
     UPDATE_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/11c6fd4b-c4d9-4cd4-9a8a-2fa2820e9353",
-    AANVAARD: "http://themis.vlaanderen.be/id/indieningstatus/dd4f1819-a70d-453f-95cb-ab5ade98563e",
+    BEHANDELD: "http://themis.vlaanderen.be/id/indieningstatus/dd4f1819-a70d-453f-95cb-ab5ade98563e",
   },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {

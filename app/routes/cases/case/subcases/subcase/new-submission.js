@@ -8,6 +8,7 @@ import { TrackedArray } from 'tracked-built-ins';
 export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service store;
   @service currentSession;
+  @service router;
 
   pieces;
   defaultAccessLevel;
@@ -21,7 +22,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
-      this.router.transitionTo('cases.submissions');
+      if (this.currentSession.may('view-submissions')) {
+        return this.router.transitionTo('cases.submissions');
+      }
+      return this.router.transitionTo('cases');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,

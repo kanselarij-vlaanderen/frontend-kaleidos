@@ -24,6 +24,7 @@ export default class AgendaitemControls extends Component {
   @service parliamentService;
   @service newsletterService;
   @service cabinetMail;
+  @service draftSubmissionService;
 
   @tracked isVerifying = false;
   @tracked isVerifyingSendBack = false;
@@ -189,8 +190,8 @@ export default class AgendaitemControls extends Component {
   async verifySendBackToSubmitter(agendaitem) {
     this.isSendingBackToSubmitter = true;
     const submission = this.submissions.at(0);
-    await submission.updateStatus(
-      CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
+    await this.draftSubmissionService.updateSubmissionStatus(
+      submission, CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
       this.sendBackToSubmitterComment
     );
     await this.cabinetMail.sendBackToSubmitterMail(
@@ -201,7 +202,7 @@ export default class AgendaitemControls extends Component {
     const subcase = await submission.subcase;
     // If decisionmaking flow & case are new & they don't have other subcases
     //  → Delete
-    if (submission.title) {
+    if (submission.decisionmakingFlowTitle) {
       const decisionmakingFlow = await submission.decisionmakingFlow;
       const subcases = await decisionmakingFlow.hasMany('subcases').reload();
       if (subcases.length === 1 && subcases.at(0).id === subcase.id) {

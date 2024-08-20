@@ -9,7 +9,7 @@ const {
   OPNIEUW_INGEDIEND,
   UPDATE_INGEDIEND,
   TERUGGESTUURD,
-  AANVAARD,
+  BEHANDELD,
 } = CONSTANTS.SUBMISSION_STATUSES;
 
 export default class SubmissionStatusChangeActivityComponent extends Component {
@@ -21,12 +21,13 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
     [TERUGGESTUURD]: 'sent-back-on',
     [IN_BEHANDELING]: 'in-treatment-by-user-on',
     [UPDATE_INGEDIEND]: 'update-submitted-on',
-    [AANVAARD]: 'accepted-on',
+    [BEHANDELD]: 'treated-on',
   };
 
   get label() {
     const activity = this.args.activity;
-    const creatorName = this.args.creatorName;
+    const user = activity.belongsTo('startedBy').value();
+    const userName = `${user?.firstName} ${user?.lastName}`;
     const startedAt = activity.startedAt;
     const status = activity.belongsTo('status').value(); // Status should be loaded in parent
 
@@ -35,10 +36,6 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
     const date = dateFormat(startedAt, `dd-MM-yyyy`);
     const hour = dateFormat(startedAt, `HH:mm`);
     const comment = activity.comment ? `: '${activity.comment}'` : '';
-    let userName = creatorName;
-    if (status.uri === IN_BEHANDELING) {
-      userName = this.args.beingTreatedByName;
-    }
 
     const intlKey = this.intlKeyMap[status.uri];
     const label = intlKey
