@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /*
  * @argument subcase
@@ -11,6 +12,7 @@ import { task } from 'ember-concurrency';
 export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
+  @service currentSession;
   @service router;
   @service toaster;
   @service intl;
@@ -26,6 +28,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
+  @tracked meetingIsClosed = false;
 
   constructor() {
     super(...arguments);
@@ -33,11 +36,41 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.loadData.perform();
   }
 
+  get maySubmitNewDocuments() {
+    return isEnabledCabinetSubmissions() &&
+      this.loadData.isIdle &&
+      this.currentSession.may('create-submissions') &&
+      this.args.subcase.submissions?.length > 0 &&
+      !this.meetingIsClosed;
+  }
+
   @task
   *loadData() {
+    yield this.args.subcase.hasMany('submissions').reload();
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
+    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
+      const latestAgendaActivity = yield this.store.queryOne(
+        'agenda-activity',
+        {
+          'filter[subcase][:id:]': this.args.subcase.id,
+          sort: '-start-date',
+        }
+      );
+      if (latestAgendaActivity?.id) {
+        const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+          'filter[agenda-activity][:id:]': latestAgendaActivity.id,
+          'filter[:has-no:next-version]': 't',
+          sort: '-created',
+        });
+        const agenda = yield latestAgendaitem?.agenda;
+        const meeting = yield agenda?.meeting;
+        if (meeting) {
+          this.meetingIsClosed = true;
+        }
+      }
+    }
   }
 
   triggerDeleteCaseDialog() {
@@ -65,7 +98,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     yield decisionmakingFlow.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases');
+    this.router.transitionTo('cases.index');
   }
 
   @action

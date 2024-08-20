@@ -53,22 +53,27 @@
           {{t "send-to-VP"}}
         </AuButton>
       {{/if}}
-      {{#if
-        (and
-          (or (user-may "remove-approved-agendaitems") (await this.isDeletable))
-          this.isDesignAgenda
-          (user-may "manage-agendaitems")
-        )
-      }}
-        <AuButton
-          data-test-agendaitem-controls-action-delete
-          @skin="link"
-          @alert={{true}}
-          role="menuitem"
-          {{on "click" this.toggleIsVerifying}}
-        >
-          {{t "delete"}}
-        </AuButton>
+      {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda this.loadSubmissions.isIdle)}}
+        {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
+          <AuButton
+            @skin="link"
+            @alert={{true}}
+            role="menuitem"
+            {{on "click" this.toggleIsVerifyingSendBack}}
+          >
+            {{t "delete-and-send-back-to-submitter"}}
+          </AuButton>
+        {{else if (or (user-may "remove-approved-agendaitems") this.isDeletable)}}
+          <AuButton
+            data-test-agendaitem-controls-action-delete
+            @skin="link"
+            @alert={{true}}
+            role="menuitem"
+            {{on "click" this.toggleIsVerifying}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        {{/if}}
       {{/if}}
     </AuDropdown>
     {{!-- template-lint-enable require-context-role --}}
@@ -76,6 +81,7 @@
     <Auk::Loader />
   {{/if}}
 {{/if}}
+
 <ConfirmationModal
   @modalOpen={{this.isVerifying}}
   @title={{t "delete-agendaitem"}}
@@ -86,6 +92,34 @@
   @confirmIcon="trash"
   @alert={{true}}
 />
+
+<ConfirmationModal
+  @modalOpen={{this.isVerifyingSendBack}}
+  @title={{t "send-back-to-submitter"}}
+  @message={{this.deleteWarningText}}
+  @onConfirm={{fn this.verifySendBackToSubmitter @agendaitem}}
+  @onCancel={{this.toggleIsVerifyingSendBack}}
+  @confirmMessage={{t "delete"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+  @disabled={{this.isSendingBackToSubmitter}}
+  @loading={{this.isSendingBackToSubmitter}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-send-back"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "sendBackToSubmitterComment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>
+
 {{#if this.showVPModal}}
   <Agenda::Agendaitem::SendToVpModal
     @onClose={{this.onSendToVp}}

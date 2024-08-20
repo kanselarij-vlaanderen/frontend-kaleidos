@@ -4,10 +4,39 @@
   @onSetFilter={{this.setCaseFilter}}
   @caseFilter={{this.caseFilter}}
 />
-<AuMainContainer class="l-search-container {{if (and this.hasToggleableFilters this.filtersOpen) "auk-u-scroll-no-overflow"}}" as |m|>
+<AuMainContainer
+  class="l-search-container
+    {{if
+      (and (responsive "isMobile") this.filtersOpen)
+      "auk-u-scroll-no-overflow"
+    }}"
+  as |m|
+>
   <m.sidebar>
-    <div class="au-c-sidebar">
+    <div class="au-c-sidebar auk-u-overflow-initial">
       <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
+        <nav>
+          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
+            {{t "content"}}
+          </AuHeading>
+          {{#if this.mayShowSubmissionsTab}}
+          {{! if viewing submissions is not allowed, it doesn't make sense to add a singular tab for cases}}
+            <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
+              <Auk::Tab
+                @route="cases"
+                @current-when="cases.index"
+              >
+                {{t "cases"}}
+              </Auk::Tab>
+              <Auk::Tab
+                @route="cases.submissions"
+                @current-when="cases.submissions"
+              >
+                {{t "submissions"}}
+              </Auk::Tab>
+            </Auk::Tabs>
+          {{/if}}
+        </nav>
         <Auk::MobileFilters
           @toggleLabel="Filters"
           @toggleIcon="filter"
@@ -77,7 +106,7 @@
                     {{#each @model as |row|}}
                       {{! template-lint-disable no-invalid-interactive }}
                       <tr
-                        class="auk-u-text-align--center auk-table--clickable-rows"
+                        class="auk-table--clickable-rows"
                         {{on
                           "click"
                           (fn this.navigateToDecisionmakingFlow row)

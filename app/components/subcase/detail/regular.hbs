@@ -145,6 +145,7 @@
       <div class="upload-container">
         {{#each @newPieces as |piece|}}
           <Documents::UploadedDocument
+            @allowEditPieceAccessLevel={{true}}
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @onDelete={{perform @deletePiece piece}}
@@ -161,5 +162,6 @@
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
+    @allowEditing={{user-may "manage-documents"}}
   />
 {{/if}}

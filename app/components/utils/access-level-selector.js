@@ -17,10 +17,22 @@ export default class UtilsAccessLevelSelectorComponent extends Component {
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
    */
   get filter() {
+    let idFilter = {};
+    if (this.args.disableInternSecretarie) {
+      idFilter = {
+        ':id:': [
+          CONSTANTS.ACCESS_LEVEL_IDS.VERTROUWELIJK,
+          CONSTANTS.ACCESS_LEVEL_IDS.INTERN_REGERING,
+          CONSTANTS.ACCESS_LEVEL_IDS.INTERN_OVERHEID,
+          CONSTANTS.ACCESS_LEVEL_IDS.PUBLIEK,
+        ].join(',')
+      }
+    }
     return {
       'concept-schemes': {
         ':uri:': CONSTANTS.CONCEPT_SCHEMES.ACCESS_LEVELS,
-      }
+      },
+      ...idFilter
     }
   }
 }

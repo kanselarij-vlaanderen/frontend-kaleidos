@@ -21,6 +21,7 @@ module.exports = function (environment) {
       ENABLE_IMPERSONATION: '{{ENABLE_IMPERSONATION}}',
       ENABLE_DEBUG: '{{ENABLE_DEBUG}}',
       ENABLE_VLAAMS_PARLEMENT: '{{ENABLE_VLAAMS_PARLEMENT}}',
+      ENABLE_CABINET_SUBMISSIONS: '{{ENABLE_CABINET_SUBMISSIONS}}',
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -47,13 +48,14 @@ module.exports = function (environment) {
     plausible: {
       domain: '{{ANALYTICS_APP_DOMAIN}}',
       apiHost: '{{ANALYTICS_API_HOST}}',
-    }
+    },
   };
 
   if (environment === 'development') {
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
+    ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -69,6 +71,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
     ENV.APP.ENABLE_IMPERSONATION = true;
+    ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
@@ -79,6 +82,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
+    ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     ENV.APP.ENABLE_DEBUG = false;
   }
 

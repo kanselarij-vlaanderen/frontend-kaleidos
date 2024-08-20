@@ -1,0 +1,206 @@
+{{#if @model.shortTitle}}
+  {{page-title @model.shortTitle}}
+{{else}}
+  {{page-title (t "submission")}}
+{{/if}}
+
+<Submissions::OverviewHeader
+  @submission={{@model}}
+  @beingTreatedBy={{this.beingTreatedBy}}
+/>
+
+<Submission::Header
+  @submission={{@model}}
+  @previousSubcase={{this.previousSubcase}}
+  @hasActions={{this.mayEdit}}
+  @onStatusUpdated={{this.onStatusUpdated}}
+/>
+<div class="auk-scroll-wrapper__body">
+  {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "this-submission-is-an-update-title"}}
+    >
+      <p>{{t "this-submission-is-an-update"}}</p>
+    </AuAlert>
+  {{/if}}
+  <div class="auk-u-responsive-margin">
+
+    <div id="submission" class="auk-u-mb-4">
+      <Submission::DescriptionPanel
+        @submission={{@model}}
+        @mayEdit={{and this.mayEdit (not this.isUpdate)}}
+      />
+    </div>
+
+    <div class="auk-u-mb-4">
+      <Mandatees::MandateesPanel
+        @onSave={{this.saveMandateeData}}
+        @referenceDate={{@model.created}}
+        @submitter={{await @model.requestedBy}}
+        @mandatees={{this.mandatees}}
+        @allowEditing={{this.mayEdit}}
+        @disableMandatee={{this.disableMandatee}}
+        @disableSubmitter={{true}}
+      />
+    </div>
+
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      class="auk-u-mb-4"
+      @referenceDate={{@model.created}}
+      @governmentAreas={{@model.governmentAreas}}
+      @allowEditing={{and this.mayEdit (not this.isUpdate)}}
+      @subcase={{@model}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
+
+    <Cases::Submissions::Notifications
+      class="auk-u-mb-2"
+      @allowEditing={{this.mayEdit}}
+      @confidential={{@model.confidential}}
+      @approvalAddresses={{this.approvalAddresses}}
+      @approvalComment={{this.approvalComment}}
+      @notificationAddresses={{this.notificationAddresses}}
+      @notificationComment={{this.notificationComment}}
+      @onNotificationDataChanged={{this.onNotificationDataChanged}}
+      @onSaveNotificationData={{this.onSaveNotificationData}}
+    />
+
+    <div id="documents" class="auk-u-mb-4">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <div class="au-u-flex au-u-flex--spaced-small">
+                  <h4 class="auk-panel__title">
+                    {{t "documents"}}
+                  </h4>
+                </div>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              {{#if (and this.mayEdit this.pieces.length)}}
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    @skin="secondary"
+                    @icon="pencil"
+                    {{on "click" (toggle "isOpenBatchDetailsModal" this)}}
+                  >
+                    {{t "batch-edit"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              {{/if}}
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          {{#if this.pieces.length}}
+            <Documents::DraftDocumentCardList
+              @pieces={{this.pieces}}
+              @isEditable={{this.mayEdit}}
+              @hideAccessLevel={{false}}
+              @highlightedPieces={{this.newDraftPieces}}
+              @didDeleteContainer={{this.updateDraftPiecePositions}}
+            />
+          {{else}}
+            <div>
+              <AuAlert
+                @skin="info"
+                @icon="info-circle"
+                class="au-u-margin-bottom-none"
+              >
+                {{t "no-documents-yet"}}
+              </AuAlert>
+            </div>
+          {{/if}}
+        </Auk::Panel::Body>
+        {{#if this.mayEdit}}
+          <Auk::Panel::Footer>
+            <AuButton
+              @skin="naked"
+              @icon="plus"
+              class="au-u-padding-left-none"
+              {{on "click" (toggle "isOpenPieceUploadModal" this)}}
+            >
+              {{t "documents-add"}}
+            </AuButton>
+          </Auk::Panel::Footer>
+        {{/if}}
+      </Auk::Panel>
+    </div>
+
+    <div id="history">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-panel__title">
+                  {{t "submission-history"}}
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-bg-alt">
+          {{#if this.reloadHistory.isIdle}}
+            <ul class="vlc-status-timeline">
+              {{#each this.statusChangeActivities as |activity|}}
+                <Submission::StatusChangeActivity
+                  @activity={{activity}}
+                />
+              {{/each}}
+            </ul>
+          {{/if}}
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
+  </div>
+</div>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <Auk::Loader @message={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @isSubmission={{true}}
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @disableInternSecretarie={{true}}
+            @onDelete={{fn this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.newDraftPieces}}
+    @onCancel={{toggle "isOpenBatchDetailsModal" this}}
+    @onSave={{this.saveBatchDetails}}
+    @disableDelete={{true}}
+    @allowEditing={{this.mayEdit}}
+    @disableEditingPosition={{true}}
+  />
+{{/if}}

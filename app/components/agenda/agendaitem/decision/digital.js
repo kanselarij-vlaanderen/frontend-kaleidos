@@ -315,11 +315,14 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
-    const newBetreftContent = await generateBetreft(shortTitle,
+    const agendaitemType = await this.args.agendaitem.type;
+    const newBetreftContent = await generateBetreft(
+      shortTitle,
       title,
       this.args.agendaitem.isApproval,
       documents,
-      subcase?.subcaseName
+      subcase?.subcaseName,
+      agendaitemType,
     );
     if (newBetreftContent) {
       this.setBetreftEditorContent(

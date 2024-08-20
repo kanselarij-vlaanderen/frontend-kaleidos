@@ -114,6 +114,40 @@
           </div>
         </div>
       </Auk::Panel::Body>
+      <Auk::Panel::Body>
+        <div class="auk-content">
+          <h4>{{t "cabinet-submissions"}}</h4>
+          <div class="au-c-form">
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+                {{t "secretary-mail"}}
+              </AuLabel>
+              <AuInput
+                value={{this.model.cabinetSubmissionsSecretaryEmail}}
+                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsSecretaryEmail"))}}
+              />
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+                {{t "ikw"}}
+              </AuLabel>
+              <AuInput
+                value={{this.model.cabinetSubmissionsIkwEmail}}
+                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsIkwEmail"))}}
+              />
+            </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+                {{t "ikw-confidential"}}
+              </AuLabel>
+              <AuInput
+                value={{this.model.cabinetSubmissionsIkwConfidentialEmail}}
+                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsIkwConfidentialEmail"))}}
+              />
+            </AuFormRow>
+          </div>
+        </div>
+      </Auk::Panel::Body>
       <Auk::Panel::Footer>
         <Auk::Toolbar as |Toolbar|>
           <Toolbar.Group @position="left" as |Group|>

@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
-import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { TrackedArray } from 'tracked-built-ins';
 import { dropTask, task, all } from 'ember-concurrency';
 import {
@@ -28,6 +27,8 @@ export default class NewSubcaseForm extends Component {
   @service agendaService;
   @service plausible;
   @service intl;
+  @service documentService;
+  @service subcaseService;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -93,7 +94,7 @@ export default class NewSubcaseForm extends Component {
     this.subcaseType = subcaseType;
     this.checkSubcaseType();
   }
-  
+
   @action
   checkSubcaseType() {
     // We need to clear mandatees if they have been selected with this type of subcase
@@ -187,7 +188,7 @@ export default class NewSubcaseForm extends Component {
     let piecesFromSubmissions;
     if (this.args.latestSubcase) {
       // Previous "versions" of this subcase exist
-      piecesFromSubmissions = yield this.loadSubcasePieces(
+      piecesFromSubmissions = yield this.subcaseService.loadSubcasePieces(
         this.args.latestSubcase
       );
       yield this.copySubcaseProperties(
@@ -220,7 +221,6 @@ export default class NewSubcaseForm extends Component {
     if (this.pieces.length) {
       yield this.savePieces.perform();
     }
-
     if (meeting) {
       try {
         yield this.agendaService.putSubmissionOnAgenda(
@@ -243,23 +243,6 @@ export default class NewSubcaseForm extends Component {
       this.args.decisionmakingFlow.id,
       this.subcase.id
     );
-  }
-
-  async loadSubcasePieces(subcase) {
-    // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
-    // work since the inverse isn't present in API config
-    const submissionActivities = await this.store.query('submission-activity', {
-      'filter[subcase][:id:]': subcase.id,
-      'page[size]': PAGE_SIZE.CASES,
-      include: 'pieces', // Make sure we have all pieces, unpaginated
-    });
-    const pieces = [];
-    for (const submissionActivity of submissionActivities.slice()) {
-      let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.slice();
-      pieces.push(...submissionPieces);
-    }
-    return pieces;
   }
 
   @action
@@ -421,22 +404,9 @@ export default class NewSubcaseForm extends Component {
 
   @task
   *openProposableAgendaModal() {
-    if (this.pieces.length) {
-      // enforce all new pieces must have type on document container
-      const typesPromises = this.pieces.map(async (piece) => {
-        const container = await piece.documentContainer;
-        const type = await container.type;
-        return type;
-      });
-      const types = yield all(typesPromises);
-      if (types.some(type => !type)) {
-        this.toaster.error(
-          this.intl.t('document-type-required'),
-          this.intl.t('warning-title'),
-        );
-        return;
-      }
-    }
+    const typesRequired = yield this.documentService.enforceDocType(this.pieces);
+    if (typesRequired) return;
+
     this.showProposableAgendaModal = true;
   }
 }

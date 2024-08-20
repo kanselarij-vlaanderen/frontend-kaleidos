@@ -1,0 +1,9 @@
+{{page-title (t "new-submission")}}
+<Cases::NewSubmission
+  @decisionmakingFlow={{@model.decisionmakingFlow}}
+  @latestSubcase={{@model.latestSubcase}}
+  @disableEdit={{true}}
+  @submitter={{this.submitter}}
+  @mandatees={{this.mandatees}}
+  @onCancel={{this.onCancelSubmission}}
+/>
