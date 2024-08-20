@@ -112,7 +112,7 @@
               {{#each @model as |agenda|}}
                 {{! template-lint-disable no-invalid-interactive }}
                 <tr
-                  class="auk-u-text-align--center auk-table--clickable-rows"
+                  class="auk-table--clickable-rows"
                   {{on "click" (fn this.onClickRow agenda)}}
                 >
                   <td data-test-route-agendas-overview-row-title>

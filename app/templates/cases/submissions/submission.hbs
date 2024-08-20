@@ -6,6 +6,7 @@
 
 <Submissions::OverviewHeader
   @submission={{@model}}
+  @beingTreatedBy={{this.beingTreatedBy}}
 />
 
 <Submission::Header
@@ -149,8 +150,6 @@
               {{#each this.statusChangeActivities as |activity|}}
                 <Submission::StatusChangeActivity
                   @activity={{activity}}
-                  @creatorName={{this.creatorName}}
-                  @beingTreatedByName={{@model.beingTreatedBy.fullName}}
                 />
               {{/each}}
             </ul>

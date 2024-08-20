@@ -22,7 +22,9 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   @tracked filter = Object.freeze({
     type: 'subcase-name',
   });
+  @tracked isEditingSubcaseName = false;
   @tracked selectedShortcut;
+  @tracked subcaseName;
   @tracked subcaseType;
   @tracked agendaItemType;
   @tracked agendaItemTypes;
@@ -35,6 +37,8 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
 
   constructor() {
     super(...arguments);
+    this.subcaseName = this.args.submission.subcaseName;
+    this.isEditingSubcaseName = this.subcaseName?.length;
     this.loadDecisionmakingFlow.perform();
     this.loadSubcaseType.perform();
     this.loadAgendaItemType.perform();
@@ -45,7 +49,7 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   *loadDecisionmakingFlow() {
     this.decisionmakingFlow = yield this.args.submission.decisionmakingFlow;
     yield this.decisionmakingFlow?.case;
-    this.decisionmakingFlowTitle = yield this.args.submission.title;
+    this.decisionmakingFlowTitle = this.args.submission.decisionmakingFlowTitle;
   }
 
   @task
@@ -63,6 +67,18 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
     this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
+  }
+
+  @action
+  selectSubcaseName(shortcut) {
+    this.selectedShortcut = shortcut;
+    this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 
   @action
@@ -87,11 +103,14 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   async saveChanges() {
     this.isSaving = true;
     this.args.submission.decisionmakingFlow = this.decisionmakingFlow;
-    this.args.submission.title = this.decisionmakingFlowTitle;
+    this.args.submission.decisionmakingFlowTitle = this.decisionmakingFlowTitle;
 
     const trimmedShortTitle = trimText(this.args.submission.shortTitle);
+    const trimmedTitle = trimText(this.args.submission.title);
 
     this.args.submission.shortTitle = trimmedShortTitle;
+    this.args.submission.title = trimmedTitle;
+    this.args.submission.subcaseName = this.subcaseName;
     this.args.submission.type = this.subcaseType;
     this.args.submission.agendaItemType = this.agendaItemType;
     await this.args.submission.save();

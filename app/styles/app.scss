@@ -9,7 +9,6 @@
 
  // EXTERNAL PLUGINS
  @import 'ember-power-select';
- @import 'ember-vo-webuniversum-data-table';
 
 
 // BASE
@@ -51,7 +50,6 @@
 @import 'addon-overrides/ember-tag-input';
 @import 'addon-overrides/ember-tooltip';
 @import 'govflanders/components/_upload';
-@import 'wu/wu-legacy'; // partly copied from "lblod/ember-vo-webuniversum" npm package (needed for "lblod/ember-vo-webuniversum-data-table")
 
 
 // UTILITIES

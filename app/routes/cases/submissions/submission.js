@@ -8,6 +8,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   @service router;
   @service store;
   @service submissionService;
+  @service draftSubmissionService;
 
   newPieces;
   pieces;
@@ -17,7 +18,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('view-submissions')) {
-      this.router.transitionTo('index');
+      this.router.transitionTo('cases');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
@@ -40,9 +41,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       params.submission_id
     );
 
-    const status = await submission.status;
+    const status = await submission.belongsTo('status').reload;
     const subcase = await submission.subcase;
-    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.AANVAARD) {
+    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (subcase)  {
         const decisionmakingFlow = await subcase.decisionmakingFlow;
         return this.router.transitionTo(
@@ -105,15 +106,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     );
     this.newDraftPieces = sortedNewPieces;
 
-    const statusChangeActivities = await submission.statusChangeActivities;
-    this.statusChangeActivities = statusChangeActivities
-      .slice()
-      .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
-      .reverse();
-    await Promise.all(this.statusChangeActivities.map((a) => a.status));
-
-    const creator = await submission.creator;
-    this.creatorName = `${creator?.firstName} ${creator?.lastName}`;
+    this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
+    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission);
 
     return submission;
   }
@@ -127,7 +121,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.previousSubcase = this.previousSubcase;
-    controller.creatorName = this.creatorName;
+    controller.beingTreatedBy = this.beingTreatedBy;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;

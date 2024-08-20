@@ -16,6 +16,7 @@ export default class AgendaitemPostponed extends Component {
   @service agendaService;
   @service toaster;
   @service intl;
+  @service router;
 
   @tracked modelsForProposedAgenda;
   @tracked latestMeeting;

@@ -10,6 +10,7 @@ export default class CasesIndexController extends Controller {
   // Services
   @service router;
   @service store;
+  @service currentSession;
 
   queryParams = [
     {
@@ -83,7 +84,8 @@ export default class CasesIndexController extends Controller {
   }
 
   get mayShowSubmissionsTab() {
-    return isEnabledCabinetSubmissions();
+    const canView = this.currentSession.may('view-submissions');
+    return isEnabledCabinetSubmissions() && canView;
   }
 
   setCaseFilter = (value) => (this.caseFilter = value);

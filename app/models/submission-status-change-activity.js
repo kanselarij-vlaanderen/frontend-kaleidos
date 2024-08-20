@@ -5,6 +5,7 @@ export default class SubmissionStatusChangeActivityModel extends Model {
   @attr('datetime') startedAt;
   @attr comment;
 
-  @belongsTo('submission', { inverse: null, async: true }) submission;
+  @belongsTo('submission', { inverse: 'statusChangeActivities', async: true }) submission;
   @belongsTo('concept', { inverse: null, async: true }) status;
+  @belongsTo('user', { inverse: null, async: true }) startedBy;
 }
