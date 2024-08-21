@@ -41,7 +41,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       params.submission_id
     );
 
-    const status = await submission.belongsTo('status').reload;
+    const status = await submission.belongsTo('status').reload();
     // querying here to get around cache issue.
     const subcase = await this.store.queryOne('subcase', {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
