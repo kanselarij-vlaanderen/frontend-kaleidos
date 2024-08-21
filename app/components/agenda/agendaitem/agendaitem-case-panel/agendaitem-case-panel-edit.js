@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -16,8 +17,20 @@ export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
 
+  @tracked filter = Object.freeze({
+    type: 'subcase-name',
+  });
+  @tracked isEditingSubcaseName = false;
+  @tracked selectedShortcut;
+  @tracked subcaseName;
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
+
+  constructor() {
+    super(...arguments);
+    this.subcaseName = this.args.subcase.subcaseName;
+    this.isEditingSubcaseName = this.subcaseName?.length;
+  }
 
   get newsItem() {
     return this.args.newsItem;
@@ -62,6 +75,7 @@ export default class AgendaitemCasePanelEdit extends Component {
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
+      subcaseName: this.subcaseName,
       confidential: this.args.subcase?.confidential,
     };
 
@@ -89,5 +103,17 @@ export default class AgendaitemCasePanelEdit extends Component {
       }
     }
     this.args.onSave();
+  }
+
+  @action
+  selectSubcaseName(shortcut) {
+    this.selectedShortcut = shortcut;
+    this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 }
