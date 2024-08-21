@@ -27,6 +27,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   @service store;
   @service toaster;
   @service intl;
+  @service pieceAccessLevelService;
 
   @tracked piece;
   @tracked documentContainer;
@@ -235,6 +236,10 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   async verifyDeleteDraftPiece() {
     await this.deleteDraftPiece.perform();
     this.isOpenVerifyDeleteModal = false;
+  }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);
   }
 
   @action

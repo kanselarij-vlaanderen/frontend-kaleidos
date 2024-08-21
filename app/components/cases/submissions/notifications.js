@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency';
 
 export default class CasesSubmissionsNotificationsComponent extends Component {
   @service store;
+  @service toaster;
 
   @tracked showApprovalAddressModal = false;
   @tracked showNotificationAddressModal = false;

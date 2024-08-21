@@ -192,9 +192,13 @@ export default class SubmissionHeaderComponent extends Component {
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
         let linkedPieces = [];
-        if (this.args.previousSubcase) {
+        const latestSubcase = await this.store.queryOne('subcase', {
+          'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
+          sort: '-created',
+        });
+        if (latestSubcase) {
           linkedPieces = await this.subcaseService.loadSubcasePieces(
-            this.args.previousSubcase
+            latestSubcase
           );
         }
         subcase = this.store.createRecord('subcase', {

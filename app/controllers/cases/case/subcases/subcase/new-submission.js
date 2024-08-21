@@ -56,6 +56,15 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const documentContainer = await newVersion.documentContainer;
     await documentContainer.save();
     await newVersion.save();
+    try {
+      const sourceFile = await newVersion.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     const index = this.pieces.indexOf(piece);
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
