@@ -108,6 +108,11 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     return submission;
   }
 
+  async afterModel(model) {
+    const decisionmakingFlow = await model.belongsTo('decisionmakingFlow').reload();
+    await decisionmakingFlow?.case;
+  }
+
   setupController(controller, _model, _transition) {
     super.setupController(...arguments);
     controller.mandatees = this.mandatees;

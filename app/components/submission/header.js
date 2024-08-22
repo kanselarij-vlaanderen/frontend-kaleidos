@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
 
@@ -167,13 +166,12 @@ export default class SubmissionHeaderComponent extends Component {
 
       const draftPieces = await this.args.submission.pieces;
 
-      let decisionmakingFlow = await this.args.submission.decisionmakingFlow;
+      let decisionmakingFlow = await this.args.submission.belongsTo('decisionmakingFlow').reload();
       if (!decisionmakingFlow) {
         decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
           title: this.args.submission.decisionmakingFlowTitle,
           opened: this.args.submission.created,
           governmentAreas,
-          submissions: [this.args.submission],
         });
         await decisionmakingFlow.save();
 
@@ -183,11 +181,8 @@ export default class SubmissionHeaderComponent extends Component {
           decisionmakingFlow,
         });
         await _case.save();
-      } else {
-        const submissions = await decisionmakingFlow.submissions;
-        addObject(submissions, this.args.submission);
-        await decisionmakingFlow.save();
       }
+      this.args.submission.decisionmakingFlow = decisionmakingFlow;
 
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
@@ -318,7 +313,6 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.BEHANDELD);
-
       this.router.transitionTo(
         'cases.case.subcases.subcase',
         decisionmakingFlow.id,

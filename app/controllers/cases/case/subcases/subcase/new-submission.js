@@ -222,7 +222,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
 
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
-    const decisionmakingFlow = await this.model.decisionmakingFlow;
+    const decisionmakingFlow = await this.model.belongsTo('decisionmakingFlow').reload();
     const mandatees = await this.mandatees;
     const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
