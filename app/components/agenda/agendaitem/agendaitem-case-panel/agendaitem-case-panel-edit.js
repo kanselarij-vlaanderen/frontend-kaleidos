@@ -28,7 +28,7 @@ export default class AgendaitemCasePanelEdit extends Component {
 
   constructor() {
     super(...arguments);
-    this.subcaseName = this.args.subcase.subcaseName;
+    this.subcaseName = this.args.subcase?.subcaseName;
     this.isEditingSubcaseName = this.subcaseName?.length;
   }
 
