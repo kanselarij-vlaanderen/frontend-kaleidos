@@ -51,21 +51,25 @@
           >
             <div class="auk-form-group">
               <Auk::Label>Dossier</Auk::Label>
-              <PowerSelect
-                @search={{perform this.search}}
-                @searchMessage="Dossier naam"
-                @searchEnabled={{true}}
-                @noMatchesMessage={{t "no-results-found"}}
-                @loadingMessage={{t "please-be-patient"}}
-                @options={{this.options}}
-                @selected={{this.selected}}
-                @onChange={{fn (mut this.selected)}}
-                class="au-u-1-1"
-                as |case|
-              >
-                {{case}}
-              </PowerSelect>
-              <AuButton @skin="link" @icon="add" class="au-u-margin-top-small" {{on "click" this.toggleCaseModal}}>Nieuw dossier toevoegen</AuButton>
+              {{#if this.existingCase}}
+              <div class="au-c-inline-input-button">
+                <AuInput
+                  @value="Tegemoetkomingen mobiliteitshulpmiddelen"
+                  @disabled={{true}}
+                />
+                <AuButton @skin="secondary" @icon="renew" {{on "click" this.clearExistingCase}}>Nieuw dossier</AuButton>
+                <AuButton @skin="secondary" @icon="add" {{on "click" this.toggleCaseModal}}>Gebruik een bestaand dossier</AuButton>
+              </div>
+              {{else}}
+              <div class="au-c-inline-input-button">
+                <AuInput
+                  @value=""
+                />
+                <AuButton @skin="secondary"  @icon="add" {{on "click" this.toggleCaseModal}}>Gebruik een bestaand dossier</AuButton>
+              </div>
+              {{/if}}
+
+              
             </div>
             <div class="auk-o-flex auk-o-flex--justify-between">
               <div class="auk-u-mb-4">
@@ -685,21 +689,35 @@
 
 {{#if this.caseModal}}
 <Auk::Modal>
-  <Auk::Modal::Header @title="Nieuw dossier toevoegen" @onClose={{this.toggleCaseModal}} />
+  <Auk::Modal::Header @title="Bestaand dossier gebruiken" @onClose={{this.toggleCaseModal}} />
   <Auk::Modal::Body>
     <div>
-      <Auk::Label>Dossier naam</Auk::Label>
-      <AuInput @width="block" @value="" />
+      <Auk::Label>Selecteer dossier</Auk::Label>
+      <PowerSelect
+        @search={{perform this.search}}
+        @searchMessage="Dossier naam"
+        @searchEnabled={{true}}
+        @noMatchesMessage={{t "no-results-found"}}
+        @loadingMessage={{t "please-be-patient"}}
+        @options={{this.options}}
+        @selected={{this.selected}}
+        @onChange={{fn (mut this.selected)}}
+        class="au-u-1-1"
+        as |case|
+      >
+        {{case}}
+      </PowerSelect>
     </div>
+    
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @onCancel={{this.toggleCaseModal}}
   >
     <AuButton
       @skin="primary"
-      {{on "click" this.toggleCaseModal}}
+      {{on "click" this.addExistingCase}}
     >
-      Dossier toevoegen
+      Dossier gebruiken
     </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

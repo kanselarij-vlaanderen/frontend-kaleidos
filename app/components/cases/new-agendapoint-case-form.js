@@ -55,6 +55,8 @@ export default class CasesNewAgendapointForm extends Component {
 
   @tracked caseModal = false;
 
+  @tracked existingCase = false;
+
 
   constructor() {
     super(...arguments);
@@ -87,6 +89,17 @@ export default class CasesNewAgendapointForm extends Component {
   @action
   toggleCaseModal() {
     this.caseModal = !this.caseModal;
+  }
+
+  @action
+  addExistingCase() {
+    this.caseModal = !this.caseModal;
+    this.existingCase = !this.existingCase;
+  }
+
+  @action
+  clearExistingCase() {
+    this.existingCase = !this.existingCase;
   }
 
   @action

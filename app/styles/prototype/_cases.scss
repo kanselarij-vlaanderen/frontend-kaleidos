@@ -194,3 +194,14 @@
   border-color: var(--au-gray-200);
   background-color: var(--au-gray-100);
 }
+
+.au-c-inline-input-button {
+  display: flex;
+  align-items: center;
+  gap: $au-unit-tiny;
+  flex-wrap: wrap;
+
+  > input {
+    flex-grow: 1;
+  }
+}
