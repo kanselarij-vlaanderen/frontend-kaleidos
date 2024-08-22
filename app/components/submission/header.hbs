@@ -12,14 +12,6 @@
           @title={{t "actions"}}
           @alignment="right"
         >
-          {{#if this.canResubmitSubmission}}
-            <AuButton
-              @skin="naked"
-              {{on "click" (toggle "isOpenResubmitModal" this)}}
-            >
-              {{t "resubmit-submission"}}
-            </AuButton>
-          {{/if}}
           {{#if this.canCreateSubcase}}
             <AuButton
               @skin="naked"
@@ -61,6 +53,14 @@
           {{/if}}
         </AuDropdown>
       </Auk::Toolbar::Group>
+    {{/if}}
+    {{#if this.canResubmitSubmission}}
+      <AuButton
+        @skin="primary"
+        {{on "click" (toggle "isOpenResubmitModal" this)}}
+      >
+        {{t "resubmit-submission"}}
+      </AuButton>
     {{/if}}
   </Auk::Toolbar>
 </Auk::Navbar>
