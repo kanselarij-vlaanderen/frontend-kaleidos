@@ -34,7 +34,7 @@
                   />
                 {{else}}
                   {{! We should only hit this temporarily when decisionmakingFlow is loading or changing}}
-                  <Auk::Loader />
+                  {{! or when a unpropagated decisionmakingFlow is linked by editors, cabinet will not be able to see it}}
                 {{/if}}
               </h4>
               {{#if @beingTreatedBy}}

@@ -181,8 +181,8 @@ export default class SubmissionHeaderComponent extends Component {
           decisionmakingFlow,
         });
         await _case.save();
+        this.args.submission.decisionmakingFlow = decisionmakingFlow;
       }
-      this.args.submission.decisionmakingFlow = decisionmakingFlow;
 
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
