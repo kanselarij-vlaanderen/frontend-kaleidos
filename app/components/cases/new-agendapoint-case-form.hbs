@@ -54,10 +54,10 @@
               {{#if this.existingCase}}
               <div class="au-c-inline-input-button">
                 <AuInput
-                  @value="Tegemoetkomingen mobiliteitshulpmiddelen"
+                  @value={{this.selectedCase}}
                   @disabled={{true}}
                 />
-                <AuButton @skin="secondary" @icon="renew" {{on "click" this.clearExistingCase}}>Nieuw dossier</AuButton>
+                <AuButton @skin="secondary" @icon="pencil" {{on "click" this.clearExistingCase}}>Nieuw dossier</AuButton>
                 <AuButton @skin="secondary" @icon="add" {{on "click" this.toggleCaseModal}}>Gebruik een bestaand dossier</AuButton>
               </div>
               {{else}}
@@ -65,7 +65,7 @@
                 <AuInput
                   @value=""
                 />
-                <AuButton @skin="secondary"  @icon="add" {{on "click" this.toggleCaseModal}}>Gebruik een bestaand dossier</AuButton>
+                <AuButton @skin="secondary" @icon="add" {{on "click" this.toggleCaseModal}}>Gebruik een bestaand dossier</AuButton>
               </div>
               {{/if}}
 
@@ -700,8 +700,8 @@
         @noMatchesMessage={{t "no-results-found"}}
         @loadingMessage={{t "please-be-patient"}}
         @options={{this.options}}
-        @selected={{this.selected}}
-        @onChange={{fn (mut this.selected)}}
+        @selected={{this.selectedCase}}
+        @onChange={{fn (mut this.selectedCase)}}
         class="au-u-1-1"
         as |case|
       >
