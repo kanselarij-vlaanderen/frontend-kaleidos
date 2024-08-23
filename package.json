@@ -58,9 +58,10 @@
     "@kanselarij-vlaanderen/au-kaleidos-icons": "3.0.1",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
-    "@lblod/ember-rdfa-editor": "3.3.0",
+    "@lblod/ember-rdfa-editor": "git+https://github.com/ValenberghsSven/ember-rdfa-editor.git#23ff47de32382f55c39207b8e3625c8842fc2dae",
     "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
+    "@nullvoxpopuli/ember-composable-helpers": "^5.1.1",
     "@typescript-eslint/parser": "^5.48.2",
     "alphabet": "^1.0.0",
     "babel-eslint": "^10.1.0",
@@ -77,6 +78,7 @@
     "ember-cli-cjs-transform": "^2.0.0",
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-dependency-lint": "^2.0.1",
+    "ember-cli-deprecation-workflow": "^2.2.0",
     "ember-cli-head": "^2.0.0",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-inject-live-reload": "^2.1.0",
@@ -87,7 +89,6 @@
     "ember-cli-update": "^1.0.1",
     "ember-click-outside": "^5.0.1",
     "ember-code-snippet": "^3.0.0",
-    "ember-composable-helpers": "^5.0.0",
     "ember-concurrency": "^2.3.7",
     "ember-copy": "^2.0.1",
     "ember-data": "~4.7.3",
@@ -150,6 +151,9 @@
     "tracked-built-ins": "^3.1.0",
     "webpack": "^5.75.0",
     "xml-formatter": "^3.2.0"
+  },
+  "overrides": {
+    "babel-plugin-ember-template-compilation": "2.2.1"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
