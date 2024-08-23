@@ -29,6 +29,7 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked comment;
 
   @tracked selectedAgenda;
+  @tracked selectedMeeting;
 
   constructor() {
     super(...arguments);
@@ -38,10 +39,40 @@ export default class SubmissionHeaderComponent extends Component {
   loadAgenda = task(async () => {
     const meeting = await this.args.submission.meeting;
     if (meeting?.id) {
+      this.selectedMeeting = meeting;
       this.selectedAgenda = await this.store.queryOne('agenda', {
         'filter[created-for][:id:]': meeting.id,
         'filter[:has-no:next-version]': true,
       });
+    } else {
+      const proposableAgendas = (await this.agendaService.getOpenMeetings()).data.map(
+        (meeting) => ({
+          id: meeting.attributes.agendaId,
+          uri: meeting.attributes.agenda,
+          serialnumber: meeting.attributes.serialnumber,
+          createdFor: {
+            id: meeting.id,
+            uri: meeting.attributes.uri,
+            plannedStart: new Date(meeting.attributes.plannedStart),
+            kind: {
+              label: meeting.attributes.type,
+            }
+          },
+        })
+      );
+      if (proposableAgendas?.length) {
+        // TODO: we should somehow be able to get the intended meeting here more easily and accurately.
+        // However, we don't store the meeting kind anywhere,
+        // so this could be any of the meetings on the submission.plannedStart date.
+        // most likely this will mean we have to store the meeting kind in the submission data model,
+        // or even better, the actual meeting uuid.
+        for (const proposableAgenda of proposableAgendas) {
+          if (proposableAgenda.createdFor.plannedStart.getTime() === this.args.submission.plannedStart?.getTime()) {
+            this.selectedAgenda = proposableAgenda;
+            break;
+          }
+        }
+      }
     }
   });
 
@@ -142,7 +173,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
       this.comment
     );
-    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment, this.selectedAgenda?.createdFor);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
