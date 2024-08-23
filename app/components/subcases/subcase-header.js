@@ -128,14 +128,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
    * @param {string} privatecomment
    */
   @task
-  *proposeForAgenda(_fullCopy, meeting, isFormallyOk, privateComment) {
+  *proposeForAgenda(_fullCopy, meeting, formallyStatusUri, privateComment) {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
       yield this.agendaService.putSubmissionOnAgenda(
         meeting,
         this.args.subcase,
-        isFormallyOk,
+        formallyStatusUri,
         privateComment,
       );
     } catch (error) {
