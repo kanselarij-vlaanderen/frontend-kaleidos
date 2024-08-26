@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
@@ -86,7 +87,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     this.pieces = await sortPieces(pieces);
 
-    let documentContainerIds = [];
+    let documentContainerIds = new TrackedArray([]);
     for (const piece of this.pieces) {
       const documentContainer = await piece.documentContainer;
       if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
@@ -104,7 +105,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
     this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
-
+    this.isUpdate = await this.draftSubmissionService.getIsUpdate(submission);
     return submission;
   }
 
@@ -122,6 +123,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.beingTreatedBy = this.beingTreatedBy;
+    controller.isUpdate = this.isUpdate;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;
