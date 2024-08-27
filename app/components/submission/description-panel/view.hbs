@@ -51,7 +51,7 @@
         {{/if}}
       </div>
     </div>
-    {{#if (user-may "view-submissions-on-agenda")}}
+    {{#if (user-may "treat-and-accept-submissions")}}
       <p>{{capitalize @submission.title}}</p>
     {{/if}}
   </Auk::Panel::Body>
@@ -67,7 +67,7 @@
           {{/if}}
         </p>
       </div>
-      {{#if (user-may "view-submissions-on-agenda")}}
+      {{#if (user-may "treat-and-accept-submissions")}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "subcase-name"}}</AuHeading>
           <p>

@@ -358,7 +358,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(signature.createSignFlow.signers.edit).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
-      .should('have.length', 9);
+      .should('have.length', 8);
     mandateeNames.current.signatureTitles.forEach((minister) => {
       cy.get(appuniversum.checkbox).contains(minister);
     });

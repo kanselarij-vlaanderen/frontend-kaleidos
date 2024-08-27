@@ -15,7 +15,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
       if (this.currentSession.may('view-submissions')) {
         return this.router.transitionTo('cases.submissions');
       }
-      return this.router.transitionTo('cases');
+      return this.router.transitionTo('cases.index');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
@@ -36,7 +36,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
     const { decisionmakingFlow, subcases} = this.modelFor('cases.case');
     let latestSubcase;
     if (decisionmakingFlow && subcases?.length) {
-      latestSubcase = subcases[subcases.length - 1];
+      latestSubcase = subcases.slice().at(-1);
     }
     return { decisionmakingFlow, latestSubcase };
   }

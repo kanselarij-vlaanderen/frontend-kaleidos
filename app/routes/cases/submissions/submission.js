@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
@@ -18,7 +19,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('view-submissions')) {
-      this.router.transitionTo('cases');
+      this.router.transitionTo('cases.index');
     }
     const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
@@ -41,8 +42,12 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       params.submission_id
     );
 
-    const status = await submission.belongsTo('status').reload;
-    const subcase = await submission.subcase;
+    const status = await submission.belongsTo('status').reload();
+    // querying here to get around cache issue.
+    const subcase = await this.store.queryOne('subcase', {
+      'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+      'filter[submissions][:id:]': submission.id
+    });
     if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (subcase)  {
         const decisionmakingFlow = await subcase.decisionmakingFlow;
@@ -52,14 +57,6 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
           subcase.id
         );
       }
-    }
-
-    const decisionmakingFlow = await submission.decisionmakingFlow;
-    const subcases = await decisionmakingFlow?.subcases;
-    const sortedSubcases = subcases?.slice()
-      .sort((s1, s2) => s2.created.getTime() - s1.created.getTime())
-    if (sortedSubcases?.length) {
-      this.previousSubcase = sortedSubcases[0];
     }
 
     const mandatees = await submission.mandatees;
@@ -90,7 +87,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     this.pieces = await sortPieces(pieces);
 
-    let documentContainerIds = [];
+    let documentContainerIds = new TrackedArray([]);
     for (const piece of this.pieces) {
       const documentContainer = await piece.documentContainer;
       if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
@@ -107,9 +104,14 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.newDraftPieces = sortedNewPieces;
 
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
-    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission);
-
+    this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
+    this.isUpdate = await this.draftSubmissionService.getIsUpdate(submission);
     return submission;
+  }
+
+  async afterModel(model) {
+    const decisionmakingFlow = await model.belongsTo('decisionmakingFlow').reload();
+    await decisionmakingFlow?.case;
   }
 
   setupController(controller, _model, _transition) {
@@ -120,8 +122,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.newDraftPieces = this.newDraftPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
-    controller.previousSubcase = this.previousSubcase;
     controller.beingTreatedBy = this.beingTreatedBy;
+    controller.isUpdate = this.isUpdate;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;

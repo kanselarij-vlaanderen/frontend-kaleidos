@@ -116,8 +116,9 @@ export default class CasesNewSubmissionComponent extends Component {
   onDecisionmakingFlowChanged = async (decisionmakingFlow) => {
     this.selectedDecisionmakingFlow = decisionmakingFlow;
     if (!this.shortTitle) {
-      const decisionmakingFlowCase = await decisionmakingFlow.case;
-      this.shortTitle = decisionmakingFlowCase.shortTitle;
+      // this can trigger without a selection, so optionals needed
+      const decisionmakingFlowCase = await decisionmakingFlow?.case;
+      this.shortTitle = decisionmakingFlowCase?.shortTitle;
     }
   }
 
