@@ -63,7 +63,7 @@
           {{on "input" (pick "target.value" (set @submission "shortTitle"))}}
         />
       </AuFormRow>
-      {{#if (user-may "view-submissions-on-agenda")}}
+      {{#if (user-may "treat-and-accept-submissions")}}
         <AuFormRow>
           <AuLabel for="title-submission">
             {{t "title-subcase"}}</AuLabel>
@@ -87,7 +87,7 @@
           @filterOptions={{this.filterSubcaseTypes}}
         />
       </AuFormRow>
-      {{#if (user-may "view-submissions-on-agenda")}}
+      {{#if (user-may "treat-and-accept-submissions")}}
         <AuFormRow>
           <AuLabel>{{t "subcase-name"}}</AuLabel>
           <div

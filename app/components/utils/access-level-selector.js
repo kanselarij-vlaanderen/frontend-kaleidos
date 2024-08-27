@@ -15,16 +15,15 @@ export default class UtilsAccessLevelSelectorComponent extends Component {
    * @argument selected
    * @argument onChange
    * @argument filterOptions: a function that will filter out results from the dropwdown menu
+   * @argument simplifiedOptions: if true, only show Vertrouwelijk and Intern Regering
    */
   get filter() {
     let idFilter = {};
-    if (this.args.disableInternSecretarie) {
+    if (this.args.simplifiedOptions) {
       idFilter = {
         ':id:': [
           CONSTANTS.ACCESS_LEVEL_IDS.VERTROUWELIJK,
           CONSTANTS.ACCESS_LEVEL_IDS.INTERN_REGERING,
-          CONSTANTS.ACCESS_LEVEL_IDS.INTERN_OVERHEID,
-          CONSTANTS.ACCESS_LEVEL_IDS.PUBLIEK,
         ].join(',')
       }
     }

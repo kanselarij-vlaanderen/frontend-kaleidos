@@ -56,10 +56,32 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const documentContainer = await newVersion.documentContainer;
     await documentContainer.save();
     await newVersion.save();
+    try {
+      const sourceFile = await newVersion.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     const index = this.pieces.indexOf(piece);
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
     addObject(this.newDraftPieces, newVersion);
+  };
+
+  onDeletePiece = async (piece, previousPiece) => {
+    const index = this.pieces.indexOf(piece);
+    if (index > -1) {
+      if (previousPiece) {
+        this.pieces[index] = previousPiece;
+      } else {
+        this.pieces.splice(index, 1);
+      }
+      this.pieces = [...this.pieces];
+      removeObject(this.newDraftPieces, piece);
+    }
   };
 
   uploadPiece = async (file) => {
@@ -200,7 +222,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
 
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
-    const decisionmakingFlow = await this.model.decisionmakingFlow;
+    const decisionmakingFlow = await this.model.belongsTo('decisionmakingFlow').reload();
     const mandatees = await this.mandatees;
     const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
@@ -209,20 +231,18 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     if (this.originalSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
       meeting = await this.store.queryOne('meeting', {
-        'filter[:has:plannedStart]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+        'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
         'filter[submissions][:id:]': this.originalSubmission.id
       });
     }
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
-    const title = this.originalSubmission ? this.originalSubmission.title : this.model.title;
-    const subcaseName = this.originalSubmission ? this.originalSubmission.subcaseName : this.model.subcaseName;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
       shortTitle: trimText(this.model.shortTitle),
-      title: trimText(title),
-      subcaseName,
+      title: trimText(this.model.title),
+      subcaseName: this.model.subcaseName,
       confidential: this.model.confidential,
       subcase: this.model,
       type,
