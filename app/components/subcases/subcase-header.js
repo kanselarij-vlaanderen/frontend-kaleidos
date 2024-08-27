@@ -98,7 +98,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     yield decisionmakingFlow.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases');
+    this.router.transitionTo('cases.index');
   }
 
   @action

@@ -95,6 +95,7 @@
           @onNotificationDataChanged={{this.onNotificationDataChanged}}
         />
         <Cases::Submissions::DocumentUploadPanel
+          @confidential={{this.confidential}}
           @pieces={{this.sortedPieces}}
           @onAddPiece={{this.addPiece}}
           @onDeletePiece={{this.deletePiece}}

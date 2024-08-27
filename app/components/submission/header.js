@@ -3,7 +3,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { addObject } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
 
@@ -102,7 +101,6 @@ export default class SubmissionHeaderComponent extends Component {
       this.canTakeInTreatment ||
       (this.args.hasActions &&
         (
-          this.canResubmitSubmission ||
           this.canCreateSubcase ||
           this.canSendBackToSubmitter ||
           this.canDeleteSubmission
@@ -167,13 +165,12 @@ export default class SubmissionHeaderComponent extends Component {
 
       const draftPieces = await this.args.submission.pieces;
 
-      let decisionmakingFlow = await this.args.submission.decisionmakingFlow;
+      let decisionmakingFlow = await this.args.submission.belongsTo('decisionmakingFlow').reload();
       if (!decisionmakingFlow) {
         decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
           title: this.args.submission.decisionmakingFlowTitle,
           opened: this.args.submission.created,
           governmentAreas,
-          submissions: [this.args.submission],
         });
         await decisionmakingFlow.save();
 
@@ -183,18 +180,19 @@ export default class SubmissionHeaderComponent extends Component {
           decisionmakingFlow,
         });
         await _case.save();
-      } else {
-        const submissions = await decisionmakingFlow.submissions;
-        addObject(submissions, this.args.submission);
-        await decisionmakingFlow.save();
+        this.args.submission.decisionmakingFlow = decisionmakingFlow;
       }
 
       let subcase = await this.args.submission.subcase;
       if (!subcase) {
         let linkedPieces = [];
-        if (this.args.previousSubcase) {
+        const latestSubcase = await this.store.queryOne('subcase', {
+          'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
+          sort: '-created',
+        });
+        if (latestSubcase) {
           linkedPieces = await this.subcaseService.loadSubcasePieces(
-            this.args.previousSubcase
+            latestSubcase
           );
         }
         subcase = this.store.createRecord('subcase', {
@@ -314,7 +312,6 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.BEHANDELD);
-
       this.router.transitionTo(
         'cases.case.subcases.subcase',
         decisionmakingFlow.id,
@@ -348,7 +345,7 @@ export default class SubmissionHeaderComponent extends Component {
     const pieces = await this.args.submission.pieces;
     await Promise.all(pieces.map(async (piece) => deletePiece(piece)));
 
-    const statusChangeActivities = await this.args.submission.hasMany('statusChangeActivities').reload();
+    const statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(this.args.submission);
     await statusChangeActivities?.map(async (activity) => {
       await activity.destroyRecord();
     });
