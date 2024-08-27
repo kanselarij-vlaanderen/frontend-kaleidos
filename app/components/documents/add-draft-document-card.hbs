@@ -114,26 +114,35 @@
               {{/unless}}
             {{/unless}}
           </Group.Item>
-          {{#if this.mayShowDropdown}}
+          {{#if this.mayShowAddNewVersion}}
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
               {{!-- template-lint-disable require-context-role --}}
-              <AuDropdown
-                @icon="three-dots"
-                @title={{t "more"}}
-                @hideText={{true}}
-                @disabled={{this.loadPieceRelatedData.isRunning}}
-                @alignment="right"
+              <AuButton
+                @skin="link"
+                @icon="plus"
+                {{on "click" (toggle "isOpenUploadModal" this)}}
+                role="menuitem"
               >
-                <AuButton
-                  @skin="link"
-                  {{on "click" (toggle "isOpenUploadModal" this)}}
-                  role="menuitem"
-                >
-                  {{t "create-new-version"}}
-                </AuButton>
-              </AuDropdown>
+                {{t "create-new-version"}}
+              </AuButton>
+              {{!-- template-lint-enable require-context-role --}}
+            </Group.Item>
+          {{/if}}
+          {{#if this.mayShowDeleteDraftPiece}}
+            <Group.Item
+              class="auk-o-flex auk-o-flex--vertical-center"
+            >
+              {{!-- template-lint-disable require-context-role --}}
+              <AuButton
+                @skin="naked"
+                @alert={{true}}
+                @icon="trash"
+                {{on "click" (fn (mut this.isOpenVerifyDeleteModal) true)}}
+              >
+                {{t "delete"}}
+              </AuButton>
               {{!-- template-lint-enable require-context-role --}}
             </Group.Item>
           {{/if}}
@@ -201,3 +210,15 @@
     {{/if}}
   </:body>
 </ConfirmationModal>
+<ConfirmationModal
+  @modalOpen={{this.isOpenVerifyDeleteModal}}
+  @title={{t "draft-piece-delete"}}
+  @message={{t "delete-draft-piece-message"}}
+  @onConfirm={{this.verifyDeleteDraftPiece}}
+  @onCancel={{this.cancelDeleteDraftPiece}}
+  @confirmMessage={{t "delete"}}
+  @confirmIcon="trash"
+  @alert={{true}}
+  @loading={{this.deleteDraftPiece.isRunning}}
+  @disabled={{this.deleteDraftPiece.isRunning}}
+/>

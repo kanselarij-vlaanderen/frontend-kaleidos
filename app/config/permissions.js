@@ -61,7 +61,7 @@ const {
 // - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 // - create-submissions: Allow the creation of submissions (by cabinets)
-// - view-submissions-on-agenda: Allow the viewing of submissions on the agenda
+// - treat-and-accept-submissions: Allow the treating of submissions on placing the agenda
 // - view-submissions: Allow the viewing of submissions in general
 // - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
 // - always-edit-submissions: Allow editing submissions regardless of status
@@ -116,7 +116,7 @@ const groups = [
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
       'view-submissions',
-      'view-submissions-on-agenda',
+      'treat-and-accept-submissions',
       'view-all-submissions',
       'always-edit-submissions',
       'edit-in-treatment-submissions',
@@ -160,7 +160,7 @@ const groups = [
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
       'view-submissions',
-      'view-submissions-on-agenda',
+      'treat-and-accept-submissions',
       'view-all-submissions',
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',
@@ -199,7 +199,7 @@ const groups = [
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
       'view-submissions',
-      'view-submissions-on-agenda',
+      'treat-and-accept-submissions',
       'view-all-submissions',
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',

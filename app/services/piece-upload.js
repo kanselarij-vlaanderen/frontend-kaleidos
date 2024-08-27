@@ -38,6 +38,7 @@ export default class PieceUploadService extends Service {
     const submissionActivity = await this.store.queryOne('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
       'filter[:has-no:agenda-activity]': true,
+      include: 'pieces',
     });
 
     if (submissionActivity) { // Adding pieces to existing submission activity

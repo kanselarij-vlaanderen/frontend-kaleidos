@@ -17,7 +17,7 @@ export default class CasesSubmissionsDocumentUploadPanelComponent extends Compon
     const type = await findDocType(this.conceptStore, parsed.type);
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      (this.confidential || parsed.confidential)
+      (this.args.confidential || parsed.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
