@@ -36,7 +36,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
     const { decisionmakingFlow, subcases} = this.modelFor('cases.case');
     let latestSubcase;
     if (decisionmakingFlow && subcases?.length) {
-      latestSubcase = subcases[subcases.length - 1];
+      latestSubcase = subcases.slice().at(-1);
     }
     return { decisionmakingFlow, latestSubcase };
   }

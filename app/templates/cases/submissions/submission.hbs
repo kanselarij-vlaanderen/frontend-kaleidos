@@ -11,7 +11,6 @@
 
 <Submission::Header
   @submission={{@model}}
-  @previousSubcase={{this.previousSubcase}}
   @hasActions={{this.mayEdit}}
   @onStatusUpdated={{this.onStatusUpdated}}
 />
@@ -185,7 +184,7 @@
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @allowEditPieceAccessLevel={{true}}
-            @disableInternSecretarie={{true}}
+            @simplifiedOptions={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}

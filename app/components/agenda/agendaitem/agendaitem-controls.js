@@ -203,7 +203,7 @@ export default class AgendaitemControls extends Component {
     // If decisionmaking flow & case are new & they don't have other subcases
     //  → Delete
     if (submission.decisionmakingFlowTitle) {
-      const decisionmakingFlow = await submission.decisionmakingFlow;
+      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
       const subcases = await decisionmakingFlow.hasMany('subcases').reload();
       if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
         const _case = await decisionmakingFlow.case;

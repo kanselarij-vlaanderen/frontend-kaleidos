@@ -8,6 +8,9 @@ export default class SubcaseService extends Service {
   async loadSubcasePieces(subcase) {
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
     // work since the inverse isn't present in API config
+    if (!subcase.id) {
+      return [];
+    }
     const submissionActivities = await this.store.query('submission-activity', {
       'filter[subcase][:id:]': subcase.id,
       'page[size]': PAGE_SIZE.CASES,

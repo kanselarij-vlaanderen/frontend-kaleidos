@@ -51,7 +51,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle,
+        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
         comment,
       };
 
@@ -78,7 +78,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle,
+        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
         comment,
       };
 
@@ -123,7 +123,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle,
+        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
         approvalComment: submission.approvalComment,
         notificationComment: submission.notificationComment,
       };
@@ -179,7 +179,7 @@ export default class CabinetMailService extends Service {
       const params = {
         submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
         submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle,
+        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
         approvalComment: submission.approvalComment,
         notificationComment: submission.notificationComment,
       };
