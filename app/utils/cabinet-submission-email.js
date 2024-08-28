@@ -50,10 +50,19 @@ async function caseSubmittedEmail(params) {
 
   let additionalMandateeNames = [];
   const mandatees = await params.submission.mandatees;
-  for (const mandatee of mandatees) {
+  const sortedMandatees = mandatees.slice().sort(
+    (m1, m2) => m1.priority - m2.priority
+  );
+  for (const mandatee of sortedMandatees) {
     if (mandatee.id !== submitter.id) {
       const mandateePerson = await mandatee.person;
-      additionalMandateeNames.push('minister ' + mandateePerson.lastName);
+      const mandate = await mandatee.mandate;
+      const role = await mandate.role;
+      if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
+        additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
+      } else {
+        additionalMandateeNames.push('minister ' + mandateePerson.lastName);
+      }
     }
   }
   if (additionalMandateeNames.length > 1) {
