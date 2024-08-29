@@ -359,7 +359,8 @@ export default class SubmissionHeaderComponent extends Component {
     );
     await this.cabinetMail.sendBackToSubmitterMail(
       this.args.submission,
-      this.comment
+      this.comment,
+      this.selectedMeeting,
     );
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
