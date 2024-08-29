@@ -124,7 +124,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   /**
    * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
    * @param {Meeting} meeting
-   * @param {boolean} isFormallyOk
+   * @param {boolean} formallyStatusUri
    * @param {string} privatecomment
    */
   @task

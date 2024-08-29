@@ -15,9 +15,14 @@ export default class ProposableAgendasModal extends Component {
 
   @tracked agendas;
   @tracked selectedAgenda;
-  @tracked privateComment;
-  @tracked isFormallyOk;
   @tracked selectedFormallyOkUri;
+  @tracked privateComment = `IF: 
+BA: 
+BZ: 
+WT: 
+Co-agendering: 
+
+Def. check: `;
 
   constructor() {
     super(...arguments);

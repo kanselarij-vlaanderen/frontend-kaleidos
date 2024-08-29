@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 
 export default class UtilsFormallyOkSelector extends Component {
   /**
-   * @argument formallyOkStatusUri: TODO: change to ember object
+   * @argument formallyOkStatusUri
    * @argument onChange
    * @argument noDefaultOption: show placeholder and have no default
    */

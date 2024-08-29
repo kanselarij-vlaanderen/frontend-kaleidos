@@ -21,7 +21,7 @@
         <AuLabel for="remarks">{{t "private-comments-title"}}</AuLabel>
         <AuTextarea
           id="remarks"
-          rows="4"
+          rows="7"
           value={{this.privateComment}}
           @width="block"
           {{on "input" (pick "target.value" (set this "privateComment"))}}
