@@ -7,6 +7,8 @@
 // line breaks are not removed.""
 // 2. no mulitline string:
 // => ensure exact representation
+
+// ! do not use auto formatters on this file. Any whitespaces are used in the eventual text.
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -104,8 +106,8 @@ async function caseSubmittedApproversEmail(params) {
   let message = await caseSubmittedEmail(params);
   if (params.approvalComment) {
     message += `
-    Aanvullende informatie:
-    ${params.approvalComment}
+  Aanvullende informatie:
+  ${params.approvalComment}
 `;
   }
 
@@ -120,6 +122,7 @@ async function caseSubmittedIkwEmail(params) {
 
   let message = await caseSubmittedEmail(params);
 
+  // this param does not exist yet
   if (params.hasConfidentialPieces) {
     message += `
   Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
@@ -128,8 +131,8 @@ async function caseSubmittedIkwEmail(params) {
 
   if (params.notificationComment) {
     message += `
-    Aanvullende informatie:
-    ${params.notificationComment}
+  Aanvullende informatie:
+  ${params.notificationComment}
 `;
   }
 

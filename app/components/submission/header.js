@@ -57,6 +57,7 @@ export default class SubmissionHeaderComponent extends Component {
               uri: meetingData.data.attributes.uri,
               plannedStart: new Date(meetingData.data.attributes.plannedStart),
               kind: {
+                uri: meetingData.data.attributes.kind,
                 label: meetingData.data.attributes.type,
               }
             },

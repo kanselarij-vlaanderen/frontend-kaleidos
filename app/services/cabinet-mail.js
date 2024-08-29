@@ -165,10 +165,10 @@ export default class CabinetMailService extends Service {
           message: mailObject.message,
         });
       }
-      let message = "to: " + to + "\t\n";
-      message += "replyTo: " + mailSettings.cabinetSubmissionsReplyToEmail + "\t\n";
-      message += "subject: " + mailObject.subject + "\t\n";
-      message += "message: " + mailObject.message + "\t\n";
+      let message = "to: " + to + "\n";
+      message += "replyTo: " + mailSettings.cabinetSubmissionsReplyToEmail + "\n";
+      message += "subject: " + mailObject.subject + "\n";
+      message += "message: " + mailObject.message + "\n";
 
       const mailErrorOptions = {
         title: this.intl.t('warning-title'),
