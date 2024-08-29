@@ -1,47 +1,78 @@
 <AuFormRow ...attributes>
-  <AuLabel @required={{true}} @inline={{true}}>{{capitalize (t "case")}}</AuLabel>
-  <PowerSelect
-    @disabled={{@disableEdit}}
-    @search={{perform this.searchDecisionmakingFlows}}
-    @searchMessage={{t "search-on-case-name"}}
-    @searchEnabled={{true}}
-    @noMatchesMessage={{t "no-results-found"}}
-    @loadingMessage={{t "please-be-patient"}}
-    @selected={{this.decisionmakingFlowOrTitle}}
-    @onChange={{this.onSelectDecisionmakingFlow}}
-    class="au-u-1-1"
-    as |decisionmakingFlow|
-  >
-    {{or decisionmakingFlow.case.shortTitle decisionmakingFlow}}
-  </PowerSelect>
-  {{#unless @disableEdit}}
-    <AuButton
-      @skin="link"
-      @icon="add"
-      class="au-u-margin-top-small"
-      {{on "click" (queue (toggle "isAddingNewDecisionmakingFlow" this) this.setFocus)}}
-    >
-      {{t "add-new-case"}}
-    </AuButton>
-  {{/unless}}
+  <AuLabel @required={{true}} @inline={{true}} for="newCaseTitleId">{{capitalize (t "case")}}</AuLabel>
+  <div class="au-u-flex au-u-flex--spaced-small auk-u-maximize-width">
+    {{#if @selectedDecisionmakingFlow}}
+      <AuInput
+        id="newCaseTitleId"
+        value={{@selectedDecisionmakingFlow.case.shortTitle}}
+        @width="block"
+        @disabled={{true}}
+      />
+      {{#unless @disableEdit}}
+        <AuButtonGroup class="au-u-flex--no-wrap">
+          <AuButton
+            @skin="secondary"
+            @icon="pencil"
+            {{on "click" (queue this.onClearSelectedDecisionmakingFlow this.setFocus)}}
+          >
+            {{t "new-case"}}
+          </AuButton>
+          <AuButton
+            @skin="secondary"
+            @icon="add"
+            {{on "click" (toggle "isUsingExistingDecisionmakingFlow" this)}}
+          >
+            {{t "use-a-different-existing-case"}}
+          </AuButton>
+        </AuButtonGroup>
+      {{/unless}}
+    {{else}}
+      <AuInput
+        id="newCaseTitleId"
+        value={{@selectedDecisionmakingFlowTitle}}
+        @width="block"
+        @disabled={{@disableEdit}}
+        {{on "input" (pick "target.value" this.onChangeDecisionmakingFlowTitle)}}
+      />
+      {{#unless @disableEdit}}
+        <AuButtonGroup class="au-u-flex--no-wrap">
+          <AuButton
+            @skin="secondary"
+            @icon="add"
+            {{on "click" (toggle "isUsingExistingDecisionmakingFlow" this)}}
+          >
+            {{t "use-an-existing-case"}}
+          </AuButton>
+        </AuButtonGroup>
+      {{/unless}}
+    {{/if}}
+  </div>
 </AuFormRow>
 
 <ConfirmationModal
-  @modalOpen={{this.isAddingNewDecisionmakingFlow}}
-  @title={{t "add-new-case"}}
-  @onConfirm={{this.onConfirmDecisionmakingFlowTitle}}
-  @onCancel={{this.onCancelDecisionmakingFlowTitle}}
-  @disabled={{not this.decisionmakingFlowTitle.length}}
-  @confirmMessage={{t "add-case"}}
+  @modalOpen={{this.isUsingExistingDecisionmakingFlow}}
+  @title={{t "use-existing-case"}}
+  @onConfirm={{this.onConfirmDecisionmakingFlow}}
+  @onCancel={{this.onCancelDecisionmakingFlow}}
+  @confirmMessage={{t "use-case"}}
+  @disabled={{not this.selectedDecisionmakingFlow}}
 >
   <:body>
     <div>
-      <AuLabel>{{t "case-name"}}</AuLabel>
-      <AuInput
-        id="searchCaseId"
-        @width="block"
-        {{on "input" (pick "target.value" this.onChangeDecisionmakingFlowTitle)}}
-      />
+      <AuLabel>{{t "select-case"}}</AuLabel>
+      <PowerSelect
+        @search={{perform this.searchDecisionmakingFlows}}
+        @searchMessage={{t "search-on-case-name"}}
+        @searchEnabled={{true}}
+        @noMatchesMessage={{t "no-results-found"}}
+        @loadingMessage={{t "please-be-patient"}}
+        @selected={{this.selectedDecisionmakingFlow}}
+        @onChange={{this.onSelectDecisionmakingFlow}}
+        class="au-u-1-1"
+        as |decisionmakingFlow|
+      >
+        {{decisionmakingFlow.case.shortTitle}}
+      </PowerSelect>
     </div>
   </:body>
 </ConfirmationModal>
