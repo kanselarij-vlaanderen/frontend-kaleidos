@@ -29,6 +29,7 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked comment;
 
   @tracked selectedAgenda;
+  @tracked selectedMeeting;
 
   constructor() {
     super(...arguments);
@@ -36,13 +37,37 @@ export default class SubmissionHeaderComponent extends Component {
   }
 
   loadAgenda = task(async () => {
-    const meeting = await this.args.submission.meeting;
-    if (meeting?.id) {
-      this.selectedAgenda = await this.store.queryOne('agenda', {
-        'filter[created-for][:id:]': meeting.id,
-        'filter[:has-no:next-version]': true,
-      });
-    }
+    if (this.args.submission) {
+      const meeting = await this.args.submission.meeting;
+      if (meeting?.id && this.currentSession.may('create-subcases-from-submissions')) {
+        // only editors can use the store if not propagated yet
+        this.selectedMeeting = meeting;
+        this.selectedAgenda = await this.store.queryOne('agenda', {
+          'filter[created-for][:id:]': meeting.id,
+          'filter[:has-no:next-version]': true,
+        });
+      } else {
+        // get meeting when not propagated yet
+        const meetingData = await this.agendaService.getMeetingForSubmission(this.args.submission);
+        const agenda = {
+            id: meetingData.data.attributes.agendaId,
+            uri: meetingData.data.attributes.agenda,
+            serialnumber: meetingData.data.attributes.serialnumber,
+            createdFor: {
+              id: meetingData.data.id,
+              uri: meetingData.data.attributes.uri,
+              plannedStart: new Date(meetingData.data.attributes.plannedStart),
+              kind: {
+                uri: meetingData.data.attributes.kind,
+                label: meetingData.data.attributes.type,
+              }
+            },
+          };
+
+        this.selectedAgenda = agenda;
+        this.selectedMeeting = agenda.createdFor;
+      }
+  }
   });
 
   get items() {
@@ -59,35 +84,35 @@ export default class SubmissionHeaderComponent extends Component {
   }
 
   get isUpdate() {
-    return !!this.args.submission.subcase?.get('id');
+    return !!this.args.subcase?.id;
   }
 
   get canResubmitSubmission() {
     return (
-      this.args.submission.isSentBack &&
+      this.args.submission?.isSentBack &&
       this.currentSession.may('edit-sent-back-submissions')
     );
   }
 
   get canCreateSubcase() {
     return (
-      this.args.submission.isInTreatment &&
+      this.args.submission?.isInTreatment &&
       this.currentSession.may('create-subcases-from-submissions')
     );
   }
 
   get canTakeInTreatment() {
     return (
-      (this.args.submission.isSubmitted ||
-        this.args.submission.isResubmitted ||
-        this.args.submission.isUpdateSubmitted) &&
+      (this.args.submission?.isSubmitted ||
+        this.args.submission?.isResubmitted ||
+        this.args.submission?.isUpdateSubmitted) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
 
   get canSendBackToSubmitter() {
     return (
-      this.args.submission.isInTreatment &&
+      this.args.submission?.isInTreatment &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
@@ -142,7 +167,7 @@ export default class SubmissionHeaderComponent extends Component {
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
       this.comment
     );
-    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment, this.selectedMeeting);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
@@ -334,7 +359,8 @@ export default class SubmissionHeaderComponent extends Component {
     );
     await this.cabinetMail.sendBackToSubmitterMail(
       this.args.submission,
-      this.comment
+      this.comment,
+      this.selectedMeeting,
     );
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();

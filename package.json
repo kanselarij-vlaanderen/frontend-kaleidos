@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "7.3.9",
+  "version": "7.3.10",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -116,7 +116,7 @@
     "ember-resources": "^7.0.0",
     "ember-router-service-refresh-polyfill": "^1.1.0",
     "ember-set-helper": "^3.0.1",
-    "ember-sortable": "^4.0.3",
+    "ember-sortable": "^5.1.2",
     "ember-source": "~4.12.0",
     "ember-svg-jar": "^2.4.2",
     "ember-tag-input": "3.1.0",

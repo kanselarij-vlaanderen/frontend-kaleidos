@@ -66,4 +66,17 @@ export default class DraftSubmissionService extends Service {
     const user = await creationActivity?.startedBy;
     return user;
   };
+
+  getIsUpdate = async(submission) => {
+    const statusChangeActivities = await this.getStatusChangeActivities(submission);
+    const creationActivity = statusChangeActivities
+      ?.filter(
+        (a) =>
+          a.status.get('uri') === constants.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+      )
+      .at(0);
+    return creationActivity ? true : false;
+  };
+
+  // getHasConfidentialPieces async(submission) queryOny and filter on accesslevel uri for mails
 }
