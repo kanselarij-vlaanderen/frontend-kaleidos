@@ -36,6 +36,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked approvalComment;
   @tracked notificationComment;
   @tracked beingTreatedBy;
+  @tracked isUpdate;
 
   currentLinkedMandatee;
 
@@ -52,10 +53,6 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       this.currentLinkedMandatee?.id ===
         this.model.belongsTo('requestedBy').value().id; // requestedBy is loaded in the route
     return mayIfAdmin || mayIfSecretarie || mayIfKabinet;
-  }
-
-  get isUpdate() {
-    return this.model.belongsTo('subcase').value()?.id;
   }
 
   get sortedNewPieces() {
@@ -131,7 +128,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
     this.pieces = await sortPieces(pieces);
 
-    let documentContainerIds = [];
+    let documentContainerIds = new TrackedArray([]);
     for (const piece of this.pieces) {
       const documentContainer = await piece.documentContainer;
       if (documentContainer && !documentContainerIds.includes(documentContainer.id)) {
@@ -172,11 +169,14 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     const now = new Date();
     const confidential = this.model.confidential || false;
     const numberOfContainers = this.documentContainerIds.length;
+    const position = parsed.index || (numberOfContainers + 1);
+    // uploading a new doc on an update results in double numbering. fe uploading doc 2 results in doc 1, 2, 2, 3
+    // const position = this.isUpdate ? (numberOfContainers + 1) : parsed.index || (numberOfContainers + 1);
     const documentContainer = this.store.createRecord(
       'draft-document-container',
       {
         created: now,
-        position: parsed.index || (numberOfContainers + 1),
+        position: position,
         type,
       }
     );
