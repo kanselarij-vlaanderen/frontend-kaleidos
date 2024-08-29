@@ -39,7 +39,8 @@ export default class SubmissionHeaderComponent extends Component {
   loadAgenda = task(async () => {
     if (this.args.submission) {
       const meeting = await this.args.submission.meeting;
-      if (meeting?.id) {
+      if (meeting?.id && this.currentSession.may('create-subcases-from-submissions')) {
+        // only editors can use the store if not propagated yet
         this.selectedMeeting = meeting;
         this.selectedAgenda = await this.store.queryOne('agenda', {
           'filter[created-for][:id:]': meeting.id,
