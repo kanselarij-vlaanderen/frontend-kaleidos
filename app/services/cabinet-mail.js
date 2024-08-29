@@ -11,6 +11,7 @@ import {
   caseUpdateSubmissionIkwEmail,
   caseUpdateSubmissionSubmitterEmail,
 } from 'frontend-kaleidos/utils/cabinet-submission-email';
+import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 
 export default class CabinetMailService extends Service {
   @service store;
@@ -42,186 +43,143 @@ export default class CabinetMailService extends Service {
     );
   }
 
-  async sendBackToSubmitterMail(submission, comment) {
-    const { mailSettings, outbox } = await this.loadSettings();
-    if (mailSettings && outbox) {
-      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-      const submissionUrl = this.getSubmissionUrl(submission);
+  async sendBackToSubmitterMail(submission, comment, meeting) {
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.getSubmissionUrl(submission);
 
-      const params = {
-        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-        submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
-        comment,
-      };
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      comment,
+      meeting,
+      submission
+    };
 
-      const mail = caseSendBackEmail(params);
-      const creator = await this.draftSubmissionService.getCreator(submission);
-      const mailResource = this.store.createRecord('email', {
-        to: creator.email,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: mail.subject,
-        message: mail.message,
-      });
+    const submitterEmail = await caseSendBackEmail(params);
+    const creator = await this.draftSubmissionService.getCreator(submission);
+    const submitterEmailResource = await this.createMailRecord(creator.email, submitterEmail);
 
-      await mailResource.save();
-    }
+    await submitterEmailResource?.save();
   }
 
-  async sendResubmissionMails(submission, comment) {
-    const { mailSettings, outbox } = await this.loadSettings();
-    if (mailSettings && outbox) {
-      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-      const submissionUrl = this.getSubmissionUrl(submission);
+  async sendResubmissionMails(submission, comment, meeting) {
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.getSubmissionUrl(submission);
 
-      const params = {
-        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-        submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
-        comment,
-      };
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      comment,
+      submission,
+      meeting
+    };
 
-      const notificationEmail = caseResubmittedEmail(params);
-      const submitterEmail = caseResubmittedSubmitterEmail(params);
+    // same mail for approvers and notification
+    const notificationEmail = await caseResubmittedEmail(params);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), notificationEmail);
+    const notificationEmailResource = await this.createMailRecord(submission.notificationAddresses.join(','), notificationEmail); 
 
-      const notificationEmailResources = [
-        ...submission.approvalAddresses,
-        ...submission.notificationAddresses,
-      ].map((address) =>
-        this.store.createRecord('email', {
-          to: address,
-          from: mailSettings.defaultFromEmail,
-          folder: outbox,
-          subject: notificationEmail.subject,
-          message: notificationEmail.message,
-        })
-      );
-      const creator = await this.draftSubmissionService.getCreator(submission);
-      const submitterEmailResource = this.store.createRecord('email', {
-        to: creator.email,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: submitterEmail.subject,
-        message: submitterEmail.message,
-      });
+    const submitterEmail = await caseResubmittedSubmitterEmail(params);
+    const creator = await this.draftSubmissionService.getCreator(submission);
+    const submitterEmailResource = await this.createMailRecord(creator.email, submitterEmail);
 
-      await Promise.all([
-        ...notificationEmailResources.map((resource) => resource.save()),
-        submitterEmailResource.save(),
-      ]);
-    }
+    await Promise.all([
+      approversMailResource?.save(),
+      notificationEmailResource?.save(),
+      submitterEmailResource?.save(),
+    ]);
   }
 
-  async sendFirstSubmissionMails(submission) {
-    const { mailSettings } = await this.loadSettings();
-    const { outbox } = await this.loadSettings();
-    if (outbox) {
-      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-      const submissionUrl = this.getSubmissionUrl(submission);
+  async sendFirstSubmissionMails(submission, meeting) {
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.getSubmissionUrl(submission);
 
-      const params = {
-        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-        submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
-        approvalComment: submission.approvalComment,
-        notificationComment: submission.notificationComment,
-      };
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      approvalComment: submission.approvalComment,
+      notificationComment: submission.notificationComment,
+      meeting,
+      submission
+    };
 
-      const approversMail = caseSubmittedApproversEmail(params);
-      const ikwMail = caseSubmittedIkwEmail(params);
-      const submitterMail = caseSubmittedSubmitterEmail(params);
+    const approversMail = await caseSubmittedApproversEmail(params);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversMail);
 
-      const approversMailResources = submission.approvalAddresses.map((address) =>
-        this.store.createRecord('email', {
-          to: address,
-          from: mailSettings.defaultFromEmail,
-          folder: outbox,
-          subject: approversMail.subject,
-          message: approversMail.message,
-        })
-      );
+    const ikwMail = await caseSubmittedIkwEmail(params);
+    const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), ikwMail);
 
-      const ikwMailResources = submission.notificationAddresses.map((address) =>
-        this.store.createRecord('email', {
-          to: address,
-          from: mailSettings.defaultFromEmail,
-          folder: outbox,
-          subject: ikwMail.subject,
-          message: ikwMail.message,
-        })
-      );
+    const submitterMail = await caseSubmittedSubmitterEmail(params);
+    const creator = await this.draftSubmissionService.getCreator(submission);
+    const submitterMailResource = await this.createMailRecord(creator.email, submitterMail);
 
-      const creator = await this.draftSubmissionService.getCreator(submission);
-      const submitterMailResource = this.store.createRecord('email', {
-        to: creator.email,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: submitterMail.subject,
-        message: submitterMail.message,
-      });
-
-      await Promise.all([
-        ...approversMailResources.map((resource) => resource.save()),
-        ...ikwMailResources.map((resource) => resource.save()),
-        submitterMailResource.save(),
-      ]);
-    }
+    await Promise.all([
+      approversMailResource?.save(),
+      ikwMailResource?.save(),
+      submitterMailResource?.save(),
+    ]);
   }
 
-  async sendUpdateSubmissionMails(submission) {
+  async sendUpdateSubmissionMails(submission, meeting) {
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.getSubmissionUrl(submission);
+
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      approvalComment: submission.approvalComment,
+      notificationComment: submission.notificationComment,
+      submission,
+      meeting
+    };
+
+    const approversMail = await caseUpdateSubmissionApproversEmail(params);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversMail);
+
+    const ikwMail = await caseUpdateSubmissionIkwEmail(params);
+    const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), ikwMail);
+
+    const submitterMail = await caseUpdateSubmissionSubmitterEmail(params);
+    const creator = await this.draftSubmissionService.getCreator(submission);
+    const submitterMailResource = await this.createMailRecord(creator.email, submitterMail);
+
+    await Promise.all([
+      approversMailResource?.save(),
+      ikwMailResource?.save(),
+      submitterMailResource?.save(),
+    ]);
+  }
+
+  async createMailRecord(to, mailObject) {
     const { mailSettings, outbox } = await this.loadSettings();
-
     if (mailSettings && outbox) {
-      const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
-      const submissionUrl = this.getSubmissionUrl(submission);
+      // just in case there is no "to" (like a creator without an email address).
+      if (to?.length) {
+        return this.store.createRecord('email', {
+          to,
+          from: mailSettings.defaultFromEmail,
+          replyTo: mailSettings.cabinetSubmissionsReplyToEmail,
+          folder: outbox,
+          subject: mailObject.subject,
+          message: mailObject.message,
+        });
+      }
+      let message = "to: " + to + "\n";
+      message += "replyTo: " + mailSettings.cabinetSubmissionsReplyToEmail + "\n";
+      message += "subject: " + mailObject.subject + "\n";
+      message += "message: " + mailObject.message + "\n";
 
-      const params = {
-        submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-        submissionTitle: submission.shortTitle,
-        caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
-        approvalComment: submission.approvalComment,
-        notificationComment: submission.notificationComment,
+      const mailErrorOptions = {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('mail-could-not-be-sent'),
+        errorContent: message,
+        showDatetime: true,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
       };
-
-      const approversMail = caseUpdateSubmissionApproversEmail(params);
-      const ikwMail = caseUpdateSubmissionIkwEmail(params);
-      const submitterMail = caseUpdateSubmissionSubmitterEmail(params);
-
-      const approversMailResources = submission.approvalAddresses.map((address) =>
-        this.store.createRecord('email', {
-          to: address,
-          from: mailSettings.defaultFromEmail,
-          folder: outbox,
-          subject: approversMail.subject,
-          message: approversMail.message,
-        })
-      );
-
-      const ikwMailResources = submission.notificationAddresses.map((address) =>
-        this.store.createRecord('email', {
-          to: address,
-          from: mailSettings.defaultFromEmail,
-          folder: outbox,
-          subject: ikwMail.subject,
-          message: ikwMail.message,
-        })
-      );
-
-      const creator = await this.draftSubmissionService.getCreator(submission);
-      const submitterMailResource = this.store.createRecord('email', {
-        to: creator.email,
-        from: mailSettings.defaultFromEmail,
-        folder: outbox,
-        subject: submitterMail.subject,
-        message: submitterMail.message,
-      });
-
-      await Promise.all([
-        ...approversMailResources.map((resource) => resource.save()),
-        ...ikwMailResources.map((resource) => resource.save()),
-        submitterMailResource.save(),
-      ]);
+      this.toaster.show(CopyErrorToClipboardToast, mailErrorOptions);
+      return;
     }
   }
 }
