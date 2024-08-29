@@ -46,6 +46,7 @@ export default class CabinetMailService extends Service {
   async sendBackToSubmitterMail(submission, comment) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
+    // should only be done by editors so ok to not cache-bust here
     const meeting = await submission.meeting;
 
     const params = {
