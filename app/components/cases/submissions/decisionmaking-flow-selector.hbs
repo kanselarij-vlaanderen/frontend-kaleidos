@@ -1,40 +1,50 @@
 <AuFormRow ...attributes>
-  <AuLabel @required={{true}} @inline={{true}}>{{capitalize (t "case")}}</AuLabel>
-  <div class="au-c-inline-input-button">
+  <AuLabel @required={{true}} @inline={{true}} for="newCaseTitleId">{{capitalize (t "case")}}</AuLabel>
+  <div class="au-u-flex au-u-flex--spaced-small auk-u-maximize-width">
     {{#if @selectedDecisionmakingFlow}}
       <AuInput
+        id="newCaseTitleId"
         value={{@selectedDecisionmakingFlow.case.shortTitle}}
+        @width="block"
         @disabled={{true}}
       />
       {{#unless @disableEdit}}
-        <AuButton
-          @skin="secondary"
-          @icon="pencil"
-          {{on "click" (queue this.onClearSelectedDecisionmakingFlow this.setFocus)}}
-        >
-          {{t "new-case"}}
-        </AuButton>
-        <AuButton
-          @skin="secondary"
-          @icon="add"
-          {{on "click" (queue (toggle "isUsingExistingDecisionmakingFlow" this) this.setFocus)}}
-        >
-          {{t "use-an-existing-case"}}
-        </AuButton>
+        <AuButtonGroup class="au-u-flex--no-wrap">
+          <AuButton
+            @skin="secondary"
+            @icon="pencil"
+            {{on "click" (queue this.onClearSelectedDecisionmakingFlow this.setFocus)}}
+          >
+            {{t "new-case"}}
+          </AuButton>
+          <AuButton
+            @skin="secondary"
+            @icon="add"
+            {{on "click" (toggle "isUsingExistingDecisionmakingFlow" this)}}
+          >
+            {{t "use-a-different-existing-case"}}
+          </AuButton>
+        </AuButtonGroup>
       {{/unless}}
     {{else}}
       <AuInput
         id="newCaseTitleId"
         value={{@selectedDecisionmakingFlowTitle}}
+        @width="block"
+        @disabled={{@disableEdit}}
         {{on "input" (pick "target.value" this.onChangeDecisionmakingFlowTitle)}}
       />
-      <AuButton
-        @skin="secondary"
-        @icon="add"
-        {{on "click" (queue (toggle "isUsingExistingDecisionmakingFlow" this) this.setFocus)}}
-      >
-        {{t "use-an-existing-case"}}
-      </AuButton>
+      {{#unless @disableEdit}}
+        <AuButtonGroup class="au-u-flex--no-wrap">
+          <AuButton
+            @skin="secondary"
+            @icon="add"
+            {{on "click" (toggle "isUsingExistingDecisionmakingFlow" this)}}
+          >
+            {{t "use-an-existing-case"}}
+          </AuButton>
+        </AuButtonGroup>
+      {{/unless}}
     {{/if}}
   </div>
 </AuFormRow>
@@ -45,6 +55,7 @@
   @onConfirm={{this.onConfirmDecisionmakingFlow}}
   @onCancel={{this.onCancelDecisionmakingFlow}}
   @confirmMessage={{t "use-case"}}
+  @disabled={{not this.selectedDecisionmakingFlow}}
 >
   <:body>
     <div>

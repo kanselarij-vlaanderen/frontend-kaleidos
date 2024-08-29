@@ -1453,5 +1453,6 @@
   "use-existing-case": "Bestaand dossier gebruiken",
   "select-case": "Selecteer dossier",
   "use-case": "Dossier gebruiken",
-  "use-an-existing-case": "Gebruik een bestaand dossier"
+  "use-an-existing-case": "Gebruik een bestaand dossier",
+  "use-a-different-existing-case": "Gebruik een ander bestaand dossier"
 }

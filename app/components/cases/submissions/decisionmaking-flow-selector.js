@@ -21,10 +21,6 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
     }
   }
 
-  get decisionmakingFlowOrTitle() {
-    return this.decisionmakingFlowTitle ?? this.selectedDecisionmakingFlow;
-  }
-
   searchDecisionmakingFlows = task(async (title) => {
     await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     return await this.store.query(
@@ -47,9 +43,9 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
   }
 
   onChangeDecisionmakingFlowTitle = (title) => {
-    this.decisionmakingFlowTitle = title.trim();
+    this.decisionmakingFlowTitle = title;
     this.selectedDecisionmakingFlow = null;
-    this.args.onChangeTitle?.(title.trim());
+    this.args.onChangeTitle?.(title);
     this.args.onChangeSelected?.(this.selectedDecisionmakingFlow);
   }
 
