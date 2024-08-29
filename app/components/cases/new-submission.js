@@ -230,7 +230,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
     // Create submission change
     await this.draftSubmissionService.createStatusChange(this.submission, submitted.uri, comment);
-    await this.createNotificationMailResources();
+    await this.createNotificationMailResources(meeting);
 
     if (meeting) {
       try {
@@ -253,9 +253,9 @@ export default class CasesNewSubmissionComponent extends Component {
     }
   });
 
-  async createNotificationMailResources() {
+  async createNotificationMailResources(meeting) {
     if (this.approvalAddresses.length && this.notificationAddresses.length) {
-      await this.cabinetMail.sendFirstSubmissionMails(this.submission);
+      await this.cabinetMail.sendFirstSubmissionMails(this.submission, meeting);
     }
   }
 

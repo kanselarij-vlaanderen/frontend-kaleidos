@@ -44,17 +44,17 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     const status = await submission.belongsTo('status').reload();
     // querying here to get around cache issue.
-    const subcase = await this.store.queryOne('subcase', {
+    this.subcase = await this.store.queryOne('subcase', {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[submissions][:id:]': submission.id
     });
     if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
-      if (subcase)  {
-        const decisionmakingFlow = await subcase.decisionmakingFlow;
+      if (this.subcase)  {
+        const decisionmakingFlow = await this.subcase.decisionmakingFlow;
         return this.router.transitionTo(
           'cases.case.subcases.subcase',
           decisionmakingFlow.id,
-          subcase.id
+          this.subcase.id
         );
       }
     }
@@ -79,8 +79,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     const newPieces = await submission.pieces;
     let pieces = [];
-    if (subcase) {
-      pieces = await this.submissionService.loadSubmissionPieces(subcase, newPieces);
+    if (this.subcase) {
+      pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
     } else {
       pieces = newPieces.slice();
     }
@@ -124,6 +124,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.beingTreatedBy = this.beingTreatedBy;
     controller.isUpdate = this.isUpdate;
+    controller.subcase = this.subcase;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;

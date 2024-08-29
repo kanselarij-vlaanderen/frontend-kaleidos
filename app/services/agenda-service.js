@@ -220,6 +220,33 @@ export default class AgendaService extends Service {
     return json;
   }
 
+  async getMeetingForSubmission(submission) {
+    const url = `/submissions/${submission.id}/for-meeting`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    let json;
+    try {
+      json = await response.json();      
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${JSON.stringify(json)}`);
+    }
+    return json;
+  }
+
   /* No API */
 
   async setAgendaitemsGroupname(agendaitems) {
