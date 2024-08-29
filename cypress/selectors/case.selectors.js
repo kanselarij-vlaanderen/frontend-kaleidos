@@ -37,7 +37,7 @@ const selectors = {
 
   // proposable-agendas
   proposableAgendas: {
-    toggleFormallyOk: '[data-test-proposable-agendas-modal-toggle-formally-ok]',
+    formallyOkSelector: '[data-test-proposable-agendas-modal-formally-ok-selector]',
     agendaRow: '[data-test-proposable-agendas-modal-agenda-row]',
     placeOnAgenda: '[data-test-proposable-agendas-modal-place-on-agenda]',
     saveWithoutAgenda: '[data-test-proposable-agendas-modal-save-without-agenda]',

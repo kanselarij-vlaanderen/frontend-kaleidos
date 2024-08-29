@@ -67,7 +67,7 @@ context('testing new add subcase command', () => {
       mandatees: mandatees,
       domains: domains,
       documents: files1,
-      formallyOk: true,
+      formallyOk: 'Formeel OK',
       agendaDate: agendaDateFormatted,
     };
 

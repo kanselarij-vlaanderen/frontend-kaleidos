@@ -306,7 +306,7 @@ context('Create case as Admin user', () => {
       mandatees: mandatees,
       domains: domains,
       documents: files1,
-      formallyOk: true,
+      formallyOk: 'Formeel OK',
       agendaDate: agendaDateFormatted,
     };
     const subcase2 = {

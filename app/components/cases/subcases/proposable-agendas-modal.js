@@ -15,7 +15,7 @@ export default class ProposableAgendasModal extends Component {
 
   @tracked agendas;
   @tracked selectedAgenda;
-  @tracked isFormallyOk;
+  @tracked selectedFormallyOkUri;
   @tracked privateComment = `IF: 
 BA: 
 BZ: 
@@ -33,7 +33,7 @@ Def. check: `;
   get disablePutOnAgenda() {
     if (this.selectedAgenda && this.agendas) {
       for (const agenda of this.agendas) {
-        if (agenda.id === this.selectedAgenda.id) {
+        if (agenda.id === this.selectedAgenda.id && this.selectedFormallyOkUri) {
           return false;
         }
       }
@@ -43,33 +43,38 @@ Def. check: `;
 
   @task
   *loadAgendas() {
-    const dateOfToday = subWeeks(new Date, 1).toISOString();
-    const futureDate = addWeeks(new Date, 20).toISOString();
+    const dateOfToday = subWeeks(new Date(), 1).toISOString();
+    const futureDate = addWeeks(new Date(), 20).toISOString();
 
     this.agendas = yield this.store.query('agenda', {
       filter: {
-        'status': {
-          ':uri:': CONSTANTS.AGENDA_STATUSSES.DESIGN
+        status: {
+          ':uri:': CONSTANTS.AGENDA_STATUSSES.DESIGN,
         },
         'created-for': {
           ':gte:planned-start': dateOfToday,
           ':lte:planned-start': futureDate,
-          ':has-no:agenda': true
-        }
+          ':has-no:agenda': true,
+        },
       },
       include: 'status,created-for,created-for.kind',
-      sort:'created-for.planned-start'
-    })
+      sort: 'created-for.planned-start',
+    });
   }
 
   @task
   *saveSubcaseAndSubmitToAgenda() {
     const meeting = yield this.selectedAgenda.createdFor;
     // don't yield this, the confirm closes this model so the task is aborted midway
-    this.args.onConfirm(false, meeting, this.isFormallyOk, this.privateComment);
+    this.args.onConfirm(
+      false,
+      meeting,
+      this.selectedFormallyOkUri,
+      this.privateComment
+    );
   }
 
-@action
+  @action
   saveSubcase() {
     this.args.onConfirm(false);
   }

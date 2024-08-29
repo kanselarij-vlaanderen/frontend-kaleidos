@@ -177,7 +177,7 @@ export default class SubmissionHeaderComponent extends Component {
     async (
       _fullCopy = false, // unused
       meeting = null,
-      isFormallyOk = false,
+      formallyStatusUri,
       privateComment = null
     ) => {
       this.toggleCreateSubcaseModal();
@@ -322,7 +322,7 @@ export default class SubmissionHeaderComponent extends Component {
           await this.agendaService.putSubmissionOnAgenda(
             meeting,
             subcase,
-            isFormallyOk,
+            formallyStatusUri,
             privateComment
           );
         } catch (error) {
