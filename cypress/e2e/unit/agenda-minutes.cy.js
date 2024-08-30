@@ -28,11 +28,11 @@ context('agenda minutes test', () => {
 
   it('Setup', () => {
     const agendaDateFormatted = agendaDate.format('DD-MM-YYYY');
-    const caseTitle1 = `Cypress test: shortlist publications route case 1 - ${currentTimestamp()}`;
+    const caseTitle1 = `Cypress test: agenda minutes case 1 - ${currentTimestamp()}`;
 
     const type1 = 'Nota';
-    const subcaseTitleShort1 = `Cypress test: subcase shortlist publications route subcase 1 - ${currentTimestamp()}`;
-    const subcaseTitleLong1 = 'Cypress test voor shortlist publications route subcase 1';
+    const subcaseTitleShort1 = `Cypress test: agenda minutes subcase 1 - ${currentTimestamp()}`;
+    const subcaseTitleLong1 = 'Cypress test voor agenda minutes subcase 1';
     const subcaseType1 = 'Definitieve goedkeuring';
     const subcaseName1 = 'Goedkeuring na advies van de Raad van State';
 
