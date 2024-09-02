@@ -275,16 +275,16 @@ async function caseRequestSendBackEmail(params) {
 `;
   if (params.comment) {
     message += `
-  Er werd een terugsturing aangevraagd voor indiening "${params.submission.shortTitle}" met volgende opmerking:
-  ${params.comment}
+Er werd een terugsturing aangevraagd voor indiening "${params.submission.shortTitle}" met volgende opmerking:
+${params.comment}
 `;
   } else {
     message += `
-  Er werd een terugsturing aangevraagd voor indiening "${params.submission.shortTitle}".
+Er werd een terugsturing aangevraagd voor indiening "${params.submission.shortTitle}".
 `;
   }
-  message += `
-  U kunt de indiening hier bekijken: ${params.submissionUrl}
+message += `
+U kunt de indiening hier bekijken: ${params.submissionUrl}
 `;
 
   return {

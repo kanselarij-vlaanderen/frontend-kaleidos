@@ -90,7 +90,7 @@ export default class DraftSubmissionService extends Service {
         a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
     );
     // if more than 1, we return the first created ongoing submission
-    return ongoingSubmission.at(0);
+    return ongoingSubmission?.at(0);
   };
 
   // getHasConfidentialPieces async(submission) queryOny and filter on accesslevel uri for mails

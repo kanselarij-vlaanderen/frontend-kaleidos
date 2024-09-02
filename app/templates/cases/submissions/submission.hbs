@@ -27,9 +27,8 @@
   {{/if}}
   {{#if this.model.isSendBackRequested}}
     <AuAlert
-      @skin="error"
+      @skin="warning"
       @icon="alert-triangle"
-      @title={{t "this-submission-has-send-back-requested-title"}}
     >
       <p>{{t "this-submission-has-send-back-requested"}}</p>
     </AuAlert>
