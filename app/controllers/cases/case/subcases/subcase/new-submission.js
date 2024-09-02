@@ -278,7 +278,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        await this.cabinetMail.sendUpdateSubmissionMails(this.submission);
+        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting);
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {
         this.toaster.error(

@@ -117,11 +117,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   });
 
   reloadPieces = task(async () => {
-    const subcase = await this.model.subcase;
     const newPieces = await this.model.pieces;
     let pieces = [];
-    if (subcase) {
-      pieces = await this.submissionService.loadSubmissionPieces(subcase, newPieces);
+    if (this.subcase) {
+      pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
     } else {
       pieces = newPieces.slice();
     }
@@ -169,9 +168,8 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     const now = new Date();
     const confidential = this.model.confidential || false;
     const numberOfContainers = this.documentContainerIds.length;
-    const position = parsed.index || (numberOfContainers + 1);
     // uploading a new doc on an update results in double numbering. fe uploading doc 2 results in doc 1, 2, 2, 3
-    // const position = this.isUpdate ? (numberOfContainers + 1) : parsed.index || (numberOfContainers + 1);
+    const position = this.isUpdate ? (numberOfContainers + 1) : parsed.index || (numberOfContainers + 1);
     const documentContainer = this.store.createRecord(
       'draft-document-container',
       {

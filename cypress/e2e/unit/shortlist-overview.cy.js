@@ -65,19 +65,19 @@ context('signatures shortlist overview tests', () => {
 
   const files1 = [
     {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2023 0504 DOC.0001-1', fileType: 'BVR',
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'document shortlist signatures 1e subcase', fileType: 'BVR',
     }
   ];
 
   const files2 = [
     {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2023 0504 DOC.0001-2', fileType: 'BVR',
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'document shortlist signatures 2e subcase', fileType: 'BVR',
     }
   ];
 
   const files3 = [
     {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2023 0504 DOC.0001-3', fileType: 'BVR',
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'document shortlist signatures 3e subcase', fileType: 'BVR',
     }
   ];
 
@@ -596,13 +596,13 @@ context('publications shortlist overview tests', () => {
 
   const files1 = [
     {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-1', fileType: 'BVR',
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'document shortlist publications 1e subcase', fileType: 'BVR',
     }
   ];
 
   const files2 = [
     {
-      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'VR 2020 0404 DOC.0001-2', fileType: 'Decreet',
+      folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'document shortlist publications 2e subcase', fileType: 'Decreet',
     }
   ];
 
@@ -657,6 +657,9 @@ context('publications shortlist overview tests', () => {
     cy.openDetailOfAgendaitem(subcaseTitleShort2);
     cy.changeDecisionResult('Goedgekeurd');
     cy.get(appuniversum.loader).should('not.exist');
+    // latest version of shortlist only shows agendaitems on approved agendas
+    cy.setAllItemsFormallyOk(3);
+    cy.approveDesignAgenda();
   });
 
   it('should check the shortlist overview', () => {
