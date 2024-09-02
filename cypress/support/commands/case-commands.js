@@ -122,7 +122,7 @@ function searchCase(caseTitle) {
  *    [mandatees]: String,
  *    [domains]: String,
  *    [documents]: String,
- *    formallyOk: Boolean,
+ *    formallyOk: String,
  *    agendaDate: String,
  *    clonePrevious: Boolean,
  *    ratification: Boolean,
@@ -270,10 +270,16 @@ function addSubcaseViaModal(subcase) {
     }).should('not.exist');
     cy.get(cases.newSubcaseForm.save).click();
 
-    if (subcase.formallyOk) {
-      cy.get(cases.proposableAgendas.toggleFormallyOk).parent()
-        .click();
-    }
+    // formally ok selector
+    cy.get(cases.proposableAgendas.formallyOkSelector).click();
+    const optionToSelect = subcase.formallyOk || 'Nog niet formeel OK'; // default
+    cy.get(dependency.emberPowerSelect.option).contains(optionToSelect,
+      {
+        matchCase: false,
+      })
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click();
 
     // select the agenda or save without one
     if (subcase.agendaDate) {
