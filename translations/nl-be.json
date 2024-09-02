@@ -1395,6 +1395,8 @@
   "co-submitters": "Co-agendeerders",
   "treated-by": "Behandeld door",
   "submit-agendaitem": "Dien agendapunt in",
+  "submit-agendaitem-for-new-case": "Dien agendapunt in voor nieuw dossier",
+  "submit-agendaitem-for-this-case": "Dien agendapunt in voor dit dossier",
   "new-submission": "Nieuwe indiening",
   "add-new-case": "Nieuw dossier toevoegen",
   "search-on-case-name": "Zoek op dossier naam",
@@ -1447,5 +1449,12 @@
   "this-submission-is-an-update-title": "Deze indiening betreft een update",
   "this-submission-is-an-update": "Bij aanvaarding zullen de documenten en ministers van de bestaande procedurestap worden aangepast.",
   "draft-piece-delete": "Ingediend document verwijderen",
-  "delete-draft-piece-message": "Bent u zeker dat u dit document wilt verwijderen? Deze actie verwijdert enkel het nieuwe document, eventuele vorige versies blijven ongewijzigd."
+  "delete-draft-piece-message": "Bent u zeker dat u dit document wilt verwijderen? Deze actie verwijdert enkel het nieuwe document, eventuele vorige versies blijven ongewijzigd.",
+  "mail-could-not-be-sent": "De volgende mail kan niet worden verzonden omdat er geen mail adres is gevonden.",
+  "use-existing-case": "Bestaand dossier gebruiken",
+  "select-case": "Selecteer dossier",
+  "use-case": "Dossier gebruiken",
+  "use-an-existing-case": "Gebruik een bestaand dossier",
+  "use-a-different-existing-case": "Gebruik een ander bestaand dossier",
+  "choose-formally-ok-status": "Kies een status"
 }

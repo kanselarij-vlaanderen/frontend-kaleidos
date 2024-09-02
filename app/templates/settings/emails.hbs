@@ -145,6 +145,15 @@
                 {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsIkwConfidentialEmail"))}}
               />
             </AuFormRow>
+            <AuFormRow @alignment="inline">
+              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+                {{t "email-reply-to"}}
+              </AuLabel>
+              <AuInput
+                value={{this.model.cabinetSubmissionsReplyToEmail}}
+                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsReplyToEmail"))}}
+              />
+            </AuFormRow>
           </div>
         </div>
       </Auk::Panel::Body>
