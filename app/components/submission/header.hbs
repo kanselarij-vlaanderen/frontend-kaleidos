@@ -27,6 +27,7 @@
           {{#if this.canTakeInTreatment}}
             <AuButton
               @skin="naked"
+              @alert={{if this.isSendBackRequested true}}
               {{on "click" this.takeInTreatment}}
             >
               {{t "take-in-treatment"}}
@@ -36,7 +37,7 @@
           {{#if this.canSendBackToSubmitter}}
             <AuButton
               @skin="naked"
-              @alert={{true}}
+              @alert={{not this.isSendBackRequested}}
               {{on "click" (toggle "isOpenSendBackModal" this)}}
             >
               {{t "send-back-to-submitter"}}
@@ -60,6 +61,15 @@
         {{on "click" (toggle "isOpenResubmitModal" this)}}
       >
         {{t "resubmit-submission"}}
+      </AuButton>
+    {{/if}}
+    {{#if this.canRequestSendBack}}
+      <AuButton
+        @skin="primary"
+        @alert={{true}}
+        {{on "click" (toggle "isOpenRequestSendBackModal" this)}}
+      >
+        {{t "request-send-back-submission"}}
       </AuButton>
     {{/if}}
   </Auk::Toolbar>
@@ -156,3 +166,26 @@
     </Auk::Modal::Body>
   </Auk::Modal>
 {{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenRequestSendBackModal}}
+  @onCancel={{this.toggleRequestSendBackModal}}
+  @title={{t "request-send-back-submission"}}
+  @onConfirm={{queue (perform this.requestSendBackToSubmitter) this.toggleRequestSendBackModal}}
+  @alert={{true}}
+  @loading={{this.requestSendBackToSubmitter.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-request-send-back">{{t "comment-title"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-request-send-back"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>

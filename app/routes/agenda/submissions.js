@@ -34,6 +34,7 @@ export default class AgendaSubmissionsRoute extends Route{
           CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
           CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
           CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND,
+          CONSTANTS.SUBMISSION_STATUSES.TERUGSTURING_AANGEVRAAGD,
         ].includes(status.uri)
       )
       .map((status) => status.id);
