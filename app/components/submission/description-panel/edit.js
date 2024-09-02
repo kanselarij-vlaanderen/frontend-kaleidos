@@ -103,11 +103,12 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   async saveChanges() {
     this.isSaving = true;
     this.args.submission.decisionmakingFlow = this.decisionmakingFlow;
-    this.args.submission.decisionmakingFlowTitle = this.decisionmakingFlowTitle;
 
+    const trimmedDecisionmakingFlowTitle = trimText(this.decisionmakingFlowTitle);
     const trimmedShortTitle = trimText(this.args.submission.shortTitle);
     const trimmedTitle = trimText(this.args.submission.title);
-
+    
+    this.args.submission.decisionmakingFlowTitle = trimmedDecisionmakingFlowTitle;
     this.args.submission.shortTitle = trimmedShortTitle;
     this.args.submission.title = trimmedTitle;
     this.args.submission.subcaseName = this.subcaseName;

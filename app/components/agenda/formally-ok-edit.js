@@ -7,7 +7,7 @@ import { task } from 'ember-concurrency';
 
 export default class AgendaFormallyOkEdit extends Component {
   /**
-   * @argument formallyOkStatusUri
+   * @argument selectedFormallyOk
    * @argument onChange
    * @argument onSave
    */
@@ -35,7 +35,7 @@ export default class AgendaFormallyOkEdit extends Component {
   *onSave() {
     if (this.args.onSave) {
       yield this.args.onSave(this.selectedFormallyOkOption.uri);
-      }
+    }
     this.args.cancelEdit();
   }
 }

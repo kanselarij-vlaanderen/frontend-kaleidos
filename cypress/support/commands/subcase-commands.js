@@ -200,6 +200,18 @@ function proposeSubcaseForAgenda(agendaDate, kind) {
     .children(appuniversum.button)
     .click();
   cy.get(cases.subcaseHeader.actions.showProposedAgendas).forceClick();
+
+  // formally ok selector
+  cy.get(cases.proposableAgendas.formallyOkSelector).click();
+  const optionToSelect = 'Nog niet formeel OK'; // default, to set later
+  cy.get(dependency.emberPowerSelect.option).contains(optionToSelect,
+    {
+      matchCase: false,
+    })
+    .scrollIntoView()
+    .trigger('mouseover')
+    .click();
+
   // find the agenda in the list
   if (kind) {
     cy.get(cases.proposableAgendas.agendaRow).contains(kind,

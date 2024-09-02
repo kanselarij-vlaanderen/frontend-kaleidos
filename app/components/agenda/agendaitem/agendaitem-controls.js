@@ -196,7 +196,8 @@ export default class AgendaitemControls extends Component {
     );
     await this.cabinetMail.sendBackToSubmitterMail(
       submission,
-      this.sendBackToSubmitterComment
+      this.sendBackToSubmitterComment,
+      this.args.meeting,
     );
     await this.deleteItem(agendaitem);
     const subcase = await submission.subcase;

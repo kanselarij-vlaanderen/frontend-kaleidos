@@ -96,6 +96,7 @@
   <td class="auk-u-text-align--right">
     {{#if (or @row.hasSentSignFlow (not @isEditingEnabled) @disableDelete)}}
       <AuLinkExternal
+        @skin="button-naked"
         @icon="book"
         @hideText={{true}}
         href={{@row.piece.viewDocumentURL}}
