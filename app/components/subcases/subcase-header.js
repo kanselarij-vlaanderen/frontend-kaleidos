@@ -16,6 +16,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service router;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
@@ -29,6 +30,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked canPropose = false;
   @tracked canDelete = false;
   @tracked meetingIsClosed = false;
+  @tracked currentSubmission;
 
   constructor() {
     super(...arguments);
@@ -40,13 +42,15 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     return isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.currentSession.may('create-submissions') &&
-      this.args.subcase.submissions?.length > 0 &&
+      this.submissions?.length > 0 &&
+      !this.currentSubmission &&
       !this.meetingIsClosed;
   }
 
   @task
   *loadData() {
-    yield this.args.subcase.hasMany('submissions').reload();
+    this.submissions = yield this.args.subcase.hasMany('submissions').reload();    
+    this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);

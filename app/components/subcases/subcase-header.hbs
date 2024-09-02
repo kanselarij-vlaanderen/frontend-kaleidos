@@ -17,6 +17,17 @@
           </AuLink>
         </Auk::Toolbar::Item>
       {{/if}}
+      {{#if this.currentSubmission}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @route="cases.submissions.submission"
+            @model={{this.currentSubmission.id}}
+          >
+            {{t "open-current-submission"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
           {{#if this.hasActions}}
