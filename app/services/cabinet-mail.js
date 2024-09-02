@@ -1,7 +1,8 @@
 import Service, { inject as service } from '@ember/service';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import {
-  caseResubmittedEmail,
+  caseResubmittedApproversEmail,
+  caseResubmittedIkwEmail,
   caseResubmittedSubmitterEmail,
   caseSendBackEmail,
   caseSubmittedApproversEmail,
@@ -12,6 +13,7 @@ import {
   caseUpdateSubmissionSubmitterEmail,
 } from 'frontend-kaleidos/utils/cabinet-submission-email';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
+import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class CabinetMailService extends Service {
   @service store;
@@ -65,19 +67,24 @@ export default class CabinetMailService extends Service {
   async sendResubmissionMails(submission, comment, meeting) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
+    const submissionPieces = await submission.pieces;
+    const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      resubmitted: true,
       comment,
       submission,
-      meeting
+      meeting,
+      hasConfidentialPieces
     };
 
     // same mail for approvers and notification
-    const notificationEmail = await caseResubmittedEmail(params);
-    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), notificationEmail);
-    const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), notificationEmail, true); 
+    const approversEmail = await caseResubmittedApproversEmail(params);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversEmail);
+    const notificationEmail = await caseResubmittedIkwEmail(params);
+    const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), notificationEmail, true);
 
     const submitterEmail = await caseResubmittedSubmitterEmail(params);
     const creator = await this.draftSubmissionService.getCreator(submission);
@@ -93,12 +100,14 @@ export default class CabinetMailService extends Service {
   async sendFirstSubmissionMails(submission, meeting) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
-
+    const submissionPieces = await submission.pieces;
+    const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
       approvalComment: submission.approvalComment,
       notificationComment: submission.notificationComment,
+      hasConfidentialPieces,
       meeting,
       submission
     };
@@ -123,12 +132,15 @@ export default class CabinetMailService extends Service {
   async sendUpdateSubmissionMails(submission, meeting) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
+    const submissionPieces = await submission.pieces;
+    const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
       approvalComment: submission.approvalComment,
       notificationComment: submission.notificationComment,
+      hasConfidentialPieces,
       submission,
       meeting
     };

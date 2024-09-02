@@ -37,4 +37,10 @@ export default class UploadedDocument extends Component {
     this.selectedDocumentType = value;
     this.documentContainer.type = value;
   }
+
+  @action
+  setAccessLevel(value) {
+    this.args.piece.accessLevel = value;
+    this.args.onAccessLevelChanged?.(this.args.piece);
+  }
 }

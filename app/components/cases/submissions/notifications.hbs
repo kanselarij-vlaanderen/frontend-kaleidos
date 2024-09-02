@@ -25,6 +25,7 @@
   </Auk::Panel::Header>
   <Auk::Panel::Body
     {{did-update (perform this.updateDefaultAddresses) @confidential}}
+    {{did-update (perform this.updateDefaultAddresses) @hasConfidentialPieces}}
   >
     <Utils::LoadableContent
       @isLoading={{this.loadEmailSettings.isRunning}}

@@ -40,19 +40,25 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
   updateDefaultAddresses = task(async () => {
     await this.addApprovalAddress(this.defaultApprovalAddress, true);
     await this.removeNotificationAddress(this.unusedDefaultNotificationAddress);
-    await this.addNotificationAddress(this.defaultNotificationAddress, true);
+    for (const address of this.defaultNotificationAddresses) {
+      await this.addNotificationAddress(address, true);
+    }
   });
 
   get defaultApprovalAddress() {
     return this.emailSettings?.cabinetSubmissionsSecretaryEmail;
   }
 
-  get defaultNotificationAddress() {
+  get defaultNotificationAddresses() {
     if (this.args.confidential) {
-      return this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail;
-    } else {
-      return this.emailSettings?.cabinetSubmissionsIkwEmail;
+      return [this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail];
+    } else if (this.args.hasConfidentialPieces) {
+      return [
+        this.emailSettings?.cabinetSubmissionsIkwEmail,
+        this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail
+      ];
     }
+    return [this.emailSettings?.cabinetSubmissionsIkwEmail];
   }
 
   get unusedDefaultNotificationAddress() {
@@ -79,7 +85,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
 
   @action
   isDefaultNotificationAddress(address) {
-    return address === this.defaultNotificationAddress;
+    return this.defaultNotificationAddresses.includes(address);
   }
 
   @action
