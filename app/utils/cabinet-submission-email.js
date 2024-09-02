@@ -168,7 +168,7 @@ async function caseSendBackEmail(params) {
   subject += await getSubject(params);
 
   let message = '';
-  message += `Beste
+  message += `Beste,
 `;
   if (params.comment) {
     message += `
@@ -271,7 +271,7 @@ async function caseRequestSendBackEmail(params) {
   subject += await getSubject(params);
 
   let message = '';
-  message += `Beste
+  message += `Beste,
 `;
   if (params.comment) {
     message += `
