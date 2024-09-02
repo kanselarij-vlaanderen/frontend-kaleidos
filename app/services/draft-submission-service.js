@@ -77,4 +77,6 @@ export default class DraftSubmissionService extends Service {
       .at(0);
     return creationActivity ? true : false;
   };
+
+  // getHasConfidentialPieces async(submission) queryOny and filter on accesslevel uri for mails
 }

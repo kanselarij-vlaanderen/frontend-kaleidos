@@ -124,18 +124,18 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   /**
    * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
    * @param {Meeting} meeting
-   * @param {boolean} isFormallyOk
+   * @param {boolean} formallyStatusUri
    * @param {string} privatecomment
    */
   @task
-  *proposeForAgenda(_fullCopy, meeting, isFormallyOk, privateComment) {
+  *proposeForAgenda(_fullCopy, meeting, formallyStatusUri, privateComment) {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
       yield this.agendaService.putSubmissionOnAgenda(
         meeting,
         this.args.subcase,
-        isFormallyOk,
+        formallyStatusUri,
         privateComment,
       );
     } catch (error) {

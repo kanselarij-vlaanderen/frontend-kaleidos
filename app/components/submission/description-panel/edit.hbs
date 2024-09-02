@@ -15,6 +15,7 @@
       {{#if this.loadDecisionmakingFlow.isIdle}}
         <Cases::Submissions::DecisionmakingFlowSelector
           class="auk-u-mb-4"
+          @disableEdit={{not (user-may "edit-in-treatment-submissions")}}
           @selectedDecisionmakingFlow={{this.decisionmakingFlow}}
           @selectedDecisionmakingFlowTitle={{this.decisionmakingFlowTitle}}
           @onChangeTitle={{fn (mut this.decisionmakingFlowTitle)}}

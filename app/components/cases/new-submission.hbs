@@ -19,13 +19,15 @@
             <Utils::LoadableContent
               @reserveSpace={{true}}
             >
-              <Cases::Submissions::DecisionmakingFlowSelector
-                class="auk-u-mb-4"
-                @disableEdit={{@disableEdit}}
-                @selectedDecisionmakingFlow={{this.selectedDecisionmakingFlow}}
-                @onChangeTitle={{this.onDecisionmakingFlowTitleChanged}}
-                @onChangeSelected={{this.onDecisionmakingFlowChanged}}
-              />
+              {{#unless @isForNewCase}}
+                <Cases::Submissions::DecisionmakingFlowSelector
+                  class="auk-u-mb-4"
+                  @disableEdit={{@disableEdit}}
+                  @selectedDecisionmakingFlow={{this.selectedDecisionmakingFlow}}
+                  @onChangeTitle={{this.onDecisionmakingFlowTitleChanged}}
+                  @onChangeSelected={{this.onDecisionmakingFlowChanged}}
+                />
+              {{/unless}}
               <Cases::Submissions::AgendaItemTypeSelector
                 class="auk-u-mb-4"
                 @onChangeAgendaItemType={{fn (mut this.agendaItemType)}}
