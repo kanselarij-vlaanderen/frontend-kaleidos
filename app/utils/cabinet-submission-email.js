@@ -12,7 +12,14 @@
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const footer = '';
+const footer = `Met vriendelijke groet,
+
+Vlaamse overheid
+DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN
+Team Regeringsondersteuning – Cel Ministerraad
+ministerraad@vlaanderen.be
+Koolstraat 35, 1000 Brussel
+`
 
 async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
@@ -36,17 +43,17 @@ async function caseSubmittedEmail(params) {
 `;
   if (params.forSubmitter) {
     message += `
-  Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volgende notificatie werd verstuurd:
+Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volgende notificatie werd verstuurd:
 `;
   }
 
   if (params.resubmitted) {
     message += `
-  Er werd een aanpassing gedaan aan het eerder ingediende "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
+Er werd een aanpassing gedaan aan het eerder ingediende "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
 `;
   } else {
     message += `
-  Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabinet ${submitterPerson.lastName}.
+Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabinet ${submitterPerson.lastName}.
 `;
   }
 
@@ -70,32 +77,32 @@ async function caseSubmittedEmail(params) {
   if (additionalMandateeNames.length > 1) {
     const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
     message += `
-  Het betreft een co-agendering met ${additionalMandateeString}.
-  Kunnen de betrokken kabinetschefs hun akkoord geven via allen beantwoorden aub?
+Het betreft een co-agendering met ${additionalMandateeString}.
+Kunnen de betrokken kabinetschefs hun akkoord geven via allen beantwoorden aub?
 `;
 } else if (additionalMandateeNames.length === 1) {
     const additionalMandateeString = additionalMandateeNames[0];
     message += `
-  Het betreft een co-agendering met ${additionalMandateeString}.
-  Kan de betrokken kabinetschef haar/zijn akkoord geven via allen beantwoorden aub?
+Het betreft een co-agendering met ${additionalMandateeString}.
+Kan de betrokken kabinetschef haar/zijn akkoord geven via allen beantwoorden aub?
 `;
   }
 
   if (params.submission.confidential) {
     message += `
-  Het betreft een vertrouwelijke indiening.
+Het betreft een vertrouwelijke indiening.
   `;
   }
 
   const meetingKind = await params.meeting.kind;
   if (meetingKind?.uri === CONSTANTS.MEETING_KINDS.PVV) {
     message += `
-  Het betreft een indiening in het kader van het Plan Vlaamse Veerkracht.
+Het betreft een indiening in het kader van het Plan Vlaamse Veerkracht.
   `;
   }
 
   message += `
-  U kan alle informatie en documenten hier terugvinden: ${params.submissionUrl}
+U kan alle informatie en documenten hier terugvinden: ${params.submissionUrl}
 `;
   return message;
 }
@@ -106,8 +113,8 @@ async function caseSubmittedApproversEmail(params) {
   let message = await caseSubmittedEmail(params);
   if (params.approvalComment) {
     message += `
-  Aanvullende informatie:
-  ${params.approvalComment}
+Aanvullende informatie:
+${params.approvalComment}
 `;
   }
 
@@ -125,14 +132,14 @@ async function caseSubmittedIkwEmail(params) {
   // this param does not exist yet
   if (params.hasConfidentialPieces) {
     message += `
-  Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
+Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
   `;
   }
 
   if (params.notificationComment) {
     message += `
-  Aanvullende informatie:
-  ${params.notificationComment}
+Aanvullende informatie:
+${params.notificationComment}
 `;
   }
 
@@ -148,12 +155,14 @@ async function caseSubmittedSubmitterEmail(params) {
   let message = await caseSubmittedEmail({ ...params, ...{ forSubmitter: true }});
   if (params.approvalComment) {
     message += `
-  Aanvullende informatie voor de secretarie en kabinetschefs: ${params.approvalComment}
+Aanvullende informatie voor de secretarie en kabinetschefs:
+${params.approvalComment}
 `;
   }
   if (params.notificationComment) {
     message += `
-  Aanvullende informatie voor de IKW/KC-groep: ${params.notificationComment}
+Aanvullende informatie voor de IKW/KC-groep:
+${params.notificationComment}
 `;
   }
 
@@ -172,16 +181,16 @@ async function caseSendBackEmail(params) {
 `;
   if (params.comment) {
     message += `
-  Uw indiening "${params.submission.shortTitle}" werd teruggestuurd met volgende opmerking:
-  ${params.comment}
+Uw indiening "${params.submission.shortTitle}" werd teruggestuurd met volgende opmerking:
+${params.comment}
 `;
   } else {
     message += `
-  Uw indiening "${params.submission.shortTitle}" werd teruggestuurd.
+Uw indiening "${params.submission.shortTitle}" werd teruggestuurd.
 `;
   }
   message += `
-  U kunt de indiening hier bekijken: ${params.submissionUrl}
+U kunt de indiening hier bekijken: ${params.submissionUrl}
 `;
 
   return {
@@ -218,7 +227,8 @@ async function caseUpdateSubmissionApproversEmail(params) {
   let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true }});
   if (params.approvalComment) {
     message += `
-  Aanvullende informatie voor goedkeuring: ${params.approvalComment}
+Aanvullende informatie voor goedkeuring:
+${params.approvalComment}
 `;
   }
 
@@ -235,7 +245,8 @@ async function caseUpdateSubmissionIkwEmail(params) {
 
   if (params.notificationComment) {
     message += `
-  Aanvullende informatie voor IKW-groep: ${params.notificationComment}
+Aanvullende informatie voor IKW-groep:
+${params.notificationComment}
 `;
   }
 
@@ -251,12 +262,14 @@ async function caseUpdateSubmissionSubmitterEmail(params) {
   let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true, forSubmitter: true }});
   if (params.approvalComment) {
     message += `
-  Aanvullende informatie voor goedkeuring: ${params.approvalComment}
+Aanvullende informatie voor goedkeuring:
+${params.approvalComment}
 `;
   }
   if (params.notificationComment) {
     message += `
-  Aanvullende informatie voor IKW/KC-groep: ${params.notificationComment}
+Aanvullende informatie voor IKW/KC-groep:
+${params.notificationComment}
 `;
   }
 
