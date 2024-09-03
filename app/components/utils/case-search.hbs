@@ -12,33 +12,53 @@
 
   {{#if this.isLoading}}
     <Auk::Loader @message={{t "please-be-patient"}} />
+  {{else if (not this.results.length)}}
+    <Auk::Panel class="auk-u-mt-4">
+      <Auk::Panel::Body>
+        <Auk::EmptyState
+          @message={{t "no-results-found"}}
+        />
+      </Auk::Panel::Body>
+    </Auk::Panel>
   {{else}}
     <table class="auk-table auk-table--striped">
       <thead>
         <tr>
-          <th class="auk-table__col--9">
+          <th class="auk-table__col--1"></th>
+          <th class="auk-table__col--8">
             {{t "case-name"}}
           </th>
-          <th class="auk-table__col--2">
+          <th class="auk-table__col--3">
             {{t "created-on"}}
           </th>
         </tr>
       </thead>
-      <tbody class="auk-table--clickable-rows">
-        {{#each (await this.results) as |row|}}
-          {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
-          {{!-- template-lint-disable no-invalid-interactive --}}
+      <tbody>
+        {{#each this.results as |row|}}
           <tr data-test-utils-case-search-row>
-            <td onclick={{fn this.selectCase row}}>
-              <p>
+            <td>
+              <AuRadio
+                @checked={{eq row.id this.selected.id}}
+                @value={{row.id}}
+                @onChange={{this.selectCase}}
+              />
+            </td>
+            <td>
+              <AuLink
+                @icon="external-link"
+                @iconAlignment="right"
+                @route="cases.case.index"
+                @models={{array row.id}}
+                target="_blank"
+              >
                 {{#if row.shortTitle}}
                   {{row.shortTitle}}
                 {{else}}
                   {{row.title}}
                 {{/if}}
-              </p>
+              </AuLink>
             </td>
-            <td onclick={{fn this.selectCase row}}>
+            <td>
               {{datetime row.created}}
             </td>
           </tr>

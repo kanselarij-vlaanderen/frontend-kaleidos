@@ -38,6 +38,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked beingTreatedBy;
   @tracked isUpdate;
 
+  hasConfidentialPieces; // not updated on piece.accessLevel changes
   currentLinkedMandatee;
 
   get mayEdit() {

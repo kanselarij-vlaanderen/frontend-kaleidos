@@ -9,6 +9,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service store;
   @service currentSession;
   @service router;
+  @service draftSubmissionService;
 
   pieces;
   defaultAccessLevel;
@@ -40,6 +41,12 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     });
     this.submitter = ministerPresident ?? linkedMandatees.slice().at(0);
     this.mandatees = this.submitter ? [this.submitter] : [];
+  
+    const { subcase } = this.modelFor('cases.case.subcases.subcase');
+    const currentSubmission = await this.draftSubmissionService.getOngoingSubmissionForSubcase(subcase);
+    if (currentSubmission?.id) {
+      return this.router.transitionTo('cases.submissions.submission', currentSubmission?.id);
+    }
   }
 
   async model() {
@@ -52,7 +59,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
-    // Get any submission that is not yet on a meeting
+    // Get any submission-activity that is not yet on a meeting
     const submissionActivitiesWithoutActivity = await this.store.query(
       'submission-activity',
       {
@@ -62,7 +69,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       }
     );
     let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
-    // Get the submission from latest meeting if applicable
+    // Get the submission-activity from latest meeting if applicable
     const agendaActivities = await subcase.agendaActivities;
     const latestActivity = agendaActivities
       .slice()

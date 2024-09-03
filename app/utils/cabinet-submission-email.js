@@ -12,7 +12,14 @@
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const footer = '';
+const footer = `Met vriendelijke groet,
+
+Vlaamse overheid
+DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN
+Team Regeringsondersteuning – Cel Ministerraad
+ministerraad@vlaanderen.be
+Koolstraat 35, 1000 Brussel
+`
 
 async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
@@ -36,66 +43,68 @@ async function caseSubmittedEmail(params) {
 `;
   if (params.forSubmitter) {
     message += `
-  Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volgende notificatie werd verstuurd:
+Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volgende notificatie werd verstuurd:
 `;
   }
 
   if (params.resubmitted) {
     message += `
-  Er werd een aanpassing gedaan aan het eerder ingediende "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
+Er werd een aanpassing gedaan aan het eerder ingediende "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
 `;
   } else {
     message += `
-  Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabinet ${submitterPerson.lastName}.
+Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabinet ${submitterPerson.lastName}.
 `;
   }
 
-  let additionalMandateeNames = [];
-  const mandatees = await params.submission.mandatees;
-  const sortedMandatees = mandatees.slice().sort(
-    (m1, m2) => m1.priority - m2.priority
-  );
-  for (const mandatee of sortedMandatees) {
-    if (mandatee.id !== submitter.id) {
-      const mandateePerson = await mandatee.person;
-      const mandate = await mandatee.mandate;
-      const role = await mandate.role;
-      if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
-        additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
-      } else {
-        additionalMandateeNames.push('minister ' + mandateePerson.lastName);
+  if (params.forApprovers) {
+    let additionalMandateeNames = [];
+    const mandatees = await params.submission.mandatees;
+    const sortedMandatees = mandatees.slice().sort(
+      (m1, m2) => m1.priority - m2.priority
+    );
+    for (const mandatee of sortedMandatees) {
+      if (mandatee.id !== submitter.id) {
+        const mandateePerson = await mandatee.person;
+        const mandate = await mandatee.mandate;
+        const role = await mandate.role;
+        if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
+          additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
+        } else {
+          additionalMandateeNames.push('minister ' + mandateePerson.lastName);
+        }
       }
     }
-  }
-  if (additionalMandateeNames.length > 1) {
-    const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
-    message += `
-  Het betreft een co-agendering met ${additionalMandateeString}.
-  Kunnen de betrokken kabinetschefs hun akkoord geven via allen beantwoorden aub?
+    if (additionalMandateeNames.length > 1) {
+      const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
+      message += `
+Het betreft een co-agendering met ${additionalMandateeString}.
+Kunnen de betrokken kabinetschefs hun akkoord geven via allen beantwoorden aub?
 `;
-} else if (additionalMandateeNames.length === 1) {
-    const additionalMandateeString = additionalMandateeNames[0];
-    message += `
-  Het betreft een co-agendering met ${additionalMandateeString}.
-  Kan de betrokken kabinetschef haar/zijn akkoord geven via allen beantwoorden aub?
+  } else if (additionalMandateeNames.length === 1) {
+      const additionalMandateeString = additionalMandateeNames[0];
+      message += `
+Het betreft een co-agendering met ${additionalMandateeString}.
+Kan de betrokken kabinetschef haar/zijn akkoord geven via allen beantwoorden aub?
 `;
+    }
   }
 
   if (params.submission.confidential) {
     message += `
-  Het betreft een vertrouwelijke indiening.
+Het betreft een vertrouwelijke indiening.
   `;
   }
 
   const meetingKind = await params.meeting.kind;
   if (meetingKind?.uri === CONSTANTS.MEETING_KINDS.PVV) {
     message += `
-  Het betreft een indiening in het kader van het Plan Vlaamse Veerkracht.
+Het betreft een indiening in het kader van het Plan Vlaamse Veerkracht.
   `;
   }
 
   message += `
-  U kan alle informatie en documenten hier terugvinden: ${params.submissionUrl}
+U kan alle informatie en documenten hier terugvinden: ${params.submissionUrl}
 `;
   return message;
 }
@@ -103,11 +112,11 @@ async function caseSubmittedEmail(params) {
 async function caseSubmittedApproversEmail(params) {
   const subject = await getSubject(params);
 
-  let message = await caseSubmittedEmail(params);
+  let message = await caseSubmittedEmail({ ...params, forApprovers: true });
   if (params.approvalComment) {
     message += `
-  Aanvullende informatie:
-  ${params.approvalComment}
+Aanvullende informatie:
+${params.approvalComment}
 `;
   }
 
@@ -125,14 +134,14 @@ async function caseSubmittedIkwEmail(params) {
   // this param does not exist yet
   if (params.hasConfidentialPieces) {
     message += `
-  Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
+Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
   `;
   }
 
   if (params.notificationComment) {
     message += `
-  Aanvullende informatie:
-  ${params.notificationComment}
+Aanvullende informatie:
+${params.notificationComment}
 `;
   }
 
@@ -145,15 +154,17 @@ async function caseSubmittedIkwEmail(params) {
 async function caseSubmittedSubmitterEmail(params) {
   const subject = await getSubject(params);
 
-  let message = await caseSubmittedEmail({ ...params, ...{ forSubmitter: true }});
+  let message = await caseSubmittedEmail({ ...params, forSubmitter: true });
   if (params.approvalComment) {
     message += `
-  Aanvullende informatie voor de secretarie en kabinetschefs: ${params.approvalComment}
+Aanvullende informatie voor de secretarie en kabinetschefs:
+${params.approvalComment}
 `;
   }
   if (params.notificationComment) {
     message += `
-  Aanvullende informatie voor de IKW/KC-groep: ${params.notificationComment}
+Aanvullende informatie voor de IKW/KC-groep:
+${params.notificationComment}
 `;
   }
 
@@ -168,97 +179,72 @@ async function caseSendBackEmail(params) {
   subject += await getSubject(params);
 
   let message = '';
-  message += `Beste
+  message += `Beste,
 `;
   if (params.comment) {
     message += `
-  Uw indiening "${params.submission.shortTitle}" werd teruggestuurd met volgende opmerking:
-  ${params.comment}
+Uw indiening "${params.submission.shortTitle}" werd teruggestuurd met volgende opmerking:
+${params.comment}
 `;
   } else {
     message += `
-  Uw indiening "${params.submission.shortTitle}" werd teruggestuurd.
+Uw indiening "${params.submission.shortTitle}" werd teruggestuurd.
 `;
   }
   message += `
-  U kunt de indiening hier bekijken: ${params.submissionUrl}
+U kunt de indiening hier bekijken: ${params.submissionUrl}
 `;
 
   return {
     subject,
     message: [message, footer].join('\n\n'),
   };
+}
+
+async function caseResubmittedApproversEmail(params) {
+  return caseSubmittedApproversEmail({ ...params, resubmitted: true });
+}
+
+async function caseResubmittedIkwEmail(params) {
+  return caseSubmittedIkwEmail({ ...params, resubmitted: true });
 }
 
 async function caseResubmittedSubmitterEmail(params) {
-  const subject = await getSubject({ ...params, ...{ resubmitted: true }});
-
-  let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true, forSubmitter: true }});
-
-  return {
-    subject,
-    message: [message, footer].join('\n\n'),
-  };
-}
-
-async function caseResubmittedEmail(params) {
-  const subject = await getSubject({ ...params, ...{ resubmitted: true }});
-
-  let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true }});
-
-  return {
-    subject,
-    message: [message, footer].join('\n\n'),
-  };
+  return caseSubmittedSubmitterEmail({ ...params, resubmitted: true });
 }
 
 async function caseUpdateSubmissionApproversEmail(params) {
-  const subject = await getSubject({ ...params, ...{ resubmitted: true }});
-
-  let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true }});
-  if (params.approvalComment) {
-    message += `
-  Aanvullende informatie voor goedkeuring: ${params.approvalComment}
-`;
-  }
-
-  return {
-    subject,
-    message: [message, footer].join('\n\n'),
-  };
+  return caseSubmittedApproversEmail({ ...params, resubmitted: true });
 }
 
 async function caseUpdateSubmissionIkwEmail(params) {
-  const subject = await getSubject({ ...params, ...{ resubmitted: true }});
-
-  let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true }});
-
-  if (params.notificationComment) {
-    message += `
-  Aanvullende informatie voor IKW-groep: ${params.notificationComment}
-`;
-  }
-
-  return {
-    subject,
-    message: [message, footer].join('\n\n'),
-  };
+  return caseSubmittedIkwEmail({ ...params, resubmitted: true });
 }
 
 async function caseUpdateSubmissionSubmitterEmail(params) {
-  const subject = await getSubject({ ...params, ...{ resubmitted: true }});
+  return caseSubmittedSubmitterEmail({ ...params, resubmitted: true });
+}
 
-  let message = await caseSubmittedEmail({ ...params, ...{ resubmitted: true, forSubmitter: true }});
-  if (params.approvalComment) {
+async function caseRequestSendBackEmail(params) {
+  let subject = 'Aanpassing aangevraagd: ';
+  subject += await getSubject(params);
+
+  let message = '';
+  message += `Beste,
+`;
+  if (params.comment) {
     message += `
-  Aanvullende informatie voor goedkeuring: ${params.approvalComment}
+Er werd een aanpassing aangevraagd voor indiening "${params.submission.shortTitle}" met volgende opmerking:
+${params.comment}
+`;
+  } else {
+    message += `
+Er werd een aanpassing aangevraagd voor indiening "${params.submission.shortTitle}".
 `;
   }
-  if (params.notificationComment) {
-    message += `
-  Aanvullende informatie voor IKW/KC-groep: ${params.notificationComment}
+message += `
+U kunt de indiening hier bekijken: ${params.submissionUrl}
 `;
-  }
 
   return {
     subject,
@@ -271,8 +257,10 @@ export {
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
   caseSendBackEmail,
+  caseRequestSendBackEmail,
   caseResubmittedSubmitterEmail,
-  caseResubmittedEmail,
+  caseResubmittedApproversEmail,
+  caseResubmittedIkwEmail,
   caseUpdateSubmissionApproversEmail,
   caseUpdateSubmissionIkwEmail,
   caseUpdateSubmissionSubmitterEmail,

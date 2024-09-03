@@ -22,6 +22,7 @@ export default class SubmissionHeaderComponent extends Component {
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
+  @tracked isOpenRequestSendBackModal;
   @tracked isOpenSendBackModal;
   @tracked isOpenDeleteModal;
   @tracked piecesMovedCounter = 0;
@@ -94,6 +95,14 @@ export default class SubmissionHeaderComponent extends Component {
     );
   }
 
+  get canRequestSendBack() {
+    return (
+      (this.args.submission?.isSubmitted ||
+        this.args.submission?.isUpdateSubmitted) &&
+      this.currentSession.may('edit-sent-back-submissions')
+    );
+  }
+
   get canCreateSubcase() {
     return (
       this.args.submission?.isInTreatment &&
@@ -105,14 +114,16 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isResubmitted ||
-        this.args.submission?.isUpdateSubmitted) &&
+        this.args.submission?.isUpdateSubmitted || 
+        this.args.submission?.isSendBackRequested) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
 
   get canSendBackToSubmitter() {
     return (
-      this.args.submission?.isInTreatment &&
+      (this.args.submission?.isInTreatment ||
+        this.args.submission?.isSendBackRequested) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
@@ -134,6 +145,10 @@ export default class SubmissionHeaderComponent extends Component {
     );
   }
 
+  get isSendBackRequested() {
+    return this.args.submission?.isSendBackRequested;
+  }
+
   // Modal helpers
   toggleResubmitModal = () => {
     this.isOpenResubmitModal = !this.isOpenResubmitModal;
@@ -142,6 +157,11 @@ export default class SubmissionHeaderComponent extends Component {
 
   toggleCreateSubcaseModal = () => {
     this.isOpenCreateSubcaseModal = !this.isOpenCreateSubcaseModal;
+    this.comment = null;
+  };
+
+  toggleRequestSendBackModal = () => {
+    this.isOpenRequestSendBackModal = !this.isOpenRequestSendBackModal;
     this.comment = null;
   };
 
@@ -193,6 +213,7 @@ export default class SubmissionHeaderComponent extends Component {
       let decisionmakingFlow = await this.args.submission.belongsTo('decisionmakingFlow').reload();
       if (!decisionmakingFlow) {
         decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
+          // TODO, title is not a known property in model (commented)
           title: this.args.submission.decisionmakingFlowTitle,
           opened: this.args.submission.created,
           governmentAreas,
@@ -379,5 +400,20 @@ export default class SubmissionHeaderComponent extends Component {
     await this.args.submission.destroyRecord();
 
     await this.router.transitionTo('cases.submissions');
+  });
+
+  requestSendBackToSubmitter = task(async () => {
+    await this._updateSubmission(
+      CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD,
+      this.comment
+    );
+    await this.cabinetMail.sendRequestSendBackToSubmitterMail(
+      this.args.submission,
+      this.comment,
+      this.selectedMeeting,
+    );
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 }

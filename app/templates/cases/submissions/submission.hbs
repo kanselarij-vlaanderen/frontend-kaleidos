@@ -25,6 +25,14 @@
       <p>{{t "this-submission-is-an-update"}}</p>
     </AuAlert>
   {{/if}}
+  {{#if this.model.isSendBackRequested}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+    >
+      <p>{{t "this-submission-has-send-back-requested"}}</p>
+    </AuAlert>
+  {{/if}}
   <div class="auk-u-responsive-margin">
 
     <div id="submission" class="auk-u-mb-4">
@@ -59,6 +67,7 @@
       class="auk-u-mb-2"
       @allowEditing={{this.mayEdit}}
       @confidential={{@model.confidential}}
+      @hasConfidentialPieces={{this.hasConfidentialPieces}}
       @approvalAddresses={{this.approvalAddresses}}
       @approvalComment={{this.approvalComment}}
       @notificationAddresses={{this.notificationAddresses}}

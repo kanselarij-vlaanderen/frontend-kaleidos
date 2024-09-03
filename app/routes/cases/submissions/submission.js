@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { TrackedArray } from 'tracked-built-ins';
+import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
@@ -78,6 +79,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     const newPieces = await submission.pieces;
+    this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
     if (this.subcase) {
       pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
@@ -125,6 +127,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.beingTreatedBy = this.beingTreatedBy;
     controller.isUpdate = this.isUpdate;
     controller.subcase = this.subcase;
+    controller.hasConfidentialPieces = this.hasConfidentialPieces;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;
