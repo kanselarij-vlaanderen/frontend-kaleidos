@@ -20,6 +20,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
+  @tracked newDecisionmakingFlow = null;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
   @tracked isShowingOptions = false;
@@ -92,6 +93,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = null;
     this.isLoading = false;
     this.isAssigningToOtherCase = false;
+    this.newDecisionmakingFlow = null;
   }
 
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
@@ -198,11 +200,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  moveSubcase = task(async (_newDecisionmakingFlow) => {
-    const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
+  @action
+  async selectDecisionmakingFlow(newDecisionmakingFlow) {
+    this.newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', newDecisionmakingFlow.id);
+  }
 
+  moveSubcase = task(async () => {
     const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
-    this.args.subcase.decisionmakingFlow = newDecisionmakingFlow;
+    this.args.subcase.decisionmakingFlow = this.newDecisionmakingFlow;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 

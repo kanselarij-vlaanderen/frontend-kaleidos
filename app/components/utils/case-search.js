@@ -13,6 +13,7 @@ export default class CaseSearch extends Component {
   @tracked results = null;
   @tracked isLoading = false;
   @tracked searchText = null;
+  @tracked selected
   @tracked page = 0;
 
   constructor() {
@@ -51,6 +52,7 @@ export default class CaseSearch extends Component {
 
   @action
   updateSearchText(event) {
+    this.page = 0;
     this.searchText = event.target.value;
     debounce(this, this.debouncedSearch, 500);
   }
@@ -60,6 +62,8 @@ export default class CaseSearch extends Component {
     if (this.page > 0) {
       this.page = this.page - 1;
       this.performSearch(this.searchText);
+      this.selected = null;
+      this.args.onSelect?.(this.selected);
     }
   }
 
@@ -67,16 +71,16 @@ export default class CaseSearch extends Component {
   nextPage() {
     this.page = this.page + 1;
     this.performSearch(this.searchText);
+    this.selected = null;
+    this.args.onSelect?.(this.selected);
   }
 
   @action
-  async selectCase(caseItem, event) {
-    // We never set loading to false, because the component closes after this action
-    this.isLoading = true;
+  selectCase(caseId, event) {
     if (event) {
       event.stopPropagation();
     }
-
-    this.args.onSelect(caseItem);
+    this.selected = this.results.find((_case) => _case.id === caseId);
+    this.args.onSelect?.(this.selected);
   }
 }

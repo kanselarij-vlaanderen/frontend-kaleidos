@@ -37,8 +37,9 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
     this.args.onChangeSelected?.(null);
   }
 
-  onSelectDecisionmakingFlow = (decisionmakingFlow) => {
+  onSelectDecisionmakingFlow = async (decisionmakingFlowResult) => {
     this.decisionmakingFlowTitle = null;
+    const decisionmakingFlow = await this.store.findRecord('decisionmaking-flow', decisionmakingFlowResult.id);
     this.selectedDecisionmakingFlow = decisionmakingFlow;
   }
 

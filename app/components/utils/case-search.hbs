@@ -16,6 +16,7 @@
     <table class="auk-table auk-table--striped">
       <thead>
         <tr>
+          <th></th>
           <th class="auk-table__col--9">
             {{t "case-name"}}
           </th>
@@ -24,21 +25,32 @@
           </th>
         </tr>
       </thead>
-      <tbody class="auk-table--clickable-rows">
+      <tbody>
         {{#each (await this.results) as |row|}}
-          {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
-          {{!-- template-lint-disable no-invalid-interactive --}}
           <tr data-test-utils-case-search-row>
-            <td onclick={{fn this.selectCase row}}>
-              <p>
+            <td>
+              <AuRadio
+                @checked={{eq row.id this.selected.id}}
+                @value={{row.id}}
+                @onChange={{this.selectCase}}
+              />
+            </td>
+            <td>
+              <AuLink
+                @icon="external-link"
+                @iconAlignment="right"
+                @route="cases.case.index"
+                @models={{array row.id}}
+                target="_blank"
+              >
                 {{#if row.shortTitle}}
                   {{row.shortTitle}}
                 {{else}}
                   {{row.title}}
                 {{/if}}
-              </p>
+              </AuLink>
             </td>
-            <td onclick={{fn this.selectCase row}}>
+            <td>
               {{datetime row.created}}
             </td>
           </tr>

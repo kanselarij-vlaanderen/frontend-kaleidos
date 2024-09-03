@@ -89,19 +89,27 @@
   @loading={{this.deleteCase.isRunning}}
 />
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.isAssigningToOtherCase}}
-  @closeModal={{this.cancel}}
+  @title={{t "move-subcase-to-other-case"}}
+  @onConfirm={{perform this.moveSubcase}}
+  @onCancel={{this.cancel}}
+  @confirmMessage={{t "move-subcase"}}
   @padding="none"
-  @closable={{this.moveSubcase.isIdle}}
+  @loading={{this.moveSubcase.isRunning}}
 >
-  <:title>
-    {{t "move-subcase-to-other-case"}}
-  </:title>
   <:body>
-    <Utils::CaseSearch @onSelect={{perform this.moveSubcase}} />
+    <div>
+      {{#if this.moveSubcase.isRunning}}
+        <Auk::Loader @message={{t "please-be-patient"}} />
+      {{else}}
+        <Utils::CaseSearch
+          @onSelect={{this.selectDecisionmakingFlow}}
+        />
+      {{/if}}
+    </div>
   </:body>
-</AuModal>
+</ConfirmationModal>
 
 <ConfirmationModal
   @modalOpen={{this.isDeletingSubcase}}
