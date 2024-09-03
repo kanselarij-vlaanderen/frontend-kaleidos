@@ -77,6 +77,21 @@ export default class DraftSubmissionService extends Service {
       .at(0);
     return creationActivity ? true : false;
   };
+  
+  getOngoingSubmissionForSubcase = async(subcase) => {
+    // technically this should be a queryOne, but possible with concurrency to have more than 1 ongoing
+    const AllSubmissions = await this.store.query('submission', {
+      'filter[subcase][:id:]': subcase.id,
+      sort: 'created',
+      include: 'status'
+    });
+    const ongoingSubmission = AllSubmissions?.filter(
+      (a) =>
+        a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
+    );
+    // if more than 1, we return the first created ongoing submission
+    return ongoingSubmission?.at(0);
+  };
 
   // getHasConfidentialPieces async(submission) queryOny and filter on accesslevel uri for mails
 }

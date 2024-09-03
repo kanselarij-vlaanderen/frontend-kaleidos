@@ -179,7 +179,7 @@ async function caseSendBackEmail(params) {
   subject += await getSubject(params);
 
   let message = '';
-  message += `Beste
+  message += `Beste,
 `;
   if (params.comment) {
     message += `
@@ -225,11 +225,39 @@ async function caseUpdateSubmissionSubmitterEmail(params) {
   return caseSubmittedSubmitterEmail({ ...params, resubmitted: true });
 }
 
+async function caseRequestSendBackEmail(params) {
+  let subject = 'Terugsturing aangevraagd: ';
+  subject += await getSubject(params);
+
+  let message = '';
+  message += `Beste,
+`;
+  if (params.comment) {
+    message += `
+Er werd een terugsturing aangevraagd voor indiening "${params.submission.shortTitle}" met volgende opmerking:
+${params.comment}
+`;
+  } else {
+    message += `
+Er werd een terugsturing aangevraagd voor indiening "${params.submission.shortTitle}".
+`;
+  }
+message += `
+U kunt de indiening hier bekijken: ${params.submissionUrl}
+`;
+
+  return {
+    subject,
+    message: [message, footer].join('\n\n'),
+  };
+}
+
 export {
   caseSubmittedApproversEmail,
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
   caseSendBackEmail,
+  caseRequestSendBackEmail,
   caseResubmittedSubmitterEmail,
   caseResubmittedApproversEmail,
   caseResubmittedIkwEmail,

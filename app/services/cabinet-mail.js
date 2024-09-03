@@ -5,6 +5,7 @@ import {
   caseResubmittedIkwEmail,
   caseResubmittedSubmitterEmail,
   caseSendBackEmail,
+  caseRequestSendBackEmail,
   caseSubmittedApproversEmail,
   caseSubmittedIkwEmail,
   caseSubmittedSubmitterEmail,
@@ -45,13 +46,24 @@ export default class CabinetMailService extends Service {
     );
   }
 
+  getSubmissionCaseTitle = async(submission) => {
+    let title = submission.decisionmakingFlowTitle;
+    if (!title) {
+      const decisionmakingFlow = await submission.decisionmakingFlow;
+      const _case = await decisionmakingFlow?.case;
+      title = _case?.shortTitle || _case?.title || "geen dossier titel gevonden";
+    }
+    return title;
+  };
+
   async sendBackToSubmitterMail(submission, comment, meeting) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
+    const caseTitle = await this.getSubmissionCaseTitle(submission);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      caseName: caseTitle,
       comment,
       meeting,
       submission
@@ -69,10 +81,11 @@ export default class CabinetMailService extends Service {
     const submissionUrl = this.getSubmissionUrl(submission);
     const submissionPieces = await submission.pieces;
     const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
+    const caseTitle = await this.getSubmissionCaseTitle(submission);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      caseName: caseTitle,
       resubmitted: true,
       comment,
       submission,
@@ -102,9 +115,11 @@ export default class CabinetMailService extends Service {
     const submissionUrl = this.getSubmissionUrl(submission);
     const submissionPieces = await submission.pieces;
     const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
+    const caseTitle = await this.getSubmissionCaseTitle(submission);
+
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      caseName: caseTitle,
       approvalComment: submission.approvalComment,
       notificationComment: submission.notificationComment,
       hasConfidentialPieces,
@@ -134,10 +149,11 @@ export default class CabinetMailService extends Service {
     const submissionUrl = this.getSubmissionUrl(submission);
     const submissionPieces = await submission.pieces;
     const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
+    const caseTitle = await this.getSubmissionCaseTitle(submission);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
-      caseName: submission.decisionmakingFlowTitle || "geen titel WIP",
+      caseName: caseTitle,
       approvalComment: submission.approvalComment,
       notificationComment: submission.notificationComment,
       hasConfidentialPieces,
@@ -160,6 +176,26 @@ export default class CabinetMailService extends Service {
       ikwMailResource?.save(),
       submitterMailResource?.save(),
     ]);
+  }
+
+  async sendRequestSendBackToSubmitterMail(submission, comment, meeting) {
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    const submissionUrl = this.getSubmissionUrl(submission);
+    const caseTitle = await this.getSubmissionCaseTitle(submission);
+
+    const params = {
+      submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      caseName: caseTitle,
+      comment,
+      meeting,
+      submission
+    };
+
+    const treaterEmail = await caseRequestSendBackEmail(params);
+    const { mailSettings } = await this.loadSettings();
+    const treaterEmailResource = await this.createMailRecord(mailSettings?.cabinetSubmissionsSecretaryEmail, treaterEmail);
+
+    await treaterEmailResource?.save();
   }
 
   // replyTo:
