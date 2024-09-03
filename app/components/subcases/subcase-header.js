@@ -202,7 +202,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   @action
   async selectDecisionmakingFlow(newDecisionmakingFlow) {
-    this.newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', newDecisionmakingFlow.id);
+    this.newDecisionmakingFlow = newDecisionmakingFlow?.id
+      ? await this.store.findRecord(
+          'decisionmaking-flow',
+          newDecisionmakingFlow.id
+        )
+      : null;
   }
 
   moveSubcase = task(async () => {

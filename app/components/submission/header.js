@@ -404,7 +404,7 @@ export default class SubmissionHeaderComponent extends Component {
 
   requestSendBackToSubmitter = task(async () => {
     await this._updateSubmission(
-      CONSTANTS.SUBMISSION_STATUSES.TERUGSTURING_AANGEVRAAGD,
+      CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD,
       this.comment
     );
     await this.cabinetMail.sendRequestSendBackToSubmitterMail(

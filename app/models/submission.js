@@ -86,7 +86,7 @@ export default class SubmissionModel extends Model {
   get isSendBackRequested() {
     return (
       this.status?.get('uri') ===
-      CONSTANTS.SUBMISSION_STATUSES.TERUGSTURING_AANGEVRAAGD
+      CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD
     );
   }
 

@@ -12,21 +12,29 @@
 
   {{#if this.isLoading}}
     <Auk::Loader @message={{t "please-be-patient"}} />
+  {{else if (not this.results.length)}}
+    <Auk::Panel class="auk-u-mt-4">
+      <Auk::Panel::Body>
+        <Auk::EmptyState
+          @message={{t "no-results-found"}}
+        />
+      </Auk::Panel::Body>
+    </Auk::Panel>
   {{else}}
     <table class="auk-table auk-table--striped">
       <thead>
         <tr>
-          <th></th>
-          <th class="auk-table__col--9">
+          <th class="auk-table__col--1"></th>
+          <th class="auk-table__col--8">
             {{t "case-name"}}
           </th>
-          <th class="auk-table__col--2">
+          <th class="auk-table__col--3">
             {{t "created-on"}}
           </th>
         </tr>
       </thead>
       <tbody>
-        {{#each (await this.results) as |row|}}
+        {{#each this.results as |row|}}
           <tr data-test-utils-case-search-row>
             <td>
               <AuRadio

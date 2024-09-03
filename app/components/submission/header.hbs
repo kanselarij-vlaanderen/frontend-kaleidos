@@ -170,7 +170,7 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenRequestSendBackModal}}
   @onCancel={{this.toggleRequestSendBackModal}}
-  @title={{t "request-send-back-submission"}}
+  @title={{t "request-send-back-submission-title"}}
   @onConfirm={{queue (perform this.requestSendBackToSubmitter) this.toggleRequestSendBackModal}}
   @alert={{true}}
   @loading={{this.requestSendBackToSubmitter.isRunning}}

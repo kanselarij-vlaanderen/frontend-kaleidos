@@ -7,14 +7,20 @@ import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service store;
   @service currentSession;
+  @service router;
 
   beforeModel() {
     this.decisionmakingFlow = this.modelFor('cases.case').decisionmakingFlow;
   }
 
   async model() {
-    const { decisionmakingFlow, subcase } = this.modelFor('cases.case.subcases.subcase');
+    const { decisionmakingFlow, subcase, subcases } = this.modelFor('cases.case.subcases.subcase');
     const _case = await decisionmakingFlow.case;
+    const subcaseIds = subcases?.map((subcase) => subcase.id);
+    if (!subcaseIds.includes(subcase.id)) {
+      // subcase is not linked to this decisionmakingFlow
+      this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+    }
 
      // Get any submission that is not yet on a meeting
      const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {

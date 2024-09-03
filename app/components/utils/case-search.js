@@ -11,7 +11,7 @@ export default class CaseSearch extends Component {
   textSearchFields = null;
 
   @tracked results = null;
-  @tracked isLoading = false;
+  @tracked isLoading = true;
   @tracked searchText = null;
   @tracked selected
   @tracked page = 0;
@@ -19,7 +19,7 @@ export default class CaseSearch extends Component {
   constructor() {
     super(...arguments);
 
-    this.textSearchFields = ['title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
+    this.textSearchFields = ['uuid', 'title', 'shortTitle', 'subcaseTitle', 'subcaseSubTitle'];
     this.performSearch();
   }
 
@@ -28,7 +28,7 @@ export default class CaseSearch extends Component {
   }
 
   async performSearch(searchTerm) {
-    this.loading = true;
+    this.isLoading = true;
     const searchModifier = ':sqs:';
 
     const textSearchKey = this.textSearchFields.join(',');
@@ -41,7 +41,6 @@ export default class CaseSearch extends Component {
     if (Object.keys(filter).length === 0) {
       filter[':sqs:title'] = '*'; // search without filter
     }
-
     this.results = await search('decisionmaking-flows', this.page, this.size, null, filter, (item) => {
       const entry = item.attributes;
       entry.id = item.id;
