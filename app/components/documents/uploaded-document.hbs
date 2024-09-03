@@ -29,7 +29,7 @@
         </AuFormRow>
         {{#if @allowEditPieceAccessLevel}}
           <AuFormRow>
-            <AuLabel>{{t "confidentiality-level"}}</AuLabel>
+            <AuLabel>{{t (if @simplifiedOptions "confidential" "confidentiality-level")}}</AuLabel>
             <Utils::AccessLevelSelector
               @selected={{@piece.accessLevel}}
               @allowClear={{false}}
