@@ -182,13 +182,12 @@
               </table>
             </div>
           {{else}}
-            <Auk::Panel>
-              <Auk::Panel::Body>
-                <Auk::EmptyState
-                  @message={{t "no-results-found"}}
-                />
-              </Auk::Panel::Body>
-            </Auk::Panel>
+            <div class="auk-u-responsive-margin">
+              <Auk::EmptyState
+                @bordered={{true}}
+                @message={{t "no-results-found"}}
+              />
+            </div>
           {{/if}}
         </div>
       </div>

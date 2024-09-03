@@ -178,14 +178,11 @@
         </table>
       </div>
     {{else}}
-      <Auk::Panel>
-        <Auk::Panel::Body>
-          <Auk::EmptyState
-            @message={{t "no-results-found"}}
-            data-test-route-agendas-overview-filter-warning-no-results
-          />
-        </Auk::Panel::Body>
-      </Auk::Panel>
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found"}}
+        data-test-route-agendas-overview-filter-warning-no-results
+      />
     {{/if}}
   </div>
 </div>
