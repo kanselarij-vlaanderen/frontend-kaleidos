@@ -112,7 +112,7 @@ const selectors = {
     rows:  {
       radio: '[data-test-utils-case-search-row-radio]',
       titleLink: '[data-test-utils-case-search-row-title-link]',
-    }
+    },
   },
 
   kindSelector: {
