@@ -109,10 +109,10 @@ const selectors = {
   caseSearch: {
     input: '[data-test-utils-case-search-input]',
     row: '[data-test-utils-case-search-row]',
-    rows:  {
+    rows: {
       radio: '[data-test-utils-case-search-row-radio]',
       titleLink: '[data-test-utils-case-search-row-title-link]',
-    }
+    },
   },
 
   kindSelector: {
