@@ -7,6 +7,7 @@ import { action } from '@ember/object';
 export default class SubcaseDetailRegular extends Component {
   @service store;
   @service currentSession;
+  @service subcaseService;
 
   @tracked hideAccessLevel = false;
   @tracked latestDecisionActivity;
@@ -18,10 +19,7 @@ export default class SubcaseDetailRegular extends Component {
 
   @task
   *loadLatestDecisionActivity() {
-    this.latestDecisionActivity = yield this.store.queryOne('decision-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      sort: '-start-date',
-    });
+    this.latestDecisionActivity = yield this.subcaseService.getLatestDecisionActivity(this.args.subcase);
     if (this.latestDecisionActivity &&
       ((this.latestDecisionActivity.isRetracted || this.latestDecisionActivity.isPostponed) &&
       !this.currentSession.may('view-access-level-pill-when-postponed'))) {
