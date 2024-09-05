@@ -3,6 +3,7 @@ const selectors = {
   casesHeader: {
     title: '[data-test-cases-header-title]',
     addCase: '[data-test-cases-header-add-case]',
+    addSubmission: '[data-test-cases-header-add-submission]',
     clearFilter: '[data-test-cases-header-clear-filter]',
     filter: '[data-test-cases-header-filter-input]',
   },
@@ -22,15 +23,6 @@ const selectors = {
     longtitle: '[data-test-new-subcase-form-longtitle]',
     procedureStep: '[data-test-new-subcase-form-procedure-step]',
     procedureName: '[data-test-new-subcase-form-procedure-name]',
-    mandateeSelectorPanel: {
-      container: '[data-test-mandatee-selector-panel-container]',
-      selectedMinister: '[data-test-mandatee-selector-panel-selected-minister]',
-      selectedMinisterName: '[data-test-mandatee-selector-panel-selected-minister-name]',
-      submitterRadio: '[data-test-mandatee-selector-panel-submitter-radio]',
-    },
-    governmentAreasPanel: '[data-test-government-areas-panel]',
-    areasPanelFieldsList: '[data-test-government-areas-panel-fields-list]',
-    documentUploadPanel: '[data-test-add-subcase-document-upload-panel]',
     cancel: '[data-test-new-subcase-form-cancel]',
     save: '[data-test-new-subcase-form-save]',
   },
@@ -61,6 +53,7 @@ const selectors = {
       editCase: '[data-test-subcase-overview-header-edit-case]',
       archive: '[data-test-subcase-overview-header-archive]',
     },
+    createSubmission: '[data-test-subcase-overview-header-create-submission]',
   },
 
   // subcase-side-nav
@@ -78,7 +71,7 @@ const selectors = {
     panel: '[data-test-subcase-bekrachtiging-description-panel]',
   },
 
-  // subcase-description
+  // subcase/description-panel/view
   subcaseDescription: {
     panel: '[data-test-subcase-description-panel]',
     edit: '[data-test-subcase-description-edit]',
@@ -90,10 +83,11 @@ const selectors = {
     agendaLink: '[data-test-subcase-description-agenda-link]',
     meetingNumber: '[data-test-subcase-description-meeting-number]',
     decidedOn: '[data-test-subcase-description-decided-on]',
+    // TODO test subaseType, subcaseName edits
     subcaseName: '[data-test-subcase-description-subcase-name]',
   },
 
-  // subcase-description-edit
+  // subcase/description-panel/edit
   subcaseDescriptionEdit: {
     type: '[data-test-subcase-description-edit-type]',
     confidential: '[data-test-subcase-description-edit-confidential]',
@@ -126,5 +120,17 @@ const selectors = {
     shortTitle: '[data-test-edit-case-shorttitle]',
     save: '[data-test-edit-case-save]',
   },
+
+  // government-areas-panel under cases/subcases
+  governmentAreasPanel: {
+    panel: '[data-test-government-areas-panel]',
+    fieldsList: '[data-test-government-areas-panel-fields-list]',
+  },
+
+  // document-upload-panel under cases/subcases
+  documentUploadPanel: {
+    panel: '[data-test-subcases-document-upload-panel]',
+  },
+
 };
 export default selectors;

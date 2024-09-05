@@ -8,12 +8,14 @@
     {{#if this.hasActions}}
       <Auk::Toolbar::Group @position="right">
         <AuDropdown
+          data-test-submission-header-actions
           @skin="secondary"
           @title={{t "actions"}}
           @alignment="right"
         >
           {{#if this.canCreateSubcase}}
             <AuButton
+              data-test-submission-header-action-create-subcase
               @skin="naked"
               {{on "click" (toggle "isOpenCreateSubcaseModal" this)}}
             >
@@ -26,6 +28,7 @@
           {{/if}}
           {{#if this.canTakeInTreatment}}
             <AuButton
+              data-test-submission-header-action-take-in-treatment
               @skin="naked"
               @alert={{if this.isSendBackRequested true}}
               {{on "click" this.takeInTreatment}}
@@ -36,6 +39,7 @@
           <AuHr/>
           {{#if this.canSendBackToSubmitter}}
             <AuButton
+              data-test-submission-header-action-send-back
               @skin="naked"
               @alert={{not this.isSendBackRequested}}
               {{on "click" (toggle "isOpenSendBackModal" this)}}
@@ -45,6 +49,7 @@
           {{/if}}
           {{#if this.canDeleteSubmission}}
             <AuButton
+              data-test-submission-header-action-delete
               @skin="naked"
               @alert={{true}}
               {{on "click" (toggle "isOpenDeleteModal" this)}}
@@ -57,6 +62,7 @@
     {{/if}}
     {{#if this.canResubmitSubmission}}
       <AuButton
+        data-test-submission-header-action-resubmit
         @skin="primary"
         {{on "click" (toggle "isOpenResubmitModal" this)}}
       >
@@ -65,6 +71,7 @@
     {{/if}}
     {{#if this.canRequestSendBack}}
       <AuButton
+        data-test-submission-header-action-request-send-back
         @skin="primary"
         @alert={{true}}
         {{on "click" (toggle "isOpenRequestSendBackModal" this)}}

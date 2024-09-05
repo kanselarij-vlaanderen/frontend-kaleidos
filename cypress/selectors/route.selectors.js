@@ -85,6 +85,19 @@ const selectors = {
     add: '[data-test-route-cases---subcase-add-documents]',
   },
 
+  // cases/submissions/submission
+  submission: {
+    documents: {
+      panel: '[data-test-route-cases---submission-documents-panel]',
+      batchEdit: '[data-test-route-cases---submission-documents-batch-edit]',
+      add: '[data-test-route-cases---submission-documents-batch-edit]',
+    },
+    history: {
+      panel: '[data-test-route-cases---submission-history-panel]',
+    },
+
+  },
+
   /**
     ROUTE SEARCH
   */

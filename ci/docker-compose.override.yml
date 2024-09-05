@@ -110,3 +110,7 @@ services:
   agenda-approve:
     environment:
       SERVER_BUSY_TIMEOUT: 10
+  draft-file:
+    user: ${HOST_UID_GID}
+  draft-file-mover:
+    user: ${HOST_UID_GID}

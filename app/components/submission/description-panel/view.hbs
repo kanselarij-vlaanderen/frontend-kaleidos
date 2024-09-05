@@ -1,4 +1,4 @@
-<Auk::Panel>
+<Auk::Panel data-test-submission-description-panel>
   <Auk::Panel::Header>
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
@@ -12,7 +12,7 @@
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
-              data-test-subcase-description-edit
+              data-test-submission-description-edit
               @skin="naked"
               @icon="pencil"
               {{on "click" @onClickEdit}}
@@ -27,6 +27,7 @@
   <Auk::Panel::Body>
     <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
       <AuHeading
+        data-test-submission-description-short-title
         @level="4"
         @skin="4"
       >
@@ -34,6 +35,7 @@
       </AuHeading>
       <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
         <AuPill
+          data-test-submission-description-agendaitem-type-pill
           @size="small"
         >
           {{#if (is-announcement @submission.agendaItemType)}}
@@ -44,6 +46,7 @@
         </AuPill>
         {{#if @submission.confidential}}
           <AuPill
+            data-test-submission-description-confidentiality-pill
             @size="small"
             @skin="warning"
             @icon="lock-closed">{{t "limited-access"}}
@@ -52,14 +55,14 @@
       </div>
     </div>
     {{#if (user-may "treat-and-accept-submissions")}}
-      <p>{{capitalize @submission.title}}</p>
+      <p data-test-submission-description-title>{{capitalize @submission.title}}</p>
     {{/if}}
   </Auk::Panel::Body>
   <Auk::Panel::Body>
     <div class="au-o-grid au-o-grid--small au-u-1-1">
       <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
         <AuHeading @level="4" @skin="6">{{t "subcase"}}</AuHeading>
-        <p>
+        <p data-test-submission-description-subcase-type>
           {{#if (await @submission.type)}}
             {{@submission.type.label}}
           {{else}}
@@ -70,7 +73,7 @@
       {{#if (user-may "treat-and-accept-submissions")}}
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "subcase-name"}}</AuHeading>
-          <p>
+          <p data-test-submission-description-subcase-name>
             {{if @submission.subcaseName @submission.subcaseName '-'}}
           </p>
         </div>
