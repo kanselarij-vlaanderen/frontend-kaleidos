@@ -13,6 +13,11 @@
         <li>
           <a href="#agenda" class="js-anchor">Agenderingen</a>
         </li>
+        {{#if @submission}}
+        <li>
+          <a href="#agenda-versions" class="js-anchor">Historiek Indieningen</a>
+        </li>
+        {{/if}}
       </ul>
     </div>
     {{else}}
@@ -28,6 +33,11 @@
         <li>
           <a href="#agenda" class="js-anchor">Publicatiestatussen</a>
         </li>
+        {{#if @submission}}
+        <li>
+          <a href="#agenda-versions" class="js-anchor">Historiek Indieningen</a>
+        </li>
+        {{/if}}
       </ul>
     </div>
     {{/if}}
@@ -44,6 +54,11 @@
       <li>
         <a href="#agenda" class="js-anchor">Document versies</a>
       </li>
+      {{#if @submission}}
+        <li>
+          <a href="#agenda-versions" class="js-anchor">Historiek Indieningen</a>
+        </li>
+        {{/if}}
     </ul>
   </div>
   {{else}}
@@ -59,6 +74,11 @@
       <li>
         <a href="#agenda" class="js-anchor">Agenderingen</a>
       </li>
+      {{#if @submission}}
+        <li>
+          <a href="#agenda-versions" class="js-anchor">Historiek Indieningen</a>
+        </li>
+        {{/if}}
     </ul>
   </div>
   {{/if}}

@@ -67,4 +67,13 @@
       <Auk::EmptyState @message={{or @emptyStateMessage (t "no-ministers-added")}} />
     </Auk::Panel::Body>
   {{/if}}
+  {{#if @submission}}
+  <Auk::Panel::Body>
+    <AuAlert @skin="warning" @icon="alert-triangle" @title="De volgende ministers worden verwijderd in deze update:" @size="small">
+      <ul>
+        <li>Lydia Peeters</li>
+      </ul>
+    </AuAlert>
+  </Auk::Panel::Body>
+  {{/if}}
 </Auk::Panel>

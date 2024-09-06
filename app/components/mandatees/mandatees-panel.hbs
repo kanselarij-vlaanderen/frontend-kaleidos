@@ -6,6 +6,7 @@
       @submitter={{@submitter}}
       @onCancel={{this.cancelEditing}}
       @onSave={{perform this.save}}
+      @submission={{@submission}}
     />
   {{else}}
     <div class="auk-u-mb-3">
@@ -15,6 +16,7 @@
         @showEditButton={{@allowEditing}}
         @onClickEdit={{this.startEditing}}
         @emptyStateMessage={{@emptyStateMessage}}
+        @submission={{@submission}}
       />
     </div>
   {{/if}}

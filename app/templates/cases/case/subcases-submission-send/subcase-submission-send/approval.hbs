@@ -21,7 +21,9 @@
     @emptyStateMessage={{if this.showMandateesNotApplicableMessage (t "not-applicable")}}
     @allowEditing={{true}}
     @onSave={{this.saveMandateeData}}
+    @submission={{true}}
   />
+  
   <Utils::GovernmentAreas::GovernmentAreasPanel
     @referenceDate={{or this.meeting.plannedStart this.agenda.created @model.subcase.created}}
     @governmentAreas={{@model.subcase.governmentAreas}}
@@ -80,8 +82,8 @@
     </Auk::Panel>
   </div>
 
-  <div id="agenda">
-     <div>
+  <div id="agenda" class="auk-u-mb-4">
+    <div>
       <Auk::Panel data-test-subcase-description-panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
@@ -101,10 +103,120 @@
             >
               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
-                Ingediend op 23-12-2023
+                Geagendeerd op de <AuLink @route="agendas">agenda van 03-09-2024</AuLink>
+              </div>
+            </li>
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                Ingediend voor agendering op 03-09-2024
               </div>
             </li>
           </ul>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
+  </div>
+
+  <div id="agenda-versions">
+    <div>
+      <Auk::Panel data-test-subcase-description-panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-panel__title">
+                  Historiek indieningen
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-bg-alt au-o-flow">
+          <div>
+            <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><AuHeading @level="5" @skin="6">Update ingediend door Tom De Nies </AuHeading><AuPill @skin="warning" @icon="undo" @size="small">Teruggestuurd</AuPill></div>
+            <ol class="vlc-status-timeline">
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Teruggestuurd op 04-09-2024 om 11:05
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  In behandeling genomen door Tom De Nies op 04-09-2024 om 11:04
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Update ingediend door Tom De Nies op 04-09-2024 om 11:03
+                </div>
+              </li>
+            </ol>
+          </div>
+          <div>
+            <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny"><AuHeading @level="5" @skin="6">Ingediend door Hilde Van Nijen </AuHeading><AuPill @skin="success" @icon="check" @size="small">Behandeld</AuPill></div>
+            <ol class="vlc-status-timeline">
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Behandeld op 04-09-2024 om 11:05
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  In behandeling genomen door Kenny Vermunicht op 04-09-2024 om 11:05
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Opnieuw ingediend door Kenny Vermunicht op 04-09-2024 om 11:05
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Teruggestuurd op 04-09-2024 om 11:05
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Aanpassing aangevraagd door Hilde Van Nijen op 30-08-2024 om 11:03
+                </div>
+              </li>
+              <li
+                class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              >
+                <div class="vlc-status-timeline__dot"></div>
+                <div class="vlc-status-timeline__text">
+                  Ingediend door Hilde Van Nijen op 30-08-2024 om 11:03: 'Advies IF volgt nog'
+                </div>
+              </li>
+            </ol>
+          </div>
         </Auk::Panel::Body>
       </Auk::Panel>
     </div>

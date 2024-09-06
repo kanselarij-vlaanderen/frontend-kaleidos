@@ -247,13 +247,15 @@
             </table>
           </div>
           {{else}}
-            <Auk::Panel>
-              <Auk::Panel::Body>
-                <Auk::EmptyState
-                  @message={{t "no-results-found"}}
-                />
-              </Auk::Panel::Body>
-            </Auk::Panel>
+            <div class="auk-u-m-4">
+              <Auk::Panel>
+                <Auk::Panel::Body>
+                  <Auk::EmptyState
+                    @message={{t "no-results-found"}}
+                  />
+                </Auk::Panel::Body>
+              </Auk::Panel>
+            </div>
           {{/if}}
         </div>
       </div>

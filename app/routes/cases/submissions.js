@@ -31,7 +31,6 @@ export default class CasesSubmissionsRoute extends Route {
         number: params.page,
         size: params.size,
       },
-      'filter[id]': '6493E1E66C91A50FD9CECC7C',
     };
     if (params.showArchivedOnly) {
       options['filter[case][is-archived]'] = true;

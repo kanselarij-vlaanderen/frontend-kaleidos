@@ -80,9 +80,63 @@
 
   <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{this.subcase}}/>
 
-  <div id="agenda" {{did-insert this.observeElement}}>
+  <div id="agenda" class="auk-u-mb-4" {{did-insert this.observeElement}}>
     {{!-- <Subcase::SubcaseAgendaPanel @subcase={{@model.subcase}} /> --}}
      <Subcase::SubcaseVersionsPanel @subcase={{@model.subcase}} />
+  </div>
+
+  <div id="agenda-versions" {{did-insert this.observeElement}}>
+     <div>
+      <Auk::Panel data-test-subcase-description-panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <h4 class="auk-panel__title">
+                  Historiek indieningen
+                </h4>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body class="auk-u-bg-alt">
+          <ul class="vlc-status-timeline">
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                Opnieuw ingediend op 27-05-2024
+              </div>
+            </li>
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                Teruggestuurd op 24-05-2024: 'opmerking ...'
+              </div>
+            </li>
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                Behandeld door 'naam' op 24-05-2024
+              </div>
+            </li>
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                Ingediend op 23-05-2024
+              </div>
+            </li>
+          </ul>
+        </Auk::Panel::Body>
+      </Auk::Panel>
+    </div>
   </div>
 
  
