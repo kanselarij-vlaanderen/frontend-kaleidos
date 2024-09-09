@@ -7,19 +7,20 @@
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
-// import route from '../../selectors/route.selectors';
+import route from '../../selectors/route.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
 import submissions from '../../selectors/submission.selectors';
 import utils from '../../selectors/utils.selectors';
 
 /**
- * @description Creates a new submission for a new case.
+ * @description Creates a new submission for a new or existing case.
  * @name createSubmission
  * @memberOf Cypress.Chainable#
  * @function
  * @param {
  *  {
+ *    caseShortTitle: String,
  *    agendaitemType: String,
  *    confidential: Boolean,
  *    shortTitle: String,
@@ -44,23 +45,40 @@ function createSubmission(submission) {
 
   cy.log('createSubmission');
   cy.intercept('POST', '/submissions').as(`createNewSubmission${randomInt}`);
-  // cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
-  // cy.intercept('POST', '/submission-activities').as(`postSubmissionActivities${randomInt}`); // we need to check draft docs
+  cy.intercept('POST', '/draft-document-containers').as('createNewDraftDocumentContainer');
+  cy.intercept('POST', '/draft-pieces').as('createNewDraftPiece');
+  cy.intercept('POST', '/submission-status-change-activities')
+    .as('createNewSubmissionStatusChangeActivity');
+  // should be 3, 1-3 may fail depending on email adresses set on profile and settings
+  cy.intercept('POST', '/emails').as('createMails');
+  cy.intercept('POST', '/meetings/*/submit-submission').as('submitSubmission');
   cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
-  cy.intercept('GET', '/government-bodies**').as(
-    `getGovernmentBodies${randomInt}`
-  );
+  cy.intercept('GET', '/government-bodies**')
+    .as(`getGovernmentBodies${randomInt}`);
 
-  cy.visit('dossiers?aantal=2'); // would it be faster to go to submissions page?
-  // in case page is loading
+  if (submission.caseShortTitle) {
+    cy.openCase(submission.caseShortTitle);
+  } else {
+    cy.visit('dossiers?aantal=2'); // would it be faster to go to submissions page?
+  }
+
+  // if case page is loading
   cy.get(appuniversum.loader, {
     timeout: 60000,
   });
   cy.get(appuniversum.loader).should('not.exist', {
     timeout: 60000,
   });
-  cy.get(cases.casesHeader.addSubmission).click();
-  cy.url().should('include', 'dossiers/nieuwe-indiening');
+  if (submission.caseShortTitle) {
+    cy.get(cases.subcaseOverviewHeader.createSubmission).click();
+    cy.url().should('not.include', '/dossiers/nieuwe-indiening');
+    cy.url().should('include', '/deeldossiers/nieuwe-indiening');
+  } else {
+    cy.get(cases.casesHeader.addSubmission).click();
+    cy.url().should('include', '/dossiers/nieuwe-indiening');
+    cy.url().should('not.include', '/deeldossiers/nieuwe-indiening');
+  }
+
 
   cy.wait(`@getMandatees${randomInt}`, {
     timeout: 60000,
@@ -89,6 +107,7 @@ function createSubmission(submission) {
   if (submission.shortTitle) {
     cy.get(submissions.newSubmissionForm.shortTitle)
       .click()
+      .clear()
       .type(submission.shortTitle);
   }
 
@@ -108,20 +127,21 @@ function createSubmission(submission) {
 
   // add mandatees
   if (submission.mandatees) {
-    let count = 0;
+    // let count = 0;
     submission.mandatees.forEach((mandateeModel) => {
       cy.get(mandatee.mandateeSelectorPanel.container)
         .find(appuniversum.checkbox)
         .contains(mandateeModel.fullName)
         .click();
-      if (mandateeModel.submitter && count > 0) {
-        cy.get(mandatee.mandateeSelectorPanel.selectedMinisterName)
-          .contains(mandateeModel.fullName)
-          .parents(mandatee.mandateeSelectorPanel.selectedMinister)
-          .find(appuniversum.radio)
-          .click();
-      }
-      count++;
+      // no option to select or change submitter
+      // if (mandateeModel.submitter) {
+      //   cy.get(mandatee.mandateeSelectorPanel.selectedMinisterName)
+      //     .contains(mandateeModel.fullName)
+      //     .parents(mandatee.mandateeSelectorPanel.selectedMinister)
+      //     .find(appuniversum.radio)
+      //     .click();
+      // }
+      // count++;
     });
   }
 
@@ -177,10 +197,15 @@ function createSubmission(submission) {
       .type(submission.notifiedComment);
   }
 
+  // if we type a comment and immediately upload a file with cypress, the 'on "change"' may not have triggered
+  cy.get(submissions.documentUploadPanel.panel).click();
+
   // add documents
   if (submission.documents) {
     cy.addDocumentsInSubmissionFileUpload(submission.documents);
   }
+  // entire form has shifted off the page, move it back a little (cypress doesn't care)
+  cy.get(submissions.agendaItemTypeSelector.typeRadio).scrollIntoView();
 
   // save
   cy.get(appuniversum.loader, {
@@ -201,13 +226,6 @@ function createSubmission(submission) {
     cy.get(submissions.proposableAgendas.comment).click()
       .type(submission.comment);
   }
-
-  cy.intercept('POST', 'draft-document-containers').as('createNewDraftDocumentContainer');
-  cy.intercept('POST', 'draft-pieces').as('createNewDraftPiece');
-  cy.intercept('POST', 'submission-status-change-activities').as('createNewSubmissionStatusChangeActivity');
-  // should be 3, 1-3 may fail depending on email adresses set on profile and settings
-  cy.intercept('POST', 'emails').as('createMails');
-  cy.intercept('POST', 'meetings/*/submit-submission').as('submitSubmission');
 
   // save the form
   cy.get(submissions.proposableAgendas.save).click();
@@ -256,6 +274,24 @@ function createSubmission(submission) {
         });
       })
     );
+}
+
+/**
+ * @description Opens a submission from the submissions overvie.
+ * @name openSubmission
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {shortTitle: String}
+*/
+function openSubmission(shortTitle) {
+  cy.log('openSubmission');
+  cy.visit('dossiers/indieningen?aantal=50');
+  cy.get(route.submissionsOverview.dataTable, {
+    timeout: 60000,
+  }).contains(shortTitle)
+    .parents('tr')
+    .click();
+  cy.log('/openSubmission');
 }
 
 /**
@@ -336,10 +372,117 @@ function addDocumentsInSubmissionFileUpload(files) {
   cy.log('/addDocumentsInSubmissionFileUpload');
 }
 
+
+/**
+ * @description Accepts the current submission and creates subcase
+ * @name acceptSubmissionCreateSubcase
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {
+ *  {
+ *    newCase: Boolean,
+ *    shortTitle: String,
+ *    [documents]: String,
+ *    formallyOk: String,
+ *    privateComment: String,
+ *    agendaDate: String,
+ *    agendaKind: String,
+ *  }[]
+ * } submission
+ */
+function acceptSubmissionCreateSubcase(submission) {
+  cy.log('acceptSubmissionCreateSubcase');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/decisionmaking-flows').as(`createNewDecisionmakingFlow${randomInt}`);
+  cy.intercept('POST', '/cases').as(`createNewCase${randomInt}`);
+  cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
+  cy.intercept('POST', '/document-containers').as('createNewDocumentContainer');
+  cy.intercept('POST', '/draft-files/*/move').as('moveDraftFiles');
+  cy.intercept('POST', '/pieces').as('createNewPiece');
+  cy.intercept('POST', '/submission-activities').as(`postSubmissionActivities${randomInt}`);
+  cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
+  cy.intercept('POST', '/submission-status-change-activities')
+    .as('createNewSubmissionStatusChangeActivity');
+  cy.intercept('PATCH', '/submissions/*').as(`patchSubmission${randomInt}`);
+
+  cy.get(submissions.submissionHeader.actions).click();
+  cy.get(submissions.submissionHeader.action.createSubcase).click();
+  // formally ok selector
+  cy.get(cases.proposableAgendas.formallyOkSelector).click();
+  const optionToSelect = submission.formallyOk || 'Nog niet formeel OK'; // default
+  cy.get(dependency.emberPowerSelect.option).contains(optionToSelect,
+    {
+      matchCase: false,
+    })
+    .scrollIntoView()
+    .trigger('mouseover')
+    .click();
+
+  if (submission.privateComment) {
+    // only append/don't clear because default text exists?
+    cy.get(cases.proposableAgendas.privateComment).click()
+      .type(submission.privateComment);
+  }
+
+  // select the agenda or save without one
+  if (submission.agendaDate) {
+    // TODO-submission test the ability to change agenda from what was requested, maybe param differentAgenda ?
+    cy.get(cases.proposableAgendas.agendaRow).children()
+      .contains(submission.agendaDate);
+    // should always already be selected unless there is an issue, check the radio button here?
+    // .scrollIntoView()
+    // .click();
+    cy.get(cases.proposableAgendas.placeOnAgenda).click();
+  } else {
+    // no intercept to /meeting/*/submit
+    // TODO-submission test this action
+    // cy.get(cases.proposableAgendas.saveWithoutAgenda).click();
+  }
+
+  if (submission.newCase) {
+    cy.wait(`@createNewDecisionmakingFlow${randomInt}`);
+    cy.wait(`@createNewCase${randomInt}`);
+  }
+  cy.wait(`@createNewSubcase${randomInt}`);
+  // can take long depending on amount of documents
+  cy.wait('@createNewDocumentContainer');
+  cy.wait('@moveDraftFiles');
+  cy.wait('@createNewPiece');
+  cy.wait(`@postSubmissionActivities${randomInt}`);
+  cy.wait(`@submitToMeeting${randomInt}`);
+  cy.wait('@createNewSubmissionStatusChangeActivity');
+  cy.wait(`@patchSubmission${randomInt}`);
+  cy.log('/acceptSubmissionCreateSubcase');
+}
+
+/**
+ * @description Change the current submission status to "in treatment"
+ * @name takeInTreatment
+ * @memberOf Cypress.Chainable#
+ * @function
+ */
+function takeInTreatment() {
+  cy.log('takeInTreatment');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/submission-status-change-activities')
+    .as(`createNewSubmissionStatusChangeActivity${randomInt}`);
+  cy.intercept('PATCH', '/submissions/*').as(`patchSubmission${randomInt}`);
+
+  cy.get(submissions.submissionHeader.actions).click();
+  cy.get(submissions.submissionHeader.action.takeInTreatment).click();
+
+  cy.wait(`@createNewSubmissionStatusChangeActivity${randomInt}`);
+  cy.wait(`@patchSubmission${randomInt}`);
+  cy.log('/takeInTreatment');
+}
+
 // Commands
 
-Cypress.Commands.add('createSubmission', createSubmission);
-// Cypress.Commands.add('createSubmissionInCase', createSubmissionInCase);
+Cypress.Commands.add('createSubmission', createSubmission); // used for new or existing case
+Cypress.Commands.add('openSubmission', openSubmission);
+Cypress.Commands.add('acceptSubmissionCreateSubcase', acceptSubmissionCreateSubcase);
+Cypress.Commands.add('takeInTreatment', takeInTreatment);
+// Cypress.Commands.add('openSubmissionInAgenda', openSubmissionInAgenda);
 // Cypress.Commands.add('createUpdateSubmission', createUpdateSubmission);
 
 Cypress.Commands.add('addDocumentsInSubmissionFileUpload', addDocumentsInSubmissionFileUpload);

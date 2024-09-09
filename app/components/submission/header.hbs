@@ -60,25 +60,27 @@
         </AuDropdown>
       </Auk::Toolbar::Group>
     {{/if}}
-    {{#if this.canResubmitSubmission}}
-      <AuButton
-        data-test-submission-header-action-resubmit
-        @skin="primary"
-        {{on "click" (toggle "isOpenResubmitModal" this)}}
-      >
-        {{t "resubmit-submission"}}
-      </AuButton>
-    {{/if}}
-    {{#if this.canRequestSendBack}}
-      <AuButton
-        data-test-submission-header-action-request-send-back
-        @skin="primary"
-        @alert={{true}}
-        {{on "click" (toggle "isOpenRequestSendBackModal" this)}}
-      >
-        {{t "request-send-back-submission"}}
-      </AuButton>
-    {{/if}}
+    <AuButtonGroup>
+      {{#if this.canResubmitSubmission}}
+        <AuButton
+          data-test-submission-header-action-resubmit
+          @skin="primary"
+          {{on "click" (toggle "isOpenResubmitModal" this)}}
+        >
+          {{t "resubmit-submission"}}
+        </AuButton>
+      {{/if}}
+      {{#if this.canRequestSendBack}}
+        <AuButton
+          data-test-submission-header-action-request-send-back
+          @skin="primary"
+          @alert={{true}}
+          {{on "click" (toggle "isOpenRequestSendBackModal" this)}}
+        >
+          {{t "request-send-back-submission"}}
+        </AuButton>
+      {{/if}}
+    </AuButtonGroup>
   </Auk::Toolbar>
 </Auk::Navbar>
 
