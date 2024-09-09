@@ -181,7 +181,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     );
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      (this.confidential || parsed.confidential)
+      (confidential || parsed.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
