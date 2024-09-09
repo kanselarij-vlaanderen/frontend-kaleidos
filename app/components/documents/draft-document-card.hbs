@@ -132,6 +132,21 @@
               </AuDropdown>
               {{!-- template-lint-enable require-context-role --}}
             </Group.Item>
+          {{else if this.mayShowAddNewVersion}}
+            <Group.Item
+              class="auk-o-flex auk-o-flex--vertical-center"
+            >
+              {{!-- template-lint-disable require-context-role --}}
+              <AuButton
+                @skin="link"
+                @icon="plus"
+                {{on "click" (toggle "isOpenUploadModal" this)}}
+                role="menuitem"
+              >
+                {{t "create-new-version"}}
+              </AuButton>
+              {{!-- template-lint-enable require-context-role --}}
+            </Group.Item>
           {{/if}}
         </Toolbar.Group>
       </Auk::Toolbar>
@@ -181,9 +196,36 @@
 {{/if}}
 
 <ConfirmationModal
+  @modalOpen={{this.isOpenUploadModal}}
+  @title={{t "new-document-piece"}}
+  @onConfirm={{perform this.addPiece}}
+  @onCancel={{perform this.cancelUploadPiece}}
+  @confirmMessage={{t "add"}}
+  @loading={{this.addPiece.isRunning}}
+  @disabled={{not this.newPiece}}
+>
+  <:body>
+    {{#if this.newPiece}}
+      <AuLabel>{{t "name"}}</AuLabel>
+      <AuInput
+        value={{this.newPiece.name}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "newPiece.name"))}}
+      />
+      <Documents::UploadedDocument
+        @piece={{this.newPiece}}
+        @onDelete={{perform this.deleteUploadedPiece}}
+      />
+    {{else}}
+      <Auk::FileUploader @isSubmission={{true}} @multiple={{false}} @onUpload={{perform this.uploadPiece}} />
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
   @modalOpen={{this.isOpenVerifyDeleteModal}}
-  @title={{t "document-container-delete"}}
-  @message={{t "delete-document-container-message"}}
+  @title={{t "draft-piece-delete"}}
+  @message={{t "delete-draft-piece-message"}}
   @onConfirm={{this.verifyDeleteDocumentContainer}}
   @onCancel={{this.cancelDeleteDocumentContainer}}
   @confirmMessage={{t "delete"}}

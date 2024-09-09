@@ -109,6 +109,7 @@
             <Documents::DraftDocumentCardList
               @pieces={{this.pieces}}
               @isEditable={{this.mayEdit}}
+              @onAddPiece={{this.onAddNewPieceVersion}}
               @hideAccessLevel={{false}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
