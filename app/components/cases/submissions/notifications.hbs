@@ -210,7 +210,7 @@
               data-test-submission-notifications-cancel
               @skin="naked"
               @disabled={{this.saveNotificationData.isRunning}}
-              {{on "click" (toggle "isEditing" this)}}
+              {{on "click" this.cancel}}
             >
               {{t "cancel"}}
             </AuButton>

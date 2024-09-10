@@ -34,11 +34,11 @@
     </AuAlert>
   {{/if}}
   <div class="auk-u-responsive-margin">
-
     <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
         @mayEdit={{and this.mayEdit (not this.isUpdate)}}
+        @onSave={{perform this.onSaveDescription}}
       />
     </div>
 
@@ -66,7 +66,7 @@
     <Cases::Submissions::Notifications
       class="auk-u-mb-2"
       @allowEditing={{this.mayEdit}}
-      @confidential={{@model.confidential}}
+      @confidential={{this.confidential}}
       @hasConfidentialPieces={{this.hasConfidentialPieces}}
       @approvalAddresses={{this.approvalAddresses}}
       @approvalComment={{this.approvalComment}}
@@ -74,6 +74,7 @@
       @notificationComment={{this.notificationComment}}
       @onNotificationDataChanged={{this.onNotificationDataChanged}}
       @onSaveNotificationData={{this.onSaveNotificationData}}
+      @onCancelNotificationData={{this.onCancelNotificationData}}
     />
 
     <div id="documents" class="auk-u-mb-4">

@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
@@ -37,6 +37,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked notificationComment;
   @tracked beingTreatedBy;
   @tracked isUpdate;
+  @tracked confidential;
 
   hasConfidentialPieces; // not updated on piece.accessLevel changes
   currentLinkedMandatee;
@@ -65,12 +66,29 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     });
   }
 
+  onSaveDescription = task(async () => {
+    if (this.confidential !== this.model.confidential) {
+      this.confidential = this.model.confidential;
+      // we need to wait for the emails to update when confidential has changed.
+      // the notification panel updates the tracked properties of this controller when confidential changes
+      await timeout(500);
+      await this.onSaveNotificationData();
+    }
+  });
+
   onNotificationDataChanged = async (newNotificationData) => {
     this.approvalAddresses = newNotificationData.approvalAddresses;
     this.approvalComment = newNotificationData.approvalComment;
     this.notificationAddresses = newNotificationData.notificationAddresses;
     this.notificationComment = newNotificationData.notificationComment;
   };
+
+  onCancelNotificationData = async () => {
+    this.approvalAddresses = this.model.approvalAddresses;
+    this.approvalComment = this.model.approvalComment;
+    this.notificationAddresses = this.model.notificationAddresses;
+    this.notificationComment = this.model.notificationComment;
+  }
 
   onSaveNotificationData = async () => {
     this.model.approvalAddresses = this.approvalAddresses;
@@ -181,7 +199,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     );
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      (this.confidential || parsed.confidential)
+      (this.model.confidential || parsed.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
