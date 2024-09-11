@@ -4,10 +4,10 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { task } from 'ember-concurrency';
-import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { containsConfidentialPieces, sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
@@ -64,6 +64,32 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       return d1?.position - d2?.position || p1.created - p2.created;
     });
   }
+
+  checkConfidentiality = async () => {
+    this.hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
+  };
+
+  onAddNewPieceVersion = async (piece, newVersion) => {
+    const documentContainer = await newVersion.documentContainer;
+    await documentContainer.save();
+    newVersion.submission = this.model;
+    await newVersion.save();
+    try {
+      const sourceFile = await newVersion.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+    const index = this.pieces.indexOf(piece);
+    this.pieces[index] = newVersion;
+    this.pieces = [...this.pieces];
+    addObject(this.newDraftPieces, newVersion);
+    await this.checkConfidentiality();
+    await this.savePieces.perform();
+  };
 
   onNotificationDataChanged = async (newNotificationData) => {
     this.approvalAddresses = newNotificationData.approvalAddresses;
@@ -181,7 +207,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     );
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      (this.confidential || parsed.confidential)
+      (confidential || parsed.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
