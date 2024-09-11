@@ -14,9 +14,9 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
   @tracked showNotificationAddressModal = false;
   @tracked emailSettings;
   @tracked isEditing = false;
-  @tracked approvalAddresses = new TrackedArray([...this.args.approvalAddresses]);
+  @tracked approvalAddresses;
   @tracked approvalComment;
-  @tracked notificationAddresses = new TrackedArray([...this.args.notificationAddresses]);
+  @tracked notificationAddresses;
   @tracked notificationComment;
 
   constructor() {
@@ -55,7 +55,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     for (const address of this.defaultNotificationAddresses) {
       this.addNotificationAddress(address, true);
     }
-    this.args.onNotificationDataChanged?.(this.notificationData);
+    this.changeNotificationData();
   });
 
   get defaultApprovalAddress() {
@@ -111,7 +111,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
         this.approvalAddresses.push(address);
       }
       if (!this.updateDefaultAddresses.isRunning) {
-        this.args.onNotificationDataChanged?.(this.notificationData);
+        this.changeNotificationData();
       }
     }
     this.showApprovalAddressModal = false;
@@ -123,7 +123,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     if (index > -1) {
       this.approvalAddresses.splice(index, 1);
       if (!this.updateDefaultAddresses.isRunning) {
-        this.args.onNotificationDataChanged?.(this.notificationData);
+        this.changeNotificationData();
       }
     }
   }
@@ -137,7 +137,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
         this.notificationAddresses.push(address);
       }
       if (!this.updateDefaultAddresses.isRunning) {
-        this.args.onNotificationDataChanged?.(this.notificationData);
+        this.changeNotificationData();
       }
     }
     this.showNotificationAddressModal = false;
@@ -149,7 +149,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     if (index > -1) {
       this.notificationAddresses.splice(index, 1);
       if (!this.updateDefaultAddresses.isRunning) {
-        this.args.onNotificationDataChanged?.(this.notificationData);
+        this.changeNotificationData();
       }
     }
   }
@@ -160,20 +160,28 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     this.isEditing = false;
   };
 
+  changeNotificationData = () => {
+    // no submission - new submission form
+    // submission - when not actually editing we are updating based on "did-update" and should call parent
+    if (!this.args.submission || this.args.submission && !this.isEditing) {
+      this.args.onNotificationDataChanged?.(this.notificationData);
+    }
+  };
+
   saveNotificationData = task(async () => {
-    await this.args.onSaveNotificationData?.();
+    await this.args.onSaveNotificationData?.(this.notificationData);
     this.isEditing = false;
   });
 
   @action
   onChangeApprovalComment(newComment) {
     this.approvalComment = trimText(newComment);
-    this.args.onNotificationDataChanged?.(this.notificationData);
+    this.changeNotificationData();
   }
 
   @action
   onChangeNotificationComment(newComment) {
     this.notificationComment = trimText(newComment);
-    this.args.onNotificationDataChanged?.(this.notificationData);
+    this.changeNotificationData();
   }
 }

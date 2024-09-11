@@ -7,7 +7,7 @@ import { task, timeout } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieces, containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
@@ -39,7 +39,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked isUpdate;
   @tracked confidential;
 
-  hasConfidentialPieces; // not updated on piece.accessLevel changes
+  @tracked hasConfidentialPieces;
   currentLinkedMandatee;
 
   get mayEdit() {
@@ -66,36 +66,60 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     });
   }
 
-  onSaveDescription = task(async () => {
+  checkIfConfidentialChanged = task(async () => {
     if (this.confidential !== this.model.confidential) {
       this.confidential = this.model.confidential;
-      // we need to wait for the emails to update when confidential has changed.
+      // we need to wait for the notification panel to update when confidential has changed.
       // the notification panel updates the tracked properties of this controller when confidential changes
       await timeout(500);
-      await this.onSaveNotificationData();
+      await this.saveNotificationDataOnModel();
     }
   });
 
-  onNotificationDataChanged = async (newNotificationData) => {
+  checkIfHasConfidentialPiecesChanged = task(async () => {
+    const hasConfidentialPieces = await containsConfidentialPieces(this.newDraftPieces);
+    if (this.hasConfidentialPieces !== hasConfidentialPieces) {
+      this.hasConfidentialPieces = hasConfidentialPieces;
+      // we need to wait for the notification panel to update when confidential has changed.
+      // the notification panel updates the tracked properties of this controller when confidential changes
+      if (!this.confidential) {
+        // if the submission is confidential the email adressess will not change based on hasConfidentialPieces
+        await timeout(500);
+        await this.saveNotificationDataOnModel();
+      }
+    }
+  });
+
+  updateLocalNotificationData = (newNotificationData) => {
     this.approvalAddresses = newNotificationData.approvalAddresses;
     this.approvalComment = newNotificationData.approvalComment;
     this.notificationAddresses = newNotificationData.notificationAddresses;
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  onCancelNotificationData = async () => {
+  rollbackLocalNotificationData = async () => {
     this.approvalAddresses = this.model.approvalAddresses;
     this.approvalComment = this.model.approvalComment;
     this.notificationAddresses = this.model.notificationAddresses;
     this.notificationComment = this.model.notificationComment;
   }
 
-  onSaveNotificationData = async () => {
+  saveNotificationDataOnModel = async (newNotificationData) => {
+    // data present - manual save
+    // data absent - automatic trigger
+    if (newNotificationData) {
+      this.updateLocalNotificationData(newNotificationData);
+    }
     this.model.approvalAddresses = this.approvalAddresses;
     this.model.approvalComment = this.approvalComment;
     this.model.notificationAddresses = this.notificationAddresses;
     this.model.notificationComment = this.notificationComment;
     await this.model.save();
+    if (!newNotificationData) {
+      this.toaster.warning(
+        this.intl.t('saved-notification-message'),
+      );
+    }
   }
 
   disableMandatee = (mandatee) => {
@@ -176,6 +200,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       }
     }
     await this.reloadPieces.perform();
+    await this.checkIfHasConfidentialPiecesChanged.perform();
   };
 
   @action
@@ -233,6 +258,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await this.updateDraftPiecePositions();
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
+    await this.checkIfHasConfidentialPiecesChanged.perform();
   });
 
   savePiece = task(async (piece, index) => {

@@ -38,7 +38,7 @@
       <Submission::DescriptionPanel
         @submission={{@model}}
         @mayEdit={{and this.mayEdit (not this.isUpdate)}}
-        @onSave={{perform this.onSaveDescription}}
+        @onSave={{perform this.checkIfConfidentialChanged}}
       />
     </div>
 
@@ -65,6 +65,7 @@
 
     <Cases::Submissions::Notifications
       class="auk-u-mb-2"
+      @submission={{this.model}}
       @allowEditing={{this.mayEdit}}
       @confidential={{this.confidential}}
       @hasConfidentialPieces={{this.hasConfidentialPieces}}
@@ -72,9 +73,9 @@
       @approvalComment={{this.approvalComment}}
       @notificationAddresses={{this.notificationAddresses}}
       @notificationComment={{this.notificationComment}}
-      @onNotificationDataChanged={{this.onNotificationDataChanged}}
-      @onSaveNotificationData={{this.onSaveNotificationData}}
-      @onCancelNotificationData={{this.onCancelNotificationData}}
+      @onNotificationDataChanged={{this.updateLocalNotificationData}}
+      @onSaveNotificationData={{this.saveNotificationDataOnModel}}
+      @onCancelNotificationData={{this.rollbackLocalNotificationData}}
     />
 
     <div id="documents" class="auk-u-mb-4">
@@ -114,6 +115,7 @@
               @hideAccessLevel={{false}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
+              @onSaveAccessLevel={{perform this.checkIfHasConfidentialPiecesChanged}}
             />
           {{else}}
           {{!-- is this technically unreachable since we don't allow a submission to be created without docs? --}}
