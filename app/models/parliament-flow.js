@@ -30,4 +30,9 @@ export default class ParliamentFlow extends Model {
     // eslint-disable-next-line ember/no-get
     return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.BEING_HANDLED_BY_FP;
   }
+
+  get isRefused() {
+    // eslint-disable-next-line ember/no-get
+    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.REFUSED;
+  }
 }
