@@ -52,7 +52,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   @task
   *loadData() {
-    this.submissions = yield this.args.subcase.hasMany('submissions').reload();    
+    this.submissions = yield this.args.subcase.hasMany('submissions').reload();
     this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
@@ -85,10 +85,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
           const actualPiece = yield piece.acceptedPiece;
           if (!actualPiece) {
             draftPieceWithoutAccepted = true;
+            break;
           }
         }
       }
       this.canSubmitNewDocuments = !draftPieceWithoutAccepted;
+      if (!this.canSubmitNewDocuments) {
+        this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
+      }
     }
   }
 

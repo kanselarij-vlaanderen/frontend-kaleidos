@@ -51,12 +51,23 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     });
     if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (this.subcase)  {
-        const decisionmakingFlow = await this.subcase.decisionmakingFlow;
-        return this.router.transitionTo(
-          'cases.case.subcases.subcase',
-          decisionmakingFlow.id,
-          this.subcase.id
-        );
+        let draftPieceWithoutAccepted = false;
+        const pieces = await submission.pieces;
+        for (const piece of pieces) {
+          const actualPiece = await piece.acceptedPiece;
+          if (!actualPiece) {
+            draftPieceWithoutAccepted = true;
+            break;
+          }
+        }
+        if (!draftPieceWithoutAccepted) {
+          const decisionmakingFlow = await this.subcase.decisionmakingFlow;
+          return this.router.transitionTo(
+            'cases.case.subcases.subcase',
+            decisionmakingFlow.id,
+            this.subcase.id
+          );
+        }
       }
     }
 
