@@ -213,20 +213,20 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     });
   }
 
-    @task
-    *deleteUploadedPiece() {
-      if (this.newPiece) {
-        removeObject(this.pieces, this.newPiece);
-        yield deletePiece(this.newPiece);
-        this.newPiece = null;
-      }
+  @task
+  *deleteUploadedPiece() {
+    if (this.newPiece) {
+      removeObject(this.pieces, this.newPiece);
+      yield deletePiece(this.newPiece);
+      this.newPiece = null;
     }
+  }
 
-    @task
-    *cancelUploadPiece() {
-      yield this.deleteUploadedPiece.perform();
-      this.isOpenUploadModal = false;
-    }
+  @task
+  *cancelUploadPiece() {
+    yield this.deleteUploadedPiece.perform();
+    this.isOpenUploadModal = false;
+  }
 
   @action
   deleteDocumentContainer() {

@@ -113,7 +113,8 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isUpdateSubmitted) &&
-      this.currentSession.may('edit-sent-back-submissions')
+      this.currentSession.may('edit-sent-back-submissions') &&
+      this.requestedByIsCurrentMandatee
     );
   }
 
