@@ -89,6 +89,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       }
     }
 
+    this.confidential = submission.confidential;
     const newPieces = await submission.pieces;
     this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
@@ -138,6 +139,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.beingTreatedBy = this.beingTreatedBy;
     controller.isUpdate = this.isUpdate;
     controller.subcase = this.subcase;
+    controller.confidential = this.confidential;
     controller.hasConfidentialPieces = this.hasConfidentialPieces;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;

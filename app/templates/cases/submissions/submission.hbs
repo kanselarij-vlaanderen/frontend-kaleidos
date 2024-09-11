@@ -34,11 +34,11 @@
     </AuAlert>
   {{/if}}
   <div class="auk-u-responsive-margin">
-
     <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
         @mayEdit={{and this.mayEdit (not this.isUpdate)}}
+        @onSave={{perform this.checkIfConfidentialChanged}}
       />
     </div>
 
@@ -65,19 +65,21 @@
 
     <Cases::Submissions::Notifications
       class="auk-u-mb-2"
+      @submission={{this.model}}
       @allowEditing={{this.mayEdit}}
-      @confidential={{@model.confidential}}
+      @confidential={{this.confidential}}
       @hasConfidentialPieces={{this.hasConfidentialPieces}}
       @approvalAddresses={{this.approvalAddresses}}
       @approvalComment={{this.approvalComment}}
       @notificationAddresses={{this.notificationAddresses}}
       @notificationComment={{this.notificationComment}}
-      @onNotificationDataChanged={{this.onNotificationDataChanged}}
-      @onSaveNotificationData={{this.onSaveNotificationData}}
+      @onNotificationDataChanged={{this.updateLocalNotificationData}}
+      @onSaveNotificationData={{this.saveNotificationDataOnModel}}
+      @onCancelNotificationData={{this.rollbackLocalNotificationData}}
     />
 
     <div id="documents" class="auk-u-mb-4">
-      <Auk::Panel>
+      <Auk::Panel data-test-route-cases---submission-documents-panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="left">
@@ -93,6 +95,7 @@
               {{#if (and this.mayEdit this.pieces.length)}}
                 <Auk::Toolbar::Item>
                   <AuButton
+                    data-test-route-cases---submission-documents-batch-edit
                     @skin="secondary"
                     @icon="pencil"
                     {{on "click" (toggle "isOpenBatchDetailsModal" this)}}
@@ -113,8 +116,10 @@
               @hideAccessLevel={{false}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
+              @onSaveAccessLevel={{perform this.checkIfHasConfidentialPiecesChanged}}
             />
           {{else}}
+          {{!-- is this technically unreachable since we don't allow a submission to be created without docs? --}}
             <div>
               <AuAlert
                 @skin="info"
@@ -129,6 +134,7 @@
         {{#if this.mayEdit}}
           <Auk::Panel::Footer>
             <AuButton
+              data-test-route-cases---submission-documents-add
               @skin="naked"
               @icon="plus"
               class="au-u-padding-left-none"
@@ -142,7 +148,7 @@
     </div>
 
     <div id="history">
-      <Auk::Panel>
+      <Auk::Panel data-test-route-cases---submission-history-panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="left">

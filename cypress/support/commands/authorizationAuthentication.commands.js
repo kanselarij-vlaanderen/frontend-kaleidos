@@ -20,6 +20,10 @@ function login(name, retries = 0) {
   cy.intercept('GET', '/mock/sessions/current').as('getCurrentSession');
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
   cy.fixture('mock-login').then((loginUsers) => {
+    if (!loginUsers[name]) {
+      // more visible when you attempt to login with a wrong name
+      cy.log('user name not found!', name);
+    }
     cy.request({
       method: 'POST',
       url: '/mock/sessions',

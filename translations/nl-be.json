@@ -1461,5 +1461,6 @@
   "use-case": "Dossier gebruiken",
   "use-an-existing-case": "Gebruik een bestaand dossier",
   "use-a-different-existing-case": "Gebruik een ander bestaand dossier",
-  "choose-formally-ok-status": "Kies een status"
+  "choose-formally-ok-status": "Kies een status",
+  "saved-notification-message": "De notificatie gegevens werden automatisch aangepast."
 }

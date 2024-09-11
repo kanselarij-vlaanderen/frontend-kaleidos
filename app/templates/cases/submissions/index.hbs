@@ -70,6 +70,7 @@
           {{#if @model.length}}
             <div>
               <table
+                data-test-route-cases-submissions-overview-data-table
                 class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
               >
                 <thead>
@@ -120,20 +121,24 @@
                         {{on "click" (fn this.navigateToSubmission submission)}}
                       >
                         <td>
-                          <p>
+                          <p data-test-route-cases-submissions-overview-row-short-title>
                             {{#if submission.shortTitle}}
                               {{submission.shortTitle}}
                             {{else}}
                               -
                             {{/if}}
                             {{#if (not submission.decisionmakingFlow.id)}}
-                              <span class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
+                              <span
+                                data-test-route-cases-submissions-overview-row-new-case
+                                class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2"
+                              >
                                 <Auk::ColorBadge @skin="success" />
                                 {{t "new-case"}}
                               </span>
                             {{/if}}
                             {{#if submission.confidential}}
                               <AuPill
+                                data-test-route-cases-submissions-overview-row-limited-access
                                 @size="small"
                                 @skin="warning"
                                 @icon="lock-closed"
@@ -143,10 +148,10 @@
                             {{/if}}
                           </p>
                         </td>
-                        <td>
+                        <td data-test-route-cases-submissions-overview-row-planned-start>
                           {{date submission.plannedStart}}
                         </td>
-                        <td>
+                        <td data-test-route-cases-submissions-overview-row-subcase-type>
                           {{#if submission.type.label}}
                             <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>
                           {{else if submission.type.altLabel}}
@@ -155,7 +160,7 @@
                             -
                           {{/if}}
                         </td>
-                        <td>
+                        <td data-test-route-cases-submissions-overview-row-status>
                           {{#if submission.status.label}}
                             <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
                           {{else if submission.status.altLabel}}
@@ -166,6 +171,7 @@
                         </td>
                         <td class="auk-u-text-align--right">
                           <AuLink
+                            data-test-route-cases-submissions-overview-row-go-to-submission
                             @skin="button-naked"
                             @icon="chevron-right"
                             @hideText={{true}}
@@ -210,10 +216,10 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@medium">
               {{t "amount-per-page"}}
             </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@small">
               <WebComponents::AuPageSize
                 @selectedSize={{this.size}}
                 @onChange={{fn (mut this.size)}}

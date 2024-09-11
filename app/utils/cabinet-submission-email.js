@@ -131,8 +131,7 @@ async function caseSubmittedIkwEmail(params) {
 
   let message = await caseSubmittedEmail(params);
 
-  // this param does not exist yet
-  if (params.hasConfidentialPieces) {
+  if (!params.submission.confidential && params.hasConfidentialPieces) {
     message += `
 Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
   `;

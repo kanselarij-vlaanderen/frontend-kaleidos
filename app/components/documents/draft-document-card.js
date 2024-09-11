@@ -278,6 +278,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   async saveAccessLevel() {
     await this.piece.save();
     await this.loadPieceRelatedData.perform();
+    this.args.onSaveAccessLevel?.();
   }
 
   @action

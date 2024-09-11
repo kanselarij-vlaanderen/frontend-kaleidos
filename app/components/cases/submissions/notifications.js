@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class CasesSubmissionsNotificationsComponent extends Component {
   @service store;
@@ -13,15 +14,26 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
   @tracked showNotificationAddressModal = false;
   @tracked emailSettings;
   @tracked isEditing = false;
-
+  @tracked approvalAddresses;
+  @tracked approvalComment;
+  @tracked notificationAddresses;
+  @tracked notificationComment;
 
   constructor() {
     super(...arguments);
     if (this.args.isEditing) {
       this.isEditing = true;
     }
+    this.init();
     this.loadEmailSettings.perform();
   }
+
+  init = () => {
+    this.approvalAddresses = new TrackedArray([...this.args.approvalAddresses]);
+    this.approvalComment = this.args.approvalComment;
+    this.notificationAddresses = new TrackedArray([...this.args.notificationAddresses]);
+    this.notificationComment = this.args.notificationComment;
+  };
 
   loadEmailSettings = task(async () => {
     this.emailSettings = await this.store.queryOne(
@@ -37,12 +49,13 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     }
   });
 
-  updateDefaultAddresses = task(async () => {
-    await this.addApprovalAddress(this.defaultApprovalAddress, true);
-    await this.removeNotificationAddress(this.unusedDefaultNotificationAddress);
+  updateDefaultAddresses = task({ maxConcurrency: 1, enqueue: true }, async () => {
+    this.addApprovalAddress(this.defaultApprovalAddress, true);
+    this.removeNotificationAddress(this.unusedDefaultNotificationAddress);
     for (const address of this.defaultNotificationAddresses) {
-      await this.addNotificationAddress(address, true);
+      this.addNotificationAddress(address, true);
     }
+    this.changeNotificationData();
   });
 
   get defaultApprovalAddress() {
@@ -69,12 +82,13 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     }
   }
 
+  // don't use this getter while initializing
   get notificationData() {
     return {
-      approvalAddresses: this.args.approvalAddresses,
-      approvalComment: this.args.approvalComment,
-      notificationAddresses: this.args.notificationAddresses,
-      notificationComment: this.args.notificationComment
+      approvalAddresses: this.approvalAddresses,
+      approvalComment: this.approvalComment,
+      notificationAddresses: this.notificationAddresses,
+      notificationComment: this.notificationComment
     }
   }
 
@@ -90,68 +104,84 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
 
   @action
   addApprovalAddress(address, insertAsFirst) {
-    if (!this.notificationData.approvalAddresses.includes(address)) {
-      let newNotificationData = this.notificationData;
+    if (!this.approvalAddresses.includes(address)) {
       if (insertAsFirst === true) {
-        newNotificationData.approvalAddresses.splice(0, 0, address)
+        this.approvalAddresses.splice(0, 0, address)
       } else {
-        newNotificationData.approvalAddresses.push(address);
+        this.approvalAddresses.push(address);
       }
-      this.args.onNotificationDataChanged?.(newNotificationData);
+      if (!this.updateDefaultAddresses.isRunning) {
+        this.changeNotificationData();
+      }
     }
     this.showApprovalAddressModal = false;
   }
 
   @action
   removeApprovalAddress(address) {
-    const index = this.notificationData.approvalAddresses.indexOf(address);
+    const index = this.approvalAddresses.indexOf(address);
     if (index > -1) {
-      let newNotificationData = this.notificationData;
-      newNotificationData.approvalAddresses.splice(index, 1);
-      this.args.onNotificationDataChanged?.(newNotificationData);
+      this.approvalAddresses.splice(index, 1);
+      if (!this.updateDefaultAddresses.isRunning) {
+        this.changeNotificationData();
+      }
     }
   }
 
   @action
   addNotificationAddress(address, insertAsFirst) {
-    if (!this.notificationData.notificationAddresses.includes(address)) {
-      let newNotificationData = this.notificationData;
+    if (!this.notificationAddresses.includes(address)) {
       if (insertAsFirst === true) {
-        newNotificationData.notificationAddresses.splice(0, 0, address)
+        this.notificationAddresses.splice(0, 0, address)
       } else {
-        newNotificationData.notificationAddresses.push(address);
+        this.notificationAddresses.push(address);
       }
-      this.args.onNotificationDataChanged?.(newNotificationData);
+      if (!this.updateDefaultAddresses.isRunning) {
+        this.changeNotificationData();
+      }
     }
     this.showNotificationAddressModal = false;
   }
 
   @action
   removeNotificationAddress(address) {
-    const index = this.notificationData.notificationAddresses.indexOf(address);
+    const index = this.notificationAddresses.indexOf(address);
     if (index > -1) {
-      let newNotificationData = this.notificationData;
-      newNotificationData.notificationAddresses.splice(index, 1);
-      this.args.onNotificationDataChanged?.(newNotificationData);
+      this.notificationAddresses.splice(index, 1);
+      if (!this.updateDefaultAddresses.isRunning) {
+        this.changeNotificationData();
+      }
     }
   }
 
+  cancel = () => {
+    this.args.onCancelNotificationData?.();
+    this.init();
+    this.isEditing = false;
+  };
+
+  changeNotificationData = () => {
+    // no submission - new submission form
+    // submission - when not actually editing we are updating based on "did-update" and should call parent
+    if (!this.args.submission || this.args.submission && !this.isEditing) {
+      this.args.onNotificationDataChanged?.(this.notificationData);
+    }
+  };
+
   saveNotificationData = task(async () => {
-    await this.args.onSaveNotificationData?.();
+    await this.args.onSaveNotificationData?.(this.notificationData);
     this.isEditing = false;
   });
 
   @action
   onChangeApprovalComment(newComment) {
-    let newNotificationData = this.notificationData;
-    newNotificationData.approvalComment = trimText(newComment);
-    this.args.onNotificationDataChanged?.(newNotificationData);
+    this.approvalComment = trimText(newComment);
+    this.changeNotificationData();
   }
 
   @action
   onChangeNotificationComment(newComment) {
-    let newNotificationData = this.notificationData;
-    newNotificationData.notificationComment = trimText(newComment);
-    this.args.onNotificationDataChanged?.(newNotificationData);
+    this.notificationComment = trimText(newComment);
+    this.changeNotificationData();
   }
 }

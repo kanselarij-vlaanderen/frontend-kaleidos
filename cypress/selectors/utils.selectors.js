@@ -144,5 +144,11 @@ const selectors = {
   },
 
   rdfaEditor: '[data-test-rdfa-editor]',
+
+  // email-modal (currently duplicated under signature selectors)
+  emailModal: {
+    input: '[data-test-email-modal-input]',
+    add: '[data-test-email-modal-add]',
+  },
 };
 export default selectors;
