@@ -4,10 +4,10 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { task, timeout } from 'ember-concurrency';
-import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
-import { sortPieces, containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
+import { containsConfidentialPieces, sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
@@ -77,7 +77,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   });
 
   checkIfHasConfidentialPiecesChanged = task(async () => {
-    const hasConfidentialPieces = await containsConfidentialPieces(this.newDraftPieces);
+    const hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
     if (this.hasConfidentialPieces !== hasConfidentialPieces) {
       this.hasConfidentialPieces = hasConfidentialPieces;
       // we need to wait for the notification panel to update when confidential has changed.
@@ -224,7 +224,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     );
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      (this.model.confidential || parsed.confidential)
+      (confidential || parsed.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
@@ -297,4 +297,26 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await documentContainer.destroyRecord();
     await piece.destroyRecord();
   }
+
+  onAddNewPieceVersion = async (piece, newVersion) => {
+    const documentContainer = await newVersion.documentContainer;
+    await documentContainer.save();
+    newVersion.submission = this.model;
+    await newVersion.save();
+    try {
+      const sourceFile = await newVersion.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+    const index = this.pieces.indexOf(piece);
+    this.pieces[index] = newVersion;
+    this.pieces = [...this.pieces];
+    addObject(this.newDraftPieces, newVersion);
+    await this.savePieces.perform();
+    await this.checkIfHasConfidentialPiecesChanged.perform();
+  };
 }

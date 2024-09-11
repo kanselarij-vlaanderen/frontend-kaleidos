@@ -29,12 +29,14 @@ export default class SubmissionHeaderComponent extends Component {
 
   @tracked comment;
 
+  @tracked requestedByIsCurrentMandatee;
   @tracked selectedAgenda;
   @tracked selectedMeeting;
 
   constructor() {
     super(...arguments);
     this.loadAgenda.perform();
+    this.loadRequestedByIsCurrentMandatee.perform();
   }
 
   loadAgenda = task(async () => {
@@ -68,7 +70,18 @@ export default class SubmissionHeaderComponent extends Component {
         this.selectedAgenda = agenda;
         this.selectedMeeting = agenda.createdFor;
       }
-  }
+    }
+  });
+
+  loadRequestedByIsCurrentMandatee = task(async () => {
+    if (this.args.submission) {
+      const requestedBy = await this.args.submission.requestedBy;
+      const organization = await this.store.queryOne('user-organization', {
+        'filter[mandatees][:id:]': requestedBy.id,
+        'filter[:id:]': this.currentSession.organization.id,
+      });
+      this.requestedByIsCurrentMandatee = !!organization;
+    }
   });
 
   get items() {
@@ -91,7 +104,8 @@ export default class SubmissionHeaderComponent extends Component {
   get canResubmitSubmission() {
     return (
       this.args.submission?.isSentBack &&
-      this.currentSession.may('edit-sent-back-submissions')
+      this.currentSession.may('edit-sent-back-submissions') &&
+      this.requestedByIsCurrentMandatee
     );
   }
 
@@ -99,7 +113,8 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isUpdateSubmitted) &&
-      this.currentSession.may('edit-sent-back-submissions')
+      this.currentSession.may('edit-sent-back-submissions') &&
+      this.requestedByIsCurrentMandatee
     );
   }
 

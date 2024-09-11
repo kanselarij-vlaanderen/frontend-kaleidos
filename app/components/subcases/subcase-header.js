@@ -30,6 +30,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
+  @tracked canSubmitNewDocuments = false;
   @tracked meetingIsClosed = false;
   @tracked currentSubmission;
 
@@ -45,12 +46,13 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.currentSession.may('create-submissions') &&
       this.submissions?.length > 0 &&
       !this.currentSubmission &&
-      !this.meetingIsClosed;
+      !this.meetingIsClosed &&
+      this.canSubmitNewDocuments;
   }
 
   @task
   *loadData() {
-    this.submissions = yield this.args.subcase.hasMany('submissions').reload();    
+    this.submissions = yield this.args.subcase.hasMany('submissions').reload();
     this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
@@ -74,6 +76,22 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
         if (meeting) {
           this.meetingIsClosed = true;
         }
+      }
+      const submissions = yield this.args.subcase.submissions;
+      let draftPieceWithoutAccepted = false;
+      for (const submission of submissions) {
+        const pieces = yield submission.pieces;
+        for (const piece of pieces) {
+          const actualPiece = yield piece.acceptedPiece;
+          if (!actualPiece) {
+            draftPieceWithoutAccepted = true;
+            break;
+          }
+        }
+      }
+      this.canSubmitNewDocuments = !draftPieceWithoutAccepted;
+      if (!this.canSubmitNewDocuments) {
+        this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
       }
     }
   }
