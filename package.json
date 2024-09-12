@@ -34,6 +34,7 @@
     "test": "npm-run-all --print-name \"lint\" \"test:*\"",
     "test:cypress": "ember serve --environment=cypress-test --proxy=http://localhost",
     "test:ember": "ember test",
+    "start-cypress": "ember serve --environment=cypress-test --proxy=http://localhost:80",
     "cypress-local": "make open-cypress-tests",
     "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be",
     "release": "release-it"
