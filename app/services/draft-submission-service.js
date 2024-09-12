@@ -78,27 +78,28 @@ export default class DraftSubmissionService extends Service {
     return creationActivity ? true : false;
   };
 
-  getOngoingSubmissionForSubcase = async(subcase) => {
-    // technically this should be a queryOne, but possible with concurrency to have more than 1 ongoing
-    const allSubmissions = await this.store.query('submission', {
-      'filter[subcase][:id:]': subcase.id,
-      sort: 'created',
-      include: 'status'
-    });
-    const ongoingSubmission = allSubmissions?.filter(
-      (a) =>
-        a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
-    );
-    // if more than 1, we return the first created ongoing submission
-    return ongoingSubmission?.at(0);
-  };
-
-  getLatestSubmissionForSubcase = async(subcase) => {
+  getAllSubmissionForSubcase = async(subcase) => {
     const allSubmissions = await this.store.query('submission', {
       'filter[subcase][:id:]': subcase.id,
       sort: '-created',
       include: 'status'
     });
+    return allSubmissions;
+  };
+
+  getOngoingSubmissionForSubcase = async(subcase) => {
+    // technically this should be a queryOne, but possible with concurrency to have more than 1 ongoing
+    const allSubmissions = await this.getAllSubmissionForSubcase(subcase, false);
+    const ongoingSubmission = allSubmissions?.filter(
+      (a) =>
+        a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
+    );
+    // if more than 1, we return the first created ongoing submission which should the last one in the filtered list
+    return ongoingSubmission?.at(-1);
+  };
+
+  getLatestSubmissionForSubcase = async(subcase) => {
+    const allSubmissions = await this.getAllSubmissionForSubcase(subcase);
     return allSubmissions?.at(0);
   };
 }

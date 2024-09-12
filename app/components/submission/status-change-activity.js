@@ -15,13 +15,14 @@ const {
 
 export default class SubmissionStatusChangeActivityComponent extends Component {
   @service intl;
+  @service currentSession;
 
   intlKeyMap = {
-    [INGEDIEND]: 'submitted-on',
+    [INGEDIEND]: this.args.isHeader ? 'submitted-on-simple' : 'submitted-on',
     [OPNIEUW_INGEDIEND]: 'resubmitted-on',
     [TERUGGESTUURD]: 'sent-back-on',
     [IN_BEHANDELING]: 'in-treatment-by-user-on',
-    [UPDATE_INGEDIEND]: 'update-submitted-on',
+    [UPDATE_INGEDIEND]: this.args.isHeader ? 'update-submitted-on-simple' : 'update-submitted-on',
     [BEHANDELD]: 'treated-on',
     [AANPASSING_AANGEVRAAGD]: 'sent-back-requested-on',
   };
@@ -37,13 +38,14 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
 
     const date = dateFormat(startedAt, `dd-MM-yyyy`);
     const hour = dateFormat(startedAt, `HH:mm`);
-    const comment = activity.comment ? `: '${activity.comment}'` : '';
+    const canViewComment = this.currentSession.may('create-submissions') || this.currentSession.may('treat-and-accept-submissions');
+    const comment = canViewComment && activity.comment ? `: '${activity.comment}'` : '';
 
     const intlKey = this.intlKeyMap[status.uri];
-    const label = intlKey
+    // date and hour are not needed for all translations but passing them as params is ok.
+    let label = intlKey
       ? this.intl.t(intlKey, { userName, date, hour })
       : '';
-
-    return label + comment;
+    return this.args.isHeader ? label : label + comment;
   }
 }

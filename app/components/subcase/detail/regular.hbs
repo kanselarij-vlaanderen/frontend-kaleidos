@@ -121,6 +121,12 @@
     </div>
     <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{@subcase}} />
     <Subcase::SubcaseVersionsPanel @subcase={{@subcase}} id="agenda" />
+    {{#if this.statusChangeActivities}}
+      <Cases::Submissions::HistoryPanel
+        @multiple={{true}}
+        @statusChangeActivities={{this.statusChangeActivities}}
+      />
+    {{/if}}
   </div>
 </div>
 

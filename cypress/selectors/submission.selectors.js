@@ -56,6 +56,11 @@ const selectors = {
     panel: '[data-test-submission-document-upload-panel]',
   },
 
+  // history-panel under cases/submissions
+  historyPanel: {
+    panel: '[data-test-submission-history-panel]',
+  },
+
   // agenda-item-type-selector
   agendaItemTypeSelector: {
     typeRadio: '[data-test-agenda-item-type-selector-radio]',

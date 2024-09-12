@@ -147,32 +147,9 @@
       </Auk::Panel>
     </div>
 
-    <div id="history">
-      <Auk::Panel data-test-route-cases---submission-history-panel>
-        <Auk::Panel::Header>
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="left">
-              <Auk::Toolbar::Item>
-                <h4 class="auk-panel__title">
-                  {{t "submission-history"}}
-                </h4>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </Auk::Panel::Header>
-        <Auk::Panel::Body class="auk-u-bg-alt">
-          {{#if this.reloadHistory.isIdle}}
-            <ul class="vlc-status-timeline">
-              {{#each this.statusChangeActivities as |activity|}}
-                <Submission::StatusChangeActivity
-                  @activity={{activity}}
-                />
-              {{/each}}
-            </ul>
-          {{/if}}
-        </Auk::Panel::Body>
-      </Auk::Panel>
-    </div>
+    <Cases::Submissions::HistoryPanel
+      @statusChangeActivities={{this.statusChangeActivities}}
+    />
   </div>
 </div>
 
