@@ -19,6 +19,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service subcaseService;
   @service agendaitemAndSubcasePropertiesSync;
   @service draftSubmissionService;
+  @service pieceAccessLevelService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -326,6 +327,7 @@ export default class SubmissionHeaderComponent extends Component {
           });
           await piece.save();
           this.piecesMovedCounter++;
+          await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
           return piece;
         })
       );
