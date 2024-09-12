@@ -51,21 +51,7 @@ export default class SubmissionHeaderComponent extends Component {
         });
       } else {
         // get meeting when not propagated yet
-        const meetingData = await this.agendaService.getMeetingForSubmission(this.args.submission);
-        const agenda = {
-            id: meetingData.data.attributes.agendaId,
-            uri: meetingData.data.attributes.agenda,
-            serialnumber: meetingData.data.attributes.serialnumber,
-            createdFor: {
-              id: meetingData.data.id,
-              uri: meetingData.data.attributes.uri,
-              plannedStart: new Date(meetingData.data.attributes.plannedStart),
-              kind: {
-                uri: meetingData.data.attributes.kind,
-                label: meetingData.data.attributes.type,
-              }
-            },
-          };
+        const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
 
         this.selectedAgenda = agenda;
         this.selectedMeeting = agenda.createdFor;

@@ -17,6 +17,11 @@
             {{#unless @submission.decisionmakingFlow.isPending}}
               <span class="auk-overline auk-u-block">
                 {{t (if case "submission-existing-case" "submission-new-case")}}
+                {{#if this.selectedMeeting}}
+                  -
+                  {{this.selectedMeeting.kind.label}} {{t "of"}}
+                  {{date this.selectedMeeting.plannedStart}}
+                {{/if}}
               </span>
               <h4 class="auk-toolbar-complex__title au-u-padding-none">
                 {{#if case}}
