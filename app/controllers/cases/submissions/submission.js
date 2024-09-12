@@ -41,6 +41,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
   @tracked hasConfidentialPieces;
   currentLinkedMandatee;
+  previousMandateePersons;
 
   get mayEdit() {
     const mayIfAdmin = this.currentSession.may('always-edit-submissions');

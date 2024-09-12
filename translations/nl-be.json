@@ -1464,5 +1464,7 @@
   "use-an-existing-case": "Gebruik een bestaand dossier",
   "use-a-different-existing-case": "Gebruik een ander bestaand dossier",
   "choose-formally-ok-status": "Kies een status",
-  "saved-notification-message": "De notificatie gegevens werden automatisch aangepast."
+  "saved-notification-message": "De notificatie gegevens werden automatisch aangepast.",
+  "new-mandatee": "Nieuwe minister",
+  "mandatees-deleted-in-update": "De volgende {count, plural, =1 {minister wordt} other {ministers worden}} verwijderd in deze update:"
 }
