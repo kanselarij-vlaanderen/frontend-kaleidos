@@ -123,7 +123,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   disableMandatee = (mandatee) => {
-    return this.currentLinkedMandatee.id === mandatee.id;
+    return this.model.requestedBy?.get('id') === mandatee.id ;
   };
 
   saveMandateeData = async ({ submitter, mandatees }) => {
