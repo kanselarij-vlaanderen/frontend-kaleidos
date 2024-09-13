@@ -14,10 +14,9 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 const footer = `Met vriendelijke groet,
 
-Vlaamse overheid
 DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN
 Team Regeringsondersteuning – Cel Ministerraad
-ministerraad@vlaanderen.be
+VlaamseRegering_Agenderingen@groepen.vlaanderen.be
 Koolstraat 35, 1000 Brussel
 `
 
@@ -57,34 +56,40 @@ Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabin
 `;
   }
 
-  if (params.forApprovers) {
-    let additionalMandateeNames = [];
-    const mandatees = await params.submission.mandatees;
-    const sortedMandatees = mandatees.slice().sort(
-      (m1, m2) => m1.priority - m2.priority
-    );
-    for (const mandatee of sortedMandatees) {
-      if (mandatee.id !== submitter.id) {
-        const mandateePerson = await mandatee.person;
-        const mandate = await mandatee.mandate;
-        const role = await mandate.role;
-        if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
-          additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
-        } else {
-          additionalMandateeNames.push('minister ' + mandateePerson.lastName);
-        }
+  let additionalMandateeNames = [];
+  const mandatees = await params.submission.mandatees;
+  const sortedMandatees = mandatees.slice().sort(
+    (m1, m2) => m1.priority - m2.priority
+  );
+  for (const mandatee of sortedMandatees) {
+    if (mandatee.id !== submitter.id) {
+      const mandateePerson = await mandatee.person;
+      const mandate = await mandatee.mandate;
+      const role = await mandate.role;
+      if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
+        additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
+      } else {
+        additionalMandateeNames.push('minister ' + mandateePerson.lastName);
       }
     }
-    if (additionalMandateeNames.length > 1) {
-      const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
+  }
+  if (additionalMandateeNames.length > 1) {
+    const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
+    message += `
+Het betreft een co-agendering met ${additionalMandateeString}.`;
+
+    if (params.forApprovers) {
       message += `
-Het betreft een co-agendering met ${additionalMandateeString}.
 Kunnen de betrokken kabinetschefs hun akkoord geven via allen beantwoorden aub?
 `;
+    }
   } else if (additionalMandateeNames.length === 1) {
-      const additionalMandateeString = additionalMandateeNames[0];
+    const additionalMandateeString = additionalMandateeNames[0];
+    message += `
+Het betreft een co-agendering met ${additionalMandateeString}.`;
+
+    if (params.forApprovers) {
       message += `
-Het betreft een co-agendering met ${additionalMandateeString}.
 Kan de betrokken kabinetschef haar/zijn akkoord geven via allen beantwoorden aub?
 `;
     }
@@ -187,11 +192,11 @@ ${params.comment}
 `;
   } else {
     message += `
-Uw indiening "${params.submission.shortTitle}" werd teruggestuurd.
+Uw indiening "${params.submission.shortTitle}" werd teruggestuurd zodat u aanpassingen kan maken.
 `;
   }
   message += `
-U kunt de indiening hier bekijken: ${params.submissionUrl}
+U kan de indiening hier aanpassen: ${params.submissionUrl}
 `;
 
   return {
