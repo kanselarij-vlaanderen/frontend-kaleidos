@@ -28,6 +28,7 @@
               {{#each statusChangeActivityArray as |activity|}}
                 <Submission::StatusChangeActivity
                   @activity={{activity}}
+                  @canSeePrivateComments={{@canSeePrivateComments}}
                 />
               {{/each}}
             </ul>
@@ -38,6 +39,7 @@
           {{#each @statusChangeActivities as |activity|}}
             <Submission::StatusChangeActivity
               @activity={{activity}}
+              @canSeePrivateComments={{@canSeePrivateComments}}
             />
           {{/each}}
         </ul>

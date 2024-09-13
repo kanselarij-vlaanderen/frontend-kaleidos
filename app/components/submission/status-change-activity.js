@@ -38,8 +38,7 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
 
     const date = dateFormat(startedAt, `dd-MM-yyyy`);
     const hour = dateFormat(startedAt, `HH:mm`);
-    const canViewComment = this.currentSession.may('create-submissions') || this.currentSession.may('treat-and-accept-submissions');
-    const comment = canViewComment && activity.comment ? `: '${activity.comment}'` : '';
+    const comment = this.args.canSeePrivateComments && activity.comment ? `: '${activity.comment}'` : '';
 
     const intlKey = this.intlKeyMap[status.uri];
     // date and hour are not needed for all translations but passing them as params is ok.

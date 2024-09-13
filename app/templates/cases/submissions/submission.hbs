@@ -150,6 +150,11 @@
 
     <Cases::Submissions::HistoryPanel
       @statusChangeActivities={{this.statusChangeActivities}}
+      {{! everyone who can edit this submission can see the comments }}
+      @canSeePrivateComments={{or
+        (user-may "treat-and-accept-submissions")
+        (user-may "create-submissions")
+      }}
     />
   </div>
 </div>

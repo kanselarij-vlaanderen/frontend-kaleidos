@@ -52,8 +52,9 @@ Router.map(function() {
           }
         });
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
-        if (isEnabledCabinetSubmissions())
+        if (isEnabledCabinetSubmissions()) {
           this.route('new-submission', { path: '/nieuwe-indiening' });
+        }
       });
     });
   });

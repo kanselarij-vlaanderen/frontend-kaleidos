@@ -327,7 +327,8 @@ export default class SubmissionHeaderComponent extends Component {
           });
           await piece.save();
           this.piecesMovedCounter++;
-          await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+          // in submissions, we allow the strengthening of the accessLevel (from default > confidential) meaning we have to update all previous versions.
+          await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
           return piece;
         })
       );

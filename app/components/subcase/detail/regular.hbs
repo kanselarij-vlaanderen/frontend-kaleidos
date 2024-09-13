@@ -124,6 +124,8 @@
     {{#if this.statusChangeActivities}}
       <Cases::Submissions::HistoryPanel
         @multiple={{true}}
+        {{! comment viewing is limited, too many variables, should we even show comments here? }}
+        @canSeePrivateComments={{user-may 'treat-and-accept-submissions'}}
         @statusChangeActivities={{this.statusChangeActivities}}
       />
     {{/if}}
