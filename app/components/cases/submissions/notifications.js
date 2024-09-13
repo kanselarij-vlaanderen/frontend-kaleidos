@@ -9,6 +9,7 @@ import { TrackedArray } from 'tracked-built-ins';
 export default class CasesSubmissionsNotificationsComponent extends Component {
   @service store;
   @service toaster;
+  @service intl;
 
   @tracked showApprovalAddressModal = false;
   @tracked showNotificationAddressModal = false;
@@ -35,12 +36,12 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     this.notificationComment = this.args.notificationComment;
   };
 
-  loadEmailSettings = task(async () => {
+  loadEmailSettings = task({ maxConcurrency: 1, restartable: true }, async () => {
     this.emailSettings = await this.store.queryOne(
       'email-notification-setting'
     );
     if (this.emailSettings) {
-      await this.updateDefaultAddresses.perform();
+      this.updateDefaultAddresses();
     } else {
       this.toaster.warning(
         this.intl.t('notification-mails-could-not-be-sent'),
@@ -49,14 +50,22 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     }
   });
 
-  updateDefaultAddresses = task({ maxConcurrency: 1, enqueue: true }, async () => {
+  onDidUpdate = task({ maxConcurrency: 1, restartable: true}, async () => {  
+    if (!this.emailSettings) {
+      // this includes calling the updateDefaultAddresses
+      return await this.loadEmailSettings.perform();
+    }
+    this.updateDefaultAddresses();
+  });
+
+  updateDefaultAddresses = () => {
     this.addApprovalAddress(this.defaultApprovalAddress, true);
     this.removeNotificationAddress(this.unusedDefaultNotificationAddress);
     for (const address of this.defaultNotificationAddresses) {
       this.addNotificationAddress(address, true);
     }
     this.changeNotificationData();
-  });
+  };
 
   get defaultApprovalAddress() {
     return this.emailSettings?.cabinetSubmissionsSecretaryEmail;
