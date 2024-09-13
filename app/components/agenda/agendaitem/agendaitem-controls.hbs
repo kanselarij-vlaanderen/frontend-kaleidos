@@ -63,7 +63,8 @@
           >
             {{t "delete-and-send-back-to-submitter"}}
           </AuButton>
-        {{else if (or (user-may "remove-approved-agendaitems") this.isDeletable)}}
+        {{/if}}
+        {{#if (or (user-may "remove-approved-agendaitems") this.isDeletable)}}
           <AuButton
             data-test-agendaitem-controls-action-delete
             @skin="link"
@@ -71,7 +72,7 @@
             role="menuitem"
             {{on "click" this.toggleIsVerifying}}
           >
-            {{t "delete"}}
+            {{t "delete-agendaitem-while-keeping-subcase"}}
           </AuButton>
         {{/if}}
       {{/if}}
