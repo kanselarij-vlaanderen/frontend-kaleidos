@@ -33,6 +33,7 @@ export default class AgendaitemControls extends Component {
   @tracked decisionActivity;
   @tracked showVPModal = false;
   @tracked canSendToVP = false;
+  @tracked canSubmitNewDocuments = false;
   @tracked isSendingBackToSubmitter = false;
   @tracked sendBackToSubmitterComment;
 
@@ -41,30 +42,43 @@ export default class AgendaitemControls extends Component {
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
-    this.loadCanSendToVP.perform();
+    this.loadPermittedAgendaItemActions.perform();
     this.loadSubmissions.perform();
   }
 
-  loadCanSendToVP = task(async () => {
-    if (!isEnabledVlaamsParlement() || !this.args.subcase) {
-      this.canSendToVP = false;
-      return;
-    }
-
-    if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+  loadPermittedAgendaItemActions = task(async () => {
+    if (this.args.subcase?.id) {
       const submitter = await this.args.subcase.requestedBy;
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
-      if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      if (isEnabledVlaamsParlement()) {
+        if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+          if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+            this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+          } else {
+            this.canSendToVP = false;
+          }
+        } else if (this.currentSession.may('send-cases-to-vp')) {
+          this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+        } else {
+          this.canSendToVP = false;
+        }
       } else {
         this.canSendToVP = false;
       }
-    } else if (this.currentSession.may('send-cases-to-vp')) {
-      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
+        if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+          this.canSubmitNewDocuments = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+        } else {
+          this.canSubmitNewDocuments = false;
+        }
+      } else {
+        this.canSubmitNewDocuments = false;
+      }
     } else {
       this.canSendToVP = false;
+      this.canSubmitNewDocuments = false;
     }
   });
 

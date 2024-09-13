@@ -53,6 +53,19 @@
           {{t "send-to-VP"}}
         </AuButton>
       {{/if}}
+      {{#if this.canSubmitNewDocuments}}
+        <AuButton
+          @skin="link"
+          role="menuitem"
+        >
+          <AuLink
+            @models={{array @subcase.decisionmakingFlow.id @subcase.id}}
+            @route="cases.case.subcases.subcase.new-submission"
+          >
+            {{t "submit-new-documents"}}
+          </AuLink>
+        </AuButton>
+      {{/if}}
       {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda this.loadSubmissions.isIdle)}}
         {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
           <AuButton
