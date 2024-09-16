@@ -57,6 +57,7 @@ function login(name, retries = 0) {
     });
   cy.wait('@getMembership');
   cy.wait('@loadConcepts');
+  stubSigninghubCallToURL();
   cy.log('/login');
 }
 
@@ -101,6 +102,7 @@ function loginFlow(name) {
     cy.contains(name).click()
       .wait('@mockLogin');
   });
+  stubSigninghubCallToURL();
   cy.log('/loginFlow');
 }
 
@@ -122,6 +124,15 @@ function logoutFlow() {
     .forceClick();
   cy.wait('@mockLogout');
   cy.log('/logoutFlow');
+}
+
+function stubSigninghubCallToURL() {
+  const staticResponse = {
+    statusCode: 500,
+    ok: false,
+  };
+  const stub = cy.stub(staticResponse);
+  cy.intercept('GET', '/signing-flows/**/pieces/**/signinghub**', stub).as('stubSigninghubCall');
 }
 
 Cypress.Commands.add('login', login);

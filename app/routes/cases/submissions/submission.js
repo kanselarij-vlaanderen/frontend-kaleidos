@@ -112,6 +112,16 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
     this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
     this.isUpdate = await this.draftSubmissionService.getIsUpdate(submission);
+
+    if (this.isUpdate && this.subcase) {
+      let subcaseMandatees = await this.subcase.mandatees;
+      subcaseMandatees = subcaseMandatees
+        .slice()
+        .sort((m1, m2) => m1.priority - m2.priority);
+      this.previousMandateePersons = await Promise.all(
+        subcaseMandatees.map((m) => m.person)
+      );
+    }
     return submission;
   }
 
@@ -133,6 +143,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.subcase = this.subcase;
     controller.confidential = this.confidential;
     controller.hasConfidentialPieces = this.hasConfidentialPieces;
+    controller.previousMandateePersons = this.previousMandateePersons;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;

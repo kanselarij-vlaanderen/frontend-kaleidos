@@ -221,6 +221,9 @@
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
         @onDelete={{perform this.deleteUploadedPiece}}
+        @allowEditPieceAccessLevel={{true}}
+        @simplifiedOptions={{true}}
+        @onAccessLevelChanged={{set this.newPiece.accessLevel "accessLevel"}}
       />
     {{else}}
       <Auk::FileUploader @isSubmission={{true}} @multiple={{false}} @onUpload={{perform this.uploadPiece}} />

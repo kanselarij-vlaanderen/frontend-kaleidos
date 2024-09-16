@@ -370,7 +370,7 @@ context('Submission happy flows', () => {
       .should('not.exist');
 
     // history panel
-    cy.get(route.submission.history.panel);
+    cy.get(submissions.historyPanel.panel);
     cy.get(submissions.statusChangeActivity.item).should('have.length', 1);
     cy.get(submissions.statusChangeActivity.item).contains(submissionNewCase.comment);
   });
@@ -510,7 +510,7 @@ context('Submission happy flows', () => {
       .should('not.exist');
 
     // history panel
-    cy.get(route.submission.history.panel);
+    cy.get(submissions.historyPanel.panel);
     cy.get(submissions.statusChangeActivity.item).should('have.length', 1);
     cy.get(submissions.statusChangeActivity.item).contains(submissionExistingCase.comment);
   });
