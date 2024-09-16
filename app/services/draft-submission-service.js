@@ -89,14 +89,27 @@ export default class DraftSubmissionService extends Service {
   };
 
   getOngoingSubmissionForSubcase = async(subcase) => {
+    // TODO verify change, cleanup
     // technically this should be a queryOne, but possible with concurrency to have more than 1 ongoing
-    const allSubmissions = await this.getAllSubmissionsForSubcase(subcase, false);
-    const ongoingSubmission = allSubmissions?.filter(
-      (a) =>
-        a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
-    );
+    // const allSubmissions = await this.getAllSubmissionsForSubcase(subcase, false);
+    // const ongoingSubmission = allSubmissions?.filter(
+    //   (a) =>
+    //     a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
+    // );
     // if more than 1, we return the first created ongoing submission which should the last one in the filtered list
-    return ongoingSubmission?.at(-1);
+
+    // "ongoing" can be defined as "not accepted" or "accepted but not yet propagated"
+    // check if all pieces are propagated on latest submission.
+    const allDraftPiecesAccepted = this.allDraftPiecesAccepted(subcase);
+    if (!allDraftPiecesAccepted) {
+      return await this.getLatestSubmissionForSubcase(subcase);
+    }
+    return null;
+  };
+
+  getOriginalSubmissionForSubcase = async(subcase) => {
+    const allSubmissions = await this.getAllSubmissionsForSubcase(subcase);
+    return allSubmissions?.at(-1);
   };
 
   getLatestSubmissionForSubcase = async(subcase) => {

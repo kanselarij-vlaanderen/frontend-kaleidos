@@ -54,8 +54,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
     this.canSubmitNewDocuments = yield this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
-    if (!this.canSubmitNewDocuments) {
-      this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
+    if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
+      this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     }
   }
 

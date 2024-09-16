@@ -60,35 +60,37 @@
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body class="auk-u-p-0">
-          <AuList
-            @divider={{true}}
-            as |Item|
-          >
-            {{#each @approvalAddresses as |approvalAddress|}}
-              <Item
-                data-test-submission-notifications-approvers-item
-                class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
-              >
-                <Auk::AbbreviatedText @text={{approvalAddress}} @maxLength={{100}} />
-                {{#if (and this.isEditing (not (this.isDefaultApprovalAddress approvalAddress)))}}
-                  <AuButton
-                    data-test-submission-notifications-approvers-remove
-                    @skin="naked"
-                    @alert={{true}}
-                    @hideText={{true}}
-                    @icon="trash"
-                    {{on "click" (fn this.removeApprovalAddress approvalAddress)}}
-                  >
-                    {{t "delete"}}
-                  </AuButton>
-                {{/if}}
-              </Item>
-            {{else}}
-              <Item class="au-u-padding-small">
-                {{t "no-submission-approval-addresses-selected"}}
-              </Item>
-            {{/each}}
-          </AuList>
+          {{#unless this.loadEmailSettings.isRunning}}
+            <AuList
+              @divider={{true}}
+              as |Item|
+            >
+              {{#each @approvalAddresses as |approvalAddress|}}
+                <Item
+                  data-test-submission-notifications-approvers-item
+                  class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+                >
+                  <Auk::AbbreviatedText @text={{approvalAddress}} @maxLength={{100}} />
+                  {{#if (and this.isEditing (not (this.isDefaultApprovalAddress approvalAddress)))}}
+                    <AuButton
+                      data-test-submission-notifications-approvers-remove
+                      @skin="naked"
+                      @alert={{true}}
+                      @hideText={{true}}
+                      @icon="trash"
+                      {{on "click" (fn this.removeApprovalAddress approvalAddress)}}
+                    >
+                      {{t "delete"}}
+                    </AuButton>
+                  {{/if}}
+                </Item>
+              {{else}}
+                <Item class="au-u-padding-small">
+                  {{t "no-submission-approval-addresses-selected"}}
+                </Item>
+              {{/each}}
+            </AuList>
+          {{/unless}}
         </Auk::Panel::Body>
         <Auk::Panel::Body class="auk-u-p-2">
           <div class="auk-form-group">
@@ -143,35 +145,37 @@
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body class="auk-u-p-0">
-          <AuList
-            @divider={{true}}
-            as |Item|
-          >
-          {{#each @notificationAddresses as |notificationAddress|}}
-            <Item
-              data-test-submission-notifications-notification-item
-              class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+          {{#unless this.loadEmailSettings.isRunning}}
+            <AuList
+              @divider={{true}}
+              as |Item|
             >
-              <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{100}} />
-              {{#if (and this.isEditing (not (this.isDefaultNotificationAddress notificationAddress)))}}
-                <AuButton
-                  data-test-submission-notifications-notification-remove
-                  @skin="naked"
-                  @alert={{true}}
-                  @hideText={{true}}
-                  @icon="trash"
-                  {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
-              {{/if}}
-            </Item>
-          {{else}}
-            <Item class="au-u-padding-small">
-              {{t "no-submission-notification-addresses-selected"}}
-            </Item>
-          {{/each}}
-          </AuList>
+            {{#each @notificationAddresses as |notificationAddress|}}
+              <Item
+                data-test-submission-notifications-notification-item
+                class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+              >
+                <Auk::AbbreviatedText @text={{notificationAddress}} @maxLength={{100}} />
+                {{#if (and this.isEditing (not (this.isDefaultNotificationAddress notificationAddress)))}}
+                  <AuButton
+                    data-test-submission-notifications-notification-remove
+                    @skin="naked"
+                    @alert={{true}}
+                    @hideText={{true}}
+                    @icon="trash"
+                    {{on "click" (fn this.removeNotificationAddress notificationAddress)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                {{/if}}
+              </Item>
+            {{else}}
+              <Item class="au-u-padding-small">
+                {{t "no-submission-notification-addresses-selected"}}
+              </Item>
+            {{/each}}
+            </AuList>
+          {{/unless}}
         </Auk::Panel::Body>
         <Auk::Panel::Body class="auk-u-p-2">
           <div class="auk-form-group">

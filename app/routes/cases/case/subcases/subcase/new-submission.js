@@ -131,17 +131,19 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       }
     }
 
-    const submissions = await subcase.submissions;
-    this.originalSubmission = submissions
+    this.mandatees = this.mandatees
       .slice()
-      .sort((s1, s2) => s1.created.getTime() - s2.created.getTime())
-      .at(0);
+      .sort((m1, m2) => m1.priority - m2.priority);
 
-    if (this.originalSubmission) {
-      this.approvalAddresses = this.originalSubmission.approvalAddresses;
-      this.approvalComment = this.originalSubmission.approvalComment;
-      this.notificationAddresses = this.originalSubmission.notificationAddresses;
-      this.notificationComment = this.originalSubmission.notificationComment;
+    // TODO verify this change. It makes sense that we check the latest submission to copy addresses rather than the original
+    this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here
+    this.originalSubmission = await this.draftSubmissionService.getOriginalSubmissionForSubcase(subcase); // used to get meeting in controller
+
+    if (this.previousSubmission) {
+      this.approvalAddresses = this.previousSubmission.approvalAddresses;
+      this.approvalComment = this.previousSubmission.approvalComment;
+      this.notificationAddresses = this.previousSubmission.notificationAddresses;
+      this.notificationComment = this.previousSubmission.notificationComment;
     }
 
     return subcase;
