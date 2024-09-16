@@ -86,7 +86,7 @@
                       class="auk-table__header-title"
                       @currentSorting={{this.sort}}
                       @field="planned-start"
-                      @label={{t "date-put-on-agenda"}}
+                      @label={{t "date-meeting"}}
                       @onChange={{fn (mut this.sort)}}
                     />
                     <Utils::ThSortable
@@ -161,13 +161,7 @@
                           {{/if}}
                         </td>
                         <td data-test-route-cases-submissions-overview-row-status>
-                          {{#if submission.status.label}}
-                            <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
-                          {{else if submission.status.altLabel}}
-                            <AuPill @size="small" @skin="ongoing">{{submission.status.altLabel}}</AuPill>
-                          {{else}}
-                            -
-                          {{/if}}
+                          <Cases::Submissions::StatusPill @status={{submission.status}}/>
                         </td>
                         <td class="auk-u-text-align--right">
                           <AuLink

@@ -1,0 +1,7 @@
+{{#if @status.label}}
+  <AuPill @size="small" @skin="ongoing">{{@status.label}}</AuPill>
+{{else if @status.altLabel}}
+  <AuPill @size="small" @skin="ongoing">{{@status.altLabel}}</AuPill>
+{{else}}
+  -
+{{/if}}

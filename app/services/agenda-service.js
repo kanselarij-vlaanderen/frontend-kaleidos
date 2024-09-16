@@ -226,7 +226,7 @@ export default class AgendaService extends Service {
     return json;
   }
 
-  async getMeetingForSubmission(submission) {
+  async getAgendaAndMeetingForSubmission(submission) {
     const url = `/submissions/${submission.id}/for-meeting`;
     const response = await fetch(url, {
       method: 'GET',
@@ -250,7 +250,21 @@ export default class AgendaService extends Service {
           response.status
         }): ${JSON.stringify(json)}`);
     }
-    return json;
+    const agenda = {
+      id: json.data.attributes.agendaId,
+      uri: json.data.attributes.agenda,
+      serialnumber: json.data.attributes.serialnumber,
+      createdFor: {
+        id: json.data.id,
+        uri: json.data.attributes.uri,
+        plannedStart: new Date(json.data.attributes.plannedStart),
+        kind: {
+          uri: json.data.attributes.kind,
+          label: json.data.attributes.type,
+        }
+      },
+    };
+    return agenda;
   }
 
   /* No API */
