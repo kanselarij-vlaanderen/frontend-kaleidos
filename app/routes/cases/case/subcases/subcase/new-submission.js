@@ -43,13 +43,14 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     this.mandatees = this.submitter ? [this.submitter] : [];
 
     const { subcase } = this.modelFor('cases.case.subcases.subcase');
-    const subcaseSubmitter = await subcase.requestedBy;
-    if (subcaseSubmitter?.id && subcaseSubmitter.id !== this.submitter.id) {
-      return this.router.transitionTo('cases.case.subcases.subcase');
-    }
-    const currentSubmission = await this.draftSubmissionService.getOngoingSubmissionForSubcase(subcase);
-    if (currentSubmission?.id) {
-      return this.router.transitionTo('cases.submissions.submission', currentSubmission?.id);
+    const canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(subcase);
+    if (!canSubmitNewDocuments) {
+      const currentSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase);
+      if (currentSubmission?.id) {
+        return this.router.transitionTo('cases.submissions.submission', currentSubmission?.id);
+      } else {
+        return this.router.transitionTo('cases.case.subcases.subcase');
+      }
     }
   }
 

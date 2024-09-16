@@ -67,11 +67,7 @@ export default class AgendaitemControls extends Component {
       } else {
         this.canSendToVP = false;
       }
-      if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
-        this.canSubmitNewDocuments = !submitter?.uri || currentUserOrganizationMandateesUris.includes(submitter?.uri);
-      } else {
-        this.canSubmitNewDocuments = false;
-      }
+      this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
     } else {
       this.canSendToVP = false;
       this.canSubmitNewDocuments = false;

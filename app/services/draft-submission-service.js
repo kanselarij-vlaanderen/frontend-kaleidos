@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import constants from 'frontend-kaleidos/config/constants';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class DraftSubmissionService extends Service {
   @service store;
@@ -101,4 +102,55 @@ export default class DraftSubmissionService extends Service {
     });
     return allSubmissions?.at(0);
   };
+
+  allDraftPiecesAccepted = async(subcase) => {
+    const latestSubmission = await this.getLatestSubmissionForSubcase(subcase);
+    const pieces = await latestSubmission?.pieces;
+    for (const piece of pieces) {
+      const actualPiece = await piece.acceptedPiece;
+      if (!actualPiece) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  canSubmitNewDocumentsOnSubcase = async(subcase) => {
+    if (!isEnabledCabinetSubmissions() || !this.currentSession.may('create-submissions')) {
+      return false;
+    }
+    const submitter = await subcase.requestedBy;
+    const currentUserOrganization = await this.currentSession.organization;
+    const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+    const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+    const hasCorrectMandatee = !submitter?.uri || currentUserOrganizationMandateesUris.includes(submitter?.uri);
+    if (!hasCorrectMandatee) {
+      return false;
+    }
+    const ongoingSubmission = await this.getOngoingSubmissionForSubcase(subcase);
+    if (ongoingSubmission?.id) {
+      return false;
+    }
+    const latestAgendaActivity = await this.store.queryOne(
+      'agenda-activity',
+      {
+        'filter[subcase][:id:]': subcase.id,
+        sort: '-start-date',
+      }
+    );
+    if (latestAgendaActivity?.id) {
+      const latestAgendaitem = await this.store.queryOne('agendaitem', {
+        'filter[agenda-activity][:id:]': latestAgendaActivity.id,
+        'filter[:has-no:next-version]': 't',
+        sort: '-created',
+      });
+      const agenda = await latestAgendaitem?.agenda;
+      const meeting = await agenda?.meeting;
+      if (meeting) {
+        return false;
+      }
+    }
+    const canSubmitNewDocuments = await this.allDraftPiecesAccepted(subcase);
+    return canSubmitNewDocuments;
+  }
 }
