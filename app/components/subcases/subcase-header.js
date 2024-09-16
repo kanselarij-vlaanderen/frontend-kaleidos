@@ -31,7 +31,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked canPropose = false;
   @tracked canDelete = false;
   @tracked canSubmitNewDocuments = false;
-  @tracked meetingIsClosed = false;
   @tracked currentSubmission;
 
   constructor() {
@@ -45,54 +44,18 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.loadData.isIdle &&
       this.currentSession.may('create-submissions') &&
       this.submissions?.length > 0 &&
-      !this.currentSubmission &&
-      !this.meetingIsClosed &&
       this.canSubmitNewDocuments;
   }
 
   @task
   *loadData() {
     this.submissions = yield this.args.subcase.hasMany('submissions').reload();
-    this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
-    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
-      const latestAgendaActivity = yield this.store.queryOne(
-        'agenda-activity',
-        {
-          'filter[subcase][:id:]': this.args.subcase.id,
-          sort: '-start-date',
-        }
-      );
-      if (latestAgendaActivity?.id) {
-        const latestAgendaitem = yield this.store.queryOne('agendaitem', {
-          'filter[agenda-activity][:id:]': latestAgendaActivity.id,
-          'filter[:has-no:next-version]': 't',
-          sort: '-created',
-        });
-        const agenda = yield latestAgendaitem?.agenda;
-        const meeting = yield agenda?.meeting;
-        if (meeting) {
-          this.meetingIsClosed = true;
-        }
-      }
-      const submissions = yield this.args.subcase.submissions;
-      let draftPieceWithoutAccepted = false;
-      for (const submission of submissions) {
-        const pieces = yield submission.pieces;
-        for (const piece of pieces) {
-          const actualPiece = yield piece.acceptedPiece;
-          if (!actualPiece) {
-            draftPieceWithoutAccepted = true;
-            break;
-          }
-        }
-      }
-      this.canSubmitNewDocuments = !draftPieceWithoutAccepted;
-      if (!this.canSubmitNewDocuments) {
-        this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
-      }
+    this.canSubmitNewDocuments = yield this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+    if (!this.canSubmitNewDocuments) {
+      this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
     }
   }
 

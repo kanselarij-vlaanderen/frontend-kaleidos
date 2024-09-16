@@ -50,12 +50,12 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       this.currentSession.may('edit-in-treatment-submissions') &&
       this.model.isInTreatment;
 
-    const mayIfKabinet =
+    const mayIfCabinet =
       this.currentSession.may('edit-sent-back-submissions') &&
       this.model.isSentBack &&
       this.currentLinkedMandatee?.id ===
         this.model.belongsTo('requestedBy').value().id; // requestedBy is loaded in the route
-    return mayIfAdmin || mayIfSecretarie || mayIfKabinet;
+    return mayIfAdmin || mayIfSecretarie || mayIfCabinet;
   }
 
   get sortedNewPieces() {
