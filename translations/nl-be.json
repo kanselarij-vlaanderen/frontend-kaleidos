@@ -115,6 +115,7 @@
   "decisions-pdf-name": "BeslissingenVlaamseRegering_",
   "definite": "Definitief",
   "delete": "Verwijderen",
+  "delete-agendaitem-while-keeping-subcase": "Verwijder agendapunt en behoud procedurestap",
   "delete-comment": "Bericht verwijderen",
   "delete-comment-message": "Bent u zeker dat u het bericht wil verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",
   "delete-document-message": "Bent u zeker dat u het document wilt verwijderen? Deze actie kan niet meer ongedaan gemaakt worden.",

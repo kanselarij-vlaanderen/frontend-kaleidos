@@ -200,6 +200,6 @@
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
     @allowEditing={{this.mayEdit}}
-    @disableEditingPosition={{true}}
+    @disableEditingPosition={{this.isUpdate}}
   />
 {{/if}}
