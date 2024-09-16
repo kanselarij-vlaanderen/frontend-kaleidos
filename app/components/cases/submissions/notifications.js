@@ -9,6 +9,7 @@ import { TrackedArray } from 'tracked-built-ins';
 export default class CasesSubmissionsNotificationsComponent extends Component {
   @service store;
   @service toaster;
+  @service intl;
 
   @tracked showApprovalAddressModal = false;
   @tracked showNotificationAddressModal = false;
@@ -35,12 +36,12 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     this.notificationComment = this.args.notificationComment;
   };
 
-  loadEmailSettings = task(async () => {
+  loadEmailSettings = task({ maxConcurrency: 1, restartable: true }, async () => {
     this.emailSettings = await this.store.queryOne(
       'email-notification-setting'
     );
     if (this.emailSettings) {
-      await this.updateDefaultAddresses.perform();
+      this.updateDefaultAddresses();
     } else {
       this.toaster.warning(
         this.intl.t('notification-mails-could-not-be-sent'),
@@ -49,36 +50,44 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     }
   });
 
-  updateDefaultAddresses = task({ maxConcurrency: 1, enqueue: true }, async () => {
+  onDidUpdate = task({ maxConcurrency: 1, restartable: true}, async () => {  
+    if (!this.emailSettings) {
+      // this includes calling the updateDefaultAddresses
+      return await this.loadEmailSettings.perform();
+    }
+    this.updateDefaultAddresses();
+  });
+
+  updateDefaultAddresses = () => {
     this.addApprovalAddress(this.defaultApprovalAddress, true);
     this.removeNotificationAddress(this.unusedDefaultNotificationAddress);
     for (const address of this.defaultNotificationAddresses) {
       this.addNotificationAddress(address, true);
     }
-    this.changeNotificationData();
-  });
+    this.changeNotificationData(true);
+  };
 
   get defaultApprovalAddress() {
-    return this.emailSettings?.cabinetSubmissionsSecretaryEmail;
+    return this.emailSettings.cabinetSubmissionsSecretaryEmail;
   }
 
   get defaultNotificationAddresses() {
     if (this.args.confidential) {
-      return [this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail];
+      return [this.emailSettings.cabinetSubmissionsIkwConfidentialEmail];
     } else if (this.args.hasConfidentialPieces) {
       return [
-        this.emailSettings?.cabinetSubmissionsIkwEmail,
-        this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail
+        this.emailSettings.cabinetSubmissionsIkwEmail,
+        this.emailSettings.cabinetSubmissionsIkwConfidentialEmail
       ];
     }
-    return [this.emailSettings?.cabinetSubmissionsIkwEmail];
+    return [this.emailSettings.cabinetSubmissionsIkwEmail];
   }
 
   get unusedDefaultNotificationAddress() {
     if (this.args.confidential) {
-      return this.emailSettings?.cabinetSubmissionsIkwEmail;
+      return this.emailSettings.cabinetSubmissionsIkwEmail;
     } else {
-      return this.emailSettings?.cabinetSubmissionsIkwConfidentialEmail;
+      return this.emailSettings.cabinetSubmissionsIkwConfidentialEmail;
     }
   }
 
@@ -110,9 +119,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
       } else {
         this.approvalAddresses.push(address);
       }
-      if (!this.updateDefaultAddresses.isRunning) {
-        this.changeNotificationData();
-      }
+      this.changeNotificationData();
     }
     this.showApprovalAddressModal = false;
   }
@@ -122,9 +129,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     const index = this.approvalAddresses.indexOf(address);
     if (index > -1) {
       this.approvalAddresses.splice(index, 1);
-      if (!this.updateDefaultAddresses.isRunning) {
-        this.changeNotificationData();
-      }
+      this.changeNotificationData();
     }
   }
 
@@ -136,9 +141,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
       } else {
         this.notificationAddresses.push(address);
       }
-      if (!this.updateDefaultAddresses.isRunning) {
-        this.changeNotificationData();
-      }
+      this.changeNotificationData();
     }
     this.showNotificationAddressModal = false;
   }
@@ -148,9 +151,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     const index = this.notificationAddresses.indexOf(address);
     if (index > -1) {
       this.notificationAddresses.splice(index, 1);
-      if (!this.updateDefaultAddresses.isRunning) {
-        this.changeNotificationData();
-      }
+      this.changeNotificationData();
     }
   }
 
@@ -160,7 +161,10 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     this.isEditing = false;
   };
 
-  changeNotificationData = () => {
+  changeNotificationData = (fromUpdate) => {
+    // if init or update tasks are running we don't want to send to parent yet (or 3 calls will be made)
+    const areUpdateTasksRunning = this.onDidUpdate.isRunning || this.loadEmailSettings.isRunning;
+    if (areUpdateTasksRunning && !fromUpdate) return;
     // no submission - new submission form
     // submission - when not actually editing we are updating based on "did-update" and should call parent
     if (!this.args.submission || this.args.submission && !this.isEditing) {
