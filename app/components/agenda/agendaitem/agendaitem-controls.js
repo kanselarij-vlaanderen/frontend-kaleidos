@@ -68,11 +68,7 @@ export default class AgendaitemControls extends Component {
         this.canSendToVP = false;
       }
       if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
-        if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-          this.canSubmitNewDocuments = await this.parliamentService.isReadyForVp(this.args.agendaitem);
-        } else {
-          this.canSubmitNewDocuments = false;
-        }
+        this.canSubmitNewDocuments = !submitter?.uri || currentUserOrganizationMandateesUris.includes(submitter?.uri);
       } else {
         this.canSubmitNewDocuments = false;
       }
@@ -85,7 +81,8 @@ export default class AgendaitemControls extends Component {
   get hasDropdownOptions() {
     return (
       (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
-      this.canSendToVP
+      this.canSendToVP ||
+      this.canSubmitNewDocuments
     );
   }
 

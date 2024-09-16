@@ -32,6 +32,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked canDelete = false;
   @tracked canSubmitNewDocuments = false;
   @tracked meetingIsClosed = false;
+  @tracked hasCorrectMandatee = false;
   @tracked currentSubmission;
 
   constructor() {
@@ -47,7 +48,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.submissions?.length > 0 &&
       !this.currentSubmission &&
       !this.meetingIsClosed &&
-      this.canSubmitNewDocuments;
+      this.canSubmitNewDocuments &&
+      this.hasCorrectMandatee;
   }
 
   @task
@@ -58,40 +60,47 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
     if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
-      const latestAgendaActivity = yield this.store.queryOne(
-        'agenda-activity',
-        {
-          'filter[subcase][:id:]': this.args.subcase.id,
-          sort: '-start-date',
-        }
-      );
-      if (latestAgendaActivity?.id) {
-        const latestAgendaitem = yield this.store.queryOne('agendaitem', {
-          'filter[agenda-activity][:id:]': latestAgendaActivity.id,
-          'filter[:has-no:next-version]': 't',
-          sort: '-created',
-        });
-        const agenda = yield latestAgendaitem?.agenda;
-        const meeting = yield agenda?.meeting;
-        if (meeting) {
-          this.meetingIsClosed = true;
-        }
-      }
-      const submissions = yield this.args.subcase.submissions;
-      let draftPieceWithoutAccepted = false;
-      for (const submission of submissions) {
-        const pieces = yield submission.pieces;
-        for (const piece of pieces) {
-          const actualPiece = yield piece.acceptedPiece;
-          if (!actualPiece) {
-            draftPieceWithoutAccepted = true;
-            break;
+      const submitter = yield this.args.subcase.requestedBy;
+      const currentUserOrganization = yield this.currentSession.organization;
+      const currentUserOrganizationMandatees = yield currentUserOrganization.mandatees;
+      const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+      this.hasCorrectMandatee = !submitter?.uri || currentUserOrganizationMandateesUris.includes(submitter?.uri);
+      if (this.hasCorrectMandatee) {
+        const latestAgendaActivity = yield this.store.queryOne(
+          'agenda-activity',
+          {
+            'filter[subcase][:id:]': this.args.subcase.id,
+            sort: '-start-date',
+          }
+        );
+        if (latestAgendaActivity?.id) {
+          const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+            'filter[agenda-activity][:id:]': latestAgendaActivity.id,
+            'filter[:has-no:next-version]': 't',
+            sort: '-created',
+          });
+          const agenda = yield latestAgendaitem?.agenda;
+          const meeting = yield agenda?.meeting;
+          if (meeting) {
+            this.meetingIsClosed = true;
           }
         }
-      }
-      this.canSubmitNewDocuments = !draftPieceWithoutAccepted;
-      if (!this.canSubmitNewDocuments) {
-        this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
+        const submissions = yield this.args.subcase.submissions;
+        let draftPieceWithoutAccepted = false;
+        for (const submission of submissions) {
+          const pieces = yield submission.pieces;
+          for (const piece of pieces) {
+            const actualPiece = yield piece.acceptedPiece;
+            if (!actualPiece) {
+              draftPieceWithoutAccepted = true;
+              break;
+            }
+          }
+        }
+        this.canSubmitNewDocuments = !draftPieceWithoutAccepted;
+        if (!this.canSubmitNewDocuments) {
+          this.currentSubmission = yield this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.subcase);
+        }
       }
     }
   }
