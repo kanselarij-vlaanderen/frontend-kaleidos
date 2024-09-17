@@ -12,37 +12,41 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body class="auk-u-bg-alt">
-      {{#if @multiple}}
-        {{#each @statusChangeActivities as |statusChangeActivityArray|}}
-          <div class={{if (has-next statusChangeActivityArray @statusChangeActivities) "auk-u-mb-4"}}>
-            {{#let (object-at (add statusChangeActivityArray.length -1) statusChangeActivityArray) as |creationActivity|}}
-              <Submission::StatusChangeActivity
-                @activity={{creationActivity}}
-                @isHeader={{true}}
-              />
-            {{/let}}
-            {{#let (object-at 0 statusChangeActivityArray) as |lastActivity|}}
-              <Cases::Submissions::StatusPill @status={{lastActivity.status}}/>
-            {{/let}}
-            <ul class="vlc-status-timeline">
-              {{#each statusChangeActivityArray as |activity|}}
-                <Submission::StatusChangeActivity
-                  @activity={{activity}}
-                  @canSeePrivateComments={{@canSeePrivateComments}}
-                />
-              {{/each}}
-            </ul>
-          </div>
-        {{/each}}
+      {{#if @loading}}
+        <Auk::Loader @message={{t "loading" }} />
       {{else}}
-        <ul class="vlc-status-timeline">
-          {{#each @statusChangeActivities as |activity|}}
-            <Submission::StatusChangeActivity
-              @activity={{activity}}
-              @canSeePrivateComments={{@canSeePrivateComments}}
-            />
+        {{#if @multiple}}
+          {{#each @statusChangeActivities as |statusChangeActivityArray|}}
+            <div class={{if (has-next statusChangeActivityArray @statusChangeActivities) "auk-u-mb-4"}}>
+              {{#let (object-at (add statusChangeActivityArray.length -1) statusChangeActivityArray) as |creationActivity|}}
+                <Submission::StatusChangeActivity
+                  @activity={{creationActivity}}
+                  @isHeader={{true}}
+                />
+              {{/let}}
+              {{#let (object-at 0 statusChangeActivityArray) as |lastActivity|}}
+                <Cases::Submissions::StatusPill @status={{lastActivity.status}}/>
+              {{/let}}
+              <ul class="vlc-status-timeline">
+                {{#each statusChangeActivityArray as |activity|}}
+                  <Submission::StatusChangeActivity
+                    @activity={{activity}}
+                    @canSeePrivateComments={{@canSeePrivateComments}}
+                  />
+                {{/each}}
+              </ul>
+            </div>
           {{/each}}
-        </ul>
+        {{else}}
+          <ul class="vlc-status-timeline">
+            {{#each @statusChangeActivities as |activity|}}
+              <Submission::StatusChangeActivity
+                @activity={{activity}}
+                @canSeePrivateComments={{@canSeePrivateComments}}
+              />
+            {{/each}}
+          </ul>
+        {{/if}}
       {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
