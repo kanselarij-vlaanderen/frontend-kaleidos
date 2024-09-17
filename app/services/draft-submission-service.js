@@ -100,7 +100,7 @@ export default class DraftSubmissionService extends Service {
 
     // "ongoing" can be defined as "not accepted" or "accepted but not yet propagated"
     // check if all pieces are propagated on latest submission.
-    const allDraftPiecesAccepted = this.allDraftPiecesAccepted(subcase);
+    const allDraftPiecesAccepted = await this.allDraftPiecesAccepted(subcase);
     if (!allDraftPiecesAccepted) {
       return await this.getLatestSubmissionForSubcase(subcase);
     }
