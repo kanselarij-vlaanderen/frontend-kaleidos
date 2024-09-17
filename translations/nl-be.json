@@ -1425,7 +1425,7 @@
   "submitted-on-simple": "Ingediend door {userName}",
   "resubmitted-on": "Opnieuw ingediend door {userName} op {date} om {hour}",
   "sent-back-requested-on": "Aanpassing aangevraagd door {userName} op {date} om {hour}",
-  "sent-back-on": "Teruggestuurd op {date} om {hour}",
+  "sent-back-on": "Klaar voor aanpassing op {date} om {hour}",
   "in-treatment-by-user-on": "In behandeling genomen door {userName} op {date} om {hour}",
   "update-submitted-on": "Update ingediend door {userName} op {date} om {hour}",
   "update-submitted-on-simple": "Update ingediend door {userName}",

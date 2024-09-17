@@ -179,7 +179,7 @@ ${params.notificationComment}
 }
 
 async function caseSendBackEmail(params) {
-  let subject = 'Teruggestuurd: ';
+  let subject = 'Indiening klaar voor aanpassing: ';
   subject += await getSubject(params);
 
   let message = '';
@@ -196,7 +196,7 @@ Uw indiening "${params.submission.shortTitle}" werd teruggestuurd zodat u aanpas
 `;
   }
   message += `
-U kan de indiening hier aanpassen: ${params.submissionUrl}
+U kunt uw indiening hier aanpassen: ${params.submissionUrl}
 `;
 
   return {
