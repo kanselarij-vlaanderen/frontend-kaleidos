@@ -119,11 +119,14 @@ export default class DraftSubmissionService extends Service {
 
   allDraftPiecesAccepted = async(subcase) => {
     const latestSubmission = await this.getLatestSubmissionForSubcase(subcase);
-    const pieces = await latestSubmission?.pieces;
-    for (const piece of pieces) {
-      const actualPiece = await piece.acceptedPiece;
-      if (!actualPiece) {
-        return false;
+    if (latestSubmission?.id) {
+      let pieces = await latestSubmission?.hasMany('pieces').reload();
+      pieces = pieces?.slice();
+      for (const piece of pieces) {
+        const actualPiece = await piece.acceptedPiece;
+        if (!actualPiece) {
+          return false;
+        }
       }
     }
     return true;

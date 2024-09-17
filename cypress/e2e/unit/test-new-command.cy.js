@@ -100,6 +100,9 @@ context('testing new add subcase command', () => {
     }
 
     cy.visitCaseWithLink('dossiers/6374F30CD9A98BD0A2288557/deeldossiers/6374F312D9A98BD0A2288558');
+    cy.get(mandatee.mandateePanelView.rows).should('not.exist');
+    cy.addSubcaseMandatee(mandateeNames['10052021-16052022'].second);
+    // old mandatee is submitter
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 1, {
       timeout: 5000,
@@ -117,6 +120,7 @@ context('testing new add subcase command', () => {
     // new subcase
     cy.addSubcaseViaModal(subcase1);
 
+    // old mandatee mapped to new mandatee is the submitter
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 1, {
       timeout: 5000,

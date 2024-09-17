@@ -35,7 +35,9 @@ export default class SubcaseDetailRegular extends Component {
   }
 
   loadSubmissionData = task(async () => {
-    if (!isEnabledCabinetSubmissions()) return;
+    if (!isEnabledCabinetSubmissions()) {
+      return;
+    };
     const allSubmissions = await this.draftSubmissionService.getAllSubmissionsForSubcase(this.args.subcase);
     let statusChangeActivities= [];
     for (const submission of allSubmissions) {
