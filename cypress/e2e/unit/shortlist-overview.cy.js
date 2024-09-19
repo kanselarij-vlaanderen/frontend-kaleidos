@@ -1022,6 +1022,7 @@ context('decisions and minutes shortlist overview tests', () => {
 
     // check succes
     cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.log('failing tests. decisionTitle should be in list:', decisionTitle); // the next line fails sometimes
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
