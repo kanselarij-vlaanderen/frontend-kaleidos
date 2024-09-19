@@ -277,7 +277,7 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-      if (!this.isPreKaleidos) {
+      if (!this.isPreKaleidos || !this.isNew) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||

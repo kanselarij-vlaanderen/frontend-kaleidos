@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -14,6 +14,10 @@ import utils from '../../selectors/utils.selectors';
 context('Testing the application as Secretarie user', () => {
   beforeEach(() => {
     cy.login('Secretarie');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {

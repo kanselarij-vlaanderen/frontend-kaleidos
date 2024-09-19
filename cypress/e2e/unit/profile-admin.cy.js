@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, beforeEach */
+/* global context, it, cy, Cypress, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -20,6 +20,10 @@ function currentTimestamp() {
 context('Testing the application as Admin user', () => {
   beforeEach(() => {
     cy.login('Admin');
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {

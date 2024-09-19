@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, beforeEach, afterEach */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -16,6 +16,10 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
   beforeEach(() => {
     cy.login('Kabinetdossierbeheerder');
     cy.wait(1000);
+  });
+
+  afterEach(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
