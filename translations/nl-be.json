@@ -1468,5 +1468,6 @@
   "choose-formally-ok-status": "Kies een status",
   "saved-notification-message": "De notificatie gegevens werden automatisch aangepast.",
   "new-mandatee": "Nieuwe minister",
-  "mandatees-deleted-in-update": "De volgende {count, plural, =1 {minister wordt} other {ministers worden}} verwijderd in deze update:"
+  "mandatees-deleted-in-update": "De volgende {count, plural, =1 {minister wordt} other {ministers worden}} verwijderd in deze update:",
+  "comment-title-to-submitter": "Opmerking voor de kabinetsdossierbeheerder"
 }
