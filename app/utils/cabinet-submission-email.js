@@ -161,7 +161,7 @@ async function caseSubmittedSubmitterEmail(params) {
   let message = await caseSubmittedEmail({ ...params, forSubmitter: true });
   if (params.approvalComment) {
     message += `
-Aanvullende informatie voor de secretarie en kabinetschefs:
+Aanvullende informatie voor de kanselarij en de kabinetschef(s) van de co-agenderende minister(s):
 ${params.approvalComment}
 `;
   }
@@ -230,20 +230,21 @@ async function caseUpdateSubmissionSubmitterEmail(params) {
 }
 
 async function caseRequestSendBackEmail(params) {
+  const submitter = await params.submission.requestedBy;
+  const submitterPerson = await submitter.person;
   let subject = 'Aanpassing aangevraagd: ';
   subject += await getSubject(params);
 
   let message = '';
   message += `Beste,
-`;
+
+Er werd een aanpassing aangevraagd door kabinet ${submitterPerson.lastName} voor indiening "${params.submission.shortTitle}"`;
   if (params.comment) {
-    message += `
-Er werd een aanpassing aangevraagd voor indiening "${params.submission.shortTitle}" met volgende opmerking:
+    message += `met volgende opmerking:
 ${params.comment}
 `;
   } else {
-    message += `
-Er werd een aanpassing aangevraagd voor indiening "${params.submission.shortTitle}".
+    message += `.
 `;
   }
 message += `

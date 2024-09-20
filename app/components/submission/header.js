@@ -99,7 +99,8 @@ export default class SubmissionHeaderComponent extends Component {
   get canRequestSendBack() {
     return (
       (this.args.submission?.isSubmitted ||
-        this.args.submission?.isUpdateSubmitted) &&
+        this.args.submission?.isUpdateSubmitted ||
+        this.args.submission?.isResubmitted) && 
       this.currentSession.may('edit-sent-back-submissions') &&
       this.requestedByIsCurrentMandatee
     );
@@ -116,7 +117,7 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isResubmitted ||
-        this.args.submission?.isUpdateSubmitted || 
+        this.args.submission?.isUpdateSubmitted ||
         this.args.submission?.isSendBackRequested) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
