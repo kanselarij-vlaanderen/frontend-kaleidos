@@ -26,8 +26,9 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
-// const agendaDate = Cypress.dayjs().add(4, 'weeks').day(1); // anything but day 4
-const agendaDate = Cypress.dayjs('2024-09-13');
+const agendaDate = Cypress.dayjs().add(4, 'weeks')
+  .day(1); // anything but day 4
+// const agendaDate = Cypress.dayjs('2024-09-13');
 
 const linkedMandatee = {
   // the second active mandatee will be our linked mandatee
