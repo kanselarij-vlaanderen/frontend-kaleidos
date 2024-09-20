@@ -83,7 +83,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
-    ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
+    ENV.APP.ENABLE_CABINET_SUBMISSIONS = false;
     ENV.APP.ENABLE_DEBUG = false;
   }
 

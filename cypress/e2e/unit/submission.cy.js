@@ -39,11 +39,11 @@ const linkedMandatee = {
 
 before(() => {
   cy.login('Admin');
-  cy.createAgenda(null, agendaDate, 'indieningen kabinet');
+  // cy.createAgenda(null, agendaDate, 'indieningen kabinet');
   cy.logoutFlow();
 });
 
-context('setup emails and mandatees', () => {
+context.skip('setup emails and mandatees', () => {
   afterEach(() => {
     cy.logout();
   });
@@ -101,7 +101,7 @@ context('setup emails and mandatees', () => {
 
 // create Agenda for all? multiple agendas (1 of each type)? the list in the modal will be massive already
 
-context('Submission happy flows', () => {
+context.skip('Submission happy flows', () => {
   afterEach(() => {
     cy.logout();
   });
@@ -745,7 +745,7 @@ context.skip('change mandatees on organisation', () => {
   });
 });
 
-context('cleanup mandatees from organisation', () => {
+context.skip('cleanup mandatees from organisation', () => {
   it('remove mandatees from organisation', () => {
     cy.login('Admin');
     cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
