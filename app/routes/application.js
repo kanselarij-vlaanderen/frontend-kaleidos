@@ -39,6 +39,7 @@ export default class ApplicationRoute extends Route {
   get isSupportedBrowser() {
     const browser = this.userAgent.browser;
     return (window.Cypress
+      || browser.isEdge
       || browser.isFirefox
       || browser.isChrome
       || browser.isSafari

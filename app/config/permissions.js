@@ -122,6 +122,23 @@ const groups = [
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',
       'delete-submissions',
+    ],
+    readOnlyPermissions: [
+      'view-all-ongoing-signatures',
+      'search-publication-flows',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
+      'view-all-confidential-documents',
+      'view-ratification-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
+      'impersonate-users',
+      'view-documents-postponed-and-retracted',
+      'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
+      'view-submissions',
+      'view-all-submissions',
     ]
   },
   {
@@ -164,6 +181,22 @@ const groups = [
       'view-all-submissions',
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',
+    ],
+    readOnlyPermissions: [
+      'view-all-ongoing-signatures',
+      'search-publication-flows',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
+      'view-all-confidential-documents',
+      'view-ratification-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
+      'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
+      'view-submissions',
+      'view-all-submissions',
     ]
   },
   {
@@ -203,6 +236,20 @@ const groups = [
       'view-all-submissions',
       'edit-in-treatment-submissions',
       'create-subcases-from-submissions',
+    ],
+    readOnlyPermissions: [
+      'view-all-ongoing-signatures',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
+      'view-all-confidential-documents',
+      'search-confidential-cases',
+      'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
+      'view-mandatees-with-range',
+      'view-access-level-pill-when-postponed',
+      'view-submissions',
+      'view-all-submissions',
     ]
   },
   {
@@ -216,6 +263,18 @@ const groups = [
       'manage-publication-flows',
       'search-publication-flows',
       'add-past-mandatees',
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
+      'view-all-confidential-documents',
+      'view-ratification-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
+    ],
+    readOnlyPermissions: [
+      'view-all-ongoing-signatures',
+      'search-publication-flows',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
@@ -242,6 +301,16 @@ const groups = [
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
     ],
+    readOnlyPermissions: [
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-decisions-before-release',
+      'view-all-confidential-documents',
+      'view-ratification-before-release',
+      'search-confidential-cases',
+      'search-confidential-documents',
+      'view-documents-postponed-and-retracted',
+    ]
   },
   {
     name: 'MINISTER',
@@ -257,6 +326,14 @@ const groups = [
       'view-submissions',
       'view-all-submissions',
     ],
+    readOnlyPermissions: [
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-documents-postponed-and-retracted',
+      'view-all-confidential-documents',
+      'view-submissions',
+      'view-all-submissions',
+    ]
   },
   {
     name: 'KABINET_DOSSIERBEHEERDER',
@@ -274,6 +351,13 @@ const groups = [
       'create-submissions',
       'edit-sent-back-submissions',
     ],
+    readOnlyPermissions: [
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-only-specific-confidential-documents',
+      'view-documents-postponed-and-retracted',
+      'view-submissions',
+    ],
   },
   {
     name: 'KABINET_MEDEWERKER',
@@ -285,12 +369,19 @@ const groups = [
       'view-documents-postponed-and-retracted',
       'view-submissions',
     ],
+    readOnlyPermissions: [
+      'view-document-version-info',
+      'view-documents-before-release',
+      'view-documents-postponed-and-retracted',
+      'view-submissions',
+    ],
   },
   {
     name: 'OVERHEID',
     roles: [OVERHEIDSORGANISATIE, VLAAMS_PARLEMENT],
     defaultRoute: 'agendas',
     permissions: [],
+    readOnlyPermissions: [],
   },
 ];
 
