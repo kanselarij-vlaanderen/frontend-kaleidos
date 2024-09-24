@@ -205,7 +205,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     const oldCase = await oldDecisionmakingFlow.case;
     const newCase = await this.newDecisionmakingFlow.case;
 
-    const signFlow = await oldCase.signFlow;
     const parliamentRetrievalActivity = await this.args.subcase.parliamentRetrievalActivity;
 
     for (const submission of this.submissions) {
@@ -244,7 +243,11 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       }
     }
 
-    if (signFlow) {
+    const signFlows = await this.store.queryAll('sign-flow', {
+      'filter[sign-subcase][sign-marking-activity][piece][submission-activity][subcase][:id:]': this.args.subcase.id,
+    });
+
+    for (const signFlow of signFlows) {
       signFlow.case = newCase;
       await signFlow.save();
     }
