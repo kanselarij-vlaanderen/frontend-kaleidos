@@ -17,6 +17,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service toaster;
   @service intl;
   @service draftSubmissionService;
+  @service parliamentService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
@@ -30,6 +31,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
+  @tracked canMove = false;
   @tracked canSubmitNewDocuments = false;
   @tracked currentSubmission;
 
@@ -57,6 +59,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
       this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     }
+    const decisionmakingFlow = yield this.args.subcase.decisionmakingFlow;
+    const _case = yield decisionmakingFlow.case;
+    const parliamentFlow = yield _case.parliamentFlow;
+    const parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
+    const subcases = yield decisionmakingFlow.hasMany('subcases').reload();
+    this.canMove = !parliamentFlow || (parliamentRetrievalActivity && subcases.length === 1);
   }
 
   triggerDeleteCaseDialog() {
@@ -105,7 +113,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   get hasActions() {
-    return this.canDelete || this.canPropose || !this.args.parliamentFlow;
+    return this.canDelete || this.canPropose || this.canMove;
   }
 
   /**
@@ -193,13 +201,60 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   moveSubcase = task(async () => {
     const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+
+    const oldCase = await oldDecisionmakingFlow.case;
+    const newCase = await this.newDecisionmakingFlow.case;
+
+    const signFlow = await oldCase.signFlow;
+    const parliamentRetrievalActivity = await this.args.subcase.parliamentRetrievalActivity;
+
+    for (const submission of this.submissions) {
+      submission.decisionmakingFlow = this.newDecisionmakingFlow;
+      await submission.save();
+    }
+
+    if (parliamentRetrievalActivity) {
+      const newParliamentFlow = await newCase.parliamentFlow;
+      if (newParliamentFlow) {
+        const oldParliamentSubcase = await parliamentRetrievalActivity.parliamentSubcase;
+        const oldParliamentFlow = await oldParliamentSubcase.parliamentFlow;
+
+        const newParliamentSubcase = await newParliamentFlow.parliamentSubcase;
+        parliamentRetrievalActivity.parliamentSubcase = newParliamentSubcase;
+
+        await parliamentRetrievalActivity.save();
+        await oldParliamentSubcase.destroyRecord();
+        await oldParliamentFlow.destroyRecord();
+
+        await this.parliamentService.relinkDecisionmakingFlow(
+          this.newDecisionmakingFlow,
+          newCase,
+          newParliamentFlow,
+        );
+      } else {
+        const parliamentFlow = await oldCase.parliamentFlow;
+        newCase.parliamentFlow = parliamentFlow;
+        await newCase.save();
+
+        await this.parliamentService.relinkDecisionmakingFlow(
+          this.newDecisionmakingFlow,
+          newCase,
+          parliamentFlow,
+        );
+      }
+    }
+
+    if (signFlow) {
+      signFlow.case = newCase;
+      await signFlow.save();
+    }
+
     this.args.subcase.decisionmakingFlow = this.newDecisionmakingFlow;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 
     const subCases = await oldDecisionmakingFlow.hasMany('subcases').reload();
     if (subCases.length === 0) {
-      const oldCase = await oldDecisionmakingFlow.case;
       const publicationFlow = await this.store.queryOne('publication-flow', {
         'filter[case][:id:]': oldCase.id,
       });
