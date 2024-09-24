@@ -45,11 +45,11 @@ export default class CurrentSessionService extends Service {
   }
 
   may(permission, checkImpersonator = false) {
-    if (this.userAgent.browser.isMobile || this.userAgent.browser.isEdge) {
-      return checkImpersonator
-        ? this.impersonatorUserGroup?.readOnlyPermissions.includes(permission)
-        : this.userGroup?.readOnlyPermissions.includes(permission);
-    }
+    // if (this.userAgent.device.isMobile || this.userAgent.browser.isEdge) {
+    //   return checkImpersonator
+    //     ? this.impersonatorUserGroup?.readOnlyPermissions.includes(permission)
+    //     : this.userGroup?.readOnlyPermissions.includes(permission);
+    // }
     return checkImpersonator
       ? this.impersonatorUserGroup?.permissions.includes(permission)
       : this.userGroup?.permissions.includes(permission);
