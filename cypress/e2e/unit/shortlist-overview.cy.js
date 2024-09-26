@@ -474,7 +474,7 @@ context('signatures shortlist overview tests', () => {
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
-    cy.intercept('POST', '/signing-flows/update-to-signinghub', {
+    cy.intercept('POST', '/signing-flows/upload-to-signinghub', {
       forceNetworkError: true,
     }).as('updateToSigningHubError');
     // no email set so forcing through disabled button
@@ -1006,7 +1006,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
-    cy.intercept('POST', '/signing-flows/update-to-signinghub', {
+    cy.intercept('POST', '/signing-flows/upload-to-signinghub', {
       forceNetworkError: true,
     }).as('updateToSigningHubError');
     // cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');

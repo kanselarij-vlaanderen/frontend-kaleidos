@@ -8,8 +8,9 @@ import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { task, timeout } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 import { DOCUMENT_DELETE_UNDO_TIME_MS } from 'frontend-kaleidos/config/config';
-import { deleteDocumentContainer } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { deleteDocumentContainer, deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import RevertActionToast from 'frontend-kaleidos/components/utils/toaster/revert-action-toast';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class DocumentsDraftDocumentCardComponent extends Component {
   /**
@@ -32,6 +33,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @service intl;
   @service pieceAccessLevelService;
 
+  @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
 
@@ -53,6 +55,10 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
 
   get mayEdit() {
     return this.args.isEditable && this.args.piece.constructor.modelName === 'draft-piece';
+  }
+
+  get mayShowAddNewVersion() {
+    return this.args.isEditable && this.piece.constructor.modelName === 'piece';
   }
 
   get dateToShowLabel() {
@@ -167,6 +173,21 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   }
 
   @task
+  *addPiece() {
+    try {
+      this.newPiece.name = this.newPiece.name.trim();
+      yield this.args.onAddPiece?.(this.piece, this.newPiece);
+      this.loadVersionHistory.perform();
+      this.newPiece = null;
+      this.isOpenUploadModal = false;
+    } catch (error) {
+      yield this.deleteUploadedPiece.perform();
+      this.isOpenUploadModal = false;
+      throw error;
+    }
+  }
+
+  @task
   *uploadPiece(file) {
     yield this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.at(-1);
@@ -174,14 +195,37 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     const newName = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
+    const type = yield this.documentContainer.type;
+    const draftDocumentContainer = this.store.createRecord('draft-document-container', {
+      created: this.documentContainer.created,
+      position: this.documentContainer.position,
+      type,
+    });
+    const accessLevel = yield previousPiece.accessLevel;
     this.newPiece = this.store.createRecord('draft-piece', {
       name: newName,
       created: now,
       modified: now,
       file: file,
       previousPiece: previousPiece,
-      documentContainer: this.documentContainer,
+      documentContainer: draftDocumentContainer,
+      accessLevel,
     });
+  }
+
+  @task
+  *deleteUploadedPiece() {
+    if (this.newPiece) {
+      removeObject(this.pieces, this.newPiece);
+      yield deletePiece(this.newPiece);
+      this.newPiece = null;
+    }
+  }
+
+  @task
+  *cancelUploadPiece() {
+    yield this.deleteUploadedPiece.perform();
+    this.isOpenUploadModal = false;
   }
 
   @action
@@ -234,6 +278,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   async saveAccessLevel() {
     await this.piece.save();
     await this.loadPieceRelatedData.perform();
+    this.args.onSaveAccessLevel?.();
   }
 
   @action

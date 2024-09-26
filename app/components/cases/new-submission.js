@@ -223,7 +223,7 @@ export default class CasesNewSubmissionComponent extends Component {
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       approvalAddresses: this.approvalAddresses,
       approvalComment: this.approvalComment,
-      notificationAddresses:this.notificationAddresses,
+      notificationAddresses: this.notificationAddresses,
       notificationComment: this.notificationComment,
       mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,

@@ -37,6 +37,7 @@
           <tr data-test-utils-case-search-row>
             <td>
               <AuRadio
+                data-test-utils-case-search-row-radio
                 @checked={{eq row.id this.selected.id}}
                 @value={{row.id}}
                 @onChange={{this.selectCase}}
@@ -44,6 +45,7 @@
             </td>
             <td>
               <AuLink
+                data-test-utils-case-search-row-title-link
                 @icon="external-link"
                 @iconAlignment="right"
                 @route="cases.case.index"

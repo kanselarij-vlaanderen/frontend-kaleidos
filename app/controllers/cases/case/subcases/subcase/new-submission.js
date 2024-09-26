@@ -56,6 +56,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
 
   checkConfidentiality = async () => {
     this.hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
+    // pop up notifications changed?
   };
 
   onAddNewPieceVersion = async (piece, newVersion) => {

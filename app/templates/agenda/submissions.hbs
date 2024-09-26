@@ -100,13 +100,7 @@
                     {{/if}}
                   </td>
                   <td>
-                    {{#if submission.status.label}}
-                      <AuPill @size="small" @skin="ongoing">{{submission.status.label}}</AuPill>
-                    {{else if submission.status.altLabel}}
-                      <AuPill @size="small" @skin="ongoing">{{submission.status.altLabel}}</AuPill>
-                    {{else}}
-                      -
-                    {{/if}}
+                    <Cases::Submissions::StatusPill @status={{submission.status}}/>
                   </td>
                   <td>
                     {{#let (await (this.getTreatedBy submission)) as |beingTreatedBy|}}
