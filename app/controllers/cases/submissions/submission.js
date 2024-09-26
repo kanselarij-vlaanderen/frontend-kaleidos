@@ -3,11 +3,11 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task } from 'ember-concurrency';
-import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { task, timeout } from 'ember-concurrency';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { containsConfidentialPieces, sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesSubmissionsSubmissionController extends Controller {
@@ -37,8 +37,11 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked notificationComment;
   @tracked beingTreatedBy;
   @tracked isUpdate;
+  @tracked confidential;
 
+  @tracked hasConfidentialPieces;
   currentLinkedMandatee;
+  previousMandateePersons;
 
   get mayEdit() {
     const mayIfAdmin = this.currentSession.may('always-edit-submissions');
@@ -47,12 +50,12 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       this.currentSession.may('edit-in-treatment-submissions') &&
       this.model.isInTreatment;
 
-    const mayIfKabinet =
+    const mayIfCabinet =
       this.currentSession.may('edit-sent-back-submissions') &&
       this.model.isSentBack &&
       this.currentLinkedMandatee?.id ===
         this.model.belongsTo('requestedBy').value().id; // requestedBy is loaded in the route
-    return mayIfAdmin || mayIfSecretarie || mayIfKabinet;
+    return mayIfAdmin || mayIfSecretarie || mayIfCabinet;
   }
 
   get sortedNewPieces() {
@@ -64,23 +67,64 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     });
   }
 
-  onNotificationDataChanged = async (newNotificationData) => {
+  checkIfConfidentialChanged = task(async () => {
+    if (this.confidential !== this.model.confidential) {
+      this.confidential = this.model.confidential;
+      // we need to wait for the notification panel to update when confidential has changed.
+      // the notification panel updates the tracked properties of this controller when confidential changes
+      await timeout(500);
+      await this.saveNotificationDataOnModel();
+    }
+  });
+
+  checkIfHasConfidentialPiecesChanged = task(async () => {
+    const hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
+    if (this.hasConfidentialPieces !== hasConfidentialPieces) {
+      this.hasConfidentialPieces = hasConfidentialPieces;
+      // we need to wait for the notification panel to update when confidential has changed.
+      // the notification panel updates the tracked properties of this controller when confidential changes
+      if (!this.confidential) {
+        // if the submission is confidential the email adressess will not change based on hasConfidentialPieces
+        await timeout(500);
+        await this.saveNotificationDataOnModel();
+      }
+    }
+  });
+
+  updateLocalNotificationData = (newNotificationData) => {
     this.approvalAddresses = newNotificationData.approvalAddresses;
     this.approvalComment = newNotificationData.approvalComment;
     this.notificationAddresses = newNotificationData.notificationAddresses;
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  onSaveNotificationData = async () => {
+  rollbackLocalNotificationData = async () => {
+    this.approvalAddresses = this.model.approvalAddresses;
+    this.approvalComment = this.model.approvalComment;
+    this.notificationAddresses = this.model.notificationAddresses;
+    this.notificationComment = this.model.notificationComment;
+  }
+
+  saveNotificationDataOnModel = async (newNotificationData) => {
+    // data present - manual save
+    // data absent - automatic trigger
+    if (newNotificationData) {
+      this.updateLocalNotificationData(newNotificationData);
+    }
     this.model.approvalAddresses = this.approvalAddresses;
     this.model.approvalComment = this.approvalComment;
     this.model.notificationAddresses = this.notificationAddresses;
     this.model.notificationComment = this.notificationComment;
     await this.model.save();
+    if (!newNotificationData) {
+      this.toaster.warning(
+        this.intl.t('saved-notification-message'),
+      );
+    }
   }
 
   disableMandatee = (mandatee) => {
-    return this.currentLinkedMandatee.id === mandatee.id;
+    return this.model.requestedBy?.get('id') === mandatee.id ;
   };
 
   saveMandateeData = async ({ submitter, mandatees }) => {
@@ -157,6 +201,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       }
     }
     await this.reloadPieces.perform();
+    await this.checkIfHasConfidentialPiecesChanged.perform();
   };
 
   @action
@@ -180,7 +225,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     );
     const defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      (this.confidential || parsed.confidential)
+      (confidential || parsed.confidential)
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
@@ -214,6 +259,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await this.updateDraftPiecePositions();
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
+    await this.checkIfHasConfidentialPiecesChanged.perform();
   });
 
   savePiece = task(async (piece, index) => {
@@ -252,4 +298,26 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await documentContainer.destroyRecord();
     await piece.destroyRecord();
   }
+
+  onAddNewPieceVersion = async (piece, newVersion) => {
+    const documentContainer = await newVersion.documentContainer;
+    await documentContainer.save();
+    newVersion.submission = this.model;
+    await newVersion.save();
+    try {
+      const sourceFile = await newVersion.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+    const index = this.pieces.indexOf(piece);
+    this.pieces[index] = newVersion;
+    this.pieces = [...this.pieces];
+    addObject(this.newDraftPieces, newVersion);
+    await this.savePieces.perform();
+    await this.checkIfHasConfidentialPiecesChanged.perform();
+  };
 }

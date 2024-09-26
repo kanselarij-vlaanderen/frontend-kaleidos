@@ -19,21 +19,25 @@ export default class SubmissionHeaderComponent extends Component {
   @service subcaseService;
   @service agendaitemAndSubcasePropertiesSync;
   @service draftSubmissionService;
+  @service pieceAccessLevelService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
+  @tracked isOpenRequestSendBackModal;
   @tracked isOpenSendBackModal;
   @tracked isOpenDeleteModal;
   @tracked piecesMovedCounter = 0;
 
   @tracked comment;
 
+  @tracked requestedByIsCurrentMandatee;
   @tracked selectedAgenda;
   @tracked selectedMeeting;
 
   constructor() {
     super(...arguments);
     this.loadAgenda.perform();
+    this.loadRequestedByIsCurrentMandatee.perform();
   }
 
   loadAgenda = task(async () => {
@@ -48,26 +52,23 @@ export default class SubmissionHeaderComponent extends Component {
         });
       } else {
         // get meeting when not propagated yet
-        const meetingData = await this.agendaService.getMeetingForSubmission(this.args.submission);
-        const agenda = {
-            id: meetingData.data.attributes.agendaId,
-            uri: meetingData.data.attributes.agenda,
-            serialnumber: meetingData.data.attributes.serialnumber,
-            createdFor: {
-              id: meetingData.data.id,
-              uri: meetingData.data.attributes.uri,
-              plannedStart: new Date(meetingData.data.attributes.plannedStart),
-              kind: {
-                uri: meetingData.data.attributes.kind,
-                label: meetingData.data.attributes.type,
-              }
-            },
-          };
+        const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
 
         this.selectedAgenda = agenda;
         this.selectedMeeting = agenda.createdFor;
       }
-  }
+    }
+  });
+
+  loadRequestedByIsCurrentMandatee = task(async () => {
+    if (this.args.submission) {
+      const requestedBy = await this.args.submission.requestedBy;
+      const organization = await this.store.queryOne('user-organization', {
+        'filter[mandatees][:id:]': requestedBy.id,
+        'filter[:id:]': this.currentSession.organization.id,
+      });
+      this.requestedByIsCurrentMandatee = !!organization;
+    }
   });
 
   get items() {
@@ -90,7 +91,18 @@ export default class SubmissionHeaderComponent extends Component {
   get canResubmitSubmission() {
     return (
       this.args.submission?.isSentBack &&
-      this.currentSession.may('edit-sent-back-submissions')
+      this.currentSession.may('edit-sent-back-submissions') &&
+      this.requestedByIsCurrentMandatee
+    );
+  }
+
+  get canRequestSendBack() {
+    return (
+      (this.args.submission?.isSubmitted ||
+        this.args.submission?.isUpdateSubmitted ||
+        this.args.submission?.isResubmitted) && 
+      this.currentSession.may('edit-sent-back-submissions') &&
+      this.requestedByIsCurrentMandatee
     );
   }
 
@@ -105,14 +117,16 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isResubmitted ||
-        this.args.submission?.isUpdateSubmitted) &&
+        this.args.submission?.isUpdateSubmitted ||
+        this.args.submission?.isSendBackRequested) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
 
   get canSendBackToSubmitter() {
     return (
-      this.args.submission?.isInTreatment &&
+      (this.args.submission?.isInTreatment ||
+        this.args.submission?.isSendBackRequested) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
@@ -134,6 +148,10 @@ export default class SubmissionHeaderComponent extends Component {
     );
   }
 
+  get isSendBackRequested() {
+    return this.args.submission?.isSendBackRequested;
+  }
+
   // Modal helpers
   toggleResubmitModal = () => {
     this.isOpenResubmitModal = !this.isOpenResubmitModal;
@@ -142,6 +160,11 @@ export default class SubmissionHeaderComponent extends Component {
 
   toggleCreateSubcaseModal = () => {
     this.isOpenCreateSubcaseModal = !this.isOpenCreateSubcaseModal;
+    this.comment = null;
+  };
+
+  toggleRequestSendBackModal = () => {
+    this.isOpenRequestSendBackModal = !this.isOpenRequestSendBackModal;
     this.comment = null;
   };
 
@@ -193,6 +216,7 @@ export default class SubmissionHeaderComponent extends Component {
       let decisionmakingFlow = await this.args.submission.belongsTo('decisionmakingFlow').reload();
       if (!decisionmakingFlow) {
         decisionmakingFlow = this.store.createRecord('decisionmaking-flow', {
+          // TODO, title is not a known property in model (commented)
           title: this.args.submission.decisionmakingFlowTitle,
           opened: this.args.submission.created,
           governmentAreas,
@@ -304,6 +328,8 @@ export default class SubmissionHeaderComponent extends Component {
           });
           await piece.save();
           this.piecesMovedCounter++;
+          // in submissions, we allow the strengthening of the accessLevel (from default > confidential) meaning we have to update all previous versions.
+          await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
           return piece;
         })
       );
@@ -379,5 +405,20 @@ export default class SubmissionHeaderComponent extends Component {
     await this.args.submission.destroyRecord();
 
     await this.router.transitionTo('cases.submissions');
+  });
+
+  requestSendBackToSubmitter = task(async () => {
+    await this._updateSubmission(
+      CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD,
+      this.comment
+    );
+    await this.cabinetMail.sendRequestSendBackToSubmitterMail(
+      this.args.submission,
+      this.comment,
+      this.selectedMeeting,
+    );
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 }

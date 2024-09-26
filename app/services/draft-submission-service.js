@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import constants from 'frontend-kaleidos/config/constants';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class DraftSubmissionService extends Service {
   @service store;
@@ -78,5 +79,95 @@ export default class DraftSubmissionService extends Service {
     return creationActivity ? true : false;
   };
 
-  // getHasConfidentialPieces async(submission) queryOny and filter on accesslevel uri for mails
+  getAllSubmissionsForSubcase = async(subcase) => {
+    const allSubmissions = await this.store.query('submission', {
+      'filter[subcase][:id:]': subcase.id,
+      sort: '-created',
+      include: 'status'
+    });
+    return allSubmissions;
+  };
+
+  getOngoingSubmissionForSubcase = async(subcase) => {
+    // TODO verify change, cleanup
+    // technically this should be a queryOne, but possible with concurrency to have more than 1 ongoing
+    // const allSubmissions = await this.getAllSubmissionsForSubcase(subcase, false);
+    // const ongoingSubmission = allSubmissions?.filter(
+    //   (a) =>
+    //     a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
+    // );
+    // if more than 1, we return the first created ongoing submission which should the last one in the filtered list
+
+    // "ongoing" can be defined as "not accepted" or "accepted but not yet propagated"
+    // check if all pieces are propagated on latest submission.
+    const allDraftPiecesAccepted = await this.allDraftPiecesAccepted(subcase);
+    if (!allDraftPiecesAccepted) {
+      return await this.getLatestSubmissionForSubcase(subcase);
+    }
+    return null;
+  };
+
+  getOriginalSubmissionForSubcase = async(subcase) => {
+    const allSubmissions = await this.getAllSubmissionsForSubcase(subcase);
+    return allSubmissions?.at(-1);
+  };
+
+  getLatestSubmissionForSubcase = async(subcase) => {
+    const allSubmissions = await this.getAllSubmissionsForSubcase(subcase);
+    return allSubmissions?.at(0);
+  };
+
+  allDraftPiecesAccepted = async(subcase) => {
+    const latestSubmission = await this.getLatestSubmissionForSubcase(subcase);
+    if (latestSubmission?.id) {
+      let pieces = await latestSubmission?.hasMany('pieces').reload();
+      pieces = pieces?.slice();
+      for (const piece of pieces) {
+        const actualPiece = await piece.acceptedPiece;
+        if (!actualPiece) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  canSubmitNewDocumentsOnSubcase = async(subcase) => {
+    if (!isEnabledCabinetSubmissions() || !this.currentSession.may('create-submissions')) {
+      return false;
+    }
+    const submitter = await subcase.requestedBy;
+    const currentUserOrganization = await this.currentSession.organization;
+    const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+    const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+    const hasCorrectMandatee = !submitter?.uri || currentUserOrganizationMandateesUris.includes(submitter?.uri);
+    if (!hasCorrectMandatee) {
+      return false;
+    }
+    const ongoingSubmission = await this.getOngoingSubmissionForSubcase(subcase);
+    if (ongoingSubmission?.id) {
+      return false;
+    }
+    const latestAgendaActivity = await this.store.queryOne(
+      'agenda-activity',
+      {
+        'filter[subcase][:id:]': subcase.id,
+        sort: '-start-date',
+      }
+    );
+    if (latestAgendaActivity?.id) {
+      const latestAgendaitem = await this.store.queryOne('agendaitem', {
+        'filter[agenda-activity][:id:]': latestAgendaActivity.id,
+        'filter[:has-no:next-version]': 't',
+        sort: '-created',
+      });
+      const agenda = await latestAgendaitem?.agenda;
+      const meeting = await agenda?.meeting;
+      if (meeting) {
+        return false;
+      }
+    }
+    const canSubmitNewDocuments = await this.allDraftPiecesAccepted(subcase);
+    return canSubmitNewDocuments;
+  }
 }
