@@ -45,14 +45,16 @@ export default class CurrentSessionService extends Service {
   }
 
   may(permission, checkImpersonator = false) {
-    if (this.userAgent.browser.isMobile || this.userAgent.browser.isEdge) {
-      return checkImpersonator
-        ? this.impersonatorUserGroup?.readOnlyPermissions.includes(permission)
-        : this.userGroup?.readOnlyPermissions.includes(permission);
+    const isReadOnly = this.userAgent.device.isMobile || this.userAgent.device.isTablet;
+    const userGroup = checkImpersonator ? this.impersonatorUserGroup : this.userGroup;
+    if (userGroup) {
+      let permissions = [ ...userGroup.permissions.readOnly ];
+      if (!isReadOnly) {
+        permissions = [ ...permissions, ...userGroup.permissions.full ]
+      }
+      return permissions?.includes(permission);
     }
-    return checkImpersonator
-      ? this.impersonatorUserGroup?.permissions.includes(permission)
-      : this.userGroup?.permissions.includes(permission);
+    return false;
   }
 
   hasAccessToApplication() {
