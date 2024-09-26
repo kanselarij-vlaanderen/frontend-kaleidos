@@ -46,13 +46,6 @@
           </div>
         </div>
         {{#let (await (this.getPiecesForAgendaitem first)) as |pieces|}}
-          {{#if pieces}}
-            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-              @pieces={{pieces}}
-              @fileNameMappings={{@fileNameMappings}}
-              @isBekrachtiging={{this.isBekrachtiging}}
-            />
-          {{/if}}
           {{! inside previous let so relation should be loaded already}}
           {{#let (await first.agendaActivity.subcase) as |subcase|}}
             {{#if subcase.subcaseName}}
@@ -67,6 +60,13 @@
               </div>
             {{/if}}
           {{/let}}
+          {{#if pieces}}
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+              @pieces={{pieces}}
+              @fileNameMappings={{@fileNameMappings}}
+              @isBekrachtiging={{this.isBekrachtiging}}
+            />
+          {{/if}}
         {{/let}}
       </div>
     {{/if}}
@@ -83,13 +83,6 @@
             />
           </div>
           {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}
-            {{#if pieces}}
-              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                @pieces={{pieces}}
-                @fileNameMappings={{@fileNameMappings}}
-                @isBekrachtiging={{this.isBekrachtiging}}
-              />
-            {{/if}}
             {{! inside previous let so relation should be loaded already}}
             {{#let (await agendaitem.agendaActivity.subcase) as |subcase|}}
               {{#if subcase.subcaseName}}
@@ -104,6 +97,13 @@
                 </div>
               {{/if}}
             {{/let}}
+            {{#if pieces}}
+              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                @pieces={{pieces}}
+                @fileNameMappings={{@fileNameMappings}}
+                @isBekrachtiging={{this.isBekrachtiging}}
+              />
+            {{/if}}
           {{/let}}
         </div>
       </div>

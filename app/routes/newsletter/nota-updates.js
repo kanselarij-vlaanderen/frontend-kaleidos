@@ -40,6 +40,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
       'filter[document-container][type][:uri:]': CONSTANTS.DOCUMENT_TYPES.NOTA,
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
+      'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       include: 'agendaitems',
       'fields[agendaitems]': 'id,number,short-title',
       'fields[piece]': 'id,name,modified',

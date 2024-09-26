@@ -51,12 +51,15 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     });
     if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (this.subcase)  {
-        const decisionmakingFlow = await this.subcase.decisionmakingFlow;
-        return this.router.transitionTo(
-          'cases.case.subcases.subcase',
-          decisionmakingFlow.id,
-          this.subcase.id
-        );
+        let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase);
+        if (allDraftPiecesAccepted) {
+          const decisionmakingFlow = await this.subcase.decisionmakingFlow;
+          return this.router.transitionTo(
+            'cases.case.subcases.subcase',
+            decisionmakingFlow.id,
+            this.subcase.id
+          );
+        }
       }
     }
 
@@ -67,17 +70,20 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     await submission.requestedBy;
 
-    if (!this.currentSession.may('view-all-submissions')) {
-      if (this.currentLinkedMandatee && this.mandatees.length) {
-        const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
-        if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
+    if (submission.confidential) {
+      if (!this.currentSession.may('view-all-submissions')) {
+        if (this.currentLinkedMandatee && this.mandatees.length) {
+          const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
+          if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
+            this.router.transitionTo('cases.submissions');
+          }
+        } else {
           this.router.transitionTo('cases.submissions');
         }
-      } else {
-        this.router.transitionTo('cases.submissions');
       }
     }
 
+    this.confidential = submission.confidential;
     const newPieces = await submission.pieces;
     this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
@@ -108,6 +114,16 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
     this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
     this.isUpdate = await this.draftSubmissionService.getIsUpdate(submission);
+
+    if (this.isUpdate && this.subcase) {
+      let subcaseMandatees = await this.subcase.mandatees;
+      subcaseMandatees = subcaseMandatees
+        .slice()
+        .sort((m1, m2) => m1.priority - m2.priority);
+      this.previousMandateePersons = await Promise.all(
+        subcaseMandatees.map((m) => m.person)
+      );
+    }
     return submission;
   }
 
@@ -127,7 +143,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     controller.beingTreatedBy = this.beingTreatedBy;
     controller.isUpdate = this.isUpdate;
     controller.subcase = this.subcase;
+    controller.confidential = this.confidential;
     controller.hasConfidentialPieces = this.hasConfidentialPieces;
+    controller.previousMandateePersons = this.previousMandateePersons;
     controller.approvalAddresses = _model.approvalAddresses;
     controller.notificationAddresses = _model.notificationAddresses;
     controller.approvalComment = _model.approvalComment;

@@ -12,15 +12,21 @@
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
-        <div>
+        <div data-test-submission-overview-header-case-title-container>
           {{#let (await @submission.decisionmakingFlow.case) as |case|}}
             {{#unless @submission.decisionmakingFlow.isPending}}
               <span class="auk-overline auk-u-block">
                 {{t (if case "submission-existing-case" "submission-new-case")}}
+                {{#if this.selectedMeeting}}
+                  -
+                  {{this.selectedMeeting.kind.label}} {{t "of"}}
+                  {{date this.selectedMeeting.plannedStart}}
+                {{/if}}
               </span>
               <h4 class="auk-toolbar-complex__title au-u-padding-none">
                 {{#if case}}
                   <AuLink
+                    data-test-submission-overview-header-case-link
                     class="au-u-padding-none card-link"
                     @route="cases.case.subcases"
                     @model={{@submission.decisionmakingFlow.id}}
@@ -38,7 +44,7 @@
                 {{/if}}
               </h4>
               {{#if @beingTreatedBy}}
-                <span class="auk-u-block">
+                <span data-test-submission-overview-header-treated-by class="auk-u-block">
                   {{t "this-submission-is-being-treated-by-user"
                       user=@beingTreatedBy.fullName}}
                 </span>
