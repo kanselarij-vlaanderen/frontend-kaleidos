@@ -481,6 +481,7 @@ $au-label-color: var(--au-gray-700);
 // Alert
 
 .au-c-alert {
+  margin-bottom: 0;
   font-size: 1.5rem;
 }
 
@@ -489,6 +490,10 @@ $au-label-color: var(--au-gray-700);
     height: 1.5rem;
     width: 1.6rem;
   }
+}
+
+.au-c-alert + * {
+  margin-top: $au-unit;
 }
 
 // Badge
