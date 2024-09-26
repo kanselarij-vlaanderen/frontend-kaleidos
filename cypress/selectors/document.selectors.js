@@ -169,5 +169,18 @@ const selectors = {
     pill: '[data-test-signature-pill]',
   },
 
+  draftDocumentCard: {
+    card: '[data-test-draft-document-card]',
+    type: '[data-test-draft-document-card-type]',
+    name: {
+      value: '[data-test-draft-document-card-name-value]',
+    },
+    actions: '[data-test-draft-document-card-actions]',
+    editPiece: '[data-test-draft-document-card-edit-piece]',
+    delete: '[data-test-draft-document-card-delete]',
+    // uploadPiece: '[data-test-document-upload-new-piece]', // should come soon
+    versionHistory: '[data-test-draft-document-card-version-history]',
+  },
+
 };
 export default selectors;

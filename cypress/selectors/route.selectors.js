@@ -85,6 +85,29 @@ const selectors = {
     add: '[data-test-route-cases---subcase-add-documents]',
   },
 
+  // cases/submissions/overview/template
+  submissionsOverview: {
+    dataTable: '[data-test-route-cases-submissions-overview-data-table]',
+    row: {
+      shortTitle: '[data-test-route-cases-submissions-overview-row-short-title]',
+      newCase: '[data-test-route-cases-submissions-overview-row-new-case]',
+      limitedAccess: '[data-test-route-cases-submissions-overview-row-limited-access]',
+      plannedStart: '[data-test-route-cases-submissions-overview-row-planned-start]',
+      subcaseType: '[data-test-route-cases-submissions-overview-row-subcase-type]',
+      status: '[data-test-route-cases-submissions-overview-row-status]',
+      goToSubmission: '[data-test-route-cases-submissions-overview-row-go-to-submission]',
+    },
+  },
+
+  // cases/submissions/submission
+  submission: {
+    documents: {
+      panel: '[data-test-route-cases---submission-documents-panel]',
+      batchEdit: '[data-test-route-cases---submission-documents-batch-edit]',
+      add: '[data-test-route-cases---submission-documents-batch-edit]',
+    },
+  },
+
   /**
     ROUTE SEARCH
   */

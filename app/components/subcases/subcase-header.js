@@ -16,9 +16,11 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service router;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
+  @tracked newDecisionmakingFlow = null;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
   @tracked isShowingOptions = false;
@@ -28,7 +30,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
-  @tracked meetingIsClosed = false;
+  @tracked canSubmitNewDocuments = false;
+  @tracked currentSubmission;
 
   constructor() {
     super(...arguments);
@@ -40,36 +43,19 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     return isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.currentSession.may('create-submissions') &&
-      this.args.subcase.submissions?.length > 0 &&
-      !this.meetingIsClosed;
+      this.submissions?.length > 0 &&
+      this.canSubmitNewDocuments;
   }
 
   @task
   *loadData() {
-    yield this.args.subcase.hasMany('submissions').reload();
+    this.submissions = yield this.args.subcase.hasMany('submissions').reload();
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
-    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
-      const latestAgendaActivity = yield this.store.queryOne(
-        'agenda-activity',
-        {
-          'filter[subcase][:id:]': this.args.subcase.id,
-          sort: '-start-date',
-        }
-      );
-      if (latestAgendaActivity?.id) {
-        const latestAgendaitem = yield this.store.queryOne('agendaitem', {
-          'filter[agenda-activity][:id:]': latestAgendaActivity.id,
-          'filter[:has-no:next-version]': 't',
-          sort: '-created',
-        });
-        const agenda = yield latestAgendaitem?.agenda;
-        const meeting = yield agenda?.meeting;
-        if (meeting) {
-          this.meetingIsClosed = true;
-        }
-      }
+    this.canSubmitNewDocuments = yield this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+    if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
+      this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     }
   }
 
@@ -88,6 +74,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = null;
     this.isLoading = false;
     this.isAssigningToOtherCase = false;
+    this.newDecisionmakingFlow = null;
   }
 
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
@@ -194,11 +181,19 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  moveSubcase = task(async (_newDecisionmakingFlow) => {
-    const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
+  @action
+  async selectDecisionmakingFlow(newDecisionmakingFlow) {
+    this.newDecisionmakingFlow = newDecisionmakingFlow?.id
+      ? await this.store.findRecord(
+          'decisionmaking-flow',
+          newDecisionmakingFlow.id
+        )
+      : null;
+  }
 
+  moveSubcase = task(async () => {
     const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
-    this.args.subcase.decisionmakingFlow = newDecisionmakingFlow;
+    this.args.subcase.decisionmakingFlow = this.newDecisionmakingFlow;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 

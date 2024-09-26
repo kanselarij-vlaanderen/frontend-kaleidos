@@ -21,3 +21,5 @@
 /bower.json.ember-try
 /npm-shrinkwrap.json.ember-try
 /package.json.ember-try
+
+/app/utils/cabinet-submission-email.js
