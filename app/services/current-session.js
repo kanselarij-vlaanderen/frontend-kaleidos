@@ -48,11 +48,10 @@ export default class CurrentSessionService extends Service {
     const isReadOnly = this.userAgent.device.isMobile || this.userAgent.device.isTablet;
     const userGroup = checkImpersonator ? this.impersonatorUserGroup : this.userGroup;
     if (userGroup) {
-      let permissions = [ ...userGroup.permissions.readOnly ];
-      if (!isReadOnly) {
-        permissions = [ ...permissions, ...userGroup.permissions.full ]
+      if (isReadOnly) {
+        return userGroup.permissions.readOnly?.includes(permission);
       }
-      return permissions?.includes(permission);
+      return userGroup.permissions.full?.includes(permission) || userGroup.permissions.readOnly?.includes(permission);
     }
     return false;
   }
