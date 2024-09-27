@@ -98,14 +98,6 @@
   scroll-margin-block: $au-unit-small;
 }
 
-.au-c-alert {
-  margin-bottom: 0;
-}
-
-.au-c-alert + * {
-  margin-bottom: $au-unit;
-}
-
 .vlc-status-timeline__item + .vlc-status-timeline__item {
   margin-top: $au-unit-tiny;
   padding-top: $au-unit-tiny;
