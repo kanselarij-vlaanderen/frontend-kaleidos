@@ -31,22 +31,32 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
-  @tracked canMove = false;
   @tracked canSubmitNewDocuments = false;
-  @tracked currentSubmission;
+  @tracked currentSubmission = null;
+  @tracked parliamentRetrievalActivity = null;
 
   constructor() {
     super(...arguments);
-
     this.loadData.perform();
   }
 
   get maySubmitNewDocuments() {
-    return isEnabledCabinetSubmissions() &&
+    return (
+      isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.currentSession.may('create-submissions') &&
       this.submissions?.length > 0 &&
-      this.canSubmitNewDocuments;
+      this.canSubmitNewDocuments
+    );
+  }
+
+  get canMove() {
+    return (
+      (this.loadData.isIdle &&
+        this.currentSession.may('manage-agendaitems') &&
+        !this.args.parliamentFlow) ||
+      (this.parliamentRetrievalActivity && this.args.subcases.length === 1)
+    );
   }
 
   @task
@@ -59,12 +69,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
       this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     }
-    const decisionmakingFlow = yield this.args.subcase.decisionmakingFlow;
-    const _case = yield decisionmakingFlow.case;
-    const parliamentFlow = yield _case.parliamentFlow;
-    const parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
-    const subcases = yield decisionmakingFlow.hasMany('subcases').reload();
-    this.canMove = !parliamentFlow || (parliamentRetrievalActivity && subcases.length === 1);
+    this.parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
   }
 
   triggerDeleteCaseDialog() {
@@ -175,8 +180,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     itemToDelete.deleteRecord();
     await itemToDelete.save();
 
-    this.navigateToSubcaseOverview(decisionmakingFlow);
-    this.args.onMoveSubcase();
+    // onMoveSubcase navigates after refresh
+    this.args.onMoveSubcase(decisionmakingFlow);
   }
 
   @action
@@ -200,12 +205,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   moveSubcase = task(async () => {
-    const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
+    const oldDecisionmakingFlow = this.args.decisionmakingFlow;
 
     const oldCase = await oldDecisionmakingFlow.case;
     const newCase = await this.newDecisionmakingFlow.case;
 
-    const parliamentRetrievalActivity = await this.args.subcase.parliamentRetrievalActivity;
+    const parliamentRetrievalActivity = this.parliamentRetrievalActivity;
 
     for (const submission of this.submissions) {
       submission.decisionmakingFlow = this.newDecisionmakingFlow;
@@ -231,22 +236,24 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
           newParliamentFlow,
         );
       } else {
-        const parliamentFlow = await oldCase.parliamentFlow;
-        newCase.parliamentFlow = parliamentFlow;
+        newCase.parliamentFlow = this.args.parliamentFlow;
         await newCase.save();
+
+        oldCase.parliamentFlow = null;
+        await oldCase.save();
 
         await this.parliamentService.relinkDecisionmakingFlow(
           this.newDecisionmakingFlow,
           newCase,
-          parliamentFlow,
+          this.args.parliamentFlow,
         );
       }
     }
 
-    const signFlows = await this.store.queryAll('sign-flow', {
+    let signFlows = await this.store.queryAll('sign-flow', {
       'filter[sign-subcase][sign-marking-activity][piece][submission-activity][subcase][:id:]': this.args.subcase.id,
     });
-
+    signFlows = signFlows?.slice();
     for (const signFlow of signFlows) {
       signFlow.case = newCase;
       await signFlow.save();
@@ -256,8 +263,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 
-    const subCases = await oldDecisionmakingFlow.hasMany('subcases').reload();
-    if (subCases.length === 0) {
+    const subcases = await oldDecisionmakingFlow.hasMany('subcases').reload();
+    if (subcases.length === 0) {
       const publicationFlow = await this.store.queryOne('publication-flow', {
         'filter[case][:id:]': oldCase.id,
       });
@@ -268,7 +275,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
         return;
       }
     }
-    this.router.transitionTo('cases.case.index');
     this.args.onMoveSubcase();
   });
 
@@ -276,6 +282,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   cancelDeleteCase() {
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases.case.index');
+    this.args.onMoveSubcase();
   }
 }

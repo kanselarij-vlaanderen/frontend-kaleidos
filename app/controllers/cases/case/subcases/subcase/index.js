@@ -262,7 +262,10 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   }
 
   @action
-  refreshSubcases() {
+  refreshSubcases(decisionmakingFlow) {
     this.router.refresh('cases.case');
+    if (decisionmakingFlow?.id) {
+      this.router.transitionTo('cases.case.index', decisionmakingFlow.id);
+    }
   }
 }

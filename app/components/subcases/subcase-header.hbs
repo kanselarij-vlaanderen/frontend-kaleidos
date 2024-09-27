@@ -49,7 +49,7 @@
                   {{t "delete-subcase"}}
                 </AuButton>
               {{/if}}
-              {{#unless @parliamentFlow}}
+              {{#if this.canMove}}
                 <AuButton
                   data-test-subcase-header-action-move-subcase
                   @skin="link"
@@ -58,7 +58,7 @@
                 >
                   {{t "move-subcase"}}
                 </AuButton>
-              {{/unless}}
+              {{/if}}
               {{#if this.canPropose}}
                 <AuButton
                   data-test-subcase-header-action-open-proposable-agendas
@@ -105,6 +105,7 @@
         <Auk::Loader @message={{t "please-be-patient"}} />
       {{else}}
         <Utils::CaseSearch
+          @excludedDecisionmakingFlow={{@decisionmakingFlow}}
           @onSelect={{this.selectDecisionmakingFlow}}
         />
       {{/if}}
