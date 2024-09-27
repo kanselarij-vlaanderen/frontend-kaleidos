@@ -258,13 +258,13 @@ const groups = [
         'view-decisions-before-release',
         'view-all-confidential-documents',
         'view-ratification-before-release',
+        'view-documents-postponed-and-retracted',
         'search-confidential-cases',
         'search-confidential-documents',
       ],
       full: [
         'manage-news-items',
         'manage-themis-publications',
-        'view-documents-postponed-and-retracted',
       ]
     }
   },
