@@ -83,6 +83,13 @@ export default class SubmissionModel extends Model {
     );
   }
 
+  get isSendBackRequested() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD
+    );
+  }
+
   save() {
     const dirtyType = this.dirtyType;
     const currentUser = this.currentSession.user;

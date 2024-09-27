@@ -27,6 +27,7 @@
           <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
           <Fieldset.content>
             <AuRadioGroup
+              data-test-submission-description-edit-agendaitem-type
               @alignment="inline"
               @selected={{this.agendaItemType}}
               @onChange={{this.onChangeAgendaItemType}}
@@ -45,6 +46,7 @@
         <AuLabel for="submission-confidential">
           {{t "limited-access"}}</AuLabel>
         <AuToggleSwitch
+          data-test-submission-description-edit-confidential
           id="submission-confidential"
           @checked={{@submission.confidential}}
           @onChange={{queue
@@ -57,6 +59,7 @@
         <AuLabel for="short-title-submission">
           {{t "name-subcase"}}</AuLabel>
         <AuTextarea
+          data-test-submission-description-edit-short-title
           id="short-title-submission"
           rows="2"
           value={{@submission.shortTitle}}
@@ -69,6 +72,7 @@
           <AuLabel for="title-submission">
             {{t "title-subcase"}}</AuLabel>
           <AuTextarea
+            data-test-submission-description-edit-title
             id="title-submission"
             rows="2"
             value={{@submission.title}}
@@ -80,6 +84,7 @@
       <AuFormRow>
         <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
         <Utils::ModelSelector
+          data-test-submission-description-edit-subcase-type
           @modelName="subcase-type"
           @sortField="label"
           @displayField="label"
@@ -96,6 +101,7 @@
           >
             {{#if (not this.isEditingSubcaseName)}}
               <Utils::ModelSelector
+                data-test-submission-description-edit-subcase-shortcut-selector
                 class="auk-u-maximize-width"
                 @modelName="shortcut"
                 @searchField="label"
@@ -108,6 +114,7 @@
                 {{capitalize model.label}}
               </Utils::ModelSelector>
               <AuButton
+                data-test-submission-description-edit-subcase-shortcut-edit
                 @skin="naked"
                 @icon="pencil"
                 @hideText={{true}}
@@ -117,12 +124,14 @@
               </AuButton>
             {{else}}
               <AuInput
+                data-test-submission-description-edit-subcase-name
                 id="subcaseNameId"
                 value={{this.subcaseName}}
                 @width="block"
                 {{on "input" (pick "target.value" (set this "subcaseName"))}}
               />
               <AuButton
+                data-test-submission-description-edit-subcase-name-cancel
                 @skin="naked"
                 @icon="x"
                 @hideText={{true}}
@@ -132,6 +141,7 @@
               </AuButton>
             {{/if}}
             <AuButton
+              data-test-submission-description-edit-subcase-name-clear
               @skin="naked"
               @icon="trash"
               @alert={{true}}
@@ -150,6 +160,7 @@
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
           <AuButton
+            data-test-submission-description-edit-cancel
             @skin="naked"
             @disabled={{this.isSaving}}
             {{on "click" this.cancelEditing}}
@@ -161,6 +172,7 @@
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
           <AuButton
+            data-test-submission-description-edit-save
             @skin="primary"
             @loading={{this.isSaving}}
             {{on "click" this.saveChanges}}
@@ -172,3 +184,12 @@
     </Auk::Toolbar>
   </Auk::Panel::Footer>
 </Auk::Panel>
+
+{{#if this.isSaving}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "save-in-progress"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "saving-in-progress-please-wait"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

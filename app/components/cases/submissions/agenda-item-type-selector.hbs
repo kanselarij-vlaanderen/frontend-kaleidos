@@ -8,6 +8,7 @@
         </AuLoader>
       {{else}}
         <AuRadioGroup
+          data-test-agenda-item-type-selector-radio
           @alignment="inline"
           @selected={{this.agendaItemType}}
           @onChange={{@onChangeAgendaItemType}}

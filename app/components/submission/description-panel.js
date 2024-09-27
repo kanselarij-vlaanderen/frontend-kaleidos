@@ -16,7 +16,8 @@ export default class SubmissionDescriptionPanelComponent extends Component {
   }
 
   @action
-  stopEditing() {
+  save() {
     this.isEditing = false;
+    this.args.onSave?.();
   }
 }

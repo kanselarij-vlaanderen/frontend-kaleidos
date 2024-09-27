@@ -56,23 +56,13 @@
   @onCancel={{this.onCancelDecisionmakingFlow}}
   @confirmMessage={{t "use-case"}}
   @disabled={{not this.selectedDecisionmakingFlow}}
+  @padding="none"
 >
   <:body>
     <div>
-      <AuLabel>{{t "select-case"}}</AuLabel>
-      <PowerSelect
-        @search={{perform this.searchDecisionmakingFlows}}
-        @searchMessage={{t "search-on-case-name"}}
-        @searchEnabled={{true}}
-        @noMatchesMessage={{t "no-results-found"}}
-        @loadingMessage={{t "please-be-patient"}}
-        @selected={{this.selectedDecisionmakingFlow}}
-        @onChange={{this.onSelectDecisionmakingFlow}}
-        class="au-u-1-1"
-        as |decisionmakingFlow|
-      >
-        {{decisionmakingFlow.case.shortTitle}}
-      </PowerSelect>
+      <Utils::CaseSearch
+        @onSelect={{this.onSelectDecisionmakingFlow}}
+      />
     </div>
   </:body>
 </ConfirmationModal>

@@ -18,6 +18,10 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
     this.loadFirstAgendaitem.perform();
   }
 
+  get responsiveBreakpoint() {
+    return this.args.responsiveBreakpoint || 'small';
+  }
+
   get isEnabledCabinetSubmissions() {
     return isEnabledCabinetSubmissions();
   }

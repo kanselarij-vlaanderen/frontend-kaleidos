@@ -109,6 +109,10 @@ const selectors = {
   caseSearch: {
     input: '[data-test-utils-case-search-input]',
     row: '[data-test-utils-case-search-row]',
+    rows: {
+      radio: '[data-test-utils-case-search-row-radio]',
+      titleLink: '[data-test-utils-case-search-row-title-link]',
+    },
   },
 
   kindSelector: {
@@ -140,5 +144,11 @@ const selectors = {
   },
 
   rdfaEditor: '[data-test-rdfa-editor]',
+
+  // email-modal (currently duplicated under signature selectors)
+  emailModal: {
+    input: '[data-test-email-modal-input]',
+    add: '[data-test-email-modal-add]',
+  },
 };
 export default selectors;

@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import {
   addObject,
   addObjects,
@@ -33,6 +34,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   @tracked agendaItemType;
   @tracked confidential = false;
+  @tracked hasConfidentialPieces = false;
   @tracked shortTitle;
   @tracked title;
   @tracked subcaseName;
@@ -164,8 +166,9 @@ export default class CasesNewSubmissionComponent extends Component {
     removeObjects(this.selectedGovernmentDomains, selectedDomain);
   };
 
-  addPiece = (piece) => {
+  addPiece = async (piece) => {
     addObject(this.pieces, piece);
+    await this.checkConfidentiality();
   };
 
   deletePiece = async (piece) => {
@@ -175,6 +178,7 @@ export default class CasesNewSubmissionComponent extends Component {
     const documentContainer = await piece?.documentContainer;
     await documentContainer?.destroyRecord();
     await piece?.destroyRecord();
+    await this.checkConfidentiality();
   };
 
   deletePieces = async () => {
@@ -183,6 +187,11 @@ export default class CasesNewSubmissionComponent extends Component {
     });
     await Promise.all(savePromises);
     this.pieces = new TrackedArray([]);
+    await this.checkConfidentiality();
+  };
+
+  checkConfidentiality = async () => {
+    this.hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
   };
 
   handleFileUploadQueueUpdates = ({ uploadIsRunning, uploadIsCompleted}) => {
@@ -214,7 +223,7 @@ export default class CasesNewSubmissionComponent extends Component {
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       approvalAddresses: this.approvalAddresses,
       approvalComment: this.approvalComment,
-      notificationAddresses:this.notificationAddresses,
+      notificationAddresses: this.notificationAddresses,
       notificationComment: this.notificationComment,
       mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,
