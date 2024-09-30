@@ -6,6 +6,7 @@ import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from  '../../selectors/route.selectors';
 import utils from  '../../selectors/utils.selectors';
 
@@ -14,7 +15,11 @@ function currentTimestamp() {
 }
 
 context('Agenda secretary tests', () => {
-  const currentDefaultSecretary = 'Jeroen Overmeer';
+  const currentDefaultSecretary = mandateeNames.current.firstSecretary.fullName;
+  // const newSecretary = mandateeNames.current.secondSecretary.fullName;
+  const newSecretary = 'Dries Verhaeghe'; // TODO this wont work
+  // const newSecretary = mandateeNames.current.thirdSecretary.fullName;
+  const newApprovalSecretary = 'Raf Suys'; // TODO this wont work
 
   beforeEach(() => {
     cy.login('Admin');
@@ -114,7 +119,6 @@ context('Agenda secretary tests', () => {
     const subcaseTitle1 = `${caseTitle1} test nota`;
     const subcaseTitle2 = `${caseTitle2} test mededeling`;
     const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
-    const newSecretary = 'Dries Verhaeghe';
 
     cy.createCase(caseTitle1);
     cy.addSubcaseViaModal({
@@ -173,8 +177,6 @@ context('Agenda secretary tests', () => {
     const agendaDate = Cypress.dayjs().add(5, 'weeks')
       .day(4);
     const approvalTitle = 'Goedkeuring van het verslag van de vergadering van';
-    const newSecretary = 'Dries Verhaeghe';
-    const newApprovalSecretary = 'Raf Suys';
     const location = 'Test no changes to secretary';
     const spy = cy.spy();
 

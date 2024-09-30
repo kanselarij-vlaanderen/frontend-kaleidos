@@ -6,6 +6,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 // import mandatee from '../../selectors/mandatee.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from '../../selectors/route.selectors';
 // import utils from '../../selectors/utils.selectors';
 
@@ -95,16 +96,16 @@ context('agenda minutes test', () => {
     // make a change to present
     cy.wait(6000);
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Jan Jambon')
+      .contains(mandateeNames.current.first.fullName)
       .as('deMinistersPresidentParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Hilde Crevits')
+      .contains(mandateeNames.current.second.fullName)
       .as('deViceministerPresidentenParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Zuhal')
+      .contains(mandateeNames.current.third.fullName)
       .as('deVlaamseMinistersParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Jeroen Overmeer')
+      .contains(mandateeNames.current.firstSecretary.fullName)
       .as('deSecretarisParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
       .contains('De Vlaamse Regering hecht haar goedkeuring aan het verslag')
