@@ -117,7 +117,7 @@
           </div>
         </AuFormRow>
       {{/if}}
-      {{#if (not this.isPreKaleidos)}}
+      {{#if (and (not this.isPreKaleidos) (not this.initializeSecretary.isRunning))}}
         <AuFormRow data-test-edit-meeting-secretary>
           <div class="auk-input-group--w-large">
             <AuLabel>

@@ -172,15 +172,16 @@ export default class MandateesService extends Service {
     return sortedMandatees;
   }
 
-  async getCurrentApplicationSecretary() {
-    const [currentApplicationSecretary] =
+  async getApplicationSecretary(referenceDateFrom = new Date()) {
+    // ref date should always be future, but if not we have different secretary mandatee active ranges
+    const [applicationSecretary] =
       await this.getMandateesActiveOn.perform(
-        new Date(),
+        referenceDateFrom,
         undefined,
         undefined,
         [CONSTANTS.MANDATE_ROLES.SECRETARIS]
       );
 
-    return currentApplicationSecretary;
+    return applicationSecretary;
   }
 }

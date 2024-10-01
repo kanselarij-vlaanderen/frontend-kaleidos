@@ -131,7 +131,7 @@ context('Publications reports tests', () => {
 
   it('should test report for Publicaties van BVRs per minister', () => {
     const title = 'Publicaties van BVRs per minister';
-    const mandatee = 'Zuhal Demir';
+    const mandatee = 'Zuhal Demir'; // TODO change hardcoded mandatee names
 
     cy.get(publication.reportsPanelEntry.title).contains(title)
       .parents('.auk-panel__body')
@@ -250,7 +250,7 @@ context('Publications reports tests', () => {
 
   it('should test report for Publicaties van decreten per minister', () => {
     const title = 'Publicaties van decreten per minister';
-    const mandatee = 'Zuhal Demir';
+    const mandatee = 'Zuhal Demir'; // TODO change hardcoded mandatee names
 
     cy.get(publication.reportsPanelEntry.title).contains(title)
       .parents('.auk-panel__body')

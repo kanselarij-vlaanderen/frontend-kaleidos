@@ -29,7 +29,7 @@ context('Publications via MR tests', () => {
   const threadId = 123456;
   const formattedThreadId = `thread::${threadId}::`;
   const subcaseTitleShort = 'Cypress test: Publications via MR - 1652967454';
-  const nameToCheck = 'Jambon';
+  const nameToCheck = 'Jambon';  // TODO change hardcoded mandatee names
   const fileName1 = 'nieuwePublicatie'; // type nota
   const fileName2 = 'bestaandePublicatie'; // type BVR
   const fileName3 = 'publicatieMB'; // type MB
@@ -131,7 +131,7 @@ context('Publications via MR tests', () => {
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).contains('Hilde Crevits')
+    cy.get(dependency.emberPowerSelect.option).contains('Hilde Crevits') // TODO change hardcoded mandatee names
       .scrollIntoView()
       .click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');

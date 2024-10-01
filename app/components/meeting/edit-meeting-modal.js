@@ -132,19 +132,34 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.initializeMeetingNumber.perform(true);
+    this.initializeSecretary.perform(true); // when selecting a range with different secretary mandatees
   }
 
-  initializeSecretary = task(async () => {
+  initializeSecretary = task(async (startDateChanged) => {
     if (!this.isPreKaleidos) {
       const secretary = await this.args.meeting.secretary;
-      if (isPresent(secretary)) {
+      if (isPresent(secretary) && !startDateChanged) {
         this.secretary = secretary;
       } else if (this.isNew) {
-        // if a meeting had no secretary yet we don't set a default one automatically
+        // if a meeting had no secretary yet we don't set the current active default one automatically
         const currentApplicationSecretary =
-          await this.mandatees.getCurrentApplicationSecretary();
+          await this.mandatees.getApplicationSecretary();
         this.secretary = currentApplicationSecretary;
       }
+      // check if the secretary is active on this agenda
+      if (startDateChanged) {
+        const isInDateRange =
+        this.secretary.start <= this.startDate &&
+        (this.startDate <= this.secretary.end ||
+          this.secretary.end === undefined);
+
+        if (!isInDateRange) {
+          // selected secretary is not active for this agenda date, trying to find one in range
+          const applicationSecretaryForDate =
+            await this.mandatees.getApplicationSecretary(this.startDate);
+          this.secretary = applicationSecretaryForDate;
+        }
+      }      
     }
   });
 

@@ -232,6 +232,18 @@ const selectors = {
       title: 'viceminister-president',
       searchTitle: 'Vlaams minister',
     },
+    signatureTitles: [
+      'Jan Jambon, Minister-president van de Vlaamse Regering',
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management',
+      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
+      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
+    ],
   },
 
   '02102019-10052021': {
@@ -249,7 +261,27 @@ const selectors = {
       title: 'viceminister-president',
       searchTitle: 'Vlaams minister',
     },
+    signatureTitles: [
+      'Jan Jambon, Minister-president van de Vlaamse Regering',
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, ICT en Facilitair Management',
+      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
+      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
+    ],
   },
 
+  preKaleidos: {
+    martens: {
+      lastName: 'Martens',
+      firstName: 'Luc',
+      fullName: 'Luc Martens',
+      signatureTitle: 'Luc Martens, Vlaams minister van Cultuur, Gezin en Welzijn',
+    },
+  },
 };
 export default selectors;

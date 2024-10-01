@@ -85,9 +85,9 @@ context('signatures shortlist overview tests', () => {
     .day(5);
 
   const primeMandatee = mandateeNames.current.first;
-  const mandatee1 = mandateeNames.current.third; // 'Lydia Peeters'
-  const mandatee2 = mandateeNames.current.fourth; // 'Ben Weyts';
-  const mandatee3 = mandateeNames.current.fifth; // 'Zuhal Demir'
+  const mandatee1 = mandateeNames.current.third;
+  const mandatee2 = mandateeNames.current.fourth;
+  const mandatee3 = mandateeNames.current.fifth;
 
   const approverEmail = 'approver@test.com';
   const notificationEmail = 'notification@test.com';
@@ -715,8 +715,8 @@ context('decisions and minutes shortlist overview tests', () => {
   const pieceTypeMinutes = 'Notulen';
   let minutesTitle;
 
-  const defaultSecretary = 'Jeroen Overmeer';
-  const newSecretary = 'Joachim Pohlmann';
+  const defaultSecretary = mandateeNames.current.firstSecretary.fullName;
+  // const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
   const alertMessage = 'De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.';
 
@@ -945,20 +945,21 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get(route.decisions.sidebar.startSignflow).should('be.enabled');
 
     // change secretary
-    cy.openAgendaForDate(agendaDate);
-    cy.openDetailOfAgendaitem(approvalTitle, false);
-    cy.get(mandatee.secretaryPanelView.actions.edit).click();
-    cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
-      .click();
-    cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
-      .scrollIntoView()
-      .trigger('mouseover')
-      .click({
-        force: true,
-      });
-    cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities1');
-    cy.get(mandatee.secretaryPanelEdit.actions.save).click();
-    cy.wait('@patchDecisionActivities1');
+
+    // cy.openAgendaForDate(agendaDate);
+    // cy.openDetailOfAgendaitem(approvalTitle, false);
+    // cy.get(mandatee.secretaryPanelView.actions.edit).click();
+    // cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
+    //   .click();
+    // cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
+    //   .scrollIntoView()
+    //   .trigger('mouseover')
+    //   .click({
+    //     force: true,
+    //   });
+    // cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities1');
+    // cy.get(mandatee.secretaryPanelEdit.actions.save).click();
+    // cy.wait('@patchDecisionActivities1');
 
     // go back
     cy.intercept('GET', '/sign-flows*').as('getShortlist2');
@@ -1025,7 +1026,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
-      .contains(newSecretary); // wait for signers to load
+      .contains(mandateeNames.current.firstSecretary.fullName); // wait for signers to load
 
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities2');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');

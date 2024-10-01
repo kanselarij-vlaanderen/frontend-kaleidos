@@ -180,7 +180,7 @@ context('Publications tests', () => {
 
   it('publications:dossier: Add and delete mandataris', () => {
     const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
-    const mandateeName = 'Jan Jambon';
+    const mandateeName = 'Jan Jambon';  // TODO change hardcoded mandatee names
 
     cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
     cy.get(publication.publicationTableRow.row.goToPublication).first()
