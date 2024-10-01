@@ -124,6 +124,7 @@
               {{t "secretary-for-meeting"}}
             </AuLabel>
             <Mandatees::MandateeSelector
+              @referenceDate={{this.startDate}}
               @onSelectMandatee={{fn (mut this.secretary)}}
               @selectedMandatees={{this.secretary}}
               @visibleRoles={{this.visibleRoles}}
