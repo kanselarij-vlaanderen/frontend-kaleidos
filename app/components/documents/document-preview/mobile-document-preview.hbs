@@ -1,0 +1,23 @@
+<AuModal
+  @modalOpen={{true}}
+  @closeModal={{@onClose}}
+  @size="fullscreen"
+  @padding="none"
+>
+  <:title>
+    <span data-test-document-preview-title class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+      <span class="au-u-word-break">
+        {{this.selectedVersion.name}}
+      </span>
+    </span>
+  </:title>
+  <:body>
+    <Documents::DocumentPreview::MobileDocumentPreviewPanel
+      @piece={{this.selectedVersion}}
+      @onSelectVersion={{@onSelectVersion}}
+      @transitionBack={{@onClose}}
+      @tab={{@tab}}
+      @onTabChanged={{@onTabChanged}}
+    />
+  </:body>
+</AuModal>

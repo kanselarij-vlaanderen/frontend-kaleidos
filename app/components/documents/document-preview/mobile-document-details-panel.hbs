@@ -1,0 +1,117 @@
+<Auk::Panel>
+  <Auk::Panel::Header class="auk-u-px-1">
+    <Auk::Toolbar as |Toolbar|>
+      <Toolbar.Group @position="left" as |Group|>
+        <Group.Item>
+          <h4 class="auk-h4 auk-u-m-0">
+            {{t "document-properties"}}
+          </h4>
+        </Group.Item>
+      </Toolbar.Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body class="auk-u-p-1">
+    {{#if this.documentType}}
+      <Auk::KeyValue
+        @key={{t "document-type"}}
+      >
+        {{this.documentType.altLabel}}
+      </Auk::KeyValue>
+    {{/if}}
+    <Auk::KeyValue @key={{t "name-document"}}>
+      {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
+        {{@piece.name}}{{#if extension}}.{{extension}}{{/if}}
+      {{/let}}
+    </Auk::KeyValue>
+    <Auk::KeyValue @key={{t "publicity"}}>
+      <AccessLevelPill
+        @accessLevel={{this.accessLevel}}
+        @isEditable={{false}}
+      />
+    </Auk::KeyValue>
+  </Auk::Panel::Body>
+  {{#if this.inlineViewLink}}
+    <Auk::Panel::Body class="auk-u-p-1">
+      <AuLinkExternal
+        @skin="button"
+        @width="block"
+        href={{this.inlineViewLink}}
+      >
+        {{t "view-document-details"}}
+      </AuLinkExternal>
+    </Auk::Panel::Body>
+  {{/if}}
+  {{#if (await (this.showAlternatePieces))}}
+    <Auk::Panel::Body class="auk-u-p-1">
+      {{#if @piece.file.derived}}
+        <Auk::KeyValue @key={{capitalize (t "source-file")}}>
+          {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
+            <AuLinkExternal
+              href={{this.downloadLinkSourceFile}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >
+              {{@piece.name}}.{{@piece.file.extension}}
+            </AuLinkExternal>
+          {{else}}
+            {{@piece.name}}
+          {{/if}}
+        </Auk::KeyValue>
+      {{/if}}
+      {{#if (await (this.canViewSignedPiece))}}
+        {{#if @piece.signedPiece.file}}
+          <div class="auk-key-value-item">
+            <div class="auk-key-value-item__label auk-u-max-width-medium">{{t "signed-document-certified"}}</div>
+            <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+              <AuLinkExternal
+                href={{await @piece.signedPiece.namedDownloadLinkPromise}}
+                @skin="primary"
+                @icon="download"
+                @iconAlignment="left"
+                download
+              >
+                {{@piece.signedPiece.name}}.{{@piece.signedPiece.file.extension}}
+              </AuLinkExternal>
+              <div class="auk-o-flex__item--fix">
+                <AccessLevelPill
+                  @accessLevel={{await @piece.signedPiece.accessLevel}}
+                  @isEditable={{false}}
+                />
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      {{/if}}
+      {{#if
+        (and
+          this.loadSignedPieces.isIdle
+          this.signedPieceCopy.file
+          (await (this.canViewConfidentialPiece))
+        )
+      }}
+        <div class="auk-key-value-item">
+          <div class="auk-key-value-item__label">{{t "signed-document"}}</div>
+          <div class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
+            <AuLinkExternal
+              href={{await this.signedPieceCopy.namedDownloadLinkPromise}}
+              @skin="primary"
+              @icon="download"
+              @iconAlignment="left"
+              download
+            >
+              {{this.signedPieceCopy.name}}.{{this.signedPieceCopy.file.extension}}
+            </AuLinkExternal>
+            <div class="auk-o-flex__item--fix">
+              <AccessLevelPill
+                @accessLevel={{this.signedPieceCopy.accessLevel}}
+                @isEditable={{false}}
+              />
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>
