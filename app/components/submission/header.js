@@ -404,7 +404,7 @@ export default class SubmissionHeaderComponent extends Component {
 
     await this.args.submission.destroyRecord();
 
-    await this.router.transitionTo('cases.submissions');
+    await this.router.transitionTo('submissions');
   });
 
   requestSendBackToSubmitter = task(async () => {
