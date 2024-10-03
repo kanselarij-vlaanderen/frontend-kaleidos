@@ -52,6 +52,7 @@ export default class SubmissionsRoute extends Route {
     // *note: the cache busting delays the loading a bit, even locally with only 2 submissions it take half a second
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+      'filter[:has:pieces]': 't',
       'filter[pieces][accepted-piece][agendaitems][agenda][created-for][:has-no:agenda]': 't', // filter out submissions on closed meetings
       include: 'type,status,requested-by,mandatees.person,submission-activities,decisionmaking-flow,meeting',
       sort: params.sortSubmissions + (params.sortSubmissions ? ',' : '') + '-modified',
@@ -102,4 +103,3 @@ export default class SubmissionsRoute extends Route {
     }
   }
 }
-

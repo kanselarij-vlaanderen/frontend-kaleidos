@@ -25,7 +25,7 @@ export default class CasesSubmissionsStatusPillComponent extends Component {
     const status = await this.args.status;
     const meeting = await this.args.meeting;
     // show status already
-    this.label = status.label || status.altLabel;
+    this.label = status?.label || status?.altLabel;
 
     // check if submission is on a visible agenda
     if (meeting?.id){
@@ -35,7 +35,7 @@ export default class CasesSubmissionsStatusPillComponent extends Component {
       });
       if (agenda?.id) {
         // different label and skin when submission is treated on an active agenda
-        if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
+        if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
           this.label = this.intl.t('on-agenda-status-pill');
           this.skin = "success";
           return;
