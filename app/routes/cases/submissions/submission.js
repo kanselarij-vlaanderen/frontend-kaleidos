@@ -130,6 +130,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   async afterModel(model) {
     const decisionmakingFlow = await model.belongsTo('decisionmakingFlow').reload();
     await decisionmakingFlow?.case;
+    if (this.currentSession.may('treat-and-accept-submissions')) {
+      await model.internalReview;
+    }
   }
 
   setupController(controller, _model, _transition) {
