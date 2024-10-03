@@ -12,14 +12,6 @@
       <WebComponents::LoadingPage />
     </:body>
   </AuModal>
-{{else if this.isMobile}}
-  <Documents::DocumentPreview::MobileDocumentPreview
-    @piece={{this.model}}
-    @onClose={{this.transitionBack}}
-    @tab={{this.tab}}
-    @onSelectVersion={{this.setSelectedVersion}}
-    @onTabChanged={{this.tabChanged}}
-  />
 {{else}}
   <Documents::DocumentPreview::DocumentPreviewModal
     @piece={{this.model}}
@@ -28,5 +20,6 @@
     @tab={{this.tab}}
     @onSelectVersion={{this.setSelectedVersion}}
     @onTabChanged={{this.tabChanged}}
+    @isMobile={{true}}
   />
 {{/if}}

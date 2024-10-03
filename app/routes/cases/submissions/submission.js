@@ -49,7 +49,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[submissions][:id:]': submission.id
     });
-    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
+    if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (this.subcase)  {
         let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase);
         if (allDraftPiecesAccepted) {
