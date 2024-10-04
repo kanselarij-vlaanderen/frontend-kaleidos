@@ -125,6 +125,7 @@
 
 {{#if this.isAssigningToAgenda}}
   <Cases::Subcases::ProposableAgendasModal
+    @subcase={{@subcase}}
     @onCancel={{toggle "isAssigningToAgenda" this}}
     @onConfirm={{perform this.proposeForAgenda}}
   />

@@ -205,7 +205,16 @@
         <div class="vlc-agenda-items__remarks">
           {{!-- Empty container below so that, when it is empty, the adjacent element is still pushed to the right  --}}
           <div>
-            {{#if @agendaitem.privateComment}}
+            {{#if this.subcase.internalReview}}
+              <p class="auk-u-text-muted">
+                <strong class="auk-u-text-bold">
+                  <AuIcon @icon="lock-closed" />
+                  {{t "private-comment-title"}}:
+                </strong>
+                {{this.subcase.internalReview.privateComment}}
+              </p>
+            {{! legacy or isApproval items }}
+            {{else if @agendaitem.privateComment}}
               <p class="auk-u-text-muted">
                 <strong class="auk-u-text-bold">
                   <AuIcon @icon="lock-closed" />
