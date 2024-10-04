@@ -12,6 +12,7 @@ RUN ember build -prod
 
 FROM semtech/static-file-service:0.2.0
 
+ENV STATIC_FOLDERS_REGEX="^/(assets|fonts|files|ember-pdfjs-wrapper|@appuniversum)/"
 
 ENV EMBER_ENABLE_IMPERSONATION=""
 ENV EMBER_ENABLE_DEBUG=""
