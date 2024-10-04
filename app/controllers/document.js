@@ -29,8 +29,8 @@ export default class DocumentController extends Controller {
   constructor() {
     super(...arguments);
 
-    this.isMobile = this.userAgent.device?.isMobile || 
-      this.userAgent.device.isTablet;
+    this.isMobile = this.userAgent.device?.isMobile ||
+      this.userAgent.device?.isTablet;
   }
 
   @action
