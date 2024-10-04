@@ -165,7 +165,7 @@
           </div>
         {{/if}}
       </div>
-      {{#if (and (user-may "manage-agendaitems") @subcase.internalReview)}}
+      {{#if (and (user-may "manage-agendaitems") @subcase.internalReview.privateComment)}}
         <Auk::Panel::Body class="auk-u-mt-4 auk-u-p-2 auk-u-maximize-height auk-u-bg-alt">
           <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold">
             <AuIcon @icon="lock-closed" />
