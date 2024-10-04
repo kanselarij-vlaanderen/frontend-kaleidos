@@ -382,13 +382,13 @@ export default class SubmissionHeaderComponent extends Component {
 
   takeInTreatment = async () => {
     await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING);
-    await this.getOrCreateInternalReview();
+    await this.createOrUpdateInternalReview();
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
   };
 
-  getOrCreateInternalReview = async () => {
+  createOrUpdateInternalReview = async () => {
     // Do we have a subcase already?
     const internalReviewOfSubmission = await this.args.submission.internalReview;
     if (!this.isUpdate && internalReviewOfSubmission?.id) {
@@ -397,7 +397,7 @@ export default class SubmissionHeaderComponent extends Component {
 
     const internalReviewOfSubcase = await this.args.subcase?.internalReview;
     if (this.isUpdate && internalReviewOfSubcase?.id && !internalReviewOfSubmission?.id) {
-      const submissions = await internalReviewOfSubcase.submissions;
+      const submissions = await internalReviewOfSubcase.hasMany('submissions').reload();
       addObject(submissions, this.args.submission);
       internalReviewOfSubcase.submissions = submissions;
       return await this.args.submission.save();
@@ -405,13 +405,6 @@ export default class SubmissionHeaderComponent extends Component {
   
     if (!internalReviewOfSubmission?.id) {
       await this.agendaService.createInternalReview(this.args.subcase, [this.args.submission], CONSTANTS.PRIVATE_COMMENT_TEMPLATE);
-      // const internalReview = await this.store.createRecord('submission-internal-review', {
-      //   created: new Date(),
-      //   privateComment: CONSTANTS.PRIVATE_COMMENT_TEMPLATE,
-      //   submissions: [this.args.submission],
-      //   subcase: this.args.subcase,
-      // });
-      // await internalReview.save();
     }
     // else, update something? 
     // is there a chance that subcase has no internalReview but submission does?
@@ -421,19 +414,18 @@ export default class SubmissionHeaderComponent extends Component {
   };
 
   sendBackToSubmitter = task(async () => {
-    await this.getOrCreateInternalReview()  
-    // await this._updateSubmission(
-    //   CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
-    //   this.comment
-    // );
-    // await this.cabinetMail.sendBackToSubmitterMail(
-    //   this.args.submission,
-    //   this.comment,
-    //   this.selectedMeeting,
-    // );
-    // if (isPresent(this.args.onStatusUpdated)) {
-    //   this.args.onStatusUpdated();
-    // }
+    await this._updateSubmission(
+      CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
+      this.comment
+    );
+    await this.cabinetMail.sendBackToSubmitterMail(
+      this.args.submission,
+      this.comment,
+      this.selectedMeeting,
+    );
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
   });
 
   deleteSubmission = task(async () => {

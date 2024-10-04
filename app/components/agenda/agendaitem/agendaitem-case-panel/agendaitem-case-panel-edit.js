@@ -116,6 +116,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       }
     }
     if (this.internalReview?.hasDirtyAttributes) {
+      yield this.internalReview.hasMany('submissions').reload();
       yield this.internalReview.save();
     }
     this.args.onSave();

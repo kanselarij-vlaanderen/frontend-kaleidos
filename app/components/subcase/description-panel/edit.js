@@ -182,6 +182,7 @@ export default class SubcaseDescriptionEdit extends Component {
     }
 
     if (this.internalReview?.hasDirtyAttributes) {
+      await this.internalReview.hasMany('submissions').reload();
       await this.internalReview.save();
     }
 
