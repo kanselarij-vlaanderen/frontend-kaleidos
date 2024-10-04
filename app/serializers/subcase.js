@@ -5,7 +5,8 @@ const SKIP_SERIALIZED = [
   'agendaActivities',
   'submissionActivities',
   'decisionActivities',
-  'submissions'
+  'submissions',
+  'internalReview'
 ];
 
 const SKIP_ATTRIBUTES = [

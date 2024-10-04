@@ -285,7 +285,7 @@ function createSubmission(submission) {
 */
 function openSubmission(shortTitle) {
   cy.log('openSubmission');
-  cy.visit('dossiers/indieningen?aantal=50');
+  cy.visit('indieningen?aantal=50');
   cy.get(route.submissionsOverview.dataTable, {
     timeout: 60000,
   }).contains(shortTitle)

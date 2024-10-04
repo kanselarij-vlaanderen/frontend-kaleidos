@@ -13,7 +13,6 @@
         {{#if (and this.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             data-test-document-preview-download-link
-            {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
             @icon="download"
             @iconAlignment="left"
             @hideText={{(responsive "isMobile")}}
@@ -31,7 +30,12 @@
         {{#if this.loadFile.isRunning}}
           <WebComponents::LoadingPage />
         {{else}}
-          <Documents::DocumentView @file={{this.file}} @piece={{this.selectedVersion}} @inlineViewLink={{this.inlineViewLink}} />
+          <Documents::DocumentView
+            @file={{this.file}}
+            @piece={{this.selectedVersion}}
+            @inlineViewLink={{this.inlineViewLink}}
+            @isMobile={{@isMobile}}
+          />
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">
