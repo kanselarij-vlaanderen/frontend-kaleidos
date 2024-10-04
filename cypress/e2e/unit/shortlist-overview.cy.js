@@ -716,7 +716,7 @@ context('decisions and minutes shortlist overview tests', () => {
   let minutesTitle;
 
   const defaultSecretary = mandateeNames.current.firstSecretary.fullName;
-  // const newSecretary = mandateeNames.current.secondSecretary.fullName;
+  const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
   const alertMessage = 'De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.';
 
@@ -946,20 +946,20 @@ context('decisions and minutes shortlist overview tests', () => {
 
     // change secretary
 
-    // cy.openAgendaForDate(agendaDate);
-    // cy.openDetailOfAgendaitem(approvalTitle, false);
-    // cy.get(mandatee.secretaryPanelView.actions.edit).click();
-    // cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
-    //   .click();
-    // cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
-    //   .scrollIntoView()
-    //   .trigger('mouseover')
-    //   .click({
-    //     force: true,
-    //   });
-    // cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities1');
-    // cy.get(mandatee.secretaryPanelEdit.actions.save).click();
-    // cy.wait('@patchDecisionActivities1');
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(approvalTitle, false);
+    cy.get(mandatee.secretaryPanelView.actions.edit).click();
+    cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities1');
+    cy.get(mandatee.secretaryPanelEdit.actions.save).click();
+    cy.wait('@patchDecisionActivities1');
 
     // go back
     cy.intercept('GET', '/sign-flows*').as('getShortlist2');

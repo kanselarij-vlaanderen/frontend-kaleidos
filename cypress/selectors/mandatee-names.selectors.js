@@ -78,14 +78,24 @@ const selectors = {
       fullName: 'Maarten Vanholle',
       title: 'Secretaris',
     },
-    // secondSecretary: {
-    //   fullName: 'Maarten Vanholle',
+    secondSecretary: {
+      fullName: 'Simon Gheysen',
+      title: 'Waarnemend secretaris',
+    },
+    thirdSecretary: {
+      fullName: 'Helmer Rooze',
+      title: 'Waarnemend secretaris',
+    },
+    fourthSecretary: {
+      fullName: 'Raf Suys',
+      title: 'Waarnemend secretaris',
+    },
+    // TBD
+    // fifthSecretary: {
+    //   fullName: 'Raf Suys',
     //   title: 'Waarnemend secretaris',
     // },
-    // thirdSecretary: {
-    //   fullName: 'Maarten Vanholle',
-    //   title: 'Waarnemend secretaris',
-    // }
+    // what is the min max amount of secretaries possible? don't rely on anything past fourth to exist maybe?
   },
 
   // TODO add secretary to config (f.e. Overmeer is used in tests hardcoded right now)

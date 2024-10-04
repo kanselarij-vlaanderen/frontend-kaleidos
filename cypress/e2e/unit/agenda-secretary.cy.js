@@ -16,10 +16,8 @@ function currentTimestamp() {
 
 context('Agenda secretary tests', () => {
   const currentDefaultSecretary = mandateeNames.current.firstSecretary.fullName;
-  // const newSecretary = mandateeNames.current.secondSecretary.fullName;
-  const newSecretary = 'Dries Verhaeghe'; // TODO this wont work
-  // const newSecretary = mandateeNames.current.thirdSecretary.fullName;
-  const newApprovalSecretary = 'Raf Suys'; // TODO this wont work
+  const newSecretary = mandateeNames.current.secondSecretary.fullName;
+  const newApprovalSecretary = mandateeNames.current.thirdSecretary.fullName;
 
   beforeEach(() => {
     cy.login('Admin');

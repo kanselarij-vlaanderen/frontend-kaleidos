@@ -82,8 +82,7 @@ context('agenda minutes test', () => {
     const extraGoedkeuring = 'the chevy';
     const extrabeslissing = 'The day the music died';
     const extraMededeling = 'Covered by Madonna';
-    // TODO-secretary need a second secretary, enable later
-    // const newSecretary = mandateeNames.current.secondSecretary.fullName;
+    const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
     cy.openAgendaForDate(agendaDate);
 
@@ -143,37 +142,36 @@ context('agenda minutes test', () => {
     cy.wait('@patchMinutes');
     cy.wait('@createNewPiecePart');
 
-    // TODO-secretary need a second secretary, enable later
     // change secretary
-    // cy.get(agenda.agendaActions.optionsDropdown)
-    //   .children(appuniversum.button)
-    //   .click();
-    // cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
-    // cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
-    //   .click();
-    // cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
-    // cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
-    //   .scrollIntoView()
-    //   .trigger('mouseover')
-    //   .click({
-    //     force: true,
-    //   });
-    // cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
-    // cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchPublicationActivities');
-    // cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities');
-    // cy.get(agenda.editMeeting.save).click({
-    //   force: true,
-    // });
-    // cy.wait('@patchMeetings');
-    // cy.wait('@patchPublicationActivities');
-    // cy.wait('@patchDecisionActivities');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
+    cy.get(agenda.editMeeting.secretary).find(dependency.emberPowerSelect.trigger)
+      .click();
+    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+    cy.get(dependency.emberPowerSelect.option).contains(newSecretary)
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click({
+        force: true,
+      });
+    cy.intercept('PATCH', '/meetings/**').as('patchMeetings');
+    cy.intercept('PATCH', '/internal-document-publication-activities/**').as('patchPublicationActivities');
+    cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities');
+    cy.get(agenda.editMeeting.save).click({
+      force: true,
+    });
+    cy.wait('@patchMeetings');
+    cy.wait('@patchPublicationActivities');
+    cy.wait('@patchDecisionActivities');
 
-    // cy.get(route.agendaMinutes.currentPieceView).contains(extraPresident);
-    // cy.get(route.agendaMinutes.currentPieceView).contains(extraVicePresident);
-    // cy.get(route.agendaMinutes.currentPieceView).contains(extraMinister);
-    // cy.get(route.agendaMinutes.currentPieceView).should('not.contain', extraSecretaris);
-    // cy.get(route.agendaMinutes.currentPieceView).contains(newSecretary);
-    // cy.get(route.agendaMinutes.currentPieceView).should('not.contain', extrabeslissing);
-    // cy.get(route.agendaMinutes.currentPieceView).contains(extraMededeling);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraPresident);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraVicePresident);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraMinister);
+    cy.get(route.agendaMinutes.currentPieceView).should('not.contain', extraSecretaris);
+    cy.get(route.agendaMinutes.currentPieceView).contains(newSecretary);
+    cy.get(route.agendaMinutes.currentPieceView).should('not.contain', extrabeslissing);
+    cy.get(route.agendaMinutes.currentPieceView).contains(extraMededeling);
   });
 });
