@@ -222,7 +222,7 @@ context('Submission happy flows', () => {
 
   it('Create new submission from cases or submission index', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/dossiers?aantal=2');
+    cy.visit('/indieningen?aantal=2');
 
     cy.createSubmission(submissionNewCase).then((result) => {
       cy.url().should('contain', `/indieningen/${result.submissionId}`);
@@ -378,7 +378,7 @@ context('Submission happy flows', () => {
 
   it('Create new submission from existing case', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/dossiers?aantal=2');
+    cy.visit('/indieningen?aantal=2');
     cy.createSubmission(submissionExistingCase);
     // cy.visit('/dossiers/indieningen/66DAE350F08D8D8342A44C07')
     // overview header, case title is the existing case short title

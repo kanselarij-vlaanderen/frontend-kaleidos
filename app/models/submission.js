@@ -36,6 +36,8 @@ export default class SubmissionModel extends Model {
   modifiedBy;
   @belongsTo('meeting', { inverse: 'submissions', async: true })
   meeting;
+  @belongsTo('submission-internal-review', { inverse: 'submissions', async: true })
+  internalReview;
 
   @hasMany('mandatee', { inverse: null, async: true })
   mandatees;

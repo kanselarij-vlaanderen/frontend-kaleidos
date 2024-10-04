@@ -25,6 +25,11 @@
             <Auk::Tab @route="cases" data-test-m-header-cases>
               {{t "cases"}}
             </Auk::Tab>
+            {{#if (and (user-may "view-submissions") this.isEnabledCabinetSubmissions)}}
+              <Auk::Tab @route="submissions" data-test-m-header-submissions>
+                {{t "submissions"}}
+              </Auk::Tab>
+            {{/if}}
             {{#if (user-may "manage-news-items")}}
               <Auk::Tab
                 @route="newsletters"
