@@ -1,7 +1,7 @@
 {{#if (and @file (await (this.canViewConfidentialPiece)))}}
   {{#if this.isPdfDocument}}
     {{#if @isMobile}}
-      <PdfView @filePath={{@file.namedDownloadLink}} />
+      <PdfView @filePath={{@downloadLink}} />
     {{else}}
       <object
         data-test-document-view-file

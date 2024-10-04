@@ -1469,5 +1469,6 @@
   "new-mandatee": "Nieuwe minister",
   "mandatees-deleted-in-update": "De volgende {count, plural, =1 {minister wordt} other {ministers worden}} verwijderd in deze update:",
   "comment-title-to-submitter": "Opmerking voor de kabinetsdossierbeheerder",
-  "on-agenda-status-pill": "Geagendeerd"
+  "on-agenda-status-pill": "Geagendeerd",
+  "submission-internal-review": "Interne opmerking"
 }

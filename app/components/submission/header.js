@@ -265,7 +265,7 @@ export default class SubmissionHeaderComponent extends Component {
         const internalReview = await this.args.submission.internalReview;
         if (internalReview?.id) {
           internalReview.subcase = subcase;
-          await internalReview?.save();
+          await internalReview.save();
         } else {
           await this.agendaService.createInternalReview(subcase, [this.args.submission], privateComment);
         }
