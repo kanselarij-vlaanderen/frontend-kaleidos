@@ -5,12 +5,14 @@ import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import utils from '../../selectors/utils.selectors';
 
 context('Publications tests', () => {
   const pubNumber = '100';
   const numberError = 'Publicatienummer is numeriek en verplicht.';
   const shortTitleError = 'Dit veld dient ingevuld te worden.';
+  const publicatieLink = '/publicaties/626FBB5ECB00108193DC4318/dossier';
 
   function checkIfNewPublicationFieldsAreEmpty(number, currentDate) {
     cy.get(publication.newPublication.number).should('not.contain', number);
@@ -180,11 +182,12 @@ context('Publications tests', () => {
 
   it('publications:dossier: Add and delete mandataris', () => {
     const noMandatees = 'Er zijn nog geen ministers toegevoegd.';
-    const mandateeName = 'Jan Jambon';  // TODO change hardcoded mandatee names
+    const mandateeName = mandateeNames['10052021-16052022'].first.fullName; // 'Jan Jambon';
 
     cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
-    cy.get(publication.publicationTableRow.row.goToPublication).first()
-      .click();
+    // cy.get(publication.publicationTableRow.row.goToPublication).first()
+    //   .click();
+    cy.visit(publicatieLink);
     cy.wait('@getNewPublicationDetail');
 
     // Assert empty.
@@ -224,8 +227,9 @@ context('Publications tests', () => {
     const fieldsName = 'Media';
 
     cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
-    cy.get(publication.publicationTableRow.row.goToPublication).first()
-      .click();
+    // cy.get(publication.publicationTableRow.row.goToPublication).first()
+    //   .click();
+    cy.visit(publicatieLink);
     cy.wait('@getNewPublicationDetail');
 
     // Assert empty.
@@ -276,7 +280,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
 
-  it('publications:dossier:Add and delete contact person', () => {
+  it('publications:dossier: Add and delete contact person', () => {
     const noContactPersons = 'Er zijn nog geen contactpersonen toegevoegd';
     const contactperson = {
       fin: 'Donald',
@@ -287,8 +291,9 @@ context('Publications tests', () => {
 
     // TODO open publication (with index)
     cy.intercept('GET', '/publication-flows**').as('getNewPublicationDetail');
-    cy.get(publication.publicationTableRow.row.goToPublication).first()
-      .click();
+    // cy.get(publication.publicationTableRow.row.goToPublication).first()
+    //   .click();
+    cy.visit(publicatieLink);
     cy.wait('@getNewPublicationDetail');
 
     // Assert empty.
@@ -344,7 +349,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noContactPersons);
   });
 
-  it('publications:dossier:check publication number uniqueness', () => {
+  it('publications:dossier: check publication number uniqueness', () => {
     const existingPubNumber = 5555;
     const suffix = 'BIS';
     const duplicateError = 'Het gekozen publicatienummer is reeds in gebruik. Gelieve een ander nummer te kiezen of een suffix te gebruiken.';

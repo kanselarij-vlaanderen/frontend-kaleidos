@@ -173,7 +173,6 @@ export default class MandateesService extends Service {
   }
 
   async getApplicationSecretary(referenceDateFrom = new Date()) {
-    // ref date should always be future, but if not we have different secretary mandatee active ranges
     const [applicationSecretary] =
       await this.getMandateesActiveOn.perform(
         referenceDateFrom,

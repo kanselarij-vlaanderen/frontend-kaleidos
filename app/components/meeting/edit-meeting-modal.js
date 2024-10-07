@@ -132,35 +132,37 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.initializeMeetingNumber.perform(true);
-    this.initializeSecretary.perform(true); // when selecting a range with different secretary mandatees
+    this.recalculateSecretary.perform(); // when selecting a range with possibly different secretary mandatees
   }
 
-  initializeSecretary = task(async (startDateChanged) => {
+  initializeSecretary = task(async () => {
     if (!this.isPreKaleidos) {
       const secretary = await this.args.meeting.secretary;
-      if (isPresent(secretary) && !startDateChanged) {
+      if (isPresent(secretary)) {
         this.secretary = secretary;
       } else if (this.isNew) {
-        // if a meeting had no secretary yet we don't set the current active default one automatically
         const currentApplicationSecretary =
           await this.mandatees.getApplicationSecretary();
         this.secretary = currentApplicationSecretary;
       }
-      // check if the secretary is active on this agenda
-      // unless no secretary is linked yet
-      if (startDateChanged && this.secretary?.id) {
-        const isInDateRange =
-        this.secretary.start <= this.startDate &&
-        (this.startDate <= this.secretary.end ||
-          this.secretary.end === undefined);
+      // if a meeting had no secretary yet we don't set the current active default one automatically     
+    }
+  });
 
-        if (!isInDateRange) {
-          // selected secretary is not active for this agenda date, trying to find one in range
-          const applicationSecretaryForDate =
-            await this.mandatees.getApplicationSecretary(this.startDate);
-          this.secretary = applicationSecretaryForDate;
-        }
-      }      
+  recalculateSecretary = task(async () => {
+    // check if the secretary is active on the agenda date unless no secretary was set
+    if (!this.isPreKaleidos && this.secretary?.id) {
+      const isInDateRange =
+      this.secretary.start <= this.startDate &&
+      (this.startDate <= this.secretary.end ||
+        this.secretary.end === undefined);
+
+      if (!isInDateRange) {
+        // selected secretary is not active for this agenda date, trying to find one in range
+        const applicationSecretaryForDate =
+          await this.mandatees.getApplicationSecretary(this.startDate);
+        this.secretary = applicationSecretaryForDate;
+      }
     }
   });
 

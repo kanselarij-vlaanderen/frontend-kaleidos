@@ -90,82 +90,8 @@ const selectors = {
       fullName: 'Raf Suys',
       title: 'Waarnemend secretaris',
     },
-    // TBD
-    // fifthSecretary: {
-    //   fullName: 'Raf Suys',
-    //   title: 'Waarnemend secretaris',
-    // },
     // what is the min max amount of secretaries possible? don't rely on anything past fourth to exist maybe?
   },
-
-  // TODO add secretary to config (f.e. Overmeer is used in tests hardcoded right now)
-  // TODO check if/what we need of this range (01082024-30092024) for some tests.
-  // current: {
-  //   first: {
-  //     firstName: 'Jan',
-  //     lastName: 'Jambon',
-  //     fullName: 'Jan Jambon',
-  //     title: 'minister-president',
-  //     searchTitle: 'Minister-president',
-  //   },
-  //   second: {
-  //     firstName: 'Hilde',
-  //     lastName: 'Crevits',
-  //     fullName: 'Hilde Crevits',
-  //     title: 'viceminister-president',
-  //     searchTitle: 'Vlaams minister',
-  //   },
-  //   third: {
-  //     firstName: 'Lydia',
-  //     lastName: 'Peeters',
-  //     fullName: 'Lydia Peeters',
-  //     title: 'viceminister-president',
-  //     searchTitle: 'Vlaams minister',
-  //   },
-  //   fourth: {
-  //     firstName: 'Ben',
-  //     lastName: 'Weyts',
-  //     fullName: 'Ben Weyts',
-  //     title: 'viceminister-president',
-  //     searchTitle: 'Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
-  //   },
-  //   fifth: {
-  //     firstName: 'Zuhal',
-  //     lastName: 'Demir',
-  //     fullName: 'Zuhal Demir',
-  //     title: 'Vlaams minister',
-  //   },
-  //   sixth: {
-  //     firstName: 'Matthias',
-  //     lastName: 'Diependaele',
-  //     fullName: 'Matthias Diependaele',
-  //     title: 'Vlaams minister',
-  //   },
-  //   seventh: {
-  //     firstName: 'Benjamin',
-  //     lastName: 'Dalle',
-  //     fullName: 'Benjamin Dalle',
-  //     title: 'Vlaams minister',
-  //   },
-  //   eighth: {
-  //     firstName: 'Jo',
-  //     lastName: 'Brouns',
-  //     fullName: 'Jo Brouns',
-  //     title: 'Vlaams minister',
-  //   },
-  //   // up to eleventh is possible, but is the minimum ninth? update: Eight is possible, don't use ninth in tests
-  //   // list of titles as shown when adding mandatees to signatures, only needed for current
-  //   signatureTitles: [
-  //     'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
-  //     'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin',
-  //     'Lydia Peeters, Vlaams minister van Mobiliteit, Openbare Werken, Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
-  //     'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
-  //     'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
-  //     'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
-  //     'Benjamin Dalle, Vlaams minister van Brussel, Jeugd, Media en Armoedebestrijding',
-  //     'Jo Brouns, Vlaams minister van Economie, Innovatie, Werk, Sociale Economie en Landbouw'
-  //   ],
-  // },
 
   // older governmentbody data used in tests (will/should not change)
   // currently unused
@@ -191,6 +117,26 @@ const selectors = {
       title: 'viceminister-president',
       searchTitle: 'Vlaams minister',
     },
+    firstSecretary: {
+      fullName: 'Jeroen Overmeer',
+      title: 'Secretaris',
+    },
+    // not really second in rank, just another one used in tests
+    secondSecretary: {
+      fullName: 'Joachim Pohlmann',
+      title: 'Waarnemend secretaris',
+    },
+    // these signatureTitles are not used currently
+    signatureTitles: [
+      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
+      'Hilde Crevits, Vlaams minister van Welzijn, Volksgezondheid en Gezin',
+      'Lydia Peeters, Vlaams minister van Mobiliteit, Openbare Werken, Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
+      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
+      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
+      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
+      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd, Media en Armoedebestrijding',
+      'Jo Brouns, Vlaams minister van Economie, Innovatie, Werk, Sociale Economie en Landbouw'
+    ],
   },
 
   // older governmentbody data used in tests (will/should not change)
