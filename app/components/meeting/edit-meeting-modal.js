@@ -147,7 +147,8 @@ export default class MeetingEditMeetingComponent extends Component {
         this.secretary = currentApplicationSecretary;
       }
       // check if the secretary is active on this agenda
-      if (startDateChanged) {
+      // unless no secretary is linked yet
+      if (startDateChanged && this.secretary?.id) {
         const isInDateRange =
         this.secretary.start <= this.startDate &&
         (this.startDate <= this.secretary.end ||

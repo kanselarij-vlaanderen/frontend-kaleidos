@@ -1026,7 +1026,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
-      .contains(mandateeNames.current.firstSecretary.fullName); // wait for signers to load
+      .contains(newSecretary); // wait for signers to load
 
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities2');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases2');
