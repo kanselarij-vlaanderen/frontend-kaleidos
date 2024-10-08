@@ -79,10 +79,14 @@ context('testing new add subcase command', () => {
     cy.addSubcaseViaModal(subcase1);
   });
 
+  // TODO this test is very dependent on previous mandatee
+  // so if a new government is completely new people/mandatees, this test fails)
   it('should map to active mandatee as submitter without manual edit', () => {
     // reason: old subcase with old mandatees > new subcase should map to new mandatees and submitter.
     // both mandatees and submitter have been wrong before with this automation (old mandatee)
     const isCI = Cypress.env('CI');
+    const oldMandatee = mandateeNames['10052021-16052022'].second; // crevits is pos 2
+    const newMandateeOfSamePerson = mandateeNames.current.third; // crevits is pos 3
 
     const subcase1 = {
       newShortTitle: 'submitter is correctly mapped to active mandatee',
@@ -101,7 +105,7 @@ context('testing new add subcase command', () => {
 
     cy.visitCaseWithLink('dossiers/6374F30CD9A98BD0A2288557/deeldossiers/6374F312D9A98BD0A2288558');
     cy.get(mandatee.mandateePanelView.rows).should('not.exist');
-    cy.addSubcaseMandatee(mandateeNames['10052021-16052022'].second);
+    cy.addSubcaseMandatee(oldMandatee);
     // old mandatee is submitter
     cy.get(mandatee.mandateePanelView.rows).as('listItems');
     cy.get('@listItems').should('have.length', 1, {
@@ -110,7 +114,7 @@ context('testing new add subcase command', () => {
     cy.get('@listItems').eq(0)
       .as('row');
     cy.get('@row').find(mandatee.mandateePanelView.row.name)
-      .should('contain', mandateeNames['10052021-16052022'].second.fullName); // crevits old mandatee
+      .should('contain', oldMandatee.fullName);
     cy.get('@row').find(mandatee.mandateePanelView.row.name)
       .contains(dateRange);
     cy.get('@row').find(mandatee.mandateePanelView.row.submitter)
@@ -128,10 +132,10 @@ context('testing new add subcase command', () => {
     cy.get('@listItems').eq(0)
       .as('row');
     cy.get('@row').find(mandatee.mandateePanelView.row.name)
-      .should('contain', mandateeNames.current.second.fullName); // crevits new mandatee
+      .should('contain', newMandateeOfSamePerson.fullName);
     cy.get('@row').find(mandatee.mandateePanelView.row.name)
-      .contains('tot heden'); // crevits new mandatee
-    cy.get('@row').find(mandatee.mandateePanelView.row.submitter) // crevits correct submitter selected
+      .contains('tot heden');
+    cy.get('@row').find(mandatee.mandateePanelView.row.submitter) // new person is the active submitter
       .children()
       .should('exist');
 

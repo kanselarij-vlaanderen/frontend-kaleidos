@@ -87,10 +87,10 @@ context('Search tests', () => {
     cy.visit('/kort-bestek/zoeken');
     // ! depends on mandatee-assigning.spec and could fail
     const searchTerm = 'test';
-    const mandateeSearchTerm = 'Jambon';
+    const mandateeToSearch = mandateeNames.current.first;
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
-    cy.get(route.search.mandatee).type(mandateeSearchTerm);
+    cy.get(route.search.mandatee).type(mandateeToSearch.lastName);
 
     cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
@@ -98,6 +98,6 @@ context('Search tests', () => {
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
     cy.get(appuniversum.alert.container).should('not.exist');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon');
+    cy.get(route.searchNewsletters.row.mandatees).contains(mandateeToSearch.fullName);
   });
 });
