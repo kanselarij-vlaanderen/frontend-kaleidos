@@ -6,6 +6,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 // import mandatee from '../../selectors/mandatee.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from '../../selectors/route.selectors';
 // import utils from '../../selectors/utils.selectors';
 
@@ -81,30 +82,30 @@ context('agenda minutes test', () => {
     const extraGoedkeuring = 'the chevy';
     const extrabeslissing = 'The day the music died';
     const extraMededeling = 'Covered by Madonna';
-    const newSecretary = 'Dries Verhaeghe';
+    const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
     cy.openAgendaForDate(agendaDate);
 
     cy.get(agenda.agendaTabs.tabs).contains('Notulen')
       .click();
     // document card still loading
-    cy.wait(2000);
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get(route.agendaMinutes.createEdit).click();
     cy.get(route.agendaMinutes.editor.updateContent).click();
 
+    cy.get(appuniversum.loader).should('not.exist');
     // make a change to present
-    cy.wait(6000);
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Jan Jambon')
+      .contains(mandateeNames.current.first.fullName)
       .as('deMinistersPresidentParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Hilde Crevits')
+      .contains(mandateeNames.current.second.fullName)
       .as('deViceministerPresidentenParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Zuhal')
+      .contains(mandateeNames.current.fifth.fullName)
       .as('deVlaamseMinistersParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
-      .contains('Jeroen Overmeer')
+      .contains(mandateeNames.current.firstSecretary.fullName)
       .as('deSecretarisParagraph');
     cy.get(dependency.rdfaEditor.inner).find('p')
       .contains('De Vlaamse Regering hecht haar goedkeuring aan het verslag')
@@ -123,8 +124,10 @@ context('agenda minutes test', () => {
     cy.get('@goedkeuringParagraph').type(`{home}${extraGoedkeuring}{shift+enter}`);
     cy.get('@beslissingParagraph').type(`{home}${extrabeslissing}{shift+enter}`);
     cy.get('@mededelingParagraph').type(`{home}${extraMededeling}{shift+enter}`);
-    cy.wait(5000);
+
+    // update should not update mandatee sections
     cy.get(route.agendaMinutes.editor.updateContent).click();
+    cy.get(appuniversum.loader).should('not.exist');
     cy.get('@deMinistersPresidentParagraph').contains(extraPresident);
     cy.get('@deViceministerPresidentenParagraph').contains(extraVicePresident);
     cy.get('@deVlaamseMinistersParagraph').contains(extraMinister);
