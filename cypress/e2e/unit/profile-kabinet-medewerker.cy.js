@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach, afterEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -12,13 +12,15 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Testing the application as Kabinetmedewerker', () => {
-  beforeEach(() => {
+context('Testing the application as Kabinetmedewerker', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Kabinetmedewerker');
     cy.wait(1000);
   });
 
-  afterEach(() => {
+  after(() => {
     cy.logout();
   });
 
@@ -56,6 +58,7 @@ context('Testing the application as Kabinetmedewerker', () => {
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
     });

@@ -62,6 +62,21 @@ function login(name, retries = 0) {
   cy.log('/login');
 }
 
+// these 2 were an experiment but doesn't really work well with mocklogin
+function loginSession(name) {
+  cy.session(['login', name], () => {
+    cy.visit('mock-login');
+    cy.login(name);
+  });
+}
+
+function loginFlowSession(name) {
+  cy.session(['loginFlow', name], () => {
+    cy.visit('mock-login');
+    cy.loginFlow(name);
+  });
+}
+
 /**
  * @description Logs out the current user and end the mocked session
  * @name logout
@@ -143,6 +158,8 @@ function stubSigninghubCallToURL() {
 }
 
 Cypress.Commands.add('login', login);
+Cypress.Commands.add('loginSession', loginSession);
+Cypress.Commands.add('loginFlowSession', loginFlowSession);
 Cypress.Commands.add('logout', logout);
 Cypress.Commands.add('loginFlow', loginFlow);
 Cypress.Commands.add('logoutFlow', logoutFlow);
