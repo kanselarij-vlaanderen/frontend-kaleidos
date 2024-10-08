@@ -49,7 +49,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[submissions][:id:]': submission.id
     });
-    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
+    if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
       if (this.subcase)  {
         let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase);
         if (allDraftPiecesAccepted) {
@@ -75,10 +75,10 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
         if (this.currentLinkedMandatee && this.mandatees.length) {
           const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
           if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
-            this.router.transitionTo('cases.submissions');
+            this.router.transitionTo('submissions');
           }
         } else {
-          this.router.transitionTo('cases.submissions');
+          this.router.transitionTo('submissions');
         }
       }
     }
@@ -130,6 +130,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   async afterModel(model) {
     const decisionmakingFlow = await model.belongsTo('decisionmakingFlow').reload();
     await decisionmakingFlow?.case;
+    if (this.currentSession.may('treat-and-accept-submissions')) {
+      await model.internalReview;
+    }
   }
 
   setupController(controller, _model, _transition) {

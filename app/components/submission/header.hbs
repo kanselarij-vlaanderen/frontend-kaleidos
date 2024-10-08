@@ -94,7 +94,7 @@
   <:body>
     <div class="au-c-form">
       <AuFormRow>
-        <AuLabel for="comment-title-resubmit">{{t "comment-title"}}</AuLabel>
+        <AuLabel for="comment-title-resubmit">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
         <AuTextarea
           id="comment-title-resubmit"
           rows="2"
@@ -119,6 +119,7 @@
     />
   {{else}}
     <Cases::Subcases::ProposableAgendasModal
+      @submission={{@submission}}
       @onCancel={{this.toggleCreateSubcaseModal}}
       @onConfirm={{perform this.createSubcase}}
       @defaultAgenda={{this.selectedAgenda}}
@@ -138,7 +139,7 @@
   <:body>
     <div class="au-c-form">
       <AuFormRow>
-        <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>
+        <AuLabel for="comment-title-send-back">{{t "comment-title-to-submitter"}}</AuLabel>
         <AuTextarea
           id="comment-title-send-back"
           rows="2"
@@ -187,7 +188,7 @@
   <:body>
     <div class="au-c-form">
       <AuFormRow>
-        <AuLabel for="comment-title-request-send-back">{{t "comment-title"}}</AuLabel>
+        <AuLabel for="comment-title-request-send-back">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
         <AuTextarea
           id="comment-title-request-send-back"
           rows="2"

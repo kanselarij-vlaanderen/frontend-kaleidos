@@ -87,6 +87,8 @@ export default class CabinetMailService extends Service {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: caseTitle,
       resubmitted: true,
+      approvalComment: submission.approvalComment,
+      notificationComment: submission.notificationComment,
       comment,
       submission,
       meeting,

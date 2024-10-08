@@ -58,6 +58,9 @@ Router.map(function() {
       });
     });
   });
+  if (isEnabledCabinetSubmissions()) {
+    this.route('submissions', { path: '/indieningen' });
+  }
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
     this.route('search', { path: '/zoeken', });

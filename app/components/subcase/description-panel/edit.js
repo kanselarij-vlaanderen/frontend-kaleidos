@@ -32,6 +32,7 @@ export default class SubcaseDescriptionEdit extends Component {
   @tracked subcaseType;
   @tracked agendaItemType;
   @tracked agendaItemTypes;
+  @tracked internalReview;
 
   @tracked isSaving = false;
 
@@ -44,6 +45,7 @@ export default class SubcaseDescriptionEdit extends Component {
     this.loadSubcaseType.perform();
     this.loadAgendaItemType.perform();
     this.loadAgendaItemTypes.perform();
+    this.loadInternalReview.perform();
   }
 
   @task
@@ -61,6 +63,13 @@ export default class SubcaseDescriptionEdit extends Component {
     this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
+  }
+
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      this.internalReview = yield this.args.subcase.internalReview;
+    }
   }
 
   @task
@@ -91,6 +100,9 @@ export default class SubcaseDescriptionEdit extends Component {
   async cancelEditing() {
     if (this.args.subcase.hasDirtyAttributes) {
       this.args.subcase.rollbackAttributes();
+    }
+    if (this.internalReview?.hasDirtyAttributes) {
+      this.internalReview.rollbackAttributes();
     }
     this.args.onCancel();
   }
@@ -167,6 +179,11 @@ export default class SubcaseDescriptionEdit extends Component {
     // when a subcase is no longer confidential, we don't regenerate the report. Manual change is needed.
     if (reportNeedsReplacing) {
       await this.updateDecisionReport();
+    }
+
+    if (this.internalReview?.hasDirtyAttributes) {
+      await this.internalReview.hasMany('submissions').reload();
+      await this.internalReview.save();
     }
 
     this.args.onSave();
