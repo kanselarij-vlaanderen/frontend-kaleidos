@@ -119,6 +119,7 @@
     />
   {{else}}
     <Cases::Subcases::ProposableAgendasModal
+      @submission={{@submission}}
       @onCancel={{this.toggleCreateSubcaseModal}}
       @onConfirm={{perform this.createSubcase}}
       @defaultAgenda={{this.selectedAgenda}}

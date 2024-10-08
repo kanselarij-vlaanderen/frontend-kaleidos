@@ -153,6 +153,21 @@
           </div>
         </AuFormRow>
       {{/if}}
+      {{#if (and (user-may "treat-and-accept-submissions") this.internalReview)}}
+        <AuFormRow>
+          <AuLabel for="private-submission-comment">
+            <AuIcon @icon="lock-closed" />
+            {{t "private-comment-title"}}
+          </AuLabel>
+          <AuTextarea
+            id="private-submission-comment"
+            rows="7"
+            value={{this.internalReview.privateComment}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this.internalReview "privateComment"))}}
+          />
+        </AuFormRow>
+      {{/if}}
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>

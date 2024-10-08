@@ -38,11 +38,15 @@ export default class ApplicationRoute extends Route {
 
   get isSupportedBrowser() {
     const browser = this.userAgent.browser;
+    const device = this.userAgent.device;
     return (window.Cypress
+      || browser.isEdge
       || browser.isFirefox
       || browser.isChrome
       || browser.isSafari
-      || browser.isChromeHeadless); // Headless in order not to break automated tests.
+      || browser.isChromeHeadless // Headless in order not to break automated tests.
+      || device.isMobile // support all mobile browsers (in read-only mode)
+      || device.isTablet);
   }
 
   @action
