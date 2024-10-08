@@ -30,7 +30,7 @@ context('Publications new features tests', () => {
     // check if translation mail message contains urgent
     cy.get(publication.publicationNav.translations).click();
     cy.get(publication.translationsIndex.requestTranslation).click();
-    cy.get(publication.translationRequest.message).should('have.value', 'DRINGEND! Tegen - vertaling gewenst\t\n\nCollega,\n\nHierbij ter vertaling:\nVO-dossier: 2007\n\nTitel: Besluitvorming Vlaamse Regering hoed\t\n\nUiterste vertaaldatum: -\t\n\nAantal pagina’s: \t\nAantal woorden: \t\nAantal documenten: 0\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Ondersteuning Vlaamse Regering\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n');
+    cy.get(publication.translationRequest.message).should('have.value', 'DRINGEND! Tegen - vertaling gewenst\t\n\nCollega,\n\nHierbij ter vertaling:\nVO-dossier: 2007\n\nTitel: Besluitvorming Vlaamse Regering hoed\t\n\nUiterste vertaaldatum: -\t\n\nAantal pagina’s: \t\nAantal woorden: \t\nAantal documenten: 0\t\n\n\nMet vriendelijke groet,\n\nVlaamse overheid\t\nDEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\nTeam Regeringsondersteuning - Cel Publicaties BS\t\npublicatiesBS@vlaanderen.be\t\nKoolstraat 35, 1000 Brussel\t\n');
     cy.get(auk.modal.footer.cancel).click();
 
     // check if proof mail subject contains urgent

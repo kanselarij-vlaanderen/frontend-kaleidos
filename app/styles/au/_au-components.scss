@@ -491,6 +491,7 @@ $au-label-color: var(--au-gray-700);
 // Alert
 
 .au-c-alert {
+  margin-bottom: 0;
   font-size: 1.5rem;
 }
 
@@ -499,6 +500,10 @@ $au-label-color: var(--au-gray-700);
     height: 1.5rem;
     width: 1.6rem;
   }
+}
+
+.au-c-alert + * {
+  margin-top: $au-unit;
 }
 
 // Badge
@@ -781,4 +786,41 @@ $au-label-color: var(--au-gray-700);
 // Adjust width of modals on mobile
 .auk-modal {
     max-width: calc(100% - 2rem);
+}
+
+// Panel variant that is displayed as a sidebar
+.au-c-panel-sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 95%;
+  z-index: 9;
+  box-shadow: $auk-shadow-small;
+
+  &::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-color: rgba(0,0,0,.1);
+  }
+
+  > .auk-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    border-top: 0;
+    border-bottom: 0;
+  }
+
+  > .auk-panel > .auk-panel__body {
+    flex-grow: 1;
+    overflow: auto;
+  }
 }
