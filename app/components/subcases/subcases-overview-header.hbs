@@ -61,59 +61,75 @@
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     {{/if}}
-    {{#if (and (user-may "manage-cases") (not this.loadData.isRunning))}}
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
-          {{!-- template-lint-disable require-context-role --}}
-          <AuDropdown
-            data-test-subcase-overview-header-actions-dropdown
-            @title={{t "case-actions"}}
-            @alignment="right"
-            @skin="secondary"
-          >
-            <AuButton
-              data-test-subcase-overview-header-edit-case
-              @skin="link"
-              {{on "click" this.openEditCaseModal}}
-              role="menuitem"
+    {{#unless this.loadData.isRunning}}
+      {{#if (user-may "manage-cases")}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+            {{!-- template-lint-disable require-context-role --}}
+            <AuDropdown
+              data-test-subcase-overview-header-actions-dropdown
+              @title={{t "case-actions"}}
+              @alignment="right"
+              @skin="secondary"
             >
-              {{t "edit-case"}}
-            </AuButton>
-            <AuButton
-              data-test-subcase-overview-header-archive
-              @skin="link"
-              @alert={{true}}
-              role="menuitem"
-              {{on
-                "click"
-                (fn
-                  (if
-                    @decisionmakingFlow.closed
-                    this.unArchiveCase
-                    this.openArchiveCaseModal
+              <AuButton
+                data-test-subcase-overview-header-edit-case
+                @skin="link"
+                {{on "click" this.openEditCaseModal}}
+                role="menuitem"
+              >
+                {{t "edit-case"}}
+              </AuButton>
+              <AuButton
+                data-test-subcase-overview-header-archive
+                @skin="link"
+                @alert={{true}}
+                role="menuitem"
+                {{on
+                  "click"
+                  (fn
+                    (if
+                      @decisionmakingFlow.closed
+                      this.unArchiveCase
+                      this.openArchiveCaseModal
+                    )
                   )
-                )
-              }}
+                }}
+              >
+                {{t (if @decisionmakingFlow.closed "unarchive-case" "archive-case")}}
+              </AuButton>
+            </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
+          </Auk::Toolbar::Item>
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-subcase-overview-header-open-add-subcase
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.navigateToAddSubcase}}
             >
-              {{t (if @decisionmakingFlow.closed "unarchive-case" "archive-case")}}
+              {{t "create-subcase"}}
             </AuButton>
-          </AuDropdown>
-          {{!-- template-lint-enable require-context-role --}}
-        </Auk::Toolbar::Item>
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-subcase-overview-header-open-add-subcase
-            @skin="primary"
-            @icon="plus"
-            {{on "click" this.navigateToAddSubcase}}
-          >
-            {{t "create-subcase"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
-    {{/if}}
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{else if (and this.loadData.isIdle this.mayCreateSubmissions)}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-subcase-overview-header-create-submission
+              @skin="primary"
+              @icon="plus"
+              {{on "click" this.navigateToAddSubmission}}
+            >
+              {{t "submit-agendaitem-for-this-case"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
+    {{/unless}}
   </Auk::Toolbar>
 </Auk::Navbar>
+
 {{! MODAL }}
 {{#if this.showEditCaseModal}}
   <Cases::EditCase

@@ -5,29 +5,46 @@
   @downloadName={{@piece.file.filename}}
   @downloadLink={{@piece.file.namedDownloadLink}}
   @onDelete={{@onDelete}}>
-  {{#if @allowDocumentContainerEdit}}
+  {{#if (or @allowDocumentContainerEdit @allowEditPieceAccessLevel)}}
     <div class="au-c-form au-u-margin-left-large" data-test-uploaded-document-container>
-      <AuFormRow>
-        <AuLabel>{{t "name-document"}}</AuLabel>
-        <AuInput
-          data-test-uploaded-document-name-input={{true}}
-          value={{@piece.name}}
-          @width="block"
-          {{on "input" (pick "target.value" (set @piece "name"))}}
-        />
-      </AuFormRow>
-      {{#unless this.loadData.isRunning}}
-        <AuFormRow data-test-uploaded-document-types>
-          <AuLabel>{{t "document-type"}}</AuLabel>
-          <Utils::RadioDropdownComboSelect
-            @options={{this.sortedDocumentTypes}}
-            @onSelect={{this.selectDocumentType}}
-            @dropdownLabelKey="altLabel"
-            @radioOptionsSize="8"
-            @selected={{this.selectedDocumentType}}
+      {{#if @allowDocumentContainerEdit}}
+        <AuFormRow>
+          <AuLabel>{{t "name-document"}}</AuLabel>
+          <AuInput
+            data-test-uploaded-document-name-input={{true}}
+            value={{@piece.name}}
+            @width="block"
+            {{on "input" (pick "target.value" (set @piece "name"))}}
           />
         </AuFormRow>
-      {{/unless}}
+        {{#unless this.loadData.isRunning}}
+          <AuFormRow data-test-uploaded-document-types>
+            <AuLabel>{{t "document-type"}}</AuLabel>
+            <Utils::RadioDropdownComboSelect
+              @options={{this.sortedDocumentTypes}}
+              @onSelect={{this.selectDocumentType}}
+              @dropdownLabelKey="altLabel"
+              @radioOptionsSize="8"
+              @selected={{this.selectedDocumentType}}
+            />
+          </AuFormRow>
+        {{/unless}}
+      {{/if}}
+      {{#if @allowEditPieceAccessLevel}}
+        {{#unless this.loadData.isRunning}}
+          <AuFormRow>
+            <AuLabel>{{t (if @simplifiedOptions "confidential" "confidentiality-level")}}</AuLabel>
+            <Utils::AccessLevelSelector
+              @selected={{@piece.accessLevel}}
+              @allowClear={{false}}
+              @simplifiedOptions={{@simplifiedOptions}}
+              @onChange={{this.setAccessLevel}}
+              @displayField="label"
+              @sortField="position"
+            />
+          </AuFormRow>
+        {{/unless}}
+      {{/if}}
     </div>
   {{/if}}
 </EmberKaleidosWebuniversum::VlUploadedDocument>

@@ -1,40 +1,43 @@
-<div class="auk-u-maximize-width auk-u-maximize-height u-padding--left--large u-padding--right--large auk-o-flex auk-o-flex--center">
-  <div class="auk-container--small">
-    <h1 class="auk-heading auk-heading--jumbo auk-u-text-normal auk-u-mb-10">{{t "kaleidos"}}</h1>
-    <h2 class="auk-h3 auk-u-text-normal auk-u-text-line-height-small auk-u-mb-8">
-      {{t "kaleidos-login-info"}}
-    </h2>
-    <div>
-      <p class="u-spacer--tiny">
-        {{t "kaleidos-login-info2"}}
-        <a href="https://overheid.vlaanderen.be/ict/ict-diensten/gebruikersbeheer">{{t "kaleidos-login-info-gebruikersbeheer-vlaanderen"}}</a>.
-      </p>
-      <p class="u-spacer--tiny">
-        {{t "kaleidos-login-info-popup-message"}}
-      </p>
-      <div data-test-route-login-acmidm-container class="u-padding--top--large">
-        <Acmidm::Login as |acmidm|>
-          <AuButton
-            @skin="primary"
-            @loading={{acmidm.isAuthenticating}}
-            {{on "click" acmidm.login}}
-          >
-            Meld u aan
-          </AuButton>
-          {{#if acmidm.errorMessage}}
-            <div class="auk-u-mt-2">
-              <AuAlert
-                @skin="error"
-                @icon="circle-x"
-                @size="small"
+<div class="auk-scroll-wrapper__body auk-o-flex auk-o-flex--vertical">
+  <div class="auk-o-flex__item auk-o-flex auk-o-flex--center"> {{!-- REMARK: nested/repetitive structure here to fix scrolling issue --}}
+    <div class="au-u-padding-large au-u-padding-top">
+      <div class="auk-container--small">
+        <h1 class="auk-heading auk-heading--jumbo auk-u-text-normal auk-u-mb-10">{{t "kaleidos"}}</h1>
+        <h2 class="auk-h3 auk-u-text-normal auk-u-text-line-height-small auk-u-mb-8">
+          {{t "kaleidos-login-info"}}
+        </h2>
+        <div>
+          <p class="au-u-margin-bottom-small">
+            {{t "kaleidos-login-info2"}}
+            <a href="https://overheid.vlaanderen.be/ict/ict-diensten/gebruikersbeheer">{{t "kaleidos-login-info-gebruikersbeheer-vlaanderen"}}</a>.
+          </p>
+          <p>
+            {{t "kaleidos-login-info-popup-message"}}
+          </p>
+          <div data-test-route-login-acmidm-container class="au-u-padding-top-large">
+            <Acmidm::Login as |acmidm|>
+              <AuButton
+                @skin="primary"
+                @loading={{acmidm.isAuthenticating}}
+                {{on "click" acmidm.login}}
               >
-                <p>{{acmidm.errorMessage}}</p>
-              </AuAlert>
-            </div>
-          {{/if}}
-      </Acmidm::Login>
+                Meld u aan
+              </AuButton>
+              {{#if acmidm.errorMessage}}
+                <div class="auk-u-mt-2">
+                  <AuAlert
+                    @skin="error"
+                    @icon="circle-x"
+                    @size="small"
+                  >
+                    <p>{{acmidm.errorMessage}}</p>
+                  </AuAlert>
+                </div>
+              {{/if}}
+          </Acmidm::Login>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 </div>

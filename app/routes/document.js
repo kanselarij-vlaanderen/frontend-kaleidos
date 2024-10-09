@@ -23,7 +23,11 @@ export default class DocumentRoute extends Route {
   }
 
   async model(params) {
-    const model = await this.store.queryOne('piece', {
+    let model = await this.store.queryOne('piece', {
+      'filter[:id:]': params.piece_id,
+      include: 'file',
+    });
+    model ??= await this.store.queryOne('draft-piece', {
       'filter[:id:]': params.piece_id,
       include: 'file',
     });

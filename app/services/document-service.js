@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
+import { all } from 'ember-concurrency';
 
 export default class DocumentService extends Service {
   @service jobMonitor;
@@ -116,7 +117,7 @@ export default class DocumentService extends Service {
         );
         await this.jobMonitor.register(job);
         setTimeout(() => {
-          this.toaster.close(namingToaster);    
+          this.toaster.close(namingToaster);
         }, 2000);
       } else {
         this.toaster.warning(
@@ -132,10 +133,30 @@ export default class DocumentService extends Service {
     }
   };
 
+  async moveDraftFile(fileId) {
+    const response = await fetch(
+      `/draft-files/${fileId}/move`,
+      {
+        method: 'POST',
+        headers: { 'Accept': 'application/vnd.api+json' },
+      }
+    );
+    const json = await response.json();
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    if (json?.data?.id) {
+      const file = await this.store.findRecord('file', json.data.id);
+      return file;
+    } else {
+      throw new Error('Could not find moved file');
+    }
+  }
+
   async handleStampingErrors(job, toasterToClose) {
     await this.jobMonitor.register(job, async (job) => {
       setTimeout(() => {
-        this.toaster.close(toasterToClose);    
+        this.toaster.close(toasterToClose);
       }, 2000);
       if (job.status === job.SUCCESS) {
         this.toaster.success(
@@ -153,5 +174,25 @@ export default class DocumentService extends Service {
         });
       }
     });
+  }
+
+  async enforceDocType(pieces) {
+    if (pieces?.length) {
+      // enforce all new pieces must have type on document container
+      const typesPromises = pieces.map(async (piece) => {
+        const container = await piece.documentContainer;
+        const type = await container.type;
+        return type;
+      });
+      const types = await all(typesPromises);
+      if (types.some(type => !type)) {
+        this.toaster.error(
+          this.intl.t('document-type-required'),
+          this.intl.t('warning-title'),
+        );
+        return true;
+      }
+    }
+    return false;
   }
 }

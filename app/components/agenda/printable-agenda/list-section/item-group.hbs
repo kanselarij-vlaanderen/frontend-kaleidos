@@ -45,11 +45,26 @@
             />
           </div>
         </div>
-        {{#let (await first.pieces) as |pieces|}}
+        {{#let (await (this.getPiecesForAgendaitem first)) as |pieces|}}
+          {{! inside previous let so relation should be loaded already}}
+          {{#let (await first.agendaActivity.subcase) as |subcase|}}
+            {{#if subcase.subcaseName}}
+              <div class="auk-u-mb-4 l-printable-agenda__subcase-name-indented">
+                <AuPill @size="small">
+                  {{!capitalization using helper instead of css class:
+                        because of `display: inline-flex` property of Auk::Pill
+                        it is not affected by the `::first-letter` selector
+                        used in the auk-u-text-capitalize class }}
+                  {{capitalize subcase.subcaseName}}
+                </AuPill>
+              </div>
+            {{/if}}
+          {{/let}}
           {{#if pieces}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
               @pieces={{pieces}}
               @fileNameMappings={{@fileNameMappings}}
+              @isBekrachtiging={{this.isBekrachtiging}}
             />
           {{/if}}
         {{/let}}
@@ -67,11 +82,26 @@
               @item={{agendaitem}}
             />
           </div>
-          {{#let (await agendaitem.pieces) as |pieces|}}
+          {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}
+            {{! inside previous let so relation should be loaded already}}
+            {{#let (await agendaitem.agendaActivity.subcase) as |subcase|}}
+              {{#if subcase.subcaseName}}
+                <div class="auk-u-mb-4 l-printable-agenda__subcase-name-indented">
+                  <AuPill @size="small">
+                    {{!capitalization using helper instead of css class:
+                          because of `display: inline-flex` property of Auk::Pill
+                          it is not affected by the `::first-letter` selector
+                          used in the auk-u-text-capitalize class }}
+                    {{capitalize subcase.subcaseName}}
+                  </AuPill>
+                </div>
+              {{/if}}
+            {{/let}}
             {{#if pieces}}
               <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                 @pieces={{pieces}}
                 @fileNameMappings={{@fileNameMappings}}
+                @isBekrachtiging={{this.isBekrachtiging}}
               />
             {{/if}}
           {{/let}}

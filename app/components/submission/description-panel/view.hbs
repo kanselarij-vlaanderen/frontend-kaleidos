@@ -1,0 +1,96 @@
+<Auk::Panel data-test-submission-description-panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <h4 class="auk-panel__title">
+            {{t "overview"}}
+          </h4>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      {{#if @mayEdit}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-submission-description-edit
+              @skin="naked"
+              @icon="pencil"
+              {{on "click" @onClickEdit}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  <Auk::Panel::Body>
+    <div class="au-u-flex au-u-flex--spaced-small au-u-flex--space-between au-u-flex--vertical-center">
+      <AuHeading
+        data-test-submission-description-short-title
+        @level="4"
+        @skin="4"
+      >
+        {{capitalize @submission.shortTitle}}
+      </AuHeading>
+      <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+        <AuPill
+          data-test-submission-description-agendaitem-type-pill
+          @size="small"
+        >
+          {{#if (is-announcement @submission.agendaItemType)}}
+            {{capitalize (t "announcement")}}
+          {{else}}
+            {{t "note"}}
+          {{/if}}
+        </AuPill>
+        {{#if @submission.confidential}}
+          <AuPill
+            data-test-submission-description-confidentiality-pill
+            @size="small"
+            @skin="warning"
+            @icon="lock-closed">{{t "limited-access"}}
+          </AuPill>
+        {{/if}}
+      </div>
+    </div>
+    {{#if (user-may "treat-and-accept-submissions")}}
+      <p data-test-submission-description-title>{{capitalize @submission.title}}</p>
+    {{/if}}
+  </Auk::Panel::Body>
+  <Auk::Panel::Body>
+    <div class="au-o-grid au-o-grid--small au-u-1-1">
+      <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+        <AuHeading @level="4" @skin="6">{{t "subcase"}}</AuHeading>
+        <p data-test-submission-description-subcase-type>
+          {{#if (await @submission.type)}}
+            {{@submission.type.label}}
+          {{else}}
+            -
+          {{/if}}
+        </p>
+      </div>
+      {{#if (user-may "treat-and-accept-submissions")}}
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">{{t "subcase-name"}}</AuHeading>
+          <p data-test-submission-description-subcase-name>
+            {{if @submission.subcaseName @submission.subcaseName '-'}}
+          </p>
+        </div>
+      {{/if}}
+    </div>
+    {{#if (and (user-may "treat-and-accept-submissions") @submission.internalReview.privateComment)}}
+      <Auk::Panel::Body class="auk-u-mt-4 auk-u-p-2 auk-u-maximize-height auk-u-bg-alt">
+        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold">
+          <AuIcon @icon="lock-closed" />
+          <span>{{t "private-comment-title"}}:</span>
+        </div>
+        <pre
+          class="auk-u-text-pre-line"
+        >
+          {{@submission.internalReview.privateComment}}
+        </pre>
+      </Auk::Panel::Body>
+    {{/if}}
+  </Auk::Panel::Body>
+</Auk::Panel>

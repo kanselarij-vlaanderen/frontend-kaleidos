@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /*
  * @argument subcase
@@ -11,12 +12,15 @@ import { task } from 'ember-concurrency';
 export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
+  @service currentSession;
   @service router;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
+  @tracked newDecisionmakingFlow = null;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
   @tracked isShowingOptions = false;
@@ -26,6 +30,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
+  @tracked canSubmitNewDocuments = false;
+  @tracked currentSubmission;
 
   constructor() {
     super(...arguments);
@@ -33,11 +39,24 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.loadData.perform();
   }
 
+  get maySubmitNewDocuments() {
+    return isEnabledCabinetSubmissions() &&
+      this.loadData.isIdle &&
+      this.currentSession.may('create-submissions') &&
+      this.submissions?.length > 0 &&
+      this.canSubmitNewDocuments;
+  }
+
   @task
   *loadData() {
+    this.submissions = yield this.args.subcase.hasMany('submissions').reload();
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
+    this.canSubmitNewDocuments = yield this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+    if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
+      this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
+    }
   }
 
   triggerDeleteCaseDialog() {
@@ -55,6 +74,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = null;
     this.isLoading = false;
     this.isAssigningToOtherCase = false;
+    this.newDecisionmakingFlow = null;
   }
 
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
@@ -65,7 +85,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     yield decisionmakingFlow.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases');
+    this.router.transitionTo('cases.index');
   }
 
   @action
@@ -91,18 +111,18 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   /**
    * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
    * @param {Meeting} meeting
-   * @param {boolean} isFormallyOk
+   * @param {boolean} formallyStatusUri
    * @param {string} privatecomment
    */
   @task
-  *proposeForAgenda(_fullCopy, meeting, isFormallyOk, privateComment) {
+  *proposeForAgenda(_fullCopy, meeting, formallyStatusUri, privateComment) {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
       yield this.agendaService.putSubmissionOnAgenda(
         meeting,
         this.args.subcase,
-        isFormallyOk,
+        formallyStatusUri,
         privateComment,
       );
     } catch (error) {
@@ -161,11 +181,19 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  moveSubcase = task(async (_newDecisionmakingFlow) => {
-    const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
+  @action
+  async selectDecisionmakingFlow(newDecisionmakingFlow) {
+    this.newDecisionmakingFlow = newDecisionmakingFlow?.id
+      ? await this.store.findRecord(
+          'decisionmaking-flow',
+          newDecisionmakingFlow.id
+        )
+      : null;
+  }
 
+  moveSubcase = task(async () => {
     const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
-    this.args.subcase.decisionmakingFlow = newDecisionmakingFlow;
+    this.args.subcase.decisionmakingFlow = this.newDecisionmakingFlow;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 

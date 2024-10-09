@@ -36,7 +36,7 @@
     <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small"
     @expanded={{true}} @label="Agenda">
       {{#each (take 1 @reverseSortedAgendas) as |agenda|}}
-        <Agenda::SideNav::Agenda 
+        <Agenda::SideNav::Agenda
           @currentAgenda={{@currentAgenda}}
           @meeting={{@meeting}}
           @agenda={{agenda}}
@@ -53,7 +53,7 @@
       {{/if}}
 
       {{#each (drop 1 @reverseSortedAgendas) as |agenda|}}
-        <Agenda::SideNav::Agenda 
+        <Agenda::SideNav::Agenda
           @currentAgenda={{@currentAgenda}}
           @meeting={{@meeting}}
           @agenda={{agenda}}

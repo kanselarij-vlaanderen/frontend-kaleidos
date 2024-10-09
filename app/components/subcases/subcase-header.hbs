@@ -6,6 +6,28 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
+      {{#if this.maySubmitNewDocuments}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @icon="plus"
+            @route="cases.case.subcases.subcase.new-submission"
+          >
+            {{t "submit-new-documents"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
+      {{#if this.currentSubmission}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @route="cases.submissions.submission"
+            @model={{this.currentSubmission.id}}
+          >
+            {{t "open-current-submission"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
           {{#if this.hasActions}}
@@ -67,19 +89,28 @@
   @loading={{this.deleteCase.isRunning}}
 />
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.isAssigningToOtherCase}}
-  @closeModal={{this.cancel}}
+  @title={{t "move-subcase-to-other-case"}}
+  @onConfirm={{perform this.moveSubcase}}
+  @onCancel={{this.cancel}}
+  @confirmMessage={{t "move-subcase"}}
   @padding="none"
-  @closable={{this.moveSubcase.isIdle}}
+  @loading={{this.moveSubcase.isRunning}}
+  @disabled={{not this.newDecisionmakingFlow}}
 >
-  <:title>
-    {{t "move-subcase-to-other-case"}}
-  </:title>
   <:body>
-    <Utils::CaseSearch @onSelect={{perform this.moveSubcase}} />
+    <div>
+      {{#if this.moveSubcase.isRunning}}
+        <Auk::Loader @message={{t "please-be-patient"}} />
+      {{else}}
+        <Utils::CaseSearch
+          @onSelect={{this.selectDecisionmakingFlow}}
+        />
+      {{/if}}
+    </div>
   </:body>
-</AuModal>
+</ConfirmationModal>
 
 <ConfirmationModal
   @modalOpen={{this.isDeletingSubcase}}
@@ -94,6 +125,7 @@
 
 {{#if this.isAssigningToAgenda}}
   <Cases::Subcases::ProposableAgendasModal
+    @subcase={{@subcase}}
     @onCancel={{toggle "isAssigningToAgenda" this}}
     @onConfirm={{perform this.proposeForAgenda}}
   />

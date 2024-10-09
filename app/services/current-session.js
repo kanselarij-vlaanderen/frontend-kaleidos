@@ -8,6 +8,7 @@ export default class CurrentSessionService extends Service {
   @service session;
   @service store;
   @service impersonation;
+  @service userAgent;
 
   @tracked user;
   @tracked organization;
@@ -44,9 +45,15 @@ export default class CurrentSessionService extends Service {
   }
 
   may(permission, checkImpersonator = false) {
-    return checkImpersonator
-      ? this.impersonatorUserGroup?.permissions.includes(permission)
-      : this.userGroup?.permissions.includes(permission);
+    const isReadOnly = this.userAgent.device.isMobile || this.userAgent.device.isTablet;
+    const userGroup = checkImpersonator ? this.impersonatorUserGroup : this.userGroup;
+    if (userGroup) {
+      if (isReadOnly) {
+        return userGroup.permissions.readOnly?.includes(permission);
+      }
+      return userGroup.permissions.full?.includes(permission) || userGroup.permissions.readOnly?.includes(permission);
+    }
+    return false;
   }
 
   hasAccessToApplication() {

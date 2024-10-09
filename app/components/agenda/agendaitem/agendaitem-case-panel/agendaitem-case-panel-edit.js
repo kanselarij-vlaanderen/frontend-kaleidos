@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -15,12 +16,34 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
+  @service currentSession;
 
+  @tracked filter = Object.freeze({
+    type: 'subcase-name',
+  });
+  @tracked isEditingSubcaseName = false;
+  @tracked selectedShortcut;
+  @tracked subcaseName;
+  @tracked internalReview;
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
+  constructor() {
+    super(...arguments);
+    this.subcaseName = this.args.subcase?.subcaseName;
+    this.isEditingSubcaseName = this.subcaseName?.length;
+    this.loadInternalReview.perform();
+  }
+
   get newsItem() {
     return this.args.newsItem;
+  }
+  
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      this.internalReview = yield this.args.subcase?.internalReview;
+    }
   }
 
   @action
@@ -45,6 +68,9 @@ export default class AgendaitemCasePanelEdit extends Component {
     if (this.newsItem && this.newsItem.hasDirtyAttributes) {
       this.newsItem.rollbackAttributes();
     }
+    if (this.internalReview?.hasDirtyAttributes) {
+      this.internalReview.rollbackAttributes();
+    }
     this.args.onCancel();
   }
 
@@ -62,6 +88,7 @@ export default class AgendaitemCasePanelEdit extends Component {
     const propertiesToSetOnSubcase = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
+      subcaseName: this.subcaseName,
       confidential: this.args.subcase?.confidential,
     };
 
@@ -88,6 +115,22 @@ export default class AgendaitemCasePanelEdit extends Component {
         yield this.newsItem.save();
       }
     }
+    if (this.internalReview?.hasDirtyAttributes) {
+      yield this.internalReview.hasMany('submissions').reload();
+      yield this.internalReview.save();
+    }
     this.args.onSave();
+  }
+
+  @action
+  selectSubcaseName(shortcut) {
+    this.selectedShortcut = shortcut;
+    this.subcaseName = shortcut.label;
+  }
+
+  @action
+  clearSubcaseName() {
+    this.selectedShortcut = null;
+    this.subcaseName = null;
   }
 }
