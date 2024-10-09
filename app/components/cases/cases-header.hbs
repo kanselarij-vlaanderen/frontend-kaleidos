@@ -3,7 +3,7 @@
     <Toolbar.Group @position="left" class="au-u-visible-from@small" as |Group|>
       <Group.Item>
         <h1 data-test-cases-header-title class="auk-toolbar__title">
-          {{t "cases"}}
+          {{t (if this.isInSubmissionRoute "submissions" "cases")}}
         </h1>
       </Group.Item>
     </Toolbar.Group>

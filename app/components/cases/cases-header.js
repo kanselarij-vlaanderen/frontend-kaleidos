@@ -37,11 +37,15 @@ export default class CasesHeader extends Component {
   });
 
   get mayCreateSubmissions() {
-    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
+    return this.isInSubmissionRoute && this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
   }
 
   get isInCasesRoute() {
     return this.router.currentRouteName === 'cases.index';
+  }
+
+  get isInSubmissionRoute() {
+    return this.router.currentRouteName === 'submissions';
   }
 
   @action
