@@ -58,6 +58,15 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     return mayIfAdmin || mayIfSecretarie || mayIfCabinet;
   }
 
+  get mayEditIfUpdate() {
+    const mayIfAdmin = this.currentSession.may('always-edit-submissions');
+
+    const mayIfSecretarie =
+      this.currentSession.may('edit-in-treatment-submissions') &&
+      this.model.isInTreatment;
+    return this.isUpdate ? (mayIfAdmin || mayIfSecretarie) : false;
+  }
+
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
       const d1 = p1.belongsTo('documentContainer').value();

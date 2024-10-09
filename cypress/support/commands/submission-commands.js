@@ -59,7 +59,7 @@ function createSubmission(submission) {
   if (submission.caseShortTitle) {
     cy.openCase(submission.caseShortTitle);
   } else {
-    cy.visit('dossiers?aantal=2'); // would it be faster to go to submissions page?
+    cy.visit('indieningen?aantal=2');
   }
 
   // if case page is loading
