@@ -151,14 +151,17 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
     }
     if (this.replacementSourceFile) {
       const oldFile = await this.args.piece.file;
-      const derivedFile = await oldFile.derived;
+       // optional in case file is lost and needs to be uploaded again
+      const derivedFile = await oldFile?.derived;
       if (derivedFile) {
         oldFile.derived = null;
         this.replacementSourceFile.derived = derivedFile;
         await Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
       }
+      // reload after the possible oldFile.save happened
+      const fileToDestroy = await this.args.piece.file;
       this.args.piece.file = this.replacementSourceFile;
-      await oldFile.destroyRecord();
+      await fileToDestroy.destroyRecord();
       try {
         await this.fileConversionService.convertSourceFile(
           this.replacementSourceFile

@@ -20,7 +20,7 @@ async function uploadPiecesToSigninghub(signFlows) {
     body: JSON.stringify(body),
   };
   const res = await fetch(endpoint, options);
-  return res
+  return res;
 }
 
 async function startSigning(signingFlow) {

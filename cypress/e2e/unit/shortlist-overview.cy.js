@@ -1007,22 +1007,22 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
-    cy.intercept('POST', '/signing-flows/upload-to-signinghub', {
-      forceNetworkError: true,
-    }).as('updateToSigningHubError');
-    // cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
+    // when we intercept the call it doesn't result in the cleanup of required resources
+    // cy.intercept('POST', '/signing-flows/upload-to-signinghub', {
+    //   forceNetworkError: true,
+    // }).as('updateToSigningHubError');
     // no email set so forcing through disabled button
     cy.get(route.decisions.sidebar.startSignflow).invoke('removeAttr', 'disabled')
       .click();
     cy.wait('@postSigningActivities');
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
-    // cy.wait('@deleteSigningActivities');
     cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
     // check succes
     cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.log('failing tests. decisionTitle should be in list:', decisionTitle); // the next line fails sometimes
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)
