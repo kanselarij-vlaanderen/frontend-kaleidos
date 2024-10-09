@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask } from 'ember-concurrency';
+import { task, dropTask, timeout } from 'ember-concurrency';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import {
@@ -169,6 +169,18 @@ export default class CasesNewSubmissionComponent extends Component {
   addPiece = async (piece) => {
     addObject(this.pieces, piece);
     await this.checkConfidentiality();
+    await timeout(100); // wait for doc to be rendered
+    const container = document.getElementById('new-submission-container');
+    const form = document.getElementById('new-submission-form');
+    const elementRect = form.getBoundingClientRect();
+
+      if (!this.isUploadingFiles) { // only try to scroll downwards when all files are uploaded
+        container.scrollTo({
+          top: elementRect.height,
+          block: 'nearest',
+          behavior: 'smooth'
+        });
+      }
   };
 
   deletePiece = async (piece) => {
