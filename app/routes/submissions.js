@@ -54,7 +54,7 @@ export default class SubmissionsRoute extends Route {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[:has:pieces]': 't',
       'filter[pieces][accepted-piece][agendaitems][agenda][created-for][:has-no:agenda]': 't', // filter out submissions on closed meetings
-      include: 'type,status,requested-by,mandatees.person,submission-activities,decisionmaking-flow,meeting',
+      include: 'type,status,requested-by,mandatees.person,submission-activities,decisionmaking-flow',
       sort: params.sortSubmissions + (params.sortSubmissions ? ',' : '') + '-modified',
       page: {
         number: params.page,
