@@ -63,9 +63,6 @@ function createSubmission(submission) {
   }
 
   // if case page is loading
-  cy.get(appuniversum.loader, {
-    timeout: 60000,
-  });
   cy.get(appuniversum.loader).should('not.exist', {
     timeout: 60000,
   });
@@ -74,7 +71,8 @@ function createSubmission(submission) {
     cy.url().should('not.include', '/dossiers/nieuwe-indiening');
     cy.url().should('include', '/deeldossiers/nieuwe-indiening');
   } else {
-    cy.get(cases.casesHeader.addSubmission).click();
+    cy.get(cases.casesHeader.openSubmissionModal).click();
+    cy.get(cases.casesHeader.navigateToNewSubmission).click();
     cy.url().should('include', '/dossiers/nieuwe-indiening');
     cy.url().should('not.include', '/deeldossiers/nieuwe-indiening');
   }

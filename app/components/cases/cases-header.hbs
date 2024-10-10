@@ -44,16 +44,16 @@
           </Group.Item>
         {{/if}}
       {{/if}}
-      {{#if this.mayCreateSubmissions}}
+      {{#if (and this.mayCreateSubmissions this.isInSubmissionRoute)}}
         <Group.Item>
-          <AuLink
-            data-test-cases-header-add-submission
-            @skin="button"
+          <AuButton
+            data-test-cases-header-open-submission-modal
+            @skin="primary"
             @icon="plus"
-            @route="cases.new-submission"
+            {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
           >
-            {{t "submit-agendaitem-for-new-case"}}
-          </AuLink>
+            {{t "submit-agendaitem"}}
+          </AuButton>
         </Group.Item>
       {{/if}}
     </Toolbar.Group>
@@ -65,4 +65,33 @@
     @didSave={{this.saveNewCaseAddSubcase}}
     @onCancel={{toggle "isOpenNewCaseAddSubcaseModal" this}}
   />
+{{/if}}
+
+{{#if this.isOpenAddSubmissionModal}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "submit-agendaitem-which-type"}} @onClose={{toggle "isOpenAddSubmissionModal" this}} />
+    <Auk::Modal::Body>
+      <div class="auk-u-mb-6">
+        <AuHeading @level="3" @skin="6" class="au-u-margin-bottom-tiny">{{t "submit-agendaitem-search-case-title"}}</AuHeading>
+        <AuLink
+          data-test-cases-header-navigate-to-cases
+          @route="cases.index"
+          {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+        >
+          {{t "submit-agendaitem-search-case"}}
+        </AuLink>
+      </div>
+      <div class="auk-u-mb-6">
+        <AuHeading @level="3" @skin="6" class="au-u-margin-bottom-tiny">{{t "submit-agendaitem-here-title"}}</AuHeading>
+        <AuLink
+          data-test-cases-header-navigate-to-new-submission
+          @skin="button"
+          @route="cases.new-submission"
+          {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+        >
+          {{t "submit-agendaitem-here"}}
+        </AuLink>
+      </div>
+    </Auk::Modal::Body>
+  </Auk::Modal>
 {{/if}}

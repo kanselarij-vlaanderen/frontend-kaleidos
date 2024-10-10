@@ -18,6 +18,7 @@ export default class CasesHeader extends Component {
 
   @tracked isOpenNewCaseAddSubcaseModal = false;
   @tracked filterText;
+  @tracked isOpenAddSubmissionModal = false;
 
   @tracked linkedMandatees;
 
@@ -37,7 +38,7 @@ export default class CasesHeader extends Component {
   });
 
   get mayCreateSubmissions() {
-    return this.isInSubmissionRoute && this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
+    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
   }
 
   get isInCasesRoute() {
