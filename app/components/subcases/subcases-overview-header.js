@@ -9,15 +9,18 @@ export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
   @service router;
   @service store;
+  @service draftSubmissionService;
 
   @tracked case;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
   @tracked isArchivingCase = false;
+  @tracked hasOngoingSubcases = false;
 
   constructor() {
     super(...arguments);
     this.loadData.perform();
+    this.loadSubmissionsData.perform();
   }
 
   loadLinkedMandatees = task(async () => {
@@ -31,10 +34,13 @@ export default class SubCasesOverviewHeader extends Component {
 
   get mayCreateSubmissions() {
     return (
+      this.loadData.isIdle &&
+      this.loadSubmissionsData.isIdle &&
       this.currentSession.may('create-submissions') &&
       this.router.currentRouteName !== 'cases.case.subcases.new-submission' &&
       this.loadLinkedMandatees.isIdle &&
       this.linkedMandatees?.length &&
+      !this.hasOngoingSubcases &&
       isEnabledCabinetSubmissions()
     );
   }
@@ -45,6 +51,23 @@ export default class SubCasesOverviewHeader extends Component {
     this.publicationFlows = yield this.case.publicationFlows;
     yield this.loadLinkedMandatees.perform();
   }
+
+  loadSubmissionsData = task(async () => {
+    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions') && this.args.latestSubcase?.id) {
+      const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.latestSubcase);
+      const meeting = await latestSubmission?.meeting;
+      if (meeting?.id) {
+        // TODO does this work reproposed/retracted subcases?
+        const latestDecisionActivity = await this.store.queryOne('decision-activity', {
+          'filter[subcase][:id:]': this.args.latestSubcase.id,
+          'filter[treatment][agendaitems][agenda][created-for][:id:]': meeting.id,
+          sort: '-start-date',
+        });
+        // when the decision-activity is propagated the meeting should be final.
+        this.hasOngoingSubcases = latestDecisionActivity?.id ? false : true;
+      }
+    }
+  });
 
   @action
   openEditCaseModal() {

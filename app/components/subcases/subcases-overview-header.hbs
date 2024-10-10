@@ -112,7 +112,7 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      {{else if (and this.loadData.isIdle this.mayCreateSubmissions)}}
+      {{else if this.mayCreateSubmissions}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton

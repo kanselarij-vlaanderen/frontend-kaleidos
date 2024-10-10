@@ -54,6 +54,7 @@ export default class CasesCaseRoute extends Route {
       parliamentFlow,
       publicationFlows: publicationFlows?.slice(),
       subcases: subcases?.slice(),
+      latestSubcase: subcases?.slice().at(-1),
     };
   }
 }

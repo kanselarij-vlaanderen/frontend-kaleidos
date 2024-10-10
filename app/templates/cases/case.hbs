@@ -1,6 +1,7 @@
 {{#unless this.isAddingSubmissionToExistingSubcase}}
   <Subcases::SubcasesOverviewHeader
     @decisionmakingFlow={{@model.decisionmakingFlow}}
+    @latestSubcase={{@model.latestSubcase}}
   />
 {{/unless}}
 {{#if this.isAddingSubmission}}
