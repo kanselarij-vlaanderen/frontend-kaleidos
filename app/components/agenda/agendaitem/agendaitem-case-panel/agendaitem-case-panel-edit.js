@@ -23,6 +23,7 @@ export default class AgendaitemCasePanelEdit extends Component {
   });
   @tracked isEditingSubcaseName = false;
   @tracked selectedShortcut;
+  @tracked subcaseType;
   @tracked subcaseName;
   @tracked internalReview;
   confidentialChanged = false;
@@ -33,12 +34,18 @@ export default class AgendaitemCasePanelEdit extends Component {
     this.subcaseName = this.args.subcase?.subcaseName;
     this.isEditingSubcaseName = this.subcaseName?.length;
     this.loadInternalReview.perform();
+    this.loadSubcaseType.perform();
   }
 
   get newsItem() {
     return this.args.newsItem;
   }
-  
+
+  @task
+  *loadSubcaseType() {
+    this.subcaseType = yield this.args.subcase?.type;
+  }
+
   @task
   *loadInternalReview() {
     if (this.currentSession.may('manage-agendaitems')) {
@@ -89,6 +96,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
       subcaseName: this.subcaseName,
+      type: this.subcaseType,
       confidential: this.args.subcase?.confidential,
     };
 
@@ -120,6 +128,12 @@ export default class AgendaitemCasePanelEdit extends Component {
       yield this.internalReview.save();
     }
     this.args.onSave();
+  }
+
+  @action
+  async selectSubcaseType(type) {
+    this.subcaseType = type;
+    this.subcaseName = type.label;
   }
 
   @action
