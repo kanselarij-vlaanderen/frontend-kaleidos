@@ -64,7 +64,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     const mayIfSecretarie =
       this.currentSession.may('edit-in-treatment-submissions') &&
       this.model.isInTreatment;
-    return this.isUpdate ? (mayIfAdmin || mayIfSecretarie) : false;
+    return this.isUpdate ? (mayIfAdmin || mayIfSecretarie) : this.mayEdit;
   }
 
   get sortedNewPieces() {

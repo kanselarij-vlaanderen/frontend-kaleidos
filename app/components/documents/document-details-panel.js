@@ -18,6 +18,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service signatureService;
   @service currentSession;
   @service documentService;
+  @service store;
 
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -33,6 +34,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
   @tracked signedPieceCopy;
+  @tracked internalReview;
 
   @tracked canEditPieceWithSignFlow = false;
 
@@ -41,6 +43,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.loadDetailsData.perform();
     this.loadSignatureRelatedData.perform();
     this.loadSignedPieces.perform();
+    this.loadInternalReview.perform();
   }
 
   get isProcessing() {
@@ -97,6 +100,26 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
   }
 
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      const internalReviewOfSubcase = yield this.store.queryOne('submission-internal-review', {
+        'filter[subcase][submission-activities][pieces][:id:]': this.args.piece.id,
+      })
+      if (internalReviewOfSubcase?.id) {
+        this.internalReview = internalReviewOfSubcase;
+        return;
+      }
+      const internalReviewOfSubmission = yield this.store.queryOne('submission-internal-review', {
+        'filter[submissions][pieces][:id:]': this.args.piece.id,
+      })
+      if (internalReviewOfSubmission?.id) {
+        this.internalReview = internalReviewOfSubmission;
+        return;
+      }
+    }
+  }
+
   @action
   handleReplacementFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
     this.isUploadingReplacementSourceFile = uploadIsRunning && !uploadIsCompleted;
@@ -110,6 +133,9 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @task
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
+    if (this.internalReview?.hasDirtyAttributes) {
+      this.internalReview.rollbackAttributes();
+    }
     yield this.loadDetailsData.perform();
     yield this.replacementSourceFile?.destroyRecord();
     yield this.addedSourceFile?.destroyRecord();
@@ -187,6 +213,12 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
     } else {
       yield this.documentService.checkAndRestamp([this.args.piece]);
+    }
+    
+    if (this.internalReview?.hasDirtyAttributes) {
+      yield this.internalReview.belongsTo('subcase').reload();
+      yield this.internalReview.hasMany('submissions').reload();
+      yield this.internalReview.save();
     }
 
     this.isEditingDetails = false;

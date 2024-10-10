@@ -41,6 +41,17 @@
           data-test-details-tab-edit-access-level
         />
       </Auk::KeyValue>
+      {{#if this.internalReview}}
+        <Auk::KeyValue @key={{t "private-comment-title"}}>
+          <AuTextarea
+            id="private-comment"
+            rows="7"
+            value={{this.internalReview.privateComment}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this.internalReview "privateComment"))}}
+          />
+        </Auk::KeyValue>
+      {{/if}}
       <Auk::KeyValue
         data-test-document-details-panel-source-file
         @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
@@ -205,6 +216,14 @@
           @isEditable={{false}}
         />
       </Auk::KeyValue>
+      {{#if this.internalReview}}
+        <Auk::KeyValue
+          @icon="lock-closed"
+          @key={{t "private-comment-title"}}
+        >
+          {{this.internalReview.privateComment}}
+        </Auk::KeyValue>
+      {{/if}}
       <Auk::KeyValue
         data-test-document-details-panel-source-file
         @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
