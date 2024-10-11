@@ -656,7 +656,6 @@ context('Submission happy flows', () => {
     cy.get(route.submission.documents.add);
     cy.get(submissions.statusChangeActivity.item).should('have.length', 2);
     cy.acceptSubmissionCreateSubcase(submissionNewCase);
-    cy.wait(10000);
   });
 
   // TODO-submission expand testing on second submission (from exisiting case)
