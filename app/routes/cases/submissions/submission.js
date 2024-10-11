@@ -50,8 +50,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       'filter[submissions][:id:]': submission.id
     });
     if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
-      if (this.subcase)  {
-        let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase);
+      if (this.subcase?.id)  {
+        let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase, submission);
         if (allDraftPiecesAccepted) {
           const decisionmakingFlow = await this.subcase.decisionmakingFlow;
           return this.router.transitionTo(
@@ -87,7 +87,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     const newPieces = await submission.pieces;
     this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
-    if (this.subcase) {
+    if (this.subcase?.id) {
       pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
     } else {
       pieces = newPieces.slice();
