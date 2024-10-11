@@ -16,6 +16,7 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked publicationFlows;
   @tracked isArchivingCase = false;
   @tracked hasOngoingSubcases = false;
+  @tracked currentSubmission;
 
   constructor() {
     super(...arguments);
@@ -53,19 +54,28 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   loadSubmissionsData = task(async () => {
-    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions') && this.args.latestSubcase?.id) {
-      const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(this.args.latestSubcase);
-      const meeting = await latestSubmission?.meeting;
-      if (meeting?.id) {
-        // TODO does this work reproposed/retracted subcases?
-        const latestDecisionActivity = await this.store.queryOne('decision-activity', {
-          'filter[subcase][:id:]': this.args.latestSubcase.id,
-          'filter[treatment][agendaitems][agenda][created-for][:id:]': meeting.id,
-          sort: '-start-date',
-        });
-        // when the decision-activity is propagated the meeting should be final.
-        this.hasOngoingSubcases = latestDecisionActivity?.id ? false : true;
+    this.currentSubmission = null;
+    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
+      const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
+      if (!latestSubmission?.id) {
+        this.hasOngoingSubcases = false;
+        return;
       }
+      // const submissionSubcase = await latestSubmission?.subcase; // yields null when it exists, cache issue
+      const subcase = await this.store.queryOne('subcase', {
+        'filter[submissions][:id:]': latestSubmission.id
+      });
+      if (!subcase?.id) {
+        // submission for new subcase is ongoing
+        this.hasOngoingSubcases = true;
+        this.currentSubmission = latestSubmission;
+        return;
+      }
+      const meeting = await this.store.queryOne('meeting', {
+        'filter[submissions][:id:]': latestSubmission.id
+      });
+      const agenda = await meeting?.belongsTo('agenda').reload();
+      this.hasOngoingSubcases = agenda?.id ? false : true;
     }
   });
 

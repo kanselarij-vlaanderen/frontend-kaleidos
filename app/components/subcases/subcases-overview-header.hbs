@@ -125,6 +125,16 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
+      {{else if (and this.loadSubmissionsData.isIdle this.currentSubmission)}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @route="cases.submissions.submission"
+            @model={{this.currentSubmission.id}}
+          >
+            {{t "open-current-submission"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
       {{/if}}
     {{/unless}}
   </Auk::Toolbar>

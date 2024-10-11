@@ -172,7 +172,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   reloadPieces = task(async () => {
     const newPieces = await this.model.pieces;
     let pieces = [];
-    if (this.subcase) {
+    if (this.subcase?.id) {
       pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
     } else {
       pieces = newPieces.slice();

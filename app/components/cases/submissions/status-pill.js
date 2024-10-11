@@ -26,7 +26,7 @@ export default class CasesSubmissionsStatusPillComponent extends Component {
     // show status already
     this.label = status?.label || status?.altLabel;
     // check if submission is on a visible agenda
-    if (this.args.submission){
+    if (this.args.submission?.id) {
       const agenda = await this.store.queryOne('agenda', {
         'filter[agendaitems][pieces][draft-piece][submission][:id:]': this.args.submission.id,
         'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
@@ -36,7 +36,7 @@ export default class CasesSubmissionsStatusPillComponent extends Component {
         // different label and skin when submission is treated on an active agenda
         if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
           this.label = this.intl.t('on-agenda-status-pill');
-          this.skin = "success";
+          this.skin = 'success';
           return;
         }
       }
