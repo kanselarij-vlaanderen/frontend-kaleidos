@@ -170,17 +170,13 @@ export default class CasesNewSubmissionComponent extends Component {
     addObject(this.pieces, piece);
     await this.checkConfidentiality();
     await timeout(100); // wait for doc to be rendered
-    const container = document.getElementById('new-submission-container');
-    const form = document.getElementById('new-submission-form');
-    const elementRect = form.getBoundingClientRect();
-
-      if (!this.isUploadingFiles) { // only try to scroll downwards when all files are uploaded
-        container.scrollTo({
-          top: elementRect.height,
-          block: 'nearest',
-          behavior: 'smooth'
-        });
-      }
+    const fragmentElement = document.getElementsByClassName('scrollable-uploaded-document')[0];
+    if (fragmentElement) {
+      fragmentElement.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth',
+      });
+    }
   };
 
   deletePiece = async (piece) => {
