@@ -488,6 +488,22 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       // If we only get 1, something happened here
       cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
 
+      // test modified sorting before patching (is it broken before we patch?)
+      cy.get(route.newsletter.header.latestModified).click();
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
+      cy.get(newsletter.tableRow.titleContent).eq(1)
+        .contains(subcaseTitleShort);
+
+      cy.get(route.newsletter.header.latestModified).click();
+      cy.get(appuniversum.loader);
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
+      cy.get(newsletter.tableRow.titleContent).eq(0)
+        .contains(subcaseTitleShort);
+
+      // set "in kort bestek"
       cy.intercept('PATCH', '/news-items/**').as('patchNewsItem1');
       cy.get(newsletter.tableRow.titleContent).contains(subcaseTitleShort)
         .parents(newsletter.tableRow.newsletterRow)
@@ -495,6 +511,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
         .parent()
         .click()
         .wait('@patchNewsItem1');
+      cy.wait(1500); // flaky spec, does waiting help?
 
       // test sort inNewsletter
       cy.get(route.newsletter.header.inNewsletter).click();
@@ -537,9 +554,10 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
           cy.log('second agendaitem id of response', responseBody.response.body.data[1]?.id);
           cy.log('third agendaitem id of response', responseBody.response.body.data[2]?.id);
           expect(responseBody.response.body.meta.count).to.equal(3);
-          // expect(responseBody.response.body.data[0].id).to.equal('6374FA9CD9A98BD0A2288581');
-          // expect(responseBody.response.body.data[1].id).to.equal('6374FA89D9A98BD0A228857D');
-          // expect(responseBody.response.body.data[2].id).to.equal('6374FAB4D9A98BD0A2288586');
+          // this succeeds locally. The meta is 3. The first should always be this id (of number 2 which doesn't show)
+          expect(responseBody.response.body.data[0].id).to.equal('6374FA9CD9A98BD0A2288581');
+          expect(responseBody.response.body.data[1].id).to.equal('6374FA89D9A98BD0A228857D');
+          expect(responseBody.response.body.data[2].id).to.equal('6374FAB4D9A98BD0A2288586');
         });
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
@@ -561,6 +579,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
         .parent()
         .click()
         .wait('@patchNewsItem2');
+      cy.wait(1500); // flaky spec, does waiting help?
     });
   });
 
