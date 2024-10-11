@@ -529,6 +529,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       // test sort latestModified
       cy.intercept('get', '/agendaitems?filter%5Bagenda%5D%5B%3Aid%3A%5D=6374FA87D9A98BD0A228857A&filter%5Btype%5D%5B%3Auri%3A%5D=http%3A%2F%2Fthemis.vlaanderen.be%2Fid%2Fconcept%2Fagendapunt-type%2Fdd47a8f8-3ad2-4d5a-8318-66fc02fe80fd&include=treatment.news-item&page%5Bsize%5D=300&sort=treatment.news-item.modified')
         .as('callToAgendaitems');
+      cy.wait(1000); // maybe waiting helps
       cy.get(route.newsletter.header.latestModified).click();
       cy.wait('@callToAgendaitems')
         .then((responseBody) => {
