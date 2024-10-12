@@ -185,11 +185,11 @@ context('Submission happy flows', () => {
     confidential: false,
     mandatees: [
       {
-        fullName: mandateeNames['09112023-01082024'].first.fullName,
+        fullName: mandateeNames['09112023-01082024'].first.fullName, // Jambon
         submitter: true,
       },
       {
-        fullName: mandateeNames['09112023-01082024'].second.fullName,
+        fullName: mandateeNames['09112023-01082024'].second.fullName, // Crevits
         submitter: false,
       }
     ],
@@ -222,7 +222,7 @@ context('Submission happy flows', () => {
 
   it('Create new submission from cases or submission index', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/dossiers?aantal=2');
+    cy.visit('/indieningen?aantal=2');
 
     cy.createSubmission(submissionNewCase).then((result) => {
       cy.url().should('contain', `/indieningen/${result.submissionId}`);
@@ -378,7 +378,7 @@ context('Submission happy flows', () => {
 
   it('Create new submission from existing case', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/dossiers?aantal=2');
+    cy.visit('/indieningen?aantal=2');
     cy.createSubmission(submissionExistingCase);
     // cy.visit('/dossiers/indieningen/66DAE350F08D8D8342A44C07')
     // overview header, case title is the existing case short title
@@ -409,16 +409,19 @@ context('Submission happy flows', () => {
     cy.get('@listItems').should('have.length', 2, {
       timeout: 5000,
     });
+    // TODO depends on active mandatee being linked to a previous subcase with old mandatees
+    // Jambon was on previous subcase but no longer active
+    // Crevits was on previous subcase and is still active (rank changed from 2 to 3)
     cy.get('@listItems')
       .eq(0)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', mandatee1.fullName);
+      .should('contain', linkedMandatee.fullName); // Depraetere
     cy.get('@listItems')
       .eq(1)
       .find(mandatee.mandateePanelView.row.name)
-      .should('contain', linkedMandatee.fullName);
+      .should('contain', mandatee3.fullName); // Crevits
     cy.get('@listItems')
-      .eq(1)
+      .eq(0)
       .find(mandatee.mandateePanelView.row.submitter)
       .children()
       .should('exist');
@@ -653,7 +656,6 @@ context('Submission happy flows', () => {
     cy.get(route.submission.documents.add);
     cy.get(submissions.statusChangeActivity.item).should('have.length', 2);
     cy.acceptSubmissionCreateSubcase(submissionNewCase);
-    cy.wait(10000);
   });
 
   // TODO-submission expand testing on second submission (from exisiting case)

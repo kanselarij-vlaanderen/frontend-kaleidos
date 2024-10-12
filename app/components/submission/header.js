@@ -5,6 +5,8 @@ import { task, dropTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
+import { addObject } from 'frontend-kaleidos/utils/array-helpers';
+import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default class SubmissionHeaderComponent extends Component {
   @service agendaService;
@@ -205,6 +207,9 @@ export default class SubmissionHeaderComponent extends Component {
     ) => {
       this.toggleCreateSubcaseModal();
       const now = new Date();
+      const trimmedShortTitle = trimText(this.args.submission.shortTitle);
+      const trimmedTitle =  trimText(this.args.submission.title);
+      const subcaseName = this.args.submission.subcaseName;
       const type = await this.args.submission.type;
       const agendaItemType = await this.args.submission.agendaItemType;
       const requestedBy = await this.args.submission.requestedBy;
@@ -245,9 +250,9 @@ export default class SubmissionHeaderComponent extends Component {
           );
         }
         subcase = this.store.createRecord('subcase', {
-          shortTitle: this.args.submission.shortTitle,
-          title: this.args.submission.title,
-          subcaseName: this.args.submission.subcaseName,
+          shortTitle: trimmedShortTitle,
+          title: trimmedTitle,
+          subcaseName,
           created: this.args.submission.created,
           modified: now,
           confidential: this.args.submission.confidential,
@@ -260,13 +265,27 @@ export default class SubmissionHeaderComponent extends Component {
           governmentAreas,
         });
         await subcase.save();
+
+        const internalReview = await this.args.submission.internalReview;
+        if (internalReview?.id) {
+          internalReview.subcase = subcase;
+          await internalReview.save();
+        } else {
+          await this.agendaService.createInternalReview(subcase, [this.args.submission], privateComment);
+        }
       } else {
         await subcase.belongsTo('requestedBy')?.reload();
         await subcase.hasMany('mandatees')?.reload();
         const propertiesToSetOnAgendaitem = {
+          title: trimmedTitle,
+          shortTitle: trimmedShortTitle,
           mandatees: mandatees,
         };
         const propertiesToSetOnSubcase = {
+          title: trimmedTitle,
+          shortTitle: trimmedShortTitle,
+          type,
+          subcaseName: subcaseName,
           mandatees: mandatees,
           requestedBy: requestedBy,
         };
@@ -372,10 +391,37 @@ export default class SubmissionHeaderComponent extends Component {
   );
 
   takeInTreatment = async () => {
+    // TODO update submission data? It could have been changed on subcase
     await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING);
+    await this.createOrUpdateInternalReview();
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
+  };
+
+  createOrUpdateInternalReview = async () => {
+    // Do we have a subcase already?
+    const internalReviewOfSubmission = await this.args.submission.internalReview;
+    if (!this.isUpdate && internalReviewOfSubmission?.id) {
+      return; // non-update submission already has an internal review
+    }
+
+    const internalReviewOfSubcase = await this.args.subcase?.internalReview;
+    if (this.isUpdate && internalReviewOfSubcase?.id && !internalReviewOfSubmission?.id) {
+      const submissions = await internalReviewOfSubcase.hasMany('submissions').reload();
+      addObject(submissions, this.args.submission);
+      internalReviewOfSubcase.submissions = submissions;
+      return await internalReviewOfSubcase.save();
+    }
+  
+    if (!internalReviewOfSubmission?.id) {
+      await this.agendaService.createInternalReview(this.args.subcase, [this.args.submission], CONSTANTS.PRIVATE_COMMENT_TEMPLATE);
+    }
+    // else, update something? 
+    // is there a chance that subcase has no internalReview but submission does?
+    // not if we connect it when creating the subcase initially
+    // sounds possible only on old data. new data should be fine
+    // subcase should/will be connected on creation and is a read-only relation on subcase 
   };
 
   sendBackToSubmitter = task(async () => {
@@ -404,7 +450,7 @@ export default class SubmissionHeaderComponent extends Component {
 
     await this.args.submission.destroyRecord();
 
-    await this.router.transitionTo('cases.submissions');
+    await this.router.transitionTo('submissions');
   });
 
   requestSendBackToSubmitter = task(async () => {

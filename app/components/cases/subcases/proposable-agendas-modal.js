@@ -12,22 +12,19 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
  */
 export default class ProposableAgendasModal extends Component {
   @service store;
+  @service currentSession;
 
   @tracked agendas;
   @tracked selectedAgenda;
   @tracked selectedFormallyOkUri;
-  @tracked privateComment = `IF: 
-BA: 
-BZ: 
-WT: 
-Co-agendering: 
-
-Def. check: `;
+  @tracked privateComment;
+  @tracked internalReview;
 
   constructor() {
     super(...arguments);
     this.loadAgendas.perform();
     this.selectedAgenda = this.args.defaultAgenda;
+    this.loadInternalReview.perform();
   }
 
   get disablePutOnAgenda() {
@@ -63,7 +60,18 @@ Def. check: `;
   }
 
   @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      const internalReviewOfSubcase = yield this.args.subcase?.internalReview;
+      const internalReviewOfSubmission = yield this.args.submission?.internalReview;
+      this.internalReview = internalReviewOfSubcase || internalReviewOfSubmission;
+      this.privateComment = this.internalReview?.privateComment || CONSTANTS.PRIVATE_COMMENT_TEMPLATE;
+    }
+  }
+
+  @task
   *saveSubcaseAndSubmitToAgenda() {
+    yield this.updateInternalReview();
     const meeting = yield this.selectedAgenda.createdFor;
     // don't yield this, the confirm closes this model so the task is aborted midway
     this.args.onConfirm(
@@ -75,8 +83,9 @@ Def. check: `;
   }
 
   @action
-  saveSubcase() {
-    this.args.onConfirm(false);
+  async saveSubcase() {
+    await this.updateInternalReview();
+    this.args.onConfirm(false, null, null, this.privateComment);
   }
 
   @action
@@ -87,6 +96,14 @@ Def. check: `;
   @action
   isSelectedAgenda(agenda) {
     return this.selectedAgenda && this.selectedAgenda.id === agenda.id;
+  }
+
+  updateInternalReview = async() => {
+    if (this.internalReview?.id) {
+      this.internalReview.privateComment = this.privateComment;
+      await this.internalReview.hasMany('submissions').reload();
+      await this.internalReview.save();
+    }
   }
 
 }
