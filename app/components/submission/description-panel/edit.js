@@ -30,6 +30,7 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   @tracked agendaItemTypes;
   @tracked decisionmakingFlow;
   @tracked decisionmakingFlowTitle;
+  @tracked internalReview;
 
   @tracked isSaving = false;
 
@@ -43,6 +44,7 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
     this.loadSubcaseType.perform();
     this.loadAgendaItemType.perform();
     this.loadAgendaItemTypes.perform();
+    this.loadInternalReview.perform();
   }
 
   @task
@@ -68,6 +70,13 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
   }
+  
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('treat-and-accept-submissions')) {
+      this.internalReview = yield this.args.submission.internalReview;
+    }
+  }
 
   @action
   selectSubcaseName(shortcut) {
@@ -85,6 +94,9 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   async cancelEditing() {
     if (this.args.submission.hasDirtyAttributes) {
       this.args.submission.rollbackAttributes();
+    }
+    if (this.internalReview?.hasDirtyAttributes) {
+      this.internalReview.rollbackAttributes();
     }
     this.args.onCancel();
   }
@@ -115,6 +127,10 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
     this.args.submission.type = this.subcaseType;
     this.args.submission.agendaItemType = this.agendaItemType;
     await this.args.submission.save();
+
+    if (this.internalReview?.hasDirtyAttributes) {
+      await this.internalReview.save();
+    }
 
     this.args.onSave();
 

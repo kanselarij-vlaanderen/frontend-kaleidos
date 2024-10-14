@@ -85,9 +85,9 @@ context('signatures shortlist overview tests', () => {
     .day(5);
 
   const primeMandatee = mandateeNames.current.first;
-  const mandatee1 = mandateeNames.current.third; // 'Lydia Peeters'
-  const mandatee2 = mandateeNames.current.fourth; // 'Ben Weyts';
-  const mandatee3 = mandateeNames.current.fifth; // 'Zuhal Demir'
+  const mandatee1 = mandateeNames.current.third;
+  const mandatee2 = mandateeNames.current.fourth;
+  const mandatee3 = mandateeNames.current.fifth;
 
   const approverEmail = 'approver@test.com';
   const notificationEmail = 'notification@test.com';
@@ -358,7 +358,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(signature.createSignFlow.signers.edit).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
-      .should('have.length', 8);
+      .should('have.length', 9);
     mandateeNames.current.signatureTitles.forEach((minister) => {
       cy.get(appuniversum.checkbox).contains(minister);
     });
@@ -715,8 +715,8 @@ context('decisions and minutes shortlist overview tests', () => {
   const pieceTypeMinutes = 'Notulen';
   let minutesTitle;
 
-  const defaultSecretary = 'Jeroen Overmeer';
-  const newSecretary = 'Joachim Pohlmann';
+  const defaultSecretary = mandateeNames.current.firstSecretary.fullName;
+  const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
   const alertMessage = 'De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.';
 
@@ -945,6 +945,7 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.get(route.decisions.sidebar.startSignflow).should('be.enabled');
 
     // change secretary
+
     cy.openAgendaForDate(agendaDate);
     cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.get(mandatee.secretaryPanelView.actions.edit).click();
@@ -1006,22 +1007,22 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.intercept('POST', '/sign-signing-activities').as('postSigningActivities');
     cy.intercept('PATCH', '/sign-subcases/**').as('patchSignSubcases');
     cy.intercept('PATCH', '/sign-flows/**').as('patchSignFlows');
-    cy.intercept('POST', '/signing-flows/upload-to-signinghub', {
-      forceNetworkError: true,
-    }).as('updateToSigningHubError');
-    // cy.intercept('DELETE', '/sign-signing-activities/**').as('deleteSigningActivities');
+    // when we intercept the call it doesn't result in the cleanup of required resources
+    // cy.intercept('POST', '/signing-flows/upload-to-signinghub', {
+    //   forceNetworkError: true,
+    // }).as('updateToSigningHubError');
     // no email set so forcing through disabled button
     cy.get(route.decisions.sidebar.startSignflow).invoke('removeAttr', 'disabled')
       .click();
     cy.wait('@postSigningActivities');
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
-    // cy.wait('@deleteSigningActivities');
     cy.get(appuniversum.toaster).find(appuniversum.alert.close)
       .click();
 
     // check succes
     cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.log('failing tests. decisionTitle should be in list:', decisionTitle); // the next line fails sometimes
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
       .click();
     cy.get(signature.createSignFlow.reportOrMinutes.signer).eq(0)

@@ -78,7 +78,7 @@ export default class MandateesService extends Service {
     });
     const activeRange = this.store.queryOne('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
-      'filter[generation][:lt:time]': referenceDateTo.toISOString(),
+      'filter[generation][:lte:time]': referenceDateTo.toISOString(),
       'filter[:has-no:invalidation]': 'yes',
     });
 
@@ -172,15 +172,15 @@ export default class MandateesService extends Service {
     return sortedMandatees;
   }
 
-  async getCurrentApplicationSecretary() {
-    const [currentApplicationSecretary] =
+  async getApplicationSecretary(referenceDateFrom = new Date()) {
+    const [applicationSecretary] =
       await this.getMandateesActiveOn.perform(
-        new Date(),
+        referenceDateFrom,
         undefined,
         undefined,
         [CONSTANTS.MANDATE_ROLES.SECRETARIS]
       );
 
-    return currentApplicationSecretary;
+    return applicationSecretary;
   }
 }

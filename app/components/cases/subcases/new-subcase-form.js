@@ -223,6 +223,8 @@ export default class NewSubcaseForm extends Component {
           this.intl.t('warning-title')
         );
       }
+    } else {
+      yield this.agendaService.createInternalReview(this.subcase, null, privateComment);
     }
 
     this.args.onCreateSubcase?.();
