@@ -110,7 +110,6 @@ export default class SubcaseDescriptionEdit extends Component {
   @action
   async selectSubcaseType(type) {
     this.subcaseType = type;
-    this.subcaseName = type.label;
   }
 
   @action
