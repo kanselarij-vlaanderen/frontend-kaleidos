@@ -133,7 +133,6 @@ export default class AgendaitemCasePanelEdit extends Component {
   @action
   async selectSubcaseType(type) {
     this.subcaseType = type;
-    this.subcaseName = type.label;
   }
 
   @action
