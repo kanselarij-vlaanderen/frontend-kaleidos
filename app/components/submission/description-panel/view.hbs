@@ -80,9 +80,19 @@
       {{/if}}
     </div>
     {{#if (and (user-may "treat-and-accept-submissions") @submission.internalReview.privateComment)}}
-    <Submission::InternalReview
-          @internalReview={{@submission.internalReview}}
-        />
+      <Auk::Panel::Body
+        class="auk-u-mt-4 auk-u-p-2 auk-u-maximize-height auk-u-bg-alt"
+      >
+        <div
+          class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold"
+        >
+          <AuIcon @icon="lock-closed" />
+          <span>{{t "private-comment-title"}}:</span>
+        </div>
+        <pre class="auk-u-text-pre-line">
+          {{@submission.internalReview.privateComment}}
+        </pre>
+      </Auk::Panel::Body>
     {{/if}}
   </Auk::Panel::Body>
 </Auk::Panel>
