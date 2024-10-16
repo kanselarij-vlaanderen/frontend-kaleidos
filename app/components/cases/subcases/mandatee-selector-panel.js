@@ -28,11 +28,11 @@ export default class MandateeSelectorPanel extends Component {
 
   constructor() {
     super(...arguments);
-    this.prepareCurrentMinisters.perform();
-    this.panelTitle = this.args.title || this.intl.t('ministers');
     if (isPresent(this.args.showSubmitter)) {
       this.showSubmitter = this.args.showSubmitter;
     }
+    this.panelTitle = this.args.title || this.intl.t('ministers');
+    this.prepareCurrentMinisters.perform();
   }
 
   get areLoadingTasksRunning() {
@@ -66,22 +66,19 @@ export default class MandateeSelectorPanel extends Component {
     // when there is no submitter: get the first from this list if any exist
     // when the submitter exists, check if it is still in selectedAllMandatees
     // If not, first from list again, if undefined submitter will be cleared
-    if (
-      (this.showSubmitter && this.submitterMandatee &&
-        !this.selectedAllMandatees.find(
-          (selectedMandatee) =>
-            selectedMandatee.id ===
-            this.submitterMandatee.id
-        )) ||
-      (!this.submitterMandatee && this.selectedAllMandatees.length)
-    ) {
-      if (this.args.disableMinisterCheckbox) {
-        return; // submitter should not be unset or set
-      }
+    const shouldUpdateSubmitter = this.showSubmitter && !this.args.disableMinisterCheckbox;
+    const submitterIsNotSelected =  this.submitterMandatee && !this.selectedAllMandatees.find(
+      (selectedMandatee) =>
+        selectedMandatee.id ===
+        this.submitterMandatee.id
+    )
+    const noSubmitterSelected = !this.submitterMandatee && this.selectedAllMandatees.length;
+    if (shouldUpdateSubmitter && (submitterIsNotSelected || noSubmitterSelected)) {
       this.submitterMandatee = this.selectedAllMandatees[0];
-      if (this.showSubmitter) {
-        this.args.setSubmitter(this.submitterMandatee);
-      }
+    }
+    if (shouldUpdateSubmitter) {
+      // args.submitter may be different or the same, set it either way with local to be sure
+      this.args.setSubmitter(this.submitterMandatee);
     }
   }
 
@@ -192,7 +189,7 @@ export default class MandateeSelectorPanel extends Component {
     );
     this.submitterMandatee = submitterMandatee;
     if (this.showSubmitter) {
-      this.args.setSubmitter(submitterMandatee);
+      this.args.setSubmitter(this.submitterMandatee);
     }
   }
 

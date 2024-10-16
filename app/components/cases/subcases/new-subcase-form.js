@@ -62,10 +62,15 @@ export default class NewSubcaseForm extends Component {
     super(...arguments);
     this.loadAgendaItemTypes.perform();
     this.loadTitleData.perform();
+    this.loadDefaultSubcaseType.perform();
   }
 
   get areLoadingTasksRunning() {
-    return this.loadAgendaItemTypes.isRunning || this.loadTitleData.isRunning;
+    return (
+      this.loadAgendaItemTypes.isRunning ||
+      this.loadTitleData.isRunning ||
+      this.loadDefaultSubcaseType.isRunning
+    );
   }
 
   get sortedPieces() {
@@ -76,6 +81,13 @@ export default class NewSubcaseForm extends Component {
       return d1?.position - d2?.position || p1.created - p2.created;
     });
   }
+
+  loadDefaultSubcaseType = task(async () => {
+    this.subcaseType = await this.store.findRecordByUri(
+      'subcase-type',
+      CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+    );
+  });
 
   @action
   async selectSubcaseType(subcaseType) {
@@ -155,7 +167,7 @@ export default class NewSubcaseForm extends Component {
   *createSubcase(
     fullCopy = false,
     meeting = null,
-    isFormallyOk = false,
+    formallyStatusUri,
     privateComment = null
   ) {
     this.showProposableAgendaModal = false;
@@ -214,7 +226,7 @@ export default class NewSubcaseForm extends Component {
         yield this.agendaService.putSubmissionOnAgenda(
           meeting,
           this.subcase,
-          isFormallyOk,
+          formallyStatusUri,
           privateComment
         );
       } catch (error) {
@@ -223,6 +235,8 @@ export default class NewSubcaseForm extends Component {
           this.intl.t('warning-title')
         );
       }
+    } else {
+      yield this.agendaService.createInternalReview(this.subcase, null, privateComment);
     }
 
     this.args.onCreateSubcase?.();

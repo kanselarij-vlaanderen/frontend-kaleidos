@@ -52,11 +52,15 @@ Router.map(function() {
           }
         });
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
-        if (isEnabledCabinetSubmissions())
+        if (isEnabledCabinetSubmissions()) {
           this.route('new-submission', { path: '/nieuwe-indiening' });
+        }
       });
     });
   });
+  if (isEnabledCabinetSubmissions()) {
+    this.route('submissions', { path: '/indieningen' });
+  }
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
     this.route('search', { path: '/zoeken', });

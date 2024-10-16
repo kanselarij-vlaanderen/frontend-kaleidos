@@ -19,7 +19,7 @@
           <h4 class="auk-toolbar-complex__title au-u-padding-none">
             <Auk::AbbreviatedText
               @text={{or @model.shortTitle "-"}}
-              @maxLength={{250}}
+              @maxLength={{150}}
             />
           </h4>
         </div>
@@ -29,7 +29,8 @@
 </Auk::Navbar>
 
 <Submission::Header
-  @submission={{@model}}
+  @submission={{null}}
+  @subcase={{@model}}
   @disableHistory={{true}}
 />
 
@@ -68,6 +69,7 @@
       @isEditing={{true}}
       @hideEditingControls={{true}}
       @confidential={{@model.confidential}}
+      @hasConfidentialPieces={{this.hasConfidentialPieces}}
       @approvalAddresses={{this.approvalAddresses}}
       @approvalComment={{this.approvalComment}}
       @notificationAddresses={{this.notificationAddresses}}
@@ -173,7 +175,7 @@
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @allowEditPieceAccessLevel={{true}}
-            @disableInternSecretarie={{true}}
+            @simplifiedOptions={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}

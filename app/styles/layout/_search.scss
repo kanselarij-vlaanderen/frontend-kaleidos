@@ -4,13 +4,24 @@
 .l-search-container {
   position: relative;
   flex: 1;
+  flex-direction: column;
+  flex-wrap: nowrap;
   overflow-y: auto;
-
   height: auto;
   min-height: 0;
 
   @include mq(medium) {
+    flex-direction: row;
+    flex-wrap: wrap;
     overflow: hidden;
+  }
+
+  > .au-c-main-container__sidebar {
+    flex: 0 0 auto;
+
+    @include mq(medium) {
+      flex: 0 1 auto;
+    }
   }
 
   .au-c-main-container {

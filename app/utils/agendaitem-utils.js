@@ -69,8 +69,8 @@ export const groupAgendaitemsByGroupname = (agendaitems) => {
 export const getNotaGroups = async (notas) => {
   if (notas?.length > 0) {
     const groups = [];
-    const firstMandatees = await notas.firstObject.mandatees;
-    const firstAgendaActivity = await notas.firstObject.agendaActivity;
+    const firstMandatees = await notas.at(0).mandatees;
+    const firstAgendaActivity = await notas.at(0).agendaActivity;
     const firstSubcase = await firstAgendaActivity?.subcase;
     await firstSubcase?.type;
     let currentSubmittersArray = firstMandatees.slice().sort((m1, m2) => m1.priority - m2.priority);

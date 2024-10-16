@@ -1,24 +1,15 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class SubmissionsOverviewHeaderComponent extends Component {
-  @service router;
+  @service store;
+  @service currentSession;
+  @service agendaService;
 
-  @tracked decisionmakingFlow;
-  @tracked case;
-
-  constructor() {
-    super(...arguments);
-    this.loadData.perform();
-  }
-
-  loadData = task(async () => {
-    this.decisionmakingFlow = await this.args.submission.decisionmakingFlow;
-    this.case = await this.decisionmakingFlow?.case;
-  });
+  @tracked selectedMeeting;
 
   @action
   transitionBack() {
@@ -26,4 +17,23 @@ export default class SubmissionsOverviewHeaderComponent extends Component {
       history.back();
     }
   }
+
+  constructor() {
+    super(...arguments);
+    this.loadMeeting.perform();
+  }
+
+  loadMeeting = task(async () => {
+    if (this.args.submission) {
+      const meeting = await this.args.submission.meeting;
+      if (meeting?.id && this.currentSession.may('create-subcases-from-submissions')) {
+        // only editors can use the store if not propagated yet
+        this.selectedMeeting = meeting;
+      } else {
+        // get meeting when not propagated yet
+        const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
+        this.selectedMeeting = agenda.createdFor;
+      }
+    }
+  });
 }

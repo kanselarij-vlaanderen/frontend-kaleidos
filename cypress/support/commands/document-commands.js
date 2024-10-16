@@ -367,11 +367,11 @@ function openAgendaitemDossierTab(agendaitemTitle) {
  * @param {String} fileName - The name of the file without the extension
  * @param {String} extension - The extension of the file
  */
-function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
+function uploadFile(folder, fileName, extension, mimeType = 'application/pdf', model = 'files') {
   cy.log('uploadFile');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
-  cy.intercept('POST', 'files').as(`createNewFile${randomInt}`);
-  cy.intercept('GET', 'files/**').as(`getNewFile${randomInt}`);
+  cy.intercept('POST', `${model}`).as(`createNewFile${randomInt}`);
+  cy.intercept('GET', `${model}/**`).as(`getNewFile${randomInt}`);
 
   const fileFullName = `${fileName}.${extension}`;
   const filePath = `${folder}/${fileFullName}`;
@@ -406,6 +406,23 @@ function uploadFile(folder, fileName, extension, mimeType = 'application/pdf') {
   cy.wait(`@getNewFile${randomInt}`);
   cy.get(appuniversum.loader).should('not.exist');
   cy.log('/uploadFile');
+}
+
+/**
+ * @description Uploads a draft-file to an open document dialog window.
+ * @name uploadDraftFile
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} folder - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} fileName - The name of the file without the extension
+ * @param {String} extension - The extension of the file
+ * @param {String} mimeType - the mimeType of the file to upload
+ * @param {String} model - the base type of the ember model (plural)
+ */
+function uploadDraftFile(folder, fileName, extension, mimeType = 'application/pdf', model = 'draft-files') {
+  cy.log('uploadDraftFile');
+  cy.uploadFile(folder, fileName, extension, mimeType, model);
+  cy.log('/uploadDraftFile');
 }
 
 /**
@@ -623,7 +640,7 @@ function deletePieceBatchEditRow(fileName, indexToDelete, editSelector) {
  */
 function addNewDocumentsInSubcaseFileUpload(files) {
   cy.log('addNewDocumentsInUploadModal');
-  cy.get(cases.newSubcaseForm.documentUploadPanel).as('fileUploadDialog');
+  cy.get(cases.documentUploadPanel.panel).as('fileUploadDialog');
 
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
@@ -693,6 +710,7 @@ Cypress.Commands.add('addNewPieceToDecision', addNewPieceToDecision);
 Cypress.Commands.add('addNewPieceToGeneratedDecision', addNewPieceToGeneratedDecision);
 Cypress.Commands.add('addNewPieceToGeneratedMinutes', addNewPieceToGeneratedMinutes);
 Cypress.Commands.add('uploadFile', uploadFile);
+Cypress.Commands.add('uploadDraftFile', uploadDraftFile);
 Cypress.Commands.add('openAgendaitemDocumentTab', openAgendaitemDocumentTab);
 Cypress.Commands.add('openAgendaitemDossierTab', openAgendaitemDossierTab);
 Cypress.Commands.add('addLinkedDocument', addLinkedDocument);

@@ -15,4 +15,5 @@ export default class EmailNotificationSetting extends Model {
   @attr('string') cabinetSubmissionsSecretaryEmail;
   @attr('string') cabinetSubmissionsIkwEmail;
   @attr('string') cabinetSubmissionsIkwConfidentialEmail;
+  @attr('string') cabinetSubmissionsReplyToEmail;
 }

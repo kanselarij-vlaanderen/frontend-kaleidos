@@ -1,7 +1,7 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t "agenda-activity"}}
-    @closeDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
+    @closeDisabled={{this.saveSubmissionAndSubmitToAgenda.isRunning}}
     @onClose={{@onCancel}}
   />
   <Auk::Modal::Body>
@@ -22,7 +22,10 @@
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
                 {{! template-lint-disable no-invalid-interactive }}
-                <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
+                <tr
+                  data-test-submission-proposable-agendas-modal-agenda-row
+                  {{on "click" (fn this.selectAgenda agenda)}}
+                >
                   <td class="auk-table__col--1">
                     <AuRadio
                       @checked={{this.isSelectedAgenda agenda}}
@@ -53,6 +56,7 @@
       <AuFormRow>
         <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
         <AuTextarea
+          data-test-submission-proposable-agendas-modal-comment
           id="remarks"
           rows="4"
           value={{this.remarks}}
@@ -63,18 +67,18 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @cancelDisabled={{this.saveSubcaseAndSubmitToAgenda.isRunning}}
+    @cancelDisabled={{this.saveSubmissionAndSubmitToAgenda.isRunning}}
     @onCancel={{@onCancel}}
   >
     <AuButton
-      data-test-proposable-agendas-modal-place-on-agenda
+      data-test-submission-proposable-agendas-save
       @skin="primary"
       @disabled={{not this.selectedAgenda}}
       @loading={{or
         this.loadAgendas.isRunning
-        (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)
+        (and this.saveSubmissionAndSubmitToAgenda.isRunning this.selectedAgenda)
       }}
-      {{on "click" (perform this.saveSubcaseAndSubmitToAgenda)}}
+      {{on "click" (perform this.saveSubmissionAndSubmitToAgenda)}}
     >
       {{t "propose-for-agenda"}}
     </AuButton>

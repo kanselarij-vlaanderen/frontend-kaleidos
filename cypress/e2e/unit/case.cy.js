@@ -274,7 +274,7 @@ context('Create case as Admin user', () => {
       fields: [],
     };
     const domain2 = {
-      name: 'Economie, Wetenschap en Innovatie',
+      name: 'Werk, Economie, Wetenschap, Innovatie, Landbouw en Sociale Economie',
       selected: false,
       fields: ['Wetenschappelijk onderzoek', 'Innovatie'],
     };
@@ -306,7 +306,7 @@ context('Create case as Admin user', () => {
       mandatees: mandatees,
       domains: domains,
       documents: files1,
-      formallyOk: true,
+      formallyOk: 'Formeel OK',
       agendaDate: agendaDateFormatted,
     };
     const subcase2 = {

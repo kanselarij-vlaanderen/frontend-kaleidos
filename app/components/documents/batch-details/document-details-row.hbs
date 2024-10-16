@@ -7,7 +7,7 @@
     disabled=@disableEditingPosition
   }}
 >
-  <td class="auk-table-drag-col">
+  <td class="auk-table__draggable-col">
     {{#unless @disableEditingPosition}}
       <AuIcon
         class="auk-u-cursor-grab auk-u-text-muted"
@@ -18,14 +18,14 @@
     {{/unless}}
   </td>
   {{#if @isEditingEnabled}}
-    <td class="auk-table-checkbox-col">
+    <td class="auk-table__checkbox-col">
       <AuCheckbox
         @checked={{@isSelected}}
         @onChange={{fn @onSelect @row}}
       />
     </td>
   {{/if}}
-  <td class="auk-table-checkbox-col">
+  <td class="auk-table__checkbox-col">
     {{#if @row.documentContainer.position}}
       {{@row.documentContainer.position}}.
     {{/if}}
@@ -96,6 +96,7 @@
   <td class="auk-u-text-align--right">
     {{#if (or @row.hasSentSignFlow (not @isEditingEnabled) @disableDelete)}}
       <AuLinkExternal
+        @skin="button-naked"
         @icon="book"
         @hideText={{true}}
         href={{@row.piece.viewDocumentURL}}

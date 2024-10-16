@@ -32,13 +32,13 @@ export default class FileConversionService extends Service {
         }
         const result = await response.json();
         const modelName = sourceFile.constructor.modelName;
-        const derivedFile = await this.store.findRecord(modelName, result.data[0].id)
+        const derivedFile = await this.store.findRecord(modelName, result.data[0].id);
         sourceFile.derived = derivedFile;
         await sourceFile.save();
       } else {
         console.warn(`Couldn't convert file with id ${sourceFile.id}`);
         let errorMessage = response.status;
-        if (response.headers.get('Content-Type') === 'application/vnd.api+json') {
+        if (response.headers.get('Content-Type').includes('application/vnd.api+json')) {
           const { errors } = await response.json();
           errorMessage = JSON.stringify(errors);
         }

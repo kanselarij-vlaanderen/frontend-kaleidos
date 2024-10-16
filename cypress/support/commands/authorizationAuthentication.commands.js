@@ -17,9 +17,14 @@ import appuniversum from '../../selectors/appuniversum.selectors';
  */
 function login(name, retries = 0) {
   cy.log('login');
-  cy.intercept('GET', '/mock/sessions/current').as('getCurrentSession');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/mock/sessions/current').as(`getCurrentSession_${randomInt}`);
   const EMBER_SIMPLE_AUTH_LS_KEY = 'ember_simple_auth-session';
   cy.fixture('mock-login').then((loginUsers) => {
+    if (!loginUsers[name]) {
+      // more visible when you attempt to login with a wrong name
+      cy.log('user name not found!', name);
+    }
     cy.request({
       method: 'POST',
       url: '/mock/sessions',
@@ -40,7 +45,7 @@ function login(name, retries = 0) {
   });
   cy.intercept('GET', '/memberships/*').as('getMembership');
   cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
-  cy.visit('/overzicht?sizeAgendas=2').wait('@getCurrentSession')
+  cy.visit('/overzicht?sizeAgendas=2').wait(`@getCurrentSession_${randomInt}`)
     .then((responseBody) => {
       if (responseBody.error || responseBody.response?.statusCode === 400) {
         if (retries < 5) {
@@ -53,7 +58,23 @@ function login(name, retries = 0) {
     });
   cy.wait('@getMembership');
   cy.wait('@loadConcepts');
+  stubSigninghubCallToURL();
   cy.log('/login');
+}
+
+// these 2 were an experiment but doesn't really work well with mocklogin
+function loginSession(name) {
+  cy.session(['login', name], () => {
+    cy.visit('mock-login');
+    cy.login(name);
+  });
+}
+
+function loginFlowSession(name) {
+  cy.session(['loginFlow', name], () => {
+    cy.visit('mock-login');
+    cy.loginFlow(name);
+  });
 }
 
 /**
@@ -97,6 +118,7 @@ function loginFlow(name) {
     cy.contains(name).click()
       .wait('@mockLogin');
   });
+  stubSigninghubCallToURL();
   cy.log('/loginFlow');
 }
 
@@ -108,7 +130,9 @@ function loginFlow(name) {
  */
 function logoutFlow() {
   cy.log('logoutFlow');
-  cy.intercept('DELETE', '/mock/sessions/current').as('mockLogout');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('DELETE', '/mock/sessions/current').as(`mockLogout_${randomInt}`);
+  cy.intercept('DELETE', '/impersonations/current').as(`impersonationLogout_${randomInt}`);
   cy.visit('/overzicht?sizeAgendas=2');
   cy.get(utils.mHeader.userActions)
     .children(appuniversum.button)
@@ -116,11 +140,26 @@ function logoutFlow() {
   cy.get(utils.mHeader.userAction.logout)
     .contains('Afmelden')
     .forceClick();
-  cy.wait('@mockLogout');
+  cy.wait(`@mockLogout_${randomInt}`);
+  cy.wait(`@impersonationLogout_${randomInt}`);
+  cy.wait(2000);
+  // with this lower than 2000 we sometimes hit the following error in mock-login on getting the session between delete and insert
+  // "ruby template: not setting allowed groups because header already provided with value "CLEAR""
   cy.log('/logoutFlow');
 }
 
+function stubSigninghubCallToURL() {
+  const staticResponse = {
+    statusCode: 500,
+    ok: false,
+  };
+  const stub = cy.stub(staticResponse);
+  cy.intercept('GET', '/signing-flows/**/pieces/**/signinghub**', stub).as('stubSigninghubCall');
+}
+
 Cypress.Commands.add('login', login);
+Cypress.Commands.add('loginSession', loginSession);
+Cypress.Commands.add('loginFlowSession', loginFlowSession);
 Cypress.Commands.add('logout', logout);
 Cypress.Commands.add('loginFlow', loginFlow);
 Cypress.Commands.add('logoutFlow', logoutFlow);

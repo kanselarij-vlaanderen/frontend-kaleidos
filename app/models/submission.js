@@ -36,6 +36,8 @@ export default class SubmissionModel extends Model {
   modifiedBy;
   @belongsTo('meeting', { inverse: 'submissions', async: true })
   meeting;
+  @belongsTo('submission-internal-review', { inverse: 'submissions', async: true })
+  internalReview;
 
   @hasMany('mandatee', { inverse: null, async: true })
   mandatees;
@@ -80,6 +82,13 @@ export default class SubmissionModel extends Model {
     return (
       this.status?.get('uri') ===
       CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+    );
+  }
+
+  get isSendBackRequested() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD
     );
   }
 
