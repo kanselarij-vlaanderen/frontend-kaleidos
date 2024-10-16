@@ -73,8 +73,9 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   
   @task
   *loadInternalReview() {
-    if (this.currentSession.may('treat-and-accept-submissions'))
-    this.internalReview = yield this.args.submission.internalReview;
+    if (this.currentSession.may('treat-and-accept-submissions')) {
+      this.internalReview = yield this.args.submission.internalReview;
+    }
   }
 
   @action

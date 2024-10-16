@@ -205,6 +205,11 @@
           @isEditable={{false}}
         />
       </Auk::KeyValue>
+      {{#if this.internalReview}}
+        <Submission::InternalReview
+          @internalReview={{this.internalReview}}
+        />
+      {{/if}}
       <Auk::KeyValue
         data-test-document-details-panel-source-file
         @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}

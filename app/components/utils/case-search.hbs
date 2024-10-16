@@ -6,6 +6,7 @@
       value={{this.searchText}}
       class="auk-u-maximize-width"
       @width="block"
+      @disabled={{this.isLoading}}
       {{on "input" this.updateSearchText}}
     />
   </div>
@@ -41,6 +42,7 @@
                 @checked={{eq row.id this.selected.id}}
                 @value={{row.id}}
                 @onChange={{this.selectCase}}
+                @disabled={{eq row.id @excludedDecisionmakingFlow.id}}
               />
             </td>
             <td>
@@ -58,6 +60,11 @@
                   {{row.title}}
                 {{/if}}
               </AuLink>
+              {{#if (eq row.id @excludedDecisionmakingFlow.id)}}
+                <AuPill @size="small">
+                  {{t "current-case"}}
+                </AuPill>
+              {{/if}}
             </td>
             <td>
               {{datetime row.created}}

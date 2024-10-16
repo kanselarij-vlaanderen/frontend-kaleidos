@@ -142,7 +142,7 @@
                           {{/if}}
                         </td>
                         <td data-test-route-cases-submissions-overview-row-status>
-                          <Cases::Submissions::StatusPill @status={{submission.status}} @meeting={{submission.meeting}}/>
+                          <Cases::Submissions::StatusPill @status={{submission.status}} @submission={{submission}}/>
                         </td>
                         <td class="auk-u-text-align--right">
                           <AuLink
