@@ -37,7 +37,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
       fields: [],
     };
     const domain2 = {
-      name: 'Economie, Wetenschap en Innovatie',
+      name: 'Werk, Economie, Wetenschap, Innovatie, Landbouw en Sociale Economie',
       selected: false,
       fields: ['Wetenschappelijk onderzoek', 'Innovatie'],
     };
@@ -145,7 +145,7 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
       fields: ['Digitalisering', 'Internationaal ondernemen'],
     };
     const domain5 = {
-      name: 'Landbouw en Visserij',
+      name: 'Onderwijs en Vorming',
       selected: true,
       fields: [],
     };
@@ -261,13 +261,13 @@ context('Assigning a field to agendaitem or subcase should update linked subcase
     cy.get('@domainLabel').eq(0)
       .should('contain', 'Cultuur, Jeugd, Sport en Media');
     cy.get('@domainLabel').eq(1)
-      .should('contain', 'Economie, Wetenschap en Innovatie');
-    cy.get('@domainLabel').eq(2)
       .should('contain', 'Financiën en Begroting');
-    cy.get('@domainLabel').eq(3)
+    cy.get('@domainLabel').eq(2)
       .should('contain', 'Kanselarij, Bestuur, Buitenlandse Zaken en Justitie');
+    cy.get('@domainLabel').eq(3)
+      .should('contain', 'Onderwijs en Vorming');
     cy.get('@domainLabel').eq(4)
-      .should('contain', 'Landbouw en Visserij');
+      .should('contain', 'Werk, Economie, Wetenschap, Innovatie, Landbouw en Sociale Economie');
 
     cy.log('deleting a mandatee and saving, check the non-edit view again');
     cy.get('@agendaitems').eq(3)
