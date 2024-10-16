@@ -132,6 +132,7 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.initializeMeetingNumber.perform(true);
+    this.recalculateSecretary.perform(); // when selecting a range with possibly different secretary mandatees
   }
 
   initializeSecretary = task(async () => {
@@ -140,10 +141,27 @@ export default class MeetingEditMeetingComponent extends Component {
       if (isPresent(secretary)) {
         this.secretary = secretary;
       } else if (this.isNew) {
-        // if a meeting had no secretary yet we don't set a default one automatically
         const currentApplicationSecretary =
-          await this.mandatees.getCurrentApplicationSecretary();
+          await this.mandatees.getApplicationSecretary();
         this.secretary = currentApplicationSecretary;
+      }
+      // if a meeting had no secretary yet we don't set the current active default one automatically     
+    }
+  });
+
+  recalculateSecretary = task(async () => {
+    // check if the secretary is active on the agenda date unless no secretary was set
+    if (!this.isPreKaleidos && this.secretary?.id) {
+      const isInDateRange =
+      this.secretary.start <= this.startDate &&
+      (this.startDate <= this.secretary.end ||
+        this.secretary.end === undefined);
+
+      if (!isInDateRange) {
+        // selected secretary is not active for this agenda date, trying to find one in range
+        const applicationSecretaryForDate =
+          await this.mandatees.getApplicationSecretary(this.startDate);
+        this.secretary = applicationSecretaryForDate;
       }
     }
   });
@@ -277,7 +295,7 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-      if (!this.isPreKaleidos) {
+      if (!this.isPreKaleidos || !this.isNew) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||

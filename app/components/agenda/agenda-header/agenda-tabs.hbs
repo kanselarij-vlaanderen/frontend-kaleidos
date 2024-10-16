@@ -1,4 +1,4 @@
-<Auk::Tabs data-test-agenda-nav-tabs @reversed={{true}} @responsive={{true}} @responsiveBreakpoint="small" class="au-u-margin-top-none">
+<Auk::Tabs data-test-agenda-nav-tabs @reversed={{true}} @responsive={{true}} @responsiveBreakpoint={{this.responsiveBreakpoint}} class="au-u-margin-top-none">
   <Auk::Tab
     @route="agendas"
     @isHierarchicalBack={{true}}
@@ -30,6 +30,11 @@
   {{#if (not @currentMeeting.isPreDigitalMinutes)}}
     <Auk::Tab @route="agenda.minutes">
       {{t "minutes"}}
+    </Auk::Tab>
+  {{/if}}
+  {{#if (and (user-may "treat-and-accept-submissions") this.isEnabledCabinetSubmissions)}}
+    <Auk::Tab @route="agenda.submissions">
+      {{t "submissions"}}
     </Auk::Tab>
   {{/if}}
 </Auk::Tabs>

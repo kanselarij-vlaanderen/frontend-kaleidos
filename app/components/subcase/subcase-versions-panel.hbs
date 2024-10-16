@@ -14,12 +14,14 @@
     <Auk::Panel::Body class="auk-u-bg-alt">
       <div class="auk-u-mb-2">
         {{#if this.loadAgendaData.isRunning}}
-          <Auk::Loader />
+          <Auk::Loader @message={{t "loading" }} />
         {{else if (not this.hasAgendaitems)}}
           <Auk::EmptyState @message={{t "not-yet-on-agenda"}} />
         {{/if}}
       </div>
-      <Subcase::Timeline @subcase={{@subcase}}/>
+      {{#if this.hasAgendaitems}}
+        <Subcase::Timeline @subcase={{@subcase}}/>
+      {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>

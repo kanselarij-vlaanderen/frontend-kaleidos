@@ -4,6 +4,7 @@ import RSVP from 'rsvp';
 
 export default class CasesCaseParliamentFlowIndex extends Route {
   @service store;
+  @service router;
 
   model() {
     const {
@@ -13,6 +14,9 @@ export default class CasesCaseParliamentFlowIndex extends Route {
       latestParliamentSubmissionActivity,
       latestParliamentRetrievalActivity,
     } = this.modelFor('cases.case');
+    if (!parliamentFlow?.id) {
+      this.router.transitionTo('cases.case.index');
+    }
     return RSVP.hash({
       decisionmakingFlow,
       parliamentFlow,

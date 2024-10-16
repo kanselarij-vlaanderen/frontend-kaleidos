@@ -25,11 +25,14 @@ export default class AgendaPrintableAgendaListSectionItemGroupComponent extends 
   getPiecesForAgendaitem = async (agendaitem) => {
     let pieces = await agendaitem.pieces;
     pieces = pieces?.slice();
+    const agendaActivity = await agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+    // TODO fix in KAS-4671, ratification was first document in agenda check
     if (this.isBekrachtiging) {
-      const agendaActivity = await agendaitem.agendaActivity;
-      const subcase = await agendaActivity?.subcase;
       const ratification = await subcase?.ratification;
-      pieces.push(ratification);
+      if (ratification) {
+        pieces.push(ratification);
+      }
     }
     return pieces;
   };

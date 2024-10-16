@@ -64,6 +64,7 @@ export default class Piece extends Model {
 
   // resources with pieces linked:
 
+  @belongsTo('draft-piece', { inverse: 'acceptedPiece', async: true, as: 'draft-piece' }) draftPiece;
   @belongsTo('submission-activity', { inverse: 'pieces', async: true, as: 'piece' })
   submissionActivity;
   @belongsTo('meeting', { inverse: 'pieces', async: true, as: 'piece' }) meeting;

@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -23,49 +23,62 @@ export default class AgendaitemControls extends Component {
   @service decisionReportGeneration;
   @service parliamentService;
   @service newsletterService;
+  @service cabinetMail;
+  @service draftSubmissionService;
 
   @tracked isVerifying = false;
+  @tracked isVerifyingSendBack = false;
   @tracked showLoader = false;
   @tracked isDesignAgenda;
   @tracked decisionActivity;
   @tracked showVPModal = false;
   @tracked canSendToVP = false;
+  @tracked canSubmitNewDocuments = false;
+  @tracked isSendingBackToSubmitter = false;
+  @tracked sendBackToSubmitterComment;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
-    this.loadCanSendToVP.perform();
+    this.loadPermittedAgendaItemActions.perform();
+    this.loadSubmissions.perform();
   }
 
-  loadCanSendToVP = task(async () => {
-    if (!isEnabledVlaamsParlement() || !this.args.subcase) {
-      this.canSendToVP = false;
-      return;
-    }
-
-    if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+  loadPermittedAgendaItemActions = task(async () => {
+    if (this.args.subcase?.id) {
       const submitter = await this.args.subcase.requestedBy;
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
-      if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      if (isEnabledVlaamsParlement()) {
+        if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+          if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
+            this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+          } else {
+            this.canSendToVP = false;
+          }
+        } else if (this.currentSession.may('send-cases-to-vp')) {
+          this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+        } else {
+          this.canSendToVP = false;
+        }
       } else {
         this.canSendToVP = false;
       }
-    } else if (this.currentSession.may('send-cases-to-vp')) {
-      this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
+      this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
     } else {
       this.canSendToVP = false;
+      this.canSubmitNewDocuments = false;
     }
   });
 
   get hasDropdownOptions() {
     return (
       (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
-      this.canSendToVP
+      this.canSendToVP ||
+      this.canSubmitNewDocuments
     );
   }
 
@@ -102,6 +115,10 @@ export default class AgendaitemControls extends Component {
     return true;
   }
 
+  get agendaItemWasSubmitted() {
+    return this.submissions?.length === 1 && isEnabledCabinetSubmissions();
+  }
+
   get deleteWarningText() {
     if (this.isDeletable) {
       return this.intl.t('delete-agendaitem-message');
@@ -123,6 +140,11 @@ export default class AgendaitemControls extends Component {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
     yield this.decisionActivity?.decisionResultCode;
+  }
+
+  @task
+  *loadSubmissions() {
+    this.submissions = yield this.args.subcase?.submissions;
   }
 
   async deleteItem(agendaitem) {
@@ -162,8 +184,48 @@ export default class AgendaitemControls extends Component {
   }
 
   @action
+  toggleIsVerifyingSendBack() {
+    this.isVerifyingSendBack = !this.isVerifyingSendBack;
+  }
+
+  @action
   verifyDelete(agendaitem) {
     this.deleteItem(agendaitem);
+  }
+
+  @action
+  async verifySendBackToSubmitter(agendaitem) {
+    this.isSendingBackToSubmitter = true;
+    const submission = this.submissions.at(0);
+    await this.draftSubmissionService.updateSubmissionStatus(
+      submission, CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
+      this.sendBackToSubmitterComment
+    );
+    await this.cabinetMail.sendBackToSubmitterMail(
+      submission,
+      this.sendBackToSubmitterComment,
+      this.args.meeting,
+    );
+    await this.deleteItem(agendaitem);
+    const subcase = await submission.subcase;
+    // If decisionmaking flow & case are new & they don't have other subcases
+    //  → Delete
+    if (submission.decisionmakingFlowTitle) {
+      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
+      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+    this.sendBackToSubmitterComment = '';
+    this.isSendingBackToSubmitter = false;
   }
 
   @task

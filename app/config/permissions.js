@@ -16,6 +16,11 @@ const {
 // NOTE: When adding a new permission: A good permission name is something that fits in the sentence:
 // "Users of the <insert group>-group are allowed to <...>"
 
+// Each permissions object has 2 arrays:
+// readOnly: for user agents that support read-only mode or better (mobile & tablet)
+// full: for user agents that support all actions
+// each permission should only appear in 1 array per user group
+
 // Available permissions are:
 // ADMIN-only (emergency actions that will remove data that was already spread to other profiles):
 // - remove-approved-agendaitems: Remove an approved agendaitem that are already spread to other profiles.
@@ -50,6 +55,7 @@ const {
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
+// - view-all-confidential-documents: allow the viewing of confidential documents in your graph
 // - view-only-specific-confidential-documents: allow the viewing of a restricted selection of confidential documents.
 // - view-ratification-before-release: See ratification info before the agenda is finalized
 // - search-confidential-cases: allow searching of cases that have at least 1 confidential subcase
@@ -59,198 +65,270 @@ const {
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
 // - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
+// - create-submissions: Allow the creation of submissions (by cabinets)
+// - treat-and-accept-submissions: Allow the treating of submissions on placing the agenda
+// - view-submissions: Allow the viewing of submissions in general
+// - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
+// - always-edit-submissions: Allow editing submissions regardless of status
+// - edit-in-treatment-submissions: Allow editing submissions when they have the In treatment status
+// - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
+// - create-subcases-from-submissions: Allow creating a real subcase (and pieces, files, ...) from a submission
+// - delete-submissions
 
 const groups = [
   {
     name: 'ADMIN',
     roles: [ADMIN],
     defaultRoute: 'agendas',
-    permissions: [
-      'remove-approved-agendaitems',
-      'reopen-approved-agenda-version',
-      'remove-approved-agenda',
-      'edit-documents-with-ongoing-signature',
-      'manage-signatures',
-      'view-all-ongoing-signatures',
-      'remove-signatures',
-      'manage-agenda-versions',
-      'manage-agendaitems',
-      'manage-decisions',
-      'manage-ratification',
-      'manage-cases',
-      'manage-meetings',
-      'manage-documents',
-      'manage-document-access-levels',
-      'manage-publication-flows',
-      'search-publication-flows',
-      'manage-news-items',
-      'manage-decision-publications',
-      'manage-document-publications',
-      'manage-themis-publications',
-      'manage-settings',
-      'manage-users',
-      'manage-alerts',
-      'manage-minutes',
-      'manage-secretary-signatures',
-      'add-past-mandatees',
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-decisions-before-release',
-      'view-ratification-before-release',
-      'search-confidential-cases',
-      'search-confidential-documents',
-      'send-cases-to-vp',
-      'impersonate-users',
-      'view-documents-postponed-and-retracted',
-      'view-mandatees-with-range',
-      'view-access-level-pill-when-postponed',
-    ]
+    permissions: {
+      readOnly: [
+        'view-all-ongoing-signatures',
+        'search-publication-flows',
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-decisions-before-release',
+        'view-all-confidential-documents',
+        'view-ratification-before-release',
+        'search-confidential-cases',
+        'search-confidential-documents',
+        'impersonate-users',
+        'view-documents-postponed-and-retracted',
+        'view-mandatees-with-range',
+        'view-access-level-pill-when-postponed',
+        'view-submissions',
+        'view-all-submissions',
+      ],
+      full: [
+        'remove-approved-agendaitems',
+        'reopen-approved-agenda-version',
+        'remove-approved-agenda',
+        'edit-documents-with-ongoing-signature',
+        'manage-signatures',
+        'remove-signatures',
+        'manage-agenda-versions',
+        'manage-agendaitems',
+        'manage-decisions',
+        'manage-ratification',
+        'manage-cases',
+        'manage-meetings',
+        'manage-documents',
+        'manage-document-access-levels',
+        'manage-publication-flows',
+        'manage-news-items',
+        'manage-decision-publications',
+        'manage-document-publications',
+        'manage-themis-publications',
+        'manage-settings',
+        'manage-users',
+        'manage-alerts',
+        'manage-minutes',
+        'manage-secretary-signatures',
+        'add-past-mandatees',
+        'send-cases-to-vp',
+        'treat-and-accept-submissions',
+        'always-edit-submissions',
+        'edit-in-treatment-submissions',
+        'create-subcases-from-submissions',
+        'delete-submissions',
+      ]
+    }
   },
   {
     name: 'KANSELARIJ',
     roles: [KANSELARIJ],
     defaultRoute: 'agendas',
-    permissions: [
-      'manage-signatures',
+    permissions: {
+      readOnly: [
       'view-all-ongoing-signatures',
-      'remove-signatures',
-      'manage-agenda-versions',
-      'manage-agendaitems',
-      'manage-decisions',
-      'manage-ratification',
-      'manage-cases',
-      'manage-meetings',
-      'manage-documents',
-      'manage-document-access-levels',
-      'manage-publication-flows',
       'search-publication-flows',
-      'manage-news-items',
-      'manage-decision-publications',
-      'manage-document-publications',
-      'manage-themis-publications',
-      'manage-minutes',
-      'manage-secretary-signatures',
-      'add-past-mandatees',
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-all-confidential-documents',
       'view-ratification-before-release',
       'search-confidential-cases',
       'search-confidential-documents',
       'view-documents-postponed-and-retracted',
       'view-mandatees-with-range',
       'view-access-level-pill-when-postponed',
-    ]
+      'view-submissions',
+      'view-all-submissions',
+      ],
+      full: [
+        'manage-signatures',
+        'remove-signatures',
+        'manage-agenda-versions',
+        'manage-agendaitems',
+        'manage-decisions',
+        'manage-ratification',
+        'manage-cases',
+        'manage-meetings',
+        'manage-documents',
+        'manage-document-access-levels',
+        'manage-publication-flows',
+        'manage-news-items',
+        'manage-decision-publications',
+        'manage-document-publications',
+        'manage-themis-publications',
+        'manage-minutes',
+        'manage-secretary-signatures',
+        'add-past-mandatees',
+        'treat-and-accept-submissions',
+        'edit-in-treatment-submissions',
+        'create-subcases-from-submissions',
+      ]
+    }
   },
   {
     name: 'SECRETARIE',
     roles: [SECRETARIE],
     defaultRoute: 'agendas',
-    permissions: [
-      'manage-signatures',
-      'view-all-ongoing-signatures',
-      'remove-signatures',
-      'manage-agenda-versions',
-      'manage-agendaitems',
-      'manage-decisions',
-      'manage-ratification',
-      'manage-cases',
-      'manage-meetings',
-      'manage-documents',
-      'manage-document-access-levels',
-      'manage-news-items',
-      'manage-decision-publications',
-      'manage-document-publications',
-      'manage-themis-publications',
-      'manage-minutes',
-      'manage-secretary-signatures',
-      'add-past-mandatees',
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-decisions-before-release',
-      'search-confidential-cases',
-      'search-confidential-documents',
-      'view-documents-postponed-and-retracted',
-      'view-mandatees-with-range',
-      'view-access-level-pill-when-postponed',
-    ]
+    permissions: {
+      readOnly: [
+        'view-all-ongoing-signatures',
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-decisions-before-release',
+        'view-all-confidential-documents',
+        'search-confidential-cases',
+        'search-confidential-documents',
+        'view-documents-postponed-and-retracted',
+        'view-mandatees-with-range',
+        'view-access-level-pill-when-postponed',
+        'view-submissions',
+        'view-all-submissions',
+      ],
+      full: [
+        'manage-signatures',
+        'remove-signatures',
+        'manage-agenda-versions',
+        'manage-agendaitems',
+        'manage-decisions',
+        'manage-ratification',
+        'manage-cases',
+        'manage-meetings',
+        'manage-documents',
+        'manage-document-access-levels',
+        'manage-news-items',
+        'manage-decision-publications',
+        'manage-document-publications',
+        'manage-themis-publications',
+        'manage-minutes',
+        'manage-secretary-signatures',
+        'add-past-mandatees',
+        'treat-and-accept-submissions',
+        'edit-in-treatment-submissions',
+        'create-subcases-from-submissions',
+      ]
+    }
   },
   {
     name: 'OVRB',
     roles: [OVRB],
     defaultRoute: 'publications',
-    permissions: [
-      'manage-signatures',
-      'manage-ratification',
-      'view-all-ongoing-signatures',
-      'manage-publication-flows',
-      'search-publication-flows',
-      'add-past-mandatees',
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-decisions-before-release',
-      'view-ratification-before-release',
-      'search-confidential-cases',
-      'search-confidential-documents',
-      'view-documents-postponed-and-retracted',
-    ]
+    permissions: {
+      readOnly: [
+        'view-all-ongoing-signatures',
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-decisions-before-release',
+        'view-all-confidential-documents',
+        'view-ratification-before-release',
+        'search-confidential-cases',
+        'search-confidential-documents',
+        'view-documents-postponed-and-retracted',
+        'search-publication-flows',
+      ],
+      full: [
+        'manage-signatures',
+        'manage-ratification',
+        'manage-publication-flows',
+        'add-past-mandatees',
+      ]
+    }
   },
   {
     name: 'KORT_BESTEK',
     roles: [KORT_BESTEK],
     defaultRoute: 'newsletters',
-    permissions: [
-      'manage-news-items',
-      'manage-themis-publications',
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-decisions-before-release',
-      'view-ratification-before-release',
-      'search-confidential-cases',
-      'search-confidential-documents',
-      'view-documents-postponed-and-retracted',
-    ],
+    permissions: {
+      readOnly: [
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-decisions-before-release',
+        'view-all-confidential-documents',
+        'view-ratification-before-release',
+        'view-documents-postponed-and-retracted',
+        'search-confidential-cases',
+        'search-confidential-documents',
+      ],
+      full: [
+        'manage-news-items',
+        'manage-themis-publications',
+      ]
+    }
   },
   {
     name: 'MINISTER',
     roles: [MINISTER],
     defaultRoute: 'agendas',
-    permissions: [
-      'manage-signatures',
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-documents-postponed-and-retracted',
-    ],
+    permissions: {
+      readOnly: [
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-documents-postponed-and-retracted',
+        'view-all-confidential-documents',
+        'view-submissions',
+        'view-all-submissions',
+      ],
+      full: [
+        'manage-signatures',
+      ]
+    }
   },
   {
     name: 'KABINET_DOSSIERBEHEERDER',
     roles: [KABINET_DOSSIERBEHEERDER],
     defaultRoute: 'agendas',
-    permissions: [
-      'manage-signatures',
-      'manage-only-specific-signatures',
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-only-specific-confidential-documents',
-      'send-only-specific-cases-to-vp',
-      'view-documents-postponed-and-retracted',
-    ],
+    permissions: {
+      readOnly: [
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-only-specific-confidential-documents',
+        'view-documents-postponed-and-retracted',
+        'view-submissions',
+      ],
+      full: [
+        'manage-signatures',
+        'manage-only-specific-signatures',
+        'send-only-specific-cases-to-vp',
+        'create-submissions',
+        'edit-sent-back-submissions',
+      ]
+    }
   },
   {
     name: 'KABINET_MEDEWERKER',
     roles: [KABINET_MEDEWERKER],
     defaultRoute: 'agendas',
-    permissions: [
-      'view-document-version-info',
-      'view-documents-before-release',
-      'view-documents-postponed-and-retracted',
-    ],
+    permissions: {
+      readOnly: [
+        'view-document-version-info',
+        'view-documents-before-release',
+        'view-documents-postponed-and-retracted',
+        'view-submissions',
+      ],
+      full: []
+    }
   },
   {
     name: 'OVERHEID',
     roles: [OVERHEIDSORGANISATIE, VLAAMS_PARLEMENT],
     defaultRoute: 'agendas',
-    permissions: [],
+    permissions: {
+      readOnly: [],
+      full: []
+    }
   },
 ];
 

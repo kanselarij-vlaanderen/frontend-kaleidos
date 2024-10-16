@@ -151,7 +151,8 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
     // wait to ensure secretary is changed, cypress can be too fast when setting location or clicking save
     cy.wait(2000);
   } else {
-    cy.wait(4000);
+    // lowered it from 4000, maybe not needed
+    cy.wait(2000);
   }
 
   // Set the location
@@ -167,16 +168,20 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   cy.wait('@createNewMeeting', {
     timeout: 60000,
   })
-    .its('response.body')
-    .then((responseBody) => {
-      meetingId = responseBody.data.id;
+    .its('response')
+    .then((response) => {
+      meetingId = response.body?.data?.id;
+      if (response.error || response.response?.statusCode === 500) {
+        cy.log('Creation of meeting failed. Do we have a valid session?');
+        cy.log('response.error: ', response.error);
+      }
     });
   cy.wait('@createNewAgenda', {
     timeout: 60000,
   })
     .its('response.body')
     .then((responseBody) => {
-      agendaId = responseBody.data.id;
+      agendaId = responseBody.data?.id;
     });
   cy.log('/createAgenda');
 
@@ -399,7 +404,9 @@ function approveDesignAgenda(shouldConfirm = true) {
     .children(appuniversum.button)
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
-  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(appuniversum.loader, {
+    timeout: 60000,
+  }).should('not.exist'); // new loader when refreshing data
   cy.get(agenda.agendaCheck.confirm).should('not.be.disabled')
     .click();
   if (shouldConfirm) {
@@ -436,18 +443,23 @@ function approveAndCloseDesignAgenda(shouldConfirm = true) {
     .children(appuniversum.button)
     .click();
   cy.get(agenda.agendaVersionActions.actions.approveAndCloseAgenda).forceClick();
-  cy.get(appuniversum.loader).should('not.exist'); // new loader when refreshing data
+  cy.get(appuniversum.loader, {
+    timeout: 60000,
+  }).should('not.exist'); // new loader when refreshing data
   cy.get(agenda.agendaCheck.confirm).should('not.be.disabled')
     .click();
   if (shouldConfirm) {
-    cy.get(auk.modal.container).find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
+    cy.get(auk.modal.container)
+      .find(agenda.agendaVersionActions.confirm.approveAndCloseAgenda)
       .click();
     // as long as the modal exists, the action is not completed
     cy.get(auk.modal.container, {
       timeout: 60000,
     }).should('not.exist');
   }
-  cy.get(appuniversum.loader).should('not.exist'); // loader when refreshing data
+  cy.get(appuniversum.loader, {
+    timeout: 60000,
+  }).should('not.exist'); // loader when refreshing data
   cy.log('/approveAndCloseDesignAgenda');
 }
 

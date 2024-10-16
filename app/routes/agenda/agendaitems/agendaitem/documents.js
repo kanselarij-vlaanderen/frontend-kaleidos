@@ -43,6 +43,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     const decisionActivityResultCode = await this.decisionActivity
       ?.decisionResultCode;
     await this.decisionActivity?.decisionResultCode;
+    this.confidentialAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+    );
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       this.subcase?.confidential
@@ -73,6 +77,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.agendaitem = this.agendaitem;
     controller.subcase = this.subcase;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.confidentialAccessLevel = this.confidentialAccessLevel;
     controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;

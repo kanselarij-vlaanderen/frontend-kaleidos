@@ -1,0 +1,215 @@
+{{page-title (t "new-submission")}}
+
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @size="large" @responsive={{true}}>
+    <Auk::Toolbar::Group @position="left" @responsive={{true}}>
+      <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+        <AuLink
+          @skin="button-naked"
+          @icon="hierarchical-back"
+          @route="cases.case.subcases.subcase"
+          class="au-u-padding-left-none"
+        />
+      </Auk::Toolbar::Item>
+      <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
+        <div>
+          <span class="auk-overline auk-u-block">
+            {{t "submission"}}
+          </span>
+          <h4 class="auk-toolbar-complex__title au-u-padding-none">
+            <Auk::AbbreviatedText
+              @text={{or @model.shortTitle "-"}}
+              @maxLength={{150}}
+            />
+          </h4>
+        </div>
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<Submission::Header
+  @submission={{null}}
+  @subcase={{@model}}
+  @disableHistory={{true}}
+/>
+
+<div class="auk-scroll-wrapper">
+  <div class="auk-u-bg-alt">
+  </div>
+  <div class="auk-scroll-wrapper__body auk-u-p-4">
+    <div id="submission" class="auk-u-mb-4">
+      <Submission::DescriptionPanel
+        @submission={{@model}}
+        @mayEdit={{false}}
+      />
+    </div>
+
+    <div class="auk-u-mb-4">
+      <Mandatees::MandateesPanel
+        @onSave={{this.onMandateeDataChanged}}
+        @referenceDate={{@model.created}}
+        @submitter={{this.requestedBy}}
+        @mandatees={{this.mandatees}}
+        @allowEditing={{true}}
+        @disableMandatee={{this.disableMandatee}}
+        @disableSubmitter={{true}}
+      />
+    </div>
+
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      class="auk-u-mb-4"
+      @governmentAreas={{@model.governmentAreas}}
+      @allowEditing={{false}}
+      @subcase={{@model}}
+    />
+
+    <Cases::Submissions::Notifications
+      class="auk-u-mb-2"
+      @isEditing={{true}}
+      @hideEditingControls={{true}}
+      @confidential={{@model.confidential}}
+      @hasConfidentialPieces={{this.hasConfidentialPieces}}
+      @approvalAddresses={{this.approvalAddresses}}
+      @approvalComment={{this.approvalComment}}
+      @notificationAddresses={{this.notificationAddresses}}
+      @notificationComment={{this.notificationComment}}
+      @onNotificationDataChanged={{this.onNotificationDataChanged}}
+    />
+
+    <div id="documents" class="auk-u-mb-4">
+      <Auk::Panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <div class="au-u-flex au-u-flex--spaced-small">
+                  <h4 class="auk-panel__title">
+                    {{t "documents"}}
+                  </h4>
+                </div>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          {{#if this.pieces.length}}
+            <Documents::AddDraftDocumentCardList
+              @pieces={{this.pieces}}
+              @isEditable={{this.mayEdit}}
+              @hideAccessLevel={{true}}
+              @onAddPiece={{this.onAddNewPieceVersion}}
+              @onDeletePiece={{this.onDeletePiece}}
+              @highlightedPieces={{this.newDraftPieces}}
+              {{!-- @didDeleteContainer={{this.refresh}} --}}
+            />
+          {{else}}
+            <div>
+              <AuAlert
+                @skin="info"
+                @icon="info-circle"
+                class="au-u-margin-bottom-none"
+              >
+                {{t "no-documents-yet"}}
+              </AuAlert>
+            </div>
+          {{/if}}
+        </Auk::Panel::Body>
+        <Auk::Panel::Footer>
+          <AuButton
+            @skin="naked"
+            @icon="plus"
+            class="au-u-padding-left-none"
+            {{on "click" (toggle "isOpenPieceUploadModal" this)}}
+          >
+            {{t "documents-add"}}
+          </AuButton>
+        </Auk::Panel::Footer>
+      </Auk::Panel>
+    </div>
+  </div>
+  <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
+    <Group>
+      <AuButton
+        @skin="secondary"
+        @disabled={{or this.createSubmission.isRunning}}
+        {{on "click" (perform this.cancelForm)}}
+      >
+        {{t "cancel"}}
+      </AuButton>
+      <AuButton
+        @skin="primary"
+        @disabled={{eq this.newDraftPieces.length 0}}
+        {{on "click" (toggle "isOpenCreateSubmissionModal" this)}}
+        >
+        {{t "new-submission"}}
+      </AuButton>
+    </Group>
+  </AuToolbar>
+</div>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <Auk::Loader @message={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @isSubmission={{true}}
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @simplifiedOptions={{true}}
+            @onDelete={{fn this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenCreateSubmissionModal}}
+  @title={{t "new-submission"}}
+  @onConfirm={{perform this.createSubmission}}
+  @onCancel={{this.cancelCreateSubmission}}
+  @confirmMessage={{t "new-submission"}}
+  @disabled={{this.createSubmission.isRunning}}
+  @loading={{this.createSubmission.isRunning}}
+>
+  <:body>
+    <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
+    <AuTextarea
+      id="remarks"
+      rows="4"
+      value=""
+      @width="block"
+      {{on "input" (pick "target.value" (set this "comment"))}}
+    />
+  </:body>
+</ConfirmationModal>
+
+{{#if this.createSubmission.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "new-submission"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "save-in-progress"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

@@ -5,6 +5,7 @@ import VrNotulenName,
 { compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import VrLegacyDocumentName,
 { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export const sortDocumentContainers = async (
   piecesOrPromise,
@@ -182,3 +183,15 @@ export const restorePiecesFromPreviousAgendaitem = async function (
     );
   }
 };
+
+
+export const containsConfidentialPieces = async function (pieces) {
+  const piecesCopy = pieces?.slice();
+  for (const piece of piecesCopy) {
+    const pieceAccessLevel = await piece.accessLevel;
+    if (pieceAccessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
+      return true;
+    }
+  }
+  return false;
+}

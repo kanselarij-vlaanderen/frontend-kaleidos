@@ -9,10 +9,8 @@ import {
   keepLatestTask,
   task,
   all,
-  timeout
 } from 'ember-concurrency';
-import { addPieceToAgendaitem } from 'frontend-kaleidos/utils/documents';
-import { removeObject, addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
@@ -24,7 +22,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @service fileConversionService;
   @service toaster;
   @service pieceAccessLevelService;
-  @service conceptStore
+  @service conceptStore;
+  @service pieceUpload;
+  @service documentService;
 
   @tracked decisionmakingFlow;
   @tracked mandatees;
@@ -95,7 +95,8 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     const type = await findDocType(this.conceptStore, parsed.type);
 
     const now = new Date();
-    const confidential = this.model.subcase.confidential || false;
+    const confidential =
+      parsed.confidential || this.model.subcase.confidential || false;
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
       position: parsed.index,
@@ -122,20 +123,8 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
   @task
   *savePieces() {
-    // enforce all new pieces must have type on document container
-    const typesPromises = this.newPieces.map(async (piece) => {
-      const container = await piece.documentContainer;
-      const type = await container.type;
-      return type;
-    });
-    const types = yield all(typesPromises);
-    if (types.some(type => !type)) {
-      this.toaster.error(
-        this.intl.t('document-type-required'),
-        this.intl.t('warning-title'),
-      );
-      return;
-    }
+    const typesRequired = yield this.documentService.enforceDocType(this.newPieces);
+    if (typesRequired) return;
 
     const savePromises = this.sortedNewPieces.map(async(piece, index) => {
       try {
@@ -232,92 +221,21 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     yield this.ensureFreshData.perform();
 
     // Attach pieces to submission activity and on open agendaitem (if any)
-    const agendaActivity = yield this.getAgendaActivity.perform();
+    const agendaActivity = yield this.pieceUpload.getAgendaActivity(this.model.subcase);
     if (agendaActivity) { // Item is already on open agenda; adding extra pieces
-      yield this.createSubmissionActivity.perform(pieces, agendaActivity);
+      yield this.pieceUpload.createSubmissionActivity(pieces, this.model.subcase, agendaActivity);
       yield this.updateRelatedAgendaitems.perform(pieces);
     } else { // Preparing pieces for subcase that is not yet on agenda
-      yield this.updateSubmissionActivity.perform(pieces);
-    }
-  }
-
-  @task
-  *getAgendaActivity() {
-    const latestAgendaActivity = yield this.store.queryOne('agenda-activity', {
-      'filter[subcase][:id:]': this.model.subcase.id,
-      'filter[agendaitems][agenda][created-for][:has-no:agenda]': true,
-      sort: '-start-date',
-    });
-
-    return latestAgendaActivity;
-  }
-
-  @task
-  *createSubmissionActivity(pieces, agendaActivity = null) {
-    let submissionActivity = this.store.createRecord('submission-activity', {
-      startDate: new Date(),
-      subcase: this.model.subcase,
-      pieces,
-      agendaActivity,
-    });
-
-    submissionActivity = yield submissionActivity.save();
-    return submissionActivity;
-  }
-
-  @task
-  *updateSubmissionActivity(pieces) {
-    const submissionActivity = yield this.store.queryOne('submission-activity', {
-      'filter[subcase][:id:]': this.model.subcase.id,
-      'filter[:has-no:agenda-activity]': true,
-    });
-
-    if (submissionActivity) { // Adding pieces to existing submission activity
-      const submissionPieces = yield submissionActivity.pieces;
-      addObjects(submissionPieces, pieces);
-      yield submissionActivity.save();
-      return submissionActivity;
-    } else { // Create first submission activity to add pieces on
-      return this.createSubmissionActivity.perform(pieces);
+      yield this.pieceUpload.updateSubmissionActivity(pieces, this.model.subcase);
     }
   }
 
   @task
   *updateRelatedAgendaitems(pieces) {
-    // Link piece to all agendaitems that are related to the subcase via an agendaActivity
-    // and related to an agenda in the design status
-    const agendaitems = yield this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-    });
-
-    // agendaitems can only have more than 1 item
-    // in case the subcase is on multiple (future) open agendas
-    for (const agendaitem of agendaitems.slice()) {
-      setNotYetFormallyOk(agendaitem);
-      // save prior to adding pieces, micro-service does all the changes with docs
-      yield agendaitem.save();
-      for (const piece of pieces) {
-        yield addPieceToAgendaitem(agendaitem, piece);
-      }
-      // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
-      for (let index = 0; index < 10; index++) {
-        const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
-        if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
-          // last added piece was found in the list from cache
-          break;
-        } else {
-          // list from cache is stale, wait with back-off strategy
-          yield timeout(500 + (index * 500));
-          if (index >= 9) {
-            this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-              {
-                timeOut: 60000,
-              });
-          }
-        }
-      }
-    }
+    yield this.pieceUpload.updateRelatedAgendaitems.perform(
+      pieces,
+      this.model.subcase
+    );
     this.router.refresh('cases.case.subcases.subcase');
   }
 
@@ -341,5 +259,13 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @action
   refresh() {
     this.router.refresh('cases.case.subcases.subcase');
+  }
+
+  @action
+  refreshSubcases(decisionmakingFlow) {
+    this.router.refresh('cases.case');
+    if (decisionmakingFlow?.id) {
+      this.router.transitionTo('cases.case.index', decisionmakingFlow.id);
+    }
   }
 }
