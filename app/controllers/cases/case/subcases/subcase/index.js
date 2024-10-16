@@ -147,7 +147,10 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @task
   *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
-    documentContainer.position = index + 1 + (this.model.pieces?.length ?? 0);
+    const containerCount = yield this.store.count('document-container', {
+      'filter[pieces][submission-activity][subcase][id]': this.model.subcase.id,
+    });
+    documentContainer.position = index + 1 + (containerCount ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();
