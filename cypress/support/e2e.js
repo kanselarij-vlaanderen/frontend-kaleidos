@@ -26,6 +26,7 @@ import './commands/document-commands'
 import './commands/publication-commands'
 import './commands/reset-database.commands'
 import './commands/subcase-commands'
+import './commands/submission-commands'
 import './commands/utility-commands'
 import dayjs from 'dayjs'
 

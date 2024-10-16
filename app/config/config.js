@@ -48,3 +48,16 @@ export const DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES = [
 ];
 export const EMAIL_ATTACHMENT_WARN_SIZE = 10 * 1000000; // 10 MB
 export const EMAIL_ATTACHMENT_MAX_SIZE = 30 * 1000000; // 30 MB
+
+export const RESIZE_SERVICE_DEFAULTS = {
+  DEBOUNCE_TIMEOUT    : 150,
+  WIDTH_SENSITIVE     : true,
+  HEIGHT_SENSITIVE    : true,
+}
+
+export const BREAKPOINTS = {
+  MOBILE: '(max-width: 767px)',
+  TABLET: '(min-width: 768px) and (max-width: 1023px)',
+  DESKTOP: '(min-width: 1024px) and (max-width: 1600px)',
+  BIG_SCREEN: '(min-width: 1601px)',
+}

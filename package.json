@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "7.2.1",
+  "version": "8.1.6",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -34,6 +34,7 @@
     "test": "npm-run-all --print-name \"lint\" \"test:*\"",
     "test:cypress": "ember serve --environment=cypress-test --proxy=http://localhost",
     "test:ember": "ember test",
+    "start-cypress": "ember serve --environment=cypress-test --proxy=http://localhost:80",
     "cypress-local": "make open-cypress-tests",
     "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be",
     "release": "release-it"
@@ -60,7 +61,6 @@
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
     "@lblod/ember-rdfa-editor": "git+https://github.com/ValenberghsSven/ember-rdfa-editor.git#23ff47de32382f55c39207b8e3625c8842fc2dae",
-    "@lblod/ember-vo-webuniversum-data-table": "^1.0.0",
     "@ljharb/eslint-config": "^21.0.1",
     "@nullvoxpopuli/ember-composable-helpers": "^5.1.1",
     "@typescript-eslint/parser": "^5.48.2",
@@ -108,6 +108,7 @@
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^7.0.0",
+    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#8300c671d3293dad0c5ccf87defdec6d08f839b3",
     "ember-plausible": "^0.1.1",
     "ember-power-select": "^6.0.2",
     "ember-prism": "^0.13.0",
@@ -115,10 +116,9 @@
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
     "ember-resources": "^7.0.0",
-    "ember-responsive": "^3.0.6",
     "ember-router-service-refresh-polyfill": "^1.1.0",
     "ember-set-helper": "^3.0.1",
-    "ember-sortable": "^4.0.3",
+    "ember-sortable": "^5.1.2",
     "ember-source": "~4.12.0",
     "ember-svg-jar": "^2.4.2",
     "ember-tag-input": "3.1.0",

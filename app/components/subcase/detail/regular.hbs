@@ -121,6 +121,16 @@
     </div>
     <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{@subcase}} />
     <Subcase::SubcaseVersionsPanel @subcase={{@subcase}} id="agenda" />
+      
+    {{#if (or this.loadSubmissionData.isRunning this.statusChangeActivities)}}
+      <Cases::Submissions::HistoryPanel
+        @loading={{this.loadSubmissionData.isRunning}}
+        @multiple={{true}}
+        {{! comment viewing is limited, too many variables, should we even show comments here? }}
+        @canSeePrivateComments={{user-may 'treat-and-accept-submissions'}}
+        @statusChangeActivities={{this.statusChangeActivities}}
+      />
+    {{/if}}
   </div>
 </div>
 
@@ -145,6 +155,7 @@
       <div class="upload-container">
         {{#each @newPieces as |piece|}}
           <Documents::UploadedDocument
+            @allowEditPieceAccessLevel={{true}}
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @onDelete={{perform @deletePiece piece}}
@@ -161,5 +172,6 @@
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
+    @allowEditing={{user-may "manage-documents"}}
   />
 {{/if}}

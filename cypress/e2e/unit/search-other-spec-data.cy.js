@@ -3,6 +3,7 @@
 // / <reference types="Cypress" />
 import route from '../../selectors/route.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 context('Search tests', () => {
   beforeEach(() => {
@@ -33,9 +34,12 @@ context('Search tests', () => {
     // the title and decision result will be the same for all 3, contains() gets the first one
     cy.get(route.searchNewsletters.row.title).contains(searchTerm);
     cy.get(route.searchNewsletters.row.decisionResult).contains('Goedgekeurd');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Matthias Diependaele');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon, Hilde Crevits, Gwendolyn Rutten, Ben Weyts, Zuhal Demir');
+    const firstRow = `${mandateeNames.current.first.fullName}, ${mandateeNames.current.second.fullName}`;
+    const secondRow = `${mandateeNames.current.first.fullName}, ${mandateeNames.current.second.fullName}, ${mandateeNames.current.sixth.fullName}`;
+    const thirdRow = `${mandateeNames.current.first.fullName}, ${mandateeNames.current.second.fullName}, ${mandateeNames.current.third.fullName}, ${mandateeNames.current.fourth.fullName}, ${mandateeNames.current.fifth.fullName}`;
+    cy.get(route.searchNewsletters.row.mandatees).contains(firstRow);
+    cy.get(route.searchNewsletters.row.mandatees).contains(secondRow);
+    cy.get(route.searchNewsletters.row.mandatees).contains(thirdRow);
     cy.get(route.searchNewsletters.row.goToAgendaitem).eq(0)
       .click();
     cy.url().should('contain', '/vergadering/');
@@ -83,10 +87,10 @@ context('Search tests', () => {
     cy.visit('/kort-bestek/zoeken');
     // ! depends on mandatee-assigning.spec and could fail
     const searchTerm = 'test';
-    const mandateeSearchTerm = 'Jambon';
+    const mandateeToSearch = mandateeNames.current.first;
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
-    cy.get(route.search.mandatee).type(mandateeSearchTerm);
+    cy.get(route.search.mandatee).type(mandateeToSearch.lastName);
 
     cy.intercept('GET', '/news-items/search?**').as('newsletterSearchCall');
     cy.get(route.search.trigger).click();
@@ -94,6 +98,6 @@ context('Search tests', () => {
 
     // amount of rows is too flaky (data from previous tests) and not tested. We expect at least 1 result
     cy.get(appuniversum.alert.container).should('not.exist');
-    cy.get(route.searchNewsletters.row.mandatees).contains('Jan Jambon');
+    cy.get(route.searchNewsletters.row.mandatees).contains(mandateeToSearch.fullName);
   });
 });

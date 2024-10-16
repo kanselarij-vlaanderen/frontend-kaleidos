@@ -6,7 +6,7 @@
     {{if @isOpen "auk-scroll-wrapper"}}"
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar @noPadding={{not @isOpen}}>
+  <Auk::Navbar @noPadding={{and (not @isOpen) (not (responsive "isMobile"))}}>
     <Auk::Toolbar as |toolbar|>
       {{#if @isOpen}}
         <toolbar.Group @position="left" as |group|>
@@ -42,9 +42,8 @@
           <Auk::Toolbar::Item>
             <AuButton
               @skin="naked"
-              @icon="chevron-right"
+              @icon={{if (responsive "isMobile") "chevron-down" "chevron-right"}}
               @hideText={{true}}
-              class="au-u-visible-from@medium"
               {{on "click" @onCollapse}}
             >
               {{t "hide"}}
@@ -52,12 +51,12 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{else}}
-        <Auk::Toolbar::Group @position="center">
+        <Auk::Toolbar::Group @position={{if (responsive "isMobile") "right" "center"}}>
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
             <AuButton
               data-test-document-preview-sidebar-open
               @skin="naked"
-              @icon="chevron-left"
+              @icon={{if (responsive "isMobile") "chevron-up" "chevron-left"}}
               @hideText={{true}}
               {{on "click" @onOpen}}
             >

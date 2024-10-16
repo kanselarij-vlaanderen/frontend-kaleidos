@@ -1,0 +1,28 @@
+<AuFormRow ...attributes>
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>{{t "subcase-type"}}</Fieldset.legend>
+    <Fieldset.content>
+      {{#if this.loadAgendaItemTypes.isRunning}}
+        <AuLoader @hideMessage={{true}}>
+          {{t "please-be-patient"}}
+        </AuLoader>
+      {{else}}
+        <AuRadioGroup
+          data-test-agenda-item-type-selector-radio
+          @alignment="inline"
+          @selected={{this.agendaItemType}}
+          @onChange={{@onChangeAgendaItemType}}
+          as |Group|
+        >
+          {{#each this.agendaItemTypes as |type|}}
+            <Group.Radio
+              @value={{type}}
+            >
+              {{type.label}}
+            </Group.Radio>
+          {{/each}}
+        </AuRadioGroup>
+      {{/if}}
+    </Fieldset.content>
+  </AuFieldset>
+</AuFormRow>

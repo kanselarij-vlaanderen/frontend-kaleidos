@@ -4,6 +4,7 @@ export default ApplicationAdapter.extend({
   findHasMany(store, snapshot, url, relationship) {
     let newUrl = url;
     // Workaround for Ember Data not taking paging into account when fetching a hasMany
+    // subcase no longer have pieces, this comes from submission-activities
     if (relationship.meta.key === 'pieces') {
       newUrl += '?page[size]=9999';
     }
