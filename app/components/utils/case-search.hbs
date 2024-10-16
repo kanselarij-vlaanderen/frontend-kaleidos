@@ -6,6 +6,7 @@
       value={{this.searchText}}
       class="auk-u-maximize-width"
       @width="block"
+      @disabled={{this.isLoading}}
       {{on "input" this.updateSearchText}}
     />
   </div>
@@ -38,13 +39,16 @@
           <tr data-test-utils-case-search-row>
             <td>
               <AuRadio
+                data-test-utils-case-search-row-radio
                 @checked={{eq row.id this.selected.id}}
                 @value={{row.id}}
                 @onChange={{this.selectCase}}
+                @disabled={{eq row.id @excludedDecisionmakingFlow.id}}
               />
             </td>
             <td>
               <AuLink
+                data-test-utils-case-search-row-title-link
                 @icon="external-link"
                 @iconAlignment="right"
                 @route="cases.case.index"
@@ -57,6 +61,11 @@
                   {{row.title}}
                 {{/if}}
               </AuLink>
+              {{#if (eq row.id @excludedDecisionmakingFlow.id)}}
+                <AuPill @size="small">
+                  {{t "current-case"}}
+                </AuPill>
+              {{/if}}
             </td>
             <td>
               {{datetime row.created}}

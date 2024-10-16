@@ -2,7 +2,8 @@
   <Submission::DescriptionPanel::Edit
     @submission={{@submission}}
     @onCancel={{this.cancelEditing}}
-    @onSave={{this.stopEditing}}
+    @onSave={{this.save}}
+    @isUpdate={{@isUpdate}}
   />
 {{else}}
   <Submission::DescriptionPanel::View

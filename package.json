@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "7.3.12",
+  "version": "8.1.6",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -34,6 +34,7 @@
     "test": "npm-run-all --print-name \"lint\" \"test:*\"",
     "test:cypress": "ember serve --environment=cypress-test --proxy=http://localhost",
     "test:ember": "ember test",
+    "start-cypress": "ember serve --environment=cypress-test --proxy=http://localhost:80",
     "cypress-local": "make open-cypress-tests",
     "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be",
     "release": "release-it"
@@ -107,6 +108,7 @@
     "ember-mu-transform-helpers": "^2.1.2",
     "ember-named-blocks-polyfill": "^0.2.4",
     "ember-page-title": "^7.0.0",
+    "ember-pdfjs-wrapper": "git+https://github.com/MikiDi/ember-pdfjs-wrapper.git#8300c671d3293dad0c5ccf87defdec6d08f839b3",
     "ember-plausible": "^0.1.1",
     "ember-power-select": "^6.0.2",
     "ember-prism": "^0.13.0",

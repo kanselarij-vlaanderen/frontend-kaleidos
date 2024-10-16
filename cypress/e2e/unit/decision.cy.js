@@ -7,6 +7,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors.js';
 
@@ -353,8 +354,8 @@ context('Decision tests post digital agenda', () => {
   });
 
   it('should test changing agenda updates decisions correctly', () => {
-    const oldSecretary = 'Jeroen Overmeer';
-    const newSecretary = 'Joachim Pohlmann';
+    const oldSecretary = mandateeNames['09112023-01082024'].firstSecretary.fullName;
+    const newSecretary = mandateeNames['09112023-01082024'].secondSecretary.fullName;
 
     // generate minutes
     cy.openAgendaForDate(agendaDate);
@@ -611,7 +612,7 @@ context('Decision tests post digital agenda', () => {
   it('should test mark all decisions for signing', () => {
     const agendaDate = Cypress.dayjs('2023-11-28').hour(10);
     const agendaDateFormatted = agendaDate.format('DD-MM-YYYY');
-    const agendaSecretary = 'Jeroen Overmeer';
+    const agendaSecretary = mandateeNames['09112023-01082024'].firstSecretary.fullName;
     const shortTitle1 = 'Cypress test: Decision - CRUD of decisions - Nota';
     const shortTitle2 = 'Cypress test: Decision - CRUD of decisions - Mededeling';
     const signFlowStatus = 'Op te starten';

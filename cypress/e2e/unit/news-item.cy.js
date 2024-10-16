@@ -1,4 +1,4 @@
-/* global Cypress, context, beforeEach, afterEach, it, cy */
+/* global Cypress, expect, context, beforeEach, afterEach, it, cy */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -500,12 +500,14 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       cy.get(route.newsletter.header.inNewsletter).click();
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
       cy.get(newsletter.tableRow.titleContent).eq(0)
         .contains(subcaseTitleShort);
 
       cy.get(route.newsletter.header.inNewsletter).click();
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
       cy.get(newsletter.tableRow.titleContent).eq(1)
         .contains(subcaseTitleShort);
 
@@ -513,25 +515,42 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       cy.get(route.newsletter.header.number).click();
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
       cy.get(newsletter.tableRow.titleContent).eq(1)
         .contains(subcaseTitleShort);
 
       cy.get(route.newsletter.header.number).click();
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
       cy.get(newsletter.tableRow.titleContent).eq(0)
         .contains(subcaseTitleShort);
 
       // test sort latestModified
+      cy.intercept('get', '/agendaitems?filter%5Bagenda%5D%5B%3Aid%3A%5D=6374FA87D9A98BD0A228857A&filter%5Btype%5D%5B%3Auri%3A%5D=http%3A%2F%2Fthemis.vlaanderen.be%2Fid%2Fconcept%2Fagendapunt-type%2Fdd47a8f8-3ad2-4d5a-8318-66fc02fe80fd&include=treatment.news-item&page%5Bsize%5D=300&sort=treatment.news-item.modified')
+        .as('callToAgendaitems');
       cy.get(route.newsletter.header.latestModified).click();
+      cy.wait('@callToAgendaitems')
+        .then((responseBody) => {
+          cy.log('meta of call to agendaitems, should be 3: ', responseBody.response.body.meta.count);
+          cy.log('first agendaitem id of response', responseBody.response.body.data[0]?.id);
+          cy.log('second agendaitem id of response', responseBody.response.body.data[1]?.id);
+          cy.log('third agendaitem id of response', responseBody.response.body.data[2]?.id);
+          expect(responseBody.response.body.meta.count).to.equal(3);
+          // expect(responseBody.response.body.data[0].id).to.equal('6374FA9CD9A98BD0A2288581');
+          // expect(responseBody.response.body.data[1].id).to.equal('6374FA89D9A98BD0A228857D');
+          // expect(responseBody.response.body.data[2].id).to.equal('6374FAB4D9A98BD0A2288586');
+        });
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
       cy.get(newsletter.tableRow.titleContent).eq(1)
         .contains(subcaseTitleShort);
 
       cy.get(route.newsletter.header.latestModified).click();
       cy.get(appuniversum.loader);
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(newsletter.tableRow.titleContent).should('have.length', 2);
       cy.get(newsletter.tableRow.titleContent).eq(0)
         .contains(subcaseTitleShort);
 
