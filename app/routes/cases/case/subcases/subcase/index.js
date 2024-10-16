@@ -14,7 +14,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   }
 
   async model() {
-    const { decisionmakingFlow, subcase, subcases } = this.modelFor('cases.case.subcases.subcase');
+    const { decisionmakingFlow, subcase, subcases, parliamentFlow } = this.modelFor('cases.case.subcases.subcase');
     const _case = await decisionmakingFlow.case;
     const subcaseIds = subcases?.map((subcase) => subcase.id);
     if (!subcaseIds.includes(subcase.id)) {
@@ -65,6 +65,8 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       decisionmakingFlow,
       _case,
       subcase,
+      parliamentFlow,
+      subcases,
       pieces: sortedPieces,
     };
   }
