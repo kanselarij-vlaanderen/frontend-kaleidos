@@ -41,6 +41,7 @@ export default class ExtendedStoreService extends Store {
     }
 
     const results = await Promise.all(batches);
+    //* note: always use .slice() on this ArrayProxy if you plan on iterating the result.
     return ArrayProxy.create({
       content: results.map((result) => result.slice()).flat(),
       meta: {

@@ -1329,6 +1329,8 @@
   "documents-sent-on": "Documenten doorgestuurd op",
   "the-documents-are-being-sent-to-parliament": "De documenten worden doorgestuurd naar het Vlaams Parlement",
   "the-documents-were-sent-to-parliament": "De documenten werden succesvol doorgestuurd naar het Vlaams Parlement",
+  "notifying-parliament-about-case-change": "Het Vlaams Parlement wordt geïnformeerd over het verplaatsen van de procedurestap",
+  "notified-parliament-about-case-change": "Het Vlaams Parlement werd geïnformeerd over het verplaatsen van de procedurestap",
   "started-by": "Opgestart door",
   "the-following-documents-were-sent": "De volgende documenten werden doorgestuurd",
   "general-information": "Algemene info",
@@ -1474,8 +1476,9 @@
   "new-mandatee": "Nieuwe minister",
   "mandatees-deleted-in-update": "De volgende {count, plural, =1 {minister wordt} other {ministers worden}} verwijderd in deze update:",
   "comment-title-to-submitter": "Opmerking voor de kabinetsdossierbeheerder",
-  "press-agenda": "Persagenda",
-  "generate-press-agenda": "Genereer persagenda",
+  "current-case": "Huidig dossier",
   "on-agenda-status-pill": "Geagendeerd",
-  "submission-internal-review": "Interne opmerking"
+  "submission-internal-review": "Interne opmerking",
+  "press-agenda": "Persagenda",
+  "generate-press-agenda": "Genereer persagenda"
 }
