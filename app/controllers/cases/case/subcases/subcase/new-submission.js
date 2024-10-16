@@ -6,6 +6,7 @@ import { task, dropTask, all } from 'ember-concurrency';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
+import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
@@ -28,6 +29,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenCreateSubmissionModal = false;
 
+  @tracked hasConfidentialPieces = false;
   @tracked comment;
   @tracked approvalComment;
   @tracked notificationComment;
@@ -52,14 +54,29 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     return this.requestedBy.id === mandatee.id;
   };
 
+  checkConfidentiality = async () => {
+    this.hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
+    // pop up notifications changed?
+  };
+
   onAddNewPieceVersion = async (piece, newVersion) => {
     const documentContainer = await newVersion.documentContainer;
     await documentContainer.save();
     await newVersion.save();
+    try {
+      const sourceFile = await newVersion.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
     const index = this.pieces.indexOf(piece);
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
     addObject(this.newDraftPieces, newVersion);
+    await this.checkConfidentiality();
   };
 
   onDeletePiece = async (piece, previousPiece) => {
@@ -72,6 +89,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       }
       this.pieces = [...this.pieces];
       removeObject(this.newDraftPieces, piece);
+      await this.checkConfidentiality();
     }
   };
 
@@ -98,6 +116,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       documentContainer: documentContainer,
     });
     this.newPieces.push(piece);
+    await this.checkConfidentiality();
   }
 
   deletePiece = async (piece) => {
@@ -107,6 +126,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const documentContainer = await piece.documentContainer;
     await documentContainer.destroyRecord();
     await piece.destroyRecord();
+    await this.checkConfidentiality();
   }
 
   savePieces = task(async () => {
@@ -127,6 +147,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     await all(savePromises);
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
+    await this.checkConfidentiality();
   });
 
   savePiece = task(async (piece, index) => {
@@ -213,7 +234,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
 
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
-    const decisionmakingFlow = await this.model.decisionmakingFlow;
+    const decisionmakingFlow = await this.model.belongsTo('decisionmakingFlow').reload();
     const mandatees = await this.mandatees;
     const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
@@ -269,7 +290,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        await this.cabinetMail.sendUpdateSubmissionMails(this.submission);
+        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting);
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {
         this.toaster.error(

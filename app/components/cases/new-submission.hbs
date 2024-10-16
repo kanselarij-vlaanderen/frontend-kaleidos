@@ -19,13 +19,15 @@
             <Utils::LoadableContent
               @reserveSpace={{true}}
             >
-              <Cases::Submissions::DecisionmakingFlowSelector
-                class="auk-u-mb-4"
-                @disableEdit={{@disableEdit}}
-                @selectedDecisionmakingFlow={{this.selectedDecisionmakingFlow}}
-                @onChangeTitle={{this.onDecisionmakingFlowTitleChanged}}
-                @onChangeSelected={{this.onDecisionmakingFlowChanged}}
-              />
+              {{#unless @isForNewCase}}
+                <Cases::Submissions::DecisionmakingFlowSelector
+                  class="auk-u-mb-4"
+                  @disableEdit={{@disableEdit}}
+                  @selectedDecisionmakingFlow={{this.selectedDecisionmakingFlow}}
+                  @onChangeTitle={{this.onDecisionmakingFlowTitleChanged}}
+                  @onChangeSelected={{this.onDecisionmakingFlowChanged}}
+                />
+              {{/unless}}
               <Cases::Submissions::AgendaItemTypeSelector
                 class="auk-u-mb-4"
                 @onChangeAgendaItemType={{fn (mut this.agendaItemType)}}
@@ -35,6 +37,7 @@
                   {{t "limited-access"}}
                 </AuLabel>
                 <AuToggleSwitch
+                  data-test-cases-new-submission-form-toggle-confidential
                   @checked={{this.confidential}}
                   id="new-subcase-confidential"
                   @onChange={{set this "confidential"}}
@@ -43,6 +46,7 @@
               <div class="auk-form-group">
                 <AuLabel for="shortTitle" @required={{true}} @inline={{true}}>{{t "name-subcase"}}</AuLabel>
                 <AuTextarea
+                  data-test-cases-new-submission-form-short-title
                   @rows="2"
                   @width="block"
                   id="shortTitle"
@@ -53,6 +57,7 @@
               <div class="auk-form-group">
                 <AuLabel @required={{true}} @inline={{true}}>{{t "subcase-type-dropdown"}}</AuLabel>
                 <Utils::ModelSelector
+                  data-test-cases-new-submission-form-subcase-type
                   @modelName="subcase-type"
                   @sortField="label"
                   @displayField="label"
@@ -88,6 +93,7 @@
           @isEditing={{true}}
           @hideEditingControls={{true}}
           @confidential={{this.confidential}}
+          @hasConfidentialPieces={{this.hasConfidentialPieces}}
           @approvalAddresses={{this.approvalAddresses}}
           @approvalComment={{this.approvalComment}}
           @notificationAddresses={{this.notificationAddresses}}
@@ -100,6 +106,7 @@
           @onAddPiece={{this.addPiece}}
           @onDeletePiece={{this.deletePiece}}
           @onFileQueueUpdate={{this.handleFileUploadQueueUpdates}}
+          @onAccessLevelChanged={{this.checkConfidentiality}}
         />
       </div>
     </div>
@@ -110,6 +117,7 @@
       as |Group|>
       <Group>
         <AuButton
+          data-test-cases-new-submission-form-cancel
           @skin="secondary"
           @disabled={{or this.createSubmission.isRunning this.isUploadingFiles}}
           {{on "click" (perform this.cancelForm)}}
@@ -117,6 +125,7 @@
           {{t "cancel"}}
         </AuButton>
         <AuButton
+          data-test-cases-new-submission-form-save
           @skin="primary"
           @disabled={{this.saveIsDisabled}}
           {{on "click" (perform this.openProposableAgendaModal)}}

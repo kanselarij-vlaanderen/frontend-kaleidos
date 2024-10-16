@@ -8,6 +8,7 @@ import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import mandatee from '../../selectors/mandatee.selectors';
 
 
 /**
@@ -122,7 +123,7 @@ function searchCase(caseTitle) {
  *    [mandatees]: String,
  *    [domains]: String,
  *    [documents]: String,
- *    formallyOk: Boolean,
+ *    formallyOk: String,
  *    agendaDate: String,
  *    clonePrevious: Boolean,
  *    ratification: Boolean,
@@ -211,18 +212,18 @@ function addSubcaseViaModal(subcase) {
   // add mandatees
   if (subcase.mandatees) {
     if (subcase.ratification) {
-      cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).should('not.exist');
+      cy.get(mandatee.mandateeSelectorPanel.container).should('not.exist');
       // We show ratification doc panel and "signing mandatees" panel instead
       // cy.get(auk.emptyState.message).contains('Niet van toepassing');
     } else {
       let count = 0;
-      subcase.mandatees.forEach((mandatee) => {
-        cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).find(appuniversum.checkbox)
-          .contains(mandatee.fullName)
+      subcase.mandatees.forEach((mandateeModel) => {
+        cy.get(mandatee.mandateeSelectorPanel.container).find(appuniversum.checkbox)
+          .contains(mandateeModel.fullName)
           .click();
-        if (mandatee.submitter && count > 0) {
-          cy.get(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinisterName).contains(mandatee.fullName)
-            .parents(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinister)
+        if (mandateeModel.submitter && count > 0) {
+          cy.get(mandatee.mandateeSelectorPanel.selectedMinisterName).contains(mandateeModel.fullName)
+            .parents(mandatee.mandateeSelectorPanel.selectedMinister)
             .find(appuniversum.radio)
             .click();
         }
@@ -234,7 +235,7 @@ function addSubcaseViaModal(subcase) {
   // add domains
   if (subcase.domains) {
     subcase.domains.forEach((domain) => {
-      cy.get(cases.newSubcaseForm.governmentAreasPanel, {
+      cy.get(cases.governmentAreasPanel.panel, {
         timeout: 60000,
       })
         .contains(domain.name)
@@ -246,7 +247,7 @@ function addSubcaseViaModal(subcase) {
       if (domain.fields) {
         domain.fields.forEach((field)  => {
           cy.get('@domain')
-            .siblings(cases.newSubcaseForm.areasPanelFieldsList)
+            .siblings(cases.governmentAreasPanel.fieldsList)
             .contains(field)
             .click();
         });
@@ -270,10 +271,16 @@ function addSubcaseViaModal(subcase) {
     }).should('not.exist');
     cy.get(cases.newSubcaseForm.save).click();
 
-    if (subcase.formallyOk) {
-      cy.get(cases.proposableAgendas.toggleFormallyOk).parent()
-        .click();
-    }
+    // formally ok selector
+    cy.get(cases.proposableAgendas.formallyOkSelector).click();
+    const optionToSelect = subcase.formallyOk || 'Nog niet formeel OK'; // default
+    cy.get(dependency.emberPowerSelect.option).contains(optionToSelect,
+      {
+        matchCase: false,
+      })
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click();
 
     // select the agenda or save without one
     if (subcase.agendaDate) {

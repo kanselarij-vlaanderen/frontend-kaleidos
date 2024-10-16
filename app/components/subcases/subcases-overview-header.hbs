@@ -112,18 +112,29 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      {{else if (and this.loadData.isIdle this.mayCreateSubmissions)}}
+      {{else if this.mayCreateSubmissions}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
+              data-test-subcase-overview-header-create-submission
               @skin="primary"
               @icon="plus"
               {{on "click" this.navigateToAddSubmission}}
             >
-              {{t "submit-agendaitem"}}
+              {{t "submit-agendaitem-for-this-case"}}
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
+      {{else if (and this.loadSubmissionsData.isIdle this.currentSubmission)}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @route="cases.submissions.submission"
+            @model={{this.currentSubmission.id}}
+          >
+            {{t "open-current-submission"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
       {{/if}}
     {{/unless}}
   </Auk::Toolbar>

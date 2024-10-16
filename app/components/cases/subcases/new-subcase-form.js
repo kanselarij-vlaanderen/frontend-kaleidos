@@ -167,7 +167,7 @@ export default class NewSubcaseForm extends Component {
   *createSubcase(
     fullCopy = false,
     meeting = null,
-    isFormallyOk = false,
+    formallyStatusUri,
     privateComment = null
   ) {
     this.showProposableAgendaModal = false;
@@ -226,7 +226,7 @@ export default class NewSubcaseForm extends Component {
         yield this.agendaService.putSubmissionOnAgenda(
           meeting,
           this.subcase,
-          isFormallyOk,
+          formallyStatusUri,
           privateComment
         );
       } catch (error) {
@@ -235,6 +235,8 @@ export default class NewSubcaseForm extends Component {
           this.intl.t('warning-title')
         );
       }
+    } else {
+      yield this.agendaService.createInternalReview(this.subcase, null, privateComment);
     }
 
     this.args.onCreateSubcase?.();

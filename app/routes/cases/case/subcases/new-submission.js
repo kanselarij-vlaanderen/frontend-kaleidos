@@ -13,7 +13,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
       if (this.currentSession.may('view-submissions')) {
-        return this.router.transitionTo('cases.submissions');
+        return this.router.transitionTo('submissions');
       }
       return this.router.transitionTo('cases.index');
     }
@@ -36,7 +36,7 @@ export default class CasesCaseSubcasesNewSubmissionRoute extends Route {
     const { decisionmakingFlow, subcases} = this.modelFor('cases.case');
     let latestSubcase;
     if (decisionmakingFlow && subcases?.length) {
-      latestSubcase = subcases[subcases.length - 1];
+      latestSubcase = subcases.slice().at(-1);
     }
     return { decisionmakingFlow, latestSubcase };
   }

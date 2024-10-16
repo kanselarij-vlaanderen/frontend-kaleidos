@@ -7,19 +7,22 @@
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
-        <AuLabel for="new-subcase-ok">{{t "formal-ok"}}</AuLabel>
-        <AuToggleSwitch
-          data-test-proposable-agendas-modal-toggle-formally-ok
-          id="new-subcase-ok"
-          @checked={{this.isFormallyOk}}
-          @onChange={{set this "isFormallyOk"}}
+        <AuLabel @required={{true}} @inline={{true}} for="new-subcase-ok">{{t "status"}}</AuLabel>
+        {{!-- TODO fix test for changed toggle to selector --}}
+          {{!-- data-test-proposable-agendas-modal-toggle-formally-ok --}}
+        <Utils::FormallyOkSelector
+          data-test-proposable-agendas-modal-formally-ok-selector
+          @formallyOkStatusUri={{this.selectedFormallyOkUri}}
+          @onChange={{set this "selectedFormallyOkUri"}}
+          @noDefaultOption={{true}}
         />
       </AuFormRow>
       <AuFormRow>
         <AuLabel for="remarks">{{t "private-comments-title"}}</AuLabel>
         <AuTextarea
+          data-test-proposable-agendas-modal-private-comment
           id="remarks"
-          rows="4"
+          rows="7"
           value={{this.privateComment}}
           @width="block"
           {{on "input" (pick "target.value" (set this "privateComment"))}}
@@ -42,11 +45,12 @@
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
                 {{! template-lint-disable no-invalid-interactive }}
-                <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
+                <tr
+                  data-test-proposable-agendas-modal-agenda-row
+                  {{on "click" (fn this.selectAgenda agenda)}}
+                >
                   <td class="auk-table__col--1">
-                    <AuRadio
-                      @checked={{this.isSelectedAgenda agenda}}
-                    />
+                    <AuRadio @checked={{this.isSelectedAgenda agenda}} />
                   </td>
                   <td class="auk-table__col--3">
                     {{date agenda.createdFor.plannedStart}}

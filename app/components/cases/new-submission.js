@@ -2,8 +2,9 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask } from 'ember-concurrency';
+import { task, dropTask, timeout } from 'ember-concurrency';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import {
   addObject,
   addObjects,
@@ -33,6 +34,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   @tracked agendaItemType;
   @tracked confidential = false;
+  @tracked hasConfidentialPieces = false;
   @tracked shortTitle;
   @tracked title;
   @tracked subcaseName;
@@ -92,8 +94,9 @@ export default class CasesNewSubmissionComponent extends Component {
   // TODO short title of submission should be mandatory
   // also when choosing an existing case, we could copy shortTitle of Case into submission shortTitle
   get saveIsDisabled() {
-    const decisionmakingFlowSet =
-      !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitle;
+    const decisionmakingFlowSet = this.args.isForNewCase
+      ? !!this.shortTitle
+      : !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitles;
     const subcaseTypeSet = !!this.type;
     return (
       !decisionmakingFlowSet ||
@@ -163,8 +166,17 @@ export default class CasesNewSubmissionComponent extends Component {
     removeObjects(this.selectedGovernmentDomains, selectedDomain);
   };
 
-  addPiece = (piece) => {
+  addPiece = async (piece) => {
     addObject(this.pieces, piece);
+    await this.checkConfidentiality();
+    await timeout(100); // wait for doc to be rendered
+    const fragmentElement = document.getElementsByClassName('scrollable-uploaded-document')[0];
+    if (fragmentElement) {
+      fragmentElement.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth',
+      });
+    }
   };
 
   deletePiece = async (piece) => {
@@ -174,6 +186,7 @@ export default class CasesNewSubmissionComponent extends Component {
     const documentContainer = await piece?.documentContainer;
     await documentContainer?.destroyRecord();
     await piece?.destroyRecord();
+    await this.checkConfidentiality();
   };
 
   deletePieces = async () => {
@@ -182,6 +195,11 @@ export default class CasesNewSubmissionComponent extends Component {
     });
     await Promise.all(savePromises);
     this.pieces = new TrackedArray([]);
+    await this.checkConfidentiality();
+  };
+
+  checkConfidentiality = async () => {
+    this.hasConfidentialPieces = await containsConfidentialPieces(this.pieces);
   };
 
   handleFileUploadQueueUpdates = ({ uploadIsRunning, uploadIsCompleted}) => {
@@ -199,6 +217,7 @@ export default class CasesNewSubmissionComponent extends Component {
     const decisionmakingFlowTitle =
       this.decisionmakingFlowTitle ??
       _case?.shortTitle ??
+      this.shortTitle ??
       '';
     this.submission = this.store.createRecord('submission', {
       shortTitle: trimText(this.shortTitle ?? decisionmakingFlowTitle),
@@ -212,7 +231,7 @@ export default class CasesNewSubmissionComponent extends Component {
       decisionmakingFlow: this.selectedDecisionmakingFlow,
       approvalAddresses: this.approvalAddresses,
       approvalComment: this.approvalComment,
-      notificationAddresses:this.notificationAddresses,
+      notificationAddresses: this.notificationAddresses,
       notificationComment: this.notificationComment,
       mandatees: this.mandatees ?? [],
       requestedBy: this.submitter,
@@ -230,7 +249,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
     // Create submission change
     await this.draftSubmissionService.createStatusChange(this.submission, submitted.uri, comment);
-    await this.createNotificationMailResources();
+    await this.createNotificationMailResources(meeting);
 
     if (meeting) {
       try {
@@ -253,9 +272,9 @@ export default class CasesNewSubmissionComponent extends Component {
     }
   });
 
-  async createNotificationMailResources() {
+  async createNotificationMailResources(meeting) {
     if (this.approvalAddresses.length && this.notificationAddresses.length) {
-      await this.cabinetMail.sendFirstSubmissionMails(this.submission);
+      await this.cabinetMail.sendFirstSubmissionMails(this.submission, meeting);
     }
   }
 

@@ -9,6 +9,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service store;
   @service currentSession;
   @service router;
+  @service draftSubmissionService;
 
   pieces;
   defaultAccessLevel;
@@ -23,7 +24,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
       if (this.currentSession.may('view-submissions')) {
-        return this.router.transitionTo('cases.submissions');
+        return this.router.transitionTo('submissions');
       }
       return this.router.transitionTo('cases.index');
     }
@@ -40,6 +41,17 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     });
     this.submitter = ministerPresident ?? linkedMandatees.slice().at(0);
     this.mandatees = this.submitter ? [this.submitter] : [];
+
+    const { subcase } = this.modelFor('cases.case.subcases.subcase');
+    const canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(subcase);
+    if (!canSubmitNewDocuments) {
+      const currentSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase);
+      if (currentSubmission?.id) {
+        return this.router.transitionTo('cases.submissions.submission', currentSubmission?.id);
+      } else {
+        return this.router.transitionTo('cases.case.subcases.subcase');
+      }
+    }
   }
 
   async model() {
@@ -52,7 +64,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
-    // Get any submission that is not yet on a meeting
+    // Get any submission-activity that is not yet on a meeting
     const submissionActivitiesWithoutActivity = await this.store.query(
       'submission-activity',
       {
@@ -62,7 +74,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       }
     );
     let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
-    // Get the submission from latest meeting if applicable
+    // Get the submission-activity from latest meeting if applicable
     const agendaActivities = await subcase.agendaActivities;
     const latestActivity = agendaActivities
       .slice()
@@ -119,17 +131,19 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       }
     }
 
-    const submissions = await subcase.submissions;
-    this.originalSubmission = submissions
+    this.mandatees = this.mandatees
       .slice()
-      .sort((s1, s2) => s1.created.getTime() - s2.created.getTime())
-      .at(0);
+      .sort((m1, m2) => m1.priority - m2.priority);
 
-    if (this.originalSubmission) {
-      this.approvalAddresses = this.originalSubmission.approvalAddresses;
-      this.approvalComment = this.originalSubmission.approvalComment;
-      this.notificationAddresses = this.originalSubmission.notificationAddresses;
-      this.notificationComment = this.originalSubmission.notificationComment;
+    // TODO verify this change. It makes sense that we check the latest submission to copy addresses rather than the original
+    this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here
+    this.originalSubmission = await this.draftSubmissionService.getOriginalSubmissionForSubcase(subcase); // used to get meeting in controller
+
+    if (this.previousSubmission) {
+      this.approvalAddresses = this.previousSubmission.approvalAddresses;
+      this.approvalComment = this.previousSubmission.approvalComment;
+      this.notificationAddresses = this.previousSubmission.notificationAddresses;
+      this.notificationComment = this.previousSubmission.notificationComment;
     }
 
     return subcase;

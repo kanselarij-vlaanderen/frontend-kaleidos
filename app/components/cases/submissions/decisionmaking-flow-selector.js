@@ -7,7 +7,7 @@ import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends Component {
   @service store;
 
-  @tracked isAddingNewDecisionmakingFlow;
+  @tracked isUsingExistingDecisionmakingFlow;
   @tracked decisionmakingFlowTitle;
   @tracked selectedDecisionmakingFlow;
 
@@ -21,10 +21,6 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
     }
   }
 
-  get decisionmakingFlowOrTitle() {
-    return this.decisionmakingFlowTitle ?? this.selectedDecisionmakingFlow;
-  }
-
   searchDecisionmakingFlows = task(async (title) => {
     await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     return await this.store.query(
@@ -34,38 +30,46 @@ export default class CasesSubmissionsDecisionmakingFlowSelectorComponent extends
     );
   });
 
-  onSelectDecisionmakingFlow = (decisionmakingFlow) => {
+  onClearSelectedDecisionmakingFlow = () => {
     this.decisionmakingFlowTitle = null;
-    this.selectedDecisionmakingFlow = decisionmakingFlow;
+    this.selectedDecisionmakingFlow = null;
     this.args.onChangeTitle?.(null);
-    this.args.onChangeSelected?.(decisionmakingFlow);
+    this.args.onChangeSelected?.(null);
+  }
+
+  onSelectDecisionmakingFlow = async (decisionmakingFlowResult) => {
+    this.decisionmakingFlowTitle = null;
+    this.selectedDecisionmakingFlow = decisionmakingFlowResult?.id
+      ? await this.store.findRecord(
+          'decisionmaking-flow',
+          decisionmakingFlowResult.id
+        )
+      : null;
   }
 
   onChangeDecisionmakingFlowTitle = (title) => {
     this.decisionmakingFlowTitle = title;
     this.selectedDecisionmakingFlow = null;
-
-  }
-  onConfirmDecisionmakingFlowTitle = () => {
-    // trim so you can't just create whitespace named
-    this.args.onChangeTitle?.(this.decisionmakingFlowTitle?.trim());
-    this.args.onChangeSelected?.(null);
-    this.isAddingNewDecisionmakingFlow = false;
-  }
-
-  onCancelDecisionmakingFlowTitle = () => {
-    this.decisionmakingFlowTitle = '';
-    this.selectedDecisionmakingFlow = null;
-    this.args.onChangeTitle?.(this.decisionmakingFlowTitle);
+    this.args.onChangeTitle?.(title);
     this.args.onChangeSelected?.(this.selectedDecisionmakingFlow);
-    this.isAddingNewDecisionmakingFlow = false;
+  }
+
+  onConfirmDecisionmakingFlow = () => {
+    this.args.onChangeTitle?.(null);
+    this.args.onChangeSelected?.(this.selectedDecisionmakingFlow);
+    this.isUsingExistingDecisionmakingFlow = false;
+  }
+
+  onCancelDecisionmakingFlow = () => {
+    this.selectedDecisionmakingFlow = this.args.selectedDecisionmakingFlow;
+    this.isUsingExistingDecisionmakingFlow = false;
   }
 
   setFocus = async () => {
     // after opening the modal, focus the input field reduced manual clicking
     // doesn't work without a timeout though
     await timeout(50);
-    const element = document.getElementById('searchCaseId');
+    const element = document.getElementById('newCaseTitleId');
     if (element) {
       element.focus();
     }

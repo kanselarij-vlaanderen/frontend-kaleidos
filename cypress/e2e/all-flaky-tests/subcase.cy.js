@@ -458,12 +458,17 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall1')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases1');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
+    cy.get(utils.caseSearch.rows.titleLink).contains(caseTitle2)
+      .parents(utils.caseSearch.row)
+      .find(utils.caseSearch.rows.radio)
+      .get(appuniversum.radio)
+      .click();
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchSubcases1');
     cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2, false);
@@ -476,13 +481,19 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall2')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases2');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
+    cy.get(utils.caseSearch.rows.titleLink).contains(caseTitle2)
+      .parents(utils.caseSearch.row)
+      .find(utils.caseSearch.rows.radio)
+      .get(appuniversum.radio)
+      .click();
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchSubcases2');
+    // which confirmation modal am I canceling here? should be remove dossier
     cy.get(auk.confirmationModal.footer.cancel).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseDescription.panel).should('not.exist');
@@ -500,12 +511,17 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall3')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases3');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
+    cy.get(utils.caseSearch.rows.titleLink).contains(caseTitle2)
+      .parents(utils.caseSearch.row)
+      .find(utils.caseSearch.rows.radio)
+      .get(appuniversum.radio)
+      .click();
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchSubcases3');
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);

@@ -5,41 +5,52 @@
         <AuLink
           @skin="button-naked"
           @icon="hierarchical-back"
-          @route="cases.submissions"
+          @route="submissions"
           class="au-u-padding-left-none"
         >
           {{t "all-submissions"}}
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
-        <div>
-          {{#unless this.loadData.isRunning}}
-            <span class="auk-overline auk-u-block">
-              {{t (if this.case "submission-existing-case" "submission-new-case")}}
-            </span>
-            <h4 class="auk-toolbar-complex__title au-u-padding-none">
-              {{#if this.case}}
-                <AuLink
-                  class="au-u-padding-none card-link"
-                  @route="cases.case.subcases"
-                  @model={{this.decisionmakingFlow.id}}
-                >
-                  {{or this.case.shortTitle this.case.title}}
-                </AuLink>
-              {{else}}
-                <Auk::AbbreviatedText
-                  @text={{or @submission.decisionmakingFlowTitle}}
-                  @maxLength={{250}}
-                />
-              {{/if}}
-            </h4>
-            {{#if @beingTreatedBy}}
-              <span class="auk-u-block">
-                {{t "this-submission-is-being-treated-by-user"
-                    user=@beingTreatedBy.fullName}}
+        <div data-test-submission-overview-header-case-title-container>
+          {{#let (await @submission.decisionmakingFlow.case) as |case|}}
+            {{#unless @submission.decisionmakingFlow.isPending}}
+              <span class="auk-overline auk-u-block">
+                {{t (if case "submission-existing-case" "submission-new-case")}}
+                {{#if this.selectedMeeting}}
+                  -
+                  {{this.selectedMeeting.kind.label}} {{t "of"}}
+                  {{date this.selectedMeeting.plannedStart}}
+                {{/if}}
               </span>
-            {{/if}}
-          {{/unless}}
+              <h4 class="auk-toolbar-complex__title au-u-padding-none">
+                {{#if case}}
+                  <AuLink
+                    data-test-submission-overview-header-case-link
+                    class="au-u-padding-none card-link"
+                    @route="cases.case.subcases"
+                    @model={{@submission.decisionmakingFlow.id}}
+                  >
+                    {{or case.shortTitle case.title}}
+                  </AuLink>
+                {{else if @submission.decisionmakingFlowTitle.length}}
+                  <Auk::AbbreviatedText
+                    @text={{or @submission.decisionmakingFlowTitle}}
+                    @maxLength={{250}}
+                  />
+                {{else}}
+                  {{! We should only hit this temporarily when decisionmakingFlow is loading or changing}}
+                  {{! or when a unpropagated decisionmakingFlow is linked by editors, cabinet will not be able to see it}}
+                {{/if}}
+              </h4>
+              {{#if @beingTreatedBy}}
+                <span data-test-submission-overview-header-treated-by class="auk-u-block">
+                  {{t "this-submission-is-being-treated-by-user"
+                      user=@beingTreatedBy.fullName}}
+                </span>
+              {{/if}}
+            {{/unless}}
+          {{/let}}
         </div>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
