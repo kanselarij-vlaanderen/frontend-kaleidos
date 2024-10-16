@@ -15,7 +15,7 @@
       {{#if this.loadDecisionmakingFlow.isIdle}}
         <Cases::Submissions::DecisionmakingFlowSelector
           class="auk-u-mb-4"
-          @disableEdit={{not (user-may "edit-in-treatment-submissions")}}
+          @disableEdit={{or (not (user-may "edit-in-treatment-submissions")) @isUpdate }}
           @selectedDecisionmakingFlow={{this.decisionmakingFlow}}
           @selectedDecisionmakingFlowTitle={{this.decisionmakingFlowTitle}}
           @onChangeTitle={{fn (mut this.decisionmakingFlowTitle)}}
@@ -31,6 +31,7 @@
               @alignment="inline"
               @selected={{this.agendaItemType}}
               @onChange={{this.onChangeAgendaItemType}}
+              @disabled={{@isUpdate}}
               as |Group|
             >
               {{#each this.agendaItemTypes as |type|}}
@@ -49,6 +50,7 @@
           data-test-submission-description-edit-confidential
           id="submission-confidential"
           @checked={{@submission.confidential}}
+          @disabled={{@isUpdate}}
           @onChange={{queue
             (set @submission "confidential")
             (set this "confidentialChanged" true)

@@ -3,9 +3,11 @@ const selectors = {
   casesHeader: {
     title: '[data-test-cases-header-title]',
     addCase: '[data-test-cases-header-add-case]',
-    addSubmission: '[data-test-cases-header-add-submission]',
+    openSubmissionModal: '[data-test-cases-header-open-submission-modal]',
     clearFilter: '[data-test-cases-header-clear-filter]',
     filter: '[data-test-cases-header-filter-input]',
+    navigateToCases: '[data-test-cases-header-navigate-to-cases]',
+    navigateToNewSubmission: '[data-test-cases-header-navigate-to-new-submission]',
   },
 
   // new-case
