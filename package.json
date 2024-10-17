@@ -60,7 +60,7 @@
     "@kanselarij-vlaanderen/au-kaleidos-css": "3.21.0",
     "@lblod/ember-acmidm-login": "git+https://github.com/ValenberghsSven/ember-acmidm-login.git#75d8aab5839585201a68df4701a15bcfda42b32d",
     "@lblod/ember-mock-login": "^0.7.0",
-    "@lblod/ember-rdfa-editor": "git+https://github.com/ValenberghsSven/ember-rdfa-editor.git#23ff47de32382f55c39207b8e3625c8842fc2dae",
+    "@lblod/ember-rdfa-editor": "9.11.0",
     "@ljharb/eslint-config": "^21.0.1",
     "@nullvoxpopuli/ember-composable-helpers": "^5.1.1",
     "@typescript-eslint/parser": "^5.48.2",
@@ -72,6 +72,7 @@
     "dayjs": "^1.11.10",
     "ember-async-data": "^1.0.3",
     "ember-auto-import": "^2.6.3",
+    "ember-changeset": "^4.1.2",
     "ember-cli": "~4.12.2",
     "ember-cli-app-version": "^6.0.0",
     "ember-cli-autoprefixer": "^2.0.0",
@@ -155,9 +156,7 @@
     "xml-formatter": "^3.2.0"
   },
   "overrides": {
-    "babel-plugin-ember-template-compilation": "2.2.1",
-    "prosemirror-transform": "1.8.0",
-    "prosemirror-model": "1.19.4"
+    "babel-plugin-ember-template-compilation": "2.2.1"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
