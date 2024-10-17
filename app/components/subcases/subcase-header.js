@@ -52,10 +52,10 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
 
   get canMove() {
     return (
-      (this.loadData.isIdle &&
+      this.loadData.isIdle &&
         this.currentSession.may('manage-agendaitems') &&
-        !this.args.parliamentFlow) ||
-      (this.parliamentRetrievalActivity && this.args.subcases.length === 1)
+        (!this.args.parliamentFlow ||
+      (this.parliamentRetrievalActivity && this.args.subcases.length === 1))
     );
   }
 
