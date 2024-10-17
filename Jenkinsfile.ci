@@ -69,6 +69,8 @@ pipeline {
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T document-stamping chmod 777 -R /share"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T draft-file chmod 777 -R /share"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T draft-file-mover chmod 777 -R /share"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T pdf-signature-remover chmod 777 -R /share"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} exec -T pdf-flattener chmod 777 -R /share"
 
         sh "cp ${WORKSPACE}/ci/.env.cypress ${WORKSPACE}/.env.cypress"
 
@@ -81,7 +83,7 @@ pipeline {
         // Reset the contents of DB an search
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill elasticsearch search"
         sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} rm -fs elasticsearch search"
-        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion forever-cache cache resource cache-warmup yggdrasil migrations publication-report decision-extraction decision-report-generation file-bundling minutes-report-generation document-stamping draft-file draft-file-mover"
+        sh "cd ${WORKSPACE}/kaleidos-project && docker-compose  -p ${projectName} kill triplestore file docx-conversion forever-cache cache resource cache-warmup yggdrasil migrations publication-report decision-extraction decision-report-generation file-bundling minutes-report-generation document-stamping draft-file draft-file-mover pdf-signature-remover pdf-flattener"
         sh "cd ${WORKSPACE}/kaleidos-project && rm -rf testdata && rm -rf testdata-elasticsearch"
         sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata.zip -d ${WORKSPACE}/kaleidos-project"
         sh "cd ${WORKSPACE}/kaleidos-project && unzip -o testdata-elasticsearch.zip -d ${WORKSPACE}/kaleidos-project"
