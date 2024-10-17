@@ -28,11 +28,11 @@ export default class AgendaPressRoute extends Route {
         ':or:': {
           'is-approval': false,
           ':has-no:is-approval': true,
-        }
+        },
+        ':has:created': `date-added-for-cache-busting-${new Date().toISOString()}`,
       },
       include: 'mandatees,agenda-activity.subcase.type',
     });
-
     return {
       meeting,
       agendaitems: await this.sortAgendaitems(agendaitems),

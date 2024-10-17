@@ -28,6 +28,7 @@
                 {{#each this.notaGroups.value as |notaGroup|}}
                   <Agenda::Press::ListSection::ItemGroup
                     @items={{notaGroup}}
+                    @hideNotFormallyOk={{true}}
                   />
                 {{/each}}
               </div>
