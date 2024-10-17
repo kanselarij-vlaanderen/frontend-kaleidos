@@ -1478,5 +1478,7 @@
   "comment-title-to-submitter": "Opmerking voor de kabinetsdossierbeheerder",
   "current-case": "Huidig dossier",
   "on-agenda-status-pill": "Geagendeerd",
-  "submission-internal-review": "Interne opmerking"
+  "submission-internal-review": "Interne opmerking",
+  "press-agenda": "Persagenda",
+  "generate-press-agenda": "Genereer persagenda"
 }
