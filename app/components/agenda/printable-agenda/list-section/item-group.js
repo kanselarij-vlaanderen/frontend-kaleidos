@@ -29,7 +29,9 @@ export default class AgendaPrintableAgendaListSectionItemGroupComponent extends 
     const subcase = await agendaActivity?.subcase;
     if (this.isBekrachtiging) {
       const ratification = await subcase?.ratification;
-      pieces.push(ratification);
+      if (ratification) {
+        pieces.push(ratification);
+      }
     }
     return pieces;
   };
