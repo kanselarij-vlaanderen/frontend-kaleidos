@@ -236,7 +236,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     if (this.model.pieces.some(piece => piece.stamp)) {
       const previousPiece = yield piece.previousPiece;
       if (previousPiece.stamp) {
-        yield this.documentService.stampDocuments([piece])
+        yield this.documentService.stampDocuments([piece]);
       }
     }
     yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
