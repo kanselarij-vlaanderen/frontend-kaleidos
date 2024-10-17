@@ -44,6 +44,7 @@ const {
 // - manage-meetings: Create and update meetings
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
+// - manage-retracted-agendaitems: Re-propose retracted agendaitems
 // - manage-decisions: Change the decision result, upload a decision report
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
@@ -107,6 +108,7 @@ const groups = [
         'remove-signatures',
         'manage-agenda-versions',
         'manage-agendaitems',
+        'manage-retracted-agendaitems',
         'manage-decisions',
         'manage-ratification',
         'manage-cases',
