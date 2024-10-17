@@ -2,7 +2,7 @@
   @size="small"
   @position="left"
   @skin="gray-200"
-  class="auk-scroll-wrapper"
+  class="auk-scroll-wrapper auk-u-position-relative l-case__sidebar"
   @isCollapsed={{false}}
 >
   <Auk::Navbar @skin="gray-200" class="au-u-visible-from@medium">
@@ -22,7 +22,6 @@
         {{#if (eq item.type "regular")}}
           <Subcases::SideNav::Subcase
             @subcase={{item.subcase}}
-            @selected={{false}}
             @number={{item.number}}
           />
         {{else if (eq item.type "parliament")}}
@@ -32,15 +31,12 @@
             @latestRetrievalActivity={{item.latestRetrievalActivity}}
             @parliamentFlow={{item.parliamentFlow}}
             @date={{item.sortDate}}
-            @selected={{false}}
           />
         {{else if (eq item.type "publication")}}
           <Subcases::SideNav::PublicationSubcase
             @decisionmakingFlow={{item.decisionmakingFlow}}
             @publicationFlow={{item.publicationFlow}}
             @date={{item.sortDate}}
-            @selected={{false}}
-
           />
         {{/if}}
       {{/each}}
