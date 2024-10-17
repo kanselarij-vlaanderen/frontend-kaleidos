@@ -14,13 +14,12 @@
   {{#if this.isLoading}}
     <Auk::Loader @message={{t "please-be-patient"}} />
   {{else if (not this.results.length)}}
-    <Auk::Panel class="auk-u-mt-4">
-      <Auk::Panel::Body>
-        <Auk::EmptyState
-          @message={{t "no-results-found"}}
-        />
-      </Auk::Panel::Body>
-    </Auk::Panel>
+    <div class="auk-u-mt-4">
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found"}}
+      />
+    </div>
   {{else}}
     <table class="auk-table auk-table--striped">
       <thead>
