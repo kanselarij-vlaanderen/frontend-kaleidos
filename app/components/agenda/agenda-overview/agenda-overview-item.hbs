@@ -207,23 +207,23 @@
           <div>
             {{#if this.subcase.internalReview}}
               {{#if this.subcase.internalReview.privateComment}}
-                <p class="auk-u-text-muted">
+                <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny auk-u-text-muted">
+                  <AuIcon @icon="lock-closed" />
                   <strong class="auk-u-text-bold">
-                    <AuIcon @icon="lock-closed" />
                     {{t "private-comment-title"}}:
                   </strong>
                   {{this.subcase.internalReview.privateComment}}
-                </p>
+                </span>
               {{/if}}
             {{! legacy or isApproval items }}
             {{else if @agendaitem.privateComment}}
-              <p class="auk-u-text-muted">
+              <span class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny auk-u-text-muted">
+                <AuIcon @icon="lock-closed" />
                 <strong class="auk-u-text-bold">
-                  <AuIcon @icon="lock-closed" />
                   {{t "private-comment-title"}}:
                 </strong>
                 {{@agendaitem.privateComment}}
-              </p>
+              </span>
             {{/if}}
           </div>
           <div class="vlc-agenda-items__icons">
