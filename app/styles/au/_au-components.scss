@@ -209,12 +209,6 @@ $au-label-color: var(--au-gray-700);
     > p + ol {
       margin-top: 0.2rem;
     }
-
-    > ul[data-list-style='upper-alpha'] + p,
-    > ol[data-list-style='upper-alpha'] + p {
-      margin-top: 0;
-    }
-
     > * + h1,
     > * + h2,
     > * + h3 {
@@ -240,6 +234,22 @@ $au-label-color: var(--au-gray-700);
   sup {
     vertical-align: super;
     font-size: smaller;
+  }
+
+  [data-indentation-level='1'] {
+    margin-left: 2.4rem;
+  }
+
+  [data-indentation-level='2'] {
+    margin-left: 4.8rem;
+  }
+
+  [data-indentation-level='3'] {
+    margin-left: 7.2rem;
+  }
+
+  [data-indentation-level='4'] {
+    margin-left: 9.6rem;
   }
 
   .auk-table & { // override the styling inherited from parent auk-table elements/components to its default
@@ -601,14 +611,33 @@ $au-label-color: var(--au-gray-700);
 }
 
 .au-c-content {
-  ol:not(.au-c-list-horizontal) {
+  ol {
     list-style: decimal;
     margin-left: $au-unit;
+  }
 
+  ol li + li {
+    margin-top: 0.1rem;
+  }
+
+  ol > li[data-list-marker]::marker {
+    content: attr(data-list-marker);
+    font-variant-numeric: tabular-nums;
+  }
+
+  ol > *[data-content-container] > li[data-list-marker]::marker {
+    content: attr(data-list-marker);
+    font-variant-numeric: tabular-nums;
+  }
+
+  // NOTE: legacy list styling
+  ol[data-list-style] {
     & > li > ol:not([data-list-style]) {
       list-style-type: inherit;
     }
+  }
 
+  ol {
     &[data-list-style='decimal'] {
       list-style-type: decimal;
     }
@@ -623,32 +652,9 @@ $au-label-color: var(--au-gray-700);
 
     &[data-list-style='upper-alpha'] {
       list-style-type: upper-alpha;
-      margin-left: 2rem;
-      ol {
-        margin-left: 2rem;
-      }
     }
   }
 
-  ol.au-c-list {
-    list-style: none;
-    margin-left: 0;
-  }
-
-  ol:not(.au-c-list-horizontal) li + li {
-    margin-top: 0.1rem;
-  }
-
-  ol.au-c-list li + li {
-    margin-top: 0;
-  }
-
-  .list-style-none {
-    list-style-type: none;
-  }
-
-  // Provides the general styling for the decimal-extended (multi-level) list type
-  // NOTE: This is limited to a certain levels deep because otherwise the styling keep overriding each other (`[data-list-style='decimal-extended']` and the rest of the ol/ul selectors)
   @mixin decimal-extended-styling($levels, $current-level: 1) {
     display: table;
     list-style-type: none;
@@ -690,22 +696,10 @@ $au-label-color: var(--au-gray-700);
   ol[data-list-style='decimal-extended'] {
     @include decimal-extended-styling(5, 1);
   }
+}
 
-  [data-indentation-level='1'] {
-    margin-left: 2.4rem;
-  }
-
-  [data-indentation-level='2'] {
-    margin-left: 4.8rem;
-  }
-
-  [data-indentation-level='3'] {
-    margin-left: 7.2rem;
-  }
-
-  [data-indentation-level='4'] {
-    margin-left: 9.6rem;
-  }
+.au-c-content__list--no-style {
+  list-style-type: none;
 }
 
 .au-c-link {

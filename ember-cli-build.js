@@ -57,6 +57,9 @@ module.exports = function (defaults) {
           }),
         ],
       },
+      // exclude: [
+      //   'ember-changeset',
+      // ],
     },
   });
 
