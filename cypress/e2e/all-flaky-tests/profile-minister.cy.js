@@ -639,6 +639,7 @@ context('Testing the application as Minister user', {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
       cy.get(appuniversum.loader).should('not.exist');
+      cy.get(route.signatures.dataTable);
       cy.get(route.signatures.openMinisterFilter).should('not.exist');
     });
 
