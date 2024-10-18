@@ -44,7 +44,7 @@ context('testing new add subcase command', () => {
       fields: [],
     };
     const domain2 = {
-      name: 'Economie, Wetenschap en Innovatie',
+      name: 'Werk, Economie, Wetenschap, Innovatie, Landbouw en Sociale Economie',
       selected: false,
       fields: ['Wetenschappelijk onderzoek', 'Innovatie'],
     };

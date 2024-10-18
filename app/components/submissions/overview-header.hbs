@@ -36,7 +36,7 @@
                 {{else if @submission.decisionmakingFlowTitle.length}}
                   <Auk::AbbreviatedText
                     @text={{or @submission.decisionmakingFlowTitle}}
-                    @maxLength={{250}}
+                    @maxLength={{150}}
                   />
                 {{else}}
                   {{! We should only hit this temporarily when decisionmakingFlow is loading or changing}}

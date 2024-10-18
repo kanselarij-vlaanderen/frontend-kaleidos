@@ -133,9 +133,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @task
   *cancelEditDetails() {
     this.args.piece.rollbackAttributes(); // in case of piece name change
-    if (this.internalReview?.hasDirtyAttributes) {
-      this.internalReview.rollbackAttributes();
-    }
     yield this.loadDetailsData.perform();
     yield this.replacementSourceFile?.destroyRecord();
     yield this.addedSourceFile?.destroyRecord();
@@ -213,12 +210,6 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
     } else {
       yield this.documentService.checkAndRestamp([this.args.piece]);
-    }
-    
-    if (this.internalReview?.hasDirtyAttributes) {
-      yield this.internalReview.belongsTo('subcase').reload();
-      yield this.internalReview.hasMany('submissions').reload();
-      yield this.internalReview.save();
     }
 
     this.isEditingDetails = false;
