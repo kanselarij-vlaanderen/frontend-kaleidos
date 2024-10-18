@@ -1,4 +1,4 @@
-<li class="auk-sidebar__item auk-sidebar__item--styled auk-sidebar__item--inside-link {{if @selected 'auk-sidebar__item--active'}}">
+<li class="auk-sidebar__item auk-sidebar__item--styled">
   <LinkTo
     @route="cases.case.publication-flow"
     @models={{array @decisionmakingFlow.id @publicationFlow.id}}
@@ -13,7 +13,7 @@
       {{datetime @publicationFlow.modified}}
     </div>
     <div class="au-u-margin-top-tiny">
-      <Publications::Publication::StatusPill 
+      <Publications::Publication::StatusPill
         @publicationFlow={{@publicationFlow}}
       />
     </div>
