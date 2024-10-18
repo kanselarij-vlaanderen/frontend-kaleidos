@@ -287,6 +287,10 @@ const groups = [
       ],
       full: [
         'manage-signatures',
+        'manage-only-specific-signatures',
+        'send-only-specific-cases-to-vp',
+        'create-submissions',
+        'edit-sent-back-submissions',
       ]
     }
   },

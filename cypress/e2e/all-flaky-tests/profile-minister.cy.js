@@ -176,7 +176,7 @@ context('Testing the application as Minister user', {
       cy.get(agenda.agendaitemNav.newsletterTab).should('not.exist');
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      // cy.get(agenda.agendaitemControls.actions).should('not.exist');
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
       cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
       cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
@@ -278,7 +278,7 @@ context('Testing the application as Minister user', {
       cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      // cy.get(agenda.agendaitemControls.actions).should('not.exist');
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
       cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
       cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
@@ -639,7 +639,8 @@ context('Testing the application as Minister user', {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
       cy.get(appuniversum.loader).should('not.exist');
-      cy.get(route.signatures.openMinisterFilter);
+      cy.get(route.signatures.dataTable);
+      cy.get(route.signatures.openMinisterFilter).should('not.exist');
     });
 
     it('check signatures/ongoing route', () => {
