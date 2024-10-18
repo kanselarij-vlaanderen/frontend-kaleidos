@@ -46,6 +46,7 @@ export default class DocumentController extends Controller {
   @action
   tabChanged(tabName){
     this.tab = tabName;
+    this.send('applyHash');
   }
 
   @action
