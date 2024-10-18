@@ -2,7 +2,7 @@
   {{#if @parliamentFlow.status}}
     <AuPill
       @size="small"
-      @skin={{if @parliamentFlow.isIncomplete "warning" "success"}}
+      @skin={{if @parliamentFlow.isIncomplete "warning" (if @parliamentFlow.isRefused "error" "success")}}
     >
       {{#if @useAltLabel}}
         {{@parliamentFlow.status.altLabel}}
