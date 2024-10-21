@@ -11,7 +11,7 @@ pipeline {
 
   environment {
     branch = getBranchName("${env.GIT_BRANCH}")
-    project = "Kaleidos"
+    project = "kaleidos"
     appName = "${env.JOB_NAME - ~/\/.*/}"
     version = "${branch}-${env.BUILD_NUMBER}"
     projectName = "${project}--${appName}--${version}"
