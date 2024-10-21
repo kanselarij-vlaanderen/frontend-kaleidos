@@ -107,11 +107,7 @@ pipeline {
         sh "export HOST_UID_GID=\$(id -u):\$(id -g)"
         sh "cd ${WORKSPACE}/kaleidos-project && docker compose -p  ${projectName} exec -T e2e-electron cypress run"
         // run specific specs example
-<<<<<<< HEAD
         // sh "cd ${WORKSPACE}/kaleidos-project && docker compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/e2e/e2e/propagatie-overheid.cy.js'"
-=======
-        // sh "cd ${WORKSPACE}/kaleidos-project && docker compose -p  ${projectName} exec -T e2e-electron cypress run --spec '**/e2e/unit/submission.cy.js'"
->>>>>>> 95f1ffefd573314cbff6ecefc06393fc8e928a9f
       }
     }
   }
