@@ -3,6 +3,7 @@
     <AuFormRow data-test-route-search-date-from>
       <AuLabel>{{t "from"}}</AuLabel>
       <Auk::Datepicker
+        class="auk-u-maximize-width"
         @date={{@dateFrom}}
         @onChange={{@onDateFromChange}}
         @enableClear={{@dateFrom}}
@@ -12,6 +13,7 @@
     <AuFormRow class="au-u-margin-top-small" data-test-route-search-date-to>
       <AuLabel>{{t "until-inclusive"}}</AuLabel>
       <Auk::Datepicker
+        class="auk-u-maximize-width"
         @date={{@dateTo}}
         @onChange={{@onDateToChange}}
         @enableClear={{@dateTo}}
