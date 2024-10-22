@@ -45,6 +45,7 @@ const {
 // - manage-agenda-versions: Create new agenda versions, close agenda versions, reopen old agenda versions, ...
 // - manage-agendaitems: Approve all agendaitems, add new agendaitems to an agenda, ...
 // - manage-retracted-agendaitems: Re-propose retracted agendaitems
+// - manage-press-agenda: Allow access to press agenda action
 // - manage-decisions: Change the decision result, upload a decision report
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
@@ -120,6 +121,7 @@ const groups = [
         'manage-decision-publications',
         'manage-document-publications',
         'manage-themis-publications',
+        'manage-press-agenda',
         'manage-settings',
         'manage-users',
         'manage-alerts',
@@ -172,6 +174,7 @@ const groups = [
         'manage-decision-publications',
         'manage-document-publications',
         'manage-themis-publications',
+        'manage-press-agenda',
         'manage-minutes',
         'manage-secretary-signatures',
         'add-past-mandatees',
@@ -215,6 +218,7 @@ const groups = [
         'manage-decision-publications',
         'manage-document-publications',
         'manage-themis-publications',
+        'manage-press-agenda',
         'manage-minutes',
         'manage-secretary-signatures',
         'add-past-mandatees',
@@ -285,6 +289,10 @@ const groups = [
       ],
       full: [
         'manage-signatures',
+        'manage-only-specific-signatures',
+        'send-only-specific-cases-to-vp',
+        'create-submissions',
+        'edit-sent-back-submissions',
       ]
     }
   },
