@@ -7,7 +7,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
@@ -315,17 +315,18 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
+    await subcase?.type;
     const agendaitemType = await this.args.agendaitem.type;
     let newBetreftContent;
     if (subcase?.isBekrachtiging) {
       const ratification = await subcase.ratification;
       newBetreftContent = await generateBetreft(
-        subcase.shortTitle,
-        null,
+        shortTitle,
+        title,
         this.args.agendaitem.isApproval,
         ratification ? [...documents, ratification] : documents,
-        // null,
-        // agendaitemType,
+        null, // This seems unused on ratifications
+        agendaitemType,
       );
     } else {
       newBetreftContent = await generateBetreft(
@@ -374,6 +375,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       .decisionResultCode;
     const agendaActivity = await this.args.agendaContext.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
+    await subcase?.type;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
@@ -383,16 +385,10 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         break;
       default:
         if (subcase?.isBekrachtiging) {
-          newBeslissingHtmlContent = "De Vlaamse Regering bekrachtigt bovengenoemd decreet en beslist over te gaan tot de afkondiging ervan.";
+          newBeslissingHtmlContent = this.intl.t("ratification-decision-text");
         } else if (this.args.agendaitem.isApproval) {
           const { shortTitle, title } = this.args.agendaContext.agendaitem;
-          let beslissing = title || shortTitle || '';
-          beslissing = beslissing.replace(
-            /Goedkeuring van/i,
-            'goedkeuring aan'
-          );
-          newBeslissingHtmlContent = `De Vlaamse Regering hecht haar ${beslissing}`;
-          // newBeslissingHtmlContent += beslissing;
+          newBeslissingHtmlContent = generateApprovalText(shortTitle, title);
         } else {
           newBeslissingHtmlContent = this.nota || '';
         }

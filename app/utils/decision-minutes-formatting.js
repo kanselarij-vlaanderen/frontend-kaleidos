@@ -54,7 +54,7 @@ async function generateBetreft(
     }
     return document;
   }))
-  const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
+  const isNota = agendaitemType?.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
   const filteredDocuments = documentsWithoutBijlageTerInzage.filter((document) => document !== null);
   let betreft = '';
   betreft += `${shortTitle}`;

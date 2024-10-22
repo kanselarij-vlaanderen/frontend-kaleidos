@@ -68,6 +68,9 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
+  const agendaActivity = await agendaitem.agendaActivity;
+  const subcase = await agendaActivity?.subcase;
+  await subcase?.type;
   let text = "";
   if (agendaitem.isApproval) {
     text = generateApprovalText(agendaitem.shortTitle, agendaitem.title);
@@ -80,20 +83,24 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     }
     switch (decisionResultCode?.uri) {
       case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
+        if (subcase?.isBekrachtiging) {
+          text = intl.t("ratification-decision-text");
+          break;
+        }
         text = intl.t("minutes-approval", {
           mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
           reportName: await generateReportName(agendaitem, meeting),
-        })
+        });
         break;
       case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
         text = intl.t("minutes-retracted", {
           mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
-        })
+        });
         break;
       case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
         text = intl.t("minutes-acknowledged", {
           mededelingOrNota: mededelingOrNota
-        })
+        });
         break;
       case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
         text = intl.t("minutes-postponed", {
@@ -112,18 +119,29 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const sortedPieces = await sortPieces(
     pieces, { isApproval: agendaitem.isApproval }
   );
-  const agendaActivity = await agendaitem.agendaActivity;
-  const subcase = await agendaActivity?.subcase;
   const agendaitemType = await agendaitem.type;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
-  const betreft = await generateBetreft(
-    agendaitem.shortTitle,
-    agendaitem.title,
-    agendaitem.isApproval,
-    sortedPieces,
-    subcase?.subcaseName,
-    agendaitemType,
-  );
+  let betreft;
+  if (subcase?.isBekrachtiging) {
+    const ratification = await subcase.ratification;
+    betreft = await generateBetreft(
+      agendaitem.shortTitle,
+      agendaitem.title,
+      agendaitem.isApproval,
+      ratification ? [...sortedPieces, ratification] : sortedPieces,
+      null,
+      agendaitemType,
+    );
+  } else {
+    betreft = await generateBetreft(
+      agendaitem.shortTitle,
+      agendaitem.title,
+      agendaitem.isApproval,
+      sortedPieces,
+      subcase?.subcaseName,
+      agendaitemType,
+    );
+  }
   return `
   <h4 ${pagebreak}><u>${
     agendaitem.number
