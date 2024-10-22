@@ -196,7 +196,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @task
   *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
-    documentContainer.position = index + 1 + (this.model.pieces?.length ?? 0);
+    const containerCount = yield this.store.count('document-container', {
+      'filter[pieces][agendaitems][id]': this.agendaitem.id,
+    });
+    documentContainer.position = index + 1 + (containerCount ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();
@@ -231,9 +234,11 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
     // Stamp the new piece if needed
     if (this.model.pieces.some(piece => piece.stamp)) {
-      yield this.documentService.stampDocuments([piece])
+      const previousPiece = yield piece.previousPiece;
+      if (previousPiece.stamp) {
+        yield this.documentService.stampDocuments([piece]);
+      }
     }
-
     yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
   }
 

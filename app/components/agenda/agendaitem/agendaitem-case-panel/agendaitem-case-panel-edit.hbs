@@ -36,6 +36,16 @@
       </AuFormRow>
        {{#if @subcase}}
         <AuFormRow>
+          <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
+          <Utils::ModelSelector
+            @modelName="subcase-type"
+            @sortField="label"
+            @displayField="label"
+            @selected={{this.subcaseType}}
+            @onChange={{this.selectSubcaseType}}
+          />
+        </AuFormRow>
+        <AuFormRow>
           <AuLabel>{{t "subcase-name"}}</AuLabel>
           <div
             class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small au-u-maximize-width"
