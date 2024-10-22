@@ -82,7 +82,7 @@ pipeline {
                 sh "cd ${WORKSPACE}/kaleidos-project && chmod 1777 -R data"
                 sh "cd ${WORKSPACE}/kaleidos-project && rm -rf data/*"
                 sh "cd ${WORKSPACE}/kaleidos-project && cp -rf testdata/* data"
-                sh "cd ${WORKSPACE}/kaleidos-project && docker-compose -p ${projectName} up -d triplestore migrations cache forever-cache"
+                sh "cd ${WORKSPACE}/kaleidos-project && docker compose -p ${projectName} up -d triplestore migrations cache forever-cache"
                 // cascaded startup, wait for migrations before warmup up cache
                 sh "sleep 30"
 
