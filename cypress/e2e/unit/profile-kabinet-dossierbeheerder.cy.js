@@ -862,7 +862,6 @@ context('Testing the application as Kabinetdossierbeheerder', {
       cy.get(appuniversum.alert.message).contains(alertMessage);
 
       // decision document
-      // TODO flakey
       cy.visit('document/6374FAD1D9A98BD0A2288589?tab=Ondertekenen');
       cy.get(appuniversum.alert.message).contains(alertMessage);
 
