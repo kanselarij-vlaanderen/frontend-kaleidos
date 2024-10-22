@@ -69,7 +69,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   loadNota = task(async () => {
     const nota = await this.agendaitemNota.nota(
-      this.args.agendaContext.agendaitem
+      this.args.agendaitem
     );
     if (!nota) {
       return;
@@ -311,7 +311,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   @action
   async updateBetreftContent() {
-    const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const { shortTitle, title, isApproval } = this.args.agendaitem;
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
@@ -323,7 +323,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       newBetreftContent = await generateBetreft(
         shortTitle,
         title,
-        this.args.agendaitem.isApproval,
+        isApproval,
         ratification ? [...documents, ratification] : documents,
         null, // This seems unused on ratifications
         agendaitemType,
@@ -332,7 +332,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       newBetreftContent = await generateBetreft(
         shortTitle,
         title,
-        this.args.agendaitem.isApproval,
+        isApproval,
         documents,
         subcase?.subcaseName,
         agendaitemType,
@@ -373,7 +373,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     let newBeslissingHtmlContent;
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
-    const agendaActivity = await this.args.agendaContext.agendaitem.agendaActivity;
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
     await subcase?.type;
     switch (decisionResultCode?.uri) {
@@ -387,7 +387,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         if (subcase?.isBekrachtiging) {
           newBeslissingHtmlContent = this.intl.t("ratification-decision-text");
         } else if (this.args.agendaitem.isApproval) {
-          const { shortTitle, title } = this.args.agendaContext.agendaitem;
+          const { shortTitle, title } = this.args.agendaitem;
           newBeslissingHtmlContent = generateApprovalText(shortTitle, title);
         } else {
           newBeslissingHtmlContent = this.nota || '';
@@ -541,7 +541,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       created: now,
       modified: now,
       name: await generateReportName(
-        this.args.agendaContext.agendaitem,
+        this.args.agendaitem,
         this.args.agendaContext.meeting,
       ),
     });
