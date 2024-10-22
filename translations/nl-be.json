@@ -1440,7 +1440,7 @@
   "treated-on": "Behandeld op {date} om {hour}",
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
   "submit-new-documents": "Dien nieuwe documenten in",
-  "submit-new-case": "Nieuw dossier indienen",
+  "submit-new-case": "Nieuw agendapunt indienen",
   "submit-new-agendaitem": "Nieuw agendapunt indienen",
   "open-current-submission": "Open huidige indiening",
   "delete-submission-confirmation": "Bent u zeker dat u de indiening wilt verwijderen?",
@@ -1479,5 +1479,7 @@
   "comment-title-to-submitter": "Opmerking voor de kabinetsdossierbeheerder",
   "current-case": "Huidig dossier",
   "on-agenda-status-pill": "Geagendeerd",
-  "submission-internal-review": "Interne opmerking"
+  "submission-internal-review": "Interne opmerking",
+  "press-agenda": "Persagenda",
+  "generate-press-agenda": "Genereer persagenda"
 }
