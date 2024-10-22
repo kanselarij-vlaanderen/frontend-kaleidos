@@ -10,7 +10,6 @@ import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
 import { replaceById } from 'frontend-kaleidos/utils/html-utils';
-import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
@@ -133,6 +132,7 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate = nextBusinessDay;
     }
     this.initializeMeetingNumber.perform(true);
+    this.recalculateSecretary.perform(); // when selecting a range with possibly different secretary mandatees
   }
 
   initializeSecretary = task(async () => {
@@ -141,10 +141,27 @@ export default class MeetingEditMeetingComponent extends Component {
       if (isPresent(secretary)) {
         this.secretary = secretary;
       } else if (this.isNew) {
-        // if a meeting had no secretary yet we don't set a default one automatically
         const currentApplicationSecretary =
-          await this.mandatees.getCurrentApplicationSecretary();
+          await this.mandatees.getApplicationSecretary();
         this.secretary = currentApplicationSecretary;
+      }
+      // if a meeting had no secretary yet we don't set the current active default one automatically     
+    }
+  });
+
+  recalculateSecretary = task(async () => {
+    // check if the secretary is active on the agenda date unless no secretary was set
+    if (!this.isPreKaleidos && this.secretary?.id) {
+      const isInDateRange =
+      this.secretary.start <= this.startDate &&
+      (this.startDate <= this.secretary.end ||
+        this.secretary.end === undefined);
+
+      if (!isInDateRange) {
+        // selected secretary is not active for this agenda date, trying to find one in range
+        const applicationSecretaryForDate =
+          await this.mandatees.getApplicationSecretary(this.startDate);
+        this.secretary = applicationSecretaryForDate;
       }
     }
   });
@@ -240,47 +257,6 @@ export default class MeetingEditMeetingComponent extends Component {
       );
   }
 
-  regenerateDecisionReportNames = task(async () => {
-    const reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-    });
-    if (reports?.length > 0) {
-      let { alterableReports } = await this.decisionReportGeneration.getAlterableReports(reports);
-      if (alterableReports.length === 0) {
-        this.toaster.error(
-          this.intl.t('reports-cannot-be-altered')
-        );
-        return;
-      }
-      await Promise.all(alterableReports.map(async (report) => {
-        const agendaitem = await this.store.queryOne('agendaitem', {
-          'filter[:has-no:next-version]': true,
-          'filter[treatment][decision-activity][report][:id:]': report.id,
-        });
-        const documentContainer = await report.documentContainer;
-        const pieces = await documentContainer.pieces;
-        report.name = await generateReportName(agendaitem, this.args.meeting, pieces.length);
-        await report.belongsTo('file').reload();
-        await report.save();
-      }));
-    }
-  });
-
-  regenerateDecisionReports = task(async () => {
-    const reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-    });
-    if (reports.length) {
-      this.decisionReportGeneration.generateReplacementReports.perform(reports);
-    }
-  });
-
   @task
   *saveMeeting() {
     const now = new Date();
@@ -319,7 +295,7 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       yield Promise.all(saveActivities);
-      if (!this.isPreKaleidos) {
+      if (!this.isPreKaleidos || !this.isNew) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
           currentKind?.uri !== this.selectedKind.uri ||
@@ -348,10 +324,11 @@ export default class MeetingEditMeetingComponent extends Component {
               })
             );
           }
+          let regenerateReportNames = false;
           if (currentMeetingNumberRepresentation !== this.numberRepresentation) {
-            yield this.regenerateDecisionReportNames.perform();
+            regenerateReportNames = true;
           }
-          yield this.regenerateDecisionReports.perform();
+          yield this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, regenerateReportNames);
           yield this.regenerateMinutes();
         }
       }

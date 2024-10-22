@@ -1,15 +1,35 @@
 <tr
   data-test-document-details-row
   class={{if @row.isToBeDeleted "auk-u-opacity--1/2"}}
+  {{sortable-item
+    model=@row
+    distance="30"
+    disabled=@disableEditingPosition
+  }}
 >
+  <td class="auk-table__draggable-col">
+    {{#unless @disableEditingPosition}}
+      <AuIcon
+        class="auk-u-cursor-grab auk-u-text-muted"
+        @icon="drag-handle-2"
+        @size="large"
+        {{sortable-handle}}
+      />
+    {{/unless}}
+  </td>
   {{#if @isEditingEnabled}}
-    <td class="auk-table-checkbox-col">
+    <td class="auk-table__checkbox-col">
       <AuCheckbox
         @checked={{@isSelected}}
         @onChange={{fn @onSelect @row}}
       />
     </td>
   {{/if}}
+  <td class="auk-table__checkbox-col">
+    {{#if @row.documentContainer.position}}
+      {{@row.documentContainer.position}}.
+    {{/if}}
+  </td>
   <td>
     {{#if (and @isEditingEnabled (not @row.hasSentSignFlow))}}
       <AuInput
@@ -34,7 +54,7 @@
       {{@row.documentType.label}}
     {{/if}}
   </td>
-  {{#if @isEditingEnabled}}
+  {{#if (and @isEditingEnabled @isAccessLevelEnabled)}}
     <td>
       <Utils::AccessLevelSelector
         data-test-document-details-row-access-level
@@ -62,10 +82,11 @@
           >
             {{t "present-for-signing"}}
           </AuToggleSwitch>
-      {{/if}}
-    </td>
+        {{/if}}
+      </td>
+    {{/if}}
   {{/if}}
-  {{else}}
+  {{#if (not @isEditingEnabled)}}
     <td>
       <Utils::Documents::FileTypePill
         @extension={{@row.piece.file.extension}}
@@ -73,8 +94,9 @@
     </td>
   {{/if}}
   <td class="auk-u-text-align--right">
-    {{#if (or @row.hasSentSignFlow (not @isEditingEnabled))}}
+    {{#if (or @row.hasSentSignFlow (not @isEditingEnabled) @disableDelete)}}
       <AuLinkExternal
+        @skin="button-naked"
         @icon="book"
         @hideText={{true}}
         href={{@row.piece.viewDocumentURL}}
@@ -90,7 +112,7 @@
       >
         {{t "undo"}}
       </AuButton>
-    {{else if (not @row.hasSentSignFlow)}}
+    {{else if (and (not @row.hasSentSignFlow) (not @disableDelete))}}
       <AuButton
         data-test-document-details-row-delete
         @skin="naked"

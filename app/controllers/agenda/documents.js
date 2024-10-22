@@ -46,9 +46,9 @@ export default class AgendaDocumentsController extends Controller {
 
   @task
   *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
+    const savePromises = this.newPieces.map(async(piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece.perform(piece);
         throw error;
@@ -64,8 +64,12 @@ export default class AgendaDocumentsController extends Controller {
    * Save a new document container and the piece it wraps
   */
   @task
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    const containerCount = yield this.store.count('document-container', {
+      'filter[pieces][meeting][id]': this.meeting.id,
+    });
+    documentContainer.position = index + 1 + (containerCount ?? 0);
     yield documentContainer.save();
     piece.name = piece.name?.trim()
     yield piece.save();

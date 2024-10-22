@@ -17,6 +17,7 @@ export default class Piece extends Model {
   @attr('datetime') modified;
   @attr('datetime') accessLevelLastModified;
   @attr('string') originalName;
+  @attr('string') stamp;
 
   @belongsTo('concept', { inverse: null, async: true }) accessLevel;
   @belongsTo('language', { inverse: null, async: true }) language;
@@ -63,6 +64,7 @@ export default class Piece extends Model {
 
   // resources with pieces linked:
 
+  @belongsTo('draft-piece', { inverse: 'acceptedPiece', async: true, as: 'draft-piece' }) draftPiece;
   @belongsTo('submission-activity', { inverse: 'pieces', async: true, as: 'piece' })
   submissionActivity;
   @belongsTo('meeting', { inverse: 'pieces', async: true, as: 'piece' }) meeting;

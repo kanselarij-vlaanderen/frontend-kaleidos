@@ -103,7 +103,14 @@ services:
       VP_API_CLIENT_SECRET: "yourVpApiClientSecret"
   digital-signing:
     environment:
-      - SIGNINGHUB_API_URL=<PUT_API_URL_HERE>
+      SIGNINGHUB_API_URL: "https://fake.api.url"
     user: ${HOST_UID_GID}
   document-stamping:
+    user: ${HOST_UID_GID}
+  agenda-approve:
+    environment:
+      SERVER_BUSY_TIMEOUT: 10
+  draft-file:
+    user: ${HOST_UID_GID}
+  draft-file-mover:
     user: ${HOST_UID_GID}

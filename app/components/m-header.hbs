@@ -12,7 +12,7 @@
               @current-when="search"
               data-test-m-header-search
             >
-              <Auk::Icon @name="search" />
+              <AuIcon @icon="search" />
               {{capitalize (t "search")}}
             </Auk::Tab>
             <Auk::Tab
@@ -22,9 +22,20 @@
             >
               {{t "agendas"}}
             </Auk::Tab>
-            <Auk::Tab @route="cases" data-test-m-header-cases>
+            <Auk::Tab
+              @route="cases"
+              @current-when="cases.index cases.case"
+              data-test-m-header-cases>
               {{t "cases"}}
             </Auk::Tab>
+            {{#if (and (user-may "view-submissions") this.isEnabledCabinetSubmissions)}}
+              <Auk::Tab
+                @route="submissions"
+                @current-when="submissions cases.submissions cases.new-submission"
+                data-test-m-header-submissions>
+                {{t "submissions"}}
+              </Auk::Tab>
+            {{/if}}
             {{#if (user-may "manage-news-items")}}
               <Auk::Tab
                 @route="newsletters"

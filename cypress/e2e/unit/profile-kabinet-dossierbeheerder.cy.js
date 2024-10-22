@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -12,10 +12,16 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Testing the application as Kabinetdossierbeheerder', () => {
-  beforeEach(() => {
+context('Testing the application as Kabinetdossierbeheerder', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Kabinetdossierbeheerder');
     cy.wait(1000);
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -52,6 +58,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
     });
@@ -673,7 +680,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-3.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
@@ -723,7 +730,7 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-3.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 
@@ -855,7 +862,6 @@ context('Testing the application as Kabinetdossierbeheerder', () => {
       cy.get(appuniversum.alert.message).contains(alertMessage);
 
       // decision document
-      // TODO flakey
       cy.visit('document/6374FAD1D9A98BD0A2288589?tab=Ondertekenen');
       cy.get(appuniversum.alert.message).contains(alertMessage);
 

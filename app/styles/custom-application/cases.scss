@@ -1,6 +1,6 @@
 .auk-panel-layout__sidebar--cases {
   position: relative;
-  max-width: 200px;
+  max-width: 220px;
 
   .auk-sidebar {
     width: 100%;
@@ -98,14 +98,6 @@
   scroll-margin-block: $au-unit-small;
 }
 
-.au-c-alert {
-  margin-bottom: 0;
-}
-
-.au-c-alert + * {
-  margin-bottom: $au-unit;
-}
-
 .vlc-status-timeline__item + .vlc-status-timeline__item {
   margin-top: $au-unit-tiny;
   padding-top: $au-unit-tiny;
@@ -156,6 +148,17 @@
 
   .vlc-document-card-versions {
     border-top: 1px dotted var(--au-gray-300);
+  }
+
+  > .ember-view {
+    counter-reset: documents;
+
+    .vlc-document-card [data-test-document-card-number]::after {
+      display: inline;
+      counter-increment: documents;
+      content: counter(documents);
+      margin-left: -.5rem;
+    }
   }
 }
 

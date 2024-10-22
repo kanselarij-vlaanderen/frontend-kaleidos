@@ -93,6 +93,10 @@ $au-label-color: var(--au-gray-700);
   &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
     cursor: pointer;
   }
+
+  .au-c-icon {
+    flex: 0 0 auto;
+  }
 }
 
 .au-c-pill--link {
@@ -328,9 +332,34 @@ $au-label-color: var(--au-gray-700);
   vertical-align: baseline;
 }
 
+// Icon
+
 .au-c-icon {
   bottom: 0;
 }
+
+@mixin au-background-icon($icon: 'add', $size: 1.6rem) {
+  $icon-url: #{'/@appuniversum/ember-appuniversum/icons/' + $icon +'.svg'};
+
+  display: inline-flex;
+  vertical-align: middle;
+  align-content: center;
+  justify-content: center;
+
+  &:before {
+    content: '';
+    width: $size;
+    height: $size;
+
+    mask-image: url($icon-url);
+    mask-size: $size;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: currentColor;
+  }
+}
+
+// Dropdown
 
 .au-c-dropdown > .au-c-button--naked { // TODO: delete when `.au-c-dropdown > .au-c-button--naked` override inside ember-appuniversum is removed
   &.au-c-button--icon-only {
@@ -403,11 +432,6 @@ $au-label-color: var(--au-gray-700);
   background-color: $au-white;
 }
 
-// Fix missing noactions class
-.auk-table--noactions .data-table__actions--top {
-  display: none;
-}
-
 // Fieldset
 
 .au-c-fieldset {
@@ -457,6 +481,7 @@ $au-label-color: var(--au-gray-700);
 // Alert
 
 .au-c-alert {
+  margin-bottom: 0;
   font-size: 1.5rem;
 }
 
@@ -465,6 +490,10 @@ $au-label-color: var(--au-gray-700);
     height: 1.5rem;
     width: 1.6rem;
   }
+}
+
+.au-c-alert + * {
+  margin-top: $au-unit;
 }
 
 // Badge
@@ -713,6 +742,10 @@ $au-label-color: var(--au-gray-700);
   }
 }
 
+.au-u-primary {
+  color: var(--au-blue-700) !important;
+}
+
 // Responsive fixes
 // ---
 .au-c-button,
@@ -745,5 +778,55 @@ $au-label-color: var(--au-gray-700);
     &:has(nav) {
       justify-content: space-between;
     }
+  }
+}
+
+// Adjust width of toaster on mobile
+.au-c-toaster .au-c-alert {
+  @include mq($until: medium) {
+    max-width: 354px;
+    min-width: 354px;
+  }
+}
+
+// Adjust width of modals on mobile
+.auk-modal {
+    max-width: calc(100% - 2rem);
+}
+
+// Panel variant that is displayed as a sidebar
+.au-c-panel-sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 95%;
+  z-index: 9;
+  box-shadow: $auk-shadow-small;
+
+  &::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-color: rgba(0,0,0,.1);
+  }
+
+  > .auk-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    border-top: 0;
+    border-bottom: 0;
+  }
+
+  > .auk-panel > .auk-panel__body {
+    flex-grow: 1;
+    overflow: auto;
   }
 }

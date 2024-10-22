@@ -2,6 +2,8 @@ import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from 'ember-inflector';
 import fetch from 'fetch';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaService extends Service {
   @service store;
@@ -105,22 +107,57 @@ export default class AgendaService extends Service {
     return piecesFromStore;
   }
 
+  createInternalReview = async(subcase, submissions, privateComment) => {
+    const submissionsToSet = submissions || await subcase?.submissions;
+    const internalReview = await this.store.createRecord('submission-internal-review', {
+      created: new Date(),
+      privateComment: privateComment, // default to the CONSTANTS? diff between nota and mededeling somewhere?
+      submissions: submissionsToSet,
+      subcase: subcase,
+    });
+    await internalReview.save();
+  };
+
   /* API: agenda-submission-service */
+
+  async reorderAgenda(agenda) {
+    const url = `/agendas/${agenda.id}/reorder`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+    });
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        })}`);
+    }
+    await agenda.hasMany('agendaitems').reload();
+  }
 
   /**
    * @argument meeting
    * @argument subcase
-   * @argument formallyOk: optional
+   * @argument formallyOk: optional, defaults to "not yet ok"
    * @argument privateComment: optional
    */
-  async putSubmissionOnAgenda(meeting, subcase, formallyOk = false, privateComment = null) {
+  async putSubmissionOnAgenda(
+    meeting,
+    subcase,
+    formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
+    privateComment = null
+  ) {  
+    const internalReview = await subcase.internalReview;
+    if (!internalReview?.id) {
+      await this.createInternalReview(subcase, null, privateComment);
+    }
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
       body: JSON.stringify({
         subcase: subcase.uri,
-        formallyOk: formallyOk,
+        formallyOkStatus: formallyStatusUri,
         privateComment: privateComment,
       })
     });
@@ -146,6 +183,103 @@ export default class AgendaService extends Service {
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
     return agendaitem;
+  }
+
+  /**
+   * @argument meeting
+   * @argument submission
+   */
+  async putDraftSubmissionOnAgenda(meeting, submission) {
+    if (!isEnabledCabinetSubmissions()) {
+      return;
+    }
+    const url = `/meetings/${meeting.id}/submit-submission`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+      body: JSON.stringify({
+        meeting: meeting.uri,
+        submission: submission.uri,
+      })
+    });
+    await submission.belongsTo('meeting').reload();
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${response.statusText}`);
+    }
+  }
+
+  async getOpenMeetings() {
+    if (!isEnabledCabinetSubmissions()) {
+      return;
+    }
+    const url = `/meetings/open`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    let json;
+    try {
+      json = await response.json();
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${JSON.stringify(json)}`);
+    }
+    return json;
+  }
+
+  async getAgendaAndMeetingForSubmission(submission) {
+    const url = `/submissions/${submission.id}/for-meeting`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    let json;
+    try {
+      json = await response.json();      
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${JSON.stringify(json)}`);
+    }
+    const agenda = {
+      id: json.data.attributes.agendaId,
+      uri: json.data.attributes.agenda,
+      serialnumber: json.data.attributes.serialnumber,
+      createdFor: {
+        id: json.data.id,
+        uri: json.data.attributes.uri,
+        plannedStart: new Date(json.data.attributes.plannedStart),
+        kind: {
+          uri: json.data.attributes.kind,
+          label: json.data.attributes.type,
+        }
+      },
+    };
+    return agenda;
   }
 
   /* No API */

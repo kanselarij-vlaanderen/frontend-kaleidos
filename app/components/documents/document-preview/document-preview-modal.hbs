@@ -6,15 +6,18 @@
 >
   <:title>
     <span data-test-document-preview-title class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
-      {{this.selectedVersion.name}}
+      <span class={{if (responsive "isMobile") "au-u-word-break-all" ""}}>
+        {{this.selectedVersion.name}}
+      </span>
       {{#unless this.loadFile.isRunning}}
         {{#if (and this.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             data-test-document-preview-download-link
-            {{! TODO: AuExternalLink doesn't support @style="button-naked" yet}}
             @icon="download"
             @iconAlignment="left"
-            href={{this.file.namedDownloadLink}}
+            @hideText={{(responsive "isMobile")}}
+            href={{this.downloadLink}}
+            class="auk-u-mr-2"
             download
           >{{t "download-2"}}</AuLinkExternal>
         {{/if}}
@@ -27,7 +30,13 @@
         {{#if this.loadFile.isRunning}}
           <WebComponents::LoadingPage />
         {{else}}
-          <Documents::DocumentView @file={{this.file}} @piece={{this.selectedVersion}} />
+          <Documents::DocumentView
+            @file={{this.file}}
+            @piece={{this.selectedVersion}}
+            @inlineViewLink={{this.inlineViewLink}}
+            @downloadLink={{this.downloadLink}}
+            @isMobile={{@isMobile}}
+          />
         {{/if}}
       </div>
       <div class="auk-panel-layout__sidebar">

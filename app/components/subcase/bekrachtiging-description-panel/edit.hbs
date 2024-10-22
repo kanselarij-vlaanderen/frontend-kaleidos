@@ -66,7 +66,6 @@
         <AuLabel>{{t "subcase-type-dropdown"}}</AuLabel>
         <Utils::ModelSelector
           @modelName="subcase-type"
-          @searchField="label"
           @sortField="label"
           @displayField="label"
           @selected={{this.subcaseType}}
@@ -77,7 +76,8 @@
         <AuLabel>{{t "subcase-name"}}</AuLabel>
         <AuInput
           @width="block"
-          @value={{mut this.subcaseName}}
+          value={{this.subcaseName}}
+          {{on "input" (pick "target.value" (set this "subcaseName"))}}
         />
       </AuFormRow>
     </div>

@@ -51,13 +51,11 @@
 }
 
 .ember-power-select-selected-item {
-  display: inline-block; // allow block content in span.ember-power-select-selected-item
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 
   margin-left: 0;
-
-  > .auk-icon {
-    font-size: 1.5rem;
-  }
 }
 
 .ember-power-select-placeholder {
@@ -98,10 +96,12 @@
 }
 
 .ember-power-select-option {
-  display: block;
   position: relative;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 
+  width: 100%;
   padding: 0.7rem 0 0.5rem 1rem;
 
   color: $auk-gray-800;
@@ -122,10 +122,6 @@
   &[aria-selected=true] {
     background-color: $auk-gray-200;
   }
-
-  > .auk-icon {
-    font-size: 1.5rem;
-  }
 }
 
 .ember-power-select-search {
@@ -145,7 +141,7 @@
   padding: 0 1rem;
 
   color: $auk-color-text;
-  font-family: $g-base-font-family;
+  font-family: $au-font;
   font-size: 1.6rem;
   line-height: 3.5rem;
 
@@ -198,29 +194,22 @@
   @extend .auk-filter-pill;
 
   flex-direction: row-reverse;
-
   margin: 0;
 
   .ember-power-select-multiple-remove-btn {
-    @extend .auk-icon;
-    @extend .auk-icon--x;
+    @include au-background-icon('cross', 1.8rem);
+    @extend .auk-filter-pill__action;
 
-    &:before {
-      @extend %auk-icons-font-style;
-      @extend .ki-x;
-    }
-
-    // hide text node & re-apply correct color + size in the `&:after` selector below
+    // hide text node & re-apply correct color in the `&:before` selector
     color: transparent;
     font-size: 0;
 
-    &:not(:hover) {
-      opacity: 1;
-    }
-
     &:before {
       color: $auk-gray-600;
-      font-size: 1.8rem;
+    }
+
+    &:not(:hover) {
+      opacity: 1;
     }
   }
 }

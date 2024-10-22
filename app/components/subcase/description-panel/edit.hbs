@@ -39,7 +39,10 @@
           data-test-subcase-description-edit-confidential
           id="subcase-confidential"
           @checked={{@subcase.confidential}}
-          @onChange={{queue (set @subcase "confidential") (set this "confidentialChanged" true)}}
+          @onChange={{queue
+            (set @subcase "confidential")
+            (set this "confidentialChanged" true)
+          }}
         />
       </AuFormRow>
       <AuFormRow>
@@ -71,7 +74,6 @@
         <Utils::ModelSelector
           data-test-subcase-description-edit-procedure-step
           @modelName="subcase-type"
-          @searchField="label"
           @sortField="label"
           @displayField="label"
           @selected={{this.subcaseType}}
@@ -80,13 +82,73 @@
       </AuFormRow>
       <AuFormRow>
         <AuLabel>{{t "subcase-name"}}</AuLabel>
-        <AuInput
-          data-test-subcase-description-edit-procedure-name
-          value={{this.subcaseName}}
-          @width="block"
-          {{on "input" (pick "target.value" (set this "subcaseName"))}}
-        />
+        <div
+          class="auk-o-flex auk-o-flex--vertical-center auk-o-flex-gap--small au-u-maximize-width"
+        >
+          {{#if (not this.isEditingSubcaseName)}}
+            <Utils::ModelSelector
+              class="auk-u-maximize-width"
+              @modelName="shortcut"
+              @searchField="label"
+              @sortField="label"
+              @filter={{this.filter}}
+              @selected={{this.selectedShortcut}}
+              @onChange={{this.selectSubcaseName}}
+              as |model|
+            >
+              {{capitalize model.label}}
+            </Utils::ModelSelector>
+            <AuButton
+              @skin="naked"
+              @icon="pencil"
+              @hideText={{true}}
+              {{on "click" (toggle "isEditingSubcaseName" this)}}
+            >
+              {{t "edit"}}
+            </AuButton>
+          {{else}}
+            <AuInput
+              data-test-subcase-description-edit-procedure-name
+              id="subcaseNameId"
+              value={{this.subcaseName}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "subcaseName"))}}
+            />
+            <AuButton
+              @skin="naked"
+              @icon="x"
+              @hideText={{true}}
+              {{on "click" (toggle "isEditingSubcaseName" this)}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          {{/if}}
+          <AuButton
+            @skin="naked"
+            @icon="trash"
+            @alert={{true}}
+            @hideText={{true}}
+            {{on "click" this.clearSubcaseName}}
+          >
+            {{t "cancel"}}
+          </AuButton>
+        </div>
       </AuFormRow>
+      {{#if (and (user-may "manage-agendaitems") this.internalReview)}}
+        <AuFormRow>
+          <AuLabel for="private-subcase-comment">
+            <AuIcon @icon="lock-closed" />
+            {{t "private-comment-title"}}
+          </AuLabel>
+          <AuTextarea
+            id="private-subcase-comment"
+            rows="7"
+            value={{this.internalReview.privateComment}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this.internalReview "privateComment"))}}
+          />
+        </AuFormRow>
+      {{/if}}
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>
@@ -95,6 +157,7 @@
         <Auk::Toolbar::Item>
           <AuButton
             @skin="naked"
+            @disabled={{this.isSaving}}
             {{on "click" this.cancelEditing}}
           >
             {{t "cancel"}}
@@ -116,3 +179,12 @@
     </Auk::Toolbar>
   </Auk::Panel::Footer>
 </Auk::Panel>
+
+{{#if this.isSaving}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "save-in-progress"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "saving-in-progress-please-wait"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}

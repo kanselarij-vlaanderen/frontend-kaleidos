@@ -19,30 +19,31 @@ context('Formally ok/nok tests', () => {
   it('should not show "formallyOk" status of agendaitems on approved agenda', () => {
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
-    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
+    cy.get(utils.formallyOkPill.pill).contains('Formeel OK');
     cy.changeSelectedAgenda('Agenda A');
     // approved agendas never show the formally ok status of the agendaitem
     cy.get(agenda.agendaOverviewItem.subitem).should('have.length', 1);
-    cy.get(agenda.agendaOverviewItem.status).should('not.exist');
+    cy.get(utils.formallyOkPill.pill).should('not.exist');
   });
 
   // TODO-agendaheader this test belongs with other agenda-header tests
   it('should show warning when trying to approve agenda with "not yet formally ok" items', () => {
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
-    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
+    cy.get(utils.formallyOkPill.pill).contains('Formeel OK');
     cy.setFormalOkOnItemWithIndex(0, true, 'Nog niet formeel OK');
-    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Nog niet formeel OK');
+    cy.get(utils.formallyOkPill.pill).contains('Nog niet formeel OK');
     cy.get(agenda.agendaVersionActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaVersionActions.actions.approveAgenda).forceClick();
-    cy.get(agenda.agendaCheck.confirm).click();
+    cy.get(agenda.agendaCheck.confirm).should('not.be.disabled')
+      .click();
     // "formeel niet ok" and "formeel nog niet ok" status are not approvable
     cy.get(appuniversum.alert.container).should('exist');
     cy.get(auk.modal.footer.cancel).click();
     cy.get(agenda.agendaCheck.cancel).click();
     cy.setFormalOkOnItemWithIndex(0, true, 'Formeel OK');
-    cy.get(agenda.agendaOverviewItem.status).should('contain', 'Formeel OK');
+    cy.get(utils.formallyOkPill.pill).contains('Formeel OK');
   });
 
   it('should change formally ok after changing beleidsveld', () => {

@@ -1,4 +1,6 @@
-{{#unless this.loadSubcasePhases.isRunning}}
+{{#if this.loadSubcasePhases.isRunning}}
+  <Auk::Loader @message={{t "loading" }} />
+{{else}}
   <ul class="vlc-status-timeline">
     {{#each this.phases as |phase|}}
       <li
@@ -26,4 +28,4 @@
       </li>
     {{/each}}
   </ul>
-{{/unless}}
+{{/if}}

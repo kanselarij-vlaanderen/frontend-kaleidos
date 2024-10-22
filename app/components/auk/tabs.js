@@ -26,7 +26,7 @@ export default class Tabs extends Component {
     this.handleClickOutside = this.handleClickOutside.bind(this);
     // Bind closeDropdownOnRouteChange method once so it can be properly added and removed
     this.boundCloseDropdownOnRouteChange = this.closeDropdownOnRouteChange.bind(this);
-  
+
     if (this.args.responsive) {
       this.setupResponsiveFeatures();
     }
@@ -77,14 +77,14 @@ export default class Tabs extends Component {
   @action
   didInsertAukTabs(element) {
     this.dropdownElement = element;
-    later(this, this.updateActiveRouteName, 50); 
+    later(this, this.updateActiveRouteName, 50);
   }
 
   @action updateActiveRouteName() {
     const activeLink = this.dropdownElement.querySelector('.auk-tabs__tab__link--active');
     const label = activeLink ? activeLink.querySelector('.auk-sidebar__label') : null;
+    const buttonLabel = this.args.label || '';
 
-    
     // Check if a sublabel was found, otherwise use the activeLink's innerText
     if (label) {
       this.activeRouteName = label.innerText;
@@ -92,7 +92,7 @@ export default class Tabs extends Component {
       this.activeRouteName = activeLink.innerText;
     } else {
       // Optionally handle the case where no active link or sublabel is found
-      this.activeRouteName = 'Laden';
+      this.activeRouteName = buttonLabel;
     }
   }
 
@@ -111,7 +111,7 @@ export default class Tabs extends Component {
   @action
   closeDropdownOnRouteChange() {
     this.closeDropdown();
-    later(this, this.updateActiveRouteName, 50); 
+    later(this, this.updateActiveRouteName, 50);
   }
 
   handleClickOutside(event) {

@@ -5,6 +5,7 @@ import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import sanitize from 'sanitize-filename';
 
 /**
  * @param {Piece} piece
@@ -16,6 +17,8 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service toaster;
   @service signatureService;
   @service currentSession;
+  @service documentService;
+  @service store;
 
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -31,6 +34,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
   @tracked signedPieceCopy;
+  @tracked internalReview;
 
   @tracked canEditPieceWithSignFlow = false;
 
@@ -39,6 +43,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.loadDetailsData.perform();
     this.loadSignatureRelatedData.perform();
     this.loadSignedPieces.perform();
+    this.loadInternalReview.perform();
   }
 
   get isProcessing() {
@@ -50,11 +55,35 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     );
   }
 
+  get isDraftPiece() {
+    return this.args.piece.constructor.modelName === 'draft-piece';
+  }
+
+  // @piece.downloadlinkPromise does not recalculate after edit of this.args.piece.name
+  // we want the piece name + the correct file download (in this case always the source file)
+  get downloadLinkSourceFile() {
+    const file = this.args.piece.get('file');
+    if (file) {
+      const filename = `${this.args.piece.name}.${file.get('extension')}`;
+      const downloadFilename = sanitize(filename, {
+        replacement: '_',
+      });
+      return `${file.get('downloadLink')}?name=${encodeURIComponent(
+        downloadFilename
+      )}`;
+    }
+    // should be unreachable, getter used in template with {{#if @piece.file}}
+    return undefined;
+  }
+
   @task
   *loadSignatureRelatedData() {
-    const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
-    const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
-    return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
+    if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {
+      const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
+      const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
+      return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
+    }
+    return this.canEditPieceWithSignFlow = true;
   }
 
   @task
@@ -69,6 +98,26 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.documentType = yield this.args.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
+  }
+
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      const internalReviewOfSubcase = yield this.store.queryOne('submission-internal-review', {
+        'filter[subcase][submission-activities][pieces][:id:]': this.args.piece.id,
+      })
+      if (internalReviewOfSubcase?.id) {
+        this.internalReview = internalReviewOfSubcase;
+        return;
+      }
+      const internalReviewOfSubmission = yield this.store.queryOne('submission-internal-review', {
+        'filter[submissions][pieces][:id:]': this.args.piece.id,
+      })
+      if (internalReviewOfSubmission?.id) {
+        this.internalReview = internalReviewOfSubmission;
+        return;
+      }
+    }
   }
 
   @action
@@ -96,7 +145,10 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *saveDetails() {
-    const signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    let signMarkingActivity;
+    if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {
+      signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+    }
     if (signMarkingActivity) {
       const signSubcase = yield signMarkingActivity?.signSubcase;
       const signFlow = yield signSubcase?.signFlow;
@@ -152,6 +204,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     );
     this.args.documentContainer.type = this.documentType;
     yield this.args.documentContainer.save();
+    if (this.replacementSourceFile) {
+      if (this.args.piece.stamp) {
+        yield this.documentService.stampDocuments([this.args.piece]);
+      }
+    } else {
+      yield this.documentService.checkAndRestamp([this.args.piece]);
+    }
+
     this.isEditingDetails = false;
     this.replacementSourceFile = null;
     this.isReplacingSourceFile = false;

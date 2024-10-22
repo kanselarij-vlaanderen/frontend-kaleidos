@@ -23,7 +23,7 @@
         @meeting={{this.model.meeting}}
         @currentAgenda={{this.model.agenda}}
         @reverseSortedAgendas={{this.model.reverseSortedAgendas}}
-        @isOpen={{this.isOpenSideNav}}
+        @isOpen={{or this.isOpenSideNav (responsive "isMobile")}}
         @onCollapse={{this.collapseSideNav}}
         @onOpen={{this.openSideNav}}
       />

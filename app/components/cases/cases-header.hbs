@@ -3,42 +3,56 @@
     <Toolbar.Group @position="left" class="au-u-visible-from@small" as |Group|>
       <Group.Item>
         <h1 data-test-cases-header-title class="auk-toolbar__title">
-          {{t "cases"}}
+          {{t (if this.isInSubmissionRoute "submissions" "cases")}}
         </h1>
       </Group.Item>
     </Toolbar.Group>
     <Toolbar.Group @position="right" as |Group|>
-      <Group.Item class="auk-o-flex au-u-padding-tiny">
-        {{#if this.filterText}}
-          <AuButton
-            data-test-cases-header-clear-filter
-            @skin="naked"
-            @icon="undo"
-            @hideText={{true}}
-            {{on "click" this.clearFilter}}
-          >
-            {{t "clear-filter"}}
-          </AuButton>
+      {{#if this.isInCasesRoute}}
+        <Group.Item class="auk-o-flex au-u-padding-tiny">
+          {{#if this.filterText}}
+            <AuButton
+              data-test-cases-header-clear-filter
+              @skin="naked"
+              @icon="undo"
+              @hideText={{true}}
+              {{on "click" this.clearFilter}}
+            >
+              {{t "clear-filter"}}
+            </AuButton>
+          {{/if}}
+          <AuInput
+            data-test-cases-header-filter-input
+            placeholder={{t "search-case-title"}}
+            autocomplete="off"
+            value={{this.filterText}}
+            @width="block"
+            @icon="search"
+            {{on "input" this.onInputFilter}}
+          />
+        </Group.Item>
+        {{#if (user-may "manage-cases")}}
+          <Group.Item>
+            <AuButton
+                data-test-cases-header-add-case
+                @skin="primary"
+                @icon="plus"
+                {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
+            >
+                {{t "add-case"}}
+            </AuButton>
+          </Group.Item>
         {{/if}}
-        <AuInput
-          data-test-cases-header-filter-input
-          placeholder={{t "search-case-title"}}
-          autocomplete="off"
-          value={{this.filterText}}
-          @width="block"
-          @icon="search"
-          {{on "input" this.onInputFilter}}
-        />
-      </Group.Item>
-      {{#if (user-may "manage-cases")}}
+      {{/if}}
+      {{#if (and this.mayCreateSubmissions this.isInSubmissionRoute)}}
         <Group.Item>
           <AuButton
-            data-test-cases-header-add-case
+            data-test-cases-header-open-submission-modal
             @skin="primary"
             @icon="plus"
-            {{on "click" (toggle "isOpenNewCaseAddSubcaseModal" this)}}
+            {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
           >
-            {{t "add-case"}}
+            {{t "submit-agendaitem"}}
           </AuButton>
         </Group.Item>
       {{/if}}
@@ -51,4 +65,33 @@
     @didSave={{this.saveNewCaseAddSubcase}}
     @onCancel={{toggle "isOpenNewCaseAddSubcaseModal" this}}
   />
+{{/if}}
+
+{{#if this.isOpenAddSubmissionModal}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "submit-agendaitem-which-type"}} @onClose={{toggle "isOpenAddSubmissionModal" this}} />
+    <Auk::Modal::Body>
+      <div class="auk-u-mb-6">
+        <AuHeading @level="3" @skin="6" class="au-u-margin-bottom-tiny">{{t "submit-agendaitem-search-case-title"}}</AuHeading>
+        <AuLink
+          data-test-cases-header-navigate-to-cases
+          @route="cases.index"
+          {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+        >
+          {{t "submit-agendaitem-search-case"}}
+        </AuLink>
+      </div>
+      <div class="auk-u-mb-6">
+        <AuHeading @level="3" @skin="6" class="au-u-margin-bottom-tiny">{{t "submit-agendaitem-here-title"}}</AuHeading>
+        <AuLink
+          data-test-cases-header-navigate-to-new-submission
+          @skin="button"
+          @route="cases.new-submission"
+          {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+        >
+          {{t "submit-agendaitem-here"}}
+        </AuLink>
+      </div>
+    </Auk::Modal::Body>
+  </Auk::Modal>
 {{/if}}

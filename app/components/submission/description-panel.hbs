@@ -1,0 +1,14 @@
+{{#if this.isEditing}}
+  <Submission::DescriptionPanel::Edit
+    @submission={{@submission}}
+    @onCancel={{this.cancelEditing}}
+    @onSave={{this.save}}
+    @isUpdate={{@isUpdate}}
+  />
+{{else}}
+  <Submission::DescriptionPanel::View
+    @submission={{@submission}}
+    @onClickEdit={{this.startEditing}}
+    @mayEdit={{@mayEdit}}
+  />
+{{/if}}

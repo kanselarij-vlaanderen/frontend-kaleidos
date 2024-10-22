@@ -28,9 +28,11 @@ const selectors = {
   },
 
   // email-modal
+  // TODO-REFACTOR this is no longer unique to signatures, also used for submission. Going to copy this to utils selectors.
+  // We need to refactor the component (change folder, rename to utils::EmailModal)
   email: {
-    input: '[data-test-signatures-create-email-input]',
-    add: '[data-test-signatures-create-email-add]',
+    input: '[data-test-email-modal-input]',
+    add: '[data-test-email-modal-add]',
   },
 
   // decisions and notes

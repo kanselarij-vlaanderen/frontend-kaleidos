@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, beforeEach */
+/* global context, it, cy, Cypress, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -17,9 +17,15 @@ function currentTimestamp() {
   return Cypress.dayjs().unix();
 }
 
-context('Testing the application as Admin user', () => {
-  beforeEach(() => {
+context('Testing the application as Admin user', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Admin');
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -124,6 +130,7 @@ context('Testing the application as Admin user', () => {
     // const agendaitemLinkOnReleased2 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FAB4D9A98BD0A2288586';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting);
     });
@@ -1057,7 +1064,7 @@ context('Testing the application as Admin user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
@@ -1108,7 +1115,7 @@ context('Testing the application as Admin user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);

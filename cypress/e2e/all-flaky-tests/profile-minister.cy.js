@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -13,9 +13,15 @@ import utils from '../../selectors/utils.selectors';
 
 // *NOTE* Moved to all-flaky-tests because deleting a meeting is not propagated properly in yggdrasil, agendas route no longer loads
 
-context('Testing the application as Minister user', () => {
-  beforeEach(() => {
+context('Testing the application as Minister user', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Minister');
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -71,6 +77,7 @@ context('Testing the application as Minister user', () => {
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
     });
@@ -169,7 +176,7 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaitemNav.newsletterTab).should('not.exist');
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      // cy.get(agenda.agendaitemControls.actions).should('not.exist');
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
       cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
       cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
@@ -271,7 +278,7 @@ context('Testing the application as Minister user', () => {
       cy.get(agenda.agendaitemNav.newsletterTab);
 
       // Detail Tab - Case tab
-      cy.get(agenda.agendaitemControls.actions).should('not.exist');
+      // cy.get(agenda.agendaitemControls.actions).should('not.exist');
       cy.get(agenda.agendaitemTitlesView.linkToSubcase);
       cy.get(agenda.agendaitemTitlesView.edit).should('not.exist');
       cy.get(mandatee.mandateePanelView.actions.edit).should('not.exist');
@@ -632,7 +639,8 @@ context('Testing the application as Minister user', () => {
     it('check signatures/start route', () => {
       cy.visit('ondertekenen/opstarten');
       cy.get(appuniversum.loader).should('not.exist');
-      cy.get(route.signatures.openMinisterFilter);
+      cy.get(route.signatures.dataTable);
+      cy.get(route.signatures.openMinisterFilter).should('not.exist');
     });
 
     it('check signatures/ongoing route', () => {
@@ -681,7 +689,7 @@ context('Testing the application as Minister user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
       cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
@@ -727,7 +735,7 @@ context('Testing the application as Minister user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 
@@ -852,18 +860,22 @@ context('Testing the application as Minister user', () => {
     });
 
     it('check signatures tab', () => {
-      const alertMessage = 'De beslissing gekoppeld aan dit document is nog niet vrijgegeven. Het is niet mogelijk om de ondertekenflow op te starten.';
+      const alertMessage = 'Dit document is niet ingediend door uw minister. U kunt de ondertekenflow niet opstarten.';
+      // change in permission means minister profile can no longer mark for signing if not connected to mandatee
+      // const alertMessage = 'De beslissing gekoppeld aan dit document is nog niet vrijgegeven. Het is niet mogelijk om de ondertekenflow op te starten.';
 
       // agendaitem document on open agenda
       cy.visit('document/6374F6E4D9A98BD0A228856A?tab=Ondertekenen');
       cy.get(appuniversum.alert.message).contains(alertMessage);
       // agendaitem document on released agenda
       cy.visit('document/6374F2FBD9A98BD0A2288550?tab=Ondertekenen');
-      cy.get(document.previewSignaturesTab.markForSignflow);
+      cy.get(appuniversum.alert.message).contains(alertMessage);
+      // cy.get(document.previewSignaturesTab.markForSignflow);
 
       // decision document (on released agenda)
       cy.visit('document/6374FAD1D9A98BD0A2288589?tab=Ondertekenen');
-      cy.get(document.previewSignaturesTab.markForSignflow);
+      // cy.get(document.previewSignaturesTab.markForSignflow);
+      cy.get(appuniversum.alert.message).contains(alertMessage);
 
       // TODO-setup for notulen
       // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');

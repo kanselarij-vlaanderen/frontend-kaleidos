@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -11,9 +11,15 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-context('Testing the application as Secretarie user', () => {
-  beforeEach(() => {
+context('Testing the application as Secretarie user', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Secretarie');
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -80,6 +86,7 @@ context('Testing the application as Secretarie user', () => {
     // const agendaitemLinkOnReleased2 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FAB4D9A98BD0A2288586';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.action.newMeeting);
     });
 
@@ -836,7 +843,8 @@ context('Testing the application as Secretarie user', () => {
       cy.visitCaseWithLink('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
       // overview header
-      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowPill);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist'); // no permission to manage
       cy.get(cases.subcaseOverviewHeader.optionsDropdown).click();
       cy.get(cases.subcaseOverviewHeader.actions.editCase);
       cy.get(cases.subcaseOverviewHeader.actions.archive);
@@ -859,7 +867,7 @@ context('Testing the application as Secretarie user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
@@ -910,7 +918,7 @@ context('Testing the application as Secretarie user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);

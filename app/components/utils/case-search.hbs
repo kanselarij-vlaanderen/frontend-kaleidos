@@ -6,39 +6,67 @@
       value={{this.searchText}}
       class="auk-u-maximize-width"
       @width="block"
+      @disabled={{this.isLoading}}
       {{on "input" this.updateSearchText}}
     />
   </div>
 
   {{#if this.isLoading}}
     <Auk::Loader @message={{t "please-be-patient"}} />
+  {{else if (not this.results.length)}}
+    <div class="auk-u-mt-4">
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found"}}
+      />
+    </div>
   {{else}}
     <table class="auk-table auk-table--striped">
       <thead>
         <tr>
-          <th class="auk-table__col--9">
+          <th class="auk-table__col--1"></th>
+          <th class="auk-table__col--8">
             {{t "case-name"}}
           </th>
-          <th class="auk-table__col--2">
+          <th class="auk-table__col--3">
             {{t "created-on"}}
           </th>
         </tr>
       </thead>
-      <tbody class="auk-table--clickable-rows">
-        {{#each (await this.results) as |row|}}
-          {{!-- TODO: address accessibility concern, keeping in mind that users want the whole row to be clickable --}}
-          {{!-- template-lint-disable no-invalid-interactive --}}
+      <tbody>
+        {{#each this.results as |row|}}
           <tr data-test-utils-case-search-row>
-            <td onclick={{fn this.selectCase row}}>
-              <p>
+            <td>
+              <AuRadio
+                data-test-utils-case-search-row-radio
+                @checked={{eq row.id this.selected.id}}
+                @value={{row.id}}
+                @onChange={{this.selectCase}}
+                @disabled={{eq row.id @excludedDecisionmakingFlow.id}}
+              />
+            </td>
+            <td>
+              <AuLink
+                data-test-utils-case-search-row-title-link
+                @icon="external-link"
+                @iconAlignment="right"
+                @route="cases.case.index"
+                @models={{array row.id}}
+                target="_blank"
+              >
                 {{#if row.shortTitle}}
                   {{row.shortTitle}}
                 {{else}}
                   {{row.title}}
                 {{/if}}
-              </p>
+              </AuLink>
+              {{#if (eq row.id @excludedDecisionmakingFlow.id)}}
+                <AuPill @size="small">
+                  {{t "current-case"}}
+                </AuPill>
+              {{/if}}
             </td>
-            <td onclick={{fn this.selectCase row}}>
+            <td>
               {{datetime row.created}}
             </td>
           </tr>

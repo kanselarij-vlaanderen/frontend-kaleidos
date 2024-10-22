@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -12,9 +12,15 @@ import utils from '../../selectors/utils.selectors';
 
 // *NOTE* Moved to all-flaky-tests because deleting a meeting is not propagated properly in yggdrasil, agendas route no longer loads
 
-context('Testing the application as Overheid user', () => {
-  beforeEach(() => {
+context('Testing the application as Overheid user', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Overheidsorganisatie');
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -70,6 +76,7 @@ context('Testing the application as Overheid user', () => {
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
     });
@@ -673,7 +680,7 @@ context('Testing the application as Overheid user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-2.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 

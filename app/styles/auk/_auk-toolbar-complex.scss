@@ -78,7 +78,7 @@
   max-width: 100%;
 
   @include mq($until: small) {
-    margin-right: .5rem;
+    margin-right: .75rem;
   }
 }
 
@@ -108,7 +108,7 @@
   max-width: 100%;
 
   @include mq($until: small) {
-    margin-left: .5rem;
+    margin-left: .75rem;
   }
 }
 
@@ -118,27 +118,33 @@
 
 // Responsive toolbar
 // ---
+
 .auk-toolbar-complex--responsive {
+  flex-wrap: wrap;
+  row-gap: 1rem;
+
   @include mq($until: medium) {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: normal;
     min-height: auto;
 
-    & .auk-toolbar-complex__right,
-    & .auk-toolbar-complex__left,
-    & .auk-toolbar-complex__center {
-      padding: .5rem 0;
+    .auk-toolbar-complex__right {
+      justify-content: flex-start;
+
+      .auk-toolbar-complex__item {
+        margin-left: 0;
+        margin-right: 1rem;
+      }
     }
   }
 }
 
 .auk-toolbar-complex__responsive-item {
+  row-gap: 1rem;
+
   @include mq($until: medium) {
     flex-direction: column;
     align-items: flex-start;
-
-    & .auk-toolbar-complex__item {
-      padding-bottom: 0 !important;
-    }
   }
 }
 

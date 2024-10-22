@@ -458,12 +458,17 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall1')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases1');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
+    cy.get(utils.caseSearch.rows.titleLink).contains(caseTitle2)
+      .parents(utils.caseSearch.row)
+      .find(utils.caseSearch.rows.radio)
+      .get(appuniversum.radio)
+      .click();
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchSubcases1');
     cy.get(auk.auModal.container).should('not.exist');
     cy.openCase(caseTitle2, false);
@@ -476,13 +481,19 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall2')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases2');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
+    cy.get(utils.caseSearch.rows.titleLink).contains(caseTitle2)
+      .parents(utils.caseSearch.row)
+      .find(utils.caseSearch.rows.radio)
+      .get(appuniversum.radio)
+      .click();
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchSubcases2');
+    // which confirmation modal am I canceling here? should be remove dossier
     cy.get(auk.confirmationModal.footer.cancel).click();
     cy.get(cases.subcaseOverviewHeader.titleContainer).contains(caseTitle1);
     cy.get(cases.subcaseDescription.panel).should('not.exist');
@@ -500,12 +511,17 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall3')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases3');
-    cy.get(utils.caseSearch.row).contains(caseTitle2)
-      .click()
+    cy.get(utils.caseSearch.rows.titleLink).contains(caseTitle2)
+      .parents(utils.caseSearch.row)
+      .find(utils.caseSearch.rows.radio)
+      .get(appuniversum.radio)
+      .click();
+    cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@patchSubcases3');
     cy.get(auk.confirmationModal.footer.confirm).click();
     cy.get(route.casesOverview.dataTable);
@@ -515,7 +531,7 @@ context('Subcase tests', () => {
 
   it('check capital letters of subcase name', () => {
     const capital = 'Principiële goedkeuring m.h.o. op adviesaanvraag';
-    // const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
+    const nonCapital = 'principiële goedkeuring m.h.o. op adviesaanvraag';
     const subcaseWithName = 'testId=1589266576: Cypress test dossier 1 test stap 2';
     const encodedSubcaseTitle = encodeURIComponent(subcaseWithName);
 
@@ -551,21 +567,14 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.subcaseName).contains(capital);
 
     cy.visitCaseWithLink('dossiers/E14FB500-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers');
-    // TODO KAS-4529 sidebar does not show subcase name
-    // cy.get(cases.subcaseItem.link).contains(nonCapital);
     cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
     cy.get(cases.newSubcaseForm.procedureName).click();
     cy.get(dependency.emberPowerSelect.option).contains(capital);
     cy.get(cases.newSubcaseForm.cancel).click();
 
-    // TODO KAS-4529 sidebar
-    // cy.get(cases.subcaseItem.link).eq(0)
-    //   .click();
-    // TODO KAS-4529 we do not show this subcasename anywhere! used to be a pill
-    // also, titltesView no longer exists
-    // cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital)
-    // .should('have.class', 'auk-u-text-capitalize');
-    // cy.get(cases.subcaseTitlesView.subcaseName).contains(capital);
+    // check that subcasename shows capitalized with css but is really not.
+    cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital);
+    // .should('have.class', 'auk-u-text-capitalize'); //this is no longer done by added class but by text-transform: uppercase on p element
   });
 
   it('check submission activities', () => {
@@ -613,6 +622,6 @@ context('Subcase tests', () => {
     // if this fails, we are probably saving subcase with an incomplete list of submission activities
     cy.get(document.documentCard.card).should('have.length', 2)
       .find(document.documentCard.name.value)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
   });
 });

@@ -69,6 +69,7 @@
     <div class="upload-container">
       {{#each this.newPieces as |piece|}}
         <Documents::UploadedDocument
+          @allowEditPieceAccessLevel={{true}}
           @piece={{piece}}
           @allowDocumentContainerEdit={{true}}
           @onDelete={{perform this.deletePiece piece}} />
@@ -82,5 +83,6 @@
     @pieces={{this.model}}
     @onCancel={{this.cancelBatchDetails}}
     @onSave={{this.saveBatchDetails}}
+    @allowEditing={{user-may "manage-documents"}}
   />
 {{/if}}

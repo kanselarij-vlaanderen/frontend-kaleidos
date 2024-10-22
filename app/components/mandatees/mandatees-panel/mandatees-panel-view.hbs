@@ -51,6 +51,16 @@
                       {{mandatee.person.fullName}}
                     {{/if}}
                   </span>
+                  {{#if @previousMandateePersons}}
+                    {{#let (map-by "id" @previousMandateePersons) as |previousPersonIds|}}
+                      {{#if (not (includes mandatee.person.id previousPersonIds))}}
+                        <p class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
+                          <Auk::ColorBadge @skin="success" />
+                          {{t "new-mandatee"}}
+                        </p>
+                      {{/if}}
+                    {{/let}}
+                  {{/if}}
                 </div>
               </td>
               <td
@@ -58,7 +68,7 @@
                 data-test-mandatee-panel-view-row-submitter
               >
                 {{#if (eq mandatee @submitter)}}
-                  <Auk::Icon @name="circle-check" @skin="success" />
+                  <AuIcon @icon="circle-check" class="au-u-success" />
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
@@ -67,6 +77,28 @@
           {{/each}}
         </tbody>
       </table>
+      {{#if @previousMandateePersons}}
+        <hr />
+        <div class="auk-u-m-4">
+          {{#let
+            (removed-from-list
+              (map-by "fullName" @previousMandateePersons)
+              (map-by "person.fullName" @mandatees)
+            )
+            as |removedPersons|
+          }}
+            {{#if removedPersons}}
+              <AuAlert
+                @skin="warning"
+                @icon="alert-triangle"
+                @title={{t "mandatees-deleted-in-update" count=removedPersons.length}}
+              >
+                {{join ", " removedPersons}}
+              </AuAlert>
+            {{/if}}
+          {{/let}}
+        </div>
+      {{/if}}
     </Auk::Panel::Body>
   {{else}}
     <Auk::Panel::Body>

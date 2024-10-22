@@ -11,6 +11,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class SignaturesOngoingRatificationsRoute extends Route {
   @service currentSession;
   @service store;
+  @service router;
 
   queryParams = {
     page: {

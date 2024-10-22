@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { Row } from './document-details-row';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { task, all } from 'ember-concurrency';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent} from '@ember/utils';
@@ -16,8 +16,10 @@ export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
   @service signatureService;
   @service currentSession;
+  @service documentService;
 
   @tracked rows;
+  @tracked reorderableRows;
   @tracked selectedRows = [];
 
   constructor() {
@@ -37,9 +39,26 @@ export default class BatchDocumentsDetailsModal extends Component {
     return this.isLoading || this.save.isRunning;
   }
 
+  get hasDraftPieces() {
+    return this.args.pieces.some(
+      (piece) => piece.constructor.modelName === 'draft-piece'
+    );
+  }
+
   get isSignaturesEnabled() {
     const hasPermission = this.currentSession.may('manage-signatures');
-    return hasPermission;
+    return hasPermission && !this.hasDraftPieces;
+  }
+
+  get isAccessLevelEnabled() {
+    // TODO not fully sure why we shouldn't show the access level? I would want to make sure my confidential file is marked as such..
+    // or edit mistakes, maybe don't allow cabinet to edit 'intern-secretarie'
+    // it is visible just fine in documents route either way
+    return !this.hasDraftPieces;
+  }
+
+  get isEditingEnabled() {
+    return this.args.allowEditing || this.currentSession.may('manage-documents');
   }
 
   @task
@@ -56,7 +75,7 @@ export default class BatchDocumentsDetailsModal extends Component {
 
     for (const key of documentsByContainer.keys()) {
       const documents = documentsByContainer.get(key);
-      const sortedDocuments = sortPieces(documents);
+      const sortedDocuments = sortPieceVersions(documents);
       documentsByContainer.set(key, sortedDocuments);
     }
 
@@ -73,7 +92,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         row.accessLevel = piece.accessLevel;
         row.documentContainer = await piece.documentContainer;
         row.documentType = row.documentContainer.type;
-        if (this.isSignaturesEnabled) {
+        if (piece.constructor.modelName === 'piece' && this.isSignaturesEnabled) {
           row.signMarkingActivity = await piece.signMarkingActivity;
           row.signedPiece = await piece.signedPiece;
           row.showSignature = isPresent(this.args.decisionActivity);
@@ -84,6 +103,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         return row;
       })
     );
+    this.reorderableRows = this.rows.slice();
   }
 
   get areAllSelected() {
@@ -113,7 +133,8 @@ export default class BatchDocumentsDetailsModal extends Component {
 
   @task
   *save() {
-    yield all(this.rows.map(async (row) => {
+    const changedPieces = [];
+    yield all(this.reorderableRows.map(async (row, index) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
@@ -137,6 +158,12 @@ export default class BatchDocumentsDetailsModal extends Component {
           hasChanged = true;
           documentContainer.type = row.documentType;
         }
+        if (!this.args.disableEditingPosition) {
+          if (documentContainer.position !== index + 1) {
+            hasChanged = true;
+            documentContainer.position = index + 1;
+          }
+        }
         if (piece.accessLevel !== row.accessLevel) {
           hasChanged = true;
           accessLevelHasChanged = true;
@@ -156,9 +183,16 @@ export default class BatchDocumentsDetailsModal extends Component {
           if (accessLevelHasChanged) {
             await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
           }
+          changedPieces.push(piece);
         }
       }
     }));
+    yield this.documentService.checkAndRestamp(changedPieces);
     this.args.onSave();
+  }
+
+  @action
+  onReorderPieces(rows, _movedRow) {
+    this.reorderableRows = rows;
   }
 }

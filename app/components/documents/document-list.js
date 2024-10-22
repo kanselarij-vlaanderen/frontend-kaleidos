@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieceVersions } from 'frontend-kaleidos/utils/documents';
 import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentListComponent extends Component {
@@ -54,7 +54,7 @@ export default class DocumentsDocumentListComponent extends Component {
 
     for (const key of documentsByContainer.keys()) {
       const documents = documentsByContainer.get(key);
-      const sortedDocuments = sortPieces(documents);
+      const sortedDocuments = sortPieceVersions(documents);
       documentsByContainer.set(key, sortedDocuments);
     }
     // eslint-disable-next-line

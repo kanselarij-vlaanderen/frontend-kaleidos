@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /*
  * @argument subcase
@@ -11,12 +12,16 @@ import { task } from 'ember-concurrency';
 export default class SubcasesSubcaseHeaderComponent extends Component {
   @service store;
   @service agendaService;
+  @service currentSession;
   @service router;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
+  @service parliamentService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
+  @tracked newDecisionmakingFlow = null;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
   @tracked isShowingOptions = false;
@@ -26,18 +31,45 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked subcaseToDelete = null;
   @tracked canPropose = false;
   @tracked canDelete = false;
+  @tracked canSubmitNewDocuments = false;
+  @tracked currentSubmission = null;
+  @tracked parliamentRetrievalActivity = null;
 
   constructor() {
     super(...arguments);
-
     this.loadData.perform();
+  }
+
+  get maySubmitNewDocuments() {
+    return (
+      isEnabledCabinetSubmissions() &&
+      this.loadData.isIdle &&
+      this.currentSession.may('create-submissions') &&
+      this.submissions?.length > 0 &&
+      this.canSubmitNewDocuments
+    );
+  }
+
+  get canMove() {
+    return (
+      this.loadData.isIdle &&
+        this.currentSession.may('manage-agendaitems') &&
+        (!this.args.parliamentFlow ||
+      (this.parliamentRetrievalActivity && this.args.subcases.length === 1))
+    );
   }
 
   @task
   *loadData() {
+    this.submissions = yield this.args.subcase.hasMany('submissions').reload();
     const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
+    this.canSubmitNewDocuments = yield this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+    if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
+      this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
+    }
+    this.parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
   }
 
   triggerDeleteCaseDialog() {
@@ -55,6 +87,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = null;
     this.isLoading = false;
     this.isAssigningToOtherCase = false;
+    this.newDecisionmakingFlow = null;
   }
 
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
@@ -65,7 +98,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     yield decisionmakingFlow.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases');
+    this.router.transitionTo('cases.index');
   }
 
   @action
@@ -84,21 +117,25 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.subcaseToDelete = subcase;
   }
 
+  get hasActions() {
+    return this.canDelete || this.canPropose || this.canMove;
+  }
+
   /**
    * @param {boolean} _fullCopy This parameter is unused, we just have it here because the component expects it
    * @param {Meeting} meeting
-   * @param {boolean} isFormallyOk
+   * @param {boolean} formallyStatusUri
    * @param {string} privatecomment
    */
   @task
-  *proposeForAgenda(_fullCopy, meeting, isFormallyOk, privateComment) {
+  *proposeForAgenda(_fullCopy, meeting, formallyStatusUri, privateComment) {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
       yield this.agendaService.putSubmissionOnAgenda(
         meeting,
         this.args.subcase,
-        isFormallyOk,
+        formallyStatusUri,
         privateComment,
       );
     } catch (error) {
@@ -143,8 +180,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     itemToDelete.deleteRecord();
     await itemToDelete.save();
 
-    this.navigateToSubcaseOverview(decisionmakingFlow);
-    this.args.onMoveSubcase();
+    // onMoveSubcase navigates after refresh
+    this.args.onMoveSubcase(decisionmakingFlow);
   }
 
   @action
@@ -157,17 +194,77 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  moveSubcase = task(async (_newDecisionmakingFlow) => {
-    const newDecisionmakingFlow = await this.store.findRecord('decisionmaking-flow', _newDecisionmakingFlow.id);
+  @action
+  async selectDecisionmakingFlow(newDecisionmakingFlow) {
+    this.newDecisionmakingFlow = newDecisionmakingFlow?.id
+      ? await this.store.findRecord(
+          'decisionmaking-flow',
+          newDecisionmakingFlow.id
+        )
+      : null;
+  }
 
-    const oldDecisionmakingFlow = await this.args.subcase.decisionmakingFlow;
-    this.args.subcase.decisionmakingFlow = newDecisionmakingFlow;
+  moveSubcase = task(async () => {
+    const oldDecisionmakingFlow = this.args.decisionmakingFlow;
+
+    const oldCase = await oldDecisionmakingFlow.case;
+    const newCase = await this.newDecisionmakingFlow.case;
+
+    const parliamentRetrievalActivity = this.parliamentRetrievalActivity;
+
+    for (const submission of this.submissions) {
+      submission.decisionmakingFlow = this.newDecisionmakingFlow;
+      await submission.save();
+    }
+
+    if (parliamentRetrievalActivity) {
+      const newParliamentFlow = await newCase.parliamentFlow;
+      if (newParliamentFlow) {
+        const oldParliamentSubcase = await parliamentRetrievalActivity.parliamentSubcase;
+        const oldParliamentFlow = await oldParliamentSubcase.parliamentFlow;
+
+        const newParliamentSubcase = await newParliamentFlow.parliamentSubcase;
+        parliamentRetrievalActivity.parliamentSubcase = newParliamentSubcase;
+
+        await parliamentRetrievalActivity.save();
+        await oldParliamentSubcase.destroyRecord();
+        await oldParliamentFlow.destroyRecord();
+
+        await this.parliamentService.relinkDecisionmakingFlow(
+          this.newDecisionmakingFlow,
+          newCase,
+          newParliamentFlow,
+        );
+      } else {
+        newCase.parliamentFlow = this.args.parliamentFlow;
+        await newCase.save();
+
+        oldCase.parliamentFlow = null;
+        await oldCase.save();
+
+        await this.parliamentService.relinkDecisionmakingFlow(
+          this.newDecisionmakingFlow,
+          newCase,
+          this.args.parliamentFlow,
+        );
+      }
+    }
+
+    let signFlows = await this.store.queryAll('sign-flow', {
+      'filter[sign-subcase][sign-marking-activity][piece][submission-activity][subcase][:id:]': this.args.subcase.id,
+    });
+    signFlows = signFlows?.slice();
+    for (const signFlow of signFlows) {
+      signFlow.case = newCase;
+      await signFlow.save();
+    }
+
+    this.args.subcase.decisionmakingFlow = this.newDecisionmakingFlow;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 
-    const subCases = await oldDecisionmakingFlow.hasMany('subcases').reload();
-    if (subCases.length === 0) {
-      const oldCase = await oldDecisionmakingFlow.case;
+    const subcases = await oldDecisionmakingFlow.hasMany('subcases').reload();
+    if (subcases.length === 0) {
       const publicationFlow = await this.store.queryOne('publication-flow', {
         'filter[case][:id:]': oldCase.id,
       });
@@ -178,7 +275,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
         return;
       }
     }
-    this.router.transitionTo('cases.case.index');
     this.args.onMoveSubcase();
   });
 
@@ -186,6 +282,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   cancelDeleteCase() {
     this.promptDeleteCase = false;
     this.caseToDelete = null;
-    this.router.transitionTo('cases.case.index');
+    this.args.onMoveSubcase();
   }
 }

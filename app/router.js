@@ -1,5 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -19,6 +20,7 @@ Router.map(function() {
   this.route('agendas', { path: '/overzicht', });
   this.route('agenda', { path: '/vergadering/:meeting_id/agenda/:agenda_id', }, function() {
     this.route('print', { path: '/afdrukken', });
+    this.route('press', { path: '/pers' });
     this.route('agendaitems', { path: '/agendapunten', }, function() {
       this.route('agendaitem', { path: '/:agendaitem_id', }, function() {
         this.route('documents', { path: '/documenten', });
@@ -29,17 +31,37 @@ Router.map(function() {
     });
     this.route('documents', { path: '/documenten', });
     this.route('minutes', { path: '/notulen', });
+    if (isEnabledCabinetSubmissions()) {
+      this.route('submissions', { path: '/indieningen', });
+    }
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
+    if (isEnabledCabinetSubmissions()) {
+      this.route('new-submission', { path: '/nieuwe-indiening' });
+      this.route('submissions', { path: '/indieningen' }, function() {
+        this.route('submission', { path: ':submission_id' });
+      });
+    }
     this.route('case', { path: ':id', }, function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
+      this.route('publication-flow', { path: '/publicatie/:publication_id'});
       this.route('subcases', { path: '/deeldossiers', }, function() {
-        this.route('subcase', { path: ':subcase_id', }, function() {});
+        this.route('subcase', { path: ':subcase_id', }, function() {
+          if (isEnabledCabinetSubmissions()) {
+            this.route('new-submission', { path: '/nieuwe-indiening' });
+          }
+        });
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
+        if (isEnabledCabinetSubmissions()) {
+          this.route('new-submission', { path: '/nieuwe-indiening' });
+        }
       });
     });
   });
+  if (isEnabledCabinetSubmissions()) {
+    this.route('submissions', { path: '/indieningen' });
+  }
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
     this.route('search', { path: '/zoeken', });
@@ -126,7 +148,6 @@ Router.map(function() {
     this.route('empty-state');
     this.route('layout-grid');
     this.route('heading');
-    this.route('icons');
     this.route('key-value');
     this.route('link-button');
     this.route('loader');

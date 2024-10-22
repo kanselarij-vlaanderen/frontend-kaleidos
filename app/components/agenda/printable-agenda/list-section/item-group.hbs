@@ -5,58 +5,108 @@
 }}
 <div class="l-printable-agenda__item-group">
   {{#let (object-at 0 @items) as |first|}}
-    <div class="l-printable-agenda__faux-item">
-      <div class="auk-u-non-breakable-group@print">
-        {{#let this.sortedMandateesFromFirst as |mandatees|}}
-          <h3
-            class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
-              {{if (not mandatees) "l-printable-agenda__item-group-header--muted auk-u-keep-colors@print"}}"
-          >{{! auk-u-text-decoration-underline }}
-            {{#if mandatees}}
-              {{#each mandatees as |mandatee|}}
-                {{mandatee.title}}
-                {{#if (has-next mandatee mandatees)}}
-                  <br />&
-                {{/if}}
-              {{/each}}
-            {{else}}
-              {{t "no-mandatee-assigned"}}
-            {{/if}}
-          </h3>
-        {{/let}}
-        <div value={{first.number}}>
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-            @item={{first}}
-          />
-        </div>
-      </div>
-      {{#let (await first.pieces) as |pieces|}}
-        {{#if pieces}}
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-            @pieces={{pieces}}
-            @fileNameMappings={{@fileNameMappings}}
-          />
-        {{/if}}
-      {{/let}}
-    </div>
-  {{/let}}
-  {{#each (drop 1 @items) as |agendaitem|}}
-    <div value={{agendaitem.number}}>
-      <div class="l-printable-agenda__item">
+    {{#if (and @hideNotFormallyOk (not first.isFormallyOk))}}
+      {{! Don't show this as its not formally OK}}
+    {{else}}
+      <div class="l-printable-agenda__faux-item">
         <div class="auk-u-non-breakable-group@print">
-          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
-            @item={{agendaitem}}
-          />
+          {{!-- {{#if this.isBekrachtiging}} --}}
+          {{#if (and (eq this.sortedMandateesFromFirst.length 0) this.isBekrachtiging)}}
+            <h3
+              class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header"
+            >
+              {{t "ratification-title"}}
+            </h3>
+          {{else}}
+            {{#let this.sortedMandateesFromFirst as |mandatees|}}
+              <h3
+                class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header
+                  {{if
+                    (not mandatees)
+                    'l-printable-agenda__item-group-header--muted auk-u-keep-colors@print'
+                  }}"
+              >{{! auk-u-text-decoration-underline }}
+                {{#if mandatees}}
+                  {{#each mandatees as |mandatee|}}
+                    {{mandatee.title}}
+                    {{#if (has-next mandatee mandatees)}}
+                      <br />&
+                    {{/if}}
+                  {{/each}}
+                {{else}}
+                  {{t "no-mandatee-assigned"}}
+                {{/if}}
+              </h3>
+            {{/let}}
+          {{/if}}
+          <div value={{first.number}}>
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+              @item={{first}}
+            />
+          </div>
         </div>
-        {{#let (await agendaitem.pieces) as |pieces|}}
+        {{#let (await (this.getPiecesForAgendaitem first)) as |pieces|}}
+          {{! inside previous let so relation should be loaded already}}
+          {{#let (await first.agendaActivity.subcase) as |subcase|}}
+            {{#if subcase.subcaseName}}
+              <div class="auk-u-mb-4 l-printable-agenda__subcase-name-indented">
+                <AuPill @size="small">
+                  {{!capitalization using helper instead of css class:
+                        because of `display: inline-flex` property of Auk::Pill
+                        it is not affected by the `::first-letter` selector
+                        used in the auk-u-text-capitalize class }}
+                  {{capitalize subcase.subcaseName}}
+                </AuPill>
+              </div>
+            {{/if}}
+          {{/let}}
           {{#if pieces}}
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
               @pieces={{pieces}}
               @fileNameMappings={{@fileNameMappings}}
+              @isBekrachtiging={{this.isBekrachtiging}}
             />
           {{/if}}
         {{/let}}
       </div>
-    </div>
+    {{/if}}
+  {{/let}}
+  {{#each (drop 1 @items) as |agendaitem|}}
+    {{#if (and @hideNotFormallyOk (not agendaitem.isFormallyOk))}}
+      {{! Don't show this as its not formally OK}}
+    {{else}}
+      <div value={{agendaitem.number}}>
+        <div class="l-printable-agenda__item">
+          <div class="auk-u-non-breakable-group@print">
+            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
+              @item={{agendaitem}}
+            />
+          </div>
+          {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}
+            {{! inside previous let so relation should be loaded already}}
+            {{#let (await agendaitem.agendaActivity.subcase) as |subcase|}}
+              {{#if subcase.subcaseName}}
+                <div class="auk-u-mb-4 l-printable-agenda__subcase-name-indented">
+                  <AuPill @size="small">
+                    {{!capitalization using helper instead of css class:
+                          because of `display: inline-flex` property of Auk::Pill
+                          it is not affected by the `::first-letter` selector
+                          used in the auk-u-text-capitalize class }}
+                    {{capitalize subcase.subcaseName}}
+                  </AuPill>
+                </div>
+              {{/if}}
+            {{/let}}
+            {{#if pieces}}
+              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                @pieces={{pieces}}
+                @fileNameMappings={{@fileNameMappings}}
+                @isBekrachtiging={{this.isBekrachtiging}}
+              />
+            {{/if}}
+          {{/let}}
+        </div>
+      </div>
+    {{/if}}
   {{/each}}
 </div>

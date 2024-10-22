@@ -145,6 +145,7 @@
           {{#if
             (and
               (user-may "manage-documents")
+              (not this.isDraftPiece)
               (or
                 this.canEditPieceWithSignFlow
                 (user-may "edit-documents-with-ongoing-signature")
@@ -204,6 +205,11 @@
           @isEditable={{false}}
         />
       </Auk::KeyValue>
+      {{#if this.internalReview}}
+        <Submission::InternalReview
+          @internalReview={{this.internalReview}}
+        />
+      {{/if}}
       <Auk::KeyValue
         data-test-document-details-panel-source-file
         @key={{capitalize (t (if @piece.file.derived "source-file" "file"))}}
@@ -211,7 +217,7 @@
         {{#if (and @piece.file (await (this.canViewConfidentialPiece)))}}
           <AuLinkExternal
             data-test-document-details-panel-source-file-download
-            href={{@piece.file.namedDownloadLink}}
+            href={{this.downloadLinkSourceFile}}
             @skin="primary"
             @icon="download"
             @iconAlignment="left"
@@ -219,7 +225,7 @@
           >
             {{@piece.name}}.{{@piece.file.extension}}
           </AuLinkExternal>
-          {{else}}
+        {{else}}
           {{@piece.name}}
         {{/if}}
       </Auk::KeyValue>

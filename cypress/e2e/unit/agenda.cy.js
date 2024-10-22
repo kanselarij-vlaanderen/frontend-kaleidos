@@ -41,6 +41,7 @@ function getTranslatedMonth(month) {
 
 function downloadDocs(postAgenda = true) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.wait(2000); // wait for deltas or file replacement from document-stamping service
 
   cy.get(appuniversum.loader).should('not.exist');
   cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true').as(`postAgendas${randomInt}`);
@@ -219,9 +220,9 @@ context('Agenda tests', () => {
     // This should technicaly fail but we simulate whitespace before of the actual value for readability
     cy.get('@longTitle').contains(subcaseTitleLong);
     // comment is not trimmed
-    cy.get(agenda.agendaitemTitlesView.comment).contains(`Opmerking: ${whitespace + comment + whitespace}`);
+    cy.get(agenda.agendaitemTitlesView.comment).contains(whitespace + comment + whitespace);
     // privatec comment is not trimmed
-    cy.get(agenda.agendaitemTitlesView.privateComment).contains(`Interne opmerking: ${whitespace + privateComment + whitespace}`);
+    cy.get(agenda.agendaitemTitlesView.privateComment).contains(whitespace + privateComment + whitespace);
     cy.get(agenda.agendaitemTitlesView.confidential).contains('Beperkte toegang');
 
     // rollback confidentiality should work

@@ -7,9 +7,6 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName, {
-  compareFunction as compareNotulen,
-} from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
@@ -31,6 +28,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @service decisionReportGeneration;
   @service currentSession;
   @service newsletterService;
+  @service router;
 
   @tracked report;
   @tracked annotatiePiecePart;
@@ -58,6 +56,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     super(...arguments);
     this.loadReport.perform();
     this.loadCodelists.perform();
+
+    this.router.on('routeWillChange', (transition) => {
+      if (this.saveReport.isRunning) {
+        if (!transition.isAborted) {
+          transition.abort();
+          this.toaster.warning(this.intl.t('saving-in-progress-please-wait'));
+        }
+      }
+    })
   }
 
   loadNota = task(async () => {
@@ -89,13 +96,9 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       'filter[:has-no:next-piece]': true,
     });
     pieces = pieces.slice();
-    let sortedPieces;
-    if (this.args.agendaitem.isApproval) {
-      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
-    this.pieces = sortedPieces;
+    this.pieces = await sortPieces(
+      pieces, { isApproval: this.args.agendaitem.isApproval }
+    );
   });
 
   @action
@@ -312,6 +315,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
+    const agendaitemType = await this.args.agendaitem.type;
     let newBetreftContent;
     if (subcase?.isBekrachtiging) {
       const ratification = await subcase.ratification;
@@ -320,6 +324,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         null,
         this.args.agendaitem.isApproval,
         ratification ? [...documents, ratification] : documents,
+        // null,
+        // agendaitemType,
       );
     } else {
       newBetreftContent = await generateBetreft(
@@ -327,7 +333,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         title,
         this.args.agendaitem.isApproval,
         documents,
-        subcase?.subcaseName
+        subcase?.subcaseName,
+        agendaitemType,
       );
     }
     if (newBetreftContent) {
@@ -497,6 +504,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       );
       this.args.decisionActivity.decisionResultCode = decisionResultCode;
     }
+
+    // double check the name is still correct to manually fix concurrency issues with naming
+    const pieces = await documentContainer.pieces;
+    const newName = await generateReportName(
+      this.args.agendaitem,
+      this.args.agendaContext.meeting,
+      pieces.length,
+    );
+    report.name = newName;
 
     await documentContainer.save();
     await report.belongsTo('file').reload();

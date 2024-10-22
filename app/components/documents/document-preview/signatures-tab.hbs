@@ -27,7 +27,6 @@
       </AuButton>
     {{/if}}
   </div>
-{{! TODO KAS-111 this is not feature flag friendly yet}}
 {{else if (not this.agendaitem this.decisionActivity this.meeting)}}
   {{! The piece is not linked to an agendaitem/meeting and cannot be signed }}
   <AuAlert @skin="warning" @icon="alert-triangle" @title={{t "cannot-sign"}}>

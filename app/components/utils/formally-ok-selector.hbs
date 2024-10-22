@@ -10,9 +10,11 @@
     @selected={{this.selectedStatus}}
     @onChange={{perform this.onChange}}
     @disabled={{this.onChange.isRunning}}
+    @placeholder={{t "choose-formally-ok-status"}}
+    class="auk-u-min-width-medium"
   as |option|>
     {{#if option.svg }}
-      <Auk::Icon @name={{option.svg.icon}} @skin={{option.svg.color}} />
+      <AuIcon @icon={{option.svg.icon}} class={{(concat "au-u-" option.svg.color)}} />
     {{/if}}
     {{option.label}}
   </PowerSelect>

@@ -1,16 +1,21 @@
-<div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center">
+<div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center au-u-flex--wrap">
   <a
     href={{@doc.viewDocumentURL}} rel="noreferrer noopener"
     data-test-document-badge-link
   >
-    <Auk::Icon @name={{if @isHighlighted "document-added" "document"}} />
+    {{#let (await @doc.documentContainer) as |documentContainer|}}
+      {{#if documentContainer.position}}
+        <p class="vlc-document-list__position">{{documentContainer.position}}.&nbsp;</p>
+      {{/if}}
+    {{/let}}
+    <AuIcon @icon={{if @isHighlighted "document-added" "document"}} class="au-u-flex-item--fixed vlc-document-badge__icon" />
     <span>
     {{@doc.name}}
     </span>
   </a>
   {{#if @isHighlighted}}
-    <span data-test-document-badge-isNew class="auk-o-flex auk-o-flex--spaced auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
-      <Auk::ColorBadge @skin="success" />
+    <span data-test-document-badge-isNew class="auk-o-flex auk-o-flex--spaced auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2 auk-u-ml-2">
+      <Auk::ColorBadge @skin="success" class="au-u-padding-right-none" />
       <span>{{t "new-document"}}</span>
     </span>
   {{/if}}
@@ -18,6 +23,7 @@
     <AccessLevelPill
       @accessLevel={{@doc.accessLevel}}
       @isDraft={{this.isDraftAccessLevel}}
+      @size="small"
     />
   {{/if}}
 </div>

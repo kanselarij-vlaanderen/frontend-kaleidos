@@ -48,6 +48,14 @@
       {{t "printable-version"}}
     </AuLink>
   {{/if}}
+  {{#if (user-may "manage-press-agenda")}}
+    <AuLink
+      @route="agenda.press"
+      role="menuitem"
+    >
+      {{t "generate-press-agenda"}}
+    </AuLink>
+  {{/if}}
   <AuButton
     data-test-agenda-actions-download-documents
     @skin="link"
@@ -182,12 +190,14 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        <p>
-          {{t
-            "approve-all-agendaitems-warning-message"
-            amountOfAgendaitems=(get (await (this.allAgendaitemsNotOk)) "length")
-          }}
-        </p>
+        {{#let (await (this.allAgendaitemsNotOk)) as |agendaitemsNotOk|}}
+          <p>
+            {{t
+              "approve-all-agendaitems-warning-message"
+              amountOfAgendaitems=(get agendaitemsNotOk "length")
+            }}
+          </p>
+        {{/let}}
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>

@@ -144,7 +144,7 @@
         </div>
         <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
           <AuHeading @level="4" @skin="6">{{t "subcase-name"}}</AuHeading>
-          <p>
+          <p data-test-subcase-description-subcase-name>
             {{if @subcase.subcaseName @subcase.subcaseName '-'}}
           </p>
         </div>
@@ -165,6 +165,19 @@
           </div>
         {{/if}}
       </div>
+      {{#if (and (user-may "manage-agendaitems") @subcase.internalReview.privateComment)}}
+        <Auk::Panel::Body class="auk-u-mt-4 auk-u-p-2 auk-u-maximize-height auk-u-bg-alt">
+          <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold">
+            <AuIcon @icon="lock-closed" />
+            <span>{{t "private-comment-title"}}:</span>
+          </div>
+          <pre
+            class="auk-u-text-pre-line"
+          >
+            {{@subcase.internalReview.privateComment}}
+          </pre>
+        </Auk::Panel::Body>
+      {{/if}}
     </Auk::Panel::Body>
   </Auk::Panel>
 </div>

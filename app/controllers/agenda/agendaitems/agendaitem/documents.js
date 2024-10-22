@@ -11,9 +11,12 @@ import {
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service currentSession;
+  @service documentService;
   @service intl;
   @service toaster;
   @service store;
@@ -22,6 +25,8 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service router;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service conceptStore;
+  @service documentService;
 
   documentsAreVisible;
   defaultAccessLevel;
@@ -47,6 +52,26 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     const hasCase = isPresent(this.agendaActivity);
     const hasPieces = isPresent(this.model.pieces);
     return mayPublish && hasCase && hasPieces;
+  }
+
+  get hideAccessLevel() {
+    if (this.decisionActivity &&
+      ((this.decisionActivity.isRetracted ||
+        this.decisionActivity.isPostponed) &&
+        !this.currentSession.may('view-access-level-pill-when-postponed'))
+    ) {
+      return true;
+    }
+    return false;
+   }
+
+  get sortedNewPieces() {
+    return this.newPieces.slice().sort((p1, p2) => {
+      const d1 = p1.belongsTo('documentContainer').value();
+      const d2 = p2.belongsTo('documentContainer').value();
+
+      return d1.position - d2.position || p1.created - p2.created;
+    });
   }
 
   @task
@@ -116,44 +141,65 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
+    const name = file.filenameWithoutExtension;
+    const parsed = new VRCabinetDocumentName(name).parsed;
+    const type = await findDocType(this.conceptStore, parsed.type);
+    
     const now = new Date();
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
+      position: parsed.index,
+      type,
     });
+    const accessLevel = parsed.confidential
+      ? this.confidentialAccessLevel
+      : this.defaultAccessLevel;
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
-      file: file,
-      accessLevel: this.defaultAccessLevel,
-      name: file.filenameWithoutExtension,
+      file,
+      accessLevel,
+      name: parsed.subject,
       documentContainer: documentContainer,
     });
     this.newPieces.push(piece);
   }
 
-  @task
-  *savePieces() {
-    const savePromises = this.newPieces.map(async (piece) => {
+  savePieces = task(async () => {
+    const typesRequired = await this.documentService.enforceDocType(this.newPieces);
+    if (typesRequired) return;
+
+    const savePromises = this.sortedNewPieces.map(async (piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece.perform(piece);
         throw error;
       }
     });
-    yield all(savePromises);
-    yield this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
+    await all(savePromises);
+    await this.updateRelatedAgendaitemsAndSubcase.perform(this.newPieces);
+    const agendaStatus = await this.currentAgenda.status;
+    if (agendaStatus.isApproved) {
+      await this.documentService.stampDocuments(
+        this.newPieces
+      );
+    }
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
-  }
+  });
 
   /**
    * Save a new document container and the piece it wraps
    */
   @task
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    const containerCount = yield this.store.count('document-container', {
+      'filter[pieces][agendaitems][id]': this.agendaitem.id,
+    });
+    documentContainer.position = index + 1 + (containerCount ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();
@@ -184,6 +230,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         this.intl.t('error-convert-file', { message: error.message }),
         this.intl.t('warning-title'),
       );
+    }
+
+    // Stamp the new piece if needed
+    if (this.model.pieces.some(piece => piece.stamp)) {
+      const previousPiece = yield piece.previousPiece;
+      if (previousPiece.stamp) {
+        yield this.documentService.stampDocuments([piece]);
+      }
     }
     yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
   }

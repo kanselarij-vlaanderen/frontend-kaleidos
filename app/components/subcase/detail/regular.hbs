@@ -45,15 +45,52 @@
                 </div>
               </Auk::Toolbar::Item>
             </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              {{#if @pieces.length}}
+                <Auk::Toolbar::Item>
+                  {{#if (user-may "manage-documents")}}
+                    <AuButton
+                      @skin="secondary"
+                      @icon="pencil"
+                      {{on "click" this.openBatchDetails}}
+                    >
+                      {{t "batch-edit"}}
+                    </AuButton>
+                  {{/if}}
+                </Auk::Toolbar::Item>
+              {{/if}}
+            </Auk::Toolbar::Group>
           </Auk::Toolbar>
         </Auk::Panel::Header>
         <Auk::Panel::Body>
-          {{#if @documentsAreVisible}}
+          {{#if (and @documentsAreVisible (not this.loadAccessLevelPillVisibility.isRunning))}}
+            {{#if (user-may "view-documents-postponed-and-retracted")}}
+              {{#if this.latestDecisionActivity.isPostponed}}
+                <AuAlert
+                  @skin="warning"
+                  @icon="alert-triangle"
+                  @title={{t "postponed-item"}}
+                  class="auk-u-mb-2"
+                >
+                  {{t "agendaitem-document-postponed--message"}}
+                </AuAlert>
+              {{else if this.latestDecisionActivity.isRetracted}}
+                <AuAlert
+                  @skin="warning"
+                  @icon="alert-triangle"
+                  @title={{t "retracted-item"}}
+                  class="auk-u-mb-2"
+                >
+                  {{t "agendaitem-document-retracted--message"}}
+                </AuAlert>
+              {{/if}}
+            {{/if}}
             <Documents::DocumentCardList
               @pieces={{@pieces}}
               @onAddPiece={{perform @addPiece}}
               @didDeleteContainer={{@refresh}}
               @isEditable={{true}}
+              @hideAccessLevel={{this.hideAccessLevel}}
             />
           {{else}}
             <div>
@@ -84,6 +121,16 @@
     </div>
     <Documents::LinkedDocumentsPanel @agendaitemOrSubcase={{@subcase}} />
     <Subcase::SubcaseVersionsPanel @subcase={{@subcase}} id="agenda" />
+      
+    {{#if (or this.loadSubmissionData.isRunning this.statusChangeActivities)}}
+      <Cases::Submissions::HistoryPanel
+        @loading={{this.loadSubmissionData.isRunning}}
+        @multiple={{true}}
+        {{! comment viewing is limited, too many variables, should we even show comments here? }}
+        @canSeePrivateComments={{user-may 'treat-and-accept-submissions'}}
+        @statusChangeActivities={{this.statusChangeActivities}}
+      />
+    {{/if}}
   </div>
 </div>
 
@@ -108,6 +155,7 @@
       <div class="upload-container">
         {{#each @newPieces as |piece|}}
           <Documents::UploadedDocument
+            @allowEditPieceAccessLevel={{true}}
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @onDelete={{perform @deletePiece piece}}
@@ -117,3 +165,13 @@
     {{/if}}
   </:body>
 </ConfirmationModal>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{@pieces}}
+    @onCancel={{this.cancelBatchDetails}}
+    @onSave={{this.saveBatchDetails}}
+    @disableDelete={{true}}
+    @allowEditing={{user-may "manage-documents"}}
+  />
+{{/if}}

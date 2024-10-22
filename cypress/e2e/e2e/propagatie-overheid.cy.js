@@ -86,7 +86,7 @@ context('Propagation to other graphs', () => {
     cy.setFormalOkOnItemWithIndex(0);
     cy.setFormalOkOnItemWithIndex(1);
     cy.approveDesignAgenda();
-    cy.wait(80000);
+    cy.wait(120000); // yggdrasil takes about 2 minutes for the entire propagation, overheid happens last
   });
 
   it('check to see if Overheid sees open agenda properly', () => {
@@ -134,7 +134,7 @@ context('Propagation to other graphs', () => {
     cy.agendaNameExists('B', false);
 
     cy.releaseDecisions();
-    cy.wait(80000);
+    cy.wait(100000); // yggdrasil takes about 2 minutes for the entire propagation
     // check status pills (use within because find doesn't work, probably can't chain of appuniversum wormhole)
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).contains(`Beslissingen zijn vrijgegeven op ${todayFormatted}`);
@@ -175,7 +175,7 @@ context('Propagation to other graphs', () => {
     cy.releaseDocuments();
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).eq(1)
-        .contains(`Publicatie documenten gepland op ${todayFormatted}`);
+        .contains(`Vrijgave van documenten gepland op ${todayFormatted}`);
     });
     cy.wait(100000);
     cy.get(agenda.publicationPills.container).within(() => {

@@ -6,15 +6,4 @@
   {{page-title (capitalize @model.subcase.subcaseName)}}
 {{/if}}
 
-<div class="auk-panel-layout__main-content au-u-flex au-u-flex--column">
-  <div class="auk-scroll-wrapper">
-    <div class="auk-u-bg-alt">
-      <Subcases::SubcaseHeader
-        @subcase={{@model.subcase}}
-        @onMoveSubcase={{this.refreshSubcases}}
-        @onProposedForAgenda={{this.refreshSubcases}}
-      />
-    </div>
-    {{outlet}}
-  </div>
-</div>
+{{outlet}}

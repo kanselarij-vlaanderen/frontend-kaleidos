@@ -6,46 +6,72 @@
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
     <Auk::Toolbar::Group @position="right">
+      {{#if this.maySubmitNewDocuments}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @icon="plus"
+            @route="cases.case.subcases.subcase.new-submission"
+          >
+            {{t "submit-new-documents"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
+      {{#if this.currentSubmission}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @route="cases.submissions.submission"
+            @model={{this.currentSubmission.id}}
+          >
+            {{t "open-current-submission"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
+      {{/if}}
       {{#if (user-may "manage-agendaitems")}}
         <Auk::Toolbar::Item>
-          {{!-- template-lint-disable require-context-role --}}
-          <AuDropdown
-            data-test-subcase-header-actions-dropdown={{true}}
-            @skin="secondary"
-            @title={{t "actions"}}
-            @alignment="right"
-          >
-            {{#if this.canDelete}}
-              <AuButton
-                data-test-subcase-header-action-delete-subcase
-                @skin="link"
-                @alert={{true}}
-                {{on "click" (fn this.requestDeleteSubcase @subcase)}}
-                role="menuitem"
-              >
-                {{t "delete-subcase"}}
-              </AuButton>
-            {{/if}}
-            <AuButton
-              data-test-subcase-header-action-move-subcase
-              @skin="link"
-              {{on "click" this.triggerMoveSubcaseDialog}}
-              role="menuitem"
+          {{#if this.hasActions}}
+            {{!-- template-lint-disable require-context-role --}}
+            <AuDropdown
+              data-test-subcase-header-actions-dropdown={{true}}
+              @skin="secondary"
+              @title={{t "actions"}}
+              @alignment="right"
             >
-              {{t "move-subcase"}}
-            </AuButton>
-            {{#if this.canPropose}}
-              <AuButton
-                data-test-subcase-header-action-show-proposed-agendas
-                @skin="link"
-                {{on "click" (toggle "isAssigningToAgenda" this)}}
-                role="menuitem"
-              >
-                {{t "propose-for-agenda"}}
-              </AuButton>
-            {{/if}}
-          </AuDropdown>
-          {{!-- template-lint-enable require-context-role --}}
+              {{#if this.canDelete}}
+                <AuButton
+                  data-test-subcase-header-action-delete-subcase
+                  @skin="link"
+                  @alert={{true}}
+                  {{on "click" (fn this.requestDeleteSubcase @subcase)}}
+                  role="menuitem"
+                >
+                  {{t "delete-subcase"}}
+                </AuButton>
+              {{/if}}
+              {{#if this.canMove}}
+                <AuButton
+                  data-test-subcase-header-action-move-subcase
+                  @skin="link"
+                  {{on "click" this.triggerMoveSubcaseDialog}}
+                  role="menuitem"
+                >
+                  {{t "move-subcase"}}
+                </AuButton>
+              {{/if}}
+              {{#if this.canPropose}}
+                <AuButton
+                  data-test-subcase-header-action-open-proposable-agendas
+                  @skin="link"
+                  {{on "click" (toggle "isAssigningToAgenda" this)}}
+                  role="menuitem"
+                >
+                  {{t "propose-for-agenda"}}
+                </AuButton>
+              {{/if}}
+            </AuDropdown>
+            {{!-- template-lint-enable require-context-role --}}
+          {{/if}}
         </Auk::Toolbar::Item>
       {{/if}}
     </Auk::Toolbar::Group>
@@ -63,19 +89,29 @@
   @loading={{this.deleteCase.isRunning}}
 />
 
-<AuModal
+<ConfirmationModal
   @modalOpen={{this.isAssigningToOtherCase}}
-  @closeModal={{this.cancel}}
+  @title={{t "move-subcase-to-other-case"}}
+  @onConfirm={{perform this.moveSubcase}}
+  @onCancel={{this.cancel}}
+  @confirmMessage={{t "move-subcase"}}
   @padding="none"
-  @closable={{this.moveSubcase.isIdle}}
+  @loading={{this.moveSubcase.isRunning}}
+  @disabled={{not this.newDecisionmakingFlow}}
 >
-  <:title>
-    {{t "move-subcase-to-other-case"}}
-  </:title>
   <:body>
-    <Utils::CaseSearch @onSelect={{perform this.moveSubcase}} />
+    <div>
+      {{#if this.moveSubcase.isRunning}}
+        <Auk::Loader @message={{t "please-be-patient"}} />
+      {{else}}
+        <Utils::CaseSearch
+          @excludedDecisionmakingFlow={{@decisionmakingFlow}}
+          @onSelect={{this.selectDecisionmakingFlow}}
+        />
+      {{/if}}
+    </div>
   </:body>
-</AuModal>
+</ConfirmationModal>
 
 <ConfirmationModal
   @modalOpen={{this.isDeletingSubcase}}
@@ -90,6 +126,7 @@
 
 {{#if this.isAssigningToAgenda}}
   <Cases::Subcases::ProposableAgendasModal
+    @subcase={{@subcase}}
     @onCancel={{toggle "isAssigningToAgenda" this}}
     @onConfirm={{perform this.proposeForAgenda}}
   />
