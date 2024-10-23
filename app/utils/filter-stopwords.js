@@ -106,9 +106,9 @@ function removeStopWords(string) {
   let stringCopy = `${string}`;
   STOP_WORDS.forEach(
     (stopWord) => stringCopy = stringCopy.replace(
-      new RegExp(`(\\W|^)${stopWord}(\\W|$)`, 'g'), '$1$2'
+      new RegExp(`(([^ ]+[ ])|^)${stopWord}(( ([^ ]+))|$)`, 'g'), '$2$4'
     )
-  )
+  );
   return stringCopy;
 }
 

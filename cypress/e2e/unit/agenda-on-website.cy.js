@@ -189,6 +189,7 @@ context('agenda notice test', () => {
 
     cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
+    cy.wait(1500); // some saves are happening, maybe (ModelWithModifier attributes of undefined)
   });
 
   it('should retract via actions', () => {
@@ -259,6 +260,7 @@ context('agenda notice test', () => {
 
     cy.get('@sidebarItem').find(agenda.agendaDetailSidebarItem.inNewsletter)
       .should('not.exist');
+    cy.wait(1500); // some saves are happening
   });
 
   it('confidential announcement subcase should not be on website', () => {
