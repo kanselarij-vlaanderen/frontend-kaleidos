@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, dropTask } from 'ember-concurrency';
+import { task, dropTask, enqueueTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
@@ -198,6 +198,59 @@ export default class SubmissionHeaderComponent extends Component {
     }
   });
 
+  movePiece = enqueueTask({ maxConcurrency: 5 }, async (draftPiece) => {
+    const now = new Date();
+    const previousPiece = await draftPiece.previousPiece;
+    const accessLevel = await draftPiece.accessLevel;
+    let documentContainer;
+
+    if (!previousPiece) {
+      const draftDocumentContainer = await draftPiece.documentContainer;
+      const type = await draftDocumentContainer.type;
+      documentContainer = this.store.createRecord(
+        'document-container',
+        {
+          position: draftDocumentContainer.position,
+          created: draftDocumentContainer.created,
+          type,
+        }
+      );
+      await documentContainer.save();
+    } else {
+      documentContainer = await previousPiece.documentContainer;
+    }
+
+    const draftFile = await draftPiece.file;
+    const draftDerivedFile = await draftFile.derived;
+
+    const file = await this.documentService.moveDraftFile(draftFile.id);
+
+    if (draftDerivedFile) {
+      const derivedFile = await this.documentService.moveDraftFile(
+        draftDerivedFile.id
+      );
+      file.derived = derivedFile;
+      await file.save();
+    }
+
+    const piece = this.store.createRecord('piece', {
+      name: draftPiece.name,
+      created: draftPiece.created,
+      modified: now,
+      previousPiece,
+      accessLevel,
+      file,
+      documentContainer,
+      originalName: previousPiece?.originalName,
+      draftPiece: draftPiece
+    });
+    await piece.save();
+    this.piecesMovedCounter++;
+    // in submissions, we allow the strengthening of the accessLevel (from default > confidential) meaning we have to update all previous versions.
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+    return piece;
+  });
+
   createSubcase = dropTask(
     async (
       _fullCopy = false, // unused
@@ -299,58 +352,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.piecesMovedCounter = 0;
       const pieces = await Promise.all(
-        draftPieces.map(async (draftPiece) => {
-          const previousPiece = await draftPiece.previousPiece;
-          const accessLevel = await draftPiece.accessLevel;
-          let documentContainer;
-
-          if (!previousPiece) {
-            const draftDocumentContainer = await draftPiece.documentContainer;
-            const type = await draftDocumentContainer.type;
-            documentContainer = this.store.createRecord(
-              'document-container',
-              {
-                position: draftDocumentContainer.position,
-                created: draftDocumentContainer.created,
-                type,
-              }
-            );
-            await documentContainer.save();
-          } else {
-            documentContainer = await previousPiece.documentContainer;
-          }
-
-          const draftFile = await draftPiece.file;
-          const draftDerivedFile = await draftFile.derived;
-
-          const file = await this.documentService.moveDraftFile(draftFile.id);
-
-          let derivedFile;
-          if (draftDerivedFile) {
-            derivedFile = await this.documentService.moveDraftFile(
-              draftDerivedFile.id
-            );
-            file.derived = derivedFile;
-            await file.save();
-          }
-
-          const piece = this.store.createRecord('piece', {
-            name: draftPiece.name,
-            created: draftPiece.created,
-            modified: now,
-            previousPiece,
-            accessLevel,
-            file,
-            documentContainer,
-            originalName: previousPiece?.originalName,
-            draftPiece: draftPiece
-          });
-          await piece.save();
-          this.piecesMovedCounter++;
-          // in submissions, we allow the strengthening of the accessLevel (from default > confidential) meaning we have to update all previous versions.
-          await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
-          return piece;
-        })
+        draftPieces.map((draftPiece) => this.movePiece.perform(draftPiece))
       );
 
       const agendaActivity = await this.pieceUpload.getAgendaActivity(subcase);
