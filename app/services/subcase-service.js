@@ -61,16 +61,15 @@ export default class SubcaseService extends Service {
   }
 
   async getLatestDecisionActivity(subcase) {
-    const agendaActivity = await this.store.queryOne('agenda-activity', {
-      'filter[subcase][:id:]': subcase.id,
-      sort: '-start-date',
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-agenda-activity.start-date,-created',
     });
-
-    const agendaitems = await agendaActivity.agendaitems;
-    const agendaitem = agendaitems[0];
-
-    const treatment = await agendaitem.treatment;
-    const decisionActivity = await treatment.decisionActivity;
-    return decisionActivity;
+    if (agendaitem.id) {
+      return await this.store.queryOne('decision-activity', {
+        'filter[treatment][agendaitems][:id:]': agendaitem.id,
+      });
+    }
   }
 }
