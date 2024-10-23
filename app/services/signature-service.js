@@ -93,15 +93,15 @@ export default class SignatureService extends Service {
       // we need to throw an error here if the job fails. In a setTimeout that
       // doesn't work.
       while ([
-        constants.SIGN_FLOW_JOB_STATUSSES.BUSY,
-        constants.SIGN_FLOW_JOB_STATUSSES.SCHEDULED
+        constants.JOB_STATUSSES.RUNNING,
+        constants.JOB_STATUSSES.SCHEDULED
       ].includes(jobResult.status)) {
         await new Promise(r => setTimeout(r, 2000));
         jobResult = await this.getJob.perform(job);
       }
-      if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.SUCCESS) {
+      if (jobResult.status === constants.JOB_STATUSSES.SUCCESS) {
         // We're done polling :)
-      } else if (jobResult.status === constants.SIGN_FLOW_JOB_STATUSSES.FAILED) {
+      } else if (jobResult.status === constants.JOB_STATUSSES.FAILED) {
         throw new Error(jobResult.error_message);
       }
     }

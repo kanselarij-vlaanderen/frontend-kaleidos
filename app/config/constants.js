@@ -71,27 +71,10 @@ export default {
     BIJLAGE_TER_INZAGE: "http://themis.vlaanderen.be/id/concept/document-type/075bc7a9-75fd-423b-be88-571d3fa3d043",
   },
   JOB_STATUSSES: {
+    SCHEDULED: 'http://vocab.deri.ie/cogs#Scheduled',
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
     SUCCESS: 'http://vocab.deri.ie/cogs#Success',
     FAILED: 'http://vocab.deri.ie/cogs#Fail',
-  },
-  DECISION_REPORT_JOB_STATUSSES: {
-      SCHEDULED: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/scheduled',
-      ONGOING: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/ongoing',
-      SUCCESS: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/success',
-      FAILURE: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/failure',
-  },
-  SIGN_FLOW_JOB_STATUSSES: {
-      SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
-      BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
-      SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
-      FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
-  },
-  VP_JOB_STATUSES: {
-    SCHEDULED: "http://redpencil.data.gift/id/concept/JobStatus/scheduled",
-    BUSY: "http://redpencil.data.gift/id/concept/JobStatus/busy",
-    SUCCESS: "http://redpencil.data.gift/id/concept/JobStatus/success",
-    FAILED: "http://redpencil.data.gift/id/concept/JobStatus/failed",
   },
   SUBCASE_TYPES: {
     BEKRACHTIGING: 'http://themis.vlaanderen.be/id/concept/procedurestap-type/bdba2bbc-7af6-490b-98a8-433955cfe869',

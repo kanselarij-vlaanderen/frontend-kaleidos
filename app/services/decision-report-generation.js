@@ -79,7 +79,7 @@ export default class DecisionReportGeneration extends Service {
     );
     if (jobResult) {
       if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS
+        jobResult.status === CONSTANTS.JOB_STATUSSES.SUCCESS
       ) {
         this.toaster.close(generatingBundleToast);
         this.toaster.success(
@@ -98,7 +98,7 @@ export default class DecisionReportGeneration extends Service {
           this.router.refresh('agenda');
         }
       } else if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE
+        jobResult.status === CONSTANTS.JOB_STATUSSES.FAILED
       ) {
         this.toaster.close(generatingBundleToast);
         this.toaster.error(
@@ -155,7 +155,7 @@ export default class DecisionReportGeneration extends Service {
     );
     if (jobResult) {
       if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS
+        jobResult.status === CONSTANTS.JOB_STATUSSES.SUCCESS
       ) {
         await this.reloadFiles(reports);
         this.toaster.close(generatingPDFsToast);
@@ -175,7 +175,7 @@ export default class DecisionReportGeneration extends Service {
           }
         );
       } else if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE
+        jobResult.status === CONSTANTS.JOB_STATUSSES.FAILED
       ) {
         this.toaster.close(generatingPDFsToast);
         this.toaster.error(
