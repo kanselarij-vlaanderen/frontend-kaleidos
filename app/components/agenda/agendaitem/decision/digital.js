@@ -7,7 +7,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { generateBetreft } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
@@ -69,7 +69,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   loadNota = task(async () => {
     const nota = await this.agendaitemNota.nota(
-      this.args.agendaContext.agendaitem
+      this.args.agendaitem
     );
     if (!nota) {
       return;
@@ -311,19 +311,33 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
 
   @action
   async updateBetreftContent() {
-    const { shortTitle, title } = this.args.agendaContext.agendaitem;
+    const { shortTitle, title, isApproval } = this.args.agendaitem;
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     const subcase = await agendaActivity?.subcase;
+    await subcase?.type;
     const agendaitemType = await this.args.agendaitem.type;
-    const newBetreftContent = await generateBetreft(
-      shortTitle,
-      title,
-      this.args.agendaitem.isApproval,
-      documents,
-      subcase?.subcaseName,
-      agendaitemType,
-    );
+    let newBetreftContent;
+    if (subcase?.isBekrachtiging) {
+      const ratification = await subcase.ratification;
+      newBetreftContent = await generateBetreft(
+        shortTitle,
+        title,
+        isApproval,
+        ratification ? [...documents, ratification] : documents,
+        null, // This seems unused on ratifications
+        agendaitemType,
+      );
+    } else {
+      newBetreftContent = await generateBetreft(
+        shortTitle,
+        title,
+        isApproval,
+        documents,
+        subcase?.subcaseName,
+        agendaitemType,
+      );
+    }
     if (newBetreftContent) {
       this.setBetreftEditorContent(
         `<p>${newBetreftContent.replace(/\n/g, '<br>')}</p>`
@@ -359,6 +373,9 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     let newBeslissingHtmlContent;
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+    await subcase?.type;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
         newBeslissingHtmlContent = this.intl.t('postponed-item-decision');
@@ -367,15 +384,11 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
         break;
       default:
-        if (this.args.agendaitem.isApproval) {
-          const { shortTitle, title } = this.args.agendaContext.agendaitem;
-          let beslissing = title || shortTitle || '';
-          beslissing = beslissing.replace(
-            /Goedkeuring van/i,
-            'goedkeuring aan'
-          );
-          newBeslissingHtmlContent = `De Vlaamse Regering hecht haar ${beslissing}`;
-          // newBeslissingHtmlContent += beslissing;
+        if (subcase?.isBekrachtiging) {
+          newBeslissingHtmlContent = this.intl.t("ratification-decision-text");
+        } else if (this.args.agendaitem.isApproval) {
+          const { shortTitle, title } = this.args.agendaitem;
+          newBeslissingHtmlContent = generateApprovalText(shortTitle, title);
         } else {
           newBeslissingHtmlContent = this.nota || '';
         }
@@ -528,7 +541,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       created: now,
       modified: now,
       name: await generateReportName(
-        this.args.agendaContext.agendaitem,
+        this.args.agendaitem,
         this.args.agendaContext.meeting,
       ),
     });

@@ -20,8 +20,30 @@ export default class AgendaPrintableAgendaListSectionItemGroupItemDocumentListCo
         return null;
       }));
       const filteredPieces = piecesNoNextVersion.filter((piece) => piece !== null);
+      
+      // Use the filename from the filename mappings to sort
+      for (const piece of pieces) {
+        let mappedName;
+        if (this.args.fileNameMappings) {
+          mappedName = this.args.fileNameMappings.get(piece.uri);
+        }
+
+        if (mappedName) {
+          piece.__name = piece.name;
+          piece.name = mappedName;
+        }
+      }
+
       (await sortPieces(filteredPieces))
         .forEach((piece) => sortedPieces.push(piece));
+
+      // Restore the piece's filename
+      for (const piece of pieces) {
+        if (piece.__name) {
+          piece.name = piece.__name;
+          delete piece.__name;
+        }
+      }
     };
     calculateSortedPieces();
     return sortedPieces;
