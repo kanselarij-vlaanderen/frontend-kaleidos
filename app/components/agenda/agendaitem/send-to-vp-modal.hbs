@@ -17,7 +17,7 @@
           <p>{{t "check-documents-to-be-sent-to-vp"}}</p>
             <ul class="au-u-margin-top au-u-margin-left-none">
             {{#each this.subcasesWithPieces as |subcaseWithPieces|}}
-              <li class="list-style-none">
+              <li class="au-c-content__list--no-style">
                 {{#if subcaseWithPieces.subcaseName}}
                   <p>
                     <strong class="auk-u-text-bold">
@@ -26,7 +26,7 @@
                   </p>
                   <ul class="au-u-margin-top-small au-u-margin-left-none">
                     {{#each subcaseWithPieces.pieces as |piece|}}
-                      <li class="list-style-none">
+                      <li class="au-c-content__list--no-style">
                         {{#if (this.isDisabled piece.accessLevel)}}
                         <AuCheckbox
                           @checked={{this.isSelected piece}}
@@ -64,7 +64,7 @@
                   </ul>
                 {{else}}
                   {{#each subcaseWithPieces.pieces as |piece|}}
-                    <li class="list-style-none">
+                    <li class="au-c-content__list--no-style">
                       {{#if (this.isDisabled piece.accessLevel)}}
                         <AuCheckbox
                           @checked={{this.isSelected piece}}
@@ -72,7 +72,7 @@
                           @disabled={{true}}
                         >
                           <LinkTo
-                            @route="document" 
+                            @route="document"
                             @model={{piece.id}}
                             disabled={{true}}
                           >
