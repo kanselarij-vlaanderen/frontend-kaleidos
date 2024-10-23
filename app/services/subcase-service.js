@@ -59,4 +59,17 @@ export default class SubcaseService extends Service {
     }
     return false;
   }
+
+  async getLatestDecisionActivity(subcase) {
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': subcase.id,
+      'filter[:has-no:next-version]': 't',
+      sort: '-agenda-activity.start-date,-created',
+    });
+    if (agendaitem?.id) {
+      return await this.store.queryOne('decision-activity', {
+        'filter[treatment][agendaitems][:id:]': agendaitem.id,
+      });
+    }
+  }
 }
