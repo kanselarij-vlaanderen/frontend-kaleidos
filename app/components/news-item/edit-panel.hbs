@@ -85,7 +85,7 @@
               <div class="auk-editor__header auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center">
                 <AuLabel class="auk-u-p-0">
                   {{t "decision-in-newsletter"}}
-                  <span class={{unless this.isFullscreen "au-u-hidden-visually"}}> voor {{this.title}}</span>
+                  <span class={{unless this.isFullscreen "au-u-hidden-visually"}}>&nbsp;{{t "for-lower-case"}}&nbsp;{{this.title}}</span>
                 </AuLabel>
                 {{#if this.isFullscreen}}
                   <AuButtonGroup>
@@ -98,7 +98,7 @@
                       {{t "close-fullscreen"}}
                     </AuButton>
                     <AuButton
-                      data-test-news-item-edit-item-save
+                      data-test-news-item-edit-item-save-fullscreen
                       @loading={{this.confirmSave.isRunning}}
                       {{on "click" this.save}}
                     >
