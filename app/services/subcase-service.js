@@ -66,7 +66,7 @@ export default class SubcaseService extends Service {
       'filter[:has-no:next-version]': 't',
       sort: '-agenda-activity.start-date,-created',
     });
-    if (agendaitem.id) {
+    if (agendaitem?.id) {
       return await this.store.queryOne('decision-activity', {
         'filter[treatment][agendaitems][:id:]': agendaitem.id,
       });
