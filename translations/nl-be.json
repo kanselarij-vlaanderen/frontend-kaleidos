@@ -1276,6 +1276,7 @@
   "minutes-retracted": "{mededelingOrNota} wordt ingetrokken.",
   "minutes-acknowledged": "De Vlaamse Regering neemt akte van {mededelingOrNota}.",
   "minutes-postponed": "{mededelingOrNota} wordt uitgesteld tot de volgende vergadering.",
+  "ratification-decision-text" : "De Vlaamse Regering bekrachtigt bovengenoemd decreet en beslist over te gaan tot de afkondiging ervan.",
   "send-to-VP": "Doorsturen naar het Vlaams Parlement",
   "check-case": "Dossier controleren",
   "the-following-things-will-be-sent": "De volgende documenten worden doorgestuurd:",
