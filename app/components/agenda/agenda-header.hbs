@@ -43,6 +43,7 @@
         <Agenda::AgendaHeader::AgendaTabs
           @currentAgenda={{@currentAgenda}}
           @currentMeeting={{@meeting}}
+          @responsiveBreakpoint={{if (user-may "manage-agenda-versions") "medium" "small"}}
         />
       </Group.Item>
     </Toolbar.Group>

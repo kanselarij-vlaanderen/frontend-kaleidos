@@ -6,6 +6,7 @@ export default class ParliamentFlow extends Model {
   @attr parliamentId;
   @attr('datetime') openingDate;
   @attr('datetime') closingDate;
+  @attr uri;
 
   @belongsTo('parliament-subcase', { inverse: 'parliamentFlow', async: true }) parliamentSubcase;
   @belongsTo('case', { inverse: 'parliamentFlow', async: true }) case;

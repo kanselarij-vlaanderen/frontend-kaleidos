@@ -63,6 +63,7 @@ const selectors = {
     editor: {
       updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
       versionsDropdown: '[data-test-route-agenda-minutes-editor-versions-dropdown]',
+      fullscreen: '.au-c-button .au-c-button--naked > au-c-icon--expand',
       cancel: '[data-test-route-agenda-minutes-editor-cancel]',
       save: '[data-test-route-agenda-minutes-editor-save]',
     },
@@ -83,6 +84,29 @@ const selectors = {
 
   subcase: {
     add: '[data-test-route-cases---subcase-add-documents]',
+  },
+
+  // cases/submissions/overview/template
+  submissionsOverview: {
+    dataTable: '[data-test-route-cases-submissions-overview-data-table]',
+    row: {
+      shortTitle: '[data-test-route-cases-submissions-overview-row-short-title]',
+      newCase: '[data-test-route-cases-submissions-overview-row-new-case]',
+      limitedAccess: '[data-test-route-cases-submissions-overview-row-limited-access]',
+      plannedStart: '[data-test-route-cases-submissions-overview-row-planned-start]',
+      subcaseType: '[data-test-route-cases-submissions-overview-row-subcase-type]',
+      status: '[data-test-route-cases-submissions-overview-row-status]',
+      goToSubmission: '[data-test-route-cases-submissions-overview-row-go-to-submission]',
+    },
+  },
+
+  // cases/submissions/submission
+  submission: {
+    documents: {
+      panel: '[data-test-route-cases---submission-documents-panel]',
+      batchEdit: '[data-test-route-cases---submission-documents-batch-edit]',
+      add: '[data-test-route-cases---submission-documents-batch-edit]',
+    },
   },
 
   /**

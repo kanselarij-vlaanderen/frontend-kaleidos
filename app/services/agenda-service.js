@@ -107,6 +107,17 @@ export default class AgendaService extends Service {
     return piecesFromStore;
   }
 
+  createInternalReview = async(subcase, submissions, privateComment) => {
+    const submissionsToSet = submissions || await subcase?.submissions;
+    const internalReview = await this.store.createRecord('submission-internal-review', {
+      created: new Date(),
+      privateComment: privateComment, // default to the CONSTANTS? diff between nota and mededeling somewhere?
+      submissions: submissionsToSet,
+      subcase: subcase,
+    });
+    await internalReview.save();
+  };
+
   /* API: agenda-submission-service */
 
   async reorderAgenda(agenda) {
@@ -136,6 +147,10 @@ export default class AgendaService extends Service {
     formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
     privateComment = null
   ) {  
+    const internalReview = await subcase.internalReview;
+    if (!internalReview?.id) {
+      await this.createInternalReview(subcase, null, privateComment);
+    }
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',
@@ -226,7 +241,7 @@ export default class AgendaService extends Service {
     return json;
   }
 
-  async getMeetingForSubmission(submission) {
+  async getAgendaAndMeetingForSubmission(submission) {
     const url = `/submissions/${submission.id}/for-meeting`;
     const response = await fetch(url, {
       method: 'GET',
@@ -250,7 +265,21 @@ export default class AgendaService extends Service {
           response.status
         }): ${JSON.stringify(json)}`);
     }
-    return json;
+    const agenda = {
+      id: json.data.attributes.agendaId,
+      uri: json.data.attributes.agenda,
+      serialnumber: json.data.attributes.serialnumber,
+      createdFor: {
+        id: json.data.id,
+        uri: json.data.attributes.uri,
+        plannedStart: new Date(json.data.attributes.plannedStart),
+        kind: {
+          uri: json.data.attributes.kind,
+          label: json.data.attributes.type,
+        }
+      },
+    };
+    return agenda;
   }
 
   /* No API */

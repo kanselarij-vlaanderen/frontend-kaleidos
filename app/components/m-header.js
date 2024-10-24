@@ -5,6 +5,7 @@ import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledImpersonation } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 const environmentNames = {
   localhost: 'LOCAL',
@@ -35,6 +36,9 @@ export default class MHeader extends Component {
       this.environmentName = null;
       this.environmentClass = null;
     }
+  }
+  get isEnabledCabinetSubmissions() {
+    return isEnabledCabinetSubmissions();
   }
 
   get canImpersonate() {

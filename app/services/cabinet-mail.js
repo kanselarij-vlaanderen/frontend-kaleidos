@@ -87,6 +87,8 @@ export default class CabinetMailService extends Service {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: caseTitle,
       resubmitted: true,
+      approvalComment: submission.approvalComment,
+      notificationComment: submission.notificationComment,
       comment,
       submission,
       meeting,
@@ -94,13 +96,13 @@ export default class CabinetMailService extends Service {
     };
 
     // same mail for approvers and notification
+    const creator = await this.draftSubmissionService.getCreator(submission);
     const approversEmail = await caseResubmittedApproversEmail(params);
-    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversEmail);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversEmail, false, [...submission.approvalAddresses, creator.email].join(','));
     const notificationEmail = await caseResubmittedIkwEmail(params);
     const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), notificationEmail, true);
 
     const submitterEmail = await caseResubmittedSubmitterEmail(params);
-    const creator = await this.draftSubmissionService.getCreator(submission);
     const submitterEmailResource = await this.createMailRecord(creator.email, submitterEmail, true);
 
     await Promise.all([
@@ -127,14 +129,14 @@ export default class CabinetMailService extends Service {
       submission
     };
 
+    const creator = await this.draftSubmissionService.getCreator(submission);
     const approversMail = await caseSubmittedApproversEmail(params);
-    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversMail);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversMail, false, [...submission.approvalAddresses, creator.email].join(','));
 
     const ikwMail = await caseSubmittedIkwEmail(params);
     const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), ikwMail, true);
 
     const submitterMail = await caseSubmittedSubmitterEmail(params);
-    const creator = await this.draftSubmissionService.getCreator(submission);
     const submitterMailResource = await this.createMailRecord(creator.email, submitterMail, true);
 
     await Promise.all([
@@ -161,14 +163,14 @@ export default class CabinetMailService extends Service {
       meeting
     };
 
+    const creator = await this.draftSubmissionService.getCreator(submission);
     const approversMail = await caseUpdateSubmissionApproversEmail(params);
-    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversMail);
+    const approversMailResource = await this.createMailRecord(submission.approvalAddresses.join(','), approversMail, false, [...submission.approvalAddresses, creator.email].join(','));
 
     const ikwMail = await caseUpdateSubmissionIkwEmail(params);
     const ikwMailResource = await this.createMailRecord(submission.notificationAddresses.join(','), ikwMail, true);
 
     const submitterMail = await caseUpdateSubmissionSubmitterEmail(params);
-    const creator = await this.draftSubmissionService.getCreator(submission);
     const submitterMailResource = await this.createMailRecord(creator.email, submitterMail, true);
 
     await Promise.all([
@@ -202,7 +204,7 @@ export default class CabinetMailService extends Service {
   // when mailing secretarie and KC also replyTo secretarie and KC
   // IKW shouldn't really need to reply, use the default for now (unsure if we need the "to" + default here)
   // when mailing creator, replyTo should be the default from settings so they reply to the secretarie
-  async createMailRecord(to, mailObject, replyToDefault = false) {
+  async createMailRecord(to, mailObject, replyToDefault = false, overrideReplyTo) {
     const { mailSettings, outbox } = await this.loadSettings();
     if (mailSettings && outbox) {
       const replyTo = replyToDefault ? mailSettings.cabinetSubmissionsReplyToEmail : to;
@@ -211,14 +213,14 @@ export default class CabinetMailService extends Service {
         return this.store.createRecord('email', {
           to,
           from: mailSettings.defaultFromEmail,
-          replyTo: replyTo,
+          replyTo: overrideReplyTo ? overrideReplyTo : replyTo,
           folder: outbox,
           subject: mailObject.subject,
           message: mailObject.message,
         });
       }
       let message = "to: " + to + "\n";
-      message += "replyTo: " + replyTo + "\n";
+      message += "replyTo: " + (overrideReplyTo ? overrideReplyTo : replyTo) + "\n";
       message += "subject: " + mailObject.subject + "\n";
       message += "message: " + mailObject.message + "\n";
 

@@ -1,0 +1,42 @@
+<Auk::Panel::Body
+  class="auk-u-mt-4 auk-u-mb-4 auk-u-p-2 auk-u-maximize-height auk-u-bg-alt"
+>
+  <div
+    class="au-u-flex au-u-flex--spaced-small au-u-flex--vertical-center auk-u-text-bold"
+  >
+    <AuIcon @icon="lock-closed" />
+    <span>{{t "private-comment-title"}}:</span>
+    {{#if this.isEditing}}
+      <AuLink @icon="check" @hideText={{true}} {{on "click" this.save}}>
+        {{t "save"}}
+      </AuLink>
+      <AuLink @icon="x" @hideText={{true}} {{on "click" this.cancel}}>
+        {{t "cancel"}}
+      </AuLink>
+    {{else}}
+      <AuLink
+        @icon="pencil"
+        @hideText={{true}}
+        {{on "click" (toggle "isEditing" this)}}
+      >
+        {{t "edit"}}
+      </AuLink>
+    {{/if}}
+  </div>
+  {{#if this.isEditing}}
+    <AuTextarea
+      id="private-comment"
+      rows="7"
+      value={{this.internalReview.privateComment}}
+      @width="block"
+      {{on
+        "input"
+        (pick "target.value" (set this.internalReview "privateComment"))
+      }}
+    />
+  {{else}}
+    <pre class="auk-u-text-pre-line">
+      {{this.internalReview.privateComment}}
+    </pre>
+  {{/if}}
+</Auk::Panel::Body>

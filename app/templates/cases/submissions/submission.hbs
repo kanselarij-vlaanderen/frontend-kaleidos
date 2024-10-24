@@ -34,11 +34,12 @@
     </AuAlert>
   {{/if}}
   <div class="auk-u-responsive-margin">
-
     <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
-        @mayEdit={{and this.mayEdit (not this.isUpdate)}}
+        @mayEdit={{this.mayEditIfUpdate}}
+        @isUpdate={{this.isUpdate}}
+        @onSave={{perform this.checkIfConfidentialChanged}}
       />
     </div>
 
@@ -51,6 +52,7 @@
         @allowEditing={{this.mayEdit}}
         @disableMandatee={{this.disableMandatee}}
         @disableSubmitter={{true}}
+        @previousMandateePersons={{this.previousMandateePersons}}
       />
     </div>
 
@@ -65,19 +67,21 @@
 
     <Cases::Submissions::Notifications
       class="auk-u-mb-2"
+      @submission={{this.model}}
       @allowEditing={{this.mayEdit}}
-      @confidential={{@model.confidential}}
+      @confidential={{this.confidential}}
       @hasConfidentialPieces={{this.hasConfidentialPieces}}
       @approvalAddresses={{this.approvalAddresses}}
       @approvalComment={{this.approvalComment}}
       @notificationAddresses={{this.notificationAddresses}}
       @notificationComment={{this.notificationComment}}
-      @onNotificationDataChanged={{this.onNotificationDataChanged}}
-      @onSaveNotificationData={{this.onSaveNotificationData}}
+      @onNotificationDataChanged={{this.updateLocalNotificationData}}
+      @onSaveNotificationData={{this.saveNotificationDataOnModel}}
+      @onCancelNotificationData={{this.rollbackLocalNotificationData}}
     />
 
     <div id="documents" class="auk-u-mb-4">
-      <Auk::Panel>
+      <Auk::Panel data-test-route-cases---submission-documents-panel>
         <Auk::Panel::Header>
           <Auk::Toolbar>
             <Auk::Toolbar::Group @position="left">
@@ -93,6 +97,7 @@
               {{#if (and this.mayEdit this.pieces.length)}}
                 <Auk::Toolbar::Item>
                   <AuButton
+                    data-test-route-cases---submission-documents-batch-edit
                     @skin="secondary"
                     @icon="pencil"
                     {{on "click" (toggle "isOpenBatchDetailsModal" this)}}
@@ -109,11 +114,14 @@
             <Documents::DraftDocumentCardList
               @pieces={{this.pieces}}
               @isEditable={{this.mayEdit}}
+              @onAddPiece={{this.onAddNewPieceVersion}}
               @hideAccessLevel={{false}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
+              @onSaveAccessLevel={{perform this.checkIfHasConfidentialPiecesChanged}}
             />
           {{else}}
+          {{!-- is this technically unreachable since we don't allow a submission to be created without docs? --}}
             <div>
               <AuAlert
                 @skin="info"
@@ -128,6 +136,7 @@
         {{#if this.mayEdit}}
           <Auk::Panel::Footer>
             <AuButton
+              data-test-route-cases---submission-documents-add
               @skin="naked"
               @icon="plus"
               class="au-u-padding-left-none"
@@ -140,32 +149,14 @@
       </Auk::Panel>
     </div>
 
-    <div id="history">
-      <Auk::Panel>
-        <Auk::Panel::Header>
-          <Auk::Toolbar>
-            <Auk::Toolbar::Group @position="left">
-              <Auk::Toolbar::Item>
-                <h4 class="auk-panel__title">
-                  {{t "submission-history"}}
-                </h4>
-              </Auk::Toolbar::Item>
-            </Auk::Toolbar::Group>
-          </Auk::Toolbar>
-        </Auk::Panel::Header>
-        <Auk::Panel::Body class="auk-u-bg-alt">
-          {{#if this.reloadHistory.isIdle}}
-            <ul class="vlc-status-timeline">
-              {{#each this.statusChangeActivities as |activity|}}
-                <Submission::StatusChangeActivity
-                  @activity={{activity}}
-                />
-              {{/each}}
-            </ul>
-          {{/if}}
-        </Auk::Panel::Body>
-      </Auk::Panel>
-    </div>
+    <Cases::Submissions::HistoryPanel
+      @statusChangeActivities={{this.statusChangeActivities}}
+      {{! everyone who can edit this submission can see the comments }}
+      @canSeePrivateComments={{or
+        (user-may "treat-and-accept-submissions")
+        (user-may "create-submissions")
+      }}
+    />
   </div>
 </div>
 
@@ -210,6 +201,6 @@
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
     @allowEditing={{this.mayEdit}}
-    @disableEditingPosition={{true}}
+    @disableEditingPosition={{this.isUpdate}}
   />
 {{/if}}

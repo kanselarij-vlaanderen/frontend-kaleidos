@@ -16,6 +16,6 @@ export default class CasesNewSubmissionController extends Controller {
   }
 
   onCancelSubmission = () => {
-    this.router.transitionTo('cases.index');
+    this.router.transitionTo('submissions');
   }
 }

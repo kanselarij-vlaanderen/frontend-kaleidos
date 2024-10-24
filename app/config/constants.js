@@ -218,5 +218,14 @@ export default {
     USER_PAGEVIEW: 'Pageview (per rol)',
     FIRST_ACTION: 'Eerste actie',
     COPY_SUBCASE_CLICK: 'Kopieer voorgaande procedurestap',
-  }
+  },
+  // is this the right way?
+  PRIVATE_COMMENT_TEMPLATE:
+`IF: 
+BA: 
+BZ: 
+WT: 
+Co-agendering: 
+
+Def. check: `
 };

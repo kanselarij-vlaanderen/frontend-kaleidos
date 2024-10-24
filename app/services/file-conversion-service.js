@@ -32,7 +32,7 @@ export default class FileConversionService extends Service {
         }
         const result = await response.json();
         const modelName = sourceFile.constructor.modelName;
-        const derivedFile = await this.store.findRecord(modelName, result.data[0].id)
+        const derivedFile = await this.store.findRecord(modelName, result.data[0].id);
         sourceFile.derived = derivedFile;
         await sourceFile.save();
       } else {

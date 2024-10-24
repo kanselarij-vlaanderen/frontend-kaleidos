@@ -134,13 +134,32 @@
           </AuButton>
         </div>
       </AuFormRow>
+      {{#if (and (user-may "manage-agendaitems") this.internalReview)}}
+        <AuFormRow>
+          <AuLabel for="private-subcase-comment">
+            <AuIcon @icon="lock-closed" />
+            {{t "private-comment-title"}}
+          </AuLabel>
+          <AuTextarea
+            id="private-subcase-comment"
+            rows="7"
+            value={{this.internalReview.privateComment}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this.internalReview "privateComment"))}}
+          />
+        </AuFormRow>
+      {{/if}}
     </div>
   </Auk::Panel::Body>
   <Auk::Panel::Footer>
     <Auk::Toolbar @auto={{true}}>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <AuButton @skin="naked" {{on "click" this.cancelEditing}}>
+          <AuButton
+            @skin="naked"
+            @disabled={{this.isSaving}}
+            {{on "click" this.cancelEditing}}
+          >
             {{t "cancel"}}
           </AuButton>
         </Auk::Toolbar::Item>

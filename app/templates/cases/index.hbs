@@ -15,28 +15,6 @@
   <m.sidebar>
     <div class="au-c-sidebar auk-u-overflow-initial">
       <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
-        <nav>
-          <AuHeading @level="3" @skin="6" class="au-u-hidden-visually">
-            {{t "content"}}
-          </AuHeading>
-          {{#if this.mayShowSubmissionsTab}}
-          {{! if viewing submissions is not allowed, it doesn't make sense to add a singular tab for cases}}
-            <Auk::Tabs @responsive={{true}} @vertical={{true}} @responsiveBreakpoint="small">
-              <Auk::Tab
-                @route="cases"
-                @current-when="cases.index"
-              >
-                {{t "cases"}}
-              </Auk::Tab>
-              <Auk::Tab
-                @route="cases.submissions"
-                @current-when="cases.submissions"
-              >
-                {{t "submissions"}}
-              </Auk::Tab>
-            </Auk::Tabs>
-          {{/if}}
-        </nav>
         <Auk::MobileFilters
           @toggleLabel="Filters"
           @toggleIcon="filter"
@@ -98,7 +76,7 @@
                 <tbody>
                   {{#if this.isLoadingModel}}
                     <tr>
-                      <td data-test-route-agendas-overview-loader colspan="5">
+                      <td colspan="5">
                         {{t "loading"}}
                       </td>
                     </tr>
@@ -152,11 +130,9 @@
               </table>
             </div>
           {{else}}
-            <Auk::Panel>
-              <Auk::Panel::Body>
-                <Auk::EmptyState @message={{t "no-results-found"}} />
-              </Auk::Panel::Body>
-            </Auk::Panel>
+            <div class="auk-u-responsive-margin">
+              <Auk::EmptyState @bordered={{true}} @message={{t "no-results-found"}} />
+            </div>
           {{/if}}
         </div>
       </div>

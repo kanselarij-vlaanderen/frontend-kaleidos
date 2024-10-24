@@ -20,6 +20,7 @@
       <AuFormRow>
         <AuLabel for="remarks">{{t "private-comments-title"}}</AuLabel>
         <AuTextarea
+          data-test-proposable-agendas-modal-private-comment
           id="remarks"
           rows="7"
           value={{this.privateComment}}
@@ -69,7 +70,7 @@
             </tbody>
           </table>
         {{else}}
-          <Auk::EmptyState @message={{t "no-meetings"}} />
+          <Auk::EmptyState @bordered={{true}} @message={{t "no-meetings"}} />
         {{/if}}
       </AuFormRow>
     </div>

@@ -12,14 +12,13 @@
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const footer = `Met vriendelijke groet,
-
-Vlaamse overheid
-DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN
-Team Regeringsondersteuning – Cel Ministerraad
-ministerraad@vlaanderen.be
-Koolstraat 35, 1000 Brussel
-`
+const footer = 'Met vriendelijke groet,\n'
+  + '\n'
+  + 'Vlaamse overheid\t\n'
+  + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\n'
+  + 'Team Regeringsondersteuning – Cel Ministerraad\t\n'
+  + 'VlaamseRegering_Agenderingen@groepen.vlaanderen.be\t\n'
+  + 'Koolstraat 35, 1000 Brussel\t\n';
 
 async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
@@ -57,34 +56,42 @@ Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabin
 `;
   }
 
-  if (params.forApprovers) {
-    let additionalMandateeNames = [];
-    const mandatees = await params.submission.mandatees;
-    const sortedMandatees = mandatees.slice().sort(
-      (m1, m2) => m1.priority - m2.priority
-    );
-    for (const mandatee of sortedMandatees) {
-      if (mandatee.id !== submitter.id) {
-        const mandateePerson = await mandatee.person;
-        const mandate = await mandatee.mandate;
-        const role = await mandate.role;
-        if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
-          additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
-        } else {
-          additionalMandateeNames.push('minister ' + mandateePerson.lastName);
-        }
+  let additionalMandateeNames = [];
+  const mandatees = await params.submission.mandatees;
+  const sortedMandatees = mandatees.slice().sort(
+    (m1, m2) => m1.priority - m2.priority
+  );
+  for (const mandatee of sortedMandatees) {
+    if (mandatee.id !== submitter.id) {
+      const mandateePerson = await mandatee.person;
+      const mandate = await mandatee.mandate;
+      const role = await mandate.role;
+      if (role.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT) {
+        additionalMandateeNames.push('minister-president ' + mandateePerson.lastName);
+      } else {
+        additionalMandateeNames.push('minister ' + mandateePerson.lastName);
       }
     }
-    if (additionalMandateeNames.length > 1) {
-      const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
+  }
+  if (additionalMandateeNames.length > 1) {
+    const additionalMandateeString = additionalMandateeNames.slice(0, -1).join(', ') + ' en ' + additionalMandateeNames.slice(-1);
+    message += `
+Het betreft een co-agendering met ${additionalMandateeString}
+`;
+
+    if (params.forApprovers) {
       message += `
-Het betreft een co-agendering met ${additionalMandateeString}.
 Kunnen de betrokken kabinetschefs hun akkoord geven via allen beantwoorden aub?
 `;
+    }
   } else if (additionalMandateeNames.length === 1) {
-      const additionalMandateeString = additionalMandateeNames[0];
-      message += `
+    const additionalMandateeString = additionalMandateeNames[0];
+    message += `
 Het betreft een co-agendering met ${additionalMandateeString}.
+`;
+
+    if (params.forApprovers) {
+      message += `
 Kan de betrokken kabinetschef haar/zijn akkoord geven via allen beantwoorden aub?
 `;
     }
@@ -131,8 +138,7 @@ async function caseSubmittedIkwEmail(params) {
 
   let message = await caseSubmittedEmail(params);
 
-  // this param does not exist yet
-  if (params.hasConfidentialPieces) {
+  if (!params.submission.confidential && params.hasConfidentialPieces) {
     message += `
 Deze ${params.resubmitted ? 'aangepaste ': ''}indiening wordt ter informatie aan de KC-groep bezorgd omdat deze één of meer vertrouwelijke documenten bevat.
   `;
@@ -157,7 +163,7 @@ async function caseSubmittedSubmitterEmail(params) {
   let message = await caseSubmittedEmail({ ...params, forSubmitter: true });
   if (params.approvalComment) {
     message += `
-Aanvullende informatie voor de secretarie en kabinetschefs:
+Aanvullende informatie voor de kanselarij en de kabinetschef(s) van de co-agenderende minister(s):
 ${params.approvalComment}
 `;
   }
@@ -175,7 +181,7 @@ ${params.notificationComment}
 }
 
 async function caseSendBackEmail(params) {
-  let subject = 'Teruggestuurd: ';
+  let subject = 'Indiening klaar voor aanpassing: ';
   subject += await getSubject(params);
 
   let message = '';
@@ -188,11 +194,11 @@ ${params.comment}
 `;
   } else {
     message += `
-Uw indiening "${params.submission.shortTitle}" werd teruggestuurd.
+Uw indiening "${params.submission.shortTitle}" werd teruggestuurd zodat u aanpassingen kan maken.
 `;
   }
   message += `
-U kunt de indiening hier bekijken: ${params.submissionUrl}
+U kunt uw indiening hier aanpassen: ${params.submissionUrl}
 `;
 
   return {
@@ -226,20 +232,21 @@ async function caseUpdateSubmissionSubmitterEmail(params) {
 }
 
 async function caseRequestSendBackEmail(params) {
+  const submitter = await params.submission.requestedBy;
+  const submitterPerson = await submitter.person;
   let subject = 'Aanpassing aangevraagd: ';
   subject += await getSubject(params);
 
   let message = '';
   message += `Beste,
-`;
+
+Er werd een aanpassing aangevraagd door kabinet ${submitterPerson.lastName} voor indiening "${params.submission.shortTitle}"`;
   if (params.comment) {
-    message += `
-Er werd een aanpassing aangevraagd voor indiening "${params.submission.shortTitle}" met volgende opmerking:
+    message += `met volgende opmerking:
 ${params.comment}
 `;
   } else {
-    message += `
-Er werd een aanpassing aangevraagd voor indiening "${params.submission.shortTitle}".
+    message += `.
 `;
   }
 message += `
