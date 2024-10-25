@@ -7,20 +7,21 @@
     <AuIcon @icon="lock-closed" />
     <span>{{t "private-comment-title"}}:</span>
     {{#if this.isEditing}}
-      <AuLink @icon="check" @hideText={{true}} {{on "click" this.save}}>
+      <AuButton @skin="naked" @icon="check" @hideText={{true}} {{on "click" this.save}}>
         {{t "save"}}
-      </AuLink>
-      <AuLink @icon="x" @hideText={{true}} {{on "click" this.cancel}}>
+      </AuButton>
+      <AuButton @skin="naked" @icon="x" @hideText={{true}} {{on "click" this.cancel}}>
         {{t "cancel"}}
-      </AuLink>
+      </AuButton>
     {{else}}
-      <AuLink
+      <AuButton
+        @skin="naked"
         @icon="pencil"
         @hideText={{true}}
         {{on "click" (toggle "isEditing" this)}}
       >
         {{t "edit"}}
-      </AuLink>
+      </AuButton>
     {{/if}}
   </div>
   {{#if this.isEditing}}
