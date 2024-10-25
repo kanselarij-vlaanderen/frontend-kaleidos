@@ -36,6 +36,7 @@ export default class AgendaitemControls extends Component {
   @tracked canSubmitNewDocuments = false;
   @tracked isSendingBackToSubmitter = false;
   @tracked sendBackToSubmitterComment;
+  @tracked ongoingSubmissionId;
 
   constructor() {
     super(...arguments);
@@ -75,10 +76,12 @@ export default class AgendaitemControls extends Component {
   });
 
   get hasDropdownOptions() {
-    return (
+    return this.loadSubmissions.isIdle &&
+      this.loadPermittedAgendaItemActions.isIdle && (
       (this.currentSession.may('manage-agendaitems') && this.isDesignAgenda) ||
       this.canSendToVP ||
-      this.canSubmitNewDocuments
+      this.canSubmitNewDocuments ||
+      this.ongoingSubmissionId
     );
   }
 
@@ -144,7 +147,11 @@ export default class AgendaitemControls extends Component {
 
   @task
   *loadSubmissions() {
-    this.submissions = yield this.args.subcase?.submissions;
+    if (this.args.subcase?.id) {
+      this.submissions = yield this.args.subcase.submissions;
+      const ongoingSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
+      this.ongoingSubmissionId = ongoingSubmission?.id;
+    }
   }
 
   async deleteItem(agendaitem) {
