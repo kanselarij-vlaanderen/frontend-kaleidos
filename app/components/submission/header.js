@@ -102,7 +102,7 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isResubmitted) && 
+        this.args.submission?.isResubmitted) &&
       this.currentSession.may('edit-sent-back-submissions') &&
       this.requestedByIsCurrentMandatee
     );
@@ -394,7 +394,7 @@ export default class SubmissionHeaderComponent extends Component {
 
   takeInTreatment = async () => {
     const subcase = await this.args.submission.subcase;
-    if (subcase) {
+    if (subcase?.id) {
       const subcaseType = await subcase.type;
       this.args.submission.shortTitle = subcase.shortTitle;
       this.args.submission.title = subcase.title;
@@ -423,15 +423,15 @@ export default class SubmissionHeaderComponent extends Component {
       internalReviewOfSubcase.submissions = submissions;
       return await internalReviewOfSubcase.save();
     }
-  
+
     if (!internalReviewOfSubmission?.id) {
       await this.agendaService.createInternalReview(this.args.subcase, [this.args.submission], CONSTANTS.PRIVATE_COMMENT_TEMPLATE);
     }
-    // else, update something? 
+    // else, update something?
     // is there a chance that subcase has no internalReview but submission does?
     // not if we connect it when creating the subcase initially
     // sounds possible only on old data. new data should be fine
-    // subcase should/will be connected on creation and is a read-only relation on subcase 
+    // subcase should/will be connected on creation and is a read-only relation on subcase
   };
 
   sendBackToSubmitter = task(async () => {
