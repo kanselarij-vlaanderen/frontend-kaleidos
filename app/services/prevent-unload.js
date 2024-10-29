@@ -29,7 +29,7 @@ export default class PreventUnloadService extends Service {
   __emberListener = (transition) => {
     if (
       !transition.to.find(route => route.name === this.router.currentRouteName) &&
-      !transition.to.localName === 'loading' &&
+      transition.to.localName !== 'loading' &&
       !confirm('Als u de pagina nu verlaat bent u alle aanpassingen kwijt. Bent u zeker dat u weg wilt navigeren?')) {
       transition.abort();
     }
