@@ -830,3 +830,26 @@ $au-label-color: var(--au-gray-700);
     overflow: auto;
   }
 }
+
+// Input with clear action
+
+.au-c-input-with-clear-action {
+  display: block;
+  position: relative;
+  width: 100%;
+
+  > .au-c-input-wrapper {
+    > .au-c-input {
+      padding-right: 3.5rem;
+    }
+  }
+
+  > .au-c-button {
+    position: absolute;
+    top: .1rem;
+    right: .1rem;
+    bottom: 0;
+
+    outline-offset: calc(var(--au-outline-offset) * -1);
+  }
+}

@@ -6,12 +6,12 @@
   />
   <Auk::Modal::Body @noPadding={{true}}>
     <Utils::LoadableContent @isLoading={{this.isLoading}}>
-      <table class="auk-table auk-table--sortable auk-table--styled auk-table--bordered">
+      <table class="auk-u-position-relative auk-table auk-table--styled auk-table--bordered">
         <thead>
           <tr>
             <th></th>
             {{#if this.isEditingEnabled}}
-              <th class="auk-table__checkbox-col">
+              <th class="auk-u-minimize-width">
                 <AuCheckbox
                   data-test-batch-documents-details-select-all
                   @checked={{this.areAllSelected}}

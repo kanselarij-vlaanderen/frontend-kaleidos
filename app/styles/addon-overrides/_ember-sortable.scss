@@ -1,0 +1,16 @@
+/* ==========================================================================
+  ember-sortable
+   ========================================================================== */
+
+.sortable-item {
+  transition: all 0.125s;
+
+  &.is-dragging {
+    transition-duration: 0s;
+  }
+
+  &.is-dragging,
+  &.is-dropping {
+    z-index: $z-index-drag;
+  }
+}

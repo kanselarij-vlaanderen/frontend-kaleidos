@@ -3,19 +3,8 @@
 
 // General
 
-.auk-u-flex-grow {
-  flex-grow: 1;
-}
-
 :target {
   scroll-margin-block: $au-unit-small;
-}
-
-
-// Modal
-
-.auk-modal-backdrop > .ember-view {
-  height: 100%;
 }
 
 
@@ -26,33 +15,6 @@
 
   tr:last-child {
     border-bottom: 0;
-  }
-}
-
-.auk-table--striped {
-  .auk-table__row--expanded {
-    background: $auk-white;
-  }
-}
-
-.auk-table__actions--bottom {
-  border-top: 2px solid #cbd2da;
-  padding: 0 1rem 0 1rem;
-}
-
-
-// Sortable
-
-.sortable-item {
-  transition: all 0.125s;
-
-  &.is-dragging {
-    transition-duration: 0s;
-  }
-
-  &.is-dragging,
-  &.is-dropping {
-    z-index: $z-index-drag;
   }
 }
 
@@ -90,10 +52,6 @@
   padding-left: .5rem;
 }
 
-.vlc-procedure-step--nopadding {
-  padding: 0;
-}
-
 
 // File uploader
 
@@ -114,236 +72,17 @@
 }
 
 
-// Temporary overrides for AuButton & AuLink refactor
-
-// List
-
-.auk-list--view {
-  .auk-list__item {
-    .au-c-button,
-    .au-c-link {
-      margin-left: auto;
-    }
-  }
-}
-
-// Table
-
-.auk-table--list {
-  thead {
-    display: none;
-  }
-
-  td {
-    border-bottom: 0;
-  }
-
-  td,
-  tr td:first-child,
-  tr td:last-child {
-    padding: 0 0 $au-unit-small 0;
-  }
-
-  .auk-table--clickable-rows {
-    tr:focus-within td {
-      background-color: transparent;
-    }
-  }
-}
-
-.auk-table__draggable-col {
-  width: 2rem; // Minimize width
-  padding: 1.75rem 1rem 1.2rem;
-}
-
-.auk-table__checkbox-col {
-  width: 2rem; // Minimize width
-}
-
-.auk-table__row--disabled {
-  opacity: .7 !important;
-  cursor: not-allowed;
-
-  &:hover td {
-    background-color: transparent !important;
-  }
-}
-
-.auk-table--sortable {
-  position: relative;
-}
-
-// Button
-
-.auk-button {
-  &:focus {
-    box-shadow: none;
-
-    outline: var(--au-outline);
-    outline-offset: var(--au-outline-offset);
-  }
-}
-
-.auk-button--secondary {
-  &:focus {
-    box-shadow: inset 0 0 0 0.2rem $auk-blue-500;
-
-    &:hover {
-      box-shadow: inset 0 0 0 0.2rem $auk-blue-700;
-    }
-
-    &:active {
-      box-shadow: inset 0 0 0 0.2rem $auk-blue-800;
-    }
-  }
-}
-
-.auk-button--tertiary {
-  &:focus {
-    box-shadow: inset 0 0 0 0.1rem $auk-gray-300;
-
-    &:hover {
-      box-shadow: inset 0 0 0 0.1rem $auk-blue-500;
-    }
-
-    &:active {
-      box-shadow: inset 0 0 0 0.1rem $auk-blue-800;
-    }
-  }
-}
-
-.auk-button-link {
-  border-radius: $au-button-border-radius;
-
-  &:focus {
-    box-shadow: none;
-
-    outline: var(--au-outline);
-    outline-offset: var(--au-outline-offset);
-  }
-}
-
-.auk-button--muted {
-  &.au-c-button--naked {
-    &,
-    &:visited {
-      color: $auk-gray-600;
-    }
-
-    &:hover,
-    &:focus-visible,
-    &:active {
-      color: $auk-gray-800;
-    }
-
-    &.is-disabled,
-    &.is-disabled:hover,
-    &.is-disabled:focus-visible,
-    &.is-disabled:active {
-      color: $auk-gray-700;
-    }
-
-    &.is-loading,
-    &.is-loading:hover,
-    &.is-loading:focus-visible {
-      color: $auk-gray-700;
-    }
-  }
-}
-
-// Input with clear action
-
-.auk-input-with-clear-action {
-  display: block;
-  position: relative;
-  width: 100%;
-
-  > .au-c-input-wrapper {
-    > .au-c-input {
-      padding-right: 3.5rem;
-    }
-  }
-
-  > .au-c-button {
-    position: absolute;
-    top: .1rem;
-    right: .1rem;
-    bottom: 0;
-
-    outline-offset: calc(var(--au-outline-offset) * -1);
-  }
-}
-
 // Help text + Errors on forms
 
 .auk-form-help-text {
   .au-c-input + &,
   .au-c-input-wrapper + &,
-  .auk-input-with-clear-action + &,
+  .au-c-input-with-clear-action + &,
   .auk-datepicker + &  {
     margin-top: 0.5rem;
   }
 }
 
-// Alignment helpers
-
-.auk-u-text-vertical-align-middle {
-  vertical-align: middle;
-}
-
-// Result cards
-// Workaround until we adapt mu-search to send more specific tags for highlights
-.result-card em {
-  font-style: inherit;
-  background: #E4EBF5;
-}
-
-// Make sure long document links break on mobile
-.result-card .card-link {
-  @include mq($until: medium) {
-    white-space: normal;
-    overflow-wrap: break-word;
-    hyphens: auto;
-  }
-
-}
-
-// Bigger font
-// workaround for search legend sign example
-.auk-u-text-size--xlarge {
-  font-size: 2.5rem !important;
-}
-
-// Bigger container
-// workaround for search legend popover having a max-width of 45rem
-.auk-u-max-width-xxlarge {
-  max-width: 65rem;
-}
-
-// Workaround for popover exiting view window on small display for search legend
-@media screen and (max-width: 780px) {
-  .auk-u-max-width-xxlarge.ember-popover {
-    transform: translate3d(10px, 64px, 0px) !important;
-  }
-}
-
-// Text ellipsis helper
-.auk-u-text-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-// Loadable content
-.auk-loadable-content__content {
-  min-width: 0;
-}
-
-.auk-u-text-uncapitalize {
-  &::first-letter {
-    text-transform: lowercase !important;
-  }
-}
 
 // Select
 
@@ -374,15 +113,6 @@
   }
 }
 
-// System alert
-
-.auk-system-alert {
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-radius: 0;
-  margin-bottom: 0;
-}
 
 // Hierarchical back tab
 // Override the visibility of the back button label within Kaleidos only
