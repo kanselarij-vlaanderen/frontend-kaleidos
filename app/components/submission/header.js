@@ -393,7 +393,15 @@ export default class SubmissionHeaderComponent extends Component {
   );
 
   takeInTreatment = async () => {
-    // TODO update submission data? It could have been changed on subcase
+    const subcase = await this.args.submission.subcase;
+    if (subcase) {
+      const subcaseType = await subcase.type;
+      this.args.submission.shortTitle = subcase.shortTitle;
+      this.args.submission.title = subcase.title;
+      this.args.submission.type = subcaseType;
+      this.args.submission.subcaseName = subcase.subcaseName;
+      this.args.submission.confidential = subcase.confidential;
+    }
     await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING);
     await this.createOrUpdateInternalReview();
     if (isPresent(this.args.onStatusUpdated)) {
