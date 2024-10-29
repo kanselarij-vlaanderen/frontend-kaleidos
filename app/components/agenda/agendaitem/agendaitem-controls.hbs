@@ -61,8 +61,16 @@
         >
           {{t "submit-new-documents"}}
         </AuLink>
+      {{else if this.ongoingSubmissionId}}
+        <AuLink
+          @route="cases.submissions.submission"
+          @model={{this.ongoingSubmissionId}}
+          role="menuitem"
+        >
+          {{t "open-current-submission"}}
+        </AuLink>
       {{/if}}
-      {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda this.loadSubmissions.isIdle)}}
+      {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda)}}
         {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
           <AuButton
             @skin="link"

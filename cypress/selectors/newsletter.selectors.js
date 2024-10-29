@@ -35,6 +35,7 @@ const selectors = {
     remark: '[data-test-news-item-edit-item-remark]',
     toggleFinished: '[data-test-news-item-edit-item-toggle-finished]',
     save: '[data-test-news-item-edit-item-save]',
+    saveFullscreen: '[data-test-news-item-edit-item-save-fullscreen]',
     cancel: '[data-test-news-item-edit-item-cancel]',
     checkedThemes: '[data-test-news-item-edit-item-themes-selector] input:checked',
     themesSelector: '[data-test-news-item-edit-item-themes-selector]',

@@ -11,6 +11,7 @@ export default class SubcaseSideNavSubcaseComponent extends Component {
    */
   @service store;
   @service intl;
+  @service subcaseService;
 
   @tracked decisionResultCode;
   @tracked decisionActivity;
@@ -27,10 +28,7 @@ export default class SubcaseSideNavSubcaseComponent extends Component {
   }
 
   loadData = task(async () => {
-    this.decisionActivity = await this.store.queryOne('decision-activity', {
-      'filter[subcase][:id:]': this.args.subcase.id,
-      sort: '-start-date',
-    });
+    this.decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
     this.decisionResultCode = await this.decisionActivity?.decisionResultCode;
   });
 
