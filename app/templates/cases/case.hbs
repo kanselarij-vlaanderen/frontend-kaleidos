@@ -6,8 +6,8 @@
 {{#if this.isAddingSubmission}}
   {{outlet}}
 {{else}}
-  <div class="auk-panel-layout auk-panel-layout--responsive auk-panel-layout--cases">
-    <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--responsive auk-panel-layout__sidebar--cases">
+  <div class="auk-panel-layout auk-panel-layout--responsive">
+    <div class="auk-panel-layout__sidebar auk-panel-layout__sidebar--responsive">
       <Subcases::SideNav
         @decisionmakingFlow={{@model.decisionmakingFlow}}
         @latestParliamentSubmissionActivity={{@model.latestParliamentSubmissionActivity}}
