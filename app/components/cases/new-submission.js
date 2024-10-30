@@ -257,10 +257,7 @@ export default class CasesNewSubmissionComponent extends Component {
           meeting,
           this.submission
         );
-        this.router.transitionTo(
-          'cases.submissions.submission',
-          this.submission.id
-        );
+        this.args.onCreateSubmission?.(this.submission);
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-while-submitting-subcase-on-meeting', {
