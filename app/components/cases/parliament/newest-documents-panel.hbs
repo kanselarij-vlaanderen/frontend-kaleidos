@@ -15,7 +15,6 @@
   {{#if this.loadData.isIdle}}
     <Auk::Panel::Body
       @noPadding={{is-empty (keys this.piecesBySubcase)}}
-      class="c-document-panel"
     >
       {{#each-in this.piecesBySubcase as |subcaseName submittedPieces|}}
         <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
@@ -41,15 +40,7 @@
           {{/each}}
         </ul>
       {{else}}
-        <div>
-          <AuAlert
-            @skin="info"
-            @icon="info-circle"
-            class="au-u-margin-bottom-none"
-          >
-            {{t "no-documents-submitted-to-vp-yet"}}
-          </AuAlert>
-        </div>
+        <Auk::EmptyState @message={{t "no-documents-submitted-to-vp-yet"}} />
       {{/each-in}}
     </Auk::Panel::Body>
   {{else}}
