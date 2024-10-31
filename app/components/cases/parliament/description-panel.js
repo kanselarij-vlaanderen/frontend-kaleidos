@@ -10,6 +10,7 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
   @tracked latestMeeting;
   @tracked publicationStatus;
   @tracked latestPublicationActivity;
+  @tracked showParliamentCaseLink;
 
   constructor() {
     super(...arguments);
@@ -17,6 +18,8 @@ export default class CasesParliamentDescriptionPanelComponent extends Component 
   }
 
   loadStatusData = task(async () => {
+    await this.args.parliamentFlow.status; // necessary for getters to work
+    this.showParliamentCaseLink = this.args.parliamentFlow.isReceived || this.args.parliamentFlow.isBeingHandledByFP;
     const generatedSubcase = await this.args.latestRetrievalActivity?.generatedSubcase;
 
     let latestMeeting = null;
