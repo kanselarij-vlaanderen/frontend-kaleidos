@@ -220,12 +220,15 @@ export default {
     COPY_SUBCASE_CLICK: 'Kopieer voorgaande procedurestap',
   },
   // is this the right way?
-  PRIVATE_COMMENT_TEMPLATE:
-`IF: 
-BA: 
-BZ: 
-WT: 
-Co-agendering: 
+  PRIVATE_COMMENT_TEMPLATE: {
+    NOTA:`IF:
+BA:
+BZ:
+WT:
+Co-agendering:
 
+Def. check: `,
+   ANNOUNCEMENT:`Co-agendering:
 Def. check: `
+  }
 };
