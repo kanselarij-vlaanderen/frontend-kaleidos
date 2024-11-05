@@ -69,6 +69,12 @@
   }
 }
 
+.auk-tabs__tab__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 /* Reversed tabs
   ========================================================================== */
 
@@ -175,7 +181,7 @@
   &:not(:first-child) {
     border-top: 1px solid var(--au-gray-300);
   }
-  
+
   .auk-tabs__tab__link {
     width: 100%;
     display: flex;
@@ -216,18 +222,22 @@
   }
 }
 
-.auk-tabs__hierarchical-back .auk-tabs__tab__label { 
-  display: none;
+.auk-tabs__hierarchical-back .auk-tabs__tab__label {
+  display: block;
 }
 
-/* Responsive tab behavour 
+.auk-tabs__hierarchical-back  .auk-tabs__tab__inner {
+  padding-left: 0;
+}
+
+/* Responsive tab behavour
   ========================================================================== */
 
 .auk-tabs-holder {
   display: flex;
   align-items: center;
   position: relative;
-  
+
 }
 
 .auk-tabs-holder--small {
@@ -253,7 +263,7 @@
 
 .auk-tabs-trigger {
   border: .1rem solid var(--au-gray-300);
-  
+
 
   &:hover,
   &:active {
@@ -298,7 +308,7 @@
     0 0 2px rgba($au-gray-900, 0.1);
   border-radius: var(--au-radius);
   background-color: var(--au-white);
-  
+
   &:before,
   &:after {
     bottom: 100%;

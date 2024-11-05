@@ -58,3 +58,13 @@
     transform: translate3d(10px, 64px, 0px) !important;
   }
 }
+
+
+// Improve search categories on mobile
+.l-search-categories {
+  @include mq($until: medium) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $au-unit-tiny
+  }
+}
