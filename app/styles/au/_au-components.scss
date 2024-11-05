@@ -198,6 +198,14 @@ $au-label-color: var(--au-gray-700);
     margin-top: 0;
   }
 
+  ol[style*="upper-alpha"] {
+    margin-left: 1.6rem;
+
+    ol[style*="upper-alpha"] {
+      margin-left: $au-unit;
+    }
+  }
+
   &,
   > div:not([class]) {
     // override child (and heading) spacing to match the one in Kaleidos a bit more

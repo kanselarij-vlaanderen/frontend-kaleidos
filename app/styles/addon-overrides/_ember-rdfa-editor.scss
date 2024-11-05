@@ -119,6 +119,14 @@ ol > *[data-content-container] > li[data-list-marker]::marker {
       margin-top: 0;
     }
   }
+
+  ol[style*="upper-alpha"] {
+    padding-left: 2rem;
+
+    ol[style*="upper-alpha"] {
+      padding-left: 3rem;
+    }
+  }
 }
 
 .say-container__aside {
