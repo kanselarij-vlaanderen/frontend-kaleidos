@@ -7,7 +7,7 @@
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
       <Auk::Toolbar @auto={{true}} @responsive={{true}} as |Toolbar|>
-        <Toolbar.Group @position="left" as |Group|>
+        <Toolbar.Group @position="left" @responsive={{true}} as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
               <AuBadge
@@ -41,6 +41,7 @@
             <LinkTo
               @route="document"
               @model={{this.piece.id}}
+              target="_blank"
               class="auk-h4"
             >
               {{#if this.loadFiles.isRunning}}
@@ -53,6 +54,10 @@
                   as |extension|
                 }}
                   {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                  <AuIcon
+                    @icon="external-link"
+                    @alignment="right"
+                  />
                 {{/let}}
               {{/if}}
             </LinkTo>
@@ -173,6 +178,7 @@
                     @piece={{piece}}
                     @agendaContext={{@agendaContext}}
                     @isEditable={{false}}
+                    @external={{true}}
                   />
                 </div>
               {{/each}}

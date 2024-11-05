@@ -7,8 +7,8 @@
  */
 
 
- // EXTERNAL PLUGINS
- @import 'ember-power-select';
+// EXTERNAL PLUGINS
+@import 'ember-power-select';
 
 
 // BASE
@@ -38,15 +38,11 @@
 @import 'layout/printable-agenda';
 @import 'layout/printable-newsletter';
 @import 'layout/search';
+@import 'layout/agendas';
+@import 'layout/case';
 
 
 // CUSTOM STYLING
-@import 'custom-application/cases';
-
-
-// PROTOTYPE
-@import 'prototype/_signatures';
-@import 'prototype/_agenda';
 
 
 // EXTERNAL

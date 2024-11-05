@@ -24,15 +24,15 @@ async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
   let meetingDate = dateFormat(params.meeting.plannedStart, 'dd-MM-yyyy');
   const resubmitted = params.resubmitted ? ' aanpassing indiening' : '';
-  let suffix = ''
+  let prefix = ''
   const mandatees = await params.submission.mandatees;
-  if (mandatees?.length > 1) {
-    suffix += ' – co-agendering';
-  }
   if (params.submission.confidential) {
-    suffix += ' – vertrouwelijk';
+    prefix += 'Vertrouwelijk - ';
   }
-  return `${meetingKind.label} VR ${meetingDate}:${resubmitted} ${params.submission.shortTitle}${suffix}`;
+  if (mandatees?.length > 1) {
+    prefix += 'Co-agendering - ';
+  }
+  return `${prefix}${meetingKind.label} VR ${meetingDate}:${resubmitted} ${params.submission.shortTitle}`;
 }
 
 async function caseSubmittedEmail(params) {

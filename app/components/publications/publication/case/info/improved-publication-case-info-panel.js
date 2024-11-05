@@ -36,7 +36,7 @@ export default class PublicationsPublicationCaseInfoImprovedPublicationCaseInfoP
     const publicationStatus = yield this.args.publicationFlow.status
     if (publicationStatus.isPublished) {
       const publicationActivity = yield this.store.queryOne('publication-activity', {
-        '[filter][subcase][publication-flow][:id:]': this.args.publicationFlow.id,
+        'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
         sort: '-end-date'
       });
       if (publicationActivity?.endDate) {

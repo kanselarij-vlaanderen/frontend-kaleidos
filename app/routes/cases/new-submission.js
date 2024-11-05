@@ -13,7 +13,7 @@ export default class CasesNewSubmissionRoute extends Route {
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
       if (this.currentSession.may('view-submissions')) {
-        return this.router.transitionTo('cases.submissions');
+        return this.router.transitionTo('submissions');
       }
       return this.router.transitionTo('cases.index');
     }

@@ -71,6 +71,13 @@ drc-kill:
 drc-up-d-service:
 	- docker-compose ${COMPOSE_FILE} up -d ${SERV}
 
+drc-kill-service:
+	- docker-compose ${COMPOSE_FILE} kill ${SERV}
+
+drc-kill-and-up-service:
+	- make drc-kill-service
+	- make drc-up-d-service
+
 drc-restart-service:
 	- docker-compose ${COMPOSE_FILE} restart ${SERV}
 

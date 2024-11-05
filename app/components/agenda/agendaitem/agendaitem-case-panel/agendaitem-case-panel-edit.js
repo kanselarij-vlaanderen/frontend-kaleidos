@@ -16,13 +16,16 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
+  @service currentSession;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
   });
   @tracked isEditingSubcaseName = false;
   @tracked selectedShortcut;
+  @tracked subcaseType;
   @tracked subcaseName;
+  @tracked internalReview;
   confidentialChanged = false;
   propertiesToSet = Object.freeze(['title', 'shortTitle', 'comment']);
 
@@ -30,10 +33,24 @@ export default class AgendaitemCasePanelEdit extends Component {
     super(...arguments);
     this.subcaseName = this.args.subcase?.subcaseName;
     this.isEditingSubcaseName = this.subcaseName?.length;
+    this.loadInternalReview.perform();
+    this.loadSubcaseType.perform();
   }
 
   get newsItem() {
     return this.args.newsItem;
+  }
+
+  @task
+  *loadSubcaseType() {
+    this.subcaseType = yield this.args.subcase?.type;
+  }
+
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      this.internalReview = yield this.args.subcase?.internalReview;
+    }
   }
 
   @action
@@ -58,6 +75,9 @@ export default class AgendaitemCasePanelEdit extends Component {
     if (this.newsItem && this.newsItem.hasDirtyAttributes) {
       this.newsItem.rollbackAttributes();
     }
+    if (this.internalReview?.hasDirtyAttributes) {
+      this.internalReview.rollbackAttributes();
+    }
     this.args.onCancel();
   }
 
@@ -76,6 +96,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
       subcaseName: this.subcaseName,
+      type: this.subcaseType,
       confidential: this.args.subcase?.confidential,
     };
 
@@ -102,7 +123,16 @@ export default class AgendaitemCasePanelEdit extends Component {
         yield this.newsItem.save();
       }
     }
+    if (this.internalReview?.hasDirtyAttributes) {
+      yield this.internalReview.hasMany('submissions').reload();
+      yield this.internalReview.save();
+    }
     this.args.onSave();
+  }
+
+  @action
+  async selectSubcaseType(type) {
+    this.subcaseType = type;
   }
 
   @action

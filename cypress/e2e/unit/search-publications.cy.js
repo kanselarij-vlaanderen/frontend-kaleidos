@@ -329,7 +329,10 @@ context('Search tests', () => {
     cy.get(route.search.input).clear()
       .type(searchTerm);
 
-    // filter on Prime minister
+    // check previous mandatees works
+    cy.get(utils.ministerFilter.pastMinisters).click();
+
+    // filter on Prime minister (past minister)
     triggerSearchPublication(mandatee1.fullName);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
@@ -354,8 +357,6 @@ context('Search tests', () => {
     // remove second minister
     triggerSearchPublication(mandatee2.fullName);
 
-    // check previous mandatees works
-    cy.get(utils.ministerFilter.pastMinisters).click();
     // add Pauk Akkermans
     triggerSearchPublication(mandatee4);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');

@@ -8,6 +8,7 @@ import settings from '../../selectors/settings.selectors';
 import utils from '../../selectors/utils.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 
 function checkRoleFilterSingle(name, numberOfResults) {
   cy.contains(appuniversum.checkbox, name)
@@ -293,8 +294,8 @@ context('testing user and organization management', () => {
     });
 
     it('should link and unlink person to user', () => {
-      const person1 = 'Benjamin Dalle';
-      const person2 = 'Zuhal Demir';
+      const person1 = mandateeNames.current.eighth.fullName;
+      const person2 = mandateeNames.current.fourth.fullName;
 
       cy.visit('instellingen/gebruikers/92d97fe7-79b8-416d-b18c-e719cb7d78ad');
 
@@ -543,8 +544,8 @@ context('testing user and organization management', () => {
     });
 
     it('should link and unlink mandatee to org', () => {
-      const person1 = 'Benjamin Dalle';
-      const person2 = 'Zuhal Demir';
+      const person1 = mandateeNames.current.eighth.fullName;
+      const person2 = mandateeNames.current.fourth.fullName;
 
       cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
 

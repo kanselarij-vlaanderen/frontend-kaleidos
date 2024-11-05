@@ -1,12 +1,16 @@
 {{#if (and @file (await (this.canViewConfidentialPiece)))}}
   {{#if this.isPdfDocument}}
-    <object
-      data-test-document-view-file
-      type="application/pdf"
-      data={{@inlineViewLink}}
-      class="au-u-maximize-width au-u-maximize-height auk-document-view"
-    >
-    </object>
+    {{#if @isMobile}}
+      <PdfView @filePath={{@downloadLink}} />
+    {{else}}
+      <object
+        data-test-document-view-file
+        type="application/pdf"
+        data={{@inlineViewLink}}
+        class="au-u-maximize-width au-u-maximize-height auk-document-view"
+      >
+      </object>
+    {{/if}}
   {{else}}
     <div class="auk-u-p-4">
       <AuAlert

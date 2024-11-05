@@ -1,4 +1,7 @@
-<Auk::Navbar @skin="gray-100">
+<Auk::Navbar
+  @skin="gray-100"
+  @auto={{true}}
+>
   <Auk::Toolbar @size="large" @responsive={{true}} class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
     <Auk::Toolbar::Group @position="left" @responsive={{true}}>
       <Auk::Toolbar::Item>
@@ -20,7 +23,7 @@
             {{#if (not this.loadData.isRunning)}}
               <Auk::AbbreviatedText
                 @text={{or this.case.shortTitle this.case.title}}
-                @maxLength={{250}}
+                @maxLength={{150}}
               />
             {{/if}}
           </h4>
@@ -112,7 +115,7 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      {{else if (and this.loadData.isIdle this.mayCreateSubmissions)}}
+      {{else if this.mayCreateSubmissions}}
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
             <AuButton
@@ -125,6 +128,16 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
+      {{else if (and this.loadSubmissionsData.isIdle this.currentSubmission)}}
+        <Auk::Toolbar::Item>
+          <AuLink
+            @skin="button-secondary"
+            @route="cases.submissions.submission"
+            @model={{this.currentSubmission.id}}
+          >
+            {{t "open-current-submission"}}
+          </AuLink>
+        </Auk::Toolbar::Item>
       {{/if}}
     {{/unless}}
   </Auk::Toolbar>

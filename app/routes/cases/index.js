@@ -82,6 +82,10 @@ export default class CasesIndexRoute extends Route {
       controller.isLoadingModel = false;
     });
     // false so we don't transition to the loading route when searching
-    return false;
+    if (transition.from && transition.to) {
+      return transition.from.name != transition.to.name;
+    } else {
+      return false;
+    }
   }
 }

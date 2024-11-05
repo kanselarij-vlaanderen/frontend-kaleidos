@@ -37,7 +37,8 @@
     <div id="submission" class="auk-u-mb-4">
       <Submission::DescriptionPanel
         @submission={{@model}}
-        @mayEdit={{and this.mayEdit (not this.isUpdate)}}
+        @mayEdit={{this.mayEditIfUpdate}}
+        @isUpdate={{this.isUpdate}}
         @onSave={{perform this.checkIfConfidentialChanged}}
       />
     </div>

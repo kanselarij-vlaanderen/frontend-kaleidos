@@ -79,6 +79,57 @@ export default class ParliamentService extends Service {
     return {};
   }
 
+  async relinkDecisionmakingFlow(decisionmakingFlow, _case, parliamentFlow) {
+    const sendingToast = this.toaster.loading(
+      this.intl.t('notifying-parliament-about-case-change'),
+      null,
+      {
+        timeOut: 10 * 60 * 1000,
+      }
+    );
+    const params = {
+      decisionmakingFlowUri: decisionmakingFlow.uri,
+      caseUri: _case.uri,
+      parliamentFlowUri: parliamentFlow.uri,
+    };
+    const response = await fetch(`/vlaams-parlement-sync/relink-decisionmaking-flow`, {
+      headers: {
+        'Content-Type': 'application/vnd.api+json',
+        Accept: 'application/vnd.api+json',
+      },
+      method: 'POST',
+      body: JSON.stringify(params),
+    });
+    if (!response.ok) {
+      let errorMessage = '';
+      try {
+        const data = await response.json();
+        if (data.message) {
+          errorMessage = data.message;
+        } else {
+          errorMessage = JSON.stringify(data);
+        }
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          errorMessage = response.status;
+        } else {
+          errorMessage = `Something went wrong while reading response: ${error}`;
+        }
+      }
+      this.closeToastAndError(sendingToast, errorMessage)
+    } else {
+      this.toaster.close(sendingToast);
+      this.toaster.success(
+        this.intl.t('notified-parliament-about-case-change'),
+        null,
+        {
+          closable: true,
+          timeOut: 5 * 1000,
+        }
+      );
+    }
+  }
+
   async delayedPoll(job, toast) {
     // Many files will only take about half a second to send
     // This avoids having to wait 2 seconds until the next poll

@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -13,11 +13,17 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Testing the application as OVRB', () => {
-  beforeEach(() => {
+context('Testing the application as OVRB', {
+  testIsolation: false,
+}, () => {
+  before(() => {
     // cy.login does not trigger the transtition to the default route for this profile for some reason
     cy.loginFlow('OVRB');
     cy.wait(1000);
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -66,7 +72,7 @@ context('Testing the application as OVRB', () => {
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
     it('check agendas route', () => {
-      cy.visit('/overzicht'); // ovrb starts on publication route by default
+      cy.visit('/overzicht?sizeAgendas=2'); // ovrb starts on publication route by default
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
     });

@@ -18,6 +18,7 @@ export default class CasesHeader extends Component {
 
   @tracked isOpenNewCaseAddSubcaseModal = false;
   @tracked filterText;
+  @tracked isOpenAddSubmissionModal = false;
 
   @tracked linkedMandatees;
 
@@ -42,6 +43,10 @@ export default class CasesHeader extends Component {
 
   get isInCasesRoute() {
     return this.router.currentRouteName === 'cases.index';
+  }
+
+  get isInSubmissionRoute() {
+    return this.router.currentRouteName === 'submissions';
   }
 
   @action

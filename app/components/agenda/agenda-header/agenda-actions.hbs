@@ -48,6 +48,14 @@
       {{t "printable-version"}}
     </AuLink>
   {{/if}}
+  {{#if (user-may "manage-press-agenda")}}
+    <AuLink
+      @route="agenda.press"
+      role="menuitem"
+    >
+      {{t "generate-press-agenda"}}
+    </AuLink>
+  {{/if}}
   <AuButton
     data-test-agenda-actions-download-documents
     @skin="link"

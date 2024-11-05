@@ -458,7 +458,8 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall1');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall1')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases1');
@@ -480,7 +481,8 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall2');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall2')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases2');
@@ -509,7 +511,8 @@ context('Subcase tests', () => {
       .click();
     cy.get(cases.subcaseHeader.actions.moveSubcase).forceClick();
     cy.intercept('GET', 'decisionmaking-flows/search?**').as('searchCall3');
-    cy.get(utils.caseSearch.input).type(caseTitle2)
+    cy.get(utils.caseSearch.input).should('not.be.disabled')
+      .type(caseTitle2)
       .wait('@searchCall3')
       .wait(1000);
     cy.intercept('PATCH', 'subcases/**').as('patchSubcases3');

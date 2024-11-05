@@ -45,7 +45,7 @@ context('check the functions of the new document widget', () => {
     cy.get(document.documentCard.editPiece).forceClick();
     cy.get(document.documentEdit.sourceFileReplace).click();
     cy.get(document.documentEdit.sourceFileReplacer).within(() => {
-      cy.uploadFile(file.folder, file.fileName, file.fileExtension);
+      cy.uploadFile(file.folder, file.fileName, pdfExtension);
     });
     cy.intercept('DELETE', '/files/**').as('deleteFile1');
     cy.intercept('PATCH', '/pieces/**').as('patchPieces1');

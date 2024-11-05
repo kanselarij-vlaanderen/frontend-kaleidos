@@ -6,7 +6,7 @@
   @downloadLink={{@piece.file.namedDownloadLink}}
   @onDelete={{@onDelete}}>
   {{#if (or @allowDocumentContainerEdit @allowEditPieceAccessLevel)}}
-    <div class="au-c-form au-u-margin-left-large" data-test-uploaded-document-container>
+    <div class="au-c-form au-u-margin-left-large scrollable-uploaded-document" data-test-uploaded-document-container>
       {{#if @allowDocumentContainerEdit}}
         <AuFormRow>
           <AuLabel>{{t "name-document"}}</AuLabel>

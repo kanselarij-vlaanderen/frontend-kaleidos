@@ -88,6 +88,7 @@ export default class WebComponentsRdfaEditor extends Component {
       window.Cypress ||
       browser.isFirefox ||
       browser.isChrome ||
+      browser.isEdge ||
       browser.isChromeHeadless
     ); // Headless in order not to break automated tests.
   }

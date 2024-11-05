@@ -89,20 +89,12 @@ export default class DraftSubmissionService extends Service {
   };
 
   getOngoingSubmissionForSubcase = async(subcase) => {
-    // TODO verify change, cleanup
-    // technically this should be a queryOne, but possible with concurrency to have more than 1 ongoing
-    // const allSubmissions = await this.getAllSubmissionsForSubcase(subcase, false);
-    // const ongoingSubmission = allSubmissions?.filter(
-    //   (a) =>
-    //     a.status.get('uri') !== constants.SUBMISSION_STATUSES.BEHANDELD
-    // );
-    // if more than 1, we return the first created ongoing submission which should the last one in the filtered list
-
     // "ongoing" can be defined as "not accepted" or "accepted but not yet propagated"
     // check if all pieces are propagated on latest submission.
-    const allDraftPiecesAccepted = await this.allDraftPiecesAccepted(subcase);
-    if (!allDraftPiecesAccepted) {
-      return await this.getLatestSubmissionForSubcase(subcase);
+    const latestSubmission = await this.getLatestSubmissionForSubcase(subcase);
+    const allDraftPiecesAccepted = await this.allDraftPiecesAccepted(subcase, latestSubmission);
+    if (latestSubmission?.id && !allDraftPiecesAccepted) {
+      return latestSubmission;
     }
     return null;
   };
@@ -117,8 +109,10 @@ export default class DraftSubmissionService extends Service {
     return allSubmissions?.at(0);
   };
 
-  allDraftPiecesAccepted = async(subcase) => {
-    const latestSubmission = await this.getLatestSubmissionForSubcase(subcase);
+  allDraftPiecesAccepted = async(subcase, latestSubmission) => {
+    if (!latestSubmission?.id) {
+      latestSubmission = await this.getLatestSubmissionForSubcase(subcase);
+    }
     if (latestSubmission?.id) {
       let pieces = await latestSubmission?.hasMany('pieces').reload();
       pieces = pieces?.slice();
@@ -170,4 +164,18 @@ export default class DraftSubmissionService extends Service {
     const canSubmitNewDocuments = await this.allDraftPiecesAccepted(subcase);
     return canSubmitNewDocuments;
   }
+
+  getAllSubmissionsForDecisionmakingFlow = async(decisionmakingFlow) => {
+    const allSubmissions = await this.store.queryAll('submission', {
+      'filter[decisionmaking-flow][:id:]': decisionmakingFlow.id,
+      sort: '-created',
+      include: 'status,subcase'
+    });
+    return allSubmissions;
+  };
+
+  getLatestSubmissionForDecisionmakingFLow = async(decisionmakingFlow) => {
+    const allSubmissions = await this.getAllSubmissionsForDecisionmakingFlow(decisionmakingFlow);
+    return allSubmissions?.slice().at(0);
+  };
 }

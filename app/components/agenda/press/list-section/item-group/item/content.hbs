@@ -1,0 +1,12 @@
+<div class="auk-o-flex auk-u-mb l-printable-agenda__item-header">
+  {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+  {{! prettier-ignore }}
+  <h4 class="auk-u-m-0 auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{if @item.shortTitle @item.shortTitle @item.title}}/></h4>
+</div>
+<div class="auk-u-mb-4 l-printable-agenda__item">
+  {{#if @item.title}}
+    {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
+    {{! prettier-ignore }}
+    <p class="auk-u-m-0 l-printable-agenda__description auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{@item.title}} /></p>
+  {{/if}}
+</div>

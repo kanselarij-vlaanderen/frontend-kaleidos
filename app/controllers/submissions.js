@@ -22,7 +22,7 @@ export default class CasesSubmissionsIndexController extends Controller {
       },
     },
     {
-      sort: {
+      sortSubmissions: {
         type: 'string',
       },
     },
@@ -45,7 +45,7 @@ export default class CasesSubmissionsIndexController extends Controller {
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[2];
-  @tracked sort = '-planned-start';
+  @tracked sortSubmissions = '-planned-start';
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked submitters = [];

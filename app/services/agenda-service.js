@@ -107,6 +107,17 @@ export default class AgendaService extends Service {
     return piecesFromStore;
   }
 
+  createInternalReview = async(subcase, submissions, privateComment) => {
+    const submissionsToSet = submissions || await subcase?.submissions;
+    const internalReview = await this.store.createRecord('submission-internal-review', {
+      created: new Date(),
+      privateComment: privateComment, // default to the CONSTANTS? diff between nota and mededeling somewhere?
+      submissions: submissionsToSet,
+      subcase: subcase,
+    });
+    await internalReview.save();
+  };
+
   /* API: agenda-submission-service */
 
   async reorderAgenda(agenda) {
@@ -136,6 +147,10 @@ export default class AgendaService extends Service {
     formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
     privateComment = null
   ) {  
+    const internalReview = await subcase.internalReview;
+    if (!internalReview?.id) {
+      await this.createInternalReview(subcase, null, privateComment);
+    }
     const url = `/meetings/${meeting.id}/submit`;
     const response = await fetch(url, {
       method: 'POST',

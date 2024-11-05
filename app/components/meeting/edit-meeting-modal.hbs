@@ -117,13 +117,14 @@
           </div>
         </AuFormRow>
       {{/if}}
-      {{#if (not this.isPreKaleidos)}}
+      {{#if (and (not this.isPreKaleidos) (not this.initializeSecretary.isRunning))}}
         <AuFormRow data-test-edit-meeting-secretary>
           <div class="auk-input-group--w-large">
             <AuLabel>
               {{t "secretary-for-meeting"}}
             </AuLabel>
             <Mandatees::MandateeSelector
+              @referenceDate={{this.startDate}}
               @onSelectMandatee={{fn (mut this.secretary)}}
               @selectedMandatees={{this.secretary}}
               @visibleRoles={{this.visibleRoles}}

@@ -45,17 +45,21 @@ async function generateBetreft(
   subcaseName = null,
   agendaitemType,
 ) {
-  const documentsWithoutBijlageTerInzage = await Promise.all(documents.map(async (document) => {
+  const documentsWithoutBijlageTerInzageOrSecretarie = await Promise.all(documents.map(async (document) => {
+    const accessLevel = await document.accessLevel;
     const documentContainer = await document.documentContainer;
     // it is possible to concurrently change the type, need to reload just in case
     const type = await documentContainer.belongsTo('type').reload();
     if (type?.uri === CONSTANTS.DOCUMENT_TYPES.BIJLAGE_TER_INZAGE) {
       return null;
     }
+    if (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE) {
+      return null;
+    }
     return document;
   }))
-  const isNota = agendaitemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
-  const filteredDocuments = documentsWithoutBijlageTerInzage.filter((document) => document !== null);
+  const isNota = agendaitemType?.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
+  const filteredDocuments = documentsWithoutBijlageTerInzageOrSecretarie.filter((document) => document !== null);
   let betreft = '';
   betreft += `${shortTitle}`;
   betreft += title ? `<br/>${title}` : '';

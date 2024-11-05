@@ -58,6 +58,15 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     return mayIfAdmin || mayIfSecretarie || mayIfCabinet;
   }
 
+  get mayEditIfUpdate() {
+    const mayIfAdmin = this.currentSession.may('always-edit-submissions');
+
+    const mayIfSecretarie =
+      this.currentSession.may('edit-in-treatment-submissions') &&
+      this.model.isInTreatment;
+    return this.isUpdate ? (mayIfAdmin || mayIfSecretarie) : this.mayEdit;
+  }
+
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
       const d1 = p1.belongsTo('documentContainer').value();
@@ -163,7 +172,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   reloadPieces = task(async () => {
     const newPieces = await this.model.pieces;
     let pieces = [];
-    if (this.subcase) {
+    if (this.subcase?.id) {
       pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
     } else {
       pieces = newPieces.slice();

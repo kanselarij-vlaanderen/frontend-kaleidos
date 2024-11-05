@@ -49,9 +49,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[submissions][:id:]': submission.id
     });
-    if (status.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
-      if (this.subcase)  {
-        let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase);
+    if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD) {
+      if (this.subcase?.id)  {
+        let allDraftPiecesAccepted = await this.draftSubmissionService.allDraftPiecesAccepted(this.subcase, submission);
         if (allDraftPiecesAccepted) {
           const decisionmakingFlow = await this.subcase.decisionmakingFlow;
           return this.router.transitionTo(
@@ -75,10 +75,10 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
         if (this.currentLinkedMandatee && this.mandatees.length) {
           const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
           if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
-            this.router.transitionTo('cases.submissions');
+            this.router.transitionTo('submissions');
           }
         } else {
-          this.router.transitionTo('cases.submissions');
+          this.router.transitionTo('submissions');
         }
       }
     }
@@ -87,7 +87,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     const newPieces = await submission.pieces;
     this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
-    if (this.subcase) {
+    if (this.subcase?.id) {
       pieces = await this.submissionService.loadSubmissionPieces(this.subcase, newPieces);
     } else {
       pieces = newPieces.slice();
@@ -130,6 +130,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
   async afterModel(model) {
     const decisionmakingFlow = await model.belongsTo('decisionmakingFlow').reload();
     await decisionmakingFlow?.case;
+    if (this.currentSession.may('treat-and-accept-submissions')) {
+      await model.internalReview;
+    }
   }
 
   setupController(controller, _model, _transition) {

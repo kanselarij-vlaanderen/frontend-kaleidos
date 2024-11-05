@@ -172,15 +172,15 @@ export default class MandateesService extends Service {
     return sortedMandatees;
   }
 
-  async getCurrentApplicationSecretary() {
-    const [currentApplicationSecretary] =
+  async getApplicationSecretary(referenceDateFrom = new Date()) {
+    const [applicationSecretary] =
       await this.getMandateesActiveOn.perform(
-        new Date(),
+        referenceDateFrom,
         undefined,
         undefined,
         [CONSTANTS.MANDATE_ROLES.SECRETARIS]
       );
 
-    return currentApplicationSecretary;
+    return applicationSecretary;
   }
 }

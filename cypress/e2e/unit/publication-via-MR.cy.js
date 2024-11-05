@@ -8,6 +8,7 @@ import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import agenda from '../../selectors/agenda.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -29,7 +30,7 @@ context('Publications via MR tests', () => {
   const threadId = 123456;
   const formattedThreadId = `thread::${threadId}::`;
   const subcaseTitleShort = 'Cypress test: Publications via MR - 1652967454';
-  const nameToCheck = 'Jambon';
+  const nameToCheck = mandateeNames['10052021-16052022'].first.lastName; // Jambon
   const fileName1 = 'nieuwePublicatie'; // type nota
   const fileName2 = 'bestaandePublicatie'; // type BVR
   const fileName3 = 'publicatieMB'; // type MB
@@ -131,7 +132,7 @@ context('Publications via MR tests', () => {
     cy.get(dependency.emberPowerSelect.trigger).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
-    cy.get(dependency.emberPowerSelect.option).contains('Hilde Crevits')
+    cy.get(dependency.emberPowerSelect.option).contains('Hilde Crevits') // TODO change hardcoded mandatee names
       .scrollIntoView()
       .click();
     cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');

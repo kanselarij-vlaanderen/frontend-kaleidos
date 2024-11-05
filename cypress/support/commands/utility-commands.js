@@ -178,6 +178,33 @@ Cypress.Commands.add('forceClick', {
   });
 });
 
+Cypress.Commands.add(
+  'shouldNotBeActionable',
+  {
+    prevSubject: 'element',
+  },
+  (subject, done) => {
+    cy.once('fail', (err) => {
+      expect(err.message).to.include(
+        '`cy.click()` failed because this element'
+      );
+      expect(err.message).to.include('is being covered by another element');
+      done();
+    });
+
+    cy.wrap(subject)
+      .click({
+        timeout: 100,
+      })
+      .then(() => done(
+        new Error(
+          'Expected element NOT to be clickable, but click() succeeded'
+        )
+      ));
+  }
+);
+
+
 // ***********************************************
 // Commands
 

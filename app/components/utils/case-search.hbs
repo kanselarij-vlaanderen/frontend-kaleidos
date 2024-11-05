@@ -6,6 +6,7 @@
       value={{this.searchText}}
       class="auk-u-maximize-width"
       @width="block"
+      @disabled={{this.isLoading}}
       {{on "input" this.updateSearchText}}
     />
   </div>
@@ -13,13 +14,12 @@
   {{#if this.isLoading}}
     <Auk::Loader @message={{t "please-be-patient"}} />
   {{else if (not this.results.length)}}
-    <Auk::Panel class="auk-u-mt-4">
-      <Auk::Panel::Body>
-        <Auk::EmptyState
-          @message={{t "no-results-found"}}
-        />
-      </Auk::Panel::Body>
-    </Auk::Panel>
+    <div class="auk-u-mt-4">
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found"}}
+      />
+    </div>
   {{else}}
     <table class="auk-table auk-table--striped">
       <thead>
@@ -42,6 +42,7 @@
                 @checked={{eq row.id this.selected.id}}
                 @value={{row.id}}
                 @onChange={{this.selectCase}}
+                @disabled={{eq row.id @excludedDecisionmakingFlow.id}}
               />
             </td>
             <td>
@@ -59,6 +60,11 @@
                   {{row.title}}
                 {{/if}}
               </AuLink>
+              {{#if (eq row.id @excludedDecisionmakingFlow.id)}}
+                <AuPill @size="small">
+                  {{t "current-case"}}
+                </AuPill>
+              {{/if}}
             </td>
             <td>
               {{datetime row.created}}

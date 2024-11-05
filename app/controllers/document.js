@@ -13,6 +13,7 @@ export default class DocumentController extends Controller {
   @service intl;
   @service toaster;
   @service signatureService;
+  @service userAgent;
 
   @tracked decisionActivity;
   queryParams = [
@@ -24,6 +25,13 @@ export default class DocumentController extends Controller {
   ];
   @tracked tab = 'details';
   @tracked isLoadingModel;
+
+  constructor() {
+    super(...arguments);
+
+    this.isMobile = this.userAgent.device?.isMobile ||
+      this.userAgent.device?.isTablet;
+  }
 
   @action
   transitionBack() {

@@ -6,6 +6,7 @@ export default class ParliamentFlow extends Model {
   @attr parliamentId;
   @attr('datetime') openingDate;
   @attr('datetime') closingDate;
+  @attr uri;
 
   @belongsTo('parliament-subcase', { inverse: 'parliamentFlow', async: true }) parliamentSubcase;
   @belongsTo('case', { inverse: 'parliamentFlow', async: true }) case;
@@ -29,5 +30,10 @@ export default class ParliamentFlow extends Model {
   get isBeingHandledByFP() {
     // eslint-disable-next-line ember/no-get
     return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.BEING_HANDLED_BY_FP;
+  }
+
+  get isRefused() {
+    // eslint-disable-next-line ember/no-get
+    return get(this, 'status.uri') === CONSTANTS.PARLIAMENT_FLOW_STATUSES.REFUSED;
   }
 }

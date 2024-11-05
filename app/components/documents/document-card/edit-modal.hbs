@@ -24,12 +24,14 @@
             data-test-document-edit-name-input
             value={{this.name}}
             @width="block"
+            @disabled={{this.isDisabled}}
             {{on "input" (pick "target.value" (set this "name"))}}
           />
           <AuButtonGroup class="au-u-flex--no-wrap">
             <AuButton
               data-test-document-edit-source-file-replace
               @skin="secondary"
+              @disabled={{this.isDisabled}}
               {{on "click" this.toggleUploadReplacementSourceFile}}
             >
               {{t "replace"}}
@@ -74,6 +76,7 @@
               <AuButton
                 data-test-document-edit-derived-file-replace
                 @skin="secondary"
+                @disabled={{this.isDisabled}}
                 {{on "click" this.toggleUploadReplacementDerivedFile}}
               >
                 {{t "replace"}}
@@ -84,6 +87,7 @@
                 @alert={{true}}
                 @icon="trash"
                 @hideText={{true}}
+                @disabled={{this.isDisabled}}
                 {{on "click" (toggle "isDeletingDerivedFile" this)}}
               >
               </AuButton>
@@ -166,6 +170,7 @@
           <Utils::DocumentTypeSelector
             @selectedDocumentType={{this.documentType}}
             @onChange={{this.selectDocumentType}}
+            @disabled={{this.isDisabled}}
           />
         </div>
       </c.content>

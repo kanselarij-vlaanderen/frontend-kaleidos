@@ -369,7 +369,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
     const revertActionToastOptions = {
       message: this.intl.t('document-being-deleted'),
-      timeOut: 15000,
+      timeOut: DOCUMENT_DELETE_UNDO_TIME_MS,
       onUndo: () => {
         this.deleteDocumentContainerWithUndo.cancelAll();
       }

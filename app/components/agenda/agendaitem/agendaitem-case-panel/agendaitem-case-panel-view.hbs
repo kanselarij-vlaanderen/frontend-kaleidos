@@ -153,7 +153,24 @@
       </div>
     </Auk::Panel::Body>
   {{/if}}
-  {{#if @agendaitem.privateComment}}
+  {{#if (and (user-may "manage-agendaitems") @subcase.internalReview)}}
+    {{#if @subcase.internalReview.privateComment}}
+      <Auk::Panel::Body class="auk-u-maximize-height auk-u-bg-alt au-u-padding-top-small au-u-padding-bottom-small">
+        <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-start">
+          <div class="au-u-flex-item--fixed au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold">
+            <AuIcon @icon="lock-closed" />
+            <span>{{t "private-comment-title"}}:</span>
+          </div>
+          <pre
+            class="au-u-flex-item--fill auk-u-text-pre-line auk-u-text-muted"
+            data-test-agendaitem-titles-private-comment
+          >
+            {{@subcase.internalReview.privateComment}}
+          </pre>
+        </div>
+      </Auk::Panel::Body>
+    {{/if}}
+  {{else if @agendaitem.privateComment}}
     <Auk::Panel::Body class="auk-u-maximize-height auk-u-bg-alt au-u-padding-top-small au-u-padding-bottom-small">
       <div class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-start">
         <div class="au-u-flex-item--fixed au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center auk-u-text-bold">

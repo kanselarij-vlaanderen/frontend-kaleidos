@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 
 export default class CasesNewSubmissionController extends Controller {
   @service router;
+  @service preventUnload;
 
   submitter;
   mandatees;
@@ -16,6 +17,12 @@ export default class CasesNewSubmissionController extends Controller {
   }
 
   onCancelSubmission = () => {
-    this.router.transitionTo('cases.index');
+    this.preventUnload.disable();
+    this.router.transitionTo('submissions');
+  }
+
+  onCreateSubmission = (submission) => {
+    this.preventUnload.disable();
+    this.router.transitionTo('cases.submissions.submission', submission.id);
   }
 }

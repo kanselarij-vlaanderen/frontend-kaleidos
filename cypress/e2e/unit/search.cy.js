@@ -912,7 +912,7 @@ context('Search tests', () => {
       const searchFlow = 'publication-flows';
       const resultRow = route.searchPublications.row;
 
-      const checkbox3 = 'Jan Jambon';
+      const checkbox3 = mandateeNames['16052022-08112023'].first.fullName; // Jambon
       const checkbox4 = 'Opgestart';
 
       cy.visit('/zoeken/publicaties');
@@ -924,6 +924,7 @@ context('Search tests', () => {
       searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
 
       // filter mandatee
+      cy.get(utils.ministerFilter.pastMinisters).click();
       triggerSearch(searchFlow, checkbox3);
       cy.get(route.publicationFlowResultCard.shortTitleLink);
       triggerSearch(searchFlow, checkbox3);

@@ -18,6 +18,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @service signatureService;
   @service currentSession;
   @service documentService;
+  @service store;
 
   @tracked isEditingDetails = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -33,6 +34,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked accessLevel;
   @tracked isLastVersionOfPiece;
   @tracked signedPieceCopy;
+  @tracked internalReview;
 
   @tracked canEditPieceWithSignFlow = false;
 
@@ -41,6 +43,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.loadDetailsData.perform();
     this.loadSignatureRelatedData.perform();
     this.loadSignedPieces.perform();
+    this.loadInternalReview.perform();
   }
 
   get isProcessing() {
@@ -95,6 +98,26 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.documentType = yield this.args.documentContainer.type;
     this.accessLevel = yield this.args.piece.accessLevel;
     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
+  }
+
+  @task
+  *loadInternalReview() {
+    if (this.currentSession.may('manage-agendaitems')) {
+      const internalReviewOfSubcase = yield this.store.queryOne('submission-internal-review', {
+        'filter[subcase][submission-activities][pieces][:id:]': this.args.piece.id,
+      })
+      if (internalReviewOfSubcase?.id) {
+        this.internalReview = internalReviewOfSubcase;
+        return;
+      }
+      const internalReviewOfSubmission = yield this.store.queryOne('submission-internal-review', {
+        'filter[submissions][pieces][:id:]': this.args.piece.id,
+      })
+      if (internalReviewOfSubmission?.id) {
+        this.internalReview = internalReviewOfSubmission;
+        return;
+      }
+    }
   }
 
   @action

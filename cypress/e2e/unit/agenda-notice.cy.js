@@ -30,7 +30,7 @@ context('agenda notice test', () => {
     const subcaseLongTitle  = `long title for test for adding minister - ${testId}`;
     const labelName1 = 'Cultuur, Jeugd, Sport en Media';
     const fieldsName1 = 'Media';
-    const labelName2 = 'Economie, Wetenschap en Innovatie';
+    const labelName2 = 'Werk, Economie, Wetenschap, Innovatie, Landbouw en Sociale Economie';
     const fieldsName2 = 'Wetenschapscommunicatie';
 
     // create agenda and notice

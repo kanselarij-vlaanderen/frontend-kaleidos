@@ -116,19 +116,22 @@
                   {{on "click" (fn this.onClickRow agenda)}}
                 >
                   <td data-test-route-agendas-overview-row-title>
-                    <span class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
-                      {{#if agenda.status.isDesignAgenda}}
-                        <strong>{{t "design-agenda"}}</strong>
-                        {{#if agenda.serialnumber}}
-                          <AuPill @size="small" @skin="ongoing" @draft={{true}}>{{agenda.serialnumber}}</AuPill>
+                    <span class="l-agendas__row-title">
+                      <span class="l-agendas__row-title__main">
+                        {{#if agenda.status.isDesignAgenda}}
+                          <strong>{{t "design-agenda"}}</strong>
+                          {{#if agenda.serialnumber}}
+                            <AuPill @size="small" @skin="ongoing" @draft={{true}}>{{agenda.serialnumber}}</AuPill>
+                          {{/if}}
+                        {{else}}
+                          <strong>{{t "agenda"}}</strong>
+                          {{#if agenda.serialnumber}}
+                            <AuPill @size="small">{{agenda.serialnumber}}</AuPill>
+                          {{/if}}
                         {{/if}}
-                      {{else}}
-                        <strong>{{t "agenda"}}</strong>
-                        {{#if agenda.serialnumber}}
-                          <AuPill @size="small">{{agenda.serialnumber}}</AuPill>
-                        {{/if}}
-                      {{/if}}
-                      <span>–</span>
+                      </span>
+                      <span class="l-agendas__row-title__dash">–</span>
+                      <span class="l-agendas__row-title__breaker"></span>
                       <span>
                         {{date agenda.createdFor.plannedStart}}
                       </span>
@@ -178,14 +181,11 @@
         </table>
       </div>
     {{else}}
-      <Auk::Panel>
-        <Auk::Panel::Body>
-          <Auk::EmptyState
-            @message={{t "no-results-found"}}
-            data-test-route-agendas-overview-filter-warning-no-results
-          />
-        </Auk::Panel::Body>
-      </Auk::Panel>
+      <Auk::EmptyState
+        @bordered={{true}}
+        @message={{t "no-results-found"}}
+        data-test-route-agendas-overview-filter-warning-no-results
+      />
     {{/if}}
   </div>
 </div>
