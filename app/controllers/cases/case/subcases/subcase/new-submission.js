@@ -22,6 +22,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service documentService;
   @service agendaService;
   @service draftSubmissionService;
+  @service preventUnload;
 
   defaultAccessLevel;
   originalSubmission;
@@ -195,6 +196,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
 
   cancelForm = task(async () => {
     await this.deleteDraftPieces.perform();
+    this.preventUnload.disable();
     this.router.transitionTo('cases.case.subcases.subcase');
   });
 
@@ -291,6 +293,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           this.submission
         );
         await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting);
+        this.preventUnload.disable();
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {
         this.toaster.error(

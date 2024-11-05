@@ -1,4 +1,5 @@
 {{page-title (t "new-submission")}}
+<div class="prevent-unload-wrapper" {{prevent-unload}}></div>
 <Cases::NewSubmission
   @decisionmakingFlow={{@model.decisionmakingFlow}}
   @latestSubcase={{@model.latestSubcase}}
@@ -6,4 +7,5 @@
   @submitter={{this.submitter}}
   @mandatees={{this.mandatees}}
   @onCancel={{this.onCancelSubmission}}
+  @onCreateSubmission={{this.onCreateSubmission}}
 />
