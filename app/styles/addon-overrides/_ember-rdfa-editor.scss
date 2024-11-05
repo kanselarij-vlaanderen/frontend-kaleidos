@@ -110,9 +110,14 @@ ol > *[data-content-container] > li[data-list-marker]::marker {
     @include au-font-size(1.8rem);
   }
 
-  > p + ul,
-  > p + ol {
-    margin-top: 0;
+  p:not(.say-hidden) + :is(ul, ol) {
+    margin-top: 0.2rem;
+  }
+
+  ul, ol {
+    p:not(.say-hidden) + :is(ul, ol) {
+      margin-top: 0;
+    }
   }
 }
 
