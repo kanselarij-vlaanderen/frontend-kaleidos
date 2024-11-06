@@ -242,11 +242,6 @@ ${renderNextMeeting(meeting, intl)}`;
       newContentElement.content.querySelector('[data-section="next-meeting"]').innerHTML = nextMeetingText;
     }
 
-    // const nextMeetingText = contentElement.content.querySelector('#next-meeting')?.innerHTML;
-    // if (nextMeetingText) {
-    //   newContentElement.content.querySelector('#next-meeting').innerHTML = nextMeetingText;
-    // }
-
     newMinutesContent = newContentElement.innerHTML;
   }
   return newMinutesContent;

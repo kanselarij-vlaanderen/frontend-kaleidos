@@ -13,7 +13,7 @@ import { replaceBySectionId } from 'frontend-kaleidos/utils/html-utils';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
-  let newHtml = replaceBySectionId(htmlString, 'secretary-title', `<p>${newSecretaryTitle}</p>`);
+  let newHtml = replaceBySectionId(htmlString, 'secretary-title', `<p>De ${newSecretaryTitle}</p>`);
   return replaceBySectionId(newHtml, 'secretary', `<p>${newSecretary}</p>`);
 }
 
@@ -366,7 +366,7 @@ export default class MeetingEditMeetingComponent extends Component {
       if (this.secretary) {
         const newHtmlContent = replaceSecretary(piecePart.htmlContent,
           this.secretary.person.get('fullName'),
-          `De ${this.secretary.title.toLowerCase()}`);
+          this.secretary.title.toLowerCase());
         piecePart.htmlContent = newHtmlContent;
       }
       await piecePart.save();
