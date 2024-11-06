@@ -259,7 +259,6 @@ export default class AgendaMinutesController extends Controller {
   @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
-  @tracked isUpdatingMinutesContent = false;
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
@@ -374,41 +373,32 @@ export default class AgendaMinutesController extends Controller {
     this.refresh();
   });
 
-  @action
-  async updateEditorContent() {
+  updateEditorContent = task(async () => {
     if (!this.editor) {
       return;
     }
-    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
       await renderMinutes(await this.reshapeModelForRender(), this.intl, this.store)
     );
-    this.isUpdatingMinutesContent = false;
-  }
+  });
 
-  @action
-  async updateEditorNotas() {
+  updateEditorNotas = task(async () => {
     if (!this.editor) {
       return;
     }
-    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
       await updateMinutesNotas(await this.reshapeModelForRender(), this.intl, this.store)
     );
-    this.isUpdatingMinutesContent = false;
-  }
+  });
 
-  @action
-  async updateEditorAnnouncements() {
+  updateEditorAnnouncements = task(async () => {
     if (!this.editor) {
       return;
     }
-    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
       await updateMinutesAnnouncements(await this.reshapeModelForRender(), this.intl, this.store)
     );
-    this.isUpdatingMinutesContent = false;
-  }
+  });
 
   @action
   handleRdfaEditorInit(editor) {
@@ -428,12 +418,25 @@ export default class AgendaMinutesController extends Controller {
     this.refresh();
   }
 
+  get isUpdatingMinutesContent() {
+    return (
+      this.updateEditorContent.isRunning ||
+      this.updateEditorNotas.isRunning ||
+      this.updateEditorAnnouncements.isRunning
+    );
+  }
+
   get saveDisabled() {
-    if (this.currentPiecePartTask?.value?.htmlContent === this.editor?.htmlContent) {
+    if (
+      this.currentPiecePartTask?.value?.htmlContent === this.editor?.htmlContent
+    ) {
       return true;
     }
 
-    return this.editor?.mainEditorState.doc.textContent.length === 0;
+    return (
+      this.isUpdatingMinutesContent ||
+      this.editor?.mainEditorState.doc.textContent.length === 0
+    );
   }
 
   get agendaContext() {
