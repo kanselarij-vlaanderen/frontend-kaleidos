@@ -8,16 +8,10 @@ const additionalAllowedAttributes = {
   '*': ['data-indentation-level'],
   'ol': ['style', 'data-hierarchical', 'data-list-style'],
   'li': ['data-list-marker'],
-  'table': [
-    {
-      name: 'id',
-      values: ['attendees', 'absentees'],
-    },
-  ],
   'section': [
     {
       name: 'data-section',
-      values: ['agendaitems', 'announcements'],
+      values: ['agendaitems', 'announcements', 'attendees', 'absentees', 'next-meeting', 'secretary', 'secretary-title'],
     },
   ],
 };
