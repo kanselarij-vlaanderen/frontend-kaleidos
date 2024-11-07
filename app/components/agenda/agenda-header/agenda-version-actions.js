@@ -344,9 +344,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       );
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
+      const agendaCheckMappingsMap = new Map(
+        this.agendaCheckMapping.map(({ uri, generatedName }) => [uri, generatedName])
+      );
       await this.documentService.setGeneratedPieceNames(
         this.args.currentAgenda.id,
-        this.agendaCheckMapping,
+        agendaCheckMappingsMap,
         this.openAgendaCheckTimestamp,
       );
       await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
@@ -356,8 +359,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadMeeting();
       // Regenerate ALL beslissingsfiches, so we ensure that the concerns part
       const newNames = true;
-      const shouldRegenerateConcerns = true;
-      await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, shouldRegenerateConcerns);
+      const agendaitemsToRegenerateConcernFor = [...new Set(this.agendaCheckMapping.map(({ agendaitem }) => agendaitem.id))];
+      await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, agendaitemsToRegenerateConcernFor);
       this.args.onStopLoading();
       return this.router.transitionTo(
         'agenda.agendaitems',
@@ -426,9 +429,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         this.intl.t('an-agenda-was-approved-since-modal-was-opened')
       );
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
+      const agendaCheckMappingsMap = new Map(
+        this.agendaCheckMapping.map(({ uri, generatedName }) => [uri, generatedName])
+      );
       await this.documentService.setGeneratedPieceNames(
         this.args.currentAgenda.id,
-        this.agendaCheckMapping,
+        agendaCheckMappingsMap,
         this.openAgendaCheckTimestamp,
       );
       await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
@@ -439,8 +445,8 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadMeeting();
       // Regenerate ALL beslissingsfiches, so we ensure that the concerns part
       const newNames = true;
-      const shouldRegenerateConcerns = true;
-      await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, shouldRegenerateConcerns);
+      const agendaitemsToRegenerateConcernFor = [...new Set(this.agendaCheckMapping.map(({ agendaitem }) => agendaitem.id))];
+      await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, agendaitemsToRegenerateConcernFor);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-approve-close-agenda', { message: error.message }),

@@ -44,10 +44,7 @@ export default class AgendaHeaderAgendaCheck extends Component {
       if (mappings.error) {
         throw new Error(mappings.error);
       }
-      const mappingsMap = new Map(
-        mappings.map(({ uri, generatedName }) => [uri, generatedName])
-      );
-      return mappingsMap;
+      return mappings;
     } catch (error) {
       // if service did not respond or self thrown errors
       this.toaster.error(

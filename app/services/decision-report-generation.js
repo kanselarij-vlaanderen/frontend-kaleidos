@@ -10,16 +10,21 @@ export default class DecisionReportGeneration extends Service {
   @service store;
   @service intl;
 
-  regenerateDecisionReportsForMeeting = task(async (meeting, newNames=false, shouldRegenerateConcerns=false) => {
+  regenerateDecisionReportsForMeeting = task(async (meeting, newNames=false, agendaitemsToRegenerateConcernFor) => {
     if (!meeting.id) {
       return;
     }
-    const reports = await this.store.queryAll('report', {
+    const reportsFilter = {
       'filter[:has-no:next-piece]': true,
       'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-      meeting.id,
-    });
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]': meeting.id,
+    };
+    let shouldRegenerateConcerns = false;
+    if (agendaitemsToRegenerateConcernFor?.length) {
+      shouldRegenerateConcerns = true;
+      reportsFilter['filter[decision-activity][treatment][agendaitems][:id:]'] = agendaitemsToRegenerateConcernFor.join(',');
+    }
+    const reports = await this.store.queryAll('report', reportsFilter);
     if (reports?.length > 0) {
       let { alterableReports } = await this.getAlterableReports(reports);
       if (alterableReports.length === 0) {
