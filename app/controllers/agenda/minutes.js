@@ -33,8 +33,8 @@ function renderAttendees(attendees) {
             <td>${ministers.join('<br/>')}</td>
           </tr>
           <tr>
-            <td><section data-section="secretary-title"><p>De ${secretaryTitle}</section></p></td>
-            <td><section data-section="secretary"><p>${mandateeName(secretary)}</section></p></td>
+            <td><section data-section="secretary-title"><p>De ${secretaryTitle}</p></section></td>
+            <td><section data-section="secretary"><p>${mandateeName(secretary)}</p></section></td>
           </tr>
         </tbody>
       </table>
