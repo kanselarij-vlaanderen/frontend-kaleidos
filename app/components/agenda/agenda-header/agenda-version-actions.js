@@ -329,6 +329,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   @action
   async approveCurrentAgenda() {
+   const agendaitemsNotOk = await this.allAgendaitemsNotOk();
     this.showConfirmForApprovingAgenda = false;
     this.args.onStartLoading(this.intl.t('agenda-approving-text'));
     if (!this.isDesignAgenda) {
@@ -342,12 +343,14 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         undefined,
         this.intl.t('an-agenda-was-approved-since-modal-was-opened')
       );
-      const agendaitemsNotOk = await this.allAgendaitemsNotOk();
       const newAgendaId = await approveDesignAgenda(this.args.currentAgenda);
       const newAgenda = await this.store.findRecord('agenda', newAgendaId);
+      const agendaCheckMappingsMap = new Map(
+        this.agendaCheckMapping.map(({ uri, generatedName }) => [uri, generatedName])
+      );
       await this.documentService.setGeneratedPieceNames(
         this.args.currentAgenda.id,
-        this.agendaCheckMapping,
+        agendaCheckMappingsMap,
         this.openAgendaCheckTimestamp,
       );
       await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
@@ -355,8 +358,11 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      if (agendaitemsNotOk?.length) {
-        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
+      // Regenerate beslissingsfiches, so we ensure that the numbering and concerns part is correct
+      const newNames = agendaitemsNotOk?.length > 0;
+      const agendaitemsToRegenerateConcernFor = [...new Set(this.agendaCheckMapping.map(({ agendaitem }) => agendaitem.id))];
+      if (newNames || agendaitemsToRegenerateConcernFor?.length) {
+        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, agendaitemsToRegenerateConcernFor);
       }
       this.args.onStopLoading();
       return this.router.transitionTo(
@@ -410,6 +416,7 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    */
   @action
   async approveCurrentAgendaAndCloseMeeting() {
+    const agendaitemsNotOk = await this.allAgendaitemsNotOk();
     this.showConfirmForApprovingAgendaAndClosingMeeting = false;
     this.args.onStartLoading(
       this.intl.t('agenda-approve-and-close-message')
@@ -425,11 +432,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         undefined,
         this.intl.t('an-agenda-was-approved-since-modal-was-opened')
       );
-      const agendaitemsNotOk = await this.allAgendaitemsNotOk();
       await approveAgendaAndCloseMeeting(this.args.currentAgenda);
+      const agendaCheckMappingsMap = new Map(
+        this.agendaCheckMapping.map(({ uri, generatedName }) => [uri, generatedName])
+      );
       await this.documentService.setGeneratedPieceNames(
         this.args.currentAgenda.id,
-        this.agendaCheckMapping,
+        agendaCheckMappingsMap,
         this.openAgendaCheckTimestamp,
       );
       await this.documentService.stampDocumentsOfAgenda(this.args.currentAgenda.id);
@@ -438,8 +447,10 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      if (agendaitemsNotOk?.length) {
-        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
+      const newNames = agendaitemsNotOk?.length > 0;
+      const agendaitemsToRegenerateConcernFor = [...new Set(this.agendaCheckMapping.map(({ agendaitem }) => agendaitem.id))];
+      if (newNames || agendaitemsToRegenerateConcernFor?.length) {
+        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, agendaitemsToRegenerateConcernFor);
       }
     } catch (error) {
       this.toaster.error(

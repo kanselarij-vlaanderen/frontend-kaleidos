@@ -10,16 +10,23 @@ export default class DecisionReportGeneration extends Service {
   @service store;
   @service intl;
 
-  regenerateDecisionReportsForMeeting = task(async (meeting, newNames=false) => {
+  regenerateDecisionReportsForMeeting = task(async (meeting, newNames=false, agendaitemsToRegenerateConcernFor) => {
     if (!meeting.id) {
       return;
     }
-    const reports = await this.store.queryAll('report', {
+    const reportsFilter = {
       'filter[:has-no:next-piece]': true,
       'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-      meeting.id,
-    });
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]': meeting.id,
+    };
+    let shouldRegenerateConcerns = false;
+    if (agendaitemsToRegenerateConcernFor?.length) {
+      shouldRegenerateConcerns = true;
+      if (!newNames) {
+        reportsFilter['filter[decision-activity][treatment][agendaitems][:id:]'] = agendaitemsToRegenerateConcernFor.join(',');
+      }
+    }
+    const reports = await this.store.queryAll('report', reportsFilter);
     if (reports?.length > 0) {
       let { alterableReports } = await this.getAlterableReports(reports);
       if (alterableReports.length === 0) {
@@ -41,7 +48,7 @@ export default class DecisionReportGeneration extends Service {
           await report.save();
         }));
       }
-      this.generateReplacementReports.perform(reports);
+      this.generateReplacementReports.perform(reports, shouldRegenerateConcerns);
     }
   });
 
@@ -112,7 +119,7 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
-  generateReplacementReports = task(async (reports) => {
+  generateReplacementReports = task(async (reports, shouldRegenerateConcerns=false) => {
     let { alterableReports, unalterableReports } = await this.getAlterableReports(reports);
     if (alterableReports.length > 0) {
       const generatingPDFsToast = this.toaster.loading(
@@ -127,7 +134,8 @@ export default class DecisionReportGeneration extends Service {
       try {
         const job = await this._generateMultiplePdfs.perform(
           alterableReports,
-          'generate-decision-report'
+          'generate-decision-report',
+          shouldRegenerateConcerns,
         );
         this.pollReplacementReports.perform(job, alterableReports, generatingPDFsToast);
       } catch (error) {
@@ -321,7 +329,7 @@ export default class DecisionReportGeneration extends Service {
     }
   });
 
-  _generateMultiplePdfs = task(async (reports, urlBase) => {
+  _generateMultiplePdfs = task(async (reports, urlBase, shouldRegenerateConcerns=false) => {
     let response;
     try {
       response = await fetch(`/${urlBase}/generate-reports`, {
@@ -332,6 +340,7 @@ export default class DecisionReportGeneration extends Service {
         },
         body: JSON.stringify({
           reports: reports.map((report) => report.uri),
+          shouldRegenerateConcerns,
         }),
       });
       const data = await response.json();
