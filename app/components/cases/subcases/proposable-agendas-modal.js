@@ -64,8 +64,22 @@ export default class ProposableAgendasModal extends Component {
     if (this.currentSession.may('manage-agendaitems')) {
       const internalReviewOfSubcase = yield this.args.subcase?.internalReview;
       const internalReviewOfSubmission = yield this.args.submission?.internalReview;
+      const argsAgendaItemType = this.args.agendaItemType;
+      const subcaseAgendaItemType = yield this.args.subcase?.agendaItemType;
+      const submissionAgendaItemType = yield this.args.submission?.agendaItemType;
       this.internalReview = internalReviewOfSubcase || internalReviewOfSubmission;
-      this.privateComment = this.internalReview?.privateComment || CONSTANTS.PRIVATE_COMMENT_TEMPLATE;
+      const agendaitemType = argsAgendaItemType || subcaseAgendaItemType || submissionAgendaItemType;
+      if (this.internalReview?.id) {
+        this.privateComment = this.internalReview?.privateComment;
+      } else if (
+        agendaitemType?.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      ) {
+        this.privateComment = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.NOTA;
+      } else if (
+        agendaitemType?.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
+      ) {
+        this.privateComment = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.ANNOUNCEMENT;
+      }
     }
   }
 
