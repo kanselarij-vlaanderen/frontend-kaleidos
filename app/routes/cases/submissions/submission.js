@@ -115,6 +115,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
     this.isUpdate = await this.draftSubmissionService.getIsUpdate(submission);
 
+    this.previousMandateePersons = [];
     if (this.isUpdate && this.subcase) {
       let subcaseMandatees = await this.subcase.mandatees;
       subcaseMandatees = subcaseMandatees
