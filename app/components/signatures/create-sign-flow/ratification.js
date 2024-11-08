@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { TrackedArray } from 'tracked-built-ins'
 
 export default class SignaturesCreateSignFlowRatificationComponent extends Component {
@@ -31,8 +31,9 @@ export default class SignaturesCreateSignFlowRatificationComponent extends Compo
 
     const getSigners = async (decisionActivity) => {
       const subcase = await decisionActivity.subcase;
-      const ratifiers = await subcase?.ratifiedBy ?? [];
-      return ratifiers;
+      const ratifiersFromSubcase = await subcase?.ratifiedBy;
+      let ratifiers = ratifiersFromSubcase?.slice() ?? [];
+      return ratifiers.sort((m1, m2) => m1.priority - m2.priority);
     };
 
     const ratifiers = await getSigners(head);

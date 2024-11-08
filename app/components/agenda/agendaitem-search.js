@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { dropTask, restartableTask, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
@@ -18,6 +19,20 @@ export default class AgendaItemSearch extends Component {
     return this.currentSession.may('manage-agendaitems') &&
       this.args.currentAgenda.status.get('isDesignAgenda') &&
       isEmpty(this.searchText);
+  }
+
+  @action
+  onInputSearchText(event) {
+    this.searchText = event.target.value;
+    this.debouncedSearch.perform();
+  }
+
+  @action
+  onEnterKeySearchText(event) {
+    if (event.key === 'Enter') {
+      this.searchText = event.target.value;
+      this.search.perform();
+    }
   }
 
   @restartableTask

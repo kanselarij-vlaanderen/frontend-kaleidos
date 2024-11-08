@@ -2,13 +2,12 @@ import Component from '@glimmer/component';
 import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import constants from 'frontend-kaleidos/config/constants';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';
 import { SIGN_FLOW_STATUS_REFRESH_INTERVAL_MS } from 'frontend-kaleidos/config/config';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 
-const { SIGNED, REFUSED, CANCELED, MARKED } = constants.SIGNFLOW_STATUSES;
+const { SIGNED, REFUSED, CANCELED, MARKED } = CONSTANTS.SIGNFLOW_STATUSES;
 
 /**
  * @param signMarkingActivity {SignMarkingActivityModel|Promise<SignMarkingActivityModel>}
@@ -62,7 +61,7 @@ export default class SignaturePillComponent extends Component {
         const piece = await signMarkingActivity.piece;
         const documentContainer = await piece?.documentContainer;
         const pieceType = await documentContainer?.type;
-        switch (pieceType.uri) {
+        switch (pieceType?.uri) {
           case CONSTANTS.DOCUMENT_TYPES.BESLISSINGSFICHE:
             route = 'signatures.decisions';
             break;

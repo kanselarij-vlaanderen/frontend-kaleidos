@@ -1,19 +1,18 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { A } from '@ember/array';
 import {
   keepLatestTask,
   task,
   all,
-  timeout
 } from 'ember-concurrency';
-import {
-  addPieceToAgendaitem, restorePiecesFromPreviousAgendaitem
-} from 'frontend-kaleidos/utils/documents';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import { findDocType } from 'frontend-kaleidos/utils/document-type';
 
 export default class CasesCaseSubcasesSubcaseIndexController extends Controller {
   @service agendaitemAndSubcasePropertiesSync;
@@ -23,6 +22,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @service fileConversionService;
   @service toaster;
   @service pieceAccessLevelService;
+  @service conceptStore;
+  @service pieceUpload;
+  @service documentService;
 
   @tracked decisionmakingFlow;
   @tracked mandatees;
@@ -31,14 +33,22 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked agenda;
 
   @tracked isOpenPieceUploadModal = false;
-  @tracked defaultAccessLevel
 
-  @tracked defaultAccessLevel;
   @tracked documentsAreVisible = false;
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
-  @tracked newPieces = A([]);
+  @tracked newPieces = new TrackedArray([]);
+
+  get sortedNewPieces() {
+    return this.newPieces.slice().sort((p1, p2) => {
+      const d1 = p1.belongsTo('documentContainer').value();
+      const d2 = p2.belongsTo('documentContainer').value();
+
+      return d1.position - d2.position || p1.created - p2.created;
+    });
+  }
+
 
   @action
   async saveMandateeData(mandateeData) {
@@ -61,9 +71,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const governmentAreas = this.model.subcase.governmentAreas;
-    governmentAreas.clear();
-    governmentAreas.pushObjects(newGovernmentAreas);
+    this.model.subcase.governmentAreas = newGovernmentAreas;
     await this.model.subcase.save();
     const agendaitemsOnDesignAgendaToEdit = await this.store.query('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,
@@ -81,29 +89,46 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   }
 
   @action
-  uploadPiece(file) {
+  async uploadPiece(file) {
+    const name = file.filenameWithoutExtension;
+    const parsed = new VRCabinetDocumentName(name).parsed;
+    const type = await findDocType(this.conceptStore, parsed.type);
+
     const now = new Date();
+    const confidential =
+      parsed.confidential || this.model.subcase.confidential || false;
     const documentContainer = this.store.createRecord('document-container', {
       created: now,
+      position: parsed.index,
+      type,
     });
+    this.defaultAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      confidential
+        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+    );
     const piece = this.store.createRecord('piece', {
       created: now,
       modified: now,
       file: file,
       accessLevel: this.defaultAccessLevel,
-      confidential: this.model.subcase.confidential || false,
-      name: file.filenameWithoutExtension,
+      confidential: confidential,
+      name: parsed.subject,
       documentContainer: documentContainer,
       cases: [this.model._case],
     });
-    this.newPieces.pushObject(piece);
+    this.newPieces.push(piece);
   }
 
   @task
   *savePieces() {
-    const savePromises = this.newPieces.map(async(piece) => {
+    const typesRequired = yield this.documentService.enforceDocType(this.newPieces);
+    if (typesRequired) return;
+
+    const savePromises = this.sortedNewPieces.map(async(piece, index) => {
       try {
-        await this.savePiece.perform(piece);
+        await this.savePiece.perform(piece, index);
       } catch (error) {
         await this.deletePiece.perform(piece);
         throw error;
@@ -112,7 +137,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     yield all(savePromises);
     yield this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.router.refresh('cases.case.subcases.subcase');
   }
 
@@ -120,8 +145,12 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
    * Save a new document container and the piece it wraps
   */
   @task
-  *savePiece(piece) {
+  *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
+    const containerCount = yield this.store.count('document-container', {
+      'filter[pieces][submission-activity][subcase][id]': this.model.subcase.id,
+    });
+    documentContainer.position = index + 1 + (containerCount ?? 0);
     yield documentContainer.save();
     piece.name = piece.name.trim();
     yield piece.save();
@@ -141,7 +170,9 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   */
   @task
   *addPiece(piece) {
-    piece.cases.pushObject(this.model._case);
+    // TODO KAS-4104 WHY DO WE ADD case to piece.cases, we have a service that does this automatically. This is asking for concurrency issues
+    // const cases = yield piece.cases;
+    // cases.push(this.case);
     yield piece.save();
     yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
@@ -161,7 +192,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *cancelUploadPieces() {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
     yield all(deletePromises);
-    this.newPieces = A();
+    this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
   }
 
@@ -169,7 +200,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *deletePiece(piece) {
     const file = yield piece.file;
     yield file.destroyRecord();
-    this.newPieces.removeObject(piece);
+    removeObject(this.newPieces, piece);
     const documentContainer = yield piece.documentContainer;
     yield documentContainer.destroyRecord();
     yield piece.destroyRecord();
@@ -188,145 +219,28 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     // since we query them from the backend on addition of new pieces
   }
 
-  /**
-   * When deleting a piece with multiple versions, we have to ensure that the agendaitem on the latest agenda is updated.
-   * This will only work correctly if only 1 agendaitem version needs to be corrected.
-   * this will not yield the correct results if multiple agenda versions (or with multiple agenda-activities) need corrections.
-   * @param {Piece} deletedPiece - the deleted piece from the store (after a destroyRecord)
-   */
-  @action
-  async setPreviousPiecesFromAgendaitem(deletedPiece) {
-    const documentContainer = await deletedPiece.documentContainer;
-    if (documentContainer) {
-      // deletedPiece.previousPiece might not work after delete, lastPiece query should return the same piece.
-      const lastPiece = await this.store.queryOne('piece', {
-        'filter[document-container][:id:]': documentContainer.id,
-        sort: '-created',
-      })
-      // only continue if there is a piece left in the container (a container could have 0 pieces left)
-      if (lastPiece) {
-        const agendaActivities = await this.model.subcase.agendaActivities;
-        const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
-        if (latestActivity) {
-          const agendaitems = await latestActivity.hasMany('agendaitems').reload(); // This fixes a case where approving an agenda did not update latestAgendaitem
-          const latestMeeting = await this.store.queryOne('meeting', {
-            'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
-            sort: '-planned-start',
-          });
-          const agendas = await latestMeeting.agendas;
-          const sortedAgendas = agendas.sortBy('serialnumber').reverse();
-          const latestAgenda = sortedAgendas.firstObject;
-          for (let index = 0; index < agendaitems.length; index++) {
-            const agendaitem = agendaitems.objectAt(index);
-            const agenda = await agendaitem.agenda;
-
-            if (agenda.id === latestAgenda.id) {
-              await restorePiecesFromPreviousAgendaitem(agendaitem, documentContainer);
-              // TODO: make sure we're not loading stale cache
-              await agendaitem.hasMany('pieces').reload();
-              break;
-            }
-          }
-        }
-      }
-    }
-  }
-
   @task
   *handleSubmittedPieces(pieces) {
     yield this.ensureFreshData.perform();
 
     // Attach pieces to submission activity and on open agendaitem (if any)
-    const agendaActivity = yield this.getAgendaActivity.perform();
+    const agendaActivity = yield this.pieceUpload.getAgendaActivity(this.model.subcase);
     if (agendaActivity) { // Item is already on open agenda; adding extra pieces
-      yield this.createSubmissionActivity.perform(pieces, agendaActivity);
+      yield this.pieceUpload.createSubmissionActivity(pieces, this.model.subcase, agendaActivity);
       yield this.updateRelatedAgendaitems.perform(pieces);
     } else { // Preparing pieces for subcase that is not yet on agenda
-      yield this.updateSubmissionActivity.perform(pieces);
-    }
-  }
-
-  @task
-  *getAgendaActivity() {
-    const latestAgendaActivity = yield this.store.queryOne('agenda-activity', {
-      'filter[subcase][:id:]': this.model.subcase.id,
-      'filter[agendaitems][agenda][created-for][:has-no:agenda]': true,
-      sort: '-start-date',
-    });
-
-    return latestAgendaActivity;
-  }
-
-  @task
-  *createSubmissionActivity(pieces, agendaActivity = null) {
-    let submissionActivity = this.store.createRecord('submission-activity', {
-      startDate: new Date(),
-      subcase: this.model.subcase,
-      pieces,
-      agendaActivity,
-    });
-
-    submissionActivity = yield submissionActivity.save();
-    return submissionActivity;
-  }
-
-  @task
-  *updateSubmissionActivity(pieces) {
-    const submissionActivity = yield this.store.queryOne('submission-activity', {
-      'filter[subcase][:id:]': this.model.subcase.id,
-      'filter[:has-no:agenda-activity]': true,
-    });
-
-    if (submissionActivity) { // Adding pieces to existing submission activity
-      const submissionPieces = yield submissionActivity.pieces;
-      submissionPieces.pushObjects(pieces);
-
-      yield submissionActivity.save();
-      return submissionActivity;
-    } else { // Create first submission activity to add pieces on
-      return this.createSubmissionActivity.perform(pieces);
+      yield this.pieceUpload.updateSubmissionActivity(pieces, this.model.subcase);
     }
   }
 
   @task
   *updateRelatedAgendaitems(pieces) {
-    // Link piece to all agendaitems that are related to the subcase via an agendaActivity
-    // and related to an agenda in the design status
-    const agendaitems = yield this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.model.subcase.id,
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-    });
-
-    // agendaitems can only have more than 1 item
-    // in case the subcase is on multiple (future) open agendas
-    for (const agendaitem of agendaitems.toArray()) {
-      setNotYetFormallyOk(agendaitem);
-      // save prior to adding pieces, micro-service does all the changes with docs
-      yield agendaitem.save();
-      for (const piece of pieces) {
-        yield addPieceToAgendaitem(agendaitem, piece);
-      }
-      // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
-      for (let index = 0; index < 10; index++) {
-        const agendaitemPieces = yield agendaitem.hasMany('pieces').reload();
-        if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
-          // last added piece was found in the list from cache
-          break;
-        } else {
-          // list from cache is stale, wait with back-off strategy
-          yield timeout(500 + (index * 500));
-          if (index >= 9) {
-            this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-              {
-                timeOut: 60000,
-              });
-          }
-        }
-      }
-    }
+    yield this.pieceUpload.updateRelatedAgendaitems.perform(
+      pieces,
+      this.model.subcase
+    );
     this.router.refresh('cases.case.subcases.subcase');
   }
-
 
   @action
   async openBatchDetails() {
@@ -348,5 +262,13 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @action
   refresh() {
     this.router.refresh('cases.case.subcases.subcase');
+  }
+
+  @action
+  refreshSubcases(decisionmakingFlow) {
+    this.router.refresh('cases.case');
+    if (decisionmakingFlow?.id) {
+      this.router.transitionTo('cases.case.index', decisionmakingFlow.id);
+    }
   }
 }

@@ -14,7 +14,7 @@
             @onDateToClear={{set this "dateTo" undefined}}
           />
           <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "status"}}</Auk::Label>
+            <AuLabel>{{t "status"}}</AuLabel>
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
               @onChange={{this.onChangeStatus}}
@@ -85,8 +85,8 @@
               @piece={{signMarkingActivity.piece}}
               @signMarkingActivity={{signMarkingActivity}}
               @isClickable={{
-                or 
-                  (not (await (this.isRowDisabled signFlow))) 
+                or
+                  (not (await (this.isRowDisabled signFlow)))
                   signFlow.isSigned
                 }}
             />

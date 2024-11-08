@@ -1,19 +1,14 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import { service } from '@ember/service';
 
 export default class subcaseDetailNav extends Component {
-  @action
-  scrollToFragment(fragName, e) {
-    // chrome does not work correctly with fragment scrolling, custom override needed
-    e.preventDefault();
-    const fragmentElement = document.getElementById(
-      `${fragName}`
-    );
-    if (fragmentElement) {
-      fragmentElement.scrollIntoView({
-        block: 'nearest',
-        behavior: 'smooth'
-      });
-    }
+  @service intl;
+
+  get items() {
+    return [
+      { elementId: 'case', label: this.intl.t('overview') },
+      { elementId: 'documents', label: this.intl.t('documents') },
+      { elementId: 'agenda', label: this.intl.t('agenda-activities') },
+    ];
   }
 }

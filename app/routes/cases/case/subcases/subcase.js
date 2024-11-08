@@ -6,11 +6,14 @@ export default class CasesCaseSubcasesSubcaseRoute extends Route {
   @service store;
 
   model(params) {
-    const { decisionmakingFlow, subcases } = this.modelFor('cases.case.subcases');
+    const { decisionmakingFlow, subcases, parliamentFlow } = this.modelFor(
+      'cases.case.subcases'
+    );
     return RSVP.hash({
       decisionmakingFlow,
       subcases,
       subcase: this.store.findRecord('subcase', params.subcase_id, { reload: true }),
+      parliamentFlow,
     });
   }
 }

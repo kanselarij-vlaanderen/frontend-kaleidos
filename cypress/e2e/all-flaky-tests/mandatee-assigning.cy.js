@@ -431,18 +431,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // const agendaDate2020 = Cypress.dayjs('2020-04-07');
     // const subcaseShortTitle = 'Cypress test: 20+ documents agendaitem with subcase - 1589286110';
     const agendaitemLink = 'vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008';
-    const mandateeNames2020 = [
-      'Jan Jambon, Minister-president van de Vlaamse Regering',
-      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, ICT en Facilitair Management',
-      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
-      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
-      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
-      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
-      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
-      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
-      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
-      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
-    ];
+    const mandateeNames2020 = mandateeNames['02102019-10052021'].signatureTitles;
     // *NOTE: these dates show differently depending on timezone
 
     let dateRange;
@@ -471,18 +460,8 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     // const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
     // const subcaseShortTitle = 'testId=1653051342: korte titel';
     const agendaitemLink = 'vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D';
-    const mandateeNames2022BeforeMay = [
-      'Jan Jambon, Minister-president van de Vlaamse Regering',
-      'Jan Jambon, Vlaams minister van Buitenlandse Zaken, Cultuur, Digitalisering en Facilitair Management',
-      'Hilde Crevits, Vlaams minister van Economie, Innovatie, Werk, Sociale economie en Landbouw',
-      'Bart Somers, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen',
-      'Ben Weyts, Vlaams minister van Onderwijs, Sport, Dierenwelzijn en Vlaamse Rand',
-      'Zuhal Demir, Vlaams minister van Justitie en Handhaving, Omgeving, Energie en Toerisme',
-      'Wouter Beke, Vlaams minister van Welzijn, Volksgezondheid, Gezin en Armoedebestrijding',
-      'Matthias Diependaele, Vlaams minister van Financiën en Begroting, Wonen en Onroerend Erfgoed',
-      'Lydia Peeters, Vlaams minister van Mobiliteit en Openbare Werken',
-      'Benjamin Dalle, Vlaams minister van Brussel, Jeugd en Media'
-    ];
+    const mandateeNames2022BeforeMay = mandateeNames['10052021-16052022'].signatureTitles;
+
     // *NOTE: these dates show differently depending on timezone
     let dateRange;
     if (isCI) {
@@ -522,7 +501,7 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(dependency.emberPowerSelect.option).contains('heden');
   });
 
-  it('check free search', () => {
+  it('check free search and add an old mandatee to agenda', () => {
     // const agendaDate2022BeforeMay = Cypress.dayjs('2022-02-28');
     // const subcaseShortTitle = 'testId=1653051342: korte titel';
     const agendaitemLink = 'vergadering/62878EB2E1ADA5F6A459ABFD/agenda/62878EB3E1ADA5F6A459ABFE/agendapunten/62879264E1ADA5F6A459AC0D';
@@ -537,12 +516,12 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
     cy.get(utils.mandateeSelector.container).click();
     cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
     cy.get(dependency.emberPowerSelect.searchInput).clear()
-      .type('Martens');
+      .type(mandateeNames.preKaleidos.martens.lastName);
     cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist', {
       timeout: 50000,
     });
     cy.get(dependency.emberPowerSelect.option).should('have.length', 4);
-    cy.get(dependency.emberPowerSelect.option).contains('Luc Martens, Vlaams minister van Cultuur, Gezin en Welzijn');
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNames.preKaleidos.martens.signatureTitle);
     // *NOTE: these dates show differently depending on timezone
     let date13071999 = Cypress.dayjs('1999-07-13').format('DD-MM-YYYY');
     let date28091998 = Cypress.dayjs('1998-09-28').format('DD-MM-YYYY');
@@ -571,6 +550,6 @@ context('Assigning a mandatee to agendaitem or subcase should update linked subc
       .wait('@patchAgendaitems')
       .wait('@patchAgendas');
     cy.get(mandatee.mandateePanelView.rows).should('have.length', 1)
-      .contains('Luc Martens');
+      .contains(mandateeNames.preKaleidos.martens.fullName);
   });
 });

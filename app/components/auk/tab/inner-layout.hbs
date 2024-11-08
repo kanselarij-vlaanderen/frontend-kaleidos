@@ -2,9 +2,9 @@
   {{#if @icon}}
     {{#if (eq @layout "icon-right")}}
       <div class="auk-tabs__tab__label">{{yield}}</div>
-      <Auk::Icon @name={{@icon}} />
+      <AuIcon @icon={{@icon}} />
     {{else}}
-      <Auk::Icon @name={{@icon}} />
+      <AuIcon @icon={{@icon}} />
       <div class="auk-tabs__tab__label">{{yield}}</div>
     {{/if}}
   {{else}}

@@ -195,8 +195,8 @@ export default class AgendaitemSearchRoute extends Route {
     this.trackSearch(
       params.searchText,
       results.length,
-      params.mandatees,
-      params.governmentAreas,
+      params.mandatees || [],
+      params.governmentAreas || [],
       params.dateFrom,
       params.dateTo,
       params.sort,

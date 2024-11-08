@@ -54,6 +54,7 @@ export default class Meeting extends Model {
   pieces;
   @hasMany('sign-flow', { inverse: 'meeting', async: true })
   signFlows;
+  @hasMany('submission', { inverse: 'meeting', async: true }) submissions;
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;

@@ -9,6 +9,7 @@ export default class CasesIndexController extends Controller {
   // Services
   @service router;
   @service store;
+  @service currentSession;
 
   queryParams = [
     {
@@ -56,6 +57,11 @@ export default class CasesIndexController extends Controller {
   @tracked submitters = [];
   @tracked caseFilter = null;
   @tracked isLoadingModel;
+  @tracked filtersOpen = false;
+
+  constructor() {
+    super(...arguments);
+  }
 
   @action
   selectSize(size) {
@@ -66,9 +72,14 @@ export default class CasesIndexController extends Controller {
   async navigateToDecisionmakingFlow(case_) {
     const decisionmakingFlow = await case_.decisionmakingFlow;
     this.router.transitionTo(
-      'cases.case.subcases',
+      'cases.case.index',
       decisionmakingFlow.id
     );
+  }
+
+  @action
+  onToggleFilters(open) {
+    this.filtersOpen = open;
   }
 
   setCaseFilter = (value) => (this.caseFilter = value);

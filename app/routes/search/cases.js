@@ -205,8 +205,8 @@ export default class CasesSearchRoute extends Route {
 
     this.trackSearch(
       params.searchText,
-      params.mandatees,
-      params.governmentAreas,
+      params.mandatees || [],
+      params.governmentAreas || [],
       results.length,
       params.dateFrom,
       params.dateTo,

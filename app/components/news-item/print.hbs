@@ -73,17 +73,17 @@
       </p>
     {{/if}}
 
-    {{#if @newsItem.themes}}
-      <div class="auk-u-mt-3 auk-u-non-breakable-group@print">
-        {{#each @newsItem.themes as |theme|}}
-          <AuPill
-            @size="small"
-            data-test-news-item-print-theme
-          >
-            {{theme.label}}
-          </AuPill>
-        {{/each}}
-      </div>
-    {{/if}}
+    {{#if this.themes}}
+        <div class="auk-u-mt-3 auk-u-non-breakable-group@print">
+          {{#each this.themes as |theme|}}
+            <AuPill
+              @size="small"
+              data-test-news-item-print-theme
+            >
+              {{theme.label}}
+            </AuPill>
+          {{/each}}
+        </div>
+      {{/if}}
   {{/if}}
 {{/if}}

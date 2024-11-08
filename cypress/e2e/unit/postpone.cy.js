@@ -154,7 +154,6 @@ context('Decision postponing tests', () => {
       .click();
     cy.get(agenda.agendaitemControls.action.postponeRevert).forceClick();
     cy.wait('@patchActivity2');
-    // TODO does this spy work?
     cy.wait(2000)
       .then(() => expect(spy).not.to.have.been.called);
     cy.get(auk.modal.container).should('not.exist');
@@ -184,11 +183,11 @@ context('Decision postponing tests', () => {
     cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
       .as('phases');
     cy.get('@phases').eq(0)
-      .contains(/Ingediend voor agendering op/);
+      .contains(/Uitgesteld op de agenda van/);
     cy.get('@phases').eq(1)
       .contains(/Geagendeerd op de agenda van/);
     cy.get('@phases').eq(2)
-      .contains(/Uitgesteld op de agenda van/);
+      .contains(/Ingediend voor agendering op/);
     cy.get(appuniversum.loader).should('not.exist');
   });
 
@@ -269,22 +268,31 @@ context('Decision postponing tests', () => {
     }).should('not.exist');
 
     // check if timeline contains multiple phase blocks (1 block has max 3 phases)
-    cy.get(cases.subcaseTimeline.item).eq(0)
-      .contains('Ingediend voor');
-    cy.get(cases.subcaseTimeline.item).eq(3)
-      .contains('Ingediend voor');
+    cy.get(cases.subcaseVersions.panel).find(cases.subcaseTimeline.item)
+      .as('phases');
+    cy.get('@phases').eq(0)
+      .contains(/Geagendeerd op de ontwerpagenda van/);
+    cy.get('@phases').eq(1)
+      .contains(/Ingediend voor agendering op/);
+    cy.get('@phases').eq(2)
+      .contains(/Uitgesteld op de agenda van/);
+    cy.get('@phases').eq(3)
+      .contains(/Geagendeerd op de agenda van/);
+    cy.get('@phases').eq(4)
+      .contains(/Ingediend voor agendering op/);
 
     // check if meeting number contains multiple numbers
-    cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+, \d+/);
+    // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)
+    // cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+, \d+/);
+    cy.get(cases.subcaseDescription.meetingNumber).contains(/\d+/);
 
     // check for multiple agenda links
-    cy.get(cases.subcaseDescription.agendaLink).should('have.length', 2);
+    // THIS CHANGED, only showing latest (which might be reverted depending on user feedback)
+    // cy.get(cases.subcaseDescription.agendaLink).should('have.length', 2);
+    cy.get(cases.subcaseDescription.agendaLink).should('have.length', 1);
 
     // check if decided on
     cy.get(cases.subcaseDescription.decidedOn).contains('Nog niet beslist');
-
-    // check if planned start is last agenda
-    // cy.get(cases.subcaseDescription.meetingPlannedStart).contains(`Ingediend voor de agenda van ${agendaDateFormatted}`);
 
     // add new doc (7)
     cy.get(route.subcase.add).click();

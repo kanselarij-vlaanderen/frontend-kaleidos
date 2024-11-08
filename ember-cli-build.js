@@ -1,6 +1,7 @@
+'use strict';
+
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
-const Funnel = require('broccoli-funnel');
 const webpack = require('webpack');
 
 module.exports = function (defaults) {
@@ -15,7 +16,6 @@ module.exports = function (defaults) {
       sourceMapEmbed: process.env.DEPLOY_ENV !== 'production',
       includePaths: [
         'node_modules/@kanselarij-vlaanderen/au-kaleidos-css/',
-        'node_modules/@kanselarij-vlaanderen/au-kaleidos-icons/iconfont/',
         'node_modules/@lblod/ember-rdfa-editor/app/styles/', // as a workaround for https://github.com/ember-cli/ember-cli/issues/8026#issuecomment-420245390
         'node_modules/@appuniversum/ember-appuniversum',
       ],
@@ -69,17 +69,5 @@ module.exports = function (defaults) {
     ],
   });
 
-  const iconAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-icons', {
-    srcDir: '/iconfont',
-    include: ['*.woff2', '*.woff', '*.ttf'],
-    destDir: '/assets'
-  });
-
-  const fontAssets = new Funnel('node_modules/@kanselarij-vlaanderen/au-kaleidos-css', {
-    srcDir: '/fonts',
-    include: ['*.woff2', '*.woff'],
-    destDir: '/assets/fonts'
-  });
-
-  return app.toTree([iconAssets, fontAssets]);
+  return app.toTree();
 };

@@ -1,0 +1,19 @@
+/* Appuniversum utilities
+   ========================================================================== */
+
+// @import '@appuniversum/ember-appuniversum/styles/a-utilities'; // REMARK: disabled for now (with individual imports below) as u-print breaks print styling (color & background-color) within Kaleidos
+
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-align-text";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-background";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-break-word";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-flex";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-font-family";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-font-weights";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-headings";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-hide";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-max-widths";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-paragraphs";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-responsive-spacings";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-spacings";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-visible";
+@import "@appuniversum/ember-appuniversum/styles/utilities/u-widths";

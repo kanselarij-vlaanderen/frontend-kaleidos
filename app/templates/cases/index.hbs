@@ -4,28 +4,41 @@
   @onSetFilter={{this.setCaseFilter}}
   @caseFilter={{this.caseFilter}}
 />
-<AuMainContainer class="l-search-container" as |m|>
+<AuMainContainer
+  class="l-search-container
+    {{if
+      (and (responsive "isMobile") this.filtersOpen)
+      "auk-u-scroll-no-overflow"
+    }}"
+  as |m|
+>
   <m.sidebar>
-    <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content">
-        <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
-          <Search::DateRangeFilter
-            @dateFrom={{this.dateFrom}}
-            @dateTo={{this.dateTo}}
-            @onDateFromChange={{this.setDateFrom}}
-            @onDateToChange={{this.setDateTo}}
-            @onDateFromClear={{set this "dateFrom" undefined}}
-            @onDateToClear={{set this "dateTo" undefined}}
-          />
-          <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "submitter"}}</Auk::Label>
-            <Search::MinisterFilter
-              @selected={{this.submitters}}
-              @onChange={{set this "submitters"}}
-              @showPastMinisters={{true}}
+    <div class="au-c-sidebar auk-u-overflow-initial">
+      <div class="au-c-sidebar__content au-c-sidebar__content--mobile">
+        <Auk::MobileFilters
+          @toggleLabel="Filters"
+          @toggleIcon="filter"
+          @onToggle={{this.onToggleFilters}}
+        >
+          <div class="au-o-box au-o-box--small au-o-flow au-o-flow--tiny">
+            <Search::DateRangeFilter
+              @dateFrom={{this.dateFrom}}
+              @dateTo={{this.dateTo}}
+              @onDateFromChange={{this.setDateFrom}}
+              @onDateToChange={{this.setDateTo}}
+              @onDateFromClear={{set this "dateFrom" undefined}}
+              @onDateToClear={{set this "dateTo" undefined}}
             />
+            <div class="au-c-card au-o-box au-o-box--small">
+              <AuLabel>{{t "submitter"}}</AuLabel>
+              <Search::MinisterFilter
+                @selected={{this.submitters}}
+                @onChange={{set this "submitters"}}
+                @showPastMinisters={{true}}
+              />
+            </div>
           </div>
-        </div>
+        </Auk::MobileFilters>
       </div>
     </div>
   </m.sidebar>
@@ -44,7 +57,7 @@
                     <Utils::ThSortable
                       class="auk-table__col--8 auk-table__header-title"
                       @currentSorting={{this.sort}}
-                      @field="title"
+                      @field="short-title"
                       @label={{t "name"}}
                       @onChange={{fn (mut this.sort)}}
                     />
@@ -63,15 +76,15 @@
                 <tbody>
                   {{#if this.isLoadingModel}}
                     <tr>
-                      <td data-test-route-agendas-overview-loader colspan="5">
+                      <td colspan="5">
                         {{t "loading"}}
                       </td>
                     </tr>
                   {{else}}
                     {{#each @model as |row|}}
+                      {{! template-lint-disable no-invalid-interactive }}
                       <tr
-                        role="button"
-                        class="auk-u-text-align--center auk-table--clickable-rows"
+                        class="auk-table--clickable-rows"
                         {{on
                           "click"
                           (fn this.navigateToDecisionmakingFlow row)
@@ -110,17 +123,16 @@
                           {{/if}}
                         </td>
                       </tr>
+                      {{! template-lint-enable no-invalid-interactive }}
                     {{/each}}
                   {{/if}}
                 </tbody>
               </table>
             </div>
           {{else}}
-            <Auk::Panel>
-              <Auk::Panel::Body>
-                <Auk::EmptyState @message={{t "no-results-found"}} />
-              </Auk::Panel::Body>
-            </Auk::Panel>
+            <div class="auk-u-responsive-margin">
+              <Auk::EmptyState @bordered={{true}} @message={{t "no-results-found"}} />
+            </div>
           {{/if}}
         </div>
       </div>
@@ -142,10 +154,10 @@
             </Auk::Toolbar::Item>
           </Auk::Toolbar::Group>
           <Auk::Toolbar::Group @position="right">
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@medium">
               {{t "amount-per-page"}}
             </Auk::Toolbar::Item>
-            <Auk::Toolbar::Item>
+            <Auk::Toolbar::Item class="au-u-visible-from@small">
               <WebComponents::AuPageSize
                 @selectedSize={{this.size}}
                 @onChange={{fn (mut this.size)}}

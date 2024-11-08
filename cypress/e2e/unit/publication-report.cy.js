@@ -4,6 +4,7 @@
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import dependency from '../../selectors/dependency.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import publication from '../../selectors/publication.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -131,7 +132,7 @@ context('Publications reports tests', () => {
 
   it('should test report for Publicaties van BVRs per minister', () => {
     const title = 'Publicaties van BVRs per minister';
-    const mandatee = 'Zuhal Demir';
+    const mandatee = mandateeNames.current.second.fullName;
 
     cy.get(publication.reportsPanelEntry.title).contains(title)
       .parents('.auk-panel__body')
@@ -250,7 +251,7 @@ context('Publications reports tests', () => {
 
   it('should test report for Publicaties van decreten per minister', () => {
     const title = 'Publicaties van decreten per minister';
-    const mandatee = 'Zuhal Demir';
+    const mandatee = mandateeNames.current.second.fullName;
 
     cy.get(publication.reportsPanelEntry.title).contains(title)
       .parents('.auk-panel__body')

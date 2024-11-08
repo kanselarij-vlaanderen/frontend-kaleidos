@@ -2,18 +2,25 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import VrLegacyDocumentName, { compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
+import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
+
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service store;
   @service currentSession;
+  @service router;
 
   beforeModel() {
-    this.decisionmakingFlow = this.modelFor('cases.case');
+    this.decisionmakingFlow = this.modelFor('cases.case').decisionmakingFlow;
   }
 
   async model() {
-    const { decisionmakingFlow, subcase } = this.modelFor('cases.case.subcases.subcase');
+    const { decisionmakingFlow, subcase, subcases, parliamentFlow } = this.modelFor('cases.case.subcases.subcase');
     const _case = await decisionmakingFlow.case;
+    const subcaseIds = subcases?.map((subcase) => subcase.id);
+    if (!subcaseIds.includes(subcase.id)) {
+      // subcase is not linked to this decisionmakingFlow
+      this.router.transitionTo('cases.case.subcases', decisionmakingFlow.id);
+    }
 
      // Get any submission that is not yet on a meeting
      const submissionActivitiesWithoutActivity = await this.store.query('submission-activity', {
@@ -21,10 +28,13 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       'filter[:has-no:agenda-activity]': true,
       include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
     });
-    let submissionActivities = [...submissionActivitiesWithoutActivity.toArray()];
+    let submissionActivities = [...submissionActivitiesWithoutActivity.slice()];
     // Get the submission from latest meeting if applicable
     const agendaActivities = await subcase.agendaActivities;
-    const latestActivity = agendaActivities.sortBy('startDate')?.lastObject;
+    const latestActivity = agendaActivities
+      .slice()
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
     if (latestActivity) {
       this.latestMeeting = await this.store.queryOne('meeting', {
         'filter[agendas][agendaitems][agenda-activity][:id:]': latestActivity.id,
@@ -35,22 +45,19 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
         'filter[agenda-activity][:id:]': latestActivity.id,
         include: 'pieces,pieces.document-container', // Make sure we have all pieces, unpaginated
       });
-      submissionActivities.addObjects(submissionActivitiesFromLatestMeeting.toArray());
+      addObjects(submissionActivities, submissionActivitiesFromLatestMeeting.slice());
     }
 
     const pieces = [];
-    for (const submissionActivity of submissionActivities.toArray()) {
+    for (const submissionActivity of submissionActivities.slice()) {
       let submissionPieces = await submissionActivity.pieces;
-      submissionPieces = submissionPieces.toArray();
+      submissionPieces = submissionPieces.slice();
       pieces.push(...submissionPieces);
     }
 
-    let sortedPieces;
-    if (this.latestMeeting?.isPreKaleidos) {
-      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
+    const sortedPieces = await sortPieces(
+      pieces, { isPreKaleidos: this.latestMeeting?.isPreKaleidos }
+    );
 
     await subcase.type;
 
@@ -58,16 +65,20 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       decisionmakingFlow,
       _case,
       subcase,
+      parliamentFlow,
+      subcases,
       pieces: sortedPieces,
     };
   }
 
   async afterModel(model) {
-    this.mandatees = (await model.subcase.mandatees)
+    const subcase = model.subcase;
+    const unsortedMandatees = await subcase.mandatees;
+    this.mandatees = unsortedMandatees
       .slice()
       .sort((m1, m2) => m1.priority - m2.priority);
-    this.submitter = await model.subcase.requestedBy;
-    const agendaActivities = await model.subcase.agendaActivities;
+    this.submitter = await subcase.requestedBy;
+    const agendaActivities = await subcase.agendaActivities;
     const latestActivity = agendaActivities
       .slice()
       .sort((a1, a2) => a1.startDate - a2.startDate)
@@ -79,10 +90,10 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       });
       this.agenda = await this.meeting?.belongsTo('agenda').reload();
     }
-    await model.subcase.governmentAreas;
+    await subcase.governmentAreas;
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
-      await model.subcase.confidential
+      subcase.confidential
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );

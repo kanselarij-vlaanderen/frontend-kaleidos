@@ -203,7 +203,7 @@ context('Agenda-Header actions tests', () => {
     cy.get(document.documentCard.name.value).eq(0)
       .contains(`${files[0].newFileName}`);
     cy.get(document.documentCard.name.value).eq(0)
-      .contains(`${files[0].newFileName}BIS`)
+      .contains(`${files[0].newFileName} BIS`)
       .should('not.exist');
   });
 });

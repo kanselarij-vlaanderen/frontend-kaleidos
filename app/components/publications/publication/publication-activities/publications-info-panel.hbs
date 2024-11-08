@@ -31,7 +31,7 @@
         <div class="auk-o-grid">
           <div class="auk-o-grid-col-3">
             <AuFormRow data-test-publications-info-panel-edit-view-target-end-date>
-              <Auk::Label>{{t "publication-target-end-date"}}</Auk::Label>
+              <AuLabel>{{t "publication-target-end-date"}}</AuLabel>
               <Auk::Datepicker
                 @date={{@publicationSubcase.targetEndDate}}
                 @onChange={{this.setTargetEndDate}}
@@ -52,9 +52,9 @@
           </div>
           <div class="auk-o-grid-col-3">
             <AuFormRow>
-              <Auk::Label>
+              <AuLabel>
                 {{t "publication-date"}}
-              </Auk::Label>
+              </AuLabel>
               {{#unless this.loadDecision.isRunning}}
                 {{#if @publicationFlow.status.isPublished}}
                   {{#if this.decision.isStaatsbladResource}}

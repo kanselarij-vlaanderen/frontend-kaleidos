@@ -1,0 +1,200 @@
+<Auk::Navbar @skin="gray-100" @auto={{true}}>
+  <Auk::Toolbar>
+    <Auk::Toolbar::Group @position="left">
+      <Auk::Toolbar::Item>
+        <OnThisPageLinks @items={{this.items}} />
+      </Auk::Toolbar::Item>
+    </Auk::Toolbar::Group>
+    {{#if this.hasActions}}
+      <Auk::Toolbar::Group @position="right">
+        <AuDropdown
+          data-test-submission-header-actions
+          @skin="secondary"
+          @title={{t "actions"}}
+          @alignment="right"
+        >
+          {{#if this.canCreateSubcase}}
+            <AuButton
+              data-test-submission-header-action-create-subcase
+              @skin="naked"
+              {{on "click" (toggle "isOpenCreateSubcaseModal" this)}}
+            >
+              {{#if this.isUpdate}}
+                {{t "accept-update-and-put-on-agenda"}}
+              {{else}}
+                {{t "create-subcase-and-put-on-agenda"}}
+              {{/if}}
+            </AuButton>
+          {{/if}}
+          {{#if this.canTakeInTreatment}}
+            <AuButton
+              data-test-submission-header-action-take-in-treatment
+              @skin="naked"
+              @alert={{if this.isSendBackRequested true}}
+              {{on "click" this.takeInTreatment}}
+            >
+              {{t "take-in-treatment"}}
+            </AuButton>
+          {{/if}}
+          <AuHr/>
+          {{#if this.canSendBackToSubmitter}}
+            <AuButton
+              data-test-submission-header-action-send-back
+              @skin="naked"
+              @alert={{not this.isSendBackRequested}}
+              {{on "click" (toggle "isOpenSendBackModal" this)}}
+            >
+              {{t "send-back-to-submitter"}}
+            </AuButton>
+          {{/if}}
+          {{#if this.canDeleteSubmission}}
+            <AuButton
+              data-test-submission-header-action-delete
+              @skin="naked"
+              @alert={{true}}
+              {{on "click" (toggle "isOpenDeleteModal" this)}}
+            >
+              {{t "delete-submission"}}
+            </AuButton>
+          {{/if}}
+        </AuDropdown>
+      </Auk::Toolbar::Group>
+    {{/if}}
+    <AuButtonGroup>
+      {{#if this.canResubmitSubmission}}
+        <AuButton
+          data-test-submission-header-action-resubmit
+          @skin="primary"
+          {{on "click" (toggle "isOpenResubmitModal" this)}}
+        >
+          {{t "resubmit-submission"}}
+        </AuButton>
+      {{/if}}
+      {{#if this.canRequestSendBack}}
+        <AuButton
+          data-test-submission-header-action-request-send-back
+          @skin="primary"
+          {{on "click" (toggle "isOpenRequestSendBackModal" this)}}
+        >
+          {{t "request-send-back-submission"}}
+        </AuButton>
+      {{/if}}
+    </AuButtonGroup>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenResubmitModal}}
+  @onCancel={{this.toggleResubmitModal}}
+  @title={{t "resubmit-submission"}}
+  @onConfirm={{queue (perform this.resubmitSubmission) this.toggleResubmitModal}}
+  @loading={{this.resubmitSubmission.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-resubmit">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-resubmit"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>
+
+{{#if (and (not this.loadAgenda.isRunning) this.isOpenCreateSubcaseModal)}}
+  {{#if this.isUpdate}}
+    <ConfirmationModal
+      @modalOpen={{this.isOpenCreateSubcaseModal}}
+      @onCancel={{this.toggleCreateSubcaseModal}}
+      @title={{t "update-subcase"}}
+      @onConfirm={{perform this.createSubcase false null false null}}
+      @alert={{true}}
+      @loading={{this.createSubcase.isRunning}}
+      @message={{t "confirm-accept-subcase-update"}}
+    />
+  {{else}}
+    <Cases::Subcases::ProposableAgendasModal
+      @submission={{@submission}}
+      @onCancel={{this.toggleCreateSubcaseModal}}
+      @onConfirm={{perform this.createSubcase}}
+      @defaultAgenda={{this.selectedAgenda}}
+      @showSaveWithoutAgenda={{true}}
+    />
+  {{/if}}
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenSendBackModal}}
+  @onCancel={{this.toggleSendBackModal}}
+  @title={{t "send-back-to-submitter"}}
+  @onConfirm={{queue (perform this.sendBackToSubmitter) this.toggleSendBackModal}}
+  @alert={{true}}
+  @loading={{this.sendBackToSubmitter.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-send-back">{{t "comment-title-to-submitter"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-send-back"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenDeleteModal}}
+  @onCancel={{this.toggleDeleteModal}}
+  @title={{t "delete-submission"}}
+  @onConfirm={{queue (perform this.deleteSubmission) this.toggleDeleteModal}}
+  @alert={{true}}
+  @loading={{this.deleteSubmission.isRunning}}
+  @disabled={{this.createSubcase.isRunning}}
+  @message={{t "delete-submission-confirmation"}}
+/>
+
+{{#if this.createSubcase.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "new-subcase"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      {{#let (await @submission.pieces) as |pieces|}}
+        {{#if pieces.length}}
+          <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesMovedCounter total=pieces.length)}} />
+        {{else}}
+          <Auk::Loader @message={{t "save-in-progress"}} />
+        {{/if}}
+      {{/let}}
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenRequestSendBackModal}}
+  @onCancel={{this.toggleRequestSendBackModal}}
+  @title={{t "request-send-back-submission-title"}}
+  @onConfirm={{queue (perform this.requestSendBackToSubmitter) this.toggleRequestSendBackModal}}
+  @alert={{true}}
+  @loading={{this.requestSendBackToSubmitter.isRunning}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel for="comment-title-request-send-back">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
+        <AuTextarea
+          id="comment-title-request-send-back"
+          rows="2"
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </AuFormRow>
+    </div>
+  </:body>
+</ConfirmationModal>

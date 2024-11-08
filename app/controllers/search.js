@@ -28,10 +28,16 @@ export default class SearchController extends Controller {
   @tracked mandatees = [];
   @tracked dateFrom;
   @tracked dateTo;
+  @tracked hasToggleableFilters = false;
+  @tracked filtersOpen = false;
 
   @tracked governmentAreas = [];
 
   @tracked searchTextBuffer = '';
+
+  constructor() {
+    super(...arguments);
+  }
 
   @action
   search(e) {
@@ -57,5 +63,10 @@ export default class SearchController extends Controller {
   @action
   setGovernmentAreas(governmentAreas) {
     this.governmentAreas = governmentAreas;
+  }
+
+  @action
+  onToggleFilters(open) {
+    this.filtersOpen = open;
   }
 }

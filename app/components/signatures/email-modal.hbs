@@ -8,19 +8,19 @@
       <AuFormRow>
         <AuLabel>{{t "email-address"}}</AuLabel>
         <AuInput
-          data-test-signatures-create-email-input
-          {{on "input" this.onInputEvent}}
-          @warning={{and this.emailBuffer (not this.isValid)}}
-          @type="text"
-          @width="block"
+          data-test-email-modal-input
+          type="text"
           class="au-c-input--mask-normal-letter-spacing"
+          @warning={{and this.emailBuffer (not this.isValid)}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "emailBuffer"))}}
         />
       </AuFormRow>
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer @onCancel={{@onCancel}}>
       <AuButton
-        data-test-signatures-create-email-add
+        data-test-email-modal-add
         @disabled={{not this.isValid}}
         {{on "click" (fn @onConfirm this.emailBuffer)}}
       >

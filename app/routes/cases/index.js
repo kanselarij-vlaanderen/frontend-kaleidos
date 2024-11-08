@@ -1,9 +1,9 @@
+import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
-import Route from '@ember/routing/route';
 
 export default class CasesIndexRoute extends Route {
   @service store;
@@ -20,6 +20,10 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'sorteer',
     },
+    caseFilter: {
+      refreshModel: true,
+      as: 'dossier_naam',
+    },
     dateFrom: {
       refreshModel: true,
       as: 'van',
@@ -27,10 +31,6 @@ export default class CasesIndexRoute extends Route {
     dateTo: {
       refreshModel: true,
       as: 'tot',
-    },
-    caseFilter: {
-      refreshModel: true,
-      as: 'dossier_naam',
     },
     submitters: {
       refreshModel: true,
@@ -81,6 +81,11 @@ export default class CasesIndexRoute extends Route {
     transition.promise.finally(() => {
       controller.isLoadingModel = false;
     });
-    return true;
+    // false so we don't transition to the loading route when searching
+    if (transition.from && transition.to) {
+      return transition.from.name != transition.to.name;
+    } else {
+      return false;
+    }
   }
 }

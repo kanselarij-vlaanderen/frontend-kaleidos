@@ -13,7 +13,7 @@ export default class CasesSubmitters extends Component {
     this.loadSubmitters.perform();
   }
 
-  loadSubmitters= task(async () => {
+  loadSubmitters = task(async () => {
     if (!this.args.case) {
       throw new Error('@case argument is required');
     }
@@ -24,12 +24,16 @@ export default class CasesSubmitters extends Component {
     });
 
     const persons = new Set();
-    subcases.forEach((subcase) => {
-      const submitter = subcase.belongsTo('requestedBy').value();
-      if (submitter) {
-        persons.add(submitter.belongsTo('person').value().fullName);
-      }
-    });
+    await Promise.all(
+      subcases.map(async (subcase) => {
+        const submitter = await subcase.requestedBy;
+        if (submitter) {
+          const value = await submitter.person;
+          const fullName = value.fullName;
+          persons.add(fullName);
+        }
+      })
+    );
     this.submitters = [...persons];
   });
 }

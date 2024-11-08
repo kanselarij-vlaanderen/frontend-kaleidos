@@ -1,5 +1,10 @@
 <div class="auk-key-value-item {{this.layout}}" ...attributes>
-  <div class="auk-key-value-item__label">{{@key}}</div>
+  <div class="auk-key-value-item__label">
+    {{#if @icon}}
+      <AuIcon @icon={{@icon}} />
+    {{/if}}
+    {{@key}}
+  </div>
   <div class="auk-key-value-item__value">
     {{#if @value}}
       {{@value}}

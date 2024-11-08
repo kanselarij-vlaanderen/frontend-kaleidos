@@ -1,4 +1,7 @@
-import templateOnly from '@ember/component/template-only';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+
 
 /**
   * @argument notaGroups: Array of AgendaitemGroup-objects
@@ -10,4 +13,41 @@ import templateOnly from '@ember/component/template-only';
   * @argument toggleShowModifiedOnly: toggle the parent to set the modified filter on or off
   * @argument activeItem: the currently selected agendaitem
   */
-export default templateOnly();
+
+export default class AgendaDetailSidebarComponent extends Component {
+  @tracked panelOpen = false;
+  panelElement = null;
+
+  constructor() {
+    super(...arguments);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setupResponsiveFeatures();
+  }
+
+  setupResponsiveFeatures() {
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
+  @action
+  didInsertPanel(element) {
+    this.panelElement = element;
+  }
+
+  @action
+  togglePanel() {
+    this.panelOpen = !this.panelOpen;
+  }
+
+  @action
+  closePanel() {
+    this.panelOpen = false;
+  }
+
+  handleClickOutside(event) {
+    if (!this.panelOpen) return;
+
+    if (!this.panelElement.contains(event.target)) {
+      this.closePanel();
+    }
+  }
+}

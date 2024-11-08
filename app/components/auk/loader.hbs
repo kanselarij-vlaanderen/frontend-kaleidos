@@ -1,8 +1,7 @@
 {{#if @message}}
-  <div class="au-u-maximize-width au-u-maximize-height au-u-flex au-u-flex--column au-u-flex--center au-u-flex--vertical-center au-u-text-center">
-    <AuLoader @padding="small" @disableMessage={{true}} class="au-u-margin-bottom-tiny" />
-    <p>{{@message}}</p>
+  <div class="au-u-maximize-width au-u-maximize-height au-u-flex au-u-flex--column au-u-flex--center au-u-flex--vertical-center">
+    <AuLoader>{{@message}}</AuLoader>
   </div>
 {{else}}
-  <AuLoader @padding="small" @disableMessage={{true}} />
+  <AuLoader @hideMessage={{true}} @centered={{false}} @inline={{true}}>{{t "loading"}}</AuLoader>
 {{/if}}

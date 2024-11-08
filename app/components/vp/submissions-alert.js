@@ -4,11 +4,24 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
+import { task } from 'ember-concurrency';
 
 export default class SubmissionsAlertComponent extends Component {
   @service intl;
 
   @tracked showActivity = null;
+  @tracked parliamentSubmissionActivities = [];
+  
+  constructor() {
+    super(...arguments);
+    this.loadActivities.perform();
+  }
+
+  loadActivities = task(async () => {
+    const parliamentSubcase = await this.args.parliamentFlow.parliamentSubcase;
+    const parliamentSubmissionActivities = await parliamentSubcase.parliamentSubmissionActivities;
+    this.parliamentSubmissionActivities = parliamentSubmissionActivities?.slice().sort((a1, a2) => a1.startDate - a2.startDate);
+  })
 
   get message() {
     if (this.args.parliamentFlow.isIncomplete) {

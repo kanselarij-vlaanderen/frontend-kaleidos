@@ -7,6 +7,19 @@ const selectors = {
     manageOrganizations: '[data-test-route-settings-manage-organizations]',
   },
 
+  email: {
+    save: '[data-test-route-settings-emails-save]',
+    publication: {
+      requestTo: '[data-test-route-settings-emails-publication-request-to]',
+    },
+    submission: {
+      toSecretary: '[data-test-route-settings-emails-submission-to-secretary]',
+      toIKW: '[data-test-route-settings-emails-submission-to-ikw]',
+      toKCGroup: '[data-test-route-settings-emails-submission-to-kc-group]',
+      replyTo: '[data-test-route-settings-emails-submission-reply-to]',
+    },
+  },
+
   // route settings/users/index
   usersIndex: {
     searchInput: '[data-test-route-settings-users-search-input]',

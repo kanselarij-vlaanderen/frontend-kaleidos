@@ -6,9 +6,19 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaController extends Controller {
   @service router;
+  @service responsive;
+  @service resize;
 
   @tracked isLoading = false;
-  @tracked isOpenSideNav = true;
+  @tracked isOpenSideNav = this.responsive.isTablet ? false : true;
+
+  constructor() {
+    super(...arguments);
+
+    this.resize.on('resize', () => {
+      this.isOpenSideNav = this.responsive.isTablet ? false : true;
+    })
+  }
 
   get meetingKindPrefix() {
     return this.model.meeting.kind.get('uri') == CONSTANTS.MEETING_KINDS.PVV ? 'MR VV' : 'MR';
@@ -30,12 +40,12 @@ export default class AgendaController extends Controller {
   }
 
   @action
-  openSideNav() {
-    this.isOpenSideNav = true;
+  collapseSideNav() {
+    this.isOpenSideNav = false;
   }
 
   @action
-  collapseSideNav() {
-    this.isOpenSideNav = false;
+  openSideNav() {
+    this.isOpenSideNav = true;
   }
 }

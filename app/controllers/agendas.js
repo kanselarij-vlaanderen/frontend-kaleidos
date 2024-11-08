@@ -17,7 +17,6 @@ export default class AgendasController extends Controller {
   @service store;
   @service router;
   @service mandatees;
-
   defaultPublicationActivityStatus;
   @tracked newMeeting;
   @tracked publicationActivities = [];
@@ -36,6 +35,13 @@ export default class AgendasController extends Controller {
   *debouncedSetFilter(event) {
     yield timeout(500);
     this.setFilter(event.target.value);
+  }
+
+  @action
+  onEnterKeyFilter(event) {
+    if (event.key === 'Enter') {
+      this.setFilter(event.target.value);
+    }
   }
 
   @action
@@ -199,7 +205,7 @@ export default class AgendasController extends Controller {
     let secretary;
     const meetingSecretary = await newMeeting.secretary;
     secretary =  meetingSecretary;
-    
+
     const decisionActivity = this.store.createRecord('decision-activity', {
       startDate: startDate,
       secretary,

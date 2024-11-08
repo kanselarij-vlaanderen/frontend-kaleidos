@@ -11,10 +11,15 @@ export default class SubmittedPiece extends Model {
   @attr signedFileParliamentId;
   @attr wordFileParliamentId;
 
+  @belongsTo('parliament-submission-activity', {
+    inverse: 'submittedPieces',
+    async: true,
+  })
+  parliamentSubmissionActivity;
   @belongsTo('piece', {
     inverse: 'submittedPieces',
     async: true,
-    polymorphic: true
+    polymorphic: true,
   })
   piece;
 }

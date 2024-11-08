@@ -5,13 +5,13 @@
         <AuFormRow>
           <AuInput
             data-test-agendaitem-search-input
+            placeholder={{t (if @isEditingOverview "search-not-allowed-during-reordering" "search-placeholder")}}
+            value={{this.searchText}}
             @icon="search"
             @width="block"
-            @value={{this.searchText}}
-            @enter={{perform this.search}}
             @disabled={{@isEditingOverview}}
-            {{on "input" (perform this.debouncedSearch)}}
-            placeholder={{t (if @isEditingOverview "search-not-allowed-during-reordering" "search-placeholder")}}
+            {{on "input" this.onInputSearchText}}
+            {{on "keydown" this.onEnterKeySearchText}}
           />
         </AuFormRow>
       </Auk::Toolbar::Item>

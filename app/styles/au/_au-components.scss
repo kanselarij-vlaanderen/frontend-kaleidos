@@ -39,6 +39,7 @@ $au-label-color: var(--au-gray-700);
 @import '@appuniversum/ember-appuniversum/styles/components/c-modal';
 @import '@appuniversum/ember-appuniversum/styles/components/c-sidebar';
 @import '@appuniversum/ember-appuniversum/styles/components/c-table';
+@import '@appuniversum/ember-appuniversum/styles/components/c-textarea';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toaster';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toolbar';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toggle-switch';
@@ -47,8 +48,8 @@ $au-label-color: var(--au-gray-700);
 // CSS variables (to override)
 
 :root {
-  --au-outline: 0.3rem solid #{$auk-yellow-500};
-  --au-outline-color: #{$auk-yellow-500};
+  --au-outline: 0.3rem solid #{$au-yellow-400};
+  --au-outline-color: #{$au-yellow-400};
 
   --au-icon-size: 1.6rem;
   --au-icon-size-medium: 1.8rem;
@@ -80,8 +81,21 @@ $au-label-color: var(--au-gray-700);
   white-space: nowrap;
   overflow: hidden;
 
+  .auk-table & {
+    @include mq($until: large) {
+      padding: 0.3rem $au-unit-tiny;
+
+      line-height: 1.2;
+      white-space: normal;
+    }
+  }
+
   &.au-c-pill--hover { // use the combined selector here (although BEM-naming is used within ember-appuniversum) to make sure the value is overridden
     cursor: pointer;
+  }
+
+  .au-c-icon {
+    flex: 0 0 auto;
   }
 }
 
@@ -132,7 +146,7 @@ $au-label-color: var(--au-gray-700);
 
 .au-c-content {
   @include au-font-size(1.5rem, 1.6); // default font size in Kaleidos
-  color: $auk-color-text; // default text color in Kaleidos
+  color: $au-gray-800; // default text color in Kaleidos
 
   h1, h2, h3, h4, h5, h6, // default heading styling in Kaleidos
   .au-c-heading--1,
@@ -141,7 +155,7 @@ $au-label-color: var(--au-gray-700);
   .au-c-heading--4,
   .au-c-heading--5,
   .au-c-heading--6 {
-    color: $auk-color-heading;
+    color: $au-gray-900;
     font-weight: 500;
   }
 
@@ -215,7 +229,7 @@ $au-label-color: var(--au-gray-700);
   }
 
   em { // default text color in Kaleidos
-    color: $auk-color-text;
+    color: $au-gray-800;
   }
 
   sub {
@@ -297,6 +311,15 @@ $au-label-color: var(--au-gray-700);
       }
     }
   }
+
+  @include mq($until: medium) {
+    // Make sure tables fit into search cards
+    :is(.auk-table, *) & {
+      table {
+        min-width: auto;
+      }
+    }
+  }
 }
 
 .au-c-button {
@@ -309,9 +332,34 @@ $au-label-color: var(--au-gray-700);
   vertical-align: baseline;
 }
 
+// Icon
+
 .au-c-icon {
   bottom: 0;
 }
+
+@mixin au-background-icon($icon: 'add', $size: 1.6rem) {
+  $icon-url: #{'/@appuniversum/ember-appuniversum/icons/' + $icon +'.svg'};
+
+  display: inline-flex;
+  vertical-align: middle;
+  align-content: center;
+  justify-content: center;
+
+  &:before {
+    content: '';
+    width: $size;
+    height: $size;
+
+    mask-image: url($icon-url);
+    mask-size: $size;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: currentColor;
+  }
+}
+
+// Dropdown
 
 .au-c-dropdown > .au-c-button--naked { // TODO: delete when `.au-c-dropdown > .au-c-button--naked` override inside ember-appuniversum is removed
   &.au-c-button--icon-only {
@@ -343,7 +391,8 @@ $au-label-color: var(--au-gray-700);
   border-top: none;
 }
 
-.au-c-input:focus {
+.au-c-input:focus,
+.au-c-textarea:focus {
   border-color: $au-input-border-color !important;
   box-shadow: none !important;
 
@@ -383,11 +432,6 @@ $au-label-color: var(--au-gray-700);
   background-color: $au-white;
 }
 
-// Fix missing noactions class
-.auk-table--noactions .data-table__actions--top {
-  display: none;
-}
-
 // Fieldset
 
 .au-c-fieldset {
@@ -399,7 +443,6 @@ $au-label-color: var(--au-gray-700);
 }
 
 .au-c-fieldset-legend {
-  color: $auk-gray-700; // TODO: delete when auk-label as a whole is refactored
   font-size: var(--au-global-font-size) !important;
 }
 
@@ -438,6 +481,7 @@ $au-label-color: var(--au-gray-700);
 // Alert
 
 .au-c-alert {
+  margin-bottom: 0;
   font-size: 1.5rem;
 }
 
@@ -446,6 +490,10 @@ $au-label-color: var(--au-gray-700);
     height: 1.5rem;
     width: 1.6rem;
   }
+}
+
+.au-c-alert + * {
+  margin-top: $au-unit;
 }
 
 // Badge
@@ -482,16 +530,29 @@ $au-label-color: var(--au-gray-700);
 
 // Loader
 
-.au-c-loader__animation {
-  height: 1.6rem + $au-unit;
+.au-c-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $au-unit-tiny / 2;
 
-  .au-c-loader--small & {
-    height: 1.6rem;
+  &.au-u-text-center { // REMARK: this a temporary fix because the usage of `inline-block` causes additional white space, `display: flex` fixes this but then we need another way to center the content
+    justify-content: center;
   }
 
-  .au-c-loader--large & {
-    height: 1.6rem + $au-unit-large;
+  &:has(span) {
+    flex-direction: row;
+    gap: $au-unit-tiny;
   }
+
+  .au-u-para {
+    @include au-font-size(var(--au-para-small), $important: true);
+  }
+}
+
+.au-p-c-loading-animation {
+  display: block;
+  height: 1.6rem;
 }
 
 // Additions
@@ -678,5 +739,94 @@ $au-label-color: var(--au-gray-700);
   #attendees,
   #absentees {
     table-layout: fixed;
+  }
+}
+
+.au-u-primary {
+  color: var(--au-blue-700) !important;
+}
+
+// Responsive fixes
+// ---
+.au-c-button,
+.au-c-input {
+  @include mq($until:medium) {
+    $au-button-height: $au-unit-large * .65;
+    padding: 0 $au-unit-tiny;
+    line-height: $au-button-height - $au-button-border * 2;
+    height: $au-button-height;
+  }
+}
+
+// Make sure the dropdown does not overflow the screen
+.au-c-dropdown__menu {
+  max-width: 350px;
+}
+
+// Adjust layout of sidebar on mobile
+.au-c-sidebar__content--mobile {
+  @include mq($until: medium) {
+    display: flex;
+    padding: $au-unit-tiny $au-unit-small;
+    gap: $au-unit-small;
+    justify-content: flex-end;
+    align-items: center;
+    overflow: initial;
+    min-height: 5rem;
+    height: auto;
+
+    &:has(nav) {
+      justify-content: space-between;
+    }
+  }
+}
+
+// Adjust width of toaster on mobile
+.au-c-toaster .au-c-alert {
+  @include mq($until: medium) {
+    max-width: 354px;
+    min-width: 354px;
+  }
+}
+
+// Adjust width of modals on mobile
+.auk-modal {
+    max-width: calc(100% - 2rem);
+}
+
+// Panel variant that is displayed as a sidebar
+.au-c-panel-sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 95%;
+  z-index: 9;
+  box-shadow: $auk-shadow-small;
+
+  &::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-color: rgba(0,0,0,.1);
+  }
+
+  > .auk-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    border-radius: 0;
+    border-top: 0;
+    border-bottom: 0;
+  }
+
+  > .auk-panel > .auk-panel__body {
+    flex-grow: 1;
+    overflow: auto;
   }
 }

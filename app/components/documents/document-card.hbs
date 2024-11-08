@@ -11,8 +11,8 @@
 >
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
-      <Auk::Toolbar @auto={{true}} as |Toolbar|>
-        <Toolbar.Group @position="left" as |Group|>
+      <Auk::Toolbar @auto={{true}} @responsive={{true}} as |Toolbar|>
+        <Toolbar.Group @position="left" @responsive={{true}} as |Group|>
           <Group.Item>
             {{#if @isHighlighted}}
               <AuBadge
@@ -38,6 +38,11 @@
                 {{/unless}}
               </span>
             </div>
+            {{#if this.documentContainer.position}}
+              <span>
+                {{this.documentContainer.position}}.
+              </span>
+            {{/if}}
             <LinkTo
               @route="document"
               @model={{this.piece.id}}
@@ -77,7 +82,7 @@
                     {{t "as"}}
                     <AuLinkExternal
                       data-test-document-card-primary-source-link
-                      href={{this.piece.file.namedDownloadLink}}
+                      href={{await this.piece.namedDownloadLinkPromise}}
                       download
                     >
                       {{t "source-file-lowercase"}}
@@ -156,14 +161,16 @@
             }}
           >
             {{#unless (or this.loadPieceRelatedData.isRunning this.loadAccessLevelRelatedData.isRunning)}}
-              <AccessLevelPill
-                @accessLevel={{this.piece.accessLevel}}
-                @isEditable={{@isEditable}}
-                @isDraft={{this.isDraftAccessLevel}}
-                @onChangeAccessLevel={{this.changeAccessLevel}}
-                @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
-                @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
-              />
+              {{#unless @hideAccessLevel}}
+                <AccessLevelPill
+                  @accessLevel={{this.piece.accessLevel}}
+                  @isEditable={{@isEditable}}
+                  @isDraft={{this.isDraftAccessLevel}}
+                  @onChangeAccessLevel={{this.changeAccessLevel}}
+                  @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
+                  @onCancelChangeAccessLevel={{this.reloadAccessLevel}}
+                />
+              {{/unless}}
             {{/unless}}
           </Group.Item>
           {{#if this.showSignatureLoader}}
@@ -188,6 +195,7 @@
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
+              {{!-- template-lint-disable require-context-role --}}
               <AuDropdown
                 data-test-document-card-actions={{true}}
                 @icon="three-dots"
@@ -261,6 +269,7 @@
                   </AuButton>
                 {{/if}}
               </AuDropdown>
+              {{!-- template-lint-enable require-context-role --}}
             </Group.Item>
           {{/if}}
         </Toolbar.Group>
@@ -313,6 +322,7 @@
 {{#if this.isEditingPiece}}
   <Documents::DocumentCard::EditModal
     @piece={{this.piece}}
+    @documentContainer={{this.documentContainer}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
     @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}
@@ -330,8 +340,12 @@
 >
   <:body>
     {{#if this.newPiece}}
-      <Auk::Label>{{t "name"}}</Auk::Label>
-      <AuInput @width="block" @value={{this.newPiece.name}} />
+      <AuLabel>{{t "name"}}</AuLabel>
+      <AuInput
+        value={{this.newPiece.name}}
+        @width="block"
+        {{on "input" (pick "target.value" (set this "newPiece.name"))}}
+      />
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
         @onDelete={{perform this.deleteUploadedPiece}}

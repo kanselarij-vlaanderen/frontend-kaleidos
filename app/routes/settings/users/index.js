@@ -65,52 +65,7 @@ export default class SettingsUsersIndexRoute extends Route {
       params.page = 0;
     }
 
-    const filter = {};
-
-    if (params.organizations.length) {
-      filter.memberships ??= {};
-      filter.memberships.organization = {
-        ':id:': params.organizations.join(','),
-      };
-    }
-
-    if (params.dateFrom) {
-      filter['login-activity'] ??= {};
-      filter['login-activity'][':gte:start-date'] =
-        startOfDay(parseDate(params.dateFrom)).toISOString();
-    }
-
-    if (params.dateTo) {
-      filter['login-activity'] ??= {};
-      filter['login-activity'][':lte:start-date'] =
-        endOfDay(parseDate(params.dateTo)).toISOString();
-    }
-
-    if (params.roles.length) {
-      filter.memberships ??= {};
-      filter.memberships.role = {
-        ':id:': params.roles.join(','),
-      };
-    } else {
-      filter.memberships ??= {};
-      filter.memberships[':has-no:role'] = true;
-    }
-
-    if (params.showBlockedUsersOnly) {
-      filter.status = {
-        ':uri:': CONSTANTS.USER_ACCESS_STATUSES.BLOCKED,
-      };
-    }
-
-    if (params.showBlockedMembershipsOnly) {
-      filter.memberships ??= {};
-      filter.memberships.status = {
-        ':uri:': CONSTANTS.USER_ACCESS_STATUSES.BLOCKED,
-      };
-    }
-
     const options = {
-      filter,
       sort: params.sort,
       page: {
         number: params.page,
@@ -126,6 +81,32 @@ export default class SettingsUsersIndexRoute extends Route {
 
     if (isPresent(params.filter)) {
       options['filter'] = params.filter;
+    }
+
+    if (params.organizations.length) {
+      options['filter[memberships][organization][:id:]'] = params.organizations.join(',');
+    }
+
+    if (params.dateFrom) {
+      options['filter[login-activity][:gte:start-date]'] = startOfDay(parseDate(params.dateFrom)).toISOString();
+    }
+
+    if (params.dateTo) {
+      options['filter[login-activity][:lte:start-date]'] = endOfDay(parseDate(params.dateTo)).toISOString();
+    }
+
+    if (params.roles.length) {
+      options['filter[memberships][role][:id:]'] = params.roles.join(',');
+    } else {
+      options['filter[memberships][:has-no:role]'] = true;
+    }
+
+    if (params.showBlockedUsersOnly) {
+      options['filter[status][:uri:]'] = CONSTANTS.USER_ACCESS_STATUSES.BLOCKED;
+    }
+
+    if (params.showBlockedMembershipsOnly) {
+      options['filter[memberships][status][:uri:]'] = CONSTANTS.USER_ACCESS_STATUSES.BLOCKED;
     }
 
     this.lastParams.commit();

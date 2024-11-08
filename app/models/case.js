@@ -6,6 +6,7 @@ export default class CaseModel extends Model {
   @attr('string') title;
   @attr('string') shortTitle;
   @attr('string') number;
+  @attr uri;
 
   @belongsTo('decisionmaking-flow', { inverse: 'case', async: true })
   decisionmakingFlow;

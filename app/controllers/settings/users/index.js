@@ -3,10 +3,11 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
-import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
+import { LIVE_SEARCH_DEBOUNCE_TIME, PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
-import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class UsersSettingsController extends Controller {
   @service store;
@@ -19,7 +20,7 @@ export default class UsersSettingsController extends Controller {
   @tracked searchTextBuffer;
 
   @tracked userBeingBlocked = null;
-  @tracked membershipsBeingBlocked = [];
+  @tracked membershipsBeingBlocked = new TrackedArray([]);
 
   @tracked showBlockMembershipsConfirmationModal = false;
   @tracked showBlockUserConfirmationModal = false;
@@ -89,21 +90,21 @@ export default class UsersSettingsController extends Controller {
   @action
   toggleShowBlockMembershipsConfirmationModal() {
     this.showBlockMembershipsConfirmationModal = !this.showBlockMembershipsConfirmationModal;
-    this.membershipsBeingBlocked = [];
+    this.membershipsBeingBlocked = new TrackedArray([]);
   }
 
   @action
   toggleShowUnblockMembershipsConfirmationModal() {
     this.showUnblockMembershipsConfirmationModal = !this.showUnblockMembershipsConfirmationModal;
-    this.membershipsBeingBlocked = [];
+    this.membershipsBeingBlocked = new TrackedArray([]);
   }
 
   @action
   toggleMembershipBeingBlocked(membership, isChecked) {
     if (isChecked) {
-      this.membershipsBeingBlocked.addObject(membership);
+      addObject(this.membershipsBeingBlocked, membership);
     } else {
-      this.membershipsBeingBlocked.removeObject(membership);
+      removeObject(this.membershipsBeingBlocked, membership);
     }
   }
 
@@ -147,8 +148,9 @@ export default class UsersSettingsController extends Controller {
    * currently match the filtering options.
    */
   @action
-  filterMemberships(memberships) {
-    return memberships.filter((membership) => {
+  async filterMemberships(user) {
+    const memberships = await user.memberships;
+    return memberships?.filter((membership) => {
       const shouldShow = !this.showBlockedMembershipsOnly || membership.get('isBlocked');
       return this.roles.includes(membership.get('role.id')) && shouldShow;
     });

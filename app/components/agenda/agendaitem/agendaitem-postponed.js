@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import subDays from 'date-fns/subDays';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument subcase
@@ -15,6 +16,7 @@ export default class AgendaitemPostponed extends Component {
   @service agendaService;
   @service toaster;
   @service intl;
+  @service router;
 
   @tracked modelsForProposedAgenda;
   @tracked latestMeeting;
@@ -29,9 +31,9 @@ export default class AgendaitemPostponed extends Component {
   *loadProposedStatus() {
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     // Filtering on agenda-activities that are more recent than the agenda-activity of the postponed agendaitem
-    let latestAagendaActivity;
+    let latestAgendaActivity;
     if (this.args.subcase) {
-      latestAagendaActivity = yield this.store.queryOne('agenda-activity', {
+      latestAgendaActivity = yield this.store.queryOne('agenda-activity', {
         'filter[subcase][:id:]': this.args.subcase.id,
         'filter[:gt:start-date]':
           this.args.agendaActivity.startDate.toISOString(),
@@ -39,11 +41,11 @@ export default class AgendaitemPostponed extends Component {
       });
     }
 
-    if (latestAagendaActivity) {
+    if (latestAgendaActivity) {
       // we have to generate a link to the latest meeting
       // The subcase could be postponed on multipe meetings, but we show only the latest one
       const latestAgendaitem = yield this.store.queryOne('agendaitem', {
-        'filter[agenda-activity][:id:]': latestAagendaActivity.id,
+        'filter[agenda-activity][:id:]': latestAgendaActivity.id,
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
@@ -71,7 +73,7 @@ export default class AgendaitemPostponed extends Component {
     });
     const allRecentMeetings = meetings.slice();
     // filter our own meeting if present
-    allRecentMeetings.removeObject(this.args.meeting);
+    removeObject(allRecentMeetings, this.args.meeting);
     return allRecentMeetings;
   }
 

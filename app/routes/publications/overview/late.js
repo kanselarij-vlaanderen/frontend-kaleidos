@@ -17,10 +17,10 @@ export default class PublicationsOverviewLateRoute extends PublicationsOverviewB
 
   beforeModel() {
     super.beforeModel(...arguments);
-    const pendingStatuses = this.store.peekAll('publication-status').rejectBy('isFinal');
+    const allStatusesExceptIsFinal = this.store.peekAll('publication-status').filter(s => !s.isFinal);
     this.filter = {
       status: {
-        ':id:': pendingStatuses.map((s) => s.id).join(','),
+        ':id:': allStatusesExceptIsFinal.map((s) => s.id).join(','),
       },
       'publication-subcase': {
         // notice: target-end-date is datetime but appears as a date to the user

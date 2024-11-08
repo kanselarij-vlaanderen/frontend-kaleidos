@@ -2,7 +2,7 @@
   @size="medium">
   <Auk::Modal::Header
     @title={{t "add-organization"}}
-    @onClose={{@onCancel}} 
+    @onClose={{@onCancel}}
     @closeDisabled={{this.save.isRunning}}/>
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
@@ -17,11 +17,11 @@
           </AuLabel>
           <AuInput
             data-test-organization-add-name
-            @width="block"
-            @value={{this.name}}
-            @error={{this.validators.name.showError}}
-            {{on "input" this.validators.name.enableError}}
             id="organizationNameInput"
+            value={{this.name}}
+            @width="block"
+            @error={{this.validators.name.showError}}
+            {{on "input" this.onInputName}}
           />
         </AuFormRow>
         <AuFormRow>
@@ -29,9 +29,10 @@
             {{t "identifier"}} ({{t "ovo-code"}})
           </AuLabel>
           <AuInput
-            @width="block"
-            @value={{this.identifier}}
             id="organizationIdentifierInput"
+            value={{this.identifier}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "identifier"))}}
           />
         </AuFormRow>
       </div>

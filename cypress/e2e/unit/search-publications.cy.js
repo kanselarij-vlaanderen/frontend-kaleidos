@@ -305,7 +305,7 @@ context('Search tests', () => {
     cy.get(publication.publicationTableRow.row.publicationNumber).contains(fieldsWithDoubleDates.number)
       .click();
     cy.addPublicationMandatee(mandatee3);
-    cy.wait(20000); // wait for indexing
+    cy.wait(60000); // wait for indexing
 
     // add urgent !only when not running publication-new-features.spec!
     // visitPublications();
@@ -329,7 +329,10 @@ context('Search tests', () => {
     cy.get(route.search.input).clear()
       .type(searchTerm);
 
-    // filter on Prime minister
+    // check previous mandatees works
+    cy.get(utils.ministerFilter.pastMinisters).click();
+
+    // filter on Prime minister (past minister)
     triggerSearchPublication(mandatee1.fullName);
     cy.get(route.searchPublications.dataTable).find('tbody')
       .children('tr')
@@ -354,8 +357,6 @@ context('Search tests', () => {
     // remove second minister
     triggerSearchPublication(mandatee2.fullName);
 
-    // check previous mandatees works
-    cy.get(utils.ministerFilter.pastMinisters).click();
     // add Pauk Akkermans
     triggerSearchPublication(mandatee4);
     cy.get(auk.emptyState.message).should('contain', 'Er werden geen resultaten gevonden. Pas je trefwoord en filters aan.');

@@ -95,8 +95,7 @@ const selectors = {
 
   fileUpload: '.auk-file-upload',
 
-  icon: {
-    warning: '.auk-icon--warning',
-  },
+  expand: '.au-c-icon--expand',
+  minimize: '.au-c-icon--minimize',
 };
 export default selectors;

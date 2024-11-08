@@ -86,6 +86,17 @@ const selectors = {
     confirm: '[data-test-alert-dialog-confirm]',
   },
 
+  formallyOkPill: {
+    pill: '[data-test-formally-ok-pill]',
+  },
+
+  formallyOkEdit: {
+    selector: '[data-test-formally-ok-edit-selector]',
+    // unused selectors, we would start changing commands to use these now and make new tests
+    save: '[data-test-formally-ok-edit-save]',
+    cancel: '[data-test-formally-ok-edit-cancel]',
+  },
+
   /** Section VL-components **/
 
   // vl-modal-verify
@@ -98,6 +109,10 @@ const selectors = {
   caseSearch: {
     input: '[data-test-utils-case-search-input]',
     row: '[data-test-utils-case-search-row]',
+    rows: {
+      radio: '[data-test-utils-case-search-row-radio]',
+      titleLink: '[data-test-utils-case-search-row-title-link]',
+    },
   },
 
   kindSelector: {
@@ -129,5 +144,11 @@ const selectors = {
   },
 
   rdfaEditor: '[data-test-rdfa-editor]',
+
+  // email-modal (currently duplicated under signature selectors)
+  emailModal: {
+    input: '[data-test-email-modal-input]',
+    add: '[data-test-email-modal-add]',
+  },
 };
 export default selectors;

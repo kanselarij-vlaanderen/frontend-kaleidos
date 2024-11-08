@@ -8,7 +8,7 @@ export default class BatchEditingRow extends Component {
 
   get isSignMarkingDisabled() {
     for (const row of this.args.selectedRows) {
-      if (row.hasSentSignFlow) {
+      if (row.hasSentSignFlow || !!row.signedPiece) {
         return true;
       }
     }

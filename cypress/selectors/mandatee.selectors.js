@@ -44,5 +44,13 @@ const selectors = {
       save: '[data-test-secretary-panel-edit-save]',
     },
   },
+
+  // mandatee-selector-panel
+  mandateeSelectorPanel: {
+    container: '[data-test-mandatee-selector-panel-container]',
+    selectedMinister: '[data-test-mandatee-selector-panel-selected-minister]',
+    selectedMinisterName: '[data-test-mandatee-selector-panel-selected-minister-name]',
+    submitterRadio: '[data-test-mandatee-selector-panel-submitter-radio]',
+  },
 };
 export default selectors;

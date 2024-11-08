@@ -1,5 +1,5 @@
 import sanitizeHtml from 'sanitize-html';
-import {decode as decodeEntities} from 'html-entities';
+import { decode as decodeEntities } from 'html-entities';
 
 /**
  * @name copyText

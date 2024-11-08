@@ -124,7 +124,7 @@ export default class SignaturesOngoingRatificationsController extends Controller
     const treatment = await decisionActivity?.treatment;
     const agendaitems = await treatment?.agendaitems;
     const agenda = await agendaitems[0]?.agenda;
-    const meeting = await agenda?.meeting;
+    const meeting = await agenda?.createdFor;
     return meeting?.plannedStart;
   }
 }

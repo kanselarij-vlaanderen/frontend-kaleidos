@@ -1,11 +1,11 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
+import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class AgendaitemsSearchController extends Controller {
   @service router;
@@ -40,7 +40,7 @@ export default class AgendaitemsSearchController extends Controller {
   @tracked page;
   @tracked size;
   @tracked sort;
-  @tracked types;
+  @tracked types = [];
   @tracked latestOnly; // Only show the most recent version of an agenda-item
   @tracked searchText;
 
@@ -49,7 +49,7 @@ export default class AgendaitemsSearchController extends Controller {
     this.page = 0;
     this.size = PAGINATION_SIZES[2];
     this.sort = this.sortOptions[1].value;
-    this.types = A(['nota', 'mededeling']);
+    this.types = ['nota', 'mededeling'];
     this.latestOnly = true;
   }
 
@@ -63,12 +63,12 @@ export default class AgendaitemsSearchController extends Controller {
 
   set includeNotas(value) {
     if (value === true) {
-      if (!this.types.includes('nota')) {
-        this.types.addObject('nota');
-      }
+      addObject(this.types, 'nota');
     } else {
-      this.types.removeObject('nota');
+      removeObject(this.types, 'nota');
     }
+    // parent route does not see pushes in tracked array
+    this.types = [...this.types];
   }
 
   get includeMededelingen() {
@@ -77,12 +77,12 @@ export default class AgendaitemsSearchController extends Controller {
 
   set includeMededelingen(value) {
     if (value === true) {
-      if (!this.types.includes('mededeling')) {
-        this.types.addObject('mededeling');
-      }
+      addObject(this.types, 'mededeling');
     } else {
-      this.types.removeObject('mededeling');
+      removeObject(this.types, 'mededeling');
     }
+    // parent route does not see pushes in tracked array
+    this.types = [...this.types];
   }
 
   @action

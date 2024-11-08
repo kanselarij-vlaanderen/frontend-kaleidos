@@ -56,6 +56,7 @@ const selectors = {
     input: '[data-test-document-details-input]',
     type: '[data-test-document-details-row-type]',
     accessLevel: '[data-test-document-details-row-access-level]',
+    markedForSignature: '[data-test-document-details-row-marked-for-signature]',
     undoDelete: '[data-test-document-details-row-undo-delete]',
     delete: '[data-test-document-details-row-delete]',
   },
@@ -161,6 +162,24 @@ const selectors = {
   documentBadge: {
     link: '[data-test-document-badge-link]',
     isNew: '[data-test-document-badge-isNew]',
+  },
+
+  // signature-pill
+  signaturePill: {
+    pill: '[data-test-signature-pill]',
+  },
+
+  draftDocumentCard: {
+    card: '[data-test-draft-document-card]',
+    type: '[data-test-draft-document-card-type]',
+    name: {
+      value: '[data-test-draft-document-card-name-value]',
+    },
+    actions: '[data-test-draft-document-card-actions]',
+    editPiece: '[data-test-draft-document-card-edit-piece]',
+    delete: '[data-test-draft-document-card-delete]',
+    // uploadPiece: '[data-test-document-upload-new-piece]', // should come soon
+    versionHistory: '[data-test-draft-document-card-version-history]',
   },
 
 };

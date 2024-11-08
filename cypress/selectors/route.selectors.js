@@ -56,12 +56,16 @@ const selectors = {
     add: '[data-test-route-agenda---agendaitem-documents-add]',
   },
 
-  // agenda/agendaitems/agendaitem/minutes/template
-  agendaitemMinutes: {
-    createEdit: '[data-test-route-agenda---agendaitem-minutes-create-edit]',
+  // agenda/minutes/template
+  agendaMinutes: {
+    createEdit: '[data-test-route-agenda-minutes-create-edit]',
+    currentPieceView: '[data-test-route-agenda-minutes-current-piece-view]',
     editor: {
-      updateContent: '[data-test-route-agenda---agendaitem-minutes-editor-update-content]',
-      save: '[data-test-route-agenda---agendaitem-minutes-editor-save]',
+      updateContent: '[data-test-route-agenda-minutes-editor-update-content]',
+      versionsDropdown: '[data-test-route-agenda-minutes-editor-versions-dropdown]',
+      fullscreen: '.au-c-button .au-c-button--naked > au-c-icon--expand',
+      cancel: '[data-test-route-agenda-minutes-editor-cancel]',
+      save: '[data-test-route-agenda-minutes-editor-save]',
     },
   },
 
@@ -80,6 +84,29 @@ const selectors = {
 
   subcase: {
     add: '[data-test-route-cases---subcase-add-documents]',
+  },
+
+  // cases/submissions/overview/template
+  submissionsOverview: {
+    dataTable: '[data-test-route-cases-submissions-overview-data-table]',
+    row: {
+      shortTitle: '[data-test-route-cases-submissions-overview-row-short-title]',
+      newCase: '[data-test-route-cases-submissions-overview-row-new-case]',
+      limitedAccess: '[data-test-route-cases-submissions-overview-row-limited-access]',
+      plannedStart: '[data-test-route-cases-submissions-overview-row-planned-start]',
+      subcaseType: '[data-test-route-cases-submissions-overview-row-subcase-type]',
+      status: '[data-test-route-cases-submissions-overview-row-status]',
+      goToSubmission: '[data-test-route-cases-submissions-overview-row-go-to-submission]',
+    },
+  },
+
+  // cases/submissions/submission
+  submission: {
+    documents: {
+      panel: '[data-test-route-cases---submission-documents-panel]',
+      batchEdit: '[data-test-route-cases---submission-documents-batch-edit]',
+      add: '[data-test-route-cases---submission-documents-batch-edit]',
+    },
   },
 
   /**
@@ -256,8 +283,11 @@ const selectors = {
     ROUTE SIGNATURES
   */
 
-  // signatures/template
+  // signatures/index
   signatures: {
+    navbar: {
+      startMultipleSignflows: '[data-test-route-signatures-start-multiple-signflows]',
+    },
     openMinisterFilter: '[data-test-route-signatures-open-minister-filter]',
     applyFilter: '[data-test-route-signatures-apply-filter]',
     dataTable: '[data-test-route-signatures-data-table]',
@@ -284,6 +314,31 @@ const selectors = {
     ministerFilter: '[data-test-route-signatures-ongoing-minister-filter]',
     row: {
       documentName: '[data-test-route-search-signatures-ongoing-row-document-name]',
+    },
+  },
+
+  // signatures/decisions
+  decisions: {
+    row: {
+      selectSignflow: '[data-test-route-signatures-decisions-row-select-signflow]',
+      pieceName: '[data-test-route-signatures-decisions-row-piece-name]',
+      openSidebar: '[data-test-route-signatures-decisions-row-open-sidebar]',
+    },
+    sidebar: {
+      close: '[data-test-route-signatures-decisions-sidebar-close]',
+      info: '[data-test-route-signatures-decisions-sidebar-info]',
+      preview: '[data-test-route-signatures-decisions-sidebar-preview]',
+      consultDecision: '[data-test-route-signatures-decisions-sidebar-consult-decision]',
+      consultMinutes: '[data-test-route-signatures-decisions-sidebar-consult-minutes]',
+      startSignflow: '[data-test-route-signatures-decisions-sidebar-start-signflow]',
+      stopSignflow: '[data-test-route-signatures-decisions-sidebar-stop-signflow]',
+    },
+  },
+
+  // signatures/ongoing-decisisons
+  ongoingDecisions: {
+    row: {
+      pieceName: '[data-test-route-signatures-ongoing-decisions-row-piece-name]',
     },
   },
 

@@ -208,6 +208,7 @@ async updateNewsItemVisibility(agendaitem) {
       }
 
       if (mandatees.length) {
+        mandatees = mandatees.slice();
         const titles = mandatees.map((mandatee) => mandatee.newsletterTitle || mandatee.title);
         let proposalText;
         if (titles.length > 1) {

@@ -501,8 +501,11 @@ context('Search tests', () => {
     // const fileNameTreatment = 'search-agendaitem-treatment_2'; // unieke woorden: codez krokkettenmaker
     const fileNameTreatment = 'VR PV 2023'; // unieke woorden: codez krokkettenmaker
     const fileNameSubcase = 'search-agendaitem-piece_2'; // unieke woorden: walkman, stereo
+    // after agenda approval, VR numbers are automatically attached, original file names fileNameSubcase and fileNameAgendaitem are replaced
     const newFileNameNota = `Cypress test - ${randomInt}: uniek we zijn de kaas niet de baas`;
+    const numberedFileNameNota = `VR + Cypress test - ${randomInt}: uniek we zijn de kaas niet de baas`;
     const newFileNameBvr = `Cypress test - ${randomInt}: uniek de slijpschijf was zijn favoriete tijdsverdrijf`;
+    const numberedFileNameBVR = `VR + Cypress test - ${randomInt}: uniek de slijpschijf was zijn favoriete tijdsverdrijf`;
     const newFileNameTreatment = `Cypress test - ${randomInt}: uniek een beetje blazé over het Oosterweeltracé`;
     const filesSubcase = [
       {
@@ -613,8 +616,8 @@ context('Search tests', () => {
       searchOnRoute(newsItemLongTitle, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(newsItemContent, searchFlow, resultRow, caseShortTitle);
       // documents
-      searchOnRoute(fileNameAgendaitem, searchFlow, resultRow, caseShortTitle);
-      searchOnRoute(fileNameSubcase, searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(numberedFileNameNota, searchFlow, resultRow, caseShortTitle);
+      searchOnRoute(numberedFileNameBVR, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(newFileNameNota, searchFlow, resultRow, caseShortTitle);
       searchOnRoute(newFileNameBvr, searchFlow, resultRow, caseShortTitle);
       searchOnRoute('walkman', searchFlow, resultRow, caseShortTitle);
@@ -638,8 +641,8 @@ context('Search tests', () => {
       // news-item
       searchOnRoute(newsItemContent, searchFlow, resultRow, subcaseShortTitle);
       // documents
-      searchOnRoute(fileNameAgendaitem, searchFlow, resultRow, subcaseShortTitle);
-      searchOnRoute(fileNameSubcase, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(numberedFileNameNota, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(numberedFileNameBVR, searchFlow, resultRow, subcaseShortTitle);
       searchOnRoute(newFileNameNota, searchFlow, resultRow, subcaseShortTitle);
       searchOnRoute(newFileNameBvr, searchFlow, resultRow, subcaseShortTitle);
       searchOnRoute('walkman', searchFlow, resultRow, subcaseShortTitle);
@@ -657,8 +660,8 @@ context('Search tests', () => {
       cy.visit('/zoeken/documenten');
 
       // documents
-      searchOnRoute(fileNameAgendaitem, searchFlow, resultRow, subcaseShortTitle);
-      searchOnRoute(fileNameSubcase, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(numberedFileNameNota, searchFlow, resultRow, subcaseShortTitle);
+      searchOnRoute(numberedFileNameBVR, searchFlow, resultRow, subcaseShortTitle);
       searchOnRoute(newFileNameNota, searchFlow, resultRow, subcaseShortTitle);
       searchOnRoute(newFileNameBvr, searchFlow, resultRow, subcaseShortTitle);
       searchOnRoute('walkman', searchFlow, resultRow, subcaseShortTitle);
@@ -909,7 +912,7 @@ context('Search tests', () => {
       const searchFlow = 'publication-flows';
       const resultRow = route.searchPublications.row;
 
-      const checkbox3 = 'Jan Jambon';
+      const checkbox3 = mandateeNames['16052022-08112023'].first.fullName; // Jambon
       const checkbox4 = 'Opgestart';
 
       cy.visit('/zoeken/publicaties');
@@ -921,6 +924,7 @@ context('Search tests', () => {
       searchDateRange(searchFlow, dateFrom, dateTo, resultRow);
 
       // filter mandatee
+      cy.get(utils.ministerFilter.pastMinisters).click();
       triggerSearch(searchFlow, checkbox3);
       cy.get(route.publicationFlowResultCard.shortTitleLink);
       triggerSearch(searchFlow, checkbox3);

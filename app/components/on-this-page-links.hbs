@@ -1,0 +1,16 @@
+<div class="l-case__anchor-holder">
+  <span class="l-case__anchor-holder__title">{{t "on-this-page"}}:&nbsp;</span>
+  <ul class="l-case__anchor-holder__list">
+    {{#each @items as |item|}}
+      <li>
+        <a
+          href={{concat "#" item.elementId}}
+          class="js-anchor"
+          onclick={{fn this.scrollToFragment item.elementId}}
+        >
+          {{item.label}}
+        </a>
+      </li>
+    {{/each}}
+  </ul>
+</div>

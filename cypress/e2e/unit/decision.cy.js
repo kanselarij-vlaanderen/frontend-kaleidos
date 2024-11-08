@@ -7,6 +7,7 @@ import appuniversum from '../../selectors/appuniversum.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors.js';
 
@@ -69,7 +70,20 @@ context('Decision tests post digital agenda', () => {
       subcaseType: subcaseType1,
       subcaseName: subcaseName1,
     });
-    cy.createAgenda('Ministerraad', agendaDate);
+    cy.createAgenda('Ministerraad', agendaDate, null, 100);
+  });
+
+  it('should fail to mark all decisions for signature', () => {
+    const warningMessage = 'Er zijn geen beslissingen om aan te bieden voor ondertekenen';
+
+    cy.openAgendaForDate(agendaDate);
+    // try without decisions, warning should be given
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    // TODO KAS-4454 no post call, spy
+    cy.get(agenda.agendaActions.markDecisionsForSigning).forceClick();
+    cy.get(appuniversum.alert.message).contains(warningMessage);
   });
 
   it('should test the document CRUD for a decision', () => {
@@ -194,6 +208,7 @@ context('Decision tests post digital agenda', () => {
 
     cy.get(appuniversum.loader).should('not.exist');
     cy.generateDecision();
+    cy.wait(3000); // does this fix flaky? check if commands needs more intercepts
 
     cy.openAgendaitemDossierTab(subcaseTitleShort1);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).should('not.be.disabled')
@@ -339,21 +354,21 @@ context('Decision tests post digital agenda', () => {
   });
 
   it('should test changing agenda updates decisions correctly', () => {
-    const oldSecretary = 'Jeroen Overmeer';
-    const newSecretary = 'Joachim Pohlmann';
+    const oldSecretary = mandateeNames['09112023-01082024'].firstSecretary.fullName;
+    const newSecretary = mandateeNames['09112023-01082024'].secondSecretary.fullName;
 
     // generate minutes
     cy.openAgendaForDate(agendaDate);
     cy.get(agenda.agendaTabs.tabs).contains('Notulen')
       .click();
-    cy.get(route.agendaitemMinutes.createEdit).click();
-    cy.get(route.agendaitemMinutes.editor.updateContent).click();
+    cy.get(route.agendaMinutes.createEdit).click();
+    cy.get(route.agendaMinutes.editor.updateContent).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
     cy.intercept('POST', 'minutes').as('postMinutes');
     cy.intercept('POST', 'piece-parts').as('postPieceParts');
     cy.intercept('GET', '/generate-minutes-report/*').as('generateMinutes');
-    cy.get(route.agendaitemMinutes.editor.save).click()
+    cy.get(route.agendaMinutes.editor.save).click()
       .wait('@createNewDocumentContainer')
       .wait('@postMinutes')
       .wait('@postPieceParts')
@@ -563,5 +578,110 @@ context('Decision tests post digital agenda', () => {
     cy.get(appuniversum.loader).should('not.exist');
     cy.wait(2000).then(() => expect(spy).not.to.have.been.called);
     cy.get(appuniversum.toaster).should('not.exist');
+  });
+
+  it('should test generate all decisions pdf', () => {
+    const agendaDate4 = Cypress.dayjs('2023-11-28').hour(10);
+    const downloadPath = 'cypress/downloads';
+    const fileName = 'VR PV 2023/101 - ALLE BESLISSINGEN.pdf'; // slash for actual name, dash for downloaded file
+    const downloadedFileName = 'VR PV 2023_101 - ALLE BESLISSINGEN.pdf';
+    const downloadDecisionPDF = `${downloadPath}/${downloadedFileName}`;
+
+    cy.openAgendaForDate(agendaDate4);
+    cy.wait(2000);
+    cy.get(agenda.agendaActions.optionsDropdown).children(appuniversum.button)
+      .click();
+    cy.intercept('POST', '/generate-decision-report/generate-reports-bundle').as('generateReportBundle');
+    cy.get(agenda.agendaActions.generateSignedDecisionsBundle).forceClick();
+    cy.wait('@generateReportBundle');
+    cy.get(appuniversum.toaster).contains('Alle beslissingen PDF aangemaakt');
+    cy.clickReverseTab('Documenten');
+
+    cy.get(document.documentCard.name.value).contains(fileName)
+      .click();
+
+    cy.get(document.documentPreview.downloadLink).click();
+
+    cy.readFile(downloadDecisionPDF, {
+      timeout: 25000,
+    });
+    // reading contents not out of the box with cypress
+    // .should('contain', 'VR PV 2023/3 - punt 0002');
+  });
+
+  it('should test mark all decisions for signing', () => {
+    const agendaDate = Cypress.dayjs('2023-11-28').hour(10);
+    const agendaDateFormatted = agendaDate.format('DD-MM-YYYY');
+    const agendaSecretary = mandateeNames['09112023-01082024'].firstSecretary.fullName;
+    const shortTitle1 = 'Cypress test: Decision - CRUD of decisions - Nota';
+    const shortTitle2 = 'Cypress test: Decision - CRUD of decisions - Mededeling';
+    const signFlowStatus = 'Op te starten';
+    // const succesMessageSingle = 'beslissing is succesvol aangeboden voor ondertekenen';
+    const succesMessageMultiple = 'beslissingen zijn succesvol aangeboden voor ondertekenen';
+    // const warningMessage = 'Er zijn geen beslissingen om aan te bieden voor ondertekenen';
+
+    cy.openAgendaForDate(agendaDate);
+
+    // try with 2 decisions
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.intercept('POST', 'signing-flows/mark-pieces-for-signing').as('markDecisionsForSigning1');
+    cy.get(agenda.agendaActions.markDecisionsForSigning).forceClick();
+    // message can already be gone faster than cypress can check after finding the POST
+    cy.get(appuniversum.alert.message).contains(succesMessageMultiple);
+    cy.wait('@markDecisionsForSigning1');
+
+    // check the sign status pills
+    cy.openDetailOfAgendaitem(shortTitle1);
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(document.signaturePill.pill).contains(signFlowStatus);
+    cy.openDetailOfAgendaitem(shortTitle2);
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(document.signaturePill.pill).contains(signFlowStatus);
+
+    // check signflow
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.get(`tr:visible:contains(${agendaDateFormatted})`).should('have.length', 2);
+    cy.get(`tr:visible:contains(${agendaSecretary})`).should('have.length', 2);
+
+    // add decision to report
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem('Goedkeuring van het verslag', false);
+    cy.generateDecision();
+
+    // try with 3 decisions, should make 1
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.intercept('POST', 'signing-flows/mark-pieces-for-signing').as('markDecisionsForSigning2');
+    cy.get(agenda.agendaActions.markDecisionsForSigning).forceClick();
+    // TODO KAS-4454 message doesn't show correct number
+    // cy.get(appuniversum.alert.message).contains(succesMessageSingle);
+    cy.wait('@markDecisionsForSigning2');
+
+    // check the signflow status pill
+    cy.openDetailOfAgendaitem('Goedkeuring van het verslag', false);
+    cy.get(agenda.agendaitemNav.decisionTab).click();
+    cy.get(document.signaturePill.pill).contains(signFlowStatus);
+
+    // check signflow
+    cy.visit('ondertekenen/beslissingen-en-notulen');
+    cy.get(`tr:visible:contains(${agendaDateFormatted})`).should('have.length', 3);
+    cy.get(`tr:visible:contains(${agendaSecretary})`).should('have.length', 3);
+
+    // try again with 3 decisions, none should be made, warning should be given
+    cy.openAgendaForDate(agendaDate);
+    cy.get(auk.loader).should('not.exist');
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.intercept('POST', 'signing-flows/mark-pieces-for-signing').as('markDecisionsForSigning3');
+    cy.get(agenda.agendaActions.markDecisionsForSigning).forceClick();
+    // TODO KAS-4454 warning doesn't show correctly
+    // cy.get(appuniversum.alert.message).contains(warningMessage);
+    cy.wait('@markDecisionsForSigning3');
   });
 });

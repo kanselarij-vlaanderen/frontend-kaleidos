@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
@@ -20,7 +21,7 @@ export default class NewsItemEditPanelComponent extends Component {
   @tracked remark;
   @tracked htmlContent;
   @tracked isFinished;
-  @tracked selectedThemes = [];
+  @tracked selectedThemes = new TrackedArray([]);
   @tracked notaOrVisieNota;
 
   constructor() {
@@ -56,7 +57,8 @@ export default class NewsItemEditPanelComponent extends Component {
     this.htmlContent = this.newsItem.htmlContent || '';
     this.isFinished = this.newsItem.finished;
     yield this.newsItem.hasMany('themes').reload(); // concurrency in some cases
-    this.selectedThemes = (yield this.newsItem.themes).slice();
+    const themes = yield this.newsItem.themes;
+    this.selectedThemes = themes?.slice();
 
     this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsItem);
   }
@@ -72,6 +74,15 @@ export default class NewsItemEditPanelComponent extends Component {
       this.isOpenMissingThemesModal = true;
     } else {
       this.confirmSave.perform();
+    }
+  }
+
+  @action
+  async setThemes(themes) {
+    if (themes?.length) {
+      this.selectedThemes = themes;
+    } else {
+      this.selectedThemes.clear();
     }
   }
 

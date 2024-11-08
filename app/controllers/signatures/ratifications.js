@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { trackedFunction } from 'ember-resources/util/function';
+import { trackedFunction } from 'reactiveweb/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
@@ -141,7 +141,7 @@ export default class SignaturesRatificationsController extends Controller {
     const treatment = await decisionActivity?.treatment;
     const agendaitems = await treatment?.agendaitems;
     const agenda = await agendaitems[0]?.agenda;
-    const meeting = await agenda?.meeting;
+    const meeting = await agenda?.createdFor;
     return meeting?.plannedStart;
   }
 
@@ -149,6 +149,7 @@ export default class SignaturesRatificationsController extends Controller {
     const piece = await pieceOrPromise;
     const agendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][ratification][:id:]' : piece.id,
+      'filter[:has-no:previous-version]': 't',
     });
     return agendaitem;
   }

@@ -40,10 +40,7 @@ export default class PublicationsPublicationCaseGovernmentAreasGovernmnetAreasPa
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {
-    const governmentAreas = await this.args.publicationFlow.governmentAreas;
-
-    governmentAreas.clear();
-    governmentAreas.pushObjects(newGovernmentAreas);
+    this.args.publicationFlow.governmentAreas = newGovernmentAreas;
     await this.args.publicationFlow.save();
   }
 }

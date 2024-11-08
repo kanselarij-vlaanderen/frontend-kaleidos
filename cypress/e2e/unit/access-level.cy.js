@@ -115,7 +115,7 @@ context('Access level tests', () => {
     // upload document
     cy.addNewPieceToAgendaitem(subcaseTitle, 'bestaandePublicatie', file);
 
-    checkPreviousVersionAccesLevel('bestaandePublicatieBIS.pdf', 'bestaandePublicatie', accessCabinet);
+    checkPreviousVersionAccesLevel('bestaandePublicatie BIS.pdf', 'bestaandePublicatie', accessCabinet);
   });
 
   it('should change the access level on a BIS/TER and check if underlying acces level changes correctly', () => {
@@ -127,22 +127,22 @@ context('Access level tests', () => {
     cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieMB', file);
     // set accesLevels to publiek
     setCurrentVersionAccesLevel('publicatieMB', accessPublic, true);
-    setPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', accessPublic);
+    setPreviousVersionAccesLevel('publicatieMB BIS', 'publicatieMB', accessPublic);
     // change access level to overheid, check previous version got a stricter level
     setCurrentVersionAccesLevel('publicatieMB', accessGovernment, true);
-    checkPreviousVersionAccesLevel('publicatieMBBIS.pdf', 'publicatieMB', accessCabinet);
+    checkPreviousVersionAccesLevel('publicatieMB BIS.pdf', 'publicatieMB', accessCabinet);
 
     // add BIS and TER to publicatieDecreet
     cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieDecreet', file);
-    cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieDecreetBIS', file);
+    cy.addNewPieceToAgendaitem(subcaseTitle, 'publicatieDecreet BIS', file);
     // set accesLevels to publiek
-    setCurrentVersionAccesLevel('publicatieDecreetTER', accessPublic, true);
-    setPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', accessPublic);
-    setPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet', accessPublic);
+    setCurrentVersionAccesLevel('publicatieDecreet TER', accessPublic, true);
+    setPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet BIS', accessPublic);
+    setPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet', accessPublic);
     // change access level to regering, check previous versions got a stricter level
-    setCurrentVersionAccesLevel('publicatieDecreetTER', accessCabinet, true);
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', accessCabinet);
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', accessCabinet);
+    setCurrentVersionAccesLevel('publicatieDecreet TER', accessCabinet, true);
+    checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet BIS', accessCabinet);
+    checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet.pdf', accessCabinet);
 
     // change access level on BatchDocumentsDetailsModal on single document
     cy.get(route.agendaitemDocuments.batchEdit).click();
@@ -156,12 +156,12 @@ context('Access level tests', () => {
       .wait('@patchPieces1')
       .wait('@getDocumentContainers1');
 
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', accessConfidential);
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', accessConfidential);
+    checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet BIS', accessConfidential);
+    checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet.pdf', accessConfidential);
 
     // change access level on BatchDocumentEdit on multiple documents
     cy.get(route.agendaitemDocuments.batchEdit).click();
-    // cy.get(document.documentDetailsRow.input).should('have.value', 'publicatieDecreetTER')
+    // cy.get(document.documentDetailsRow.input).should('have.value', 'publicatieDecreet TER')
     //   .parents(document.documentDetailsRow.row)
     //   .as('row1');
     // cy.get(document.documentDetailsRow.input).should('have.value', 'publicatieMB')
@@ -181,12 +181,12 @@ context('Access level tests', () => {
       .wait('@patchPieces2')
       .wait('@getDocumentContainers2');
 
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreetBIS', accessInternal);
-    checkPreviousVersionAccesLevel('publicatieDecreetTER', 'publicatieDecreet.pdf', accessInternal);
-    checkPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', accessInternal);
+    checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet BIS', accessInternal);
+    checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet.pdf', accessInternal);
+    checkPreviousVersionAccesLevel('publicatieMB BIS', 'publicatieMB', accessInternal);
 
     // change access level to a lower one and check that there are no changes to underlying level
-    setCurrentVersionAccesLevel('publicatieMBBIS', accessGovernment, true);
-    checkPreviousVersionAccesLevel('publicatieMBBIS', 'publicatieMB', accessInternal);
+    setCurrentVersionAccesLevel('publicatieMB BIS', accessGovernment, true);
+    checkPreviousVersionAccesLevel('publicatieMB BIS', 'publicatieMB', accessInternal);
   });
 });

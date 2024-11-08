@@ -4,12 +4,10 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
-import { task as trackedTask } from 'ember-resources/util/ember-concurrency';
+import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName,
-{ compareFunction as compareNotulen } from 'frontend-kaleidos/utils/vr-notulen-name';
 import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import { addWeeks } from 'date-fns';
@@ -70,6 +68,9 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
+  const agendaActivity = await agendaitem.agendaActivity;
+  const subcase = await agendaActivity?.subcase;
+  await subcase?.type;
   let text = "";
   if (agendaitem.isApproval) {
     text = generateApprovalText(agendaitem.shortTitle, agendaitem.title);
@@ -82,20 +83,24 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     }
     switch (decisionResultCode?.uri) {
       case constants.DECISION_RESULT_CODE_URIS.GOEDGEKEURD:
+        if (subcase?.isBekrachtiging) {
+          text = intl.t("ratification-decision-text");
+          break;
+        }
         text = intl.t("minutes-approval", {
           mededelingOrNota: capitalizeFirstLetter(mededelingOrNota),
           reportName: await generateReportName(agendaitem, meeting),
-        })
+        });
         break;
       case constants.DECISION_RESULT_CODE_URIS.INGETROKKEN:
         text = intl.t("minutes-retracted", {
           mededelingOrNota: capitalizeFirstLetter(mededelingOrNota)
-        })
+        });
         break;
       case constants.DECISION_RESULT_CODE_URIS.KENNISNAME:
         text = intl.t("minutes-acknowledged", {
           mededelingOrNota: mededelingOrNota
-        })
+        });
         break;
       case constants.DECISION_RESULT_CODE_URIS.UITGESTELD:
         text = intl.t("minutes-postponed", {
@@ -111,24 +116,36 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
     'filter[:has-no:next-piece]': true,
   });
   pieces = pieces.slice();
-  let sortedPieces;
-  if (agendaitem.isApproval) {
-    sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-  } else {
-    sortedPieces = sortPieces(pieces);
-  }
-  const agendaActivity = await agendaitem.agendaActivity;
-  const subcase = await agendaActivity?.subcase;
+  const sortedPieces = await sortPieces(
+    pieces, { isApproval: agendaitem.isApproval }
+  );
+  const agendaitemType = await agendaitem.type;
   const pagebreak = agendaitem.number === 1 ? 'class="page-break"' : '';
+  let betreft;
+  if (subcase?.isBekrachtiging) {
+    const ratification = await subcase.ratification;
+    betreft = await generateBetreft(
+      agendaitem.shortTitle,
+      agendaitem.title,
+      agendaitem.isApproval,
+      ratification ? [...sortedPieces, ratification] : sortedPieces,
+      null,
+      agendaitemType,
+    );
+  } else {
+    betreft = await generateBetreft(
+      agendaitem.shortTitle,
+      agendaitem.title,
+      agendaitem.isApproval,
+      sortedPieces,
+      subcase?.subcaseName,
+      agendaitemType,
+    );
+  }
   return `
   <h4 ${pagebreak}><u>${
     agendaitem.number
-  }. ${generateBetreft(
-    agendaitem.shortTitle,
-    agendaitem.title,
-    agendaitem.isApproval,
-    sortedPieces,
-    subcase?.subcaseName).toUpperCase()}</u></h4>
+  }. ${betreft.toUpperCase()}</u></h4>
   <p>${text}</p>`
 }
 function capitalizeFirstLetter(string) {
@@ -313,22 +330,19 @@ export default class AgendaMinutesController extends Controller {
 
   onCreateNewVersion = task(async () => {
     const minutes = this.model.minutes;
-    let newName;
-    try {
-      newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
-        (await (await minutes.documentContainer).pieces).length + 1
-      );
-    } catch (e) {
-      newName = minutes.name;
-    }
-
+    const accessLevel = await minutes.accessLevel;
+    const container = await minutes.documentContainer;
+    const pieces = await container.pieces;
+    const newName = new VRDocumentName(minutes.name).withOtherVersionSuffix(
+      pieces.length + 1
+    );
     const newVersion = this.store.createRecord('minutes', {
       name: newName,
       created: new Date(),
       minutesForMeeting: this.meeting,
       previousPiece: minutes,
-      documentContainer: minutes.documentContainer,
-      accessLevel: minutes.accessLevel,
+      documentContainer: container,
+      accessLevel: accessLevel,
     });
 
     await newVersion.save();
@@ -348,6 +362,14 @@ export default class AgendaMinutesController extends Controller {
     await this.signatureService.markNewPieceForSignature(minutes, newVersion, null, this.meeting);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(newVersion);
     await this.meeting.save();
+
+    // TODO KAS-4654 unset meeting on old minutes to prevent many in a one-to-one
+    minutes.minutesForMeeting = null;
+    await minutes.belongsTo('file').reload(); // make sure we have the latest file
+    // nextVersion should be set correctly by setting the inverse, no reload needed
+    // any chance we need to reload the pieceParts here? We will possibly concurrently overwrite them
+    await minutes.save();
+    await this.meeting.belongsTo('minutes').reload();
 
     this.refresh();
   });

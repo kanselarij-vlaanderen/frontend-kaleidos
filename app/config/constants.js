@@ -12,6 +12,7 @@ export default {
     DECISION_RESULT_CODES: 'http://themis.vlaanderen.be/id/concept-scheme/43052680-1c88-47f1-b081-99087afc4497',
     SIGNFLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/ebfe253c-0537-11ee-bb35-ee395168dcf7',
     PARLIAMENT_FLOW_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/bfa3671b-68c1-4371-aa00-63840b7c9901',
+    SUBMISSION_STATUSES: 'http://themis.vlaanderen.be/id/concept-scheme/9ee8c485-e750-4982-a2b7-3f17d390331d',
   },
   ACCESS_LEVELS: {
     INTERN_SECRETARIE: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/66804c35-4652-4ff4-b927-16982a3b6de8',
@@ -19,6 +20,13 @@ export default {
     INTERN_REGERING: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/13ae94b0-6188-49df-8ecd-4c4a17511d6d',
     INTERN_OVERHEID: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/634f438e-0d62-4ae4-923a-b63460f6bc46',
     PUBLIEK: 'http://themis.vlaanderen.be/id/concept/toegangsniveau/c3de9c70-391e-4031-a85e-4b03433d6266',
+  },
+  ACCESS_LEVEL_IDS: {
+    INTERN_SECRETARIE: '66804c35-4652-4ff4-b927-16982a3b6de8',
+    VERTROUWELIJK: '9692ba4f-f59b-422b-9402-fcbd30a46d17',
+    INTERN_REGERING: '13ae94b0-6188-49df-8ecd-4c4a17511d6d',
+    INTERN_OVERHEID: '634f438e-0d62-4ae4-923a-b63460f6bc46',
+    PUBLIEK: 'c3de9c70-391e-4031-a85e-4b03433d6266',
   },
   USER_ROLES: {
     ADMIN: 'http://themis.vlaanderen.be/id/gebruikersrol/9a969b13-e80b-424f-8a82-a402bcb42bc5',
@@ -60,6 +68,7 @@ export default {
     ADVIES: "http://themis.vlaanderen.be/id/concept/document-type/fb931eff-38f2-4743-802b-4240c35b8b0c",
     ADVIES_AGO: "http://themis.vlaanderen.be/id/concept/document-type/9c043848-6a9f-4448-9794-600e40dee6d2",
     BEKRACHTIGING: "http://themis.vlaanderen.be/id/concept/document-type/609cf883-b52c-43fe-84b1-eed02527173b",
+    BIJLAGE_TER_INZAGE: "http://themis.vlaanderen.be/id/concept/document-type/075bc7a9-75fd-423b-be88-571d3fa3d043",
   },
   JOB_STATUSSES: {
     RUNNING: 'http://vocab.deri.ie/cogs#Running',
@@ -149,6 +158,7 @@ export default {
     COMPLETE: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/018fb31c-44ad-4bf5-b01b-76de2d48abf4',
     BEING_HANDLED_BY_FP: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/3905d9a1-c841-42fc-8a89-3b7d4ad61b4b',
     RECEIVED: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/879aed2f-6efa-4d7b-ab1b-13cc406b1f92',
+    REFUSED: 'http://themis.vlaanderen.be/id/parlementaireaangelegenheid-status/df0870a3-ce07-481d-9dbd-e95f0fd73a8b',
   },
   PARLIAMENT_CASE_URL_BASE: 'https://www.vlaamsparlement.be/nl/parlementaire-documenten/parlementaire-initiatieven/',
   URGENCY_LEVELS: {
@@ -184,6 +194,20 @@ export default {
     SECRETARIS: 'http://themis.vlaanderen.be/id/bestuursfunctie/9d5ebfb9-3829-4b1f-a2a8-15033f7e2097',
     WAARNEMEND_SECRETARIS: 'http://themis.vlaanderen.be/id/bestuursfunctie/cfa6ed74-bb6f-4d4c-b905-9a205be135d7',
   },
+  FORMALLY_OK_STATUSES: {
+    FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/CC12A7DB-A73A-4589-9D53-F3C2F4A40636',
+    FORMALLY_NOT_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/92705106-4A61-4C30-971A-55532633A9D6',
+    NOT_YET_FORMALLY_OK: 'http://kanselarij.vo.data.gift/id/concept/goedkeurings-statussen/B72D1561-8172-466B-B3B6-FCC372C287D0',
+  },
+  SUBMISSION_STATUSES: {
+    INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b8a0cec4-60d5-431e-b27f-9696bde22552",
+    IN_BEHANDELING: "http://themis.vlaanderen.be/id/indieningstatus/1fa83eac-e995-4d0f-8a02-6c6e66ade185",
+    TERUGGESTUURD: "http://themis.vlaanderen.be/id/indieningstatus/b6e33771-665b-4af2-9f1d-41405d1a24d3",
+    OPNIEUW_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/b27cd825-72ae-44b0-b1ea-9dafdebe4e85",
+    UPDATE_INGEDIEND: "http://themis.vlaanderen.be/id/indieningstatus/11c6fd4b-c4d9-4cd4-9a8a-2fa2820e9353",
+    BEHANDELD: "http://themis.vlaanderen.be/id/indieningstatus/dd4f1819-a70d-453f-95cb-ab5ade98563e",
+    AANPASSING_AANGEVRAAGD: "http://themis.vlaanderen.be/id/indieningstatus/b40d5f2d-719d-42c8-bd1c-e05d07e3d1a9",
+  },
   // TODO replace harcoded strings with constants for plausible
   PLAUSIBLE_EVENTS: {
     SEARCH_RESULT_KLIK: 'Zoekresultaat klik',
@@ -194,5 +218,14 @@ export default {
     USER_PAGEVIEW: 'Pageview (per rol)',
     FIRST_ACTION: 'Eerste actie',
     COPY_SUBCASE_CLICK: 'Kopieer voorgaande procedurestap',
-  }
+  },
+  // is this the right way?
+  PRIVATE_COMMENT_TEMPLATE:
+`IF: 
+BA: 
+BZ: 
+WT: 
+Co-agendering: 
+
+Def. check: `
 };

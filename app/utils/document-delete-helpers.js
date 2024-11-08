@@ -16,19 +16,24 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
         break;
       }
     }
+    let firstDeletedPieceModelName = latestPiece.constructor.modelName;
     while (latestPiece) {
       const previousPiece = await latestPiece.previousPiece;
-      if (latestPiece.constructor.modelName === 'piece') {
-        await deletePiece(latestPiece);
-      } else if (latestPiece.constructor.modelName === 'report'
-                || latestPiece.constructor.modelName === 'minutes') {
-        await deletePieceWithPieceParts(latestPiece);
+      const modelName = latestPiece.constructor.modelName;
+      if (modelName === firstDeletedPieceModelName) {
+        if (modelName === 'piece' || modelName === 'draft-piece') {
+          await deletePiece(latestPiece);
+        } else if (modelName === 'report' || modelName === 'minutes') {
+          await deletePieceWithPieceParts(latestPiece);
+        } else {
+          console.debug(
+            'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
+          );
+        }
+        latestPiece = previousPiece;
       } else {
-        console.debug(
-          'Piece subclass might not be removed propery, add override to document-delete-helpers.js'
-        );
+        latestPiece = null;
       }
-      latestPiece = previousPiece;
     }
   }
 }
@@ -44,6 +49,11 @@ export async function deletePiece(pieceOrPromise) {
   const piece = await pieceOrPromise;
   const documentContainer = await piece.documentContainer;
   if (piece) {
+    const draftPiece = await piece.draftPiece;
+    if (draftPiece) {
+      await deletePiece(draftPiece);
+    }
+
     const file = await piece.file;
     await deleteFile(file);
     await piece.destroyRecord();

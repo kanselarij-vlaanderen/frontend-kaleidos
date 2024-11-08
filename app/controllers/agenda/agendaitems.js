@@ -3,12 +3,11 @@ import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, lastValue } from 'ember-concurrency';
+import { task, lastValue, all, animationFrame } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
-  AgendaitemGroup,
+  AgendaitemGroup
 } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { all, animationFrame } from 'ember-concurrency';
 
 export default class AgendaAgendaitemsController extends Controller {
   queryParams = [
@@ -24,7 +23,7 @@ export default class AgendaAgendaitemsController extends Controller {
       },
     },
   ];
-
+  
   @service store;
   @service router;
   @service intl;
@@ -101,11 +100,10 @@ export default class AgendaAgendaitemsController extends Controller {
   *assignNewPriorities(reorderedAgendaitems) {
     yield setAgendaitemsNumber(
       reorderedAgendaitems,
-      this.meeting,
+      this.agenda,
       this.store,
       this.decisionReportGeneration,
       true,
-      true
     ); // permissions guarded in template (and backend)
     this.notasHasChanged = false;
     this.announcementsHasChanged = false;
@@ -119,14 +117,19 @@ export default class AgendaAgendaitemsController extends Controller {
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
       yield animationFrame(); // Computationally heavy task. This keeps the interface alive
+      const agendaActivity = yield agendaitem.agendaActivity;
+      const subcase = yield agendaActivity?.subcase;
+      yield subcase?.type;
       if (
         currentAgendaitemGroup &&
-        (yield currentAgendaitemGroup.itemBelongsToThisGroup(agendaitem))
+        (yield currentAgendaitemGroup.itemBelongsToThisGroup(
+          agendaitem, subcase?.isBekrachtiging
+        ))
       ) {
-        currentAgendaitemGroup.agendaitems.pushObject(agendaitem);
+        currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
         const mandatees = yield agendaitem.get('mandatees');
-        currentAgendaitemGroup = new AgendaitemGroup(mandatees, agendaitem);
+        currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem, subcase?.isBekrachtiging);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }

@@ -76,7 +76,6 @@ context('Delete BIS tests', () => {
 
     cy.get('@documentCard1').find(document.documentCard.name.value)
       .invoke('removeAttr', 'target')
-      .parent()
       .click();
 
     cy.get(document.previewDetailsTab.delete).click();
@@ -114,7 +113,6 @@ context('Delete BIS tests', () => {
 
     cy.get('@documentCard2').find(document.documentCard.name.value)
       .invoke('removeAttr', 'target')
-      .parent()
       .click();
 
     cy.get(document.previewDetailsTab.delete).click();

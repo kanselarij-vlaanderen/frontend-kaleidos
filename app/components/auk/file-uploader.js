@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { enqueueTask } from 'ember-concurrency';
+import { isEnabledCabinetSubmissions } from '../../utils/feature-flag';
 
 /**
  * @argument {Boolean} fullHeight Stretch the upload zone over the full height
@@ -61,9 +62,18 @@ export default class FileUploader extends Component {
   }) *uploadFileTask(file) {
     try {
       this.args.onQueueUpdate?.(this.queueInfo);
-      const response = yield file.upload('/files');
+      const response = yield file.upload(
+        (this.args.isSubmission && isEnabledCabinetSubmissions())
+          ? '/draft-files'
+          : '/files'
+      );
       const body = yield response.json();
-      const fileFromStore = yield this.store.findRecord('file', body.data.id);
+      const fileFromStore = yield this.store.findRecord(
+        (this.args.isSubmission && isEnabledCabinetSubmissions())
+          ? 'draft-file'
+          : 'file',
+        body.data.id
+      );
       if (this.args.onUpload) {
         this.args.onUpload(fileFromStore);
       }

@@ -10,7 +10,7 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.isUrgent}}
     <td class="auk-u-text-align--center">
       {{#if @publicationFlow.urgencyLevel.isUrgent}}
-        <Auk::Icon @skin="warning" @name="alert-triangle" />
+        <AuIcon @icon="alert-triangle" class="au-u-warning" />
       {{else}}
         {{t "dash"}}
       {{/if}}
@@ -27,11 +27,13 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{/if}}
   {{#if @tableColumnDisplayOptions.numacNumber}}
     <td>
-      {{#if @publicationFlow.numacNumbers.length}}
-        {{join ", " (map-by "idName" @publicationFlow.numacNumbers)}}
-      {{else}}
-        {{t "dash"}}
-      {{/if}}
+      {{#let (await @publicationFlow.numacNumbers) as | numacNumbers |}}
+        {{#if numacNumbers.length}}
+          {{join ", " (map-by "idName" numacNumbers)}}
+        {{else}}
+          {{t "dash"}}
+        {{/if}}
+      {{/let}}
     </td>
   {{/if}}
   {{#if @tableColumnDisplayOptions.shortTitle}}

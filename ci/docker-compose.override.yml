@@ -10,7 +10,7 @@ services:
     volumes:
       - /usr/share/elasticsearch/data
   e2e-electron:
-    image: "kanselarij/kaleidos-cypress:3.0.0"
+    image: "kanselarij/kaleidos-cypress:3.0.1"
     ipc: host
     environment:
       NO_COLOR: 1
@@ -101,3 +101,16 @@ services:
       VP_API_DOMAIN: "https://replace.by.actual.api.url"
       VP_API_CLIENT_ID: "yourVpApiClientId"
       VP_API_CLIENT_SECRET: "yourVpApiClientSecret"
+  digital-signing:
+    environment:
+      SIGNINGHUB_API_URL: "https://fake.api.url"
+    user: ${HOST_UID_GID}
+  document-stamping:
+    user: ${HOST_UID_GID}
+  agenda-approve:
+    environment:
+      SERVER_BUSY_TIMEOUT: 10
+  draft-file:
+    user: ${HOST_UID_GID}
+  draft-file-mover:
+    user: ${HOST_UID_GID}

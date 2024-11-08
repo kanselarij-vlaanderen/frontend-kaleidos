@@ -8,6 +8,7 @@ import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import route from '../../selectors/route.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import mandatee from '../../selectors/mandatee.selectors';
 
 
 /**
@@ -22,8 +23,13 @@ function createCase(shortTitle) {
   cy.log('createCase');
   cy.intercept('POST', '/decisionmaking-flows').as('createNewCase');
   cy.visit('/dossiers?aantal=2');
-  cy.get(appuniversum.loader);
-  cy.get(appuniversum.loader).should('not.exist');
+  // page can be blank for awhile, unsure why
+  cy.get(appuniversum.loader, {
+    timeout: 60000,
+  });
+  cy.get(appuniversum.loader).should('not.exist', {
+    timeout: 60000,
+  });
 
   cy.get(cases.casesHeader.addCase).click();
   cy.get(cases.newCase.shorttitle).type(shortTitle);
@@ -117,9 +123,10 @@ function searchCase(caseTitle) {
  *    [mandatees]: String,
  *    [domains]: String,
  *    [documents]: String,
- *    formallyOk: Boolean,
+ *    formallyOk: String,
  *    agendaDate: String,
  *    clonePrevious: Boolean,
+ *    ratification: Boolean,
  *  }[]
  * } subcase
  * @returns {Promise<String>} the id of the created subcase
@@ -204,25 +211,31 @@ function addSubcaseViaModal(subcase) {
 
   // add mandatees
   if (subcase.mandatees) {
-    let count = 0;
-    subcase.mandatees.forEach((mandatee) => {
-      cy.get(cases.newSubcaseForm.mandateeSelectorPanel.container).find(appuniversum.checkbox)
-        .contains(mandatee.fullName)
-        .click();
-      if (mandatee.submitter && count > 0) {
-        cy.get(cases.newSubcaseForm.mandateeSelectorPanel.selectedMinister).contains(mandatee.fullName)
-          .parent()
-          .find(appuniversum.radio)
+    if (subcase.ratification) {
+      cy.get(mandatee.mandateeSelectorPanel.container).should('not.exist');
+      // We show ratification doc panel and "signing mandatees" panel instead
+      // cy.get(auk.emptyState.message).contains('Niet van toepassing');
+    } else {
+      let count = 0;
+      subcase.mandatees.forEach((mandateeModel) => {
+        cy.get(mandatee.mandateeSelectorPanel.container).find(appuniversum.checkbox)
+          .contains(mandateeModel.fullName)
           .click();
-      }
-      count++;
-    });
+        if (mandateeModel.submitter && count > 0) {
+          cy.get(mandatee.mandateeSelectorPanel.selectedMinisterName).contains(mandateeModel.fullName)
+            .parents(mandatee.mandateeSelectorPanel.selectedMinister)
+            .find(appuniversum.radio)
+            .click();
+        }
+        count++;
+      });
+    }
   }
 
   // add domains
   if (subcase.domains) {
     subcase.domains.forEach((domain) => {
-      cy.get(cases.newSubcaseForm.governmentAreasPanel, {
+      cy.get(cases.governmentAreasPanel.panel, {
         timeout: 60000,
       })
         .contains(domain.name)
@@ -234,7 +247,7 @@ function addSubcaseViaModal(subcase) {
       if (domain.fields) {
         domain.fields.forEach((field)  => {
           cy.get('@domain')
-            .siblings(cases.newSubcaseForm.areasPanelFieldsList)
+            .siblings(cases.governmentAreasPanel.fieldsList)
             .contains(field)
             .click();
         });
@@ -253,15 +266,21 @@ function addSubcaseViaModal(subcase) {
     // putting this last since it should be possible to make a copy with changes made above
   } else {
     // go to save modal
-    cy.get(appuniversum.loader).should('not.exist', {
+    cy.get(appuniversum.loader, {
       timeout: 60000,
-    });
+    }).should('not.exist');
     cy.get(cases.newSubcaseForm.save).click();
 
-    if (subcase.formallyOk) {
-      cy.get(cases.proposableAgendas.toggleFormallyOk).parent()
-        .click();
-    }
+    // formally ok selector
+    cy.get(cases.proposableAgendas.formallyOkSelector).click();
+    const optionToSelect = subcase.formallyOk || 'Nog niet formeel OK'; // default
+    cy.get(dependency.emberPowerSelect.option).contains(optionToSelect,
+      {
+        matchCase: false,
+      })
+      .scrollIntoView()
+      .trigger('mouseover')
+      .click();
 
     // select the agenda or save without one
     if (subcase.agendaDate) {
@@ -274,8 +293,10 @@ function addSubcaseViaModal(subcase) {
       cy.get(cases.proposableAgendas.saveWithoutAgenda).click();
     }
   }
-
-  cy.wait(`@createNewSubcase${randomInt}`);
+  let subcaseId;
+  cy.wait(`@createNewSubcase${randomInt}`)
+    .its('response.body')
+    .as('subcaseResponseBody');
   if (subcase.documents) {
     cy.wait(`@postSubmissionActivities${randomInt}`);
   }
@@ -288,8 +309,22 @@ function addSubcaseViaModal(subcase) {
     });
   }
   // check if we have transitioned to the detail page (Do we want to check/return the number from the responsebody?)
-  cy.get(cases.subcaseDescription.panel);
+  if (subcase.ratification) {
+    cy.get(cases.subcaseBekrachtigingDescription.panel);
+  } else {
+    cy.get(cases.subcaseDescription.panel);
+  }
   cy.log('/addSubcaseViaModal');
+  cy.get('@subcaseResponseBody')
+    .then((responseBody) => {
+      subcaseId = responseBody.data.id;
+      cy.log('subcaseId', subcaseId);
+    })
+    .then(() => new Cypress.Promise((resolve) => {
+      resolve({
+        subcaseId,
+      });
+    }));
 }
 
 /**

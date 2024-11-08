@@ -76,6 +76,13 @@ export default class AccessLevelPillComponent extends Component {
     return skin;
   }
 
+  get pillSize() {
+    if (this.args.size) {
+      return this.args.size;
+    }
+    return 'regular';
+  }
+
   get accessLevelLabel() {
     return this.args.accessLevel ? this.args.accessLevel.get('label') : this.intl.t('no-accessLevel');
   }

@@ -8,18 +8,20 @@
           </h4>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
-      <Auk::Toolbar::Group @position="right">
-        <Auk::Toolbar::Item>
-          <AuButton
-            data-test-contact-persons-view-add
-            @skin="naked"
-            @icon="plus"
-            {{on "click" this.openAddModal}}
-          >
-            {{t "add-contact"}}
-          </AuButton>
-        </Auk::Toolbar::Item>
-      </Auk::Toolbar::Group>
+      {{#if @allowEditing}}
+        <Auk::Toolbar::Group @position="right">
+          <Auk::Toolbar::Item>
+            <AuButton
+              data-test-contact-persons-view-add
+              @skin="naked"
+              @icon="plus"
+              {{on "click" this.openAddModal}}
+            >
+              {{t "add-contact"}}
+            </AuButton>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+      {{/if}}
     </Auk::Toolbar>
   </Auk::Panel::Header>
   {{#if this.contactPersons}}
@@ -47,22 +49,29 @@
               </td>
               <td data-test-contact-persons-row-email>
                 {{#if contactPerson.email}}
-                  <a href="mailto:{{contactPerson.email}}">{{contactPerson.email}}</a>
+                  <AuLinkExternal
+                    href="mailto:{{contactPerson.email}}"
+                    target="_blank"
+                  >
+                    {{contactPerson.email}}
+                  </AuLinkExternal>
                 {{else}}
                   {{t "dash"}}
                 {{/if}}
               </td>
               <td class="auk-u-text-align--right">
-                <AuButton
-                  data-test-contact-persons-row-delete
-                  @skin="naked"
-                  @alert={{true}}
-                  @icon="trash"
-                  @hideText={{true}}
-                  {{on "click" (fn this.delete contactPerson)}}
-                >
-                  {{t "delete"}}
-                </AuButton>
+                {{#if @allowEditing}}
+                  <AuButton
+                    data-test-contact-persons-row-delete
+                    @skin="naked"
+                    @alert={{true}}
+                    @icon="trash"
+                    @hideText={{true}}
+                    {{on "click" (fn this.delete contactPerson)}}
+                  >
+                    {{t "delete"}}
+                  </AuButton>
+                {{/if}}
               </td>
             </tr>
           {{/each}}

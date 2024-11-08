@@ -1,5 +1,4 @@
 import Route from '@ember/routing/route';
-import { A } from '@ember/array';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   task, timeout
@@ -30,7 +29,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
   }
 
   async model(params) {
-    const processedNotas = A([]);
+    const processedNotas = [];
     const newsletterModel = this.modelFor('newsletter');
     const meeting = newsletterModel.meeting;
     const agenda = newsletterModel.agenda;
@@ -41,6 +40,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
       'filter[document-container][type][:uri:]': CONSTANTS.DOCUMENT_TYPES.NOTA,
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
+      'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       include: 'agendaitems',
       'fields[agendaitems]': 'id,number,short-title',
       'fields[piece]': 'id,name,modified',
@@ -50,7 +50,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       const agendaitemsLinkedToNota = await nota.get('agendaitems');
       let agendaitemOnLatestAgenda;
       for (let index = 0; index < agendaitemsLinkedToNota.length; index++) {
-        const agendaitemToFetch = agendaitemsLinkedToNota.objectAt(index);
+        const agendaitemToFetch = agendaitemsLinkedToNota.at(index);
         const agendaitemFromStore = await this.store.findRecord('agendaitem', agendaitemToFetch.id,
           {
             reload: true,
@@ -74,7 +74,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
         agendaitemShortTitle,
         ...pieceData,
       };
-      processedNotas.pushObject(processedNota);
+      processedNotas.push(processedNota);
     }
     return processedNotas;
   }

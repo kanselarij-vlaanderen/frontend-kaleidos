@@ -8,6 +8,7 @@ export default class NewsItemPrintComponent extends Component {
   @service newsletterService;
 
   @tracked proposalText;
+  @tracked themes;
   @tracked isEditing = false;
 
   constructor() {
@@ -19,6 +20,7 @@ export default class NewsItemPrintComponent extends Component {
   *loadData() {
     if (this.args.newsItem) {
       this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
+      this.themes = yield this.args.newsItem.themes;
     }
   }
 

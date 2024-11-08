@@ -1,9 +1,16 @@
 /* Framework & external component fixes
    ========================================================================== */
 
+// General
+
 .auk-u-flex-grow {
   flex-grow: 1;
 }
+
+:target {
+  scroll-margin-block: $au-unit-small;
+}
+
 
 // Modal
 
@@ -14,50 +21,6 @@
 
 // Ember data table
 
-.auk-table--no-scroll {
-  .data-table-content {
-    overflow: hidden;
-  }
-}
-
-.auk-table {
-  .data-table,
-  &.data-table {
-    tbody {
-      tr:hover {
-        background: $auk-gray-100;
-      }
-    }
-  }
-}
-
-.auk-table--striped {
-  .data-table,
-  &.data-table {
-    tbody {
-      tr:hover {
-        td {
-          background: $auk-gray-200;
-        }
-      }
-    }
-  }
-
-  tbody {
-    tr.lt-expanded-row {
-      td {
-        background: $auk-white;
-      }
-    }
-  }
-}
-
-.auk-table--noactions {
-  .data-table tbody tr:hover {
-    background-color: transparent !important;
-  }
-}
-
 .auk-panel .au-c-table-wrapper {
   border: 0;
 
@@ -66,24 +29,15 @@
   }
 }
 
-.data-table__actions--top {
-  border-bottom: none;
-}
-
-table tr.lt-expanded-row {
-  &:hover {
-    background-color: $auk-white !important;
+.auk-table--striped {
+  .auk-table__row--expanded {
+    background: $auk-white;
   }
 }
 
 .auk-table__actions--bottom {
   border-top: 2px solid #cbd2da;
   padding: 0 1rem 0 1rem;
-}
-
-// When using au-modal, the ember power select wormhole is behind the modal so we use the $ember-power-select-dropdown-z-index value from ember-appuniversum here to fix this
-.ember-power-select-dropdown {
-  z-index: 10000;
 }
 
 
@@ -197,13 +151,26 @@ table tr.lt-expanded-row {
   }
 }
 
-.auk-table-row-disabled {
+.auk-table__draggable-col {
+  width: 2rem; // Minimize width
+  padding: 1.75rem 1rem 1.2rem;
+}
+
+.auk-table__checkbox-col {
+  width: 2rem; // Minimize width
+}
+
+.auk-table__row--disabled {
   opacity: .7 !important;
   cursor: not-allowed;
 
   &:hover td {
     background-color: transparent !important;
   }
+}
+
+.auk-table--sortable {
+  position: relative;
 }
 
 // Button
@@ -331,6 +298,16 @@ table tr.lt-expanded-row {
   background: #E4EBF5;
 }
 
+// Make sure long document links break on mobile
+.result-card .card-link {
+  @include mq($until: medium) {
+    white-space: normal;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+}
+
 // Bigger font
 // workaround for search legend sign example
 .auk-u-text-size--xlarge {
@@ -409,7 +386,216 @@ table tr.lt-expanded-row {
 
 // Hierarchical back tab
 // Override the visibility of the back button label within Kaleidos only
-
 .auk-tabs__hierarchical-back .auk-tabs__tab__label {
   display: block;
+}
+
+// Tab
+
+.auk-tabs__tab__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+// Remove left padding
+.auk-tabs__hierarchical-back  .auk-tabs__tab__inner {
+  padding-left: 0;
+}
+
+// Responsive panel layout
+.auk-panel-layout--responsive {
+  @include mq($until: medium) {
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+    height: 100% !important;
+
+    .auk-panel-layout__main-content {
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+  }
+}
+
+.auk-panel-layout__sidebar--responsive {
+  @include mq($until: medium) {
+    flex: 0 1 auto !important;
+    max-width: 100% !important;
+    height: initial !important;
+
+    .auk-sidebar {
+      position: relative !important;
+      display: block !important;
+      overflow: initial !important;
+      width: 100% !important;
+      border-right: none !important;
+    }
+
+    .auk-scroll-wrapper__body {
+      padding: $au-unit-tiny $au-unit-small !important;
+      border-bottom: 1px solid var(--au-gray-300) !important;
+      overflow: initial !important;
+    }
+  }
+}
+
+.auk-panel-layout__agenda-items {
+  @include mq($until: medium) {
+    height: auto !important;
+    width: 100% !important;
+    border-bottom: 1px solid var(--au-gray-200);
+
+    .auk-sidebar {
+      position: initial !important;
+      display: block !important;
+      overflow: initial !important;
+      width: 100% !important;
+      border-right: none !important;
+    }
+  }
+}
+
+.auk-panel-layout--documents {
+  @include mq($until: medium) {
+    flex-direction: column;
+
+    .auk-panel-layout__main-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .auk-document-view {
+        flex: 1 1 auto;
+        height: 100%;
+      }
+    }
+
+    .auk-panel-layout__sidebar {
+      height: auto;
+    }
+
+    .auk-sidebar {
+      width: 100%;
+      border-top: .1rem solid var(--au-gray-200);
+    }
+
+    .auk-sidebar--right {
+      border-left: none;
+    }
+
+    .auk-sidebar[data-collapsed="true"] {
+      .auk-navbar--bordered-bottom {
+        border-bottom: none;
+      }
+    }
+
+    .auk-sidebar[data-collapsed="false"] {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 50rem;
+      // max-height: 50dvh;
+
+      box-shadow:
+        0 0 12px rgba($au-gray-900, 0.15),
+        0 0 2px rgba($au-gray-900, 0.1);
+    }
+  }
+
+  @include mq(medium) {
+    .auk-panel-layout__main-content {
+      aspect-ratio: 1/1.4;
+    }
+
+    .auk-sidebar[data-collapsed="false"] {
+      width: 40rem;
+    }
+  }
+
+  @include mq(large) {
+    .auk-sidebar[data-collapsed="false"] {
+      width: 55rem;
+    }
+  }
+}
+
+.auk-panel-layout--agenda {
+  @include mq($until: medium) {
+    &:has(.auk-agenda-subnav) .auk-panel-layout__agenda-items,
+    &:has(.auk-agenda-subnav) .auk-panel-layout__agenda-history {
+      display: none;
+    }
+  }
+}
+
+// Improve search categories on mobile
+.auk-search-categories {
+  @include mq($until: medium) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $au-unit-tiny
+  }
+}
+
+// Responsive tables
+.auk-table__col--8 {
+  @include mq($until: medium) {
+    min-width: 20rem;
+  }
+}
+
+// Sidebar extension
+$scroll-sidebar-width: 50rem;
+
+.auk-scroll-wrapper--sidebar {
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+
+.auk-scroll-wrapper__body {
+  width: calc(100% - #{$scroll-sidebar-width});
+}
+
+.auk-scroll-wrapper__sidebar {
+  position: relative;
+  height: 100%;
+  width: #{$scroll-sidebar-width};
+  background-color: $auk-gray-100;
+  border-left: .1rem solid $auk-gray-300;
+}
+
+.auk-sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+}
+
+.auk-sidebar__header {
+border-bottom: .2rem solid $auk-gray-300;
+padding: .7rem 1.2rem;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.auk-sidebar__body {
+flex-grow: 1;
+overflow: auto;
+padding: .9rem 1.2rem;
+}
+
+.auk-sidebar__footer {
+border-top: .1rem solid $auk-gray-300;
+min-height: 5rem;
+padding: .9rem 1.2rem;
+}
+
+// Empty state
+
+.auk-empty-state {
+  width: 100%;
 }

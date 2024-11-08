@@ -1,0 +1,51 @@
+<Auk::Panel>
+  <Auk::Panel::Header>
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <h4 class="auk-panel__title">
+              {{t "most-recent-documents"}}
+            </h4>
+          </div>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Panel::Header>
+  {{#if this.loadData.isIdle}}
+    <Auk::Panel::Body
+      @noPadding={{is-empty (keys this.piecesBySubcase)}}
+    >
+      {{#each-in this.piecesBySubcase as |subcaseName submittedPieces|}}
+        <AuHeading @level="4" @skin="6">{{capitalize subcaseName}}</AuHeading>
+        <ul>
+          {{#each submittedPieces as |submittedPiece|}}
+            <li class="vlc-document-list__item vlc-document-list__item--condensed">
+              <div
+                class="auk-o-flex au-u-flex--spaced-tiny auk-o-flex--vertical-center"
+              >
+                <AuLink
+                  @route="document"
+                  @model={{submittedPiece.piece.id}}
+                  @skin="secondary"
+                >
+                  <AuIcon @icon="document" class="au-u-flex-item--fixed vlc-document-badge__icon" />
+                  <span>
+                    {{submittedPiece.name}}
+                    {{this.submittedPieceList submittedPiece}}
+                  </span>
+                </AuLink>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <Auk::EmptyState @message={{t "no-documents-submitted-to-vp-yet"}} />
+      {{/each-in}}
+    </Auk::Panel::Body>
+  {{else}}
+    <Auk::Panel::Body>
+      <Auk::Loader />
+    </Auk::Panel::Body>
+  {{/if}}
+</Auk::Panel>

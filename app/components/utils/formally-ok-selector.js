@@ -5,8 +5,9 @@ import { task } from 'ember-concurrency';
 
 export default class UtilsFormallyOkSelector extends Component {
   /**
-   * @argument formallyOkStatusUri: TODO: change to ember object
+   * @argument formallyOkStatusUri
    * @argument onChange
+   * @argument noDefaultOption: show placeholder and have no default
    */
 
   options;
@@ -15,11 +16,20 @@ export default class UtilsFormallyOkSelector extends Component {
   constructor() {
     super(...arguments);
     this.options = CONFIG.formallyOkOptions;
-    this.defaultOption = this.options.find((option) => option.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
+    this.defaultOption = this.args.noDefaultOption
+      ? null
+      : this.options.find(
+          (option) => option.uri === CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK
+        );
   }
 
   get formallyOkStatus() {
-    return this.options.find((option) => option.uri === this.args.formallyOkStatusUri);
+    if (this.args.formallyOkStatusUri) {
+      return this.options.find(
+        (option) => option.uri === this.args.formallyOkStatusUri
+      );
+    }
+    return null;
   }
 
   get selectedStatus() {

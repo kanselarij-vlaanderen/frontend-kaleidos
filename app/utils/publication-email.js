@@ -14,7 +14,7 @@ const footer = 'Met vriendelijke groet,\n'
   + '\n'
   + 'Vlaamse overheid\t\n'
   + 'DEPARTEMENT KANSELARIJ & BUITENLANDSE ZAKEN\t\n'
-  + 'Team Ondersteuning Vlaamse Regering\t\n'
+  + 'Team Regeringsondersteuning - Cel Publicaties BS\t\n'
   + 'publicatiesBS@vlaanderen.be\t\n'
   + 'Koolstraat 35, 1000 Brussel\t\n';
 

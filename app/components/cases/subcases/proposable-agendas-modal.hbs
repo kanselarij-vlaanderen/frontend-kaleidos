@@ -7,17 +7,26 @@
   <Auk::Modal::Body>
     <div class="au-c-form">
       <AuFormRow>
-        <Auk::Label for="new-subcase-ok">{{t "formal-ok"}}</Auk::Label>
-        <AuToggleSwitch
-          data-test-proposable-agendas-modal-toggle-formally-ok
-          id="new-subcase-ok"
-          @checked={{this.isFormallyOk}}
-          @onChange={{fn (mut this.isFormallyOk)}}
+        <AuLabel @required={{true}} @inline={{true}} for="new-subcase-ok">{{t "status"}}</AuLabel>
+        {{!-- TODO fix test for changed toggle to selector --}}
+          {{!-- data-test-proposable-agendas-modal-toggle-formally-ok --}}
+        <Utils::FormallyOkSelector
+          data-test-proposable-agendas-modal-formally-ok-selector
+          @formallyOkStatusUri={{this.selectedFormallyOkUri}}
+          @onChange={{set this "selectedFormallyOkUri"}}
+          @noDefaultOption={{true}}
         />
       </AuFormRow>
       <AuFormRow>
-        <Auk::Label for="remarks">{{t "private-comments-title"}}</Auk::Label>
-        <Auk::Textarea @rows="4" @value={{this.privateComment}} id="remarks" />
+        <AuLabel for="remarks">{{t "private-comments-title"}}</AuLabel>
+        <AuTextarea
+          data-test-proposable-agendas-modal-private-comment
+          id="remarks"
+          rows="7"
+          value={{this.privateComment}}
+          @width="block"
+          {{on "input" (pick "target.value" (set this "privateComment"))}}
+        />
       </AuFormRow>
       <AuHr />
       <AuFormRow>
@@ -35,11 +44,13 @@
             </thead>
             <tbody class="auk-table--clickable-rows">
               {{#each this.agendas as |agenda|}}
-                <tr data-test-proposable-agendas-modal-agenda-row {{on "click" (fn this.selectAgenda agenda)}}>
+                {{! template-lint-disable no-invalid-interactive }}
+                <tr
+                  data-test-proposable-agendas-modal-agenda-row
+                  {{on "click" (fn this.selectAgenda agenda)}}
+                >
                   <td class="auk-table__col--1">
-                    <AuRadio
-                      @checked={{this.isSelectedAgenda agenda}}
-                    />
+                    <AuRadio @checked={{this.isSelectedAgenda agenda}} />
                   </td>
                   <td class="auk-table__col--3">
                     {{date agenda.createdFor.plannedStart}}
@@ -54,11 +65,12 @@
                     {{agenda.createdFor.kind.label}}
                   </td>
                 </tr>
+                {{! template-lint-enable no-invalid-interactive }}
               {{/each}}
             </tbody>
           </table>
         {{else}}
-          <Auk::EmptyState @message={{t "no-meetings"}} />
+          <Auk::EmptyState @bordered={{true}} @message={{t "no-meetings"}} />
         {{/if}}
       </AuFormRow>
     </div>
@@ -71,6 +83,10 @@
       <AuButton
         data-test-proposable-agendas-modal-save-without-agenda
         @skin="secondary"
+        @loading={{or
+          this.loadAgendas.isRunning
+          (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)
+        }}
         {{on "click" this.saveSubcase}}
       >
         {{t "save-without-agenda"}}
@@ -79,7 +95,7 @@
     <AuButton
       data-test-proposable-agendas-modal-place-on-agenda
       @skin="primary"
-      @disabled={{not this.selectedAgenda}}
+      @disabled={{this.disablePutOnAgenda}}
       @loading={{or
         this.loadAgendas.isRunning
         (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)

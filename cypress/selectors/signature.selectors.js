@@ -17,6 +17,9 @@ const selectors = {
       item: '[data-test-signatures-create-sign-flow-notification-adresses-item]',
       remove: '[data-test-signatures-create-sign-flow-notification-adresses-remove]',
     },
+    reportOrMinutes: {
+      signer: '[data-test-signatures-create-signflow-report-or-minutes-signer]',
+    },
   },
 
   // select-ministers-modal
@@ -25,9 +28,21 @@ const selectors = {
   },
 
   // email-modal
+  // TODO-REFACTOR this is no longer unique to signatures, also used for submission. Going to copy this to utils selectors.
+  // We need to refactor the component (change folder, rename to utils::EmailModal)
   email: {
-    input: '[data-test-signatures-create-email-input]',
-    add: '[data-test-signatures-create-email-add]',
+    input: '[data-test-email-modal-input]',
+    add: '[data-test-email-modal-add]',
+  },
+
+  // decisions and notes
+
+  // create-sign-flow
+  // TODO: cleanup? (not tested yet)
+  decisionsSignFlow: {
+    pieceName: '[data-test-signatures-decisions-signflow-piece-name]',
+    meetingDate: '[data-test-signatures-decisions-signflow-meeting-date]',
+    secretaryName: '[data-test-signatures-decisions-signflow-secretary-nam]',
   },
 };
 export default selectors;

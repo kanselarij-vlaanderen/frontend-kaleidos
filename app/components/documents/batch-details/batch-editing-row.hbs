@@ -1,5 +1,7 @@
 <tr class="auk-table--batch-edit">
   <td></td>
+  <td></td>
+  <td></td>
   <td>
     {{#if @selectedRows}}
       {{t "x-documents-selected" count=@selectedRows.length}}
@@ -13,25 +15,28 @@
       @onChange={{this.setDocumentType}}
     />
   </td>
-  <td>
-    <Utils::AccessLevelSelector
-      data-test-batch-editing-row-access-level
-      @allowClear={{true}}
-      @displayField="label"
-      @sortField="position"
-      @disabled={{this.isDisabled}}
-      @selected={{this.accessLevel}}
-      @onChange={{this.setAccessLevel}}
-    />
-  </td>
+  {{#if @isAccessLevelEnabled}}
+    <td>
+      <Utils::AccessLevelSelector
+        data-test-batch-editing-row-access-level
+        @allowClear={{true}}
+        @displayField="label"
+        @sortField="position"
+        @disabled={{this.isDisabled}}
+        @selected={{this.accessLevel}}
+        @onChange={{this.setAccessLevel}}
+      />
+    </td>
+  {{/if}}
   {{#if (and @isSignaturesEnabled @decisionActivity)}}
     <td>
       <AuToggleSwitch
         @skin="primary"
-        @label={{t "present-for-signing"}}
-        @onChange={{fn this.setMarkedForSignature}}
         @disabled={{or this.isDisabled this.isSignMarkingDisabled @agendaitemIsRetracted}}
-      />
+        @onChange={{this.setMarkedForSignature}}
+      >
+        {{t "present-for-signing"}}
+      </AuToggleSwitch>
     </td>
   {{/if}}
   <td class="auk-u-text-align--right">
@@ -45,7 +50,7 @@
       >
         {{t "undo"}}
       </AuButton>
-    {{else}}
+    {{else if (not @disableDelete)}}
       <AuButton
         @skin="naked"
         @alert={{true}}

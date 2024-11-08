@@ -65,7 +65,6 @@
    ========================================================================== */
 
 .vlc-document-card-versions {
-  margin-top: 0;
   border-top: .1rem solid #CCD1D9;
 
   .auk-accordion__item .auk-accordion__content {
@@ -107,6 +106,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
 
   .auk-h1,
   .auk-h2,
@@ -149,5 +150,5 @@ a.vlc-document-card-item__title-link {
   color: #545961;
   position: absolute;
   left: -2.4rem;
-  top: 0;
+  top: .4rem;
 }

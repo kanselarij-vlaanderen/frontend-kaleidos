@@ -4,7 +4,6 @@ import { all, task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { resource, use } from 'ember-resources';
-import { A } from '@ember/array';
 import { warn } from '@ember/debug';
 import { sortDocumentContainers } from 'frontend-kaleidos/utils/documents';
 
@@ -24,7 +23,7 @@ class DocumentHistory {
 export default class LinkedDocumentList extends Component {
   @service store;
 
-  @tracked documentHistories = A([]);
+  @tracked documentHistories = new TrackedArray([]);
 
   constructor() {
     super(...arguments);

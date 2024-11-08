@@ -1,0 +1,82 @@
+<div  id="case" class="auk-u-mb-4">
+  <Auk::Panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar>
+        <Auk::Toolbar::Group @position="left">
+          <Auk::Toolbar::Item>
+            <div class="au-u-flex au-u-flex--spaced-small">
+              <h4 class="auk-panel__title">
+                {{t "publication-case-info-panel-title"}}
+              </h4>
+            </div>
+          </Auk::Toolbar::Item>
+        </Auk::Toolbar::Group>
+        {{#unless this.loadData.isRunning}}
+          {{#if (gt this.links.length 0)}}
+            {{#each this.links as |link|}}
+              <Auk::Toolbar::Group @position="right">
+                <Auk::Toolbar::Item>
+                  <AuLinkExternal @icon="external" @iconAlignment="right" href={{link.hrefCodex}}>
+                    {{t "codex"}}
+                  </AuLinkExternal>
+                </Auk::Toolbar::Item>
+                <Auk::Toolbar::Item>
+                  <AuLinkExternal @icon="external" @iconAlignment="right" href={{link.hrefGazette}}>
+                    {{t "belgian-official-gazette"}}
+                  </AuLinkExternal>
+                </Auk::Toolbar::Item>
+              </Auk::Toolbar::Group>
+            {{/each}}
+          {{/if}}
+        {{/unless}}
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body>
+      <p class="auk-overline">
+        {{#if this.loadData.isRunning}}
+          <Auk::Loader />
+        {{else}}
+          {{t "publication"}} -
+          {{#if this.isViaCouncilOfMinisters}}
+            {{t "via-cabinet"}}
+          {{else}}
+            {{t "not-via-cabinet"}}
+          {{/if}}
+          - {{this.publicationNumber}}
+        {{/if}}
+        </p>
+      <AuHeading @level="4" @skin="4">{{capitalize @subcase.shortTitle}}</AuHeading>
+      {{#if @subcase.title}}
+      <p class="auk-u-mb-0">{{capitalize @subcase.title}}</p>
+      {{/if}}
+    </Auk::Panel::Body>
+    <Auk::Panel::Body>
+      <div class="au-o-grid au-o-grid--small au-u-1-1">
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">
+            {{t "status"}}
+          </AuHeading>
+          <Publications::Publication::StatusPill 
+            @publicationFlow={{@publicationFlow}}
+          />
+        </div>
+        <div class="au-o-grid__item au-u-1-2 au-u-1-4@medium">
+          <AuHeading @level="4" @skin="6">
+            {{t "publication-flow-numac-number-text"}}
+          </AuHeading>
+          {{#if this.loadData.isRunning}}
+            <Auk::Loader />
+          {{else}}
+            {{#each this.numacNumbers as |numacNumber|}}
+            <p class="auk-u-mt-1">{{numacNumber.idName}}
+              {{#if (has-next numacNumber this.numacNumbers)}}
+              ,
+              {{/if}}
+            </p>
+            {{/each}}
+          {{/if}}
+        </div>
+      </div>
+    </Auk::Panel::Body>
+  </Auk::Panel>
+</div>

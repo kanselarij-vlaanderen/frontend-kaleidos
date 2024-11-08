@@ -6,6 +6,7 @@ import Snapshot from 'frontend-kaleidos/utils/snapshot';
 export default class SignaturesRatificationsRoute extends Route {
   @service store;
   @service currentSession;
+  @service router;
 
   queryParams = {
     pageSignaturesRatifications: {

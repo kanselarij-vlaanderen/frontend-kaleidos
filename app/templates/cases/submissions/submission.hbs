@@ -1,0 +1,206 @@
+{{#if @model.shortTitle}}
+  {{page-title @model.shortTitle}}
+{{else}}
+  {{page-title (t "submission")}}
+{{/if}}
+
+<Submissions::OverviewHeader
+  @submission={{@model}}
+  @beingTreatedBy={{this.beingTreatedBy}}
+/>
+
+<Submission::Header
+  @submission={{@model}}
+  @subcase={{this.subcase}}
+  @hasActions={{this.mayEdit}}
+  @onStatusUpdated={{this.onStatusUpdated}}
+/>
+<div class="auk-scroll-wrapper__body">
+  {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "this-submission-is-an-update-title"}}
+    >
+      <p>{{t "this-submission-is-an-update"}}</p>
+    </AuAlert>
+  {{/if}}
+  {{#if this.model.isSendBackRequested}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+    >
+      <p>{{t "this-submission-has-send-back-requested"}}</p>
+    </AuAlert>
+  {{/if}}
+  <div class="auk-u-responsive-margin">
+    <div id="submission" class="auk-u-mb-4">
+      <Submission::DescriptionPanel
+        @submission={{@model}}
+        @mayEdit={{this.mayEditIfUpdate}}
+        @isUpdate={{this.isUpdate}}
+        @onSave={{perform this.checkIfConfidentialChanged}}
+      />
+    </div>
+
+    <div class="auk-u-mb-4">
+      <Mandatees::MandateesPanel
+        @onSave={{this.saveMandateeData}}
+        @referenceDate={{@model.created}}
+        @submitter={{await @model.requestedBy}}
+        @mandatees={{this.mandatees}}
+        @allowEditing={{this.mayEdit}}
+        @disableMandatee={{this.disableMandatee}}
+        @disableSubmitter={{true}}
+        @previousMandateePersons={{this.previousMandateePersons}}
+      />
+    </div>
+
+    <Utils::GovernmentAreas::GovernmentAreasPanel
+      class="auk-u-mb-4"
+      @referenceDate={{@model.created}}
+      @governmentAreas={{@model.governmentAreas}}
+      @allowEditing={{and this.mayEdit (not this.isUpdate)}}
+      @subcase={{@model}}
+      @onSave={{this.saveGovernmentAreas}}
+    />
+
+    <Cases::Submissions::Notifications
+      class="auk-u-mb-2"
+      @submission={{this.model}}
+      @allowEditing={{this.mayEdit}}
+      @confidential={{this.confidential}}
+      @hasConfidentialPieces={{this.hasConfidentialPieces}}
+      @approvalAddresses={{this.approvalAddresses}}
+      @approvalComment={{this.approvalComment}}
+      @notificationAddresses={{this.notificationAddresses}}
+      @notificationComment={{this.notificationComment}}
+      @onNotificationDataChanged={{this.updateLocalNotificationData}}
+      @onSaveNotificationData={{this.saveNotificationDataOnModel}}
+      @onCancelNotificationData={{this.rollbackLocalNotificationData}}
+    />
+
+    <div id="documents" class="auk-u-mb-4">
+      <Auk::Panel data-test-route-cases---submission-documents-panel>
+        <Auk::Panel::Header>
+          <Auk::Toolbar>
+            <Auk::Toolbar::Group @position="left">
+              <Auk::Toolbar::Item>
+                <div class="au-u-flex au-u-flex--spaced-small">
+                  <h4 class="auk-panel__title">
+                    {{t "documents"}}
+                  </h4>
+                </div>
+              </Auk::Toolbar::Item>
+            </Auk::Toolbar::Group>
+            <Auk::Toolbar::Group @position="right">
+              {{#if (and this.mayEdit this.pieces.length)}}
+                <Auk::Toolbar::Item>
+                  <AuButton
+                    data-test-route-cases---submission-documents-batch-edit
+                    @skin="secondary"
+                    @icon="pencil"
+                    {{on "click" (toggle "isOpenBatchDetailsModal" this)}}
+                  >
+                    {{t "batch-edit"}}
+                  </AuButton>
+                </Auk::Toolbar::Item>
+              {{/if}}
+            </Auk::Toolbar::Group>
+          </Auk::Toolbar>
+        </Auk::Panel::Header>
+        <Auk::Panel::Body>
+          {{#if this.pieces.length}}
+            <Documents::DraftDocumentCardList
+              @pieces={{this.pieces}}
+              @isEditable={{this.mayEdit}}
+              @onAddPiece={{this.onAddNewPieceVersion}}
+              @hideAccessLevel={{false}}
+              @highlightedPieces={{this.newDraftPieces}}
+              @didDeleteContainer={{this.updateDraftPiecePositions}}
+              @onSaveAccessLevel={{perform this.checkIfHasConfidentialPiecesChanged}}
+            />
+          {{else}}
+          {{!-- is this technically unreachable since we don't allow a submission to be created without docs? --}}
+            <div>
+              <AuAlert
+                @skin="info"
+                @icon="info-circle"
+                class="au-u-margin-bottom-none"
+              >
+                {{t "no-documents-yet"}}
+              </AuAlert>
+            </div>
+          {{/if}}
+        </Auk::Panel::Body>
+        {{#if this.mayEdit}}
+          <Auk::Panel::Footer>
+            <AuButton
+              data-test-route-cases---submission-documents-add
+              @skin="naked"
+              @icon="plus"
+              class="au-u-padding-left-none"
+              {{on "click" (toggle "isOpenPieceUploadModal" this)}}
+            >
+              {{t "documents-add"}}
+            </AuButton>
+          </Auk::Panel::Footer>
+        {{/if}}
+      </Auk::Panel>
+    </div>
+
+    <Cases::Submissions::HistoryPanel
+      @statusChangeActivities={{this.statusChangeActivities}}
+      {{! everyone who can edit this submission can see the comments }}
+      @canSeePrivateComments={{or
+        (user-may "treat-and-accept-submissions")
+        (user-may "create-submissions")
+      }}
+    />
+  </div>
+</div>
+
+<ConfirmationModal
+  @modalOpen={{this.isOpenPieceUploadModal}}
+  @title={{t "document-add"}}
+  @onConfirm={{perform this.savePieces}}
+  @onCancel={{perform this.cancelUploadPieces}}
+  @confirmMessage={{t "documents-add"}}
+  @disabled={{eq this.newPieces.length 0}}
+  @loading={{this.savePieces.isRunning}}
+>
+  <:body>
+    {{#if this.savePieces.isRunning}}
+      <Auk::Loader @message={{t "documents-loading-text"}} />
+    {{else}}
+      <Auk::FileUploader
+        @isSubmission={{true}}
+        @multiple={{true}}
+        @reusable={{true}}
+        @onUpload={{this.uploadPiece}}
+      />
+      <div class="upload-container">
+        {{#each this.newPieces as |piece|}}
+          <Documents::UploadedDocument
+            @piece={{piece}}
+            @allowDocumentContainerEdit={{true}}
+            @allowEditPieceAccessLevel={{true}}
+            @simplifiedOptions={{true}}
+            @onDelete={{fn this.deletePiece piece}}
+          />
+        {{/each}}
+      </div>
+    {{/if}}
+  </:body>
+</ConfirmationModal>
+
+{{#if this.isOpenBatchDetailsModal}}
+  <Documents::BatchDetails::BatchDocumentsDetailsModal
+    @pieces={{this.newDraftPieces}}
+    @onCancel={{toggle "isOpenBatchDetailsModal" this}}
+    @onSave={{this.saveBatchDetails}}
+    @disableDelete={{true}}
+    @allowEditing={{this.mayEdit}}
+    @disableEditingPosition={{this.isUpdate}}
+  />
+{{/if}}

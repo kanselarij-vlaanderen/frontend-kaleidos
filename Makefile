@@ -9,24 +9,24 @@ reset-cache-resource-only:
 	- sleep 5
 
 reset-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync minutes-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
-	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations database cache forever-cache
+	- docker-compose ${COMPOSE_FILE} up -d triplestore database migrations cache forever-cache
 	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 5
 
 reset-elastic-and-cache:
-	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync
-	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync
+	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync minutes-report-generation
+	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync minutes-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
 	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
 	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
-	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations database cache forever-cache
+	- docker-compose ${COMPOSE_FILE} up -d triplestore database migrations cache forever-cache
 	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 120
@@ -71,6 +71,13 @@ drc-kill:
 drc-up-d-service:
 	- docker-compose ${COMPOSE_FILE} up -d ${SERV}
 
+drc-kill-service:
+	- docker-compose ${COMPOSE_FILE} kill ${SERV}
+
+drc-kill-and-up-service:
+	- make drc-kill-service
+	- make drc-up-d-service
+
 drc-restart-service:
 	- docker-compose ${COMPOSE_FILE} restart ${SERV}
 
@@ -90,6 +97,9 @@ new-zip-run-migrations:
 	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations && docker-compose ${COMPOSE_FILE} logs -f migrations
 # instead of backup up the zips you could rename the current ones after this step
 # wait till migrations are done
+
+new-zip-run-up-triplestore:
+	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations && docker-compose ${COMPOSE_FILE} logs -f migrations
 
 new-zip-run-yggdrasil:
 # make sure the yggdrasil env flags are enabled => USE_DIRECT_QUERIES: "yes" / RELOAD_ON_INIT: "true"

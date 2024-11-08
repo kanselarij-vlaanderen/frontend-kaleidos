@@ -47,7 +47,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
       }
     });
 
-    this.notaModifiedTime = latestNotaVersion?.created;
+    this.notaModifiedTime = latestNotaVersion?.modified;
     // It is possible to concurrently create multiple newsItems
     // While searching for a proper fix, we inform the users of this problem
     const hasMultipleNewsItems = (await this.store.count('news-item', {

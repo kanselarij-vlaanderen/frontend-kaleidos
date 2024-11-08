@@ -10,6 +10,7 @@ import endOfDay from 'date-fns/endOfDay';
 export default class SignaturesOngoingDecisionsRoute extends Route {
   @service currentSession;
   @service store;
+  @service router;
 
   queryParams = {
     page: {

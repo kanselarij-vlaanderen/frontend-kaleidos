@@ -75,7 +75,7 @@ export default class SearchPublicationFlowsController extends Controller {
       // do nothing, there is no ID to navigate to or this was a clicked link in the card and the router will transition later
       return;
     } else {
-      this.router.transitionTo('cases.case.subcases', decisionmakingFlowId);
+      this.router.transitionTo('cases.case.index', decisionmakingFlowId);
     }
   }
 

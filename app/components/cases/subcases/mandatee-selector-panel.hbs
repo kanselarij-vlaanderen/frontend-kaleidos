@@ -11,8 +11,10 @@
         @itemStructure={{hash label="fullName"}}
         @selectedItems={{this.selectedCurrentMinisters}}
         @didUpdate={{this.onChangeSelectedCurrentMinisters}}
+        @mandatoryItem={{if @disableMinisterCheckbox (await this.submitterMandatee.person)}}
         @layout="grid"
         @disabled={{@disabled}}
+        @itemDisabled={{@disableMinisterCheckbox}}
       />
       {{#if (user-may "add-past-mandatees")}}
         <AuButton
@@ -36,7 +38,7 @@
             class="au-c-list__item au-u-flex au-u-flex--vertical-center au-u-flex--between"
           >
             {{! prettier-ignore}}
-            <div>
+            <div data-test-mandatee-selector-panel-selected-minister-name>
               {{! <Mandatee::NameWithRange/> does not suit the needs}}
               <strong>{{mandatee.person.fullName}}</strong>{{concat ', ' mandatee.displayTitle}}
               {{#if (user-may "view-mandatees-with-range")}}
@@ -52,14 +54,15 @@
             >
               {{#if this.showSubmitter}}
                 <AuRadio
+                  data-test-mandatee-selector-panel-submitter-radio
                   @name="submitter"
                   @checked={{eq this.submitterMandatee.id mandatee.id}}
-                  @disabled={{@disabled}}
+                  @disabled={{or @disableSubmitter @disabled}}
                   {{on "click" (fn this.onChangeSubmitter mandatee)}}
                 />
-                <Auk::Label class="au-u-padding-bottom-none">
+                <AuLabel class="au-u-padding-bottom-none">
                   {{t "submitter"}}
-                </Auk::Label>
+                </AuLabel>
               {{/if}}
               {{#if (includes mandatee this.selectedPastMandatees)}}
                 <AuButton
@@ -91,7 +94,7 @@
       <Utils::LoadableContent
         @reserveSpace={{true}}
       >
-        <Auk::Label>{{t "minister"}}</Auk::Label>
+        <AuLabel>{{t "minister"}}</AuLabel>
         <Mandatees::MandateeSelector::OpenSearch
           @excludeMandatees={{this.excludedMandatees}}
           @onSelectMandatee={{set this "selectedPastMandatee"}}

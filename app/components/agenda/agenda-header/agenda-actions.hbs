@@ -1,3 +1,4 @@
+{{!-- template-lint-disable require-context-role --}}
 <AuDropdown
   data-test-agenda-actions-options-dropdown={{true}}
   @skin="secondary"
@@ -47,6 +48,14 @@
       {{t "printable-version"}}
     </AuLink>
   {{/if}}
+  {{#if (user-may "manage-press-agenda")}}
+    <AuLink
+      @route="agenda.press"
+      role="menuitem"
+    >
+      {{t "generate-press-agenda"}}
+    </AuLink>
+  {{/if}}
   <AuButton
     data-test-agenda-actions-download-documents
     @skin="link"
@@ -65,6 +74,7 @@
   </AuButton>
   {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-documents"))}}
     <AuButton
+      data-test-agenda-actions-generate-signed-decisions-bundle
       @skin="link"
       {{on "click" this.generateSignedDecisionsBundle}}
       role="menuitem"
@@ -87,6 +97,7 @@
   {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-decisions"))}}
     <AuHr />
     <AuButton
+      data-test-agenda-actions-mark-decisions-sor-signing
       @skin="link"
       {{on "click" this.markDecisionsForSigning}}
       role="menuitem"
@@ -150,6 +161,7 @@
     </AuButton>
   {{/if}}
 </AuDropdown>
+{{!-- template-lint-enable require-context-role --}}
 
 {{#if this.isAddingAgendaitems}}
   <Agenda::Agendaitem::CreateAgendaitem
@@ -178,12 +190,14 @@
         @isLoading={{this.reloadAgendaitemsData.isRunning}}
         @reserveSpace={{true}}
       >
-        <p>
-          {{t
-            "approve-all-agendaitems-warning-message"
-            amountOfAgendaitems=(get (await (this.allAgendaitemsNotOk)) "length")
-          }}
-        </p>
+        {{#let (await (this.allAgendaitemsNotOk)) as |agendaitemsNotOk|}}
+          <p>
+            {{t
+              "approve-all-agendaitems-warning-message"
+              amountOfAgendaitems=(get agendaitemsNotOk "length")
+            }}
+          </p>
+        {{/let}}
       </Utils::LoadableContent>
     </Auk::Modal::Body>
     <Auk::Modal::Footer @onCancel={{this.cancelApproveAllAgendaitems}}>

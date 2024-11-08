@@ -13,7 +13,7 @@ export default class AgendaDocumentsRoute extends Route {
       include: 'document-container',
     });
     pieces = pieces.slice();
-    return sortPieces(pieces);
+    return await sortPieces(pieces);
   }
 
   async afterModel() {

@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -12,12 +12,18 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Testing the application as Kort bestek user', () => {
-  beforeEach(() => {
+context('Testing the application as Kort bestek user', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     // cy.login does not trigger the transtition to the default route for this profile for some reason
     cy.loginFlow('Kort bestek');
     cy.wait(1000);
     cy.url().should('include', 'kort-bestek'); // make sure we transitioned to default route
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -75,6 +81,10 @@ context('Testing the application as Kort bestek user', () => {
 
   context('Profile rights checks for agendas/agenda routes', () => {
     // setup for this context -> see profile-admin.spec context
+    const digitalAgendaLinkB = 'vergadering/6639E50648A2200932C2E206/agenda/aab25440-0c52-11ef-8806-3dee87cfd9c2/agendapunten';
+    const digitalAgendaNoMinutesLinkB = 'vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/agendapunten';
+    const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1715070204';
+    const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1715070204';
 
     const agendaOpenLink = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten';
     const agendaReleasedLink = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten';
@@ -90,9 +100,83 @@ context('Testing the application as Kort bestek user', () => {
     const subcaseTitleShort4 = 'Cypress test: profile rights - subcase 2 released with decision docs';
 
     it('check agendas route', () => {
-      cy.visit('/overzicht'); // ovrb starts on publication route by default
+      cy.visit('/overzicht?sizeAgendas=2'); // ovrb starts on publication route by default
       cy.get(route.agendas.title);
       cy.get(route.agendas.action.newMeeting).should('not.exist');
+    });
+
+    it('check agenda route on open digital agenda', () => {
+      cy.visitAgendaWithLink(digitalAgendaLinkB);
+
+      // Main view - Tabs
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen');
+
+      // Main view - Actions
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions);
+      cy.get(agenda.agendaActions.generateSignedDecisionsBundle).should('not.exist');
+      cy.get(agenda.agendaActions.markDecisionsForSigning).should('not.exist');
+      cy.clickReverseTab('Overzicht'); // close dropdown
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital1);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.decisionResultPill.pill);
+      cy.get(agenda.decisionResultPill.edit).should('not.exist');
+      cy.get(agenda.agendaitemDecision.create).should('not.exist'); // digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(document.accessLevelPill.pill);
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(document.accessLevelPill.edit).should('not.exist');
+      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Decisions tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
+
+      // Detail Tab - Decisions tab - overview
+      cy.get(agenda.agendaitemDecision.edit.annotation).should('not.exist');
+      cy.get(agenda.agendaitemDecision.edit.concern).should('not.exist');
+      cy.get(agenda.agendaitemDecision.edit.treatment).should('not.exist');
+
+      // Minutes Tab - with minutes - Document Card
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit).should('not.exist');
+      cy.get(document.documentCard.actions).should('not.exist');
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(route.agendaMinutes.currentPieceView).should('not.exist');
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Minutes Tab - with minutes - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit)
+        .should('not.exist');
+
+      // Minutes Tab - no minutes
+      cy.visitAgendaWithLink(digitalAgendaNoMinutesLinkB);
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(appuniversum.alert.container).contains('Er zijn nog geen notulen voor deze vergadering');
+      cy.get(route.agendaMinutes.createEdit).should('not.exist');
     });
 
     it('check agenda route on open agenda', () => {
@@ -682,12 +766,13 @@ context('Testing the application as Kort bestek user', () => {
       cy.visitCaseWithLink('dossiers/6374F284D9A98BD0A2288538/deeldossiers/6374F28BD9A98BD0A2288539');
 
       // overview header
-      cy.get(cases.subcaseOverviewHeader.publicationFlowLink);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowPill);
+      cy.get(cases.subcaseOverviewHeader.publicationFlowLink).should('not.exist'); // no permission to manage
       cy.get(cases.subcaseOverviewHeader.optionsDropdown).should('not.exist');
       cy.get(cases.subcaseOverviewHeader.openAddSubcase).should('not.exist');
 
       // sidebar
-      // TODO KAS-4529 this has changed > approved should not show before decisions are released?
+      // * 16/03/24 this has changed > approved should not show before decisions are released?
       cy.get(agenda.decisionResultPill.pill).contains(decisionApproved);
 
       // subcase header
@@ -703,7 +788,7 @@ context('Testing the application as Kort bestek user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 
@@ -747,7 +832,7 @@ context('Testing the application as Kort bestek user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).should('not.exist');
       cy.get(document.accessLevelPill.edit).should('not.exist');
 

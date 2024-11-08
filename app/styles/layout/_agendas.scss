@@ -1,0 +1,32 @@
+.l-agendas__row-title {
+  display: flex;
+  align-items: center;
+  gap: 0 .8rem;
+  flex-wrap: wrap;
+
+  @include mq(large) {
+    flex-wrap: nowrap;
+  }
+}
+
+.l-agendas__row-title__main {
+  display: flex;
+  align-items: center;
+  gap: 0 .8rem;
+}
+
+.l-agendas__row-title__dash {
+  display: none;
+
+  @include mq(large) {
+    display: block;
+  }
+}
+
+.l-agendas__row-title__breaker {
+  flex: 1 1 100%;
+
+  @include mq(large) {
+    display: none;
+  }
+}

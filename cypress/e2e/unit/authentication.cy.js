@@ -1,4 +1,4 @@
-/* global context, it, cy */
+/* global context, it, cy, Cypress */
 // / <reference types="Cypress" />
 
 import route from '../../selectors/route.selectors';
@@ -10,7 +10,14 @@ context('Authentication tests', () => {
     cy.url().should('include', 'overzicht');
     cy.logout();
     cy.visit('/overzicht?sizeAgendas=2');
-    cy.get(route.login.acmidmButton).contains(acmidmButtonText);
+    const isCI = Cypress.env('CI');
+    if (isCI) {
+      cy.get(route.login.acmidmButton).contains(acmidmButtonText);
+    } else {
+      // only when we are on env "development" do we come back to mocklogin route after logout
+      // aanmelden route fails locally because of it
+      cy.get(route.mockLogin.list);
+    }
   });
 
   it('should login/logout using the mock-login and logout button', () => {

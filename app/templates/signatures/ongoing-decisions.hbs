@@ -14,7 +14,7 @@
             @onDateToClear={{set this "dateTo" undefined}}
           />
           <div class="au-c-card au-o-box au-o-box--small">
-            <Auk::Label>{{t "status"}}</Auk::Label>
+            <AuLabel>{{t "status"}}</AuLabel>
             <Signatures::StatusFilter
               @selectedStatusIds={{this.statuses}}
               @onChange={{this.onChangeStatus}}
@@ -51,7 +51,7 @@
       <:body as |signFlow|>
         {{#let signFlow.signSubcase.signMarkingActivity as |signMarkingActivity|}}
           {{#let signMarkingActivity.piece as |piece|}}
-            <td>
+            <td data-test-route-signatures-ongoing-decisions-row-piece-name>
               {{#if piece}}
                 {{piece.name}}
                 {{#if (this.isConfidential piece.accessLevel)}}
@@ -85,8 +85,8 @@
               @piece={{signMarkingActivity.piece}}
               @signMarkingActivity={{signMarkingActivity}}
               @isClickable={{
-                or 
-                  (not (await (this.isRowDisabled signFlow))) 
+                or
+                  (not (await (this.isRowDisabled signFlow)))
                   signFlow.isSigned
                 }}
             />

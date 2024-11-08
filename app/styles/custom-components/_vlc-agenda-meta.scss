@@ -14,36 +14,18 @@
   display: flex;
   align-items: center;
   opacity: 0.65;
-}
 
-.vlc-agenda-meta__status {
   font-weight: 500;
 }
 
 .vlc-agenda-items__status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+
   font-size: 1.4rem;
   white-space: nowrap;
-  align-items: center;
-
-  .formally-ok-icon {
-    i {
-      &::before {
-        margin-right: 0.4rem;
-        height: 100%;
-      }
-
-      &.ki-check::before {
-        line-height: 2.4rem;
-      }
-
-      &.ki-x::before {
-        margin-right: 0;
-        font-size: 2.1rem;
-        line-height: 2.3rem;
-        font-weight: 700;
-      }
-    }
-  }
 }
 
 .vlc-agenda-meta__status--positive {

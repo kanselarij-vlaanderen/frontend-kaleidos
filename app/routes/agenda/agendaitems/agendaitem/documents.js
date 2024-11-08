@@ -3,11 +3,6 @@ import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import VrNotulenName, {
-  compareFunction as compareNotulen,
-} from 'frontend-kaleidos/utils/vr-notulen-name';
-import VrLegacyDocumentName,
-{ compareFunction as compareLegacyDocuments } from 'frontend-kaleidos/utils/vr-legacy-document-name';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -22,15 +17,14 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
       include: 'document-container',
     });
     pieces = pieces.slice();
-    let sortedPieces;
     this.meeting = this.modelFor('agenda').meeting;
-    if (agendaitem.isApproval) {
-      sortedPieces = sortPieces(pieces, VrNotulenName, compareNotulen);
-    } else if (this.meeting.isPreKaleidos) {
-      sortedPieces = sortPieces(pieces, VrLegacyDocumentName, compareLegacyDocuments);
-    } else {
-      sortedPieces = sortPieces(pieces);
-    }
+    const sortedPieces = await sortPieces(
+      pieces,
+      {
+        isApproval: agendaitem.isApproval,
+        isPreKaleidos: this.meeting.isPreKaleidos,
+      }
+    );
 
     return {
       pieces: sortedPieces,
@@ -49,6 +43,10 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     const decisionActivityResultCode = await this.decisionActivity
       ?.decisionResultCode;
     await this.decisionActivity?.decisionResultCode;
+    this.confidentialAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+    );
     this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       this.subcase?.confidential
@@ -79,6 +77,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.agendaitem = this.agendaitem;
     controller.subcase = this.subcase;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.confidentialAccessLevel = this.confidentialAccessLevel;
     controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;

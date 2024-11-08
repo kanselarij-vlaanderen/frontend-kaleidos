@@ -16,7 +16,7 @@
     {{#each @items as |item|}}
       <Group.Checkbox
         @value={{item}}
-        @disabled={{@disabled}}
+        @disabled={{or (@itemDisabled item) @disabled}}
       >
         {{get item this.itemStructure.label}}
       </Group.Checkbox>

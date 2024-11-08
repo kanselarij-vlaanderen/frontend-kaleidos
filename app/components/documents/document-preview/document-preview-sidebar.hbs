@@ -6,7 +6,7 @@
     {{if @isOpen "auk-scroll-wrapper"}}"
   @isCollapsed={{not @isOpen}}
 >
-  <Auk::Navbar @noPadding={{not @isOpen}}>
+  <Auk::Navbar @noPadding={{and (not @isOpen) (not (responsive "isMobile"))}}>
     <Auk::Toolbar as |toolbar|>
       {{#if @isOpen}}
         <toolbar.Group @position="left" as |group|>
@@ -42,7 +42,7 @@
           <Auk::Toolbar::Item>
             <AuButton
               @skin="naked"
-              @icon="chevron-right"
+              @icon={{if (responsive "isMobile") "chevron-down" "chevron-right"}}
               @hideText={{true}}
               {{on "click" @onCollapse}}
             >
@@ -51,12 +51,12 @@
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       {{else}}
-        <Auk::Toolbar::Group @position="center">
+        <Auk::Toolbar::Group @position={{if (responsive "isMobile") "right" "center"}}>
           <Auk::Toolbar::Item class="auk-o-flex auk-o-flex--horizontal-center">
             <AuButton
               data-test-document-preview-sidebar-open
               @skin="naked"
-              @icon="chevron-left"
+              @icon={{if (responsive "isMobile") "chevron-up" "chevron-left"}}
               @hideText={{true}}
               {{on "click" @onOpen}}
             >
@@ -73,7 +73,7 @@
       <Utils::LoadableContent @isLoading={{this.loadPieceData.isRunning}}>
         {{! DETAILS }}
         {{#if (eq this.tab "details")}}
-          <div class="auk-u-m-4">
+          <div class="auk-u-responsive-margin">
             <Documents::DocumentPreview::DetailsTab
               @piece={{@piece}}
               @documentContainer={{this.documentContainer}}
@@ -83,7 +83,7 @@
             {{! SIGNATURES }}
           </div>
         {{else if (eq this.tab (t "signatures"))}}
-          <div class="auk-u-m-4">
+          <div class="auk-u-responsive-margin">
             <Documents::DocumentPreview::SignaturesTab
               @piece={{@piece}}
               @documentContainer={{this.documentContainer}}
@@ -91,7 +91,7 @@
             {{! VERSIONS }}
           </div>
         {{else if (eq this.tab (t "versions"))}}
-          <div class="auk-u-m-4">
+          <div class="auk-u-responsive-margin">
             <Documents::DocumentPreview::VersionsTab
               @documentContainer={{this.documentContainer}}
               @currentVersion={{@piece}}

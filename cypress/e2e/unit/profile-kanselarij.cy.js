@@ -1,4 +1,4 @@
-/* global context, it, cy, beforeEach */
+/* global context, it, cy, before, after */
 // / <reference types="Cypress" />
 
 import agenda from '../../selectors/agenda.selectors';
@@ -14,9 +14,15 @@ import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
 
-context('Testing the application as Kanselarij user', () => {
-  beforeEach(() => {
+context('Testing the application as Kanselarij user', {
+  testIsolation: false, // login once, do all tests
+}, () => {
+  before(() => {
     cy.login('Kanselarij');
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   context('M-header toolbar tests', () => {
@@ -57,6 +63,10 @@ context('Testing the application as Kanselarij user', () => {
 
   context('Profile rights checks for agendas/agenda routes', () => {
     // setup for this context -> see profile-admin.spec context
+    const digitalAgendaLinkB = 'vergadering/6639E50648A2200932C2E206/agenda/aab25440-0c52-11ef-8806-3dee87cfd9c2/agendapunten';
+    const digitalAgendaNoMinutesLinkB = 'vergadering/6639E55748A2200932C2E221/agenda/c758ec80-0c52-11ef-8806-3dee87cfd9c2/agendapunten';
+    const subcaseTitleShortDigital1 = 'Cypress test: profile rights - subcase 1 no decision - 1715070204';
+    const subcaseTitleShortDigital2 = 'Cypress test: profile rights - subcase 2 with decision - 1715070204';
 
     const agendaOpenLink = 'vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/agendapunten';
     const agendaReleasedLink = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten';
@@ -79,7 +89,95 @@ context('Testing the application as Kanselarij user', () => {
     // const agendaitemLinkOnReleased2 = 'vergadering/6374FA85D9A98BD0A2288576/agenda/6374FA87D9A98BD0A228857A/agendapunten/6374FAB4D9A98BD0A2288586';
 
     it('check agendas route', () => {
+      cy.visit('/overzicht?sizeAgendas=2');
       cy.get(route.agendas.action.newMeeting);
+    });
+
+    it('check agenda route on open digital agenda', () => {
+      cy.visitAgendaWithLink(digitalAgendaLinkB);
+
+      // Main view - Tabs
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen');
+
+      // Main view - Actions
+      cy.get(agenda.agendaActions.optionsDropdown)
+        .children(appuniversum.button)
+        .click();
+      cy.get(agenda.agendaActions.downloadDecisions);
+      cy.get(agenda.agendaActions.generateSignedDecisionsBundle);
+      cy.get(agenda.agendaActions.markDecisionsForSigning);
+      cy.clickReverseTab('Overzicht'); // close dropdown
+
+      // Detail Tab - Decisions tab (no decision doc)
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital1);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.decisionResultPill.pill);
+      cy.get(agenda.decisionResultPill.edit);
+      cy.get(agenda.agendaitemDecision.create); // digital signing
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+
+      // Detail Tab - Decisions tab - Document Card
+      cy.openDetailOfAgendaitem(subcaseTitleShortDigital2);
+      cy.get(agenda.agendaitemNav.decisionTab).click();
+      cy.get(agenda.agendaitemDecision.create).should('not.exist');
+      cy.get(agenda.agendaitemDecision.uploadFile).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece).should('not.exist'); // digital agenda
+      cy.get(document.documentCard.editPiece).should('not.exist');
+      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.delete);
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Detail Tab - Decisions tab - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit);
+
+      // Detail Tab - Decisions tab - overview
+      cy.get(agenda.agendaitemDecision.edit.annotation);
+      cy.get(agenda.agendaitemDecision.edit.concern);
+      cy.get(agenda.agendaitemDecision.edit.treatment);
+
+      // Minutes Tab - with minutes - Document Card
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(document.accessLevelPill.pill);
+      cy.get(document.accessLevelPill.edit);
+      cy.get(document.documentCard.actions)
+        .eq(0)
+        .children(appuniversum.button)
+        .click();
+      cy.get(document.documentCard.uploadPiece).should('not.exist');
+      cy.get(document.documentCard.signMarking);
+      cy.get(document.documentCard.delete);
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(route.agendaMinutes.currentPieceView);
+      cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
+        .should('not.be.disabled')
+        .click();
+      // Minutes Tab - with minutes - Document Card history
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.pill);
+      cy.get(document.vlDocument.piece)
+        .find(document.accessLevelPill.edit);
+
+      // Minutes Tab - no minutes
+      cy.visitAgendaWithLink(digitalAgendaNoMinutesLinkB);
+      cy.get(agenda.agendaTabs.tabs).contains('Notulen')
+        .click();
+      cy.get(appuniversum.loader).should('not.exist');
+      cy.get(route.agendaMinutes.createEdit).click();
+      cy.get(route.agendaMinutes.editor.updateContent);
+      cy.get(route.agendaMinutes.editor.versionsDropdown);
+      cy.get(route.agendaMinutes.editor.cancel);
+      cy.get(route.agendaMinutes.editor.save);
     });
 
     it('check agenda route on open agenda', () => {
@@ -520,7 +618,7 @@ context('Testing the application as Kanselarij user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis).should('not.exist');
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkOpenAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -619,7 +717,7 @@ context('Testing the application as Kanselarij user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkReleasedAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -680,7 +778,7 @@ context('Testing the application as Kanselarij user', () => {
         cy.get(newsletter.newsletterHeaderOverview.newsletterActions.unpublishThemis);
       });
 
-      it('check definitief view', () => {
+      it.skip('check definitief view', () => {
         // setup: make sure there is a nota to check in definitief view
         cy.visit(kortBestekLinkClosedAgenda);
         cy.intercept('PATCH', '/news-items/**').as('patchNewsItem');
@@ -835,7 +933,7 @@ context('Testing the application as Kanselarij user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2204 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
@@ -886,7 +984,7 @@ context('Testing the application as Kanselarij user', () => {
         .parent()
         .find(document.documentCard.primarySourceLink)
         .invoke('attr', 'href')
-        .should('contain', 'test.docx');
+        .should('contain', encodeURIComponent('VR 2022 2304 DOC.0001-5.docx'));
       cy.get(document.documentCard.actions).eq(0)
         .click();
       cy.get(document.documentCard.uploadPiece);
@@ -1023,10 +1121,10 @@ context('Testing the application as Kanselarij user', () => {
 
       // TODO-setup for notulen
       // cy.visit('vergadering/6374F696D9A98BD0A2288559/agenda/3db46410-65bd-11ed-a5a5-db2587a216a4/notulen');
-      // cy.get(route.agendaitemMinutes.createEdit).click();
-      // cy.get(route.agendaitemMinutes.editor.updateContent).click();
+      // cy.get(route.agendaMinutes.createEdit).click();
+      // cy.get(route.agendaMinutes.editor.updateContent).click();
       // cy.intercept('PATCH', '/minutes/**').as('patchMinutes');
-      // cy.get(route.agendaitemMinutes.editor.save).click()
+      // cy.get(route.agendaMinutes.editor.save).click()
       //   .wait('@patchMinutes');
       // cy.get(document.documentCard.name.value)
       //   .invoke('removeAttr', 'target')

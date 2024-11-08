@@ -116,7 +116,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
 
     // Verify agendaitem is updated
     cy.get(document.documentCard.name.value).eq(0)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
 
     // Verify formally ok is reset
     cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 1);
@@ -125,7 +125,7 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     // Verify subcase is updated
     cy.visitCaseWithLink('/dossiers/E14FB4D8-3347-11ED-B8A0-F82C0F9DE1CF/deeldossiers/5EBA9556751CF7000800000F');
     cy.get(document.documentCard.name.value).eq(0)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
 
     // PART 2, adding new document
     cy.visitAgendaWithLink('/vergadering/5EBA9588751CF70008000012/agenda/5EBA9589751CF70008000013/agendapunten/5EBA95A2751CF70008000016');
@@ -162,12 +162,12 @@ context('Tests on pieces and page-sizes of agendaitems and subcase', () => {
     // *note* This is the only use of this command so keep it.
     cy.addNewPieceToSubcase('test pdf', file);
     cy.get(document.documentCard.name.value).eq(0)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
 
     // check agendaitem formally not yet ok
     cy.visitAgendaWithLink('/vergadering/5EBA960A751CF7000800001D/agenda/5EBA960B751CF7000800001E/agendapunten/5EBA9623751CF70008000021/documenten');
     cy.get(document.documentCard.name.value).eq(0)
-      .contains(`${file.newFileName}BIS`);
+      .contains(`${file.newFileName} BIS`);
     cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 1);
     cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 1);
 

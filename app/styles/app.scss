@@ -7,30 +7,18 @@
  */
 
 
-// EXTERNAL COMPONENTS
+// EXTERNAL PLUGINS
 @import 'ember-power-select';
-@import 'ember-vo-webuniversum-data-table';
 
 
-// AUK BASE
-@import 'auk-base'; // sourced from "au-kaleidos-css" npm package
+// BASE
+@import 'au/au-base'; // Appuniversum base
+@import 'auk/auk-base'; // Kaleidos base
 
 
-// AUK ICONS STYLING
-@import 'auk-icons'; // sourced from "au-kaleidos-icons" npm package
-
-
-// AU STYLING
-@import 'au/au-base';
+// COMPONENTS
 @import 'au/au-components';
-
-
-// WEBUNIVERSUM 2 LEGACY STYLING
-@import 'wu/wu-legacy'; // partly copied from "lblod/ember-vo-webuniversum" npm package (needed for "lblod/ember-vo-webuniversum-data-table")
-
-
-// GOVFLANDERS COMPONENTS
-@import 'govflanders/components/_upload';
+@import 'auk/auk-components';
 
 
 // VLC COMPONENTS
@@ -38,29 +26,11 @@
 @import 'custom-components/vlc-agenda-items';
 @import 'custom-components/vlc-agenda-meta';
 @import 'custom-components/vlc-document-card';
+@import 'custom-components/vlc-document-badge';
 @import 'custom-components/vlc-document-list';
 @import 'custom-components/vlc-environment-pill';
 @import 'custom-components/vlc-procedure-step';
 @import 'custom-components/vlc-status-timeline';
-
-
-// CUSTOM STYLING
-@import 'custom-application/cases';
-
-// AUK COMPONENTS
-@import 'auk-components'; // sourced from "au-kaleidos-css" npm package
-
-
-// LOCAL AUK EXTENSIONS & ADDITIONS
-@import 'auk/auk-additions';
-
-
-// EXTERNAL ADDON OVERRIDES
-@import 'addon-overrides/ember-flatpickr';
-@import 'addon-overrides/ember-power-select';
-@import 'addon-overrides/ember-rdfa-editor';
-@import 'addon-overrides/ember-tag-input';
-@import 'addon-overrides/ember-tooltip';
 
 
 // LAYOUT STYLING
@@ -68,11 +38,29 @@
 @import 'layout/printable-agenda';
 @import 'layout/printable-newsletter';
 @import 'layout/search';
+@import 'layout/agendas';
+@import 'layout/case';
+
+
+// CUSTOM STYLING
+
+
+// EXTERNAL
+@import 'addon-overrides/ember-flatpickr';
+@import 'addon-overrides/ember-power-select';
+@import 'addon-overrides/ember-rdfa-editor';
+@import 'addon-overrides/ember-tag-input';
+@import 'addon-overrides/ember-tooltip';
+@import 'govflanders/components/_upload';
+
+
+// UTILITIES
+@import 'au/au-utilities';
+@import 'auk/auk-utilities';
 
 
 // PRINT STYLING
 @import 'print/general';
 
 
-// PROTOTYPE
-@import 'prototype/_signatures';
+
