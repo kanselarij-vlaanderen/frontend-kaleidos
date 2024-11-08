@@ -358,14 +358,10 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      // Regenerate beslissingsfiches, so we ensure that the numbering is correct
-      if (agendaitemsNotOk?.length) {
-        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
-      }
-      // Regenerate beslissingsfiches, so we ensure that the concerns part is correct
-      const newNames = true;
+      // Regenerate beslissingsfiches, so we ensure that the numbering and concerns part is correct
+      const newNames = agendaitemsNotOk?.length > 0;
       const agendaitemsToRegenerateConcernFor = [...new Set(this.agendaCheckMapping.map(({ agendaitem }) => agendaitem.id))];
-      if (agendaitemsToRegenerateConcernFor?.length) {
+      if (newNames || agendaitemsToRegenerateConcernFor?.length) {
         await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, agendaitemsToRegenerateConcernFor);
       }
       this.args.onStopLoading();
@@ -451,14 +447,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
       await this.reloadAgenda(this.args.currentAgenda);
       await this.reloadAgendaitemsOfAgenda(this.args.currentAgenda);
       await this.reloadMeeting();
-      // Regenerate beslissingsfiches, so we ensure that the numbering is correct
-      if (agendaitemsNotOk?.length) {
-        await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, true);
-      }
-      // Regenerate beslissingsfiches, so we ensure that the concerns part is correct
-      const newNames = true;
+      const newNames = agendaitemsNotOk?.length > 0;
       const agendaitemsToRegenerateConcernFor = [...new Set(this.agendaCheckMapping.map(({ agendaitem }) => agendaitem.id))];
-      if (agendaitemsToRegenerateConcernFor?.length) {
+      if (newNames || agendaitemsToRegenerateConcernFor?.length) {
         await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, newNames, agendaitemsToRegenerateConcernFor);
       }
     } catch (error) {
