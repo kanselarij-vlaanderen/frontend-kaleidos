@@ -221,14 +221,17 @@ export default {
   },
   // is this the right way?
   PRIVATE_COMMENT_TEMPLATE: {
-    NOTA:`IF:
+    NOTA:
+`IF:
 BA:
 BZ:
 WT:
 Co-agendering:
 
 Def. check: `,
-   ANNOUNCEMENT:`Co-agendering:
+   ANNOUNCEMENT:
+`Co-agendering:
+
 Def. check: `
   }
 };
