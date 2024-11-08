@@ -57,6 +57,12 @@ export default class AgendaHeaderAgendaCheck extends Component {
 
   fileNameMappings = trackedTask(this, this.getFileNameMappings);
 
+  get fileNameMap() {
+    return new Map(
+      this.fileNameMappings.value?.map(({ uri, generatedName }) => [uri, generatedName])
+    );
+  }
+
   @action
   onSave() {
     this.args.onSave?.(this.fileNameMappings.value);
