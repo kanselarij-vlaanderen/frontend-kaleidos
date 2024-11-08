@@ -44,6 +44,7 @@ export default class AgendaHeaderAgendaCheck extends Component {
       if (mappings.error) {
         throw new Error(mappings.error);
       }
+      // this is falsy if no mappings exist (nothing to do)
       return mappings;
     } catch (error) {
       // if service did not respond or self thrown errors
@@ -58,9 +59,14 @@ export default class AgendaHeaderAgendaCheck extends Component {
   fileNameMappings = trackedTask(this, this.getFileNameMappings);
 
   get fileNameMap() {
-    return new Map(
-      this.fileNameMappings.value?.map(({ uri, generatedName }) => [uri, generatedName])
-    );
+    // this is always truthy if mappings exist (empty or not) (to enable approve button)
+    if (this.fileNameMappings.value) {
+      return new Map(
+        this.fileNameMappings.value?.map(({ uri, generatedName }) => [uri, generatedName])
+      );
+    }
+    // this is falsy (to disabled approve button, not loaded yet or error)
+    return null;
   }
 
   @action

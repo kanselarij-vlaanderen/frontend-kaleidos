@@ -22,7 +22,9 @@ export default class DecisionReportGeneration extends Service {
     let shouldRegenerateConcerns = false;
     if (agendaitemsToRegenerateConcernFor?.length) {
       shouldRegenerateConcerns = true;
-      reportsFilter['filter[decision-activity][treatment][agendaitems][:id:]'] = agendaitemsToRegenerateConcernFor.join(',');
+      if (!newNames) {
+        reportsFilter['filter[decision-activity][treatment][agendaitems][:id:]'] = agendaitemsToRegenerateConcernFor.join(',');
+      }
     }
     const reports = await this.store.queryAll('report', reportsFilter);
     if (reports?.length > 0) {
