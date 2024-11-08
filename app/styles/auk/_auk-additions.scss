@@ -1,9 +1,16 @@
 /* Framework & external component fixes
    ========================================================================== */
 
+// General
+
 .auk-u-flex-grow {
   flex-grow: 1;
 }
+
+:target {
+  scroll-margin-block: $au-unit-small;
+}
+
 
 // Modal
 

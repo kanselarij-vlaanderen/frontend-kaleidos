@@ -59,7 +59,7 @@
                   {{#each this.agendaitems.value.notaGroups as |notaGroup|}}
                     <Agenda::PrintableAgenda::ListSection::ItemGroup
                       @items={{notaGroup}}
-                      @fileNameMappings={{this.fileNameMappings.value}}
+                      @fileNameMappings={{this.fileNameMap}}
                       @hideNotFormallyOk={{true}}
                     />
                   {{/each}}
@@ -89,7 +89,7 @@
                         {{#if pieces}}
                           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                             @pieces={{pieces}}
-                            @fileNameMappings={{this.fileNameMappings.value}}
+                            @fileNameMappings={{this.fileNameMap}}
                           />
                         {{/if}}
                       {{/let}}
@@ -117,7 +117,7 @@
               data-test-agenda-check-confirm
               @skin="primary"
               @loading={{this.fileNameMappings.isRunning}}
-              @disabled={{not this.fileNameMappings.value}}
+              @disabled={{not this.fileNameMap}}
               {{on "click" this.onSave}}>
               {{@saveLabel}}
             </AuButton>

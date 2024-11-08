@@ -115,8 +115,8 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
-              @loading={{this.loadDocuments.isRunning}}
-              {{on "click" this.updateBetreftContent}}
+              @loading={{or this.loadDocuments.isRunning this.updateBetreftContent.isRunning}}
+              {{on "click" this.updateBetreftContent.perform}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
               @record={{this.betreftPiecePart}}
@@ -136,9 +136,9 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
-              @loading={{this.loadNota.isRunning}}
-              @disabled={{not (or this.nota @agendaitem.isApproval)}}
-              {{on "click" this.updateBeslissingContent}}
+              @loading={{or this.loadNota.isRunning this.updateBeslissingContent.isRunning}}
+              @disabled={{not (or this.nota @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
+              {{on "click" this.updateBeslissingContent.perform}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
               @record={{this.beslissingPiecePart}}
@@ -260,8 +260,8 @@
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
-                  @loading={{this.loadDocuments.isRunning}}
-                  {{on "click" this.updateBetreftContent}}
+                  @loading={{or this.loadDocuments.isRunning this.updateBetreftContent.isRunning}}
+                  {{on "click" this.updateBetreftContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
                   @record={{this.betreftPiecePart}}
@@ -340,9 +340,9 @@
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
-                  @loading={{this.loadNota.isRunning}}
-                  @disabled={{not (or this.nota @agendaitem.isApproval)}}
-                  {{on "click" this.updateBeslissingContent}}
+                  @loading={{or this.loadNota.isRunning this.updateBeslissingContent.isRunning}}
+                  @disabled={{not (or this.nota @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
+                  {{on "click" this.updateBeslissingContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
                   @record={{this.beslissingPiecePart}}

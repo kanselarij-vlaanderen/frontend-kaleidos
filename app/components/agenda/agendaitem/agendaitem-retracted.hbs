@@ -23,4 +23,78 @@
       {{t "view-case"}}
     </Auk::Button>
   {{/if}}
+  {{#if this.loadProposedStatus.isIdle}}
+    {{#if this.modelsForProposedAgenda}}
+      <Auk::Button
+        @skin="primary"
+        @layout="icon-right"
+        @icon="chevron-right"
+        @route="agenda.agendaitems.agendaitem"
+        @models={{this.modelsForProposedAgenda}}
+        class="auk-u-ml-2"
+      >
+        {{t "open-agenda"}}
+        {{date-phrase this.latestMeeting.plannedStart}}
+      </Auk::Button>
+    {{else}}
+      {{#if (user-may "manage-retracted-agendaitems")}}
+        {{!-- template-lint-disable require-context-role --}}
+        <AuDropdown
+          @skin="primary"
+          @title={{t "propose-again"}}
+          @alignment="right"
+          class="auk-u-ml-2"
+        >
+          {{#if this.loadProposableMeetings.isRunning}}
+            <div role="menuitem">
+              <Auk::Loader @message={{t "agenda-loading"}} />
+            </div>
+          {{else}}
+            {{#if this.loadProposableMeetings.lastSuccessful.value}}
+              {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
+                <AuButton
+                  @skin="link"
+                  {{on "click" (perform this.reProposeForMeeting meeting)}}
+                  role="menuitem"
+                >
+                  {{t "agenda-for"}}
+                  {{date-phrase meeting.plannedStart}}
+                  {{concat " - " meeting.numberRepresentation}}
+                </AuButton>
+              {{/each}}
+            {{else}}
+              <div role="menuitem">
+                <p>{{t "no-recent-meetings"}}</p>
+              </div>
+            {{/if}}
+            <AuHr />
+            <AuButton
+              @skin="link"
+              {{on "click" this.openProposingForOtherMeetingModal}}
+              role="menuitem"
+            >
+              {{t "other-agenda"}}
+            </AuButton>
+          {{/if}}
+        </AuDropdown>
+        {{!-- template-lint-enable require-context-role --}}
+      {{/if}}
+    {{/if}}
+  {{/if}}
 </div>
+{{#if this.reProposeForMeeting.isRunning}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "propose-again"}} @closeable={{false}} />
+    <Auk::Modal::Body>
+      <Auk::Loader @message={{t "please-be-patient"}} />
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
+
+{{#if this.isProposingForOtherMeeting}}
+  <Subcases::ProposableMeetings
+    @meeting={{@meeting}}
+    @onProposeForMeeting={{perform this.reProposeForMeeting}}
+    @onCancel={{this.closeProposingForOtherMeetingModal}}
+  />
+{{/if}}

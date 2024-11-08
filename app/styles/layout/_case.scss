@@ -1,0 +1,51 @@
+.l-case__sidebar {
+  max-width: 220px;
+}
+
+// REMARK: I think this specific styling can't be reached (within the application) at the moment
+// TODO: I'll check this within a follow-up story
+.l-case__case-form {
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: $au-unit;
+}
+
+.l-case__anchor-holder {
+  display: flex;
+  align-items: start;
+  flex-wrap: wrap;
+  margin: $au-unit-tiny 0;
+  color: var(--au-gray-700);
+}
+
+.l-case__anchor-holder__title {
+  flex: 0 0 auto;
+}
+
+.l-case__anchor-holder__list {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: $au-unit-tiny / 1.5;
+  row-gap: 0;
+
+  a {
+    display: inline-flex;
+    font-weight: var(--au-medium);
+  }
+
+  a,
+  a:visited {
+    color: var(--au-gray-700);
+  }
+
+  a.active {
+    color: var(--au-gray-800);
+    text-decoration: none;
+  }
+
+  li:not(:last-child) a:after {
+    content: ",";
+  }
+}

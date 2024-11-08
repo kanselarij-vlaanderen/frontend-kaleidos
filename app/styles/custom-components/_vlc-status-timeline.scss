@@ -10,6 +10,9 @@
 }
 
 .vlc-status-timeline__item + .vlc-status-timeline__item {
+  margin-top: $au-unit-tiny;
+  padding-top: $au-unit-tiny;
+
   &:before {
     content: " ";
     background: $auk-color-border;
@@ -23,13 +26,16 @@
 }
 
 .vlc-status-timeline__text {
-  font-size: 1.2rem;
+  @include au-font-size($au-base);
+
   .vlc-status-timeline__item--positive & {
     color: #8CAE2C; // Not $auk-green-500
   }
+
   .vlc-status-timeline__item--neutral & {
     color: $auk-gray-600;
   }
+
   .vlc-status-timeline__item--in-progress & {
     color: $auk-color-primary;
   }
@@ -39,15 +45,34 @@
   flex: 0 0 auto;
   height: 1.1rem;
   width: 1.1rem;
+  border: 2px solid var(--au-gray-300);
   border-radius: 100%;
-  margin-right: 0.5rem;
+  background-color: #fff !important;
+  margin-right: $au-unit-tiny * 1.2;
+
   .vlc-status-timeline__item--positive & {
     background: #8CAE2C;// Not $auk-green-500
   }
+
   .vlc-status-timeline__item--neutral & {
     background: $auk-gray-600;
   }
+
   .vlc-status-timeline__item--in-progress & {
     background: $auk-color-primary;
+  }
+
+  .vlc-status-timeline__item + .vlc-status-timeline__item & {
+    position: relative;
+
+    &:after {
+      content: '';
+      border-left: 2px solid var(--au-gray-300);
+      width: 1px;
+      height: 2.6rem;
+      position: absolute;
+      left: calc(50% - 1px);
+      bottom: 100%;
+    }
   }
 }
