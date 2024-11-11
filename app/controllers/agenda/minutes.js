@@ -21,20 +21,20 @@ function renderAttendees(attendees) {
       <table>
         <tbody>
           <tr>
-            <td>De minister-president</td>
-            <td>${primeMinister}</td>
+            <td data-colwidth="50">De minister-president</td>
+            <td data-colwidth="50">${primeMinister}</td>
           </tr>
           <tr>
-            <td>De viceminister-presidenten</td>
-            <td>${viceMinisters.join('<br/>')}</td>
+            <td data-colwidth="50">De viceminister-presidenten</td>
+            <td data-colwidth="50">${viceMinisters.join('<br/>')}</td>
           </tr>
           <tr>
-            <td>De Vlaamse ministers</td>
-            <td>${ministers.join('<br/>')}</td>
+            <td data-colwidth="50">De Vlaamse ministers</td>
+            <td data-colwidth="50">${ministers.join('<br/>')}</td>
           </tr>
           <tr>
-            <td><section data-section="secretary-title"><p>De ${secretaryTitle}</p></section></td>
-            <td><section data-section="secretary"><p>${mandateeName(secretary)}</p></section></td>
+            <td data-colwidth="50"><section data-section="secretary-title"><p>De ${secretaryTitle}</p></section></td>
+            <td data-colwidth="50"><section data-section="secretary"><p>${mandateeName(secretary)}</p></section></td>
           </tr>
         </tbody>
       </table>
@@ -161,8 +161,8 @@ function renderAbsentees() {
       <table>
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
+            <td data-colwidth="50"></td>
+            <td data-colwidth="50"></td>
           </tr>
         </tbody>
       </table>
@@ -191,7 +191,7 @@ async function updateMinutesNotas(data, intl, store) {
     contentElement.content.querySelector('[data-section="agendaitems"]').outerHTML = newNotas;
   }
   // error? block should be found or button should not have been shown
-  
+
   return contentElement.innerHTML;
 }
 
@@ -264,7 +264,6 @@ export default class AgendaMinutesController extends Controller {
   @tracked isLoading = false;
   @tracked isEditing = false;
   @tracked isFullscreen = false;
-  @tracked isUpdatingMinutesContent = false;
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
   @tracked editor = null;
@@ -379,41 +378,32 @@ export default class AgendaMinutesController extends Controller {
     this.refresh();
   });
 
-  @action
-  async updateEditorContent() {
+  updateEditorContent = task(async () => {
     if (!this.editor) {
       return;
     }
-    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
       await renderMinutes(await this.reshapeModelForRender(), this.intl, this.store)
     );
-    this.isUpdatingMinutesContent = false;
-  }
+  });
 
-  @action
-  async updateEditorNotas() {
+  updateEditorNotas = task(async () => {
     if (!this.editor) {
       return;
     }
-    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
       await updateMinutesNotas(await this.reshapeModelForRender(), this.intl, this.store)
     );
-    this.isUpdatingMinutesContent = false;
-  }
+  });
 
-  @action
-  async updateEditorAnnouncements() {
+  updateEditorAnnouncements = task(async () => {
     if (!this.editor) {
       return;
     }
-    this.isUpdatingMinutesContent = true;
     this.editor.setHtmlContent(
       await updateMinutesAnnouncements(await this.reshapeModelForRender(), this.intl, this.store)
     );
-    this.isUpdatingMinutesContent = false;
-  }
+  });
 
   @action
   handleRdfaEditorInit(editor) {
@@ -433,12 +423,25 @@ export default class AgendaMinutesController extends Controller {
     this.refresh();
   }
 
+  get isUpdatingMinutesContent() {
+    return (
+      this.updateEditorContent.isRunning ||
+      this.updateEditorNotas.isRunning ||
+      this.updateEditorAnnouncements.isRunning
+    );
+  }
+
   get saveDisabled() {
-    if (this.currentPiecePartTask?.value?.htmlContent === this.editor?.htmlContent) {
+    if (
+      this.currentPiecePartTask?.value?.htmlContent === this.editor?.htmlContent
+    ) {
       return true;
     }
 
-    return this.editor?.mainEditorState.doc.textContent.length === 0;
+    return (
+      this.isUpdatingMinutesContent ||
+      this.editor?.mainEditorState.doc.textContent.length === 0
+    );
   }
 
   get agendaContext() {
