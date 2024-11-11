@@ -309,8 +309,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     this.editorInstanceBetreft?.setHtmlContent(content);
   }
 
-  @action
-  async updateBetreftContent() {
+  updateBetreftContent = task(async () => {
     const { shortTitle, title, isApproval } = this.args.agendaitem;
     const documents = this.pieces;
     const agendaActivity = await this.args.agendaitem.agendaActivity;
@@ -345,7 +344,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     } else {
       this.setBetreftEditorContent('');
     }
-  }
+  });
 
   @action
   handleRdfaEditorInitBeslissing(editorInterface) {
@@ -368,8 +367,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     this.editorInstanceBeslissing?.setHtmlContent(content);
   }
 
-  @action
-  async updateBeslissingContent() {
+  updateBeslissingContent = task(async () => {
     let newBeslissingHtmlContent;
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
@@ -395,7 +393,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         break;
     }
     this.setBeslissingEditorContent(`<p>${newBeslissingHtmlContent}</p>`);
-  }
+  });
 
   onUpdateAnnotation = task(async () => {
     const report = this.report;
@@ -688,7 +686,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   }
 
   get disableSaveConcernButton() {
-    if (this.loadReport.isRunning) {
+    if (this.loadReport.isRunning || this.updateBetreftContent.isRunning) {
       return true;
     }
 
@@ -714,7 +712,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   }
 
   get disableSaveTreatmentButton() {
-    if (this.loadReport.isRunning) {
+    if (this.loadReport.isRunning || this.updateBeslissingContent.isRunning) {
       return true;
     }
 
@@ -741,9 +739,13 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   }
 
   get disableSaveButton() {
-    if (this.disableSaveConcernButton
-      || this.disableSaveTreatmentButton
-      || this.disableSaveAnnotationButton) {
+    if (
+      this.disableSaveConcernButton ||
+      this.disableSaveTreatmentButton ||
+      this.disableSaveAnnotationButton ||
+      this.updateBetreftContent.isRunning ||
+      this.updateBeslissingContent.isRunning
+    ) {
       return true;
     }
     return false;
