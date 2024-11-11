@@ -16,27 +16,29 @@ function renderAttendees(attendees) {
   const { primeMinister, viceMinisters, ministers, secretary } = attendees;
   let secretaryTitle = secretary?.title.toLowerCase() || 'secretaris';
   return `
-    <p><u>AANWEZIG</u></p>
-    <table id="attendees">
-      <tbody>
-        <tr>
-          <td data-colwidth="50">De minister-president</td>
-          <td data-colwidth="50">${primeMinister}</td>
-        </tr>
-        <tr>
-          <td data-colwidth="50">De viceminister-presidenten</td>
-          <td data-colwidth="50">${viceMinisters.join('<br/>')}</td>
-        </tr>
-        <tr>
-          <td data-colwidth="50">De Vlaamse ministers</td>
-          <td data-colwidth="50">${ministers.join('<br/>')}</td>
-        </tr>
-        <tr>
-          <td data-colwidth="50">De <span id="secretary-title">${secretaryTitle}</span></td>
-          <td data-colwidth="50"><span id="secretary">${mandateeName(secretary)}</span></td>
-        </tr>
-      </tbody>
-    </table>
+    <section data-section="attendees">
+      <p><u>AANWEZIG</u></p>
+      <table>
+        <tbody>
+          <tr>
+            <td data-colwidth="50">De minister-president</td>
+            <td data-colwidth="50">${primeMinister}</td>
+          </tr>
+          <tr>
+            <td data-colwidth="50">De viceminister-presidenten</td>
+            <td data-colwidth="50">${viceMinisters.join('<br/>')}</td>
+          </tr>
+          <tr>
+            <td data-colwidth="50">De Vlaamse ministers</td>
+            <td data-colwidth="50">${ministers.join('<br/>')}</td>
+          </tr>
+          <tr>
+            <td data-colwidth="50"><section data-section="secretary-title"><p>De ${secretaryTitle}</p></section></td>
+            <td data-colwidth="50"><section data-section="secretary"><p>${mandateeName(secretary)}</p></section></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   `;
 }
 
@@ -154,15 +156,17 @@ function capitalizeFirstLetter(string) {
 
 function renderAbsentees() {
   return `
-    <p><u>AFWEZIG MET KENNISGEVING</u></p>
-    <table id="absentees">
-      <tbody>
-        <tr>
-          <td data-colwidth="50"></td>
-          <td data-colwidth="50"></td>
-        </tr>
-      </tbody>
-    </table>
+    <section data-section="absentees">
+      <p><u>AFWEZIG MET KENNISGEVING</u></p>
+      <table>
+        <tbody>
+          <tr>
+            <td data-colwidth="50"></td>
+            <td data-colwidth="50"></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   `;
 }
 
@@ -171,7 +175,8 @@ function renderNextMeeting(meeting, intl) {
   const nextPlannedStart = addWeeks(currentPlannedStart, 1);
   const date = dateFormat(nextPlannedStart, 'EEEE d MMMM yyyy');
   const time = dateFormat(nextPlannedStart, 'HH:mm');
-  return `<p><span id="next-meeting">${intl.t("minutes-next-meeting", { date, time })}</span><p/>`;
+  //TODO the span is not rendered in rdfa editor, needed?
+  return `<section data-section="next-meeting"><p><span>${intl.t("minutes-next-meeting", { date, time })}</span><p/></section>`;
 }
 
 async function updateMinutesNotas(data, intl, store) {
@@ -222,19 +227,19 @@ ${renderNextMeeting(meeting, intl)}`;
     const newContentElement = document.createElement('template');
     newContentElement.innerHTML = newMinutesContent;
 
-    const attendeesText = contentElement.content.querySelector('#attendees')?.innerHTML;
+    const attendeesText = contentElement.content.querySelector('[data-section="attendees"]')?.innerHTML;
     if (attendeesText) {
-      newContentElement.content.querySelector('#attendees').innerHTML = attendeesText;
+      newContentElement.content.querySelector('[data-section="attendees"]').innerHTML = attendeesText;
     }
 
-    const absenteesText = contentElement.content.querySelector('#absentees')?.innerHTML;
+    const absenteesText = contentElement.content.querySelector('[data-section="absentees"]')?.innerHTML;
     if (absenteesText) {
-      newContentElement.content.querySelector('#absentees').innerHTML = absenteesText;
+      newContentElement.content.querySelector('[data-section="absentees"]').innerHTML = absenteesText;
     }
 
-    const nextMeetingText = contentElement.content.querySelector('#next-meeting')?.innerHTML;
+    const nextMeetingText = contentElement.content.querySelector('[data-section="next-meeting"]')?.innerHTML;
     if (nextMeetingText) {
-      newContentElement.content.querySelector('#next-meeting').innerHTML = nextMeetingText;
+      newContentElement.content.querySelector('[data-section="next-meeting"]').innerHTML = nextMeetingText;
     }
 
     newMinutesContent = newContentElement.innerHTML;
