@@ -5,9 +5,17 @@
     {{else if @piece.file}}
       <LinkTo @route="document" @model={{@piece.id}}
         class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-        data-test-vl-document-name>
+        target="{{if @external 'blank'}}"
+        data-test-vl-document-name
+      >
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
           {{@piece.name}}{{#if extension}}.{{extension}}{{/if}}
+          {{#if @external}}
+            <AuIcon
+              @icon="external-link"
+              @alignment="right"
+            />
+          {{/if}}
         {{/let}}
       </LinkTo>
     {{else}}

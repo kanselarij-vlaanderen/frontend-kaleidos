@@ -1,5 +1,5 @@
 {{page-title (t "new-submission")}}
-<Auk::Navbar @skin="gray-100">
+<Auk::Navbar @skin="gray-100" {{prevent-unload}}>
   <Auk::Toolbar @size="large">
     <Auk::Toolbar::Group>
       <Auk::Toolbar::Item>
@@ -27,5 +27,6 @@
   @submitter={{this.submitter}}
   @mandatees={{this.mandatees}}
   @onCancel={{this.onCancelSubmission}}
+  @onCreateSubmission={{this.onCreateSubmission}}
   @isForNewCase={{true}}
 />

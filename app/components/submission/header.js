@@ -425,7 +425,18 @@ export default class SubmissionHeaderComponent extends Component {
     }
 
     if (!internalReviewOfSubmission?.id) {
-      await this.agendaService.createInternalReview(this.args.subcase, [this.args.submission], CONSTANTS.PRIVATE_COMMENT_TEMPLATE);
+      const agendaItemType = await this.args.submission.agendaItemType;
+      let privateCommentTemplate;
+      if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        privateCommentTemplate = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.NOTA;
+      } else if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+        privateCommentTemplate = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.ANNOUNCEMENT;
+      }
+      await this.agendaService.createInternalReview(
+        this.args.subcase,
+        [this.args.submission],
+        privateCommentTemplate
+      );
     }
     // else, update something?
     // is there a chance that subcase has no internalReview but submission does?
