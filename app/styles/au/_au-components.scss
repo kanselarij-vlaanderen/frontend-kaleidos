@@ -332,6 +332,34 @@ $au-label-color: var(--au-gray-700);
   vertical-align: baseline;
 }
 
+.au-c-button--naked {
+  &.au-c-button--muted {
+    &,
+    &:visited {
+      color: $auk-gray-600;
+    }
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      color: $auk-gray-800;
+    }
+
+    &.is-disabled,
+    &.is-disabled:hover,
+    &.is-disabled:focus-visible,
+    &.is-disabled:active {
+      color: $auk-gray-700;
+    }
+
+    &.is-loading,
+    &.is-loading:hover,
+    &.is-loading:focus-visible {
+      color: $auk-gray-700;
+    }
+  }
+}
+
 // Icon
 
 .au-c-icon {
