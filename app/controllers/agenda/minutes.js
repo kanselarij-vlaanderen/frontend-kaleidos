@@ -20,20 +20,20 @@ function renderAttendees(attendees) {
     <table id="attendees">
       <tbody>
         <tr>
-          <td>De minister-president</td>
-          <td>${primeMinister}</td>
+          <td data-colwidth="50">De minister-president</td>
+          <td data-colwidth="50">${primeMinister}</td>
         </tr>
         <tr>
-          <td>De viceminister-presidenten</td>
-          <td>${viceMinisters.join('<br/>')}</td>
+          <td data-colwidth="50">De viceminister-presidenten</td>
+          <td data-colwidth="50">${viceMinisters.join('<br/>')}</td>
         </tr>
         <tr>
-          <td>De Vlaamse ministers</td>
-          <td>${ministers.join('<br/>')}</td>
+          <td data-colwidth="50">De Vlaamse ministers</td>
+          <td data-colwidth="50">${ministers.join('<br/>')}</td>
         </tr>
         <tr>
-          <td>De <span id="secretary-title">${secretaryTitle}</span></td>
-          <td><span id="secretary">${mandateeName(secretary)}</span></td>
+          <td data-colwidth="50">De <span id="secretary-title">${secretaryTitle}</span></td>
+          <td data-colwidth="50"><span id="secretary">${mandateeName(secretary)}</span></td>
         </tr>
       </tbody>
     </table>
@@ -158,8 +158,8 @@ function renderAbsentees() {
     <table id="absentees">
       <tbody>
         <tr>
-          <td></td>
-          <td></td>
+          <td data-colwidth="50"></td>
+          <td data-colwidth="50"></td>
         </tr>
       </tbody>
     </table>
@@ -186,7 +186,7 @@ async function updateMinutesNotas(data, intl, store) {
     contentElement.content.querySelector('[data-section="agendaitems"]').outerHTML = newNotas;
   }
   // error? block should be found or button should not have been shown
-  
+
   return contentElement.innerHTML;
 }
 
