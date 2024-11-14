@@ -15,6 +15,7 @@ import {
 } from 'frontend-kaleidos/utils/cabinet-submission-email';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CabinetMailService extends Service {
   @service store;
@@ -56,6 +57,15 @@ export default class CabinetMailService extends Service {
     return title;
   };
 
+  getSubmissionLatestApprovedAgendaitem = async (submission) => {
+    const subcase = await submission.subcase;
+    return await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': subcase.id,
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
+      sort: 'agenda.serialnumber'
+    });
+  };
+
   async sendBackToSubmitterMail(submission, comment, meeting) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
@@ -82,6 +92,7 @@ export default class CabinetMailService extends Service {
     const submissionPieces = await submission.pieces;
     const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
     const caseTitle = await this.getSubmissionCaseTitle(submission);
+    const agendaitem = await this.getSubmissionLatestApprovedAgendaitem(submission);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
@@ -92,7 +103,8 @@ export default class CabinetMailService extends Service {
       comment,
       submission,
       meeting,
-      hasConfidentialPieces
+      hasConfidentialPieces,
+      agendaitem,
     };
 
     // same mail for approvers and notification
@@ -152,6 +164,7 @@ export default class CabinetMailService extends Service {
     const submissionPieces = await submission.pieces;
     const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
     const caseTitle = await this.getSubmissionCaseTitle(submission);
+    const agendaitem = await this.getSubmissionLatestApprovedAgendaitem(submission);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
@@ -160,7 +173,8 @@ export default class CabinetMailService extends Service {
       notificationComment: submission.notificationComment,
       hasConfidentialPieces,
       submission,
-      meeting
+      meeting,
+      agendaitem,
     };
 
     const creator = await this.draftSubmissionService.getCreator(submission);
@@ -184,13 +198,15 @@ export default class CabinetMailService extends Service {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
     const caseTitle = await this.getSubmissionCaseTitle(submission);
+    const agendaitem = await this.getSubmissionLatestApprovedAgendaitem(submission);
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: caseTitle,
       comment,
       meeting,
-      submission
+      submission,
+      agendaitem,
     };
 
     const treaterEmail = await caseRequestSendBackEmail(params);
