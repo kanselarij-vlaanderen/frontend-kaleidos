@@ -4,6 +4,7 @@
   @multiple={{@multiple}}
   @filter={{this.validateFile}}
   class="auk-file-upload {{if this.uploadIsRunning "auk-file-upload--gray-100"}} {{if this.uploadIsCompleted "auk-file-upload--success"}} {{if @fullHeight "auk-file-upload--full-height"}}"
+  ...attributes
   as |dropzone|
 >
   {{!-- template-lint-disable require-input-label --}}
