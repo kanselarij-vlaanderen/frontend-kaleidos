@@ -187,13 +187,21 @@ export default class SubmissionHeaderComponent extends Component {
     await this.draftSubmissionService.updateSubmissionStatus(this.args.submission, statusUri, comment);
   };
 
+  // This method is passed to the modal
+  // In case of an update, the modal passes no parameters through,
+  // so we just have to use the members of the component.
   resubmitSubmission = task(async (meeting, remarks) => {
+    this.toggleResubmitModal();
+    const selectedMeeting = meeting?.id ? meeting : this.selectedMeeting;
+    const comment = meeting?.id ? remarks : this.comment;
+
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
-      remarks,
+      comment,
     );
-    await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
-    await this.cabinetMail.sendResubmissionMails(this.args.submission, remarks, meeting);
+    if (meeting?.id)
+      await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, comment, selectedMeeting);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
