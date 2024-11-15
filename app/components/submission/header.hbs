@@ -83,27 +83,12 @@
   </Auk::Toolbar>
 </Auk::Navbar>
 
-<ConfirmationModal
-  @modalOpen={{this.isOpenResubmitModal}}
-  @onCancel={{this.toggleResubmitModal}}
-  @title={{t "resubmit-submission"}}
-  @onConfirm={{queue (perform this.resubmitSubmission) this.toggleResubmitModal}}
-  @loading={{this.resubmitSubmission.isRunning}}
->
-  <:body>
-    <div class="au-c-form">
-      <AuFormRow>
-        <AuLabel for="comment-title-resubmit">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
-        <AuTextarea
-          id="comment-title-resubmit"
-          rows="2"
-          @width="block"
-          {{on "input" (pick "target.value" (set this "comment"))}}
-        />
-      </AuFormRow>
-    </div>
-  </:body>
-</ConfirmationModal>
+{{#if this.isOpenResubmitModal}}
+  <Cases::Submissions::ProposableAgendasModal
+    @onCancel={{this.toggleResubmitModal}}
+    @onConfirm={{queue (perform this.resubmitSubmission) this.toggleResubmitModal}}
+  />
+{{/if}}
 
 {{#if (and (not this.loadAgenda.isRunning) this.isOpenCreateSubcaseModal)}}
   {{#if this.isUpdate}}

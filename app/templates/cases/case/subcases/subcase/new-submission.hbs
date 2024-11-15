@@ -184,26 +184,12 @@
   </:body>
 </ConfirmationModal>
 
-<ConfirmationModal
-  @modalOpen={{this.isOpenCreateSubmissionModal}}
-  @title={{t "new-submission"}}
-  @onConfirm={{perform this.createSubmission}}
-  @onCancel={{this.cancelCreateSubmission}}
-  @confirmMessage={{t "new-submission"}}
-  @disabled={{this.createSubmission.isRunning}}
-  @loading={{this.createSubmission.isRunning}}
->
-  <:body>
-    <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
-    <AuTextarea
-      id="remarks"
-      rows="4"
-      value=""
-      @width="block"
-      {{on "input" (pick "target.value" (set this "comment"))}}
-    />
-  </:body>
-</ConfirmationModal>
+{{#if this.isOpenCreateSubmissionModal}}
+  <Cases::Submissions::ProposableAgendasModal
+    @onCancel={{this.cancelCreateSubmission}}
+    @onConfirm={{perform this.createSubmission}}
+  />
+{{/if}}
 
 {{#if this.createSubmission.isRunning}}
   <Auk::Modal @size="medium">

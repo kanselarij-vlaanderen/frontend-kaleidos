@@ -187,12 +187,13 @@ export default class SubmissionHeaderComponent extends Component {
     await this.draftSubmissionService.updateSubmissionStatus(this.args.submission, statusUri, comment);
   };
 
-  resubmitSubmission = task(async () => {
+  resubmitSubmission = task(async (meeting, remarks) => {
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
-      this.comment
+      remarks,
     );
-    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment, this.selectedMeeting);
+    await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, remarks, meeting);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
@@ -366,6 +367,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       if (meeting) {
         try {
+          await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
           await this.agendaService.putSubmissionOnAgenda(
             meeting,
             subcase,

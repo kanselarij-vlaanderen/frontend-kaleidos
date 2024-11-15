@@ -31,7 +31,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked isOpenCreateSubmissionModal = false;
 
   @tracked hasConfidentialPieces = false;
-  @tracked comment;
   @tracked approvalComment;
   @tracked notificationComment;
   @tracked approvalAddresses = new TrackedArray([]);
@@ -222,7 +221,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  createSubmission = dropTask(async () => {
+  createSubmission = dropTask(async (meeting, remarks) => {
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(
@@ -240,15 +239,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const mandatees = await this.mandatees;
     const requestedBy = await this.requestedBy;
     const governmentAreas = await this.model.governmentAreas;
-
-    let meeting;
-    if (this.originalSubmission) {
-      // this fixes a cache issue that leaves meeting null for KDB
-      meeting = await this.store.queryOne('meeting', {
-        'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-        'filter[submissions][:id:]': this.originalSubmission.id
-      });
-    }
 
     const status = this.originalSubmission ? updateSubmitted : submitted;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
@@ -284,7 +274,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.newDraftPieces = new TrackedArray([]);
 
     // Create submission change
-    await this.draftSubmissionService.createStatusChange(this.submission, status.uri, this.comment);
+    await this.draftSubmissionService.createStatusChange(this.submission, status.uri, remarks);
 
     if (meeting) {
       try {
