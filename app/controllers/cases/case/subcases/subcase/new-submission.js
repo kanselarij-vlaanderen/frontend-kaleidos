@@ -249,7 +249,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
         'filter[submissions][:id:]': this.originalSubmission.id
       });
     }
-
     const status = this.originalSubmission ? updateSubmitted : submitted;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
