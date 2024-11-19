@@ -7,25 +7,30 @@
     <AuIcon @icon="lock-closed" />
     <span>{{t "private-comment-title"}}:</span>
     {{#if this.isEditing}}
-      <AuButton @skin="naked" @icon="check" @hideText={{true}} {{on "click" this.save}}>
-        {{t "save"}}
-      </AuButton>
-      <AuButton @skin="naked" @icon="x" @hideText={{true}} {{on "click" this.cancel}}>
-        {{t "cancel"}}
-      </AuButton>
+      <AuButtonGroup>
+        <AuButton @skin="link" @icon="check" @hideText={{true}} {{on "click" this.save}}>
+          {{t "save"}}
+        </AuButton>
+        <AuButton @skin="link" @icon="x" @hideText={{true}} {{on "click" this.cancel}}>
+          {{t "cancel"}}
+        </AuButton>
+      </AuButtonGroup>
     {{else}}
-      <AuButton
-        @skin="naked"
-        @icon="pencil"
-        @hideText={{true}}
-        {{on "click" (toggle "isEditing" this)}}
-      >
-        {{t "edit"}}
-      </AuButton>
+      <AuButtonGroup>
+        <AuButton
+          @skin="link"
+          @icon="pencil"
+          @hideText={{true}}
+          {{on "click" (toggle "isEditing" this)}}
+        >
+          {{t "edit"}}
+        </AuButton>
+      </AuButtonGroup>
     {{/if}}
   </div>
   {{#if this.isEditing}}
     <AuTextarea
+      class="au-u-margin-top-small"
       id="private-comment"
       rows="7"
       value={{this.internalReview.privateComment}}
@@ -36,7 +41,7 @@
       }}
     />
   {{else}}
-    <pre class="auk-u-text-pre-line">
+    <pre class="auk-u-text-pre-line au-u-margin-top-small">
       {{this.internalReview.privateComment}}
     </pre>
   {{/if}}

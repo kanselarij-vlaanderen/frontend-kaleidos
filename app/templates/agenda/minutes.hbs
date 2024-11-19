@@ -53,8 +53,9 @@
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
+                  @loading={{this.updateEditorContent.isRunning}}
                   @disabled={{this.saveMinutes.isRunning}}
-                  {{on "click" this.updateEditorContent}}
+                  {{on "click" this.updateEditorContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 {{/if}}
                 {{#if this.editorShowContentNotasButton}}
@@ -62,8 +63,9 @@
                     @skin="link"
                     @icon="renew"
                     class="au-u-padding-left-none"
+                    @loading={{this.updateEditorNotas.isRunning}}
                     @disabled={{this.saveMinutes.isRunning}}
-                    {{on "click" this.updateEditorNotas}}
+                    {{on "click" this.updateEditorNotas.perform}}
                   >{{t "update-thing" thing=(t "agendaitems-subtitle")}}</AuButton>
                 {{/if}}
                 {{#if this.editorShowContentAnnouncementsButton}}
@@ -71,8 +73,9 @@
                     @skin="link"
                     @icon="renew"
                     class="au-u-padding-left-none"
+                    @loading={{this.updateEditorAnnouncements.isRunning}}
                     @disabled={{this.saveMinutes.isRunning}}
-                    {{on "click" this.updateEditorAnnouncements}}
+                    {{on "click" this.updateEditorAnnouncements.perform}}
                   >{{t "update-thing" thing=(t "announcements-subtitle")}}</AuButton>
                 {{/if}}
                 <VersionsDropdown

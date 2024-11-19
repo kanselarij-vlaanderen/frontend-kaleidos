@@ -187,12 +187,21 @@ export default class SubmissionHeaderComponent extends Component {
     await this.draftSubmissionService.updateSubmissionStatus(this.args.submission, statusUri, comment);
   };
 
-  resubmitSubmission = task(async () => {
+  // This method is passed to the modal
+  // In case of an update, the modal passes no parameters through,
+  // so we just have to use the members of the component.
+  resubmitSubmission = task(async (meeting, remarks) => {
+    this.toggleResubmitModal();
+    const selectedMeeting = meeting?.id ? meeting : this.selectedMeeting;
+    const comment = meeting?.id ? remarks : this.comment;
+
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
-      this.comment
+      comment,
     );
-    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment, this.selectedMeeting);
+    if (meeting?.id)
+      await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, comment, selectedMeeting);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
@@ -366,6 +375,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       if (meeting) {
         try {
+          await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
           await this.agendaService.putSubmissionOnAgenda(
             meeting,
             subcase,
@@ -425,7 +435,18 @@ export default class SubmissionHeaderComponent extends Component {
     }
 
     if (!internalReviewOfSubmission?.id) {
-      await this.agendaService.createInternalReview(this.args.subcase, [this.args.submission], CONSTANTS.PRIVATE_COMMENT_TEMPLATE);
+      const agendaItemType = await this.args.submission.agendaItemType;
+      let privateCommentTemplate;
+      if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+        privateCommentTemplate = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.NOTA;
+      } else if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+        privateCommentTemplate = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.ANNOUNCEMENT;
+      }
+      await this.agendaService.createInternalReview(
+        this.args.subcase,
+        [this.args.submission],
+        privateCommentTemplate
+      );
     }
     // else, update something?
     // is there a chance that subcase has no internalReview but submission does?

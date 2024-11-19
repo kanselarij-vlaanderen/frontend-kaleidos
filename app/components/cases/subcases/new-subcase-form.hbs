@@ -215,6 +215,7 @@
   <Cases::Subcases::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
     @onConfirm={{perform this.createSubcase}}
+    @agendaItemType={{this.agendaItemType}}
     @showSaveWithoutAgenda={{true}}
   />
 {{/if}}
