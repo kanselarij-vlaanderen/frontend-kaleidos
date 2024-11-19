@@ -29,9 +29,9 @@ module.exports = function (environment) {
       disableRedirectInitializer: true,
       providers: {
         'acmidm-oauth2': {
-          apiKey: '{{OAUTH_API_KEY}}',
+          clientId: '{{OAUTH_CLIENT_ID}}',
           baseUrl: '{{OAUTH_BASE_URL}}',
-          redirectUri: '{{OAUTH_REDIRECT_URL}}',
+          redirectUrl: '{{OAUTH_REDIRECT_URL}}',
           logoutUrl: '{{OAUTH_LOGOUT_URL}}',
           scope: [
             'vo',
@@ -56,6 +56,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
+    
     ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
