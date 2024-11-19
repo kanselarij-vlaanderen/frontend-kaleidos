@@ -56,7 +56,11 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
+    
     ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
+    ENV.torii.providers["acmidm-oauth2"].clientId = "b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d"
+    ENV.torii.providers["acmidm-oauth2"].baseUrl = "https://authenticatie-ti.vlaanderen.be/op/v1/auth"
+    ENV.torii.providers["acmidm-oauth2"].redirectUri = "https://kaleidos-dev.vlaanderen.be/authorization/callback"
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
