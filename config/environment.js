@@ -29,9 +29,9 @@ module.exports = function (environment) {
       disableRedirectInitializer: true,
       providers: {
         'acmidm-oauth2': {
-          apiKey: '{{OAUTH_API_KEY}}',
+          clientId: '{{OAUTH_CLIENT_ID}}',
           baseUrl: '{{OAUTH_BASE_URL}}',
-          redirectUri: '{{OAUTH_REDIRECT_URL}}',
+          redirectUrl: '{{OAUTH_REDIRECT_URL}}',
           logoutUrl: '{{OAUTH_LOGOUT_URL}}',
           scope: [
             'vo',
@@ -58,9 +58,6 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     
     ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
-    ENV.torii.providers["acmidm-oauth2"].clientId = "b1c78c1e-3c88-44f4-90fa-bebc5c5dc28d"
-    ENV.torii.providers["acmidm-oauth2"].baseUrl = "https://authenticatie-ti.vlaanderen.be/op/v1/auth"
-    ENV.torii.providers["acmidm-oauth2"].redirectUri = "https://kaleidos-dev.vlaanderen.be/authorization/callback"
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
