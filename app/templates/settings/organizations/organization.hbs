@@ -58,16 +58,10 @@
             </AuToolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
-            <dl>
+            <dl class="auk-key-values-list">
               <div class="auk-key-value-item auk-key-value-item--horizontal">
-                <div class="auk-key-value-item__label">
-                  {{t "manage-users-full-name"}}
-                </div>
-                <div
-                  class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small"
-                >
-                  {{this.model.name}}
-                </div>
+                <dt class="auk-key-value-item__label">{{t "manage-users-full-name"}}</dt>
+                <dd class="auk-key-value-item__value">{{this.model.name}}</dd>
               </div>
             </dl>
           </Auk::Panel::Body>

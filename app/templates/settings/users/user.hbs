@@ -63,40 +63,25 @@
             </AuToolbar>
           </Auk::Panel::Header>
           <Auk::Panel::Body>
-            <dl>
+            <dl class="auk-key-values-list">
               <div class="auk-key-value-item auk-key-value-item--horizontal">
-                <div class="auk-key-value-item__label">{{t
-                    "manage-users-full-name"
-                  }}</div>
-                <div
-                  class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small"
-                >
-                  {{this.model.fullName}}
-                </div>
+                <dt class="auk-key-value-item__label">{{t "manage-users-full-name"}}</dt>
+                <dd class="auk-key-value-item__value">{{this.model.fullName}}</dd>
               </div>
-            </dl>
-            <dl>
               <div class="auk-key-value-item auk-key-value-item--horizontal">
-                <div class="auk-key-value-item__label">{{t
-                    "manage-users-email"
-                  }}</div>
-                <div
-                  class="auk-key-value-item__value au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small"
-                >
-                  {{this.model.email}}
-                </div>
+                <dt class="auk-key-value-item__label">{{t "manage-users-email"}}</dt>
+                <dd class="auk-key-value-item__value">{{this.model.email}}</dd>
               </div>
-            </dl>
-            <dl>
-              <Auk::KeyValue
-                @key={{t "last-seen"}}
-                @value={{if
-                  @model.loginActivity.startDate
-                  (datetime-at @model.loginActivity.startDate)
-                  "-"
-                }}
-                @layout="horizontal"
-              />
+              <div class="auk-key-value-item auk-key-value-item--horizontal">
+                <dt class="auk-key-value-item__label">{{t "last-seen"}}</dt>
+                <dd class="auk-key-value-item__value">
+                  {{if
+                    @model.loginActivity.startDate
+                    (datetime-at @model.loginActivity.startDate)
+                    "-"
+                  }}
+                </dd>
+              </div>
             </dl>
           </Auk::Panel::Body>
         </Auk::Panel>
