@@ -4,6 +4,8 @@ import { inject as service } from '@ember/service';
 export default class AuthCallbackRoute extends Route {
   @service session;
   @service router;
+  @service toaster;
+  @service intl;
 
   beforeModel() {
     this.session.prohibitAuthentication('index');
@@ -15,9 +17,10 @@ export default class AuthCallbackRoute extends Route {
       try {
         await this.session.authenticate('authenticator:acm-idm', params.code);
       } catch (error) {
-        throw new Error(
-          'Something went wrong while authenticating the user in the backend. The token might be expired.',
-          { cause: error },
+        const message = error?.message ? error.message : `${error.status} ${error.statusText}`;
+        this.toaster.error(
+          this.intl.t('error-login', { message }),
+          this.intl.t('warning-title'),
         );
       }
     } else {
