@@ -339,7 +339,7 @@ $au-label-color: var(--au-gray-700);
 }
 
 @mixin au-background-icon($icon: 'add', $size: 1.6rem) {
-  $icon-url: #{'/@appuniversum/ember-appuniversum/icons/' + $icon +'.svg'};
+  $icon-url: #{'/@appuniversum/ember-appuniversum/icons/' + $icon + '.svg'};
 
   display: inline-flex;
   vertical-align: middle;
@@ -534,7 +534,7 @@ $au-label-color: var(--au-gray-700);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $au-unit-tiny / 2;
+  gap: calc($au-unit-tiny / 2);
 
   &.au-u-text-center { // REMARK: this a temporary fix because the usage of `inline-block` causes additional white space, `display: flex` fixes this but then we need another way to center the content
     justify-content: center;
