@@ -22,6 +22,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service agendaitemAndSubcasePropertiesSync;
   @service draftSubmissionService;
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -254,9 +255,16 @@ export default class SubmissionHeaderComponent extends Component {
       draftPiece: draftPiece
     });
     await piece.save();
-    this.piecesMovedCounter++;
+    if (previousPiece?.id) {
+      const decisionActivity = await this.store.queryOne('decision-activity', {
+        'filter[sign-flows][sign-subcase][sign-marking-activity][piece][:id:]': previousPiece.id,
+      });
+      if (decisionActivity)
+        await this.signatureService.markNewPieceForSignature(previousPiece, piece, decisionActivity);
+    }
     // in submissions, we allow the strengthening of the accessLevel (from default > confidential) meaning we have to update all previous versions.
     await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+    this.piecesMovedCounter++;
     return piece;
   });
 
