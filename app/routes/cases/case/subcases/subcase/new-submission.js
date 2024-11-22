@@ -160,5 +160,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     controller.approvalComment = this.approvalComment;
     controller.notificationAddresses = this.notificationAddresses;
     controller.notificationComment = this.notificationComment;
+    // empty list of draft pieces in case user navigating away and back
+    // those pieces still exist but should no longer cause hidden BIS versions on real pieces.
+    controller.newDraftPieces = new TrackedArray([]);
   }
 }

@@ -547,8 +547,9 @@ context('Search tests', () => {
       cy.openAgendaForDate(agendaDate);
       cy.addAgendaitemToAgenda(subcaseShortTitle);
       cy.addDocumentsToAgendaitem(subcaseShortTitle, files);
-      cy.generateDecision(treatmentWords, null);
-      setDocNameInViewer(fileNameTreatment, newFileNameTreatment);
+      // generating decision here results in regenerating decision after doc numbering
+      // cy.generateDecision(treatmentWords, null);
+      // setDocNameInViewer(fileNameTreatment, newFileNameTreatment);
 
       // cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
       // cy.addDocumentToTreatment(fileTreatment);
@@ -580,6 +581,11 @@ context('Search tests', () => {
       cy.setFormalOkOnItemWithIndex(0);
       cy.setFormalOkOnItemWithIndex(1);
       cy.approveDesignAgenda();
+
+      // generate decision after approving to counter regenerated "betreft" piece-part and change the name
+      cy.openDetailOfAgendaitem(subcaseShortTitle);
+      cy.generateDecision(treatmentWords, null);
+      setDocNameInViewer(fileNameTreatment, newFileNameTreatment);
 
       // *agendaItem titles and subcase titles are the same unless we change the agendaitem once on approved agenda
       // cy.openAgendaitemKortBestekTab(subcaseShortTitle);
