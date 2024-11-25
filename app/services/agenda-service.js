@@ -108,7 +108,7 @@ export default class AgendaService extends Service {
   }
 
   createInternalReview = async(subcase, submissions, privateComment) => {
-    const submissionsToSet = submissions || await subcase?.submissions;
+    const submissionsToSet = submissions || (await subcase?.submissions);
     const internalReview = await this.store.createRecord('submission-internal-review', {
       created: new Date(),
       privateComment: privateComment, // default to the CONSTANTS? diff between nota and mededeling somewhere?

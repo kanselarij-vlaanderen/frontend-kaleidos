@@ -1,9 +1,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { sortPieces, containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import { TrackedArray } from 'tracked-built-ins';
-import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 
 export default class CasesSubmissionsSubmissionRoute extends Route {
   @service currentSession;
