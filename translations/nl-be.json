@@ -1483,5 +1483,6 @@
   "on-agenda-status-pill": "Geagendeerd",
   "submission-internal-review": "Interne opmerking",
   "press-agenda": "Persagenda",
-  "generate-press-agenda": "Genereer persagenda"
+  "generate-press-agenda": "Genereer persagenda",
+  "login-text" : "Meld u aan"
 }
