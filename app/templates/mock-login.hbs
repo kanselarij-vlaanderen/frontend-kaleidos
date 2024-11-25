@@ -30,12 +30,15 @@
                 {{/if}}
                 {{#if this.model.length}}
                   <AuList
-                    class="auk-u-mb"
+                    class="auk-u-mb auk-table--clickable-rows"
                     data-test-mock-login-list
                     as |Item|
                   >
-                    <login.each-account @accounts={{this.model}} as |account|>
-                      <Item class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small">
+                    {{#each this.model as |account|}}
+                      <Item
+                        class="auk-o-flex auk-o-flex--justify-between auk-o-flex--vertical-center au-u-padding-small"
+                        {{on "click" (fn login.login account.id account.gebruiker.group.id)}}
+                      >
                         <div class="auk-u-mx-2">
                           <span>{{account.user.firstName}} {{account.user.lastName}}</span>
                         </div>
@@ -47,7 +50,7 @@
                           {{t "login"}}
                         </AuButton>
                       </Item>
-                    </login.each-account>
+                    {{/each}}
                   </AuList>
                 {{else}}
                   Geen accounts gevonden.
