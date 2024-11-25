@@ -9,12 +9,12 @@ import addBusinessDays from 'date-fns/addBusinessDays';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import { KALEIDOS_START_DATE } from 'frontend-kaleidos/config/config';
-import { replaceById } from 'frontend-kaleidos/utils/html-utils';
+import { replaceBySectionId } from 'frontend-kaleidos/utils/html-utils';
 import CONFIG from 'frontend-kaleidos/utils/config';
 
 function replaceSecretary(htmlString, newSecretary, newSecretaryTitle) {
-  let newHtml = replaceById(htmlString, 'secretary-title', newSecretaryTitle);
-  return replaceById(newHtml, 'secretary', newSecretary);
+  let newHtml = replaceBySectionId(htmlString, 'secretary-title', `<p>De ${newSecretaryTitle}</p>`);
+  return replaceBySectionId(newHtml, 'secretary', `<p>${newSecretary}</p>`);
 }
 
 /**

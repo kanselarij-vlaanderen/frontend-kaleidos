@@ -10,10 +10,10 @@ import newsletter from '../../selectors/newsletter.selectors';
 import route from '../../selectors/route.selectors';
 import utils from '../../selectors/utils.selectors';
 
-// TODO-command
-function pressRdfaButton(buttonName) {
-  cy.get('button').contains(buttonName)
-    .parent('button')
+function pressRdfaButton(buttonTitle) {
+  // Each Rdfa editor has 2 of these buttons, 1 in the main toolbar, 1 in the reponsive toolbar in the dropdown so eq(0)
+  cy.get('.say-toolbar').find(`[title="${buttonTitle}"]`)
+    .eq(0)
     .click();
 }
 
@@ -115,20 +115,20 @@ context('rdfa editor tests', () => {
       .click();
     cy.wait('@getThemes');
 
-    pressRdfaButton('Doorstreept');
+    pressRdfaButton('Doorgehaald');
     cy.get(dependency.rdfaEditor.inner).type('Strikethrough');
     cy.wait(200);
-    pressRdfaButton('Doorstreept');
+    pressRdfaButton('Doorgehaald');
     cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Onderstreept');
     cy.get(dependency.rdfaEditor.inner).type('Underline');
     cy.wait(200);
     pressRdfaButton('Onderstreept');
     cy.get(dependency.rdfaEditor.inner).type(' ');
-    pressRdfaButton('Schuingedrukt');
+    pressRdfaButton('Cursief');
     cy.get(dependency.rdfaEditor.inner).type('Italic');
     cy.wait(200);
-    pressRdfaButton('Schuingedrukt');
+    pressRdfaButton('Cursief');
     cy.get(dependency.rdfaEditor.inner).type(' ');
     pressRdfaButton('Vetgedrukt');
     cy.get(dependency.rdfaEditor.inner).type('Bold');
@@ -146,8 +146,8 @@ context('rdfa editor tests', () => {
     cy.wait(200);
 
     cy.get(dependency.rdfaEditor.inner).type('{enter}');
-    pressRdfaButton('Ongeordende lijst');
-    cy.get(dependency.rdfaEditor.inner).type('Ongeordende lijst');
+    pressRdfaButton('Lijst met opsommingstekens'); // Lijst met opsommingstekens
+    cy.get(dependency.rdfaEditor.inner).type('Lijst met opsommingstekens');
     cy.wait(200);
     cy.get(dependency.rdfaEditor.inner).type('{enter}');
     pressRdfaButton('Indentatie vergroten');
@@ -156,16 +156,39 @@ context('rdfa editor tests', () => {
 
     cy.get(dependency.rdfaEditor.inner).type('{enter}');
     pressRdfaButton('Indentatie verkleinen');
-    cy.get('button').contains('Indentatie vergroten');
+    cy.get(dependency.rdfaEditor.inner).type('Indentatie verkleinen');
 
-    cy.get('del').contains('Strikethrough');
-    cy.get('u').contains('Underline');
-    cy.get('em').contains('Italic');
-    cy.get('strong').contains('Bold');
-    cy.get('sub').contains('Subscript');
-    cy.get('sup').contains('Superscript');
-    cy.get('ul').contains('Ongeordende lijst');
-    cy.get('li').contains('Indentatie vergroten');
+    cy.get(newsletter.editItem.rdfaEditor).within(() => {
+      cy.get('del').contains('Strikethrough');
+      cy.get('u').contains('Underline');
+      cy.get('em').contains('Italic');
+      cy.get('strong').contains('Bold');
+      cy.get('sub').contains('Subscript');
+      cy.get('sup').contains('Superscript');
+      cy.get('ul')
+        .eq(0)
+        .find('li')
+        .eq(0)
+        .contains('Lijst met opsommingstekens'); // list item 1. in the ul
+      cy.get('ul')
+        .eq(0)
+        .find('li')
+        .eq(1)
+        .contains('Indentatie vergroten'); // inside the first unordered list
+      cy.get('ul')
+        .eq(0)
+        .find('li')
+        .eq(0)
+        .find('ul')
+        .find('li')
+        .contains('Indentatie vergroten'); // inside the first unordered list
+      cy.get('ul')
+        .eq(0)
+        .find('li')
+        .eq(0)
+        .next()
+        .contains('Indentatie verkleinen'); // next sibling, list item 2. in the ul
+    });
     cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
     cy.get(newsletter.editItem.save).click();
     cy.get(auk.confirmationModal.footer.confirm).click()
