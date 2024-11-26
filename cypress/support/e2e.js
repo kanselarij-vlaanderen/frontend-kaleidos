@@ -62,6 +62,11 @@ Cypress.Commands.overwrite("type", (originalFn, subject, text, options) => {
   return originalFn(subject, text, options);
 });
 
+// rapid succession of visits to multiple routes with "this.simpleAuthSession.requireAuthentication" seems to be failing unless we add a delay
+// Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
+//   return setTimeout(() => originalFn(url, options), 100)
+// });
+
 
 
 // workaround for issue DOES NOT WORK!!
