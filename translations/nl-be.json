@@ -1156,6 +1156,7 @@
   "change-role": "Profiel switchen",
   "revert-role": "Ga terug naar origineel profiel",
   "error-change-roles": "Er ging iets mis met de aanvraag om van profiel te switchen.\nDetail: {message}",
+  "error-login": "Er ging iets mis met het aanmelden.\nDetail: {message}",
   "you-see-the-app-as": "Je ziet de app als: {name}",
   "view-case": "Dossier bekijken",
   "no-recent-meetings": "Geen recente open agenda’s",
@@ -1482,5 +1483,6 @@
   "on-agenda-status-pill": "Geagendeerd",
   "submission-internal-review": "Interne opmerking",
   "press-agenda": "Persagenda",
-  "generate-press-agenda": "Genereer persagenda"
+  "generate-press-agenda": "Genereer persagenda",
+  "login-text" : "Meld u aan"
 }
