@@ -42,6 +42,7 @@ module.exports = function (defaults) {
     'ember-test-selectors': {
       strip: false
     },
+    //polyfill for insecure context (like cypress on jenkins) https://github.com/emberjs/data/tree/v5.0.0?tab=readme-ov-file#randomuuid-polyfill
     '@embroider/macros': {
       setConfig: {
         '@ember-data/store': {

@@ -65,6 +65,7 @@
     "@nullvoxpopuli/ember-composable-helpers": "^5.2.6",
     "@typescript-eslint/parser": "^5.48.2",
     "alphabet": "^1.0.0",
+    "@embroider/macros": "^1.16.9",
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-funnel": "^3.0.8",
     "cypress": "^12.17.4",
