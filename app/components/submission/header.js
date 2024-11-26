@@ -22,6 +22,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service agendaitemAndSubcasePropertiesSync;
   @service draftSubmissionService;
   @service pieceAccessLevelService;
+  @service signatureService;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -187,12 +188,21 @@ export default class SubmissionHeaderComponent extends Component {
     await this.draftSubmissionService.updateSubmissionStatus(this.args.submission, statusUri, comment);
   };
 
-  resubmitSubmission = task(async () => {
+  // This method is passed to the modal
+  // In case of an update, the modal passes no parameters through,
+  // so we just have to use the members of the component.
+  resubmitSubmission = task(async (meeting, remarks) => {
+    this.toggleResubmitModal();
+    const selectedMeeting = meeting?.id ? meeting : this.selectedMeeting;
+    const comment = meeting?.id ? remarks : this.comment;
+
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
-      this.comment
+      comment,
     );
-    await this.cabinetMail.sendResubmissionMails(this.args.submission, this.comment, this.selectedMeeting);
+    if (meeting?.id)
+      await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
+    await this.cabinetMail.sendResubmissionMails(this.args.submission, comment, selectedMeeting);
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
@@ -245,9 +255,16 @@ export default class SubmissionHeaderComponent extends Component {
       draftPiece: draftPiece
     });
     await piece.save();
-    this.piecesMovedCounter++;
+    if (previousPiece?.id) {
+      const decisionActivity = await this.store.queryOne('decision-activity', {
+        'filter[sign-flows][sign-subcase][sign-marking-activity][piece][:id:]': previousPiece.id,
+      });
+      if (decisionActivity)
+        await this.signatureService.markNewPieceForSignature(previousPiece, piece, decisionActivity);
+    }
     // in submissions, we allow the strengthening of the accessLevel (from default > confidential) meaning we have to update all previous versions.
     await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
+    this.piecesMovedCounter++;
     return piece;
   });
 
@@ -366,6 +383,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       if (meeting) {
         try {
+          await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
           await this.agendaService.putSubmissionOnAgenda(
             meeting,
             subcase,
