@@ -348,7 +348,8 @@ const selectors = {
 
   // login/template
   login: {
-    acmidmButton: '[data-test-route-login-acmidm-container] button',
+    acmidmContainer: '[data-test-route-login-acmidm-container]',
+    loginButton: '[data-test-route-login-acmidm-login-button]',
   },
 
   /**
