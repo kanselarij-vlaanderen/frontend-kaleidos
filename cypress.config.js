@@ -1,6 +1,7 @@
 /* global require, module */
 
 const { defineConfig } = require('cypress')
+const browserify = require('@cypress/browserify-preprocessor')
 
 module.exports = defineConfig({
   chromeWebSecurity: false,
@@ -20,7 +21,10 @@ module.exports = defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
-      return require('./cypress/plugins/index.js')(on, config)
+      const options = {
+        crypto: require.resolve('crypto'),
+      }
+      return require('./cypress/plugins/index.js')(on('file:preprocessor', browserify(options)), config)
     },
     baseUrl: 'http://localhost:4200',
     testIsolation: true, // default true,

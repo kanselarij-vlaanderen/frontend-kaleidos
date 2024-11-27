@@ -51,12 +51,12 @@
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-html": "^0.20.0",
     "@codemirror/lang-xml": "^0.20.0",
+    "@cypress/browserify-preprocessor": "^3.0.2",
     "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.2.0",
     "@ember/render-modifiers": "^2.1.0",
     "@ember/string": "^4.0.0",
     "@ember/test-helpers": "^4.0.4",
-    "@embroider/macros": "^1.16.9",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@kanselarij-vlaanderen/au-kaleidos-css": "3.22.0",
@@ -161,5 +161,8 @@
   },
   "engines": {
     "node": "16.* || >= 18"
+  },
+  "dependencies": {
+    "@embroider/macros": "^1.16.9"
   }
 }

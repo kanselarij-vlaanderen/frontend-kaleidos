@@ -63,7 +63,7 @@ module.exports = function (defaults) {
             http: false,
             https: false,
             os: false,
-            crypto: false,
+            crypto: require.resolve('crypto'),
             vm: false,
           },
         },
