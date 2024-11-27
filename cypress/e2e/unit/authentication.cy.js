@@ -12,7 +12,8 @@ context('Authentication tests', () => {
     cy.visit('/overzicht?sizeAgendas=2');
     const isCI = Cypress.env('CI');
     if (isCI) {
-      cy.get(route.login.acmidmButton).contains(acmidmButtonText);
+      cy.get(route.login.acmidmContainer).get(route.login.loginButton)
+        .contains(acmidmButtonText);
     } else {
       // only when we are on env "development" do we come back to mocklogin route after logout
       // aanmelden route fails locally because of it
@@ -26,6 +27,7 @@ context('Authentication tests', () => {
     cy.logoutFlow();
     cy.visit('/overzicht?sizeAgendas=2');
     // TODO flaky, sometimes we end up on authentication-ti.vlaanderen
-    // cy.get(route.login.acmidmButton).contains(acmidmButtonText);
+    // cy.get(route.login.acmidmContainer).get(route.login.loginButton)
+    //   .contains(acmidmButtonText);
   });
 });
