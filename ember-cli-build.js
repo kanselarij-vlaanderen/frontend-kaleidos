@@ -57,6 +57,16 @@ module.exports = function (defaults) {
             process: 'process/browser.js',
           }),
         ],
+        resolve: {
+          fallback: {
+            stream: require.resolve('stream-browserify'),
+            http: false,
+            https: false,
+            os: false,
+            crypto: false,
+            vm: false,
+          },
+        },
       },
       // exclude: [
       //   'ember-changeset',
