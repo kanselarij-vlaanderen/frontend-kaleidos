@@ -54,7 +54,7 @@ async function getSubject(params) {
   if (mandatees?.length > 1) {
     prefix += 'Co-agendering - ';
   }
-  return `${prefix}${meetingKind.label} VR ${meetingDate}:${titlePrefix} ${params.submission.shortTitle}`;
+  return `${prefix}${meetingKind.label} VR ${meetingDate}: ${titlePrefix} ${params.submission.shortTitle}`;
 }
 
 async function caseSubmittedEmail(params) {
