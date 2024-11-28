@@ -7,6 +7,9 @@
   <:title>
     <span data-test-document-preview-title class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       <span class={{if (responsive "isMobile") "au-u-word-break-all" ""}}>
+        {{#if @documentContainer.position}}
+          {{@documentContainer.position}}.
+        {{/if}}
         {{this.selectedVersion.name}}
       </span>
       {{#unless this.loadFile.isRunning}}

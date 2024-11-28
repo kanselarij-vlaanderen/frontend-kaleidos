@@ -195,6 +195,11 @@
         </Auk::KeyValue>
       {{/if}}
       <Auk::KeyValue data-test-details-tab-name @key={{t "name-document"}}>
+        {{#if @documentContainer.position}}
+          <span>
+            {{@documentContainer.position}}.
+          </span>
+        {{/if}}
         {{#let (or @piece.file.derived.extension @piece.file.extension) as |extension|}}
           {{@piece.name}}{{#if extension}}.{{extension}}{{/if}}
         {{/let}}
