@@ -1,4 +1,5 @@
-import Store from '@ember-data/store';
+/* eslint-disable ember/use-ember-data-rfc-395-imports */
+import Store from 'ember-data/store';
 import ArrayProxy from '@ember/array/proxy';
 
 export default class ExtendedStoreService extends Store {

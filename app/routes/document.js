@@ -35,6 +35,7 @@ export default class DocumentRoute extends Route {
   }
 
   async afterModel(model) {
+    this.documentContainer = await model.documentContainer;
     this.decisionActivity = await this.store.queryOne('decision-activity', {
       filter: {
         report: {
@@ -60,6 +61,7 @@ export default class DocumentRoute extends Route {
       }
     }
     controller.decisionActivity = this.decisionActivity;
+    controller.documentContainer = this.documentContainer;
   }
 
   resetController(controller, isExiting) {

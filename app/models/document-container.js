@@ -4,7 +4,7 @@ export default class DocumentContainerModel extends Model {
   @attr('number') position;
   @attr('datetime') created;
 
-  @belongsTo('concept', { inverse: null, async: true, polymorphic: true }) type;
+  @belongsTo('document-type', { inverse: null , async: true, polymorphic: true }) type;
 
   @hasMany('piece', {
     inverse: 'documentContainer',

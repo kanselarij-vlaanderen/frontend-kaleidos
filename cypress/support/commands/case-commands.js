@@ -135,21 +135,21 @@ function addSubcaseViaModal(subcase) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.log('addSubcaseViaModal');
+  cy.intercept('GET', '/government-bodies**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
   cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
   cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
   cy.intercept('POST', '/submission-activities').as(`postSubmissionActivities${randomInt}`);
-  cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
-  cy.intercept('GET', '/government-bodies**').as(`getGovernmentBodies${randomInt}`);
 
   // after creating a case we are already on the page to add a subcase
   if (!subcase.newCase) {
     cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
   }
 
-  cy.wait(`@getMandatees${randomInt}`, {
+  cy.wait(`@getGovernmentBodies${randomInt}`, {
     timeout: 60000,
   });
-  cy.wait(`@getGovernmentBodies${randomInt}`, {
+  cy.wait(`@getMandatees${randomInt}`, {
     timeout: 60000,
   });
 

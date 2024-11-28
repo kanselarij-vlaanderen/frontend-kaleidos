@@ -11,6 +11,7 @@
 // ! do not use auto formatters on this file. Any whitespaces are used in the eventual text.
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { sortPieces } from './documents';
 
 const footer = 'Met vriendelijke groet,\n'
   + '\n'
@@ -20,24 +21,48 @@ const footer = 'Met vriendelijke groet,\n'
   + 'VlaamseRegering_Agenderingen@groepen.vlaanderen.be\t\n'
   + 'Koolstraat 35, 1000 Brussel\t\n';
 
+async function getAgendaitemText(params) {
+  let agendaitemText = null;
+  const type = await params.submission.agendaItemType;
+  let typeLabel = type?.label.toLowerCase();
+  agendaitemText = typeLabel;
+
+  const number = params.agendaitem?.number;
+  if (number) {
+    if (params.resubmitted && type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+      agendaitemText = `agendapunt ${number}`;
+    } else {
+      agendaitemText = `${typeLabel} ${number}`;
+    }
+  }
+  return agendaitemText;
+}
+
 async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
   let meetingDate = dateFormat(params.meeting.plannedStart, 'dd-MM-yyyy');
-  const resubmitted = params.resubmitted ? ' aanpassing indiening' : '';
-  let prefix = ''
+  const resubmitted = params.resubmitted ? 'aanpassing' : '';
+  const agendaitemText = await getAgendaitemText(params) ?? '';
+  const titlePrefix = params.resubmitted
+    ? ` ${resubmitted} ${agendaitemText}`
+    : ` ${agendaitemText.charAt(0).toUpperCase() + agendaitemText.slice(1)}`;
   const mandatees = await params.submission.mandatees;
+  let prefix = '';
   if (params.submission.confidential) {
     prefix += 'Vertrouwelijk - ';
   }
   if (mandatees?.length > 1) {
     prefix += 'Co-agendering - ';
   }
-  return `${prefix}${meetingKind.label} VR ${meetingDate}:${resubmitted} ${params.submission.shortTitle}`;
+  return `${prefix}${meetingKind.label} VR ${meetingDate}:${titlePrefix} ${params.submission.shortTitle}`;
 }
 
 async function caseSubmittedEmail(params) {
   const submitter = await params.submission.requestedBy;
   const submitterPerson = await submitter.person;
+  const meetingKind = await params.meeting.kind;
+  const agendaitemText = await getAgendaitemText(params);
+
   let message = `Beste,
 `;
   if (params.forSubmitter) {
@@ -47,13 +72,25 @@ Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volg
   }
 
   if (params.resubmitted) {
-    message += `
+    if (agendaitemText) {
+      message += `
+Er werd een aanpassing gedaan aan ${agendaitemText} "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
+`;
+    } else {
+      message += `
 Er werd een aanpassing gedaan aan het eerder ingediende "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
 `;
+    }
   } else {
-    message += `
+    if (agendaitemText) {
+      message += `
+Er werd een nieuwe ${agendaitemText} "${params.submission.shortTitle}" ingediend door kabinet ${submitterPerson.lastName}.
+`;
+    } else {
+      message += `
 Er werd een nieuwe indiening "${params.submission.shortTitle}" gedaan door kabinet ${submitterPerson.lastName}.
 `;
+    }
   }
 
   let additionalMandateeNames = [];
@@ -103,11 +140,36 @@ Het betreft een vertrouwelijke indiening.
   `;
   }
 
-  const meetingKind = await params.meeting.kind;
   if (meetingKind?.uri === CONSTANTS.MEETING_KINDS.PVV) {
     message += `
 Het betreft een indiening in het kader van het Plan Vlaamse Veerkracht.
   `;
+  }
+
+  if (params.isUpdate) {
+    const pieces = (await params.submission.pieces).slice();
+    if (pieces.length) {
+      message += `
+Nieuwe documenten:
+`;
+    }
+    for (const piece of await sortPieces(pieces)) {
+      const previousPiece = await piece.previousPiece;
+
+      if (previousPiece) {
+        // BIS versions already have a proper VR name
+        message += `
+- ${piece.name}
+`;
+      } else {
+        // Craft a sensible doc name for users with position & type
+        const documentContainer = await piece.documentContainer;
+        const type = await documentContainer.type;
+        message += `
+- ${documentContainer.position}. ${piece.name} - ${type.label}
+`;
+      }
+    }
   }
 
   message += `
@@ -220,15 +282,15 @@ async function caseResubmittedSubmitterEmail(params) {
 }
 
 async function caseUpdateSubmissionApproversEmail(params) {
-  return caseSubmittedApproversEmail({ ...params, resubmitted: true });
+  return caseSubmittedApproversEmail({ ...params, resubmitted: true, isUpdate: true });
 }
 
 async function caseUpdateSubmissionIkwEmail(params) {
-  return caseSubmittedIkwEmail({ ...params, resubmitted: true });
+  return caseSubmittedIkwEmail({ ...params, resubmitted: true, isUpdate: true });
 }
 
 async function caseUpdateSubmissionSubmitterEmail(params) {
-  return caseSubmittedSubmitterEmail({ ...params, resubmitted: true });
+  return caseSubmittedSubmitterEmail({ ...params, resubmitted: true, isUpdate: true });
 }
 
 async function caseRequestSendBackEmail(params) {
