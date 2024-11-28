@@ -1,9 +1,8 @@
 import Service from '@ember/service';
 import { run } from '@ember/runloop';
-import { classify, dasherize } from '@ember/string';
+import { classify, dasherize, camelize } from '@ember/string';
 import Evented from '@ember/object/evented';
 import { tracked, TrackedObject } from 'tracked-built-ins';
-import { camelize } from '@ember/string';
 import { BREAKPOINTS } from 'frontend-kaleidos/config/config';
 
 export default class ResponsiveService extends Service.extend(Evented) {
