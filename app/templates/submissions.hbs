@@ -34,7 +34,7 @@
                 <AuLabel>{{t "submitter"}}</AuLabel>
                 <Search::MinisterFilter
                   @selected={{this.submitters}}
-                  @onChange={{set this "submitters"}}
+                  @onChange={{this.setSubmitters}}
                   @showPastMinisters={{true}}
                 />
               </div>

@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
-// import CONSTANTS from 'frontend-kaleidos/config/constants';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
 
 export default class SubmissionsRoute extends Route {
@@ -40,11 +39,27 @@ export default class SubmissionsRoute extends Route {
     },
   };
 
+  // We only want to load the defaults once. Changes made after stay untill all checkboxes are cleared.
+  loadedDefaults = false;
+
   async beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
     if (!this.currentSession.may('view-submissions')) {
       this.router.transitionTo('cases.index');
+    }
+    // minister profile can see all but we will check their mandatee by default
+    // admin profile can see all by default.
+    // we only try this once
+    if (this.currentSession.may('view-all-submissions') && (!this.currentSession.may('treat-and-accept-submissions')) && !this.loadedDefaults) {
+      const currentUserOrganization = await this.currentSession.organization;
+      const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
+      const submitters = await Promise.all(
+        currentUserOrganizationMandatees?.map((m) => m.person)
+      );
+      this.submittersIds = await Promise.all(
+        submitters?.map((m) => m.id)
+      );
     }
   }
 
@@ -71,11 +86,23 @@ export default class SubmissionsRoute extends Route {
       options['filter[:lte:planned-start]'] = date.toISOString();
     }
 
+    // empty list in case all checkboxes become unchecked
+    this.submitters = [];
     if (isPresent(params.submitters)) {
       const submitters = Array.isArray(params.submitters)
         ? params.submitters.join(',')
         : params.submitters || '';
       options['filter[requested-by][person][:id:]'] = submitters;
+      this.submitters = Array.isArray(params.submitters) ? params.submitters : [params.submitters];
+    } else if (this.submittersIds?.length && !this.loadedDefaults) {
+      // We can hit this in 2 occasions: when loading the page or when deselecting all boxes.
+      // in the first case, controller is not yet loaded and will use the value we passed with setupController
+      // in the latter case, controller is already created, ministerfilter has been created and side effects occur with the defaults.
+      // only setting the defaults once.
+      this.loadedDefaults = true;
+      const submitters = [...this.submittersIds].join(',');
+      options['filter[requested-by][person][:id:]'] = submitters;
+      this.submitters = this.submittersIds;
     }
 
     if (!this.currentSession.may('view-all-submissions')) {
@@ -101,5 +128,10 @@ export default class SubmissionsRoute extends Route {
     } else {
       return false;
     }
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    controller.submitters = this.submitters;
   }
 }
