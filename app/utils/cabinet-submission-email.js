@@ -24,28 +24,28 @@ const footer = 'Met vriendelijke groet,\n'
 async function getAgendaitemText(params) {
   let agendaitemText = null;
   const type = await params.submission.agendaItemType;
-  let typeLabel;
-  if (params.resubmitted && type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
-    typeLabel = 'agendapunt';
-  } else {
-    typeLabel = type?.label.toLowerCase();
-  }
-  agendaitemText = `${typeLabel} `;
+  let typeLabel = type?.label.toLowerCase();
+  agendaitemText = typeLabel;
 
   const number = params.agendaitem?.number;
-  if (number)
-    agendaitemText += `${number} `;
+  if (number) {
+    if (params.resubmitted && type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
+      agendaitemText = `agendapunt ${number}`;
+    } else {
+      agendaitemText = `${typeLabel} ${number}`;
+    }
+  }
   return agendaitemText;
 }
 
 async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
   let meetingDate = dateFormat(params.meeting.plannedStart, 'dd-MM-yyyy');
-  const resubmitted = params.resubmitted ? ' aanpassing ' : '';
+  const resubmitted = params.resubmitted ? 'aanpassing' : '';
   const agendaitemText = await getAgendaitemText(params) ?? '';
   const titlePrefix = params.resubmitted
-    ? `${resubmitted}${agendaitemText}`
-    : `${agendaitemText.charAt(0).toUpperCase() + agendaitemText.slice(1)}`;
+    ? ` ${resubmitted} ${agendaitemText}`
+    : ` ${agendaitemText.charAt(0).toUpperCase() + agendaitemText.slice(1)}`;
   const mandatees = await params.submission.mandatees;
   let prefix = '';
   if (params.submission.confidential) {
@@ -54,7 +54,7 @@ async function getSubject(params) {
   if (mandatees?.length > 1) {
     prefix += 'Co-agendering - ';
   }
-  return `${prefix}${meetingKind.label} VR ${meetingDate}: ${titlePrefix} ${params.submission.shortTitle}`;
+  return `${prefix}${meetingKind.label} VR ${meetingDate}:${titlePrefix} ${params.submission.shortTitle}`;
 }
 
 async function caseSubmittedEmail(params) {
@@ -74,7 +74,7 @@ Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volg
   if (params.resubmitted) {
     if (agendaitemText) {
       message += `
-Er werd een aanpassing gedaan aan ${agendaitemText}"${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
+Er werd een aanpassing gedaan aan ${agendaitemText} "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
 `;
     } else {
       message += `
@@ -84,7 +84,7 @@ Er werd een aanpassing gedaan aan het eerder ingediende "${params.submission.sho
   } else {
     if (agendaitemText) {
       message += `
-Er werd een nieuwe ${agendaitemText}"${params.submission.shortTitle}" ingediend door kabinet ${submitterPerson.lastName}.
+Er werd een nieuwe ${agendaitemText} "${params.submission.shortTitle}" ingediend door kabinet ${submitterPerson.lastName}.
 `;
     } else {
       message += `
@@ -146,27 +146,29 @@ Het betreft een indiening in het kader van het Plan Vlaamse Veerkracht.
   `;
   }
 
-  const pieces = (await params.submission.pieces).slice();
-  if (pieces.length) {
-    message += `
+  if (params.isUpdate) {
+    const pieces = (await params.submission.pieces).slice();
+    if (pieces.length) {
+      message += `
 Nieuwe documenten:
 `;
-  }
-  for (const piece of await sortPieces(pieces)) {
-    const previousPiece = await piece.previousPiece;
+    }
+    for (const piece of await sortPieces(pieces)) {
+      const previousPiece = await piece.previousPiece;
 
-    if (previousPiece) {
-      // BIS versions already have a proper VR name
-      message += `
+      if (previousPiece) {
+        // BIS versions already have a proper VR name
+        message += `
 - ${piece.name}
 `;
-    } else {
-      // Craft a sensible doc name for users with position & type
-      const documentContainer = await piece.documentContainer;
-      const type = await documentContainer.type;
-      message += `
+      } else {
+        // Craft a sensible doc name for users with position & type
+        const documentContainer = await piece.documentContainer;
+        const type = await documentContainer.type;
+        message += `
 - ${documentContainer.position}. ${piece.name} - ${type.label}
 `;
+      }
     }
   }
 
@@ -280,15 +282,15 @@ async function caseResubmittedSubmitterEmail(params) {
 }
 
 async function caseUpdateSubmissionApproversEmail(params) {
-  return caseSubmittedApproversEmail({ ...params, resubmitted: true });
+  return caseSubmittedApproversEmail({ ...params, resubmitted: true, isUpdate: true });
 }
 
 async function caseUpdateSubmissionIkwEmail(params) {
-  return caseSubmittedIkwEmail({ ...params, resubmitted: true });
+  return caseSubmittedIkwEmail({ ...params, resubmitted: true, isUpdate: true });
 }
 
 async function caseUpdateSubmissionSubmitterEmail(params) {
-  return caseSubmittedSubmitterEmail({ ...params, resubmitted: true });
+  return caseSubmittedSubmitterEmail({ ...params, resubmitted: true, isUpdate: true });
 }
 
 async function caseRequestSendBackEmail(params) {

@@ -59,11 +59,13 @@ export default class CabinetMailService extends Service {
 
   getSubmissionLatestApprovedAgendaitem = async (submission) => {
     const subcase = await submission.subcase;
-    return await this.store.queryOne('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': subcase.id,
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
-      sort: 'agenda.serialnumber'
-    });
+    if (subcase?.id) {
+      return await this.store.queryOne('agendaitem', {
+        'filter[agenda-activity][subcase][:id:]': subcase.id,
+        'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
+        sort: 'agenda.serialnumber'
+      });
+    }
   };
 
   async sendBackToSubmitterMail(submission, comment, meeting) {
