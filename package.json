@@ -57,6 +57,7 @@
     "@ember/render-modifiers": "^2.1.0",
     "@ember/string": "^4.0.0",
     "@ember/test-helpers": "^4.0.4",
+    "@embroider/macros": "^1.16.9",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@kanselarij-vlaanderen/au-kaleidos-css": "3.22.0",
@@ -161,8 +162,5 @@
   },
   "engines": {
     "node": "16.* || >= 18"
-  },
-  "dependencies": {
-    "@embroider/macros": "^1.16.9"
   }
 }
