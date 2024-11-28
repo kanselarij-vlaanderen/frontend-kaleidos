@@ -63,7 +63,7 @@ export default class CabinetMailService extends Service {
       return await this.store.queryOne('agendaitem', {
         'filter[agenda-activity][subcase][:id:]': subcase.id,
         'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
-        sort: 'agenda.serialnumber'
+        sort: '-created'
       });
     }
   };
@@ -95,11 +95,12 @@ export default class CabinetMailService extends Service {
     const hasConfidentialPieces = await containsConfidentialPieces(submissionPieces);
     const caseTitle = await this.getSubmissionCaseTitle(submission);
     const agendaitem = await this.getSubmissionLatestApprovedAgendaitem(submission);
-
+    const subcase = await submission?.subcase;
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
       caseName: caseTitle,
       resubmitted: true,
+      isUpdate: subcase?.id,
       approvalComment: submission.approvalComment,
       notificationComment: submission.notificationComment,
       comment,
