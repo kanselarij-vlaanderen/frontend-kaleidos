@@ -7,5 +7,6 @@ module.exports = {
     // We like to handle the most common branch in the first clause, which is
     // why the first clause has a negated condition some times.
     'no-negated-condition': 'off',
+    'no-at-ember-render-modifiers': 'off',
   },
 };

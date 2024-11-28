@@ -16,7 +16,7 @@
     @disabled={{this.onSave.isRunning}}
   as |option|>
     {{#if option.svg }}
-      <AuIcon @icon={{option.svg.icon}} class={{(concat "au-u-" option.svg.color)}} />
+      <AuIcon @icon={{option.svg.icon}} class={{concat "au-u-" option.svg.color}} />
     {{/if}}
     {{option.label}}
   </PowerSelect>
