@@ -1,13 +1,11 @@
-import Inflector from 'ember-inflector';
+import { irregular } from '@ember-data/request-utils/string'
 
 export function initialize() {
-  const inflector = Inflector.inflector;
-
-  inflector.irregular('person', 'persons');
-  inflector.irregular('contactPerson', 'contactPersons');
-  inflector.irregular('contact-person', 'contact-persons');
-  inflector.irregular('submission-activity', 'submission-activities');
-  inflector.irregular('minutes', 'minutes');
+  irregular('person', 'persons');
+  irregular('contactPerson', 'contactPersons');
+  irregular('contact-person', 'contact-persons');
+  irregular('submission-activity', 'submission-activities');
+  irregular('minutes', 'minutes');
 }
 
 export default {

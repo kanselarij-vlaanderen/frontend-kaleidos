@@ -29,6 +29,8 @@ module.exports = {
       { argsIgnorePattern: '^_' },
     ],
     'no-dupe-class-members': 'off',
+    'ember/no-runloop': 'off',
+    'ember/no-tracked-properties-from-args': 'off',
   },
   overrides: [
     // node files

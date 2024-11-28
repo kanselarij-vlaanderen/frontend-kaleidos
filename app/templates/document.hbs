@@ -15,6 +15,7 @@
 {{else}}
   <Documents::DocumentPreview::DocumentPreviewModal
     @piece={{this.model}}
+    @documentContainer={{this.documentContainer}}
     @onClose={{this.transitionBack}}
     @didDeletePiece={{this.didDeletePiece}}
     @tab={{this.tab}}
