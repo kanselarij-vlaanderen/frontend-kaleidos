@@ -122,3 +122,29 @@ new-zip-run-reindex:
 # run make reset-elastic-and-cache and verify
 # testdata.zip contains folder named "testdata" with subfolders "db", "files", "tika"
 # testdata-elasticsearch.zip contains folder named "testdata-elasticsearch" with subfolder "elasticsearch"
+
+
+new-database-move-dump:
+# first, make a dump with the old version
+# drc exec -T triplestore isql-v
+# SQL> dump_nquads ('dumps', 1, 1000000000, 1);
+# make sure the file has the right permissions (not locked)
+# - mkdir ${PROJECT_PATH}/testdata/db/toLoad
+	- mv ${PROJECT_PATH}/testdata/db/dumps/* ${PROJECT_PATH}/testdata/db/toLoad
+	- rm ${PROJECT_PATH}/testdata/db/virtuoso.db
+	- rm ${PROJECT_PATH}/testdata/db/virtuoso.pxa
+	- rm ${PROJECT_PATH}/testdata/db/virtuoso-temp.db
+	- rm ${PROJECT_PATH}/testdata/db/.data_loaded
+	- rm ${PROJECT_PATH}/testdata/db/.dba_pwd_set
+	- rm ${PROJECT_PATH}/testdata/db/*.trx
+
+# new-database-version:
+# drc down the stack
+# switch database to new version
+# 	- docker-compose ${COMPOSE_FILE} up -d triplestore && docker-compose ${COMPOSE_FILE} logs -f triplestore
+
+# new-database-migrations:
+# 	- docker-compose ${COMPOSE_FILE} up -d migrations && docker-compose ${COMPOSE_FILE} logs -f migrations
+
+# new-database-database:
+# 	- docker-compose ${COMPOSE_FILE} up -d database && docker-compose ${COMPOSE_FILE} logs -f database
