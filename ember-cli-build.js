@@ -4,7 +4,8 @@
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const webpack = require('webpack');
 
-module.exports = function (defaults) {
+module.exports = async function (defaults) {
+  const { setConfig } = await import('@warp-drive/build-config');
   const app = new EmberApp(defaults, {
     autoprefixer: {
       enabled: true,
@@ -42,9 +43,6 @@ module.exports = function (defaults) {
     'ember-test-selectors': {
       strip: false
     },
-    emberData: {
-      polyfillUUID: true,
-    },
     //polyfill for insecure context (like cypress on jenkins) https://github.com/emberjs/data/tree/v5.0.0?tab=readme-ov-file#randomuuid-polyfill
     '@embroider/macros': {
       setConfig: {
@@ -65,6 +63,11 @@ module.exports = function (defaults) {
       //   'ember-changeset',
       // ],
     },
+  });
+
+  setConfig(app, __dirname, {
+    polyfillUUID: true
+    // WarpDrive/EmberData settings go here (if any)
   });
 
   app.import('node_modules/sanitize-filename/index.js', {
