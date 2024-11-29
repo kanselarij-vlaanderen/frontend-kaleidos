@@ -71,7 +71,7 @@ export default class SearchPublicationFlowsController extends Controller {
   navigateToCase(publicationFlow, clickEvent) {
     const decisionmakingFlowId = publicationFlow.decisionmakingFlowId;
     // Check if we clicked an emphasis inside a linkTo or a linkTo
-    if (!decisionmakingFlowId || clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+    if (!decisionmakingFlowId || clickEvent?.target.parentElement.className.indexOf('l-result-card__link') > -1 || clickEvent?.target.className.indexOf('l-result-card__link') > -1) {
       // do nothing, there is no ID to navigate to or this was a clicked link in the card and the router will transition later
       return;
     } else {

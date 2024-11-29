@@ -1,7 +1,7 @@
 <AuCard
   @shadow={{true}}
   @size="small"
-  class="result-card"
+  class="l-result-card"
   as |card|
 >
   <card.header>
@@ -16,14 +16,11 @@
     <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
       {{#if @decisionmakingFlowId}}
         <AuLink
-          class="au-u-padding-none card-link"
+          class="au-u-padding-none l-result-card__link"
           @route="cases.case.index"
           @model={{@decisionmakingFlowId}}
         >
-          <span
-            class="card-link"
-            data-test-route-search-result-cards-publication-flow-shorttitle
-          >
+          <span data-test-route-search-result-cards-publication-flow-shorttitle>
             <SanitizeHtml
               @raw={{true}}
               @value={{or @shortTitle @title}}

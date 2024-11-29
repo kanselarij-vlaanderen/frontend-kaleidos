@@ -67,7 +67,7 @@ export default class SearchDocumentsController extends Controller {
   @action
   navigateToDocument(document, clickEvent) {
     // Check if we clicked an emphasis or svg inside a linkTo or a linkTo
-    if (clickEvent?.target.parentElement.className.indexOf('card-link') > -1 || clickEvent?.target.className.indexOf('card-link') > -1) {
+    if (clickEvent?.target.parentElement.className.indexOf('l-result-card__link') > -1 || clickEvent?.target.className.indexOf('l-result-card__link') > -1) {
       // do nothing, this was a clicked link in the card and the router will transition later
       return;
     } else {

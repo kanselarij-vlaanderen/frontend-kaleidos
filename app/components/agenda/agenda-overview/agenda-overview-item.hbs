@@ -81,7 +81,7 @@
           {{/if}}
         </div>
         {{#if (and (user-may "manage-agendaitems") @showFormallyOkStatus @isEditingFormallyOkStatus)}}
-          <div class="auk-u-flex-grow auk-o-flex auk-o-flex--justify-end">
+          <div class="auk-o-flex__item auk-o-flex auk-o-flex--justify-end">
             <div class="vlc-agenda-meta__status-holder">
               <Utils::FormallyOkSelector
                 data-test-agenda-overview-item-formally-ok={{true}}

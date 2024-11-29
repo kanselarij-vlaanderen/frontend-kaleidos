@@ -1,7 +1,7 @@
 <AuCard
   @shadow={{true}}
   @size="small"
-  class="result-card"
+  class="l-result-card"
   as |c|
 >
   <c.header>
@@ -26,12 +26,12 @@
     <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
       <AuLink
         data-test-route-search-result-cards-agendaitem-shorttitle
-        class="au-u-padding-none card-link"
+        class="au-u-padding-none l-result-card__link"
         @route="agenda.agendaitems.agendaitem"
 
         @models={{array @meetingId @agendaId @agendaItemId}}
       >
-        <span class="card-link">
+        <span>
           <SanitizeHtml
             @raw={{true}}
             @value={{if @shortTitle @shortTitle @title}}
