@@ -18,7 +18,7 @@ You will need the following things properly installed on your computer.
 
 ## Running / Development
 
-* `npm start`
+* `npm run start`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 * Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
@@ -39,6 +39,8 @@ There you will need some customsations in your docker-compose.override.yml
     networks:
       - default
 ```
+* `npm run test`
+* `npm run test:ember -- --server`
 
 ### Running the full suite:
 * `make run-cypress-tests-headless` will prepare the database, search and cache and run  all specs headless. This is the one you want.
@@ -59,6 +61,12 @@ These commands are used in the above commands. you only need them if you want to
 1. In the project run `docker-compose up -d` make sure every service is up and running.
 2. Make sure your frontend is running on port 4200 also. Issueing the command `npm start` in the frontend should do the trick.
 3. Also in the frontend: issue the  `make run-cypress-tests-headless` command. Your tests are now running.
+
+### Deploying
+
+Specify what it takes to deploy your app.
+
+## Further Reading / Useful Links
 
 * [ember.js](https://emberjs.com/)
 * [ember-cli](https://cli.emberjs.com/release/)

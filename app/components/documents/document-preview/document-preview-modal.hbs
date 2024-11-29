@@ -7,6 +7,9 @@
   <:title>
     <span data-test-document-preview-title class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-small">
       <span class={{if (responsive "isMobile") "au-u-word-break-all" ""}}>
+        {{#if @documentContainer.position}}
+          {{@documentContainer.position}}.
+        {{/if}}
         {{this.selectedVersion.name}}
       </span>
       {{#unless this.loadFile.isRunning}}
@@ -15,7 +18,7 @@
             data-test-document-preview-download-link
             @icon="download"
             @iconAlignment="left"
-            @hideText={{(responsive "isMobile")}}
+            @hideText={{responsive "isMobile"}}
             href={{this.downloadLink}}
             class="auk-u-mr-2"
             download

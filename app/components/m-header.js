@@ -4,8 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledImpersonation } from 'frontend-kaleidos/utils/feature-flag';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledImpersonation, isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 const environmentNames = {
   localhost: 'LOCAL',

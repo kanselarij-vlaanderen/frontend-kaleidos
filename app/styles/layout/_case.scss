@@ -27,7 +27,7 @@
   display: flex;
   flex: 1 1 auto;
   flex-wrap: wrap;
-  gap: $au-unit-tiny / 1.5;
+  gap: calc($au-unit-tiny / 1.5);
   row-gap: 0;
 
   a {

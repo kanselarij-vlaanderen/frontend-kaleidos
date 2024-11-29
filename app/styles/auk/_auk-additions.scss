@@ -91,3 +91,23 @@
     min-width: 20rem;
   }
 }
+
+// Text utilities
+
+.auk-u-text-hyphenate-breaking-words {
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+// Values list
+
+.auk-key-values-list {
+  display: flex;
+  flex-direction: column;
+  gap: $au-unit-medium;
+}
+
+.auk-key-value-item {
+  margin-bottom: 0;
+}

@@ -11,11 +11,11 @@ export default class Concept extends Model {
 
   // The idea behind also using broader is because ember was automatically connecting the broader parent under the narrower relation
   // Resulting in all concepts with 1 inverse narrower to break length == 0 checks on narrower
-  @belongsTo('concept', { inverse: 'narrower', async: true }) broader;
+  @belongsTo('concept', { inverse: 'narrower', async: true, as: 'concept', polymorphic: true }) broader;
 
-  @hasMany('concept', { inverse: 'broader', async: true }) narrower;
-  @hasMany('concept-scheme', { inverse: 'concepts', async: true })
+  @hasMany('concept', { inverse: 'broader', async: true, as: 'concept', polymorphic: true }) narrower;
+  @hasMany('concept-scheme', { inverse: 'concepts', async: true, as: 'concept', polymorphic: false })
   conceptSchemes;
-  @hasMany('concept-scheme', { inverse: 'topConcepts', async: true })
+  @hasMany('concept-scheme', { inverse: 'topConcepts', async: true, as: 'concept', polymorphic: false })
   topConceptSchemes;
 }

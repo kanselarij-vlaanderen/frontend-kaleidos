@@ -207,8 +207,7 @@ context('signatures shortlist overview tests', () => {
       .invoke('removeAttr', 'target')
       .click();
     cy.url().should('include', 'document');
-    cy.get(document.previewDetailsTab.name).children('div.auk-key-value-item__value')
-      .contains(files1[0].newFileName);
+    cy.get(document.previewDetailsTab.name).contains(files1[0].newFileName);
     cy.go('back');
 
     cy.get('@currentDoc').find(route.signatures.row.openSidebar)
@@ -793,8 +792,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .invoke('removeAttr', 'target')
       .click();
     cy.url().should('include', 'document');
-    cy.get(document.previewDetailsTab.name).children('div.auk-key-value-item__value')
-      .contains(decisionTitle);
+    cy.get(document.previewDetailsTab.name).contains(decisionTitle);
     cy.go('back');
 
     cy.get(route.decisions.row.pieceName).contains(decisionTitle)
@@ -817,8 +815,7 @@ context('decisions and minutes shortlist overview tests', () => {
       .invoke('removeAttr', 'target')
       .click();
     cy.url().should('include', 'document');
-    cy.get(document.previewDetailsTab.name).children('div.auk-key-value-item__value')
-      .contains(minutesTitle);
+    cy.get(document.previewDetailsTab.name).contains(minutesTitle);
     cy.go('back');
     cy.get(appuniversum.loader).should('not.exist');
 
