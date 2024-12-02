@@ -39,6 +39,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   @tracked isOpenPieceUploadModal = false;
   @tracked defaultAccessLevel;
   @tracked newPieces = new TrackedArray([]);
+  @tracked piecesNotOnAgenda;
 
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
