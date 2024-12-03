@@ -47,6 +47,11 @@ export default class CasesIndexController extends Controller {
         type: 'array',
       },
     },
+    {
+      noDefinitivePresent: {
+        type: 'boolean',
+      },
+    }
   ];
 
   @tracked page = 0;

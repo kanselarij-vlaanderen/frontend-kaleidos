@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+// import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesIndexRoute extends Route {
   @service store;
@@ -35,6 +36,10 @@ export default class CasesIndexRoute extends Route {
     submitters: {
       refreshModel: true,
       as: 'indieners'
+    },
+    noDefinitivePresent: {
+      refreshModel: true,
+      as: 'enkel_zonder_definitieve',
     },
   };
 
@@ -69,6 +74,12 @@ export default class CasesIndexRoute extends Route {
         'filter[decisionmaking-flow][subcases][requested-by][person][:id:]'
       ] = params.submitters.join(',');
     }
+
+    // We should filter on "not exists" of CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING, which is not possible in ember I think.
+    // we would need post filtering (which will mess with the meta count and make pagination difficult) or do like a shortlist instead.
+    // if (params.noDefinitivePresent) {
+      // options['filter[decisionmaking-flow][subcases][type][:uri:]'] = CONSTANTS.SUBCASE_TYPES.PRINCIPIELE_GOEDKEURING;
+    // }
 
     return this.store.query('case', options);
   }

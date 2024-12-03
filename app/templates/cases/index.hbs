@@ -37,6 +37,12 @@
                 @showPastMinisters={{true}}
               />
             </div>
+            {{#if (user-may "view-submissions")}}
+              <Cases::DefinitiveFilter
+                @noDefinitivePresent={{this.noDefinitivePresent}}
+                @onChange={{set this "noDefinitivePresent"}}
+              />
+            {{/if}}
           </div>
         </Auk::MobileFilters>
       </div>

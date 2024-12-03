@@ -1484,5 +1484,6 @@
   "submission-internal-review": "Interne opmerking",
   "press-agenda": "Persagenda",
   "generate-press-agenda": "Genereer persagenda",
-  "login-text" : "Meld u aan"
+  "login-text" : "Meld u aan",
+  "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring"
 }
