@@ -77,9 +77,11 @@ export default class CasesIndexRoute extends Route {
 
     // We should filter on "not exists" of CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING, which is not possible in ember I think.
     // we would need post filtering (which will mess with the meta count and make pagination difficult) or do like a shortlist instead.
-    // if (params.noDefinitivePresent) {
-      // options['filter[decisionmaking-flow][subcases][type][:uri:]'] = CONSTANTS.SUBCASE_TYPES.PRINCIPIELE_GOEDKEURING;
-    // }
+    if (params.noDefinitivePresent) {
+      // this could be it, but the problem is that the righthand value does not matter with a :has-no:. it will assume any text as
+      // "apply the filter 'FILTER NOT EXISTS ?subcase ?predicate ?type"
+      // options['filter[decisionmaking-flow][subcases][:has-no:type]'] = CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING;
+    }
 
     return this.store.query('case', options);
   }
