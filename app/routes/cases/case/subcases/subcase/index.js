@@ -106,13 +106,11 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
 
-    // show accepted but not propagated pieces as "new" for certain profiles
-    if (this.currentSession.may('create-submissions')) {
-      this.piecesNotOnAgenda = await this.store.queryAll('piece', {
-        'filter[submission-activity][subcase][:id:]': subcase.id,
-        'filter[:has-no:agendaitems]': true,
-      });
-    }
+    // show accepted but not propagated pieces as "new"
+    this.piecesNotOnAgenda = await this.store.queryAll('piece', {
+      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[:has-no:agendaitems]': true,
+    });
   }
 
   async setupController(controller) {
