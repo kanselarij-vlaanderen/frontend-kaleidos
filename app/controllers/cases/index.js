@@ -63,6 +63,7 @@ export default class CasesIndexController extends Controller {
   @tracked caseFilter = null;
   @tracked isLoadingModel;
   @tracked filtersOpen = false;
+  @tracked noDefinitivePresent = false;
 
   constructor() {
     super(...arguments);

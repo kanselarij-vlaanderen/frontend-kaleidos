@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
-// import CONSTANTS from 'frontend-kaleidos/config/constants';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesIndexRoute extends Route {
   @service store;
@@ -43,7 +43,7 @@ export default class CasesIndexRoute extends Route {
     },
   };
 
-  model(params) {
+  async model(params) {
     const options = {
       include: 'decisionmaking-flow',
       sort: params.sort,
@@ -75,12 +75,12 @@ export default class CasesIndexRoute extends Route {
       ] = params.submitters.join(',');
     }
 
-    // We should filter on "not exists" of CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING, which is not possible in ember I think.
-    // we would need post filtering (which will mess with the meta count and make pagination difficult) or do like a shortlist instead.
     if (params.noDefinitivePresent) {
-      // this could be it, but the problem is that the righthand value does not matter with a :has-no:. it will assume any text as
-      // "apply the filter 'FILTER NOT EXISTS ?subcase ?predicate ?type"
-      // options['filter[decisionmaking-flow][subcases][:has-no:type]'] = CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING;
+      const definitiveType = await this.store.findRecordByUri(
+        'subcase-type',
+        CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+      );
+      options['filter[decisionmaking-flow][subcases][type][:not:label]'] = definitiveType.label;
     }
 
     return this.store.query('case', options);
