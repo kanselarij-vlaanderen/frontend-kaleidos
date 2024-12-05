@@ -503,7 +503,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   openConfirmEmptyInternalReviews = () => {
-  // this.reloadAgendaitemsData.perform(); // Do we need to reload anything?? The interalreview may not be loaded, but the model itself cannot be stale
+  // TODO KAS-4886 this first line can go when we no longer have to save agendaitems
+  this.reloadAgendaitemsData.perform(); // Do we need to reload anything?? The interalreview may not be loaded yet, but the model itself cannot be stale
   this.showConfirmEmptyInternalReviews = true;
   };
 
