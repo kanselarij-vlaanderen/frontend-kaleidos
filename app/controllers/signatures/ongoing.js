@@ -8,7 +8,6 @@ import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
 export default class SignaturesOngoingController extends Controller {
   @service router;
-  @service mandatees;
   @service intl;
   @service currentSession;
   @service signatureService;
