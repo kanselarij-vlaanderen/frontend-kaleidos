@@ -1485,5 +1485,7 @@
   "press-agenda": "Persagenda",
   "generate-press-agenda": "Genereer persagenda",
   "login-text" : "Meld u aan",
-  "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring"
+  "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring",
+  "empty-internal-review": "Interne opmerkingen leegmaken",
+  "empty-internal-review-message": "Bent u zeker dat u alle interne opmerkingen voor de goedgekeurde agendapunten op deze agenda wil leegmaken?\nDeze actie kan niet ongedaan worden gemaakt.\nDe interne opmerkingen van nieuwe agendapunten blijven ongewijzigd."
 }

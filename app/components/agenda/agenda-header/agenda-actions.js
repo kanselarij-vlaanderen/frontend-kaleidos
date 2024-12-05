@@ -12,7 +12,7 @@ import {
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import bind from 'frontend-kaleidos/utils/bind';
-import { isPresent } from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
 
 /**
@@ -53,6 +53,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showDownloadDocuments = false;
   @tracked selectedMandatees = [];
   @tracked showDownloadDecisions = false;
+  @tracked showConfirmEmptyInternalReviews = false;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -352,6 +353,43 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.router.refresh(this.router.currentRouteName);
   }
 
+  get canEmptyInternalReviews() {
+    // action will do nothing on designAgenda A, so hide it instead
+    const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.currentAgenda.serialnumber === 'A';
+    return this.currentSession.may('manage-agendaitems') && !isDesignAgendaA;
+  }
+
+  emptyInteralReviews = async() => {
+    this.showConfirmEmptyInternalReviews = false;
+    this.args.onStartLoading(this.intl.t('empty-internal-review'));
+    // getting all valid agendaitems first gets better results than trying submission-internal-review directly via subcase
+    const approvedAgendaitems = await this.store.queryAll('agendaitem', {
+      'filter[:has:previous-version]': true,
+      'filter[agenda][:id:]': this.args.currentAgenda.id,
+    });
+    const savePromises = approvedAgendaitems.map((internalReview) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(internalReview));
+    await all(savePromises);
+    // TODO KAS-4886 this can go when we no longer have to save agendaitems
+    this.args.onStopLoading();
+    this.args.didApproveAgendaitems();
+  };
+
+  emptyInteralReviewsOfAgendaitemThrottled = task({ maxConcurrency: 5}, async (agendaitem) => {
+    const internalReview = await this.store.queryOne('submission-internal-review', {
+      'filter[subcase][agenda-activities][agendaitems][:id:]': agendaitem.id,
+    })
+    if (internalReview?.id && !isEmpty(internalReview.privateComment)) {
+      internalReview.privateComment = '';
+      return await internalReview.save();
+    }
+    // This property is still filled in as of now, we should empty it to avoid showing this briefly in agenda overview
+    // TODO KAS-4886 remove when property is removed from model
+    if (!isEmpty(agendaitem.privateComment)) {
+      agendaitem.privateComment = '';
+      return await agendaitem.save();
+    }
+  });
+
   @action
   print() {
     window.print();
@@ -463,4 +501,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   onChangeDownloadOption(selectedDownloadOption) {
     this.downloadOption = selectedDownloadOption;
   }
+
+  openConfirmEmptyInternalReviews = () => {
+  // this.reloadAgendaitemsData.perform(); // Do we need to reload anything?? The interalreview may not be loaded, but the model itself cannot be stale
+  this.showConfirmEmptyInternalReviews = true;
+  };
+
+  cancelEmptyInternalReviews = () => {
+    this.showConfirmEmptyInternalReviews = false;
+  };
 }
