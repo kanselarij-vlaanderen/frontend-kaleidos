@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesIndexRoute extends Route {
   @service store;
@@ -36,9 +37,13 @@ export default class CasesIndexRoute extends Route {
       refreshModel: true,
       as: 'indieners'
     },
+    noDefinitivePresent: {
+      refreshModel: true,
+      as: 'enkel_zonder_definitieve',
+    },
   };
 
-  model(params) {
+  async model(params) {
     const options = {
       include: 'decisionmaking-flow',
       sort: params.sort,
@@ -68,6 +73,14 @@ export default class CasesIndexRoute extends Route {
       options[
         'filter[decisionmaking-flow][subcases][requested-by][person][:id:]'
       ] = params.submitters.join(',');
+    }
+
+    if (params.noDefinitivePresent) {
+      const definitiveType = await this.store.findRecordByUri(
+        'subcase-type',
+        CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
+      );
+      options['filter[decisionmaking-flow][subcases][type][:not:label]'] = definitiveType.label;
     }
 
     return this.store.query('case', options);
