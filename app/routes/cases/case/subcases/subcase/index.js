@@ -105,6 +105,12 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       const documentPublicationStatus = await documentPublicationActivity?.status;
       this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
+
+    // show accepted but not propagated pieces as "new"
+    this.piecesNotOnAgenda = await this.store.queryAll('piece', {
+      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[:has-no:agendaitems]': true,
+    });
   }
 
   async setupController(controller) {
@@ -117,5 +123,6 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     controller.governmentAreas = this.governmentAreas;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.piecesNotOnAgenda = this.piecesNotOnAgenda;
   }
 }
