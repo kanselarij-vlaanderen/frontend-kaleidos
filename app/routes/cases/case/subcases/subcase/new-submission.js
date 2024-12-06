@@ -10,6 +10,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service currentSession;
   @service router;
   @service draftSubmissionService;
+  @service subcaseService;
 
   pieces;
   defaultAccessLevel;
@@ -20,6 +21,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   approvalComment;
   notificationAddresses;
   notificationComment;
+  isForPostponedSubcase = false;
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
@@ -146,6 +148,12 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       this.notificationComment = this.previousSubmission.notificationComment;
     }
 
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(subcase);
+    const decisionResultCode = await decisionActivity.decisionResultCode;
+    if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
+      // Check whether this subcase is already on a design agenda
+      this.isForPostponedSubcase = !(await this.subcaseService.isOnDesignAgenda(subcase));
+    }
     return subcase;
   }
 
@@ -160,6 +168,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     controller.approvalComment = this.approvalComment;
     controller.notificationAddresses = this.notificationAddresses;
     controller.notificationComment = this.notificationComment;
+    controller.isForPostponedSubcase = this.isForPostponedSubcase;
     // empty list of draft pieces in case user navigating away and back
     // those pieces still exist but should no longer cause hidden BIS versions on real pieces.
     controller.newDraftPieces = new TrackedArray([]);

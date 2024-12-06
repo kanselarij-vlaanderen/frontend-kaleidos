@@ -1,10 +1,11 @@
 import Service, { inject as service } from '@ember/service';
-import constants from 'frontend-kaleidos/config/constants';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class DraftSubmissionService extends Service {
   @service store;
   @service currentSession;
+  @service subcaseService;
 
   updateSubmissionStatus = async(submission, statusUri, comment='') => {
     const newStatus = await this.store.findRecordByUri('concept', statusUri);
@@ -48,7 +49,7 @@ export default class DraftSubmissionService extends Service {
       // use only the latest activity
       statusChangeActivities = [statusChangeActivities.at(0)];
     }
-    const treatedByActivity = statusChangeActivities?.filter((a) => a.status.get('uri') === constants.SUBMISSION_STATUSES.IN_BEHANDELING)
+    const treatedByActivity = statusChangeActivities?.filter((a) => a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING)
       .at(0);
     const user = await treatedByActivity?.startedBy;
     return user;
@@ -59,8 +60,9 @@ export default class DraftSubmissionService extends Service {
     const creationActivity = statusChangeActivities
       ?.filter(
         (a) =>
-          a.status.get('uri') === constants.SUBMISSION_STATUSES.INGEDIEND ||
-          a.status.get('uri') === constants.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.INGEDIEND ||
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND ||
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND
       )
       .at(0);
     // What if this is null (should never happen, mails depend on this to exist)
@@ -73,7 +75,7 @@ export default class DraftSubmissionService extends Service {
     const creationActivity = statusChangeActivities
       ?.filter(
         (a) =>
-          a.status.get('uri') === constants.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
       )
       .at(0);
     return creationActivity ? true : false;
@@ -142,22 +144,15 @@ export default class DraftSubmissionService extends Service {
     if (ongoingSubmission?.id) {
       return false;
     }
-    const latestAgendaActivity = await this.store.queryOne(
-      'agenda-activity',
-      {
-        'filter[subcase][:id:]': subcase.id,
-        sort: '-start-date',
-      }
-    );
-    if (latestAgendaActivity?.id) {
-      const latestAgendaitem = await this.store.queryOne('agendaitem', {
-        'filter[agenda-activity][:id:]': latestAgendaActivity.id,
-        'filter[:has-no:next-version]': 't',
-        sort: '-created',
-      });
-      const agenda = await latestAgendaitem?.agenda;
-      const meeting = await agenda?.meeting;
-      if (meeting) {
+    
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(subcase);
+    const decisionResultCode = await decisionActivity?.decisionResultCode;
+    const relatedAgendas = await this.subcaseService.getRelatedAgendas(subcase);
+    if (relatedAgendas.length) {
+      if (
+        relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+        decisionResultCode?.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+      ) {
         return false;
       }
     }

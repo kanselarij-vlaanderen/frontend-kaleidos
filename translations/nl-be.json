@@ -1441,6 +1441,7 @@
   "update-submitted-on-simple": "Update ingediend door {userName}",
   "treated-on": "Behandeld op {date} om {hour}",
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
+  "resubmit-postponed-agendaitem": "Dien uitgesteld agendapunt opnieuw in",
   "submit-new-documents": "Dien nieuwe documenten in",
   "submit-new-case": "Nieuw agendapunt indienen",
   "submit-new-agendaitem": "Nieuw agendapunt indienen",

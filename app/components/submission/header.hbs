@@ -124,7 +124,15 @@
 {{/if}}
 
 {{#if (and (not this.loadAgenda.isRunning) this.isOpenCreateSubcaseModal)}}
-  {{#if this.isUpdate}}
+  {{#if (or (not this.isUpdate) this.isForPostponedSubcase)}}
+    <Cases::Subcases::ProposableAgendasModal
+      @submission={{@submission}}
+      @onCancel={{this.toggleCreateSubcaseModal}}
+      @onConfirm={{perform this.createSubcase}}
+      @defaultAgenda={{this.selectedAgenda}}
+      @showSaveWithoutAgenda={{true}}
+    />
+  {{else if this.isUpdate}}
     <ConfirmationModal
       @modalOpen={{this.isOpenCreateSubcaseModal}}
       @onCancel={{this.toggleCreateSubcaseModal}}
@@ -133,14 +141,6 @@
       @alert={{true}}
       @loading={{this.createSubcase.isRunning}}
       @message={{t "confirm-accept-subcase-update"}}
-    />
-  {{else}}
-    <Cases::Subcases::ProposableAgendasModal
-      @submission={{@submission}}
-      @onCancel={{this.toggleCreateSubcaseModal}}
-      @onConfirm={{perform this.createSubcase}}
-      @defaultAgenda={{this.selectedAgenda}}
-      @showSaveWithoutAgenda={{true}}
     />
   {{/if}}
 {{/if}}

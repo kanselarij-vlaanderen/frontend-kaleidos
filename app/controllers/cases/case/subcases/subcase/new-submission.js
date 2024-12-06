@@ -23,6 +23,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service agendaService;
   @service draftSubmissionService;
   @service preventUnload;
+  @service subcaseService;
 
   defaultAccessLevel;
   originalSubmission;
@@ -41,6 +42,14 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked requestedBy = null;
   @tracked mandatees = new TrackedArray([]);
+
+  @tracked isForPostponedSubcase;
+
+  get confirmButtonLabel() {
+    return this.isForPostponedSubcase
+      ? this.intl.t('resubmit-postponed-agendaitem')
+      : this.intl.t('new-submission');
+  }
 
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
@@ -222,7 +231,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  createSubmission = dropTask(async () => {
+  createSubmission = dropTask(async (_meeting) => {
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(
@@ -233,6 +242,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
     );
+    const postponedSubmitted = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND
+    )
 
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
@@ -242,14 +255,34 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const governmentAreas = await this.model.governmentAreas;
 
     let meeting;
-    if (this.originalSubmission) {
+    if (_meeting) {
+      meeting = _meeting
+    } else if (this.originalSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
       meeting = await this.store.queryOne('meeting', {
         'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
         'filter[submissions][:id:]': this.originalSubmission.id
       });
     }
-    const status = this.originalSubmission ? updateSubmitted : submitted;
+
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.model);
+    const decisionResultCode = await decisionActivity?.decisionResultCode;
+    const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.model);
+    let oldMeeting = null;
+    if (relatedAgendas.length) {
+      if (
+        relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+        decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+      ) {
+        oldMeeting = relatedAgendas[0].meeting;
+      }
+    }
+
+    const status =  this.isForPostponedSubcase
+      ? postponedSubmitted
+      : this.originalSubmission
+      ? updateSubmitted
+      : submitted;
     const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
@@ -291,7 +324,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting);
+        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting, oldMeeting);
         this.preventUnload.disable();
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {
