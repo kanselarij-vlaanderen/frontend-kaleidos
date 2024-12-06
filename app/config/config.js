@@ -61,3 +61,5 @@ export const BREAKPOINTS = {
   DESKTOP: '(min-width: 1024px) and (max-width: 1600px)',
   BIG_SCREEN: '(min-width: 1601px)',
 }
+
+export const EMAIL_VALIDATION_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/;
