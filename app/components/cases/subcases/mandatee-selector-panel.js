@@ -147,11 +147,14 @@ export default class MandateeSelectorPanel extends Component {
       }
       let ministersToSelect = [];
       // yield Promise.all(selectedMandatees?.map ... starting throwing "void(0) is not a function
-      if (selectedMandatees) {
-        ministersToSelect = yield Promise.all(
-          selectedMandatees.map((m) => m.person)
-        );
-      }
+      // if (selectedMandatees) {
+      //   ministersToSelect = yield Promise.all(
+      //     selectedMandatees.map((m) => m.person)
+      //   );
+      // }
+      ministersToSelect = yield Promise.all(
+        selectedMandatees?.map((m) => m.person)
+      );
       // Try to match the args.submitter to an entry from the mandatees list
       if (this.showSubmitter) {
         // First try to select the active mandatee of the submitter person
