@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* Appuniversum components
    ========================================================================== */
 
@@ -357,26 +359,26 @@ $au-unit-medium: 1.6rem;
   &.au-c-button--muted {
     &,
     &:visited {
-      color: $auk-gray-600;
+      color: auk.$color-gray-600;
     }
 
     &:hover,
     &:focus-visible,
     &:active {
-      color: $auk-gray-800;
+      color: auk.$color-gray-800;
     }
 
     &.is-disabled,
     &.is-disabled:hover,
     &.is-disabled:focus-visible,
     &.is-disabled:active {
-      color: $auk-gray-700;
+      color: auk.$color-gray-700;
     }
 
     &.is-loading,
     &.is-loading:hover,
     &.is-loading:focus-visible {
-      color: $auk-gray-700;
+      color: auk.$color-gray-700;
     }
   }
 }
@@ -522,7 +524,7 @@ $au-unit-medium: 1.6rem;
 
   &:has(.au-c-control-group) {
     > .au-c-control-group {
-      @include style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
+      @include auk.mixin-style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
     }
   }
 }
@@ -837,7 +839,7 @@ $au-unit-medium: 1.6rem;
   height: 100vh;
   width: 95%;
   z-index: 9;
-  box-shadow: $auk-shadow-small;
+  box-shadow: auk.$shadow-small;
 
   &::before {
     content: '';

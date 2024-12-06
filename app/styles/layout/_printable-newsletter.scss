@@ -1,9 +1,11 @@
+@use "../auk";
+
 /* Printable newsletter list
    ========================================================================== */
 
 .l-printable-newsletter {
   p {
-    color: $auk-color-text;
+    color: auk.$color-text;
     line-height: 1.5;
   }
 

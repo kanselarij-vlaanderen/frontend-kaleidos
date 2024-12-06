@@ -1,3 +1,5 @@
+@use "../../auk";
+
 /* Styling for grid documentation
    ========================================================================== */
 
@@ -8,7 +10,7 @@
       justify-content: center;
       align-items: center;
 
-      background: $auk-gray-100;
+      background: auk.$color-gray-100;
       padding: 1rem;
       text-align: center;
     }

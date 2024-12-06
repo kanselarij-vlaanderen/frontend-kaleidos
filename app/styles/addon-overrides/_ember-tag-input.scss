@@ -1,20 +1,22 @@
+@use "../auk";
+
 /* ==========================================================================
    ember-tag-input
    ========================================================================== */
 
 .emberTagInput {
-  border: 0.1rem solid $auk-gray-300;
+  border: 0.1rem solid auk.$color-gray-300;
   border-radius: .3rem;
   width: 100%;
-  background-color: $auk-white;
+  background-color: auk.$color-white;
   padding: .7rem .7rem .4rem .7rem;
 
   font-family: $au-font;
   font-size: 1.5rem;
-  color: $auk-gray-800;
+  color: auk.$color-gray-800;
 
   &::placeholder {
-    color: $auk-gray-500;
+    color: auk.$color-gray-500;
   }
 
   &:focus-within {
@@ -57,7 +59,7 @@
 
   font-family: $au-font;
   font-size: 1.5rem;
-  color: $auk-gray-800;
+  color: auk.$color-gray-800;
 
   &:focus {
     outline: none;

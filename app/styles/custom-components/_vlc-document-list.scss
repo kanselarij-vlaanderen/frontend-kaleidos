@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* ==========================================================================
   .vlc-document-list
    ========================================================================== */
@@ -26,7 +28,7 @@
     align-items: baseline;
     padding-right: .5rem;
 
-    color: $auk-gray-600;
+    color: auk.$color-gray-600;
     font-weight: 400;
     line-height: 1.2;
   }
@@ -39,12 +41,12 @@
 
     &:hover,
     &:active {
-      background: $auk-gray-100;
+      background: auk.$color-gray-100;
       border-radius: 1rem;
     }
 
     &:focus {
-      color: $auk-color-primary;
+      color: auk.$color-primary;
     }
   }
 
@@ -67,7 +69,7 @@
 
 .vlc-document-list__item--active {
   .au-c-icon {
-    color: $auk-green-500;
+    color: auk.$color-green-500;
   }
 }
 
@@ -83,7 +85,7 @@
 /* Document item list show more
    ========================================================================== */
 .vlc-document-show-more-button {
-  color: $auk-blue-500;
+  color: auk.$color-blue-500;
   border: none;
   padding: 0;
   font-size: 1.6rem;

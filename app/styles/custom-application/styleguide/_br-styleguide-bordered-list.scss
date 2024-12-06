@@ -1,3 +1,5 @@
+@use "../../auk";
+
 /* ==========================================================================
   Component: styleguide bordered list
   ========================================================================== */
@@ -11,7 +13,7 @@
 }
 
 .br-styleguide-bordered-list li {
-  border-bottom: 0.1rem solid $auk-gray-200;
+  border-bottom: 0.1rem solid auk.$color-gray-200;
 }
 
 .br-styleguide-bordered-list li:last-child {
@@ -21,25 +23,25 @@
 .br-styleguide-bordered-list a {
   display: block;
   padding: 0.6rem;
-  color: $auk-gray-600;
+  color: auk.$color-gray-600;
   &.active {
     color: #000;
-    background: $auk-gray-100;
+    background: auk.$color-gray-100;
   }
   &:hover {
-    color: $auk-blue-700;
+    color: auk.$color-blue-700;
   }
   &:focus {
     outline: 0;
-    border-color: $auk-yellow-500;
-    box-shadow: inset 0 0 0 0.2rem $auk-yellow-500;
+    border-color: auk.$color-yellow-500;
+    box-shadow: inset 0 0 0 0.2rem auk.$color-yellow-500;
   }
   text-decoration: none;
 }
 
 .br-styleguide-bordered-list--on-gray-100 {
   a.active {
-    background: $auk-gray-200;
+    background: auk.$color-gray-200;
   }
 }
 
