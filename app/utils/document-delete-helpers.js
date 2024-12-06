@@ -43,15 +43,18 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
  * container would otherwise be orphaned.
  *
  * @param pieceOrPromise {Piece | Promise<Piece>}
+ * @param keepDraftPiece Boolean: if only the accepted piece of a submission should be removed
  * @returns {Promise}
  */
-export async function deletePiece(pieceOrPromise) {
+export async function deletePiece(pieceOrPromise, removeDraftPiece=true) {
   const piece = await pieceOrPromise;
   const documentContainer = await piece.documentContainer;
   if (piece) {
-    const draftPiece = await piece.draftPiece;
-    if (draftPiece) {
-      await deletePiece(draftPiece);
+    if (removeDraftPiece) {
+      const draftPiece = await piece.draftPiece;
+      if (draftPiece) {
+        await deletePiece(draftPiece);
+      }
     }
 
     const file = await piece.file;
