@@ -115,12 +115,14 @@ export default class MandateeSelectorPanel extends Component {
     if (this.args.mandatees?.length) {
       let selectedMandatees = [];
       // Only select args mandatees if they are still active
+      console.log(selectedMandatees);
       for (const oldMandatee of this.args.mandatees) {
         const mandatee = this.currentMandatees.find(
           (currentMandatee) =>
             currentMandatee.get('id') === oldMandatee.id
         );
         if (mandatee) {
+          console.log('mandatee', mandatee);
           // the mandatee is a current one
           selectedMandatees.push(mandatee);
         } else {
@@ -145,9 +147,15 @@ export default class MandateeSelectorPanel extends Component {
           }
         }
       }
-      const ministersToSelect = yield Promise.all(
-        selectedMandatees?.map((m) => m.person)
-      );
+      console.log('selectedMandatees', selectedMandatees);
+      
+      let ministersToSelect = [];
+      if (selectedMandatees) {
+        ministersToSelect = yield Promise.all(
+          selectedMandatees.map((m) => m.person)
+        );
+      }
+      console.log('ministersToSelect', ministersToSelect);
       // Try to match the args.submitter to an entry from the mandatees list
       if (this.showSubmitter) {
         // First try to select the active mandatee of the submitter person
