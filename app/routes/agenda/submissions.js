@@ -27,6 +27,7 @@ export default class AgendaSubmissionsRoute extends Route{
         CONSTANTS.CONCEPT_SCHEMES.SUBMISSION_STATUSES
       )
     )
+      .forEach(status => console.debug(status.label))
       .filter((status) =>
         [
           CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
@@ -35,6 +36,7 @@ export default class AgendaSubmissionsRoute extends Route{
           CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
           CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND,
           CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD,
+          CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND,
         ].includes(status.uri)
       )
       .map((status) => status.id);
