@@ -181,7 +181,7 @@
             <Group.Item>
               <AuButton
                 @skin="naked"
-                @disabled={{or (not this.validators.areValid) this.save.isRunning}}
+                @disabled={{this.save.isRunning}}
                 {{on "click" this.cancel}}
               >
                 {{t "cancel"}}
