@@ -1,9 +1,10 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { isBlank } from '@ember/utils';
+import { isBlank, isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
-import { EMAIL_VALIDATION_REGEX } from 'frontend-kaleidos/config/config';
+import { EMAIL_VALIDATION_REGEX_MULTIPLE } from 'frontend-kaleidos/config/config';
+import { set } from '@ember/object';
 import {
   ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
@@ -20,14 +21,15 @@ export default class SettingsEmailController extends Controller {
   }
 
   initValidators = () => {
+    // Maybe no email should be allowed empty besides the CC ones, but for local and DEV it's fine.
     this.validators = new ValidatorSet({
       translationRequestCcEmail: new Validator(() => this.validateEmail(this.model.translationRequestCcEmail)),
-      translationRequestToEmail: new Validator(() => this.validateEmail(this.model.translationRequestToEmail)),
+      translationRequestToEmail: new Validator(() => this.validateEmail(this.model.translationRequestToEmail) && !isBlank(this.model.translationRequestToEmail)),
       translationRequestReplyToEmail: new Validator(() => this.validateEmail(this.model.translationRequestReplyToEmail)),
-      proofRequestToEmail: new Validator(() => this.validateEmail(this.model.proofRequestToEmail)),
+      proofRequestToEmail: new Validator(() => this.validateEmail(this.model.proofRequestToEmail) && !isBlank(this.model.proofRequestToEmail)),
       proofRequestCcEmail: new Validator(() => this.validateEmail(this.model.proofRequestCcEmail)),
       proofRequestReplyToEmail: new Validator(() => this.validateEmail(this.model.proofRequestReplyToEmail)),
-      publicationRequestToEmail: new Validator(() => this.validateEmail(this.model.publicationRequestToEmail)),
+      publicationRequestToEmail: new Validator(() => this.validateEmail(this.model.publicationRequestToEmail) && !isBlank(this.model.publicationRequestToEmail)),
       publicationRequestCcEmail: new Validator(() => this.validateEmail(this.model.publicationRequestCcEmail)),
       publicationRequestReplyToEmail: new Validator(() => this.validateEmail(this.model.publicationRequestReplyToEmail)),
       cabinetSubmissionsSecretaryEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsSecretaryEmail)),
@@ -37,49 +39,23 @@ export default class SettingsEmailController extends Controller {
     });
   };
 
-  onInputProperty = (property) => {
-   
-    // this.model.get(`${property}`) = event.target.value;
+  onInputProperty = (property, value) => {
+    set(this.model, property, value);
     this.validators[`${property}`].enableError();
   };
 
   @task
   *save() {
-    const errors = this.validateAllEmails();
-    if (errors.length) {
-      errors.map((error) => this.toaster.error(error))
-      
-    } else {
+    if (this.validators.areValid) {
       yield this.model.save();
       this.router.transitionTo('settings');
     }
   }
 
-  validateAllEmails = () => {
-    const propertiesToValidate = [
-      'translationRequestCcEmail',
-      'translationRequestToEmail',
-      'translationRequestReplyToEmail',
-      'proofRequestToEmail',
-      'proofRequestCcEmail',
-      'proofRequestReplyToEmail',
-      'publicationRequestToEmail',
-      'publicationRequestCcEmail',
-      'publicationRequestReplyToEmail',
-      'cabinetSubmissionsSecretaryEmail',
-      'cabinetSubmissionsIkwEmail',
-      'cabinetSubmissionsIkwConfidentialEmail',
-      'cabinetSubmissionsReplyToEmail',
-    ]
-    const allResults = propertiesToValidate.map((prop) => this.validateEmail(this.model.get(`${prop}`)));
-    return allResults.filter((result) => !!result);
-  };
-
   validateEmail = (emailProp) => {
-    return !!emailProp?.length || EMAIL_VALIDATION_REGEX.test(emailProp);
-    // if (emailProp?.length && !EMAIL_VALIDATION_REGEX.test(emailProp)) {
-    //   return `${emailProp} is niet aanvaardbaar`;
-    // }
+    const empty = isEmpty(emailProp)
+    const valid = EMAIL_VALIDATION_REGEX_MULTIPLE.test(emailProp);
+    return empty || valid;
   };
 
   @action
@@ -90,9 +66,7 @@ export default class SettingsEmailController extends Controller {
 
   get isDisabled() {
     return (
-      isBlank(this.model.translationRequestToEmail) ||
-      isBlank(this.model.proofRequestToEmail) ||
-      isBlank(this.model.publicationRequestToEmail) ||
+      !this.validators.areValid ||
       this.save.isRunning
     );
   }
