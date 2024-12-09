@@ -63,6 +63,6 @@ export const BREAKPOINTS = {
 }
 
 const mailValidationRegex = "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)+"; // need the "\." here so escape with "\" is needed for RegExp
-export const EMAIL_VALIDATION_REGEX = new RegExp(`^${mailValidationRegex}$`);
+export const EMAIL_VALIDATION_REGEX = new RegExp(`^(${mailValidationRegex})$`);
 // the above, but an optional komma separated list of them is possible
-export const EMAIL_VALIDATION_REGEX_MULTIPLE = new RegExp(`^((${mailValidationRegex})([,]${mailValidationRegex})*)$`, 'g');
+export const EMAIL_VALIDATION_REGEX_MULTIPLE = new RegExp(`^(${mailValidationRegex})([,]${mailValidationRegex})*$`);

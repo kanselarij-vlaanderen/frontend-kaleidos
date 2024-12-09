@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { isBlank, isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { EMAIL_VALIDATION_REGEX_MULTIPLE } from 'frontend-kaleidos/config/config';
-import { set } from '@ember/object';
+import { set, get } from '@ember/object';
 import {
   ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
@@ -41,7 +41,7 @@ export default class SettingsEmailController extends Controller {
 
   onInputProperty = (property, value) => {
     set(this.model, property, value);
-    this.validators[`${property}`].enableError();
+    get(this.validators, property).enableError();
   };
 
   @task
@@ -53,7 +53,7 @@ export default class SettingsEmailController extends Controller {
   }
 
   validateEmail = (emailProp) => {
-    const empty = isEmpty(emailProp)
+    const empty = isEmpty(emailProp);
     const valid = EMAIL_VALIDATION_REGEX_MULTIPLE.test(emailProp);
     return empty || valid;
   };
