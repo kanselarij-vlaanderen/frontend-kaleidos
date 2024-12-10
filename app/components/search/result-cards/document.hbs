@@ -1,4 +1,4 @@
-<AuCard @shadow={{true}} @size="small" class="result-card" as |c|>
+<AuCard @shadow={{true}} @size="small" class="l-result-card" as |c|>
   <c.header>
     <div class="au-u-flex au-u-flex--vertical-center au-u-flex--spaced-tiny">
       <p
@@ -17,13 +17,13 @@
     <AuHeading @level="3" @skin="6" class="au-u-margin-top-tiny">
       <AuLink
         data-test-route-search-result-cards-document-filename
-        class="au-u-padding-none card-link"
+        class="au-u-padding-none l-result-card__link"
         @route="document"
         @model={{@documentId}}
         @icon="document"
         @iconAlignment="left"
       >
-        <span class="card-link">
+        <span>
           <SanitizeHtml
             @raw={{true}}
             @value={{@title}}
@@ -48,11 +48,11 @@
         {{#if @agendaitemShortTitle}}
           {{t "uploaded-in-thing" thing=(t "agendaitem")}}
           <AuLink
-            class="card-link"
+            class="l-result-card__link"
             @route="agenda.agendaitems.agendaitem"
             @models={{array @meetingId @agendaId @agendaitemId}}
           >
-            <span class="card-link">
+            <span>
               <SanitizeHtml
                 @raw={{true}}
                 @value={{@agendaitemShortTitle}}
@@ -62,7 +62,7 @@
         {{else}}
           {{t "uploaded-in"}}
           <AuLink
-            class="card-link"
+            class="l-result-card__link"
             @route="agenda.agendaitems.agendaitem"
             @models={{array @meetingId @agendaId @agendaitemId}}
           >

@@ -3,19 +3,8 @@
 
 // General
 
-.auk-u-flex-grow {
-  flex-grow: 1;
-}
-
 :target {
   scroll-margin-block: $au-unit-small;
-}
-
-
-// Modal
-
-.auk-modal-backdrop > .ember-view {
-  height: 100%;
 }
 
 
@@ -26,33 +15,6 @@
 
   tr:last-child {
     border-bottom: 0;
-  }
-}
-
-.auk-table--striped {
-  .auk-table__row--expanded {
-    background: $auk-white;
-  }
-}
-
-.auk-table__actions--bottom {
-  border-top: 2px solid #cbd2da;
-  padding: 0 1rem 0 1rem;
-}
-
-
-// Sortable
-
-.sortable-item {
-  transition: all 0.125s;
-
-  &.is-dragging {
-    transition-duration: 0s;
-  }
-
-  &.is-dragging,
-  &.is-dropping {
-    z-index: $z-index-drag;
   }
 }
 
@@ -90,10 +52,6 @@
   padding-left: .5rem;
 }
 
-.vlc-procedure-step--nopadding {
-  padding: 0;
-}
-
 
 // File uploader
 
@@ -114,488 +72,42 @@
 }
 
 
-// Temporary overrides for AuButton & AuLink refactor
-
-// List
-
-.auk-list--view {
-  .auk-list__item {
-    .au-c-button,
-    .au-c-link {
-      margin-left: auto;
-    }
-  }
-}
-
-// Table
-
-.auk-table--list {
-  thead {
-    display: none;
-  }
-
-  td {
-    border-bottom: 0;
-  }
-
-  td,
-  tr td:first-child,
-  tr td:last-child {
-    padding: 0 0 $au-unit-small 0;
-  }
-
-  .auk-table--clickable-rows {
-    tr:focus-within td {
-      background-color: transparent;
-    }
-  }
-}
-
-.auk-table__draggable-col {
-  width: 2rem; // Minimize width
-  padding: 1.75rem 1rem 1.2rem;
-}
-
-.auk-table__checkbox-col {
-  width: 2rem; // Minimize width
-}
-
-.auk-table__row--disabled {
-  opacity: .7 !important;
-  cursor: not-allowed;
-
-  &:hover td {
-    background-color: transparent !important;
-  }
-}
-
-.auk-table--sortable {
-  position: relative;
-}
-
-// Button
-
-.auk-button {
-  &:focus {
-    box-shadow: none;
-
-    outline: var(--au-outline);
-    outline-offset: var(--au-outline-offset);
-  }
-}
-
-.auk-button--secondary {
-  &:focus {
-    box-shadow: inset 0 0 0 0.2rem $auk-blue-500;
-
-    &:hover {
-      box-shadow: inset 0 0 0 0.2rem $auk-blue-700;
-    }
-
-    &:active {
-      box-shadow: inset 0 0 0 0.2rem $auk-blue-800;
-    }
-  }
-}
-
-.auk-button--tertiary {
-  &:focus {
-    box-shadow: inset 0 0 0 0.1rem $auk-gray-300;
-
-    &:hover {
-      box-shadow: inset 0 0 0 0.1rem $auk-blue-500;
-    }
-
-    &:active {
-      box-shadow: inset 0 0 0 0.1rem $auk-blue-800;
-    }
-  }
-}
-
-.auk-button-link {
-  border-radius: $au-button-border-radius;
-
-  &:focus {
-    box-shadow: none;
-
-    outline: var(--au-outline);
-    outline-offset: var(--au-outline-offset);
-  }
-}
-
-.auk-button--muted {
-  &.au-c-button--naked {
-    &,
-    &:visited {
-      color: $auk-gray-600;
-    }
-
-    &:hover,
-    &:focus-visible,
-    &:active {
-      color: $auk-gray-800;
-    }
-
-    &.is-disabled,
-    &.is-disabled:hover,
-    &.is-disabled:focus-visible,
-    &.is-disabled:active {
-      color: $auk-gray-700;
-    }
-
-    &.is-loading,
-    &.is-loading:hover,
-    &.is-loading:focus-visible {
-      color: $auk-gray-700;
-    }
-  }
-}
-
-// Input with clear action
-
-.auk-input-with-clear-action {
-  display: block;
-  position: relative;
-  width: 100%;
-
-  > .au-c-input-wrapper {
-    > .au-c-input {
-      padding-right: 3.5rem;
-    }
-  }
-
-  > .au-c-button {
-    position: absolute;
-    top: .1rem;
-    right: .1rem;
-    bottom: 0;
-
-    outline-offset: calc(var(--au-outline-offset) * -1);
-  }
-}
-
 // Help text + Errors on forms
 
 .auk-form-help-text {
   .au-c-input + &,
   .au-c-input-wrapper + &,
-  .auk-input-with-clear-action + &,
+  .au-c-input-with-clear-action + &,
   .auk-datepicker + &  {
     margin-top: 0.5rem;
   }
 }
 
-// Alignment helpers
-
-.auk-u-text-vertical-align-middle {
-  vertical-align: middle;
-}
-
-// Result cards
-// Workaround until we adapt mu-search to send more specific tags for highlights
-.result-card em {
-  font-style: inherit;
-  background: #E4EBF5;
-}
-
-// Make sure long document links break on mobile
-.result-card .card-link {
-  @include mq($until: medium) {
-    white-space: normal;
-    overflow-wrap: break-word;
-    hyphens: auto;
-  }
-
-}
-
-// Bigger font
-// workaround for search legend sign example
-.auk-u-text-size--xlarge {
-  font-size: 2.5rem !important;
-}
-
-// Bigger container
-// workaround for search legend popover having a max-width of 45rem
-.auk-u-max-width-xxlarge {
-  max-width: 65rem;
-}
-
-// Workaround for popover exiting view window on small display for search legend
-@media screen and (max-width: 780px) {
-  .auk-u-max-width-xxlarge.ember-popover {
-    transform: translate3d(10px, 64px, 0px) !important;
-  }
-}
-
-// Text ellipsis helper
-.auk-u-text-ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-// Loadable content
-.auk-loadable-content__content {
-  min-width: 0;
-}
-
-.auk-u-text-uncapitalize {
-  &::first-letter {
-    text-transform: lowercase !important;
-  }
-}
-
-// Select
-
-.auk-select {
-  border: 0.1rem solid $au-input-border-color;
-  color: $au-input-color;
-  font-size: $au-input-font-size;
-  font-weight: var(--au-regular);
-  font-family: var(--au-font);
-  height: $au-input-height;
-  max-width: 100%;
-  padding: 0 $au-unit-small 0.1ex;
-  border-radius: $au-input-border-radius;
-
-  &[disabled],
-  &:disabled {
-    background-color: $au-input-disabled-background-color;
-    border-color: $au-input-disabled-border-color;
-    color: $au-input-disabled-color;
-    cursor: not-allowed;
-  }
-
-  &:focus {
-    outline: var(--au-outline);
-    outline-offset: var(--au-outline-offset);
-    border-color: $au-input-border-color;
-    box-shadow: none;
-  }
-}
-
-// System alert
-
-.auk-system-alert {
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  border-radius: 0;
-  margin-bottom: 0;
-}
-
-// Hierarchical back tab
-// Override the visibility of the back button label within Kaleidos only
-.auk-tabs__hierarchical-back .auk-tabs__tab__label {
-  display: block;
-}
-
-// Tab
-
-.auk-tabs__tab__label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-// Remove left padding
-.auk-tabs__hierarchical-back  .auk-tabs__tab__inner {
-  padding-left: 0;
-}
-
-// Responsive panel layout
-.auk-panel-layout--responsive {
-  @include mq($until: medium) {
-    display: flex !important;
-    flex-direction: column !important;
-    position: relative !important;
-    height: 100% !important;
-
-    .auk-panel-layout__main-content {
-      height: 100% !important;
-      overflow: hidden !important;
-    }
-  }
-}
-
-.auk-panel-layout__sidebar--responsive {
-  @include mq($until: medium) {
-    flex: 0 1 auto !important;
-    max-width: 100% !important;
-    height: initial !important;
-
-    .auk-sidebar {
-      position: relative !important;
-      display: block !important;
-      overflow: initial !important;
-      width: 100% !important;
-      border-right: none !important;
-    }
-
-    .auk-scroll-wrapper__body {
-      padding: $au-unit-tiny $au-unit-small !important;
-      border-bottom: 1px solid var(--au-gray-300) !important;
-      overflow: initial !important;
-    }
-  }
-}
-
-.auk-panel-layout__agenda-items {
-  @include mq($until: medium) {
-    height: auto !important;
-    width: 100% !important;
-    border-bottom: 1px solid var(--au-gray-200);
-
-    .auk-sidebar {
-      position: initial !important;
-      display: block !important;
-      overflow: initial !important;
-      width: 100% !important;
-      border-right: none !important;
-    }
-  }
-}
-
-.auk-panel-layout--documents {
-  @include mq($until: medium) {
-    flex-direction: column;
-
-    .auk-panel-layout__main-content {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-
-      .auk-document-view {
-        flex: 1 1 auto;
-        height: 100%;
-      }
-    }
-
-    .auk-panel-layout__sidebar {
-      height: auto;
-    }
-
-    .auk-sidebar {
-      width: 100%;
-      border-top: .1rem solid var(--au-gray-200);
-    }
-
-    .auk-sidebar--right {
-      border-left: none;
-    }
-
-    .auk-sidebar[data-collapsed="true"] {
-      .auk-navbar--bordered-bottom {
-        border-bottom: none;
-      }
-    }
-
-    .auk-sidebar[data-collapsed="false"] {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: 50rem;
-      // max-height: 50dvh;
-
-      box-shadow:
-        0 0 12px rgba($au-gray-900, 0.15),
-        0 0 2px rgba($au-gray-900, 0.1);
-    }
-  }
-
-  @include mq(medium) {
-    .auk-panel-layout__main-content {
-      aspect-ratio: 1/1.4;
-    }
-
-    .auk-sidebar[data-collapsed="false"] {
-      width: 40rem;
-    }
-  }
-
-  @include mq(large) {
-    .auk-sidebar[data-collapsed="false"] {
-      width: 55rem;
-    }
-  }
-}
-
-.auk-panel-layout--agenda {
-  @include mq($until: medium) {
-    &:has(.auk-agenda-subnav) .auk-panel-layout__agenda-items,
-    &:has(.auk-agenda-subnav) .auk-panel-layout__agenda-history {
-      display: none;
-    }
-  }
-}
-
-// Improve search categories on mobile
-.auk-search-categories {
-  @include mq($until: medium) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $au-unit-tiny
-  }
-}
 
 // Responsive tables
+
 .auk-table__col--8 {
   @include mq($until: medium) {
     min-width: 20rem;
   }
 }
 
-// Sidebar extension
-$scroll-sidebar-width: 50rem;
+// Text utilities
 
-.auk-scroll-wrapper--sidebar {
-display: flex;
-flex-direction: row;
-flex-wrap: nowrap;
-
-.auk-scroll-wrapper__body {
-  width: calc(100% - #{$scroll-sidebar-width});
+.auk-u-text-hyphenate-breaking-words {
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
-.auk-scroll-wrapper__sidebar {
-  position: relative;
-  height: 100%;
-  width: #{$scroll-sidebar-width};
-  background-color: $auk-gray-100;
-  border-left: .1rem solid $auk-gray-300;
-}
+// Values list
 
-.auk-sidebar {
-  height: 100%;
+.auk-key-values-list {
   display: flex;
   flex-direction: column;
-  width: 100%;
-}
-}
-
-.auk-sidebar__header {
-border-bottom: .2rem solid $auk-gray-300;
-padding: .7rem 1.2rem;
-display: flex;
-justify-content: space-between;
-align-items: center;
+  gap: $au-unit-medium;
 }
 
-.auk-sidebar__body {
-flex-grow: 1;
-overflow: auto;
-padding: .9rem 1.2rem;
-}
-
-.auk-sidebar__footer {
-border-top: .1rem solid $auk-gray-300;
-min-height: 5rem;
-padding: .9rem 1.2rem;
-}
-
-// Empty state
-
-.auk-empty-state {
-  width: 100%;
+.auk-key-value-item {
+  margin-bottom: 0;
 }

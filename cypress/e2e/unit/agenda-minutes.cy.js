@@ -61,6 +61,9 @@ context('agenda minutes test', () => {
     cy.generateDecision();
     cy.setAllItemsFormallyOk(2);
     cy.approveDesignAgenda();
+    // we regenerate the decision after agenda approval because documents are "new" and decision exists
+    cy.get(appuniversum.toaster).contains('1 beslissing is aangepast');
+    cy.get(appuniversum.alert.close).click();
 
     cy.openDetailOfAgendaitem(approvalTitle, false);
     cy.generateDecision();

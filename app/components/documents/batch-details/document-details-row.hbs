@@ -7,7 +7,7 @@
     disabled=@disableEditingPosition
   }}
 >
-  <td class="auk-table__draggable-col">
+  <td class="auk-u-minimize-width auk-table__cell--draggable">
     {{#unless @disableEditingPosition}}
       <AuIcon
         class="auk-u-cursor-grab auk-u-text-muted"
@@ -18,14 +18,14 @@
     {{/unless}}
   </td>
   {{#if @isEditingEnabled}}
-    <td class="auk-table__checkbox-col">
+    <td class="auk-u-minimize-width">
       <AuCheckbox
         @checked={{@isSelected}}
         @onChange={{fn @onSelect @row}}
       />
     </td>
   {{/if}}
-  <td class="auk-table__checkbox-col">
+  <td class="auk-u-minimize-width">
     {{#if @row.documentContainer.position}}
       {{@row.documentContainer.position}}.
     {{/if}}

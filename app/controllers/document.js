@@ -16,6 +16,7 @@ export default class DocumentController extends Controller {
   @service userAgent;
 
   @tracked decisionActivity;
+  @tracked documentContainer;
   queryParams = [
     {
       tab: {

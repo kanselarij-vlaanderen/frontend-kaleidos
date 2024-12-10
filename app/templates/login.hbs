@@ -15,26 +15,13 @@
             {{t "kaleidos-login-info-popup-message"}}
           </p>
           <div data-test-route-login-acmidm-container class="au-u-padding-top-large">
-            <Acmidm::Login as |acmidm|>
-              <AuButton
-                @skin="primary"
-                @loading={{acmidm.isAuthenticating}}
-                {{on "click" acmidm.login}}
-              >
-                Meld u aan
-              </AuButton>
-              {{#if acmidm.errorMessage}}
-                <div class="auk-u-mt-2">
-                  <AuAlert
-                    @skin="error"
-                    @icon="circle-x"
-                    @size="small"
-                  >
-                    <p>{{acmidm.errorMessage}}</p>
-                  </AuAlert>
-                </div>
-              {{/if}}
-          </Acmidm::Login>
+            <a
+              data-test-route-login-acmidm-login-button
+              href={{this.loginUrl}}
+              class="au-c-button au-c-button--primary"
+            >
+              {{t "login-text"}}
+            </a>
           </div>
         </div>
       </div>

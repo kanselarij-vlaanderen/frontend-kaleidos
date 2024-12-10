@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { singularize } from 'ember-inflector';
+import { singularize } from '@ember-data/request-utils/string'
 import fetch from 'fetch';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -108,7 +108,8 @@ export default class AgendaService extends Service {
   }
 
   createInternalReview = async(subcase, submissions, privateComment) => {
-    const submissionsToSet = submissions || await subcase?.submissions;
+    const subcaseSubmissions = await subcase?.submissions;
+    const submissionsToSet = submissions || subcaseSubmissions;
     const internalReview = await this.store.createRecord('submission-internal-review', {
       created: new Date(),
       privateComment: privateComment, // default to the CONSTANTS? diff between nota and mededeling somewhere?

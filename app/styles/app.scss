@@ -40,9 +40,7 @@
 @import 'layout/search';
 @import 'layout/agendas';
 @import 'layout/case';
-
-
-// CUSTOM STYLING
+@import 'layout/system-alert';
 
 
 // EXTERNAL
@@ -51,6 +49,7 @@
 @import 'addon-overrides/ember-rdfa-editor';
 @import 'addon-overrides/ember-tag-input';
 @import 'addon-overrides/ember-tooltip';
+@import 'addon-overrides/ember-sortable';
 @import 'govflanders/components/_upload';
 
 
@@ -61,6 +60,3 @@
 
 // PRINT STYLING
 @import 'print/general';
-
-
-

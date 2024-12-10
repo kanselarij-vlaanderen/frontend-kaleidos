@@ -1,6 +1,7 @@
 /* Search page
    ========================================================================== */
 
+// Search container
 .l-search-container {
   position: relative;
   flex: 1;
@@ -31,5 +32,39 @@
     @include mq(medium) {
       display: flex;
     }
+  }
+}
+
+
+// Result cards
+// Workaround until we adapt mu-search to send more specific tags for highlights
+.l-result-card em {
+  font-style: inherit;
+  background: var(--au-blue-200);
+}
+
+// Make sure long document links break on mobile
+.l-result-card__link {
+  @include mq($until: medium) {
+    white-space: normal;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+}
+
+// Workaround for popover exiting view window on small display for search legend
+@media screen and (max-width: 780px) {
+  .l-search-legend .auk-popover {
+    transform: translate3d(10px, 64px, 0px) !important;
+  }
+}
+
+
+// Improve search categories on mobile
+.l-search-categories {
+  @include mq($until: medium) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $au-unit-tiny
   }
 }
