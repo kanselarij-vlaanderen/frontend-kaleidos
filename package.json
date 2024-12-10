@@ -151,7 +151,7 @@
     "release-it": "^15.6.0",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.13.1",
-    "sass": "^1.57.7",
+    "sass": "^1.82.0",
     "tracked-built-ins": "^3.3.0",
     "webpack": "^5.95.0",
     "xml-formatter": "^3.6.3"
