@@ -55,35 +55,38 @@ export default class PieceUploadService extends Service {
   updateRelatedAgendaitems = task(async (pieces, subcase) => {
     // Link piece to all agendaitems that are related to the subcase via an agendaActivity
     // and related to an agenda in the design status
-    const agendaitems = await this.store.query('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': subcase.id,
-      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
-    });
 
     // agendaitems can only have more than 1 item
-    // in case the subcase is on multiple (future) open agendas
-    for (const agendaitem of agendaitems.slice()) {
-      setNotYetFormallyOk(agendaitem);
-      // save prior to adding pieces, micro-service does all the changes with docs
-      await agendaitem.save();
-      for (const piece of pieces) {
-        await addPieceToAgendaitem(agendaitem, piece);
-      }
-      // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
-      for (let index = 0; index < 10; index++) {
-        const agendaitemPieces = await agendaitem.hasMany('pieces').reload();
-        if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
-          // last added piece was found in the list from cache
-          break;
-        } else {
-          // list from cache is stale, wait with back-off strategy
-          await timeout(500 + (index * 500));
-          if (index >= 9) {
-            this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
-              {
-                timeOut: 60000,
-              });
-          }
+    // in case the subcase is on multiple (future) open agendas (retracted and resubmitted)
+    // in that exception case we only want to update the agendaitem with the most recent agenda-activity
+    // that should always be the one that is not retracted (without having to check the decision-result-code)
+    const agendaitem = await this.store.queryOne('agendaitem', {
+      'filter[agenda-activity][subcase][:id:]': subcase.id, 
+      'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
+      'filter[:has-no:next-version]': 't',
+      sort: '-agenda-activity.start-date,-created',
+    });
+
+    setNotYetFormallyOk(agendaitem);
+    // save prior to adding pieces, micro-service does all the changes with docs
+    await agendaitem.save();
+    for (const piece of pieces) {
+      await addPieceToAgendaitem(agendaitem, piece);
+    }
+    // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
+    for (let index = 0; index < 10; index++) {
+      const agendaitemPieces = await agendaitem.hasMany('pieces').reload();
+      if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
+        // last added piece was found in the list from cache
+        break;
+      } else {
+        // list from cache is stale, wait with back-off strategy
+        await timeout(500 + (index * 500));
+        if (index >= 9) {
+          this.toaster.error(this.intl.t('documents-may-not-be-saved-message'), this.intl.t('warning-title'),
+            {
+              timeOut: 60000,
+            });
         }
       }
     }
