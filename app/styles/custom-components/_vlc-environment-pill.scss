@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @use "../auk";
 
 .vlc-environment-pill {
@@ -22,19 +24,19 @@
 
 .vlc-environment-pill--local {
   background-color: auk.$color-pink;
-  border-color: darken(auk.$color-pink, 5%);
+  border-color: color.adjust(auk.$color-pink, $lightness: -5%);
   color: auk.$color-white;
 }
 
 .vlc-environment-pill--dev {
   background-color: auk.$color-green-500;
-  border-color: darken(auk.$color-green-500, 5%);
+  border-color: color.adjust(auk.$color-green-500, $lightness: -5%);
   color: auk.$color-white;
 }
 
 .vlc-environment-pill--test {
   background-color: auk.$color-yellow-500;
-  border-color: darken(auk.$color-yellow-500, 5%);
+  border-color: color.adjust(auk.$color-yellow-500, $lightness: -5%);
   color: auk.$color-yellow-800;
 }
 
@@ -46,7 +48,7 @@
 
 .vlc-environment-pill--prod {
   background-color: auk.$color-red-500;
-  border-color: darken(auk.$color-red-500, 5%);
+  border-color: color.adjust(auk.$color-red-500, $lightness: -5%);
   color: auk.$color-white;
 
   animation: blink 1s cubic-bezier(1,-0.09, 0, 0.99) infinite;
