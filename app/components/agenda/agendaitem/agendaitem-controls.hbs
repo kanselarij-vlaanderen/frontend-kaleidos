@@ -73,6 +73,7 @@
       {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda)}}
         {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
           <AuButton
+            data-test-agendaitem-controls-action-send-submission-back
             @skin="link"
             @alert={{true}}
             role="menuitem"
@@ -131,6 +132,7 @@
           id="comment-title-send-back"
           rows="2"
           @width="block"
+          @disabled={{this.isSendingBackToSubmitter}}
           {{on "input" (pick "target.value" (set this "sendBackToSubmitterComment"))}}
         />
       </AuFormRow>
