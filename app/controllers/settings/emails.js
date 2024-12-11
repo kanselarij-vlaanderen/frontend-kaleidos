@@ -11,10 +11,9 @@ import {
 
 export default class SettingsEmailController extends Controller {
   @service router;
-  @service toaster;
 
   validators;
-  
+
   constructor() {
     super(...arguments);
     this.initValidators();
@@ -32,10 +31,10 @@ export default class SettingsEmailController extends Controller {
       publicationRequestToEmail: new Validator(() => this.validateEmail(this.model.publicationRequestToEmail) && !isBlank(this.model.publicationRequestToEmail)),
       publicationRequestCcEmail: new Validator(() => this.validateEmail(this.model.publicationRequestCcEmail)),
       publicationRequestReplyToEmail: new Validator(() => this.validateEmail(this.model.publicationRequestReplyToEmail)),
-      cabinetSubmissionsSecretaryEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsSecretaryEmail)),
-      cabinetSubmissionsIkwEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsIkwEmail)),
-      cabinetSubmissionsIkwConfidentialEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsIkwConfidentialEmail)),
-      cabinetSubmissionsReplyToEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsReplyToEmail)),
+      cabinetSubmissionsSecretaryEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsSecretaryEmail) && !isBlank(this.model.cabinetSubmissionsSecretaryEmail)),
+      cabinetSubmissionsIkwEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsIkwEmail) && !isBlank(this.model.cabinetSubmissionsIkwEmail)),
+      cabinetSubmissionsIkwConfidentialEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsIkwConfidentialEmail) && !isBlank(this.model.cabinetSubmissionsIkwConfidentialEmail)),
+      cabinetSubmissionsReplyToEmail: new Validator(() => this.validateEmail(this.model.cabinetSubmissionsReplyToEmail) && !isBlank(this.model.cabinetSubmissionsReplyToEmail)),
     });
   };
 
