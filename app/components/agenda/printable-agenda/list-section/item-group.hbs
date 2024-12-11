@@ -49,7 +49,7 @@
           {{! inside previous let so relation should be loaded already}}
           {{#let (await first.agendaActivity.subcase) as |subcase|}}
             {{#if subcase.subcaseName}}
-              <div class="auk-u-mb-4 l-printable-agenda__subcase-name-indented">
+              <div class="l-printable-agenda__subcase-name-indented">
                 <AuPill @size="small">
                   {{!capitalization using helper instead of css class:
                         because of `display: inline-flex` property of Auk::Pill
@@ -86,7 +86,7 @@
             {{! inside previous let so relation should be loaded already}}
             {{#let (await agendaitem.agendaActivity.subcase) as |subcase|}}
               {{#if subcase.subcaseName}}
-                <div class="auk-u-mb-4 l-printable-agenda__subcase-name-indented">
+                <div class="l-printable-agenda__subcase-name-indented">
                   <AuPill @size="small">
                     {{!capitalization using helper instead of css class:
                           because of `display: inline-flex` property of Auk::Pill
@@ -110,3 +110,5 @@
     {{/if}}
   {{/each}}
 </div>
+
+

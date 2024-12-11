@@ -24,35 +24,65 @@
 }
 
 .l-printable-agenda__section-content {
-  margin-left: 3rem;
+  margin-left: 4rem;
 }
 
-.l-printable-agenda__item-group {
-  margin-top: 4rem;
+.l-printable-agenda__item-group{
+  max-width: 750px;
+}
+
+.l-printable-agenda__item-group:not(:first-of-type) {
+  margin-top: 5rem;
 }
 
 .l-printable-agenda__item-group-header {
   line-height: 1.2;
+  max-width: 80%;
 }
 
 .l-printable-agenda__item-group-header--muted { // we can't use `auk-u-text-muted` class here because because the light gray is not really suited (not light enough) for headings
   color: $auk-gray-500 !important;
 }
 
-.l-printable-agenda__item,
-.l-printable-agenda__faux-item {
-  + .l-printable-agenda__item {
+.l-printable-agenda__item + div[value],
+.l-printable-agenda__faux-item + div[value] {
     margin-top: 3rem;
-  }
 }
 
 .l-printable-agenda__item-header {
   font-size: 1.6rem;
   font-weight: 500;
   line-height: 1.5;
+  position: relative;
 
   .l-printable-agenda__header-prefix {
     min-width: 2.5rem;
+  }
+}
+
+.l-printable-agenda__item-header__edit{
+  position: absolute;
+  top: -8px;
+  left: -5rem;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+
+  > svg{
+    fill: #8E98A6;
+  }
+
+  &:hover{
+    background-color: #fff;
+    border: 0.1rem solid #C6CDD3;
+    cursor: pointer;
+
+    > svg{
+      fill: #0055CC;
+    }
   }
 }
 
@@ -62,6 +92,24 @@
 
 .l-printable-agenda__document-list {
   list-style: none !important;
+  margin-inline-start: 25px !important;
+  margin-block-end: 0 !important;
+  padding-inline-start: 0 !important;
+  background-color: rgb(247, 249, 252);
+  border: 0.1rem solid #C6CDD3;
+  border-radius: 0.3rem;
+
+  & > li{
+    padding: 1rem 1rem;
+  }
+
+  & > li:not(:last-child){
+    border-bottom: 0.1rem solid #C6CDD3;
+  }
+
+  .document-content{
+    width: 100%;
+  }
 }
 
 .l-printable-agenda__item-indented {
@@ -70,4 +118,17 @@
 
 .l-printable-agenda__subcase-name-indented {
   padding-left: 2rem;
+}
+
+.title-container{
+  display: flex; justify-content: space-between;
+}
+
+.l-printable-agenda__item{
+  input, textarea{
+    width: 100%;
+  }
+  textarea{
+    min-height: 100px;
+  }
 }
