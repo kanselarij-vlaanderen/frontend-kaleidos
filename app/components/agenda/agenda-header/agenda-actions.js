@@ -354,7 +354,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   get canEmptyInternalReviews() {
-    // action will do nothing on designAgenda A, so hide it instead
+    // action will do nothing on designAgenda A, so hide it instead. This method avoids having to yield async relations
     const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.currentAgenda.serialnumber === 'A';
     return this.currentSession.may('manage-agendaitems') && !isDesignAgendaA;
   }
@@ -363,8 +363,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.showConfirmEmptyInternalReviews = false;
     this.args.onStartLoading(this.intl.t('empty-internal-review'));
     // getting all valid agendaitems first gets better results than trying submission-internal-review directly via subcase
+    const agendaStatus = await this.args.currentAgenda.status;
     const approvedAgendaitems = await this.store.queryAll('agendaitem', {
-      'filter[:has:previous-version]': true,
+      'filter[:has:previous-version]': status.isDesignAgenda ? true : undefined,
       'filter[agenda][:id:]': this.args.currentAgenda.id,
     });
     const savePromises = approvedAgendaitems.map((internalReview) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(internalReview));
