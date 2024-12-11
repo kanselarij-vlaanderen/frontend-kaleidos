@@ -39,6 +39,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
 
   @tracked piece;
   @tracked documentContainer;
+  @tracked retrievedPieces;
 
   @tracked uploadedFile;
   @tracked newPiece;
@@ -82,6 +83,12 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
+  get mayDelete() {
+    return (
+      this.retrievedPieces?.length === 0 || this.currentSession.may('remove-piece-from-parliament')
+    );
+  }
+
   @task
   *loadPieceRelatedData() {
     const loadPiece = (id) =>
@@ -94,6 +101,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
       this.piece = yield loadPiece(this.piece.id);
       yield this.piece.accessLevel;
       this.documentContainer = yield this.piece.documentContainer;
+      this.retrievedPieces = yield this.piece.retrievedPieces;
       yield this.loadVersionHistory.perform();
       // check for alternative label
       if (!isPresent(this.args.dateToShowLabel)) {

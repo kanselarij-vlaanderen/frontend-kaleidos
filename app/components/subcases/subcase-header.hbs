@@ -96,17 +96,25 @@
   @onCancel={{this.cancel}}
   @confirmMessage={{t "move-subcase"}}
   @padding="none"
-  @loading={{this.moveSubcase.isRunning}}
-  @disabled={{not this.newDecisionmakingFlow}}
+  @loading={{or this.moveSubcase.isRunning this.selectDecisionmakingFlow.isRunning}}
+  @disabled={{or (not this.newDecisionmakingFlow) this.newDecisionmakingFlowHasParliamentFlow}}
 >
   <:body>
     <div>
       {{#if this.moveSubcase.isRunning}}
         <Auk::Loader @message={{t "please-be-patient"}} />
       {{else}}
+        {{#if this.newDecisionmakingFlowHasParliamentFlow}}
+        <AuAlert
+          @skin="warning"
+          @size="small"
+        >
+          <p>{{t "warning-new-case-has-parliament-flow"}}</p>
+        </AuAlert>
+        {{/if}}
         <Utils::CaseSearch
           @excludedDecisionmakingFlow={{@decisionmakingFlow}}
-          @onSelect={{this.selectDecisionmakingFlow}}
+          @onSelect={{perform this.selectDecisionmakingFlow}}
         />
       {{/if}}
     </div>
