@@ -65,8 +65,66 @@
                   {{/each}}
 
 
-                  {{!-- Test agenda item --}}
-                  <div class="l-printable-agenda__item-group">
+                  {{!-- Mock agenda item --}}
+
+                  <div id="mock-agenda__item--view" class="l-printable-agenda__item-group">
+                    <div class="l-printable-agenda__faux-item">
+                      <div class="auk-u-non-breakable-group@print">
+                      </div>
+                      <h3 class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header">
+                        Vlaams minister van [...]
+                      </h3>
+                    </div>
+
+                    <div>
+                      <div class="l-printable-agenda__item">
+                        <div>
+                          <div class="auk-o-flex auk-u-mb au-u-flex--vertical-center l-printable-agenda__item-header">
+                            <div class="l-printable-agenda__header-prefix">
+                              6.
+                            </div>
+                            <h4 class="auk-u-m-0 auk-u-text-pre-line">Title of the item</h4>
+                            <button {{on "click" this.toggleEditing}} class="l-printable-agenda__item-header__edit">
+                              <AuIcon
+                                @icon="pencil"
+                              />
+                            </button>
+                          </div>
+                          <div class="auk-u-mb-4 l-printable-agenda__item-indented">
+                              <p>Description of the item</p>
+                          </div>
+                        </div>
+                        <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
+                          <li>
+                            <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
+                              <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+                                Document name #1
+                              </div>
+                              <span class="au-c-pill-container">
+                                <span class="au-c-pill au-c-pill--warning">
+                                  Intern Regering
+                                </span>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
+                              <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+                                Document name #2
+                              </div>
+                              <span class="au-c-pill-container">
+                                <span class="au-c-pill au-c-pill--warning">
+                                  Intern Regering
+                                </span>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="mock-agenda__item--editing" class="l-printable-agenda__item-group hidden">
                     <div class="l-printable-agenda__faux-item">
                       <div class="auk-u-non-breakable-group@print">
                       </div>
@@ -142,10 +200,16 @@
                         </ul>
                         <div class="auk-o-flex auk-u-mt-2 au-u-flex--spaced-tiny au-u-flex--between l-printable-agenda__item-indented">
                           <div class="auk-o-flex au-u-flex--spaced-tiny">
-                            <AuButton @skin="primary">
+                            <AuButton
+                              @skin="primary"
+                              {{on "click" this.toggleEditing}}
+                            >
                               Save
                             </AuButton>
-                            <AuButton @skin="secondary">
+                            <AuButton
+                              @skin="secondary"
+                              {{on "click" this.toggleEditing}}
+                            >
                               Cancel
                             </AuButton>
                           </div>
@@ -156,6 +220,8 @@
                       </div>
                     </div>
                   </div>
+
+                  {{!-- End mock agenda item --}}
 
                 </div>
               </div>

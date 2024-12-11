@@ -70,6 +70,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
+  border: none;
 
   > svg{
     fill: #8E98A6;
@@ -131,4 +132,10 @@
   textarea{
     min-height: 100px;
   }
+}
+
+// Functional
+#mock-agenda__item--editing.hidden,
+#mock-agenda__item--view.hidden{
+  display: none;
 }

@@ -73,4 +73,14 @@ export default class AgendaHeaderAgendaCheck extends Component {
   onSave() {
     this.args.onSave?.(this.fileNameMappings.value);
   }
+
+  @action
+  toggleEditing() {
+    // Your custom logic here
+    console.log('Button was clicked!');
+
+    // // You can also call other methods or perform actions
+    document.getElementById("mock-agenda__item--editing").classList.toggle("hidden");
+    document.getElementById("mock-agenda__item--view").classList.toggle("hidden");
+  }
 }
