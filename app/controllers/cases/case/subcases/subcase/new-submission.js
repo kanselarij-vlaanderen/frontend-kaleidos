@@ -26,7 +26,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service subcaseService;
 
   defaultAccessLevel;
-  originalSubmission;
+  originalSubmission; // TODO cleanup?
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenCreateSubmissionModal = false;
@@ -255,20 +255,21 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const governmentAreas = await this.model.governmentAreas;
 
     let meeting;
-    if (_meeting) {
-      meeting = _meeting
-    } else if (this.originalSubmission) {
+    // this _meeting can be a pointer event when coming from the confirmation model
+    if (_meeting?.plannedStart) {
+      meeting = _meeting;
+    } else if (this.previousSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
       meeting = await this.store.queryOne('meeting', {
         'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-        'filter[submissions][:id:]': this.originalSubmission.id
+        'filter[submissions][:id:]': this.previousSubmission.id
       });
     }
 
     const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.model);
     const decisionResultCode = await decisionActivity?.decisionResultCode;
     const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.model);
-    let oldMeeting = null;
+    let oldMeeting = null; // -- 18/12
     if (relatedAgendas.length) {
       if (
         relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
@@ -278,12 +279,14 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       }
     }
 
+    // this.originalSubmission points to the very first submission, which is not what we want when postponed and resubmitted.
+    // this.previousSubmission should be ok to verify if this was an update and to get the plannedStart
     const status =  this.isForPostponedSubcase
       ? postponedSubmitted
-      : this.originalSubmission
+      : this.previousSubmission
       ? updateSubmitted
       : submitted;
-    const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
+    const plannedStart = meeting?.plannedStart || this.previousSubmission?.plannedStart;
 
     this.submission = this.store.createRecord('submission', {
       shortTitle: trimText(this.model.shortTitle),

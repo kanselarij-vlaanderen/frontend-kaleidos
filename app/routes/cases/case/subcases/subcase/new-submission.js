@@ -141,6 +141,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here
     this.originalSubmission = await this.draftSubmissionService.getOriginalSubmissionForSubcase(subcase); // used to get meeting in controller
 
+    // TODO there was no previousSubmission when postponed > resubmitted > BIS update
     if (this.previousSubmission) {
       this.approvalAddresses = this.previousSubmission.approvalAddresses;
       this.approvalComment = this.previousSubmission.approvalComment;
@@ -148,9 +149,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       this.notificationComment = this.previousSubmission.notificationComment;
     }
 
+    this.isForPostponedSubcase = false; // clear
     const decisionActivity = await this.subcaseService.getLatestDecisionActivity(subcase);
-    const decisionResultCode = await decisionActivity.decisionResultCode;
-    if (decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
+    const decisionResultCode = await decisionActivity?.decisionResultCode;
+    if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
       // Check whether this subcase is already on a design agenda
       this.isForPostponedSubcase = !(await this.subcaseService.isOnDesignAgenda(subcase));
     }

@@ -75,7 +75,8 @@ export default class DraftSubmissionService extends Service {
     const creationActivity = statusChangeActivities
       ?.filter(
         (a) =>
-          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND ||
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND
       )
       .at(0);
     return creationActivity ? true : false;
@@ -121,6 +122,12 @@ export default class DraftSubmissionService extends Service {
       for (const piece of pieces) {
         const actualPiece = await piece.acceptedPiece;
         if (!actualPiece) {
+          return false;
+        }
+        // pieces may be propagated because of pav:previousVersion between piece on approved agenda and accepted piece on draft agenda
+        // in that case we should check if the submissionActivity exists, that only gets propagated with approved agendas
+        const submissionActivity = await actualPiece.submissionActivity;
+        if (!submissionActivity) {
           return false;
         }
       }
