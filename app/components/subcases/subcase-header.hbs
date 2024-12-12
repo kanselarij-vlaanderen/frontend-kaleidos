@@ -105,12 +105,14 @@
         <Auk::Loader @message={{t "please-be-patient"}} />
       {{else}}
         {{#if this.newDecisionmakingFlowHasParliamentFlow}}
-        <AuAlert
-          @skin="warning"
-          @size="small"
-        >
-          <p>{{t "warning-new-case-has-parliament-flow"}}</p>
-        </AuAlert>
+          <div class="auk-u-m-2">
+            <AuAlert
+              @icon="alert-triangle"
+              @skin="warning"
+            >
+              <p>{{t "warning-new-case-has-parliament-flow"}}</p>
+            </AuAlert>
+          </div>
         {{/if}}
         <Utils::CaseSearch
           @excludedDecisionmakingFlow={{@decisionmakingFlow}}
