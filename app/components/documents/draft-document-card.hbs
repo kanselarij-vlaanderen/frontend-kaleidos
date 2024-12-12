@@ -125,17 +125,15 @@
                   </AuButton>
                 {{/if}}
                 <AuHr />
-                {{#if this.mayDelete}}
-                  <AuButton
-                    data-test-draft-document-card-delete
-                    @skin="link"
-                    @alert={{true}}
-                    {{on "click" this.deleteDocumentContainer}}
-                    role="menuitem"
-                  >
-                    {{t "document-delete"}}
-                  </AuButton>
-                {{/if}}
+                <AuButton
+                  data-test-draft-document-card-delete
+                  @skin="link"
+                  @alert={{true}}
+                  {{on "click" this.deleteDocumentContainer}}
+                  role="menuitem"
+                >
+                  {{t "document-delete"}}
+                </AuButton>
               </AuDropdown>
               {{!-- template-lint-enable require-context-role --}}
             </Group.Item>
