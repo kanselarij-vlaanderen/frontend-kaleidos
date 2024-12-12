@@ -18,6 +18,7 @@ import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/downlo
 /**
  * @argument {Meeting} meeting
  * @argument {Agenda} currentAgenda
+ * @argument {[Agenda]} reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
  * @argument {function} didApproveAgendaitems
  * @argument onStartLoading
  * @argument onStopLoading
@@ -127,6 +128,23 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get isFinalMeeting() {
     return isPresent(this.args.meeting.agenda.get('id'));
+  }
+
+  get latestAgenda() {
+    return this.args.reverseSortedAgendas.slice().at(0);
+  }
+
+  get currentAgendaIsLatest() {
+    return (
+      this.latestAgenda.id === this.args.currentAgenda.id
+    );
+  }
+
+  get canEmptyInternalReviews() {
+    // action will do nothing on designAgenda A, so hide it instead. This method avoids having to yield async relations
+    const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.currentAgenda.serialnumber === 'A';
+    // need permission and be on the latest agenda to do the action
+    return this.currentSession.may('manage-agendaitems') && this.currentAgendaIsLatest && !isDesignAgendaA;
   }
 
   @bind
@@ -353,26 +371,20 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.router.refresh(this.router.currentRouteName);
   }
 
-  get canEmptyInternalReviews() {
-    // action will do nothing on designAgenda A, so hide it instead. This method avoids having to yield async relations
-    const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.currentAgenda.serialnumber === 'A';
-    return this.currentSession.may('manage-agendaitems') && !isDesignAgendaA;
-  }
-
   emptyInteralReviews = async() => {
     this.showConfirmEmptyInternalReviews = false;
     this.args.onStartLoading(this.intl.t('empty-internal-review'));
     // getting all valid agendaitems first gets better results than trying submission-internal-review directly via subcase
     const agendaStatus = await this.args.currentAgenda.status;
     const approvedAgendaitems = await this.store.queryAll('agendaitem', {
-      'filter[:has:previous-version]': status.isDesignAgenda ? true : undefined,
+      'filter[:has:previous-version]': agendaStatus.isDesignAgenda ? true : undefined,
       'filter[agenda][:id:]': this.args.currentAgenda.id,
     });
     const savePromises = approvedAgendaitems.map((internalReview) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(internalReview));
     await all(savePromises);
     // TODO KAS-4886 this can go when we no longer have to save agendaitems
     this.args.onStopLoading();
-    this.args.didApproveAgendaitems();
+    this.args.didApproveAgendaitems(); // just calls a refresh route
   };
 
   emptyInteralReviewsOfAgendaitemThrottled = task({ maxConcurrency: 5}, async (agendaitem) => {

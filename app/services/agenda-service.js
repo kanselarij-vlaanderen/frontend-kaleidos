@@ -159,7 +159,7 @@ export default class AgendaService extends Service {
       body: JSON.stringify({
         subcase: subcase.uri,
         formallyOkStatus: formallyStatusUri,
-        privateComment: privateComment,
+        privateComment: null, // TODO KAS-4886 fully remove, private comments were still being set on the agendaitem
       })
     });
     let json;
