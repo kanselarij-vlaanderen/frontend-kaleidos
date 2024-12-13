@@ -47,6 +47,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @tracked piece;
   @tracked documentContainer;
+  @tracked retrievedPieces;
   @tracked isDraftAccessLevel;
   @tracked signFlow;
   @tracked signMarkingActivity;
@@ -154,6 +155,13 @@ export default class DocumentsDocumentCardComponent extends Component {
     return hasPermission;
   }
 
+  get mayDelete() {
+    return (
+      !this.args.hideDelete &&
+      (this.retrievedPieces?.length === 0 || this.currentSession.may('remove-piece-from-parliament'))
+    );
+  }
+
   @task
   *loadCodelists() {
     this.defaultAccessLevel = yield this.store.findRecordByUri(
@@ -172,6 +180,7 @@ export default class DocumentsDocumentCardComponent extends Component {
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
       this.piece = yield loadPiece(this.piece.id);
+      this.retrievedPieces = yield this.piece.retrievedPieces;
       this.documentContainer = yield this.piece.documentContainer;
       yield this.loadVersionHistory.perform();
       // check for alternative label

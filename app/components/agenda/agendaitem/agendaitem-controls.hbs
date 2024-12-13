@@ -115,7 +115,6 @@
 <ConfirmationModal
   @modalOpen={{this.isVerifyingSendBack}}
   @title={{t "send-back-to-submitter"}}
-  @message={{this.deleteWarningText}}
   @onConfirm={{fn this.verifySendBackToSubmitter @agendaitem}}
   @onCancel={{this.toggleIsVerifyingSendBack}}
   @confirmMessage={{t "delete"}}
@@ -125,6 +124,12 @@
   @loading={{this.isSendingBackToSubmitter}}
 >
   <:body>
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+    >
+      <p>{{t "send-back-to-submitter-message"}}</p>
+    </AuAlert>
     <div class="au-c-form">
       <AuFormRow>
         <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>

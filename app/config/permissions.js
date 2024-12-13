@@ -76,6 +76,8 @@ const {
 // - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
 // - create-subcases-from-submissions: Allow creating a real subcase (and pieces, files, ...) from a submission
 // - delete-submissions
+// - remove-piece-from-parliament
+// - manage-agendaitems-with-parliament-flow
 
 const groups = [
   {
@@ -134,6 +136,8 @@ const groups = [
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
         'delete-submissions',
+        'remove-piece-from-parliament',
+        'manage-agendaitems-with-parliament-flow',
       ]
     }
   },

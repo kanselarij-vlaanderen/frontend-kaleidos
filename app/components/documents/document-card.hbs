@@ -256,7 +256,7 @@
                     {{t "stop-sign-flow"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideDelete)}}
+                {{#if this.mayDelete}}
                   <AuHr />
                   <AuButton
                     data-test-document-card-delete
