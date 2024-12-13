@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -171,6 +172,49 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
+  async deleteItemAndSubcaseFullyForSubmission(agendaitem, submission) {
+    this.showLoader = true;
+    const agendaItemType = await agendaitem.type;
+    const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
+    if (this.isDeletable) {
+      await this.agendaService.deleteAgendaitem(agendaitem);
+    } else {
+      // should be unreachable if there is a submission
+      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
+    }
+    // If decisionmaking flow & case are new & they don't have other subcases
+    //  → Delete
+    const subcase = await submission.subcase; // could this ever be stale? get subcase from agendaitem instead?
+    if (submission.decisionmakingFlowTitle) {
+      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
+      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+    // submission still has acceptedPieces connected to draftPieces, but are we always allowed to delete the acceptedpieces?
+    const acceptedPiecesOfSubmission = await this.store.queryAll('piece', {
+      'filter[draft-piece][submission][:id:]': submission.id,
+    });
+
+    const savePromises = acceptedPiecesOfSubmission.map(async (piece) => {
+      await deletePiece(piece, false);
+    });
+    await all(savePromises);
+
+    if (this.args.onDeleteAgendaitem) {
+      await this.args.onDeleteAgendaitem(agendaItemType, previousNumber);
+    }
+    this.showLoader = false;
+  }
+
   @task
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
@@ -213,24 +257,8 @@ export default class AgendaitemControls extends Component {
       this.sendBackToSubmitterComment,
       this.args.meeting,
     );
-    await this.deleteItem(agendaitem);
-    const subcase = await submission.subcase;
-    // If decisionmaking flow & case are new & they don't have other subcases
-    //  → Delete
-    if (submission.decisionmakingFlowTitle) {
-      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
-      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
-      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
-        const _case = await decisionmakingFlow.case;
-        await _case.destroyRecord();
-        await decisionmakingFlow.destroyRecord();
-      }
-    }
-    // Delete subcase
-    await subcase.destroyRecord();
-    // Delete submission activity
-    const submissionActivities = await submission.submissionActivities;
-    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+
+    await this.deleteItemAndSubcaseFullyForSubmission(agendaitem, submission);
     this.sendBackToSubmitterComment = '';
     this.isSendingBackToSubmitter = false;
   }
