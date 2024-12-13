@@ -22,6 +22,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
   @tracked newDecisionmakingFlow = null;
+  @tracked newDecisionmakingFlowHasParliamentFlow = false;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
   @tracked isShowingOptions = false;
@@ -55,7 +56,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.loadData.isIdle &&
         this.currentSession.may('manage-agendaitems') &&
         (!this.args.parliamentFlow ||
-      (this.parliamentRetrievalActivity && this.args.subcases.length === 1))
+      (this.parliamentRetrievalActivity && this.args.subcases.length === 1 && this.currentSession.may('manage-agendaitems-with-parliament-flow')))
     );
   }
 
@@ -194,15 +195,16 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  @action
-  async selectDecisionmakingFlow(newDecisionmakingFlow) {
+  selectDecisionmakingFlow = task(async (newDecisionmakingFlow) => {
     this.newDecisionmakingFlow = newDecisionmakingFlow?.id
       ? await this.store.findRecord(
           'decisionmaking-flow',
           newDecisionmakingFlow.id
         )
       : null;
-  }
+    const _case = await this.newDecisionmakingFlow?.case;
+    this.newDecisionmakingFlowHasParliamentFlow = !!(await _case?.parliamentFlow);
+  });
 
   moveSubcase = task(async () => {
     const oldDecisionmakingFlow = this.args.decisionmakingFlow;

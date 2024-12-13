@@ -1485,5 +1485,6 @@
   "submission-internal-review": "Interne opmerking",
   "press-agenda": "Persagenda",
   "generate-press-agenda": "Genereer persagenda",
-  "login-text" : "Meld u aan"
+  "login-text" : "Meld u aan",
+  "warning-new-case-has-parliament-flow": "Deze procedurestap kan niet naar dit dossier verplaatst worden aangezien er al een koppeling is met het Vlaams Parlement"
 }
