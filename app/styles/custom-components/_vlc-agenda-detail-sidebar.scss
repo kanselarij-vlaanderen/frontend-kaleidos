@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* ==========================================================================
   Agenda items
    ========================================================================== */
@@ -20,10 +22,10 @@
   position: relative;
 
   padding: 1rem 1.5rem;
-  background: $auk-gray-100;
-  border-bottom: 0.01rem solid $auk-gray-300;
+  background: auk.$color-gray-100;
+  border-bottom: 0.01rem solid auk.$color-gray-300;
 
-  color: $auk-gray-600;
+  color: auk.$color-gray-600;
   font-size: 1.3rem;
   text-decoration: none;
 }
@@ -31,7 +33,7 @@
 .vlc-agenda-detail-sidebar__sub-item a {
   &:hover,
   &:focus {
-    background: $auk-gray-200;
+    background: auk.$color-gray-200;
   }
 }
 
@@ -39,7 +41,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active,
 a.vlc-agenda-detail-sidebar__sub-item--active:hover,
 a.vlc-agenda-detail-sidebar__sub-item--active:focus,
 a.vlc-agenda-detail-sidebar__sub-item--active:active {
-  background: $auk-white;
+  background: auk.$color-white;
 
   &:before {
     display: block;
@@ -50,7 +52,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
 
     width: 0.4rem;
     height: 100%;
-    background-color: $auk-color-primary;
+    background-color: auk.$color-primary;
 
     content: "";
   }
@@ -65,25 +67,22 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
   display: flex;
   justify-content: flex-start;
 
-  color: $auk-blue-500;
+  color: auk.$color-blue-500;
   font-size: 1.4rem;
   font-weight: 500;
   line-height: 1.4;
 
   .vlc-agenda-detail-sidebar__sub-item:hover &,
   .vlc-agenda-detail-sidebar__sub-item:focus & {
-    color: $auk-blue-700;
+    color: auk.$color-blue-700;
   }
 
   .vlc-agenda-detail-sidebar__sub-item--active &,
   .vlc-agenda-detail-sidebar__sub-item--active:hover &,
   .vlc-agenda-detail-sidebar__sub-item--active:focus & {
-    color: $auk-color-text;
+    color: auk.$color-text;
   }
 }
-
-// $auk-blue-500
-// color: $auk-color-text;
 
 .vlc-agenda-detail-sidebar__text-container {
   width: calc(100% - 3rem);
@@ -108,7 +107,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
   margin-right: 0.5rem;
   min-width: 2.5rem;
 
-  color: $auk-color-text;
+  color: auk.$color-text;
   font-size: 1.4rem;
   font-weight: 500;
   text-align: left;
@@ -126,7 +125,7 @@ a.vlc-agenda-detail-sidebar__sub-item--active:active {
 .vlc-agenda-detail-sidebar__no-items-text {
   line-height: 3.5rem;
   font-size: 1.5rem;
-  color: $auk-gray-600;
+  color: auk.$color-gray-600;
   margin: 1.5rem;
 }
 

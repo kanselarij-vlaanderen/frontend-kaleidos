@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* ==========================================================================
   .vlc-status-timeline
    ========================================================================== */
@@ -15,7 +17,7 @@
 
   &:before {
     content: " ";
-    background: $auk-color-border;
+    background: auk.$color-border;
     height: 100%;
     width: 1px;
     position: absolute;
@@ -29,15 +31,15 @@
   @include au-font-size($au-base);
 
   .vlc-status-timeline__item--positive & {
-    color: #8CAE2C; // Not $auk-green-500
+    color: #8CAE2C; // Not auk.$color-green-500
   }
 
   .vlc-status-timeline__item--neutral & {
-    color: $auk-gray-600;
+    color: auk.$color-gray-600;
   }
 
   .vlc-status-timeline__item--in-progress & {
-    color: $auk-color-primary;
+    color: auk.$color-primary;
   }
 }
 
@@ -51,15 +53,15 @@
   margin-right: $au-unit-tiny * 1.2;
 
   .vlc-status-timeline__item--positive & {
-    background: #8CAE2C;// Not $auk-green-500
+    background: #8CAE2C;// Not auk.$color-green-500
   }
 
   .vlc-status-timeline__item--neutral & {
-    background: $auk-gray-600;
+    background: auk.$color-gray-600;
   }
 
   .vlc-status-timeline__item--in-progress & {
-    background: $auk-color-primary;
+    background: auk.$color-primary;
   }
 
   .vlc-status-timeline__item + .vlc-status-timeline__item & {

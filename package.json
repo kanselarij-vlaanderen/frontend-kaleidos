@@ -59,7 +59,7 @@
     "@embroider/macros": "^1.16.9",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "3.23.0",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "4.0.0",
     "@lblod/ember-acmidm-login": "^2.0.0",
     "@lblod/ember-mock-login": "^0.9.0",
     "@lblod/ember-rdfa-editor": "10.7.0",
@@ -151,7 +151,7 @@
     "release-it": "^15.6.0",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.13.1",
-    "sass": "^1.57.7",
+    "sass": "^1.82.0",
     "tracked-built-ins": "^3.3.0",
     "webpack": "^5.95.0",
     "xml-formatter": "^3.6.3"
