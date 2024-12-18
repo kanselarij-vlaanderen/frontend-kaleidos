@@ -74,13 +74,26 @@ export default class AgendaHeaderAgendaCheck extends Component {
     this.args.onSave?.(this.fileNameMappings.value);
   }
 
+  // Prototyping
+
   @action
   toggleEditing() {
-    // Your custom logic here
-    console.log('Button was clicked!');
 
-    // // You can also call other methods or perform actions
     document.getElementById("mock-agenda__item--editing").classList.toggle("hidden");
     document.getElementById("mock-agenda__item--view").classList.toggle("hidden");
+  }
+
+  @action
+  toggleFileTagEditing() {
+
+    document.getElementById("mock-agenda__item__file--editing").classList.toggle("hidden");
+    document.getElementById("mock-agenda__item__file--view").classList.toggle("hidden");
+  }
+
+  @action
+  toggleFileNameEditing() {
+
+    document.getElementById("mock-agenda__item__name--editing").classList.toggle("hidden");
+    document.getElementById("mock-agenda__item__name--view").classList.toggle("hidden");
   }
 }

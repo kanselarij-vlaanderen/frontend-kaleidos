@@ -155,46 +155,69 @@
                         <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
                           <li>
                             <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
-                              <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+                              <div id="mock-agenda__item__name--view" class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
                                 NOOZO - Decreet
-                                <AuIcon
-                                  @icon="pencil"
+                                <AuButton
+                                  @skin={{"naked"}}
+                                  @icon={{"pencil"}}
+                                  @hideText={{true}}
+                                  {{on "click" this.toggleFileNameEditing}}
                                 />
                               </div>
-                              <span class="au-c-pill-container">
-                                <span class="au-c-pill au-c-pill--warning" data-test-access-level-pill="">
+                              <div id="mock-agenda__item__name--editing" class="au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center hidden">
+                                <AuInput
+                                  value={{"NOOZO - Decreet"}}
+                                  id="input"
+                                />
+                                <AuButton
+                                  @skin={{"naked"}}
+                                  @icon={{"check"}}
+                                  @hideText={{true}}
+                                  {{on "click" this.toggleFileNameEditing}}
+                                />
+                                <AuButton
+                                  @skin={{"naked"}}
+                                  @icon={{"cross"}}
+                                  @hideText={{true}}
+                                  {{on "click" this.toggleFileNameEditing}}
+                                />
+                              </div>
+                              <div id="mock-agenda__item__file--view">
+                                <AuPill
+                                  @skin={{"warning"}}
+                                  @draft={{false}}
+                                  @size={{"regular"}}
+                                  @icon={{""}}
+                                  @onClickAction={{this.toggleFileTagEditing}}
+                                  @actionIcon={{"pencil"}}
+                                  @actionText={{"Edit"}}
+                                >
                                   Intern Regering
-                                </span>
-                                <button class="au-c-pill-action au-c-pill--warning" type="button">
-                                  <AuIcon
-                                    @icon="pencil"
-                                  />
-                                  <span class="au-u-hidden-visually"></span>
-                                </button>
-                              </span>
+                                </AuPill>
+                              </div>
+                              <div class="auk-o-flex--inline auk-o-flex--vertical-center hidden" id="mock-agenda__item__file--editing">
+                                <select class="ember-view ember-basic-dropdown-trigger ember-power-select-trigger proto-select" id="cars" name="proto-select">
+                                  <option value="secretarie">Intern Secretarie</option>
+                                  <option value="ministerraad">Ministerraad</option>
+                                  <option value="regering">Intern Regering</option>
+                                  <option value="overheid">Intern Overheid</option>
+                                  <option value="publiek">Publiek</option>
+                                </select>
+                                <AuButton
+                                  @skin={{"naked"}}
+                                  @icon={{"check"}}
+                                  @hideText={{true}}
+                                  {{on "click" this.toggleFileTagEditing}}
+                                />
+                                <AuButton
+                                  @skin={{"naked"}}
+                                  @icon={{"cross"}}
+                                  @hideText={{true}}
+                                  {{on "click" this.toggleFileTagEditing}}
+                                />
+                              </div>
                             </span>
                           </li>
-                          {{!-- <li>
-                            <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
-                              <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-                                Document name #2
-                                <AuIcon
-                                  @icon="pencil"
-                                />
-                              </div>
-                              <span class="au-c-pill-container">
-                                <span class="au-c-pill au-c-pill--warning" data-test-access-level-pill="">
-                                  Intern Regering
-                                </span>
-                                <button class="au-c-pill-action au-c-pill--warning" type="button">
-                                  <AuIcon
-                                    @icon="pencil"
-                                  />
-                                  <span class="au-u-hidden-visually"></span>
-                                </button>
-                              </span>
-                            </span>
-                          </li> --}}
                         </ul>
                         <div class="auk-o-flex auk-u-mt-2 au-u-flex--spaced-tiny au-u-flex--between l-printable-agenda__item-indented">
                           <div class="auk-o-flex au-u-flex--spaced-tiny">

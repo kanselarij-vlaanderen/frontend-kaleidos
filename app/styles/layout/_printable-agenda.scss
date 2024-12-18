@@ -91,6 +91,10 @@
   break-inside: auto;
 }
 
+.proto-select{
+  width: 150px
+}
+
 .l-printable-agenda__document-list {
   list-style: none !important;
   margin-inline-start: 25px !important;
@@ -140,6 +144,11 @@
 
 // Functional
 #mock-agenda__item--editing.hidden,
-#mock-agenda__item--view.hidden{
-  display: none;
+#mock-agenda__item--view.hidden,
+#mock-agenda__item__file--editing.hidden,
+#mock-agenda__item__file--view.hidden,
+#mock-agenda__item__name--editing.hidden,
+#mock-agenda__item__name--view.hidden
+{
+  display: none !important;
 }
