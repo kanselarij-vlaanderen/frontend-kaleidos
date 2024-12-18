@@ -70,6 +70,21 @@ export default class AgendasRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.defaultPublicationActivityStatus = this.defaultPublicationActivityStatus;
+    controller.isCreatingNewSession = false;
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      if (controller.newMeeting) {
+        controller.newMeeting.deleteRecord();
+      }
+      controller.newMeeting = null;
+
+      if (controller.publicationActivities.length) {
+        controller.publicationActivities.forEach((activity) => activity.deleteRecord());
+      }
+      controller.publicationActivities = [];
+    }
   }
 
   @action
