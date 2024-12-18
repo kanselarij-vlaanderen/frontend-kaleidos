@@ -1,3 +1,7 @@
+@use "sass:color";
+
+@use "../auk";
+
 /* ==========================================================================
   Agenda items
    ========================================================================== */
@@ -11,17 +15,17 @@
   position: relative;
   font-size: 1.3rem;
   text-decoration: none;
-  color: $auk-black;
+  color: auk.$color-black;
 }
 
 .vlc-agenda-items__sub-item a {
   &:hover,
   &:focus {
-    background-color: $auk-gray-200;
-    color: $auk-blue-700;
+    background-color: auk.$color-gray-200;
+    color: auk.$color-blue-700;
 
     span {
-      color: $auk-blue-700;
+      color: auk.$color-blue-700;
     }
   }
 }
@@ -29,7 +33,7 @@
 a.vlc-agenda-items__sub-item--active,
 a.vlc-agenda-items__sub-item--active:hover,
 a.vlc-agenda-items__sub-item--active:active {
-  background: $auk-color-primary;
+  background: auk.$color-primary;
   color: #fff;
 
   span {
@@ -46,7 +50,7 @@ a.vlc-agenda-items__sub-item--active:active {
 }
 
 a.vlc-agenda-items__sub-item--active:focus {
-  background: darken($auk-color-primary, 5%);
+  background: color.adjust(auk.$color-primary, $lightness: -5%);
 }
 
 .vlc-agenda-meta {
@@ -82,12 +86,12 @@ a.vlc-agenda-items__sub-item--active:focus {
 .vlc-agenda-items__sub-item--active a,
 .vlc-agenda-items__sub-item--active a:hover,
 .vlc-agenda-items__sub-item--active a:active {
-  background: $auk-color-primary;
+  background: auk.$color-primary;
   color: #FFF;
 }
 
 .vlc-agenda-items__sub-item--active a:focus {
-  background: darken($auk-color-primary, 5%);
+  background: color.adjust(auk.$color-primary, $lightness: -5%);
 }
 
 .vlc-agenda-items-sub-item__numbering {
@@ -135,7 +139,7 @@ $i: 0;
 .vlc-agenda-items__status--positive {
   font-weight: 500;
   opacity: 1;
-  color: $auk-green-700 !important;
+  color: auk.$color-green-700 !important;
 }
 
 .vlc-agenda-items__body {
@@ -143,7 +147,7 @@ $i: 0;
   flex-direction: row;
   padding: 2rem;
   background-color: #FFF;
-  border-bottom: .1rem solid $auk-color-border;
+  border-bottom: .1rem solid auk.$color-border;
 
   // Override HR spacing
   .auk-hr {

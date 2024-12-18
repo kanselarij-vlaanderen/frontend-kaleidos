@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* ==========================================================================
    ember-flatpickr
    ========================================================================== */
@@ -12,9 +14,9 @@ $calendarWidth: $daysWidth;
   position: fixed;
   width: $calendarWidth;
 
-  box-shadow: $auk-shadow-small;
+  box-shadow: auk.$shadow-small;
   border-radius: .3rem;
-  background: $auk-white;
+  background: auk.$color-white;
 
   font-family: flanders-sans, sans-serif;
 
@@ -33,18 +35,18 @@ $calendarWidth: $daysWidth;
 
     border-radius: 50%;
 
-    color: $auk-gray-600;
+    color: auk.$color-gray-600;
 
     &:hover {
-      background-color: $auk-gray-100;
+      background-color: auk.$color-gray-100;
 
-      color: $auk-gray-700;
+      color: auk.$color-gray-700;
     }
 
     &:active {
-      background-color: $auk-gray-200;
+      background-color: auk.$color-gray-200;
 
-      color: $auk-gray-800;
+      color: auk.$color-gray-800;
     }
   }
 
@@ -85,14 +87,14 @@ $calendarWidth: $daysWidth;
     padding: 0;
 
     &:hover {
-      border-color: $auk-gray-300;
-      background-color: $auk-white;
+      border-color: auk.$color-gray-300;
+      background-color: auk.$color-white;
     }
 
     &:focus {
-      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
       outline: 0;
-      border-color: $auk-yellow-500;
+      border-color: auk.$color-yellow-500;
     }
 
     option {
@@ -105,14 +107,14 @@ $calendarWidth: $daysWidth;
     border-radius: .3rem;
 
     &:hover {
-      border-color: $auk-gray-300;
+      border-color: auk.$color-gray-300;
       background-color: transparent;
     }
 
     &:focus-within {
-      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
       outline: 0;
-      border-color: $auk-yellow-500;
+      border-color: auk.$color-yellow-500;
     }
 
     input.cur-year {
@@ -124,10 +126,10 @@ $calendarWidth: $daysWidth;
 .numInputWrapper {
   span {
     border: 0.1rem solid transparent;
-    border-left-color: $auk-gray-300;
+    border-left-color: auk.$color-gray-300;
     padding: 0.1rem 0 0 0.1rem;
 
-    color: $auk-gray-600;
+    color: auk.$color-gray-600;
     font-size: 1rem;
 
     &:after {
@@ -135,15 +137,15 @@ $calendarWidth: $daysWidth;
     }
 
     &:hover {
-      background-color: $auk-gray-100;
+      background-color: auk.$color-gray-100;
 
-      color: $auk-gray-700;
+      color: auk.$color-gray-700;
     }
 
     &:active {
-      background-color: $auk-gray-200;
+      background-color: auk.$color-gray-200;
 
-      color: $auk-gray-800;
+      color: auk.$color-gray-800;
     }
 
     &.arrowUp {
@@ -155,7 +157,7 @@ $calendarWidth: $daysWidth;
     &.arrowDown {
       @include au-background-icon('dash', 1rem);
 
-      border-top-color: $auk-gray-300;
+      border-top-color: auk.$color-gray-300;
       border-bottom-right-radius: .3rem;
     }
   }
@@ -166,7 +168,7 @@ $calendarWidth: $daysWidth;
 }
 
 span.flatpickr-weekday {
-  color: $auk-gray-600;
+  color: auk.$color-gray-600;
   font-size: 1.3rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -187,20 +189,20 @@ span.flatpickr-weekday {
   max-width: $daySize;
   height: $daySize;
 
-  color: $auk-gray-800;
+  color: auk.$color-gray-800;
   font-size: 1.5rem;
   line-height: $daySize - 2px; // offset for better vertical center
 
   &:hover {
-    border-color: $auk-blue-100;
-    background-color: $auk-blue-100;
+    border-color: auk.$color-blue-100;
+    background-color: auk.$color-blue-100;
   }
 
   &:focus {
-    box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
     outline: 0;
-    border-color: $auk-yellow-500;
-    background-color: $auk-blue-100;
+    border-color: auk.$color-yellow-500;
+    background-color: auk.$color-blue-100;
   }
 
   &.flatpickr-disabled,
@@ -210,78 +212,78 @@ span.flatpickr-weekday {
   &.notAllowed,
   &.notAllowed.prevMonthDay,
   &.notAllowed.nextMonthDay {
-    color: $auk-gray-400;
+    color: auk.$color-gray-400;
   }
 
   &.prevMonthDay,
   &.nextMonthDay {
     &:hover {
-      border-color: $auk-gray-100;
-      background-color: $auk-gray-100;
+      border-color: auk.$color-gray-100;
+      background-color: auk.$color-gray-100;
     }
 
     &:focus {
-      background-color: $auk-gray-100;
+      background-color: auk.$color-gray-100;
     }
 
     &:active {
-      border-color: $auk-gray-200;
-      background-color: $auk-gray-200;
+      border-color: auk.$color-gray-200;
+      background-color: auk.$color-gray-200;
     }
   }
 
   &.today {
-    border-color: $auk-blue-500;
+    border-color: auk.$color-blue-500;
 
     &:hover {
-      border-color: $auk-blue-500;
-      background-color: $auk-blue-100;
+      border-color: auk.$color-blue-500;
+      background-color: auk.$color-blue-100;
 
-      color: $auk-gray-800;
+      color: auk.$color-gray-800;
     }
 
     &.prevMonthDay,
     &.nextMonthDay {
-      border-color: $auk-gray-500;
+      border-color: auk.$color-gray-500;
 
       &:hover {
-        border-color: $auk-gray-500;
-        background-color: $auk-gray-100;
+        border-color: auk.$color-gray-500;
+        background-color: auk.$color-gray-100;
 
-        color: $auk-gray-400;
+        color: auk.$color-gray-400;
       }
     }
   }
 
   &.selected {
-    background: $auk-blue-500;
-    border-color: $auk-blue-500;
+    background: auk.$color-blue-500;
+    border-color: auk.$color-blue-500;
 
-    color: $auk-white;
+    color: auk.$color-white;
 
     &:hover {
-      background: $auk-blue-700;
-      border-color: $auk-blue-700;
+      background: auk.$color-blue-700;
+      border-color: auk.$color-blue-700;
 
-      color: $auk-white;
+      color: auk.$color-white;
     }
 
     &:focus {
-      background-color: $auk-blue-700;
+      background-color: auk.$color-blue-700;
     }
 
     &.prevMonthDay,
     &.nextMonthDay {
-      background: $auk-gray-500;
-      border-color: $auk-gray-500;
+      background: auk.$color-gray-500;
+      border-color: auk.$color-gray-500;
 
       &:hover {
-        background: $auk-gray-600;
-        border-color: $auk-gray-600;
+        background: auk.$color-gray-600;
+        border-color: auk.$color-gray-600;
       }
 
       &:focus {
-        background-color: $auk-gray-600;
+        background-color: auk.$color-gray-600;
       }
     }
   }
@@ -295,9 +297,9 @@ span.flatpickr-weekday {
   &.selected.prevMonthDay,
   &.selected.nextMonthDay {
     &:focus {
-      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
       outline: 0;
-      border-color: $auk-yellow-500;
+      border-color: auk.$color-yellow-500;
     }
   }
 }
@@ -315,7 +317,7 @@ span.flatpickr-weekday {
     float: none;
 
     height: auto;
-    border: 0.1rem solid $auk-gray-300;
+    border: 0.1rem solid auk.$color-gray-300;
     border-radius: .3rem;
 
     &:hover {
@@ -323,9 +325,9 @@ span.flatpickr-weekday {
     }
 
     &:focus-within {
-      box-shadow: inset 0 0 0 0.1rem $auk-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
       outline: 0;
-      border-color: $auk-yellow-500;
+      border-color: auk.$color-yellow-500;
     }
 
     span {
@@ -338,7 +340,7 @@ span.flatpickr-weekday {
   input {
     padding: .7rem;
 
-    color: $auk-gray-800;
+    color: auk.$color-gray-800;
     font-family: flanders-sans, sans-serif;
     font-size: 1.5rem;
     text-align: left;

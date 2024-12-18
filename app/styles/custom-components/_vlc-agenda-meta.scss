@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* ==========================================================================
   Agenda meta
   The last line in an agenda item
@@ -30,7 +32,7 @@
 
 .vlc-agenda-meta__status--positive {
   opacity: 1;
-  color: $auk-green-700;
+  color: auk.$color-green-700;
 }
 
 .vlc-agenda-meta__status--warning {

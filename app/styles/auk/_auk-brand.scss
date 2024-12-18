@@ -1,3 +1,5 @@
+@use "../auk";
+
 /* ==========================================================================
   auk-brand
    ========================================================================== */
@@ -9,26 +11,26 @@
   position: relative;
   top: 0;
 }
-  
+
 .auk-brand--link {
   &:focus {
     outline: none;
   }
 }
-  
+
 .auk-brand__logo {
   position: relative;
   width: 5rem;
   height: 5rem;
   padding-left: .75rem;
   overflow: hidden;
-  background-color: $auk-brand;
+  background-color: auk.$color-brand;
 
   svg {
     height: 100%;
     width: 56%;
   }
-  
+
   &::before {
     content: "";
     display: block;
@@ -45,13 +47,13 @@
     height: 4.4rem;
   }
 }
-  
+
 .auk-brand__logotype {
   font-size: 2.1rem;
   line-height: 1;
   position: relative;
   font-weight: 500;
-  color: $auk-gray-1000;
+  color: auk.$color-gray-1000;
   margin-left: .6rem;
   transition: color 125ms cubic-bezier(.19,1,.22,1);
 

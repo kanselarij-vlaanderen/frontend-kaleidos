@@ -219,6 +219,7 @@ const selectors = {
       delete: '[data-test-agendaitem-controls-action-delete]',
       postponeRevert: '[data-test-agendaitem-controls-action-postpone-revert]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
+      sendSubmissionBack: '[data-test-agendaitem-controls-action-send-submission-back]',
     },
   },
 
