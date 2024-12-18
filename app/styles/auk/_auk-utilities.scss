@@ -4,13 +4,13 @@
 
 
 // Utilities
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-cursors';
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-dimensions';
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-generic';
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-print';
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-scroll';
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-spacer';
-@import '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-text';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-cursors';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-dimensions';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-generic';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-print';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-scroll';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-spacer';
+@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-u-text';
 
 // Custom
 // Hide dropdown text on mobile: exception for the m-header help dropdown
@@ -38,7 +38,7 @@
 // Responsive margin
 .auk-u-responsive-margin {
   margin: $au-unit-small;
- 
+
   @include mq(medium) {
     margin: $au-unit;
   }

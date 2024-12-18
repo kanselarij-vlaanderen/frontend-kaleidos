@@ -1,3 +1,7 @@
+@use "sass:color";
+
+@use "../auk";
+
 .vlc-environment-pill {
   pointer-events: none;
   background: #fefefe;
@@ -19,21 +23,21 @@
 }
 
 .vlc-environment-pill--local {
-  background-color: $auk-pink;
-  border-color: darken($auk-pink, 5%);
-  color: $auk-white;
+  background-color: auk.$color-pink;
+  border-color: color.adjust(auk.$color-pink, $lightness: -5%);
+  color: auk.$color-white;
 }
 
 .vlc-environment-pill--dev {
-  background-color: $auk-green-500;
-  border-color: darken($auk-green-500, 5%);
-  color: $auk-white;
+  background-color: auk.$color-green-500;
+  border-color: color.adjust(auk.$color-green-500, $lightness: -5%);
+  color: auk.$color-white;
 }
 
 .vlc-environment-pill--test {
-  background-color: $auk-yellow-500;
-  border-color: darken($auk-yellow-500, 5%);
-  color: $auk-yellow-800;
+  background-color: auk.$color-yellow-500;
+  border-color: color.adjust(auk.$color-yellow-500, $lightness: -5%);
+  color: auk.$color-yellow-800;
 }
 
 @keyframes blink {
@@ -43,9 +47,9 @@
 }
 
 .vlc-environment-pill--prod {
-  background-color: $auk-red-500;
-  border-color: darken($auk-red-500, 5%);
-  color: $auk-white;
+  background-color: auk.$color-red-500;
+  border-color: color.adjust(auk.$color-red-500, $lightness: -5%);
+  color: auk.$color-white;
 
   animation: blink 1s cubic-bezier(1,-0.09, 0, 0.99) infinite;
 }

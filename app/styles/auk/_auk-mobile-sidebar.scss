@@ -1,3 +1,5 @@
+@use "../auk";
+
 .auk-mobile-sidebar__panel {
   @include mq($until:medium) {
     display: none;
@@ -9,7 +11,7 @@
     width: 90vw;
     height: 100%;
     overflow: hidden;
-    z-index: $z-index-dropdown;
+    z-index: auk.$z-index-dropdown;
     background-color: var(--au-white);
     box-shadow:
       0 0 12px rgba($au-gray-900, 0.15),
