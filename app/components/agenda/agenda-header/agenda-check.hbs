@@ -72,18 +72,20 @@
                       <div class="auk-u-non-breakable-group@print">
                       </div>
                       <h3 class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header">
-                        Vlaams minister van [...]
+                        Minister-president van de Vlaamse Regering, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen
                       </h3>
                     </div>
 
                     <div>
                       <div class="l-printable-agenda__item">
                         <div>
-                          <div class="auk-o-flex auk-u-mb au-u-flex--vertical-center l-printable-agenda__item-header">
+                          <div class="auk-o-flex auk-u-mb l-printable-agenda__item-header">
                             <div class="l-printable-agenda__header-prefix">
                               6.
                             </div>
-                            <h4 class="auk-u-m-0 auk-u-text-pre-line">Title of the item</h4>
+                            <h4 class="auk-u-m-0">
+                              Vlaamse advies- en beleidsparticipatieraad van personen met een handicap (NOOZO vzw): subsidie werkjaar 2023
+                            </h4>
                             <button {{on "click" this.toggleEditing}} class="l-printable-agenda__item-header__edit">
                               <AuIcon
                                 @icon="pencil"
@@ -91,21 +93,21 @@
                             </button>
                           </div>
                           <div class="auk-u-mb-4 l-printable-agenda__item-indented">
-                              <p>Description of the item</p>
+                              <p>Ontwerpbesluit van de Vlaamse Regering tot toekenning van een subsidie aan de Vlaamse advies- en beleidsparticipatieraad van personen met een handicap NOOZO vzw voor het werkjaar 2023</p>
                           </div>
                         </div>
                         <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
                           <li>
                             <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
                               <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-                                Document name #1
+                                NOOZO - Decreet
                               </div>
                               <span class="au-c-pill au-c-pill--warning">
                                 Intern Regering
                               </span>
                             </span>
                           </li>
-                          <li>
+                          {{!-- <li>
                             <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
                               <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
                                 Document name #2
@@ -114,18 +116,20 @@
                                 Intern Regering
                               </span>
                             </span>
-                          </li>
+                          </li> --}}
                         </ul>
                       </div>
                     </div>
                   </div>
+
+                  {{!-- Editing --}}
 
                   <div id="mock-agenda__item--editing" class="l-printable-agenda__item-group hidden">
                     <div class="l-printable-agenda__faux-item">
                       <div class="auk-u-non-breakable-group@print">
                       </div>
                       <h3 class="auk-u-mb-3 auk-u-text-uppercase l-printable-agenda__item-group-header">
-                        Vlaams minister van [...]
+                        Minister-president van de Vlaamse Regering, Vlaams minister van Binnenlands Bestuur, Bestuurszaken, Inburgering en Gelijke Kansen
                       </h3>
                     </div>
 
@@ -137,24 +141,22 @@
                               6.
                             </div>
                             <AuInput
-                              value={{"Title of the item"}}
+                              value={{"Vlaamse advies- en beleidsparticipatieraad van personen met een handicap (NOOZO vzw): subsidie werkjaar 2023"}}
                               id="input"
                             />
                           </div>
                           <div class="auk-u-mb-4 l-printable-agenda__item-indented">
-                              <AuTextarea
-                                id="textaerea"
-                              />
-                              <div class="auk-u-mt-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-                                  <AuToggleSwitch>Beperkte toegang</AuToggleSwitch>
-                              </div>
+                            <textarea class="au-c-textarea" id="">Ontwerpbesluit van de Vlaamse Regering tot toekenning van een subsidie aan de Vlaamse advies- en beleidsparticipatieraad van personen met een handicap NOOZO vzw voor het werkjaar 2023</textarea>
+                            <div class="auk-u-mt-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
+                                <AuToggleSwitch>Beperkte toegang</AuToggleSwitch>
+                            </div>
                           </div>
                         </div>
                         <ul class="l-printable-agenda__document-list l-printable-agenda__item-indented">
                           <li>
                             <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
                               <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
-                                Document name #1
+                                NOOZO - Decreet
                                 <AuIcon
                                   @icon="pencil"
                                 />
@@ -172,7 +174,7 @@
                               </span>
                             </span>
                           </li>
-                          <li>
+                          {{!-- <li>
                             <span class="auk-o-flex--inline auk-o-flex--vertical-center au-u-flex--between document-content">
                               <div class="auk-u-ml-2 au-u-flex au-u-flex--spaced-tiny au-u-flex--vertical-center">
                                 Document name #2
@@ -192,7 +194,7 @@
                                 </button>
                               </span>
                             </span>
-                          </li>
+                          </li> --}}
                         </ul>
                         <div class="auk-o-flex auk-u-mt-2 au-u-flex--spaced-tiny au-u-flex--between l-printable-agenda__item-indented">
                           <div class="auk-o-flex au-u-flex--spaced-tiny">
