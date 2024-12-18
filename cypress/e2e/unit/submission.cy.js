@@ -1,11 +1,11 @@
-/* global context, it, cy, Cypress, before, afterEach */
+/* global context, it, cy, Cypress, before, afterEach, expect */
 
 // / <reference types="Cypress" />
 // import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
-// import agenda from '../../selectors/agenda.selectors';
+import agenda from '../../selectors/agenda.selectors';
 // import publication from '../../selectors/publication.selectors';
-// import auk from '../../selectors/auk.selectors';
+import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import document from '../../selectors/document.selectors';
 import settings from '../../selectors/settings.selectors';
@@ -696,6 +696,53 @@ context('Submission happy flows', () => {
     cy.get(route.submission.documents.add);
     cy.get(submissions.statusChangeActivity.item).should('have.length', 2);
     cy.acceptSubmissionCreateSubcase(submissionExistingCase);
+  });
+
+  it('send back the submission from the agenda', () => {
+    cy.login('Kanselarij');
+    const fileSpy = cy.spy();
+    const pieceSpy = cy.spy();
+    const containerSpy = cy.spy();
+    cy.openAgendaForDate(agendaDate);
+    cy.openDetailOfAgendaitem(submissionNewCase.shortTitle);
+
+    cy.get(agenda.agendaitemControls.actions)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaitemControls.action.sendSubmissionBack).forceClick();
+    cy.intercept('DELETE', 'agendaitems/**').as('deleteAgendaitem');
+    cy.intercept('DELETE', 'agenda-activities/**').as('deleteAgendaActivity');
+    cy.intercept('DELETE', 'agenda-item-treatments/**').as('deleteAgendaItemTreatment');
+    cy.intercept('DELETE', 'decision-activities/**').as('deleteDecisionActivity');
+    cy.intercept('DELETE', 'cases/**').as('deleteCase');
+    cy.intercept('DELETE', 'decisionmaking-flows/**').as('deleteDecFlow');
+    cy.intercept('DELETE', 'subcases/**').as('deleteSubcase');
+    cy.intercept('DELETE', 'files/**').as('deleteFile');
+    cy.intercept('DELETE', 'draft-files/**', fileSpy).as('deleteDraftFile');
+    cy.intercept('DELETE', 'pieces/**').as('deleteAcceptedPiece');
+    cy.intercept('DELETE', 'draft-pieces/**', pieceSpy).as('deleteDraftPiece');
+    cy.intercept('DELETE', 'document-containers/**').as('deleteDocumentContainer');
+    cy.intercept('DELETE', 'draft-document-containers/**', containerSpy).as('deleteDraftDocumentContainer');
+    cy.get(auk.confirmationModal.footer.confirm).contains('Verwijderen')
+      .click();
+    cy.wait('@deleteAgendaitem'); // 2 of these happen
+    cy.wait('@deleteAgendaActivity');
+    cy.wait('@deleteDecisionActivity');
+    cy.wait('@deleteAgendaItemTreatment');
+    cy.wait('@deleteCase');
+    cy.wait('@deleteDecFlow');
+    cy.wait('@deleteSubcase');
+    cy.wait('@deleteFile');
+    cy.wait('@deleteAcceptedPiece');
+    cy.wait('@deleteDocumentContainer');
+    cy.wait(2000).then(() => expect(fileSpy).not.to.have.been.called);
+    cy.wait(2000).then(() => expect(pieceSpy).not.to.have.been.called);
+    cy.wait(2000).then(() => expect(containerSpy).not.to.have.been.called);
+    cy.get(appuniversum.alert.close).click(); // email not sent
+    cy.openSubmission(submissionNewCase.shortTitle);
+    cy.get(document.draftDocumentCard.card).should('have.length', 2);
+    // check we didn't get routed to a subcase view
+    cy.url().should('contain', '/dossiers/indieningen');
   });
 
   // needs an existing subcase with at least 1 submission
