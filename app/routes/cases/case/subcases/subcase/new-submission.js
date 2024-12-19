@@ -16,7 +16,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   defaultAccessLevel;
   submitter;
   mandatees;
-  originalSubmission;
   approvalAddresses;
   approvalComment;
   notificationAddresses;
@@ -137,11 +136,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       .slice()
       .sort((m1, m2) => m1.priority - m2.priority);
 
-    // TODO verify this change. It makes sense that we check the latest submission to copy addresses rather than the original
-    this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here
-    this.originalSubmission = await this.draftSubmissionService.getOriginalSubmissionForSubcase(subcase); // used to get meeting in controller
+    this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here and meeting in controller
 
-    // TODO there was no previousSubmission when postponed > resubmitted > BIS update
     if (this.previousSubmission) {
       this.approvalAddresses = this.previousSubmission.approvalAddresses;
       this.approvalComment = this.previousSubmission.approvalComment;
@@ -165,7 +161,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.requestedBy = this.submitter;
     controller.mandatees = this.mandatees;
-    controller.originalSubmission = this.originalSubmission;
+    controller.previousSubmission = this.previousSubmission;
     controller.approvalAddresses = this.approvalAddresses;
     controller.approvalComment = this.approvalComment;
     controller.notificationAddresses = this.notificationAddresses;
