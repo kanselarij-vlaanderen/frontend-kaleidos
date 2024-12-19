@@ -64,7 +64,7 @@
             </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
-              {{#if this.dateToShow}}
+              {{#if (and this.dateToShow (not this.loadPieceRelatedData.isRunning))}}
                 <p
                   data-test-document-card-primary-source-created={{if
                     this.piece.file.derived
