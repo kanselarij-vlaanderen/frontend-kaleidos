@@ -82,6 +82,17 @@ export default class DraftSubmissionService extends Service {
     return creationActivity ? true : false;
   };
 
+  getWasPostponed = async(submission) => {
+    const statusChangeActivities = await this.getStatusChangeActivities(submission);
+    const creationActivity = statusChangeActivities
+      ?.filter(
+        (a) =>
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND
+      )
+      .at(0);
+    return creationActivity ? true : false;
+  };
+
   getAllSubmissionsForSubcase = async(subcase) => {
     const allSubmissions = await this.store.query('submission', {
       'filter[subcase][:id:]': subcase.id,

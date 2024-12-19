@@ -1469,6 +1469,8 @@
   "submissions-history": "Historiek indieningen",
   "this-submission-is-an-update-title": "Deze indiening betreft een update",
   "this-submission-is-an-update": "Bij aanvaarding zullen de titels, documenten en ministers van de bestaande procedurestap worden aangepast.",
+  "this-submission-is-from-postponed-title": "Deze indiening betreft een nieuwe indiening van een uitgestelde procedurestap",
+  "this-submission-is-from-postponed": "Bij aanvaarding zullen de titels, documenten en ministers van de bestaande procedurestap worden aangepast. Er zal een nieuw agendapunt worden aangemaakt op de geselecteerde agenda.",
   "this-submission-has-send-back-requested": "Er is een aanpassing aangevraagd. De kabinetsdossierbeheerder ontvangt een e-mail van de kanselarij als de indiening open staat voor aanpassing.",
   "draft-piece-delete": "Ingediend document verwijderen",
   "delete-draft-piece-message": "Bent u zeker dat u dit document wilt verwijderen? Deze actie verwijdert enkel het nieuwe document, eventuele vorige versies blijven ongewijzigd.",
@@ -1489,5 +1491,6 @@
   "press-agenda": "Persagenda",
   "generate-press-agenda": "Genereer persagenda",
   "login-text" : "Meld u aan",
-  "warning-new-case-has-parliament-flow": "Deze procedurestap kan niet naar dit dossier verplaatst worden aangezien er al een koppeling is met het Vlaams Parlement"
+  "warning-new-case-has-parliament-flow": "Deze procedurestap kan niet naar dit dossier verplaatst worden aangezien er al een koppeling is met het Vlaams Parlement",
+  "no-meeting-found-for-submission": "Er is geen geldige vergadering gevonden voor deze indiening"
 }
