@@ -113,6 +113,7 @@ export default class DraftSubmissionService extends Service {
     return null;
   };
 
+  // unused for now
   getOriginalSubmissionForSubcase = async(subcase) => {
     const allSubmissions = await this.getAllSubmissionsForSubcase(subcase);
     return allSubmissions?.at(-1);
