@@ -18,4 +18,14 @@ export default class SettingsOrganizationsOrganizationRoute extends Route {
     super.setupController(...arguments);
     controller.linkedMandatees = this.linkedMandatees;
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.mandateeBeingUnlinked = null;
+      controller.showBlockOrganization = false;
+      controller.showUnblockOrganization = false;
+      controller.showUnlinkMandatee = false;
+      controller.showSelectMandateeModal = false;
+    }
+  }
 }
