@@ -85,6 +85,15 @@ export default class SettingsOrganizationsIndexRoute extends Route {
     controller.loadSelectedOrganizations.perform();
   }
 
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.organizationBeingBlocked = null;
+
+      controller.showBlockOrganizationConfirmationModal = false;
+      controller.showUnblockOrganizationConfirmationModal = false;
+    }
+  }
+
   @action
   loading(transition) {
     // eslint-disable-next-line ember/no-controller-access-in-routes
