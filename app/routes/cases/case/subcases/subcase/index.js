@@ -1,8 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service store;
@@ -124,5 +126,16 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.piecesNotOnAgenda = this.piecesNotOnAgenda;
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.isOpenPieceUploadModal = false;
+      controller.isOpenBatchDetailsModal = false;
+      
+      Promise.all(
+        controller.newPieces.map(async (piece) => await deletePiece(piece))
+      ).then(() => controller.newPieces = new TrackedArray([]));
+    }
   }
 }
