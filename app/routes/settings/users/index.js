@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { inject as service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
 import startOfDay from 'date-fns/startOfDay';
@@ -125,6 +126,18 @@ export default class SettingsUsersIndexRoute extends Route {
     controller.dateToBuffer = parseDate(this.lastParams.committed.dateTo);
     controller.loadSelectedOrganizations.perform();
     controller.loadSelectedRoles.perform();
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.userBeingBlocked = null;
+      controller.membershipsBeingBlocked = new TrackedArray([]);
+
+      controller.showBlockMembershipsConfirmationModal = false;
+      controller.showBlockUserConfirmationModal = false;
+      controller.showUnblockMembershipsConfirmationModal = false;
+      controller.showUnblockUserConfirmationModal = false;
+    }
   }
 
   @action
