@@ -32,4 +32,10 @@ export default class PublicationsPublicationDecisionsIndexRoute extends Route {
     ctrl.publicationFlow = this.publicationFlow;
     ctrl.isViaCouncilOfMinisters = this.isViaCouncilOfMinisters;
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.isOpenReferenceDocumentUploadModal = false;
+    }
+  }
 }
