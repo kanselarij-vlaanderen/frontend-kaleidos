@@ -28,7 +28,6 @@ export default class SearchController extends Controller {
   @tracked mandatees = [];
   @tracked dateFrom;
   @tracked dateTo;
-  @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
 
   @tracked governmentAreas = [];
