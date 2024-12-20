@@ -1,7 +1,9 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import { inject as service } from '@ember/service';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class AgendaDocumentsRoute extends Route {
   @service store;
@@ -27,5 +29,16 @@ export default class AgendaDocumentsRoute extends Route {
     const agenda = this.modelFor('agenda').agenda;
     controller.agenda = agenda;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.isOpenBatchDetailsModal = false;
+      controller.isOpenPieceUploadModal = false;
+      
+      Promise.all(
+        controller.newPieces.map(async (piece) => await deletePiece(piece))
+      ).then(() => (controller.newPieces = new TrackedArray([])));
+    }
   }
 }
