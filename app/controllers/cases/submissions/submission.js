@@ -43,6 +43,8 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   currentLinkedMandatee;
   previousMandateePersons;
 
+  subcase;
+
   get mayEdit() {
     const mayIfAdmin = this.currentSession.may('always-edit-submissions');
 
