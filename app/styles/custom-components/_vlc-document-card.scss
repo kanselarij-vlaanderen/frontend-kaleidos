@@ -1,3 +1,4 @@
+@use "../auk";
 
 /* ==========================================================================
    vlc-document-card
@@ -11,7 +12,7 @@
 
 .vlc-document-card {
   display: block;
-  border: 0.1rem solid $auk-color-border;
+  border: 0.1rem solid auk.$color-border;
   padding: 0;
 
   .auk-h4 {
@@ -52,7 +53,7 @@
 
 .vlc-document-card-content__meta {
   font-size: 1.4rem;
-  color: $auk-gray-600;
+  color: auk.$color-gray-600;
 }
 
 .vlc-document-card__actions {
@@ -70,8 +71,8 @@
   .auk-accordion__item .auk-accordion__content {
     margin: 0;
     padding: 1rem 1.8rem;
-    background: $auk-gray-100;
-    border-top: 1px solid $auk-color-border;
+    background: auk.$color-gray-100;
+    border-top: 1px solid auk.$color-border;
   }
 }
 
@@ -81,7 +82,7 @@
 
   &:before {
     content: "";
-    background: $auk-gray-300;
+    background: auk.$color-gray-300;
     height: calc(100% - 1.5rem);
     width: 1px;
     position: absolute;

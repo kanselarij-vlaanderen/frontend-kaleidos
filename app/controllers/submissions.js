@@ -74,6 +74,11 @@ export default class CasesSubmissionsIndexController extends Controller {
     this.filtersOpen = open;
   }
 
+  @action
+  setSubmitters(submitters) {
+    this.submitters = submitters;
+  }
+
   selectSize = (size) => (this.size = size);
   nextPage = () => (this.page += 1);
   prevPage = () => (this.page -= 1);

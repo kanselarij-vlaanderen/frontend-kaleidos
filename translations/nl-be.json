@@ -1492,5 +1492,6 @@
   "generate-press-agenda": "Genereer persagenda",
   "login-text" : "Meld u aan",
   "warning-new-case-has-parliament-flow": "Deze procedurestap kan niet naar dit dossier verplaatst worden aangezien er al een koppeling is met het Vlaams Parlement",
-  "no-meeting-found-for-submission": "Er is geen geldige vergadering gevonden voor deze indiening"
+  "no-meeting-found-for-submission": "Er is geen geldige vergadering gevonden voor deze indiening",
+  "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring"
 }

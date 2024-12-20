@@ -5,6 +5,7 @@ import { startOfDay } from 'date-fns';
 import { tracked } from '@glimmer/tracking';
 import { later } from '@ember/runloop';
 import { action } from '@ember/object';
+import { set } from '@ember/object';
 
 export default class SystemAlertService extends Service {
   @service store;
@@ -68,7 +69,10 @@ export default class SystemAlertService extends Service {
     const prevConfirmedAlerts = alerts.filter((alert) =>
       confirmedAlertIds.includes(alert.id)
     );
-    prevConfirmedAlerts.setEach('confirmed', true);
+    // setEach might be deprecated, test this
+    prevConfirmedAlerts.forEach(alert => {
+      set(alert, 'confirmed', true);
+    });
 
     this.alerts = alerts;
   }
