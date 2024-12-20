@@ -88,6 +88,12 @@ export default class SignaturesDecisionsRoute extends Route {
 
   resetController(controller, isExiting) {
     if (isExiting) {
+      controller.closeSidebar();
+    }
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
       controller.showSidebar = false;
       controller.piece = null;
       controller.decisionActivity = null;
