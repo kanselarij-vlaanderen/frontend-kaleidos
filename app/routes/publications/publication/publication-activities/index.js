@@ -93,6 +93,13 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
     controller.publicationSubcase = this.publicationSubcase;
   }
 
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      this.isOpenRequestModal = false;
+      this.isOpenRegistrationModal = false;
+    }
+  }
+
   @action
   refresh() {
     // We want to refresh our own route + parent route which has the info panel
