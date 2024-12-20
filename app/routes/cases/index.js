@@ -81,6 +81,7 @@ export default class CasesIndexRoute extends Route {
         CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
       );
       options['filter[decisionmaking-flow][subcases][type][:not:label]'] = definitiveType.label;
+      options['filter[decisionmaking-flow][subcases][:has-no:ratification]'] = true;
     }
 
     return this.store.query('case', options);
