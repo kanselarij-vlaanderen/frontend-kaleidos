@@ -19,6 +19,15 @@
 />
 <div class="auk-scroll-wrapper__body">
   {{#if (and this.model.isInTreatment this.mayEdit this.isUpdate)}}
+    {{#if this.wasPostponed}}
+      <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "this-submission-is-from-postponed-title"}}
+    >
+      <p>{{t "this-submission-is-from-postponed"}}</p>
+    </AuAlert>
+    {{else}}
     <AuAlert
       @skin="warning"
       @icon="alert-triangle"
@@ -26,6 +35,7 @@
     >
       <p>{{t "this-submission-is-an-update"}}</p>
     </AuAlert>
+    {{/if}}
   {{/if}}
   {{#if this.model.isSendBackRequested}}
     <AuAlert

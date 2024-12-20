@@ -38,7 +38,7 @@ async function getAgendaitemText(params) {
   return agendaitemText;
 }
 
-async function getAgendaitemLidwoord(params) {
+async function getAgendaitemArticle(params) {
   const type = await params.submission.agendaItemType;
   if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {
     return 'Het';
@@ -83,8 +83,9 @@ Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volg
   if (params.isForPostponedSubcase) {
     const oldMeetingKind = await params.oldMeeting?.kind?.label;
     const oldMeetingDate = dateFormat(params.oldMeeting?.plannedStart, 'dd-MM-yyyy');
+    const agendaitemArticle = await getAgendaitemArticle(params);
     message += `
-${getAgendaitemLidwoord(params)} ${agendaitemText} "${params.submission.shortTitle}", uitgesteld op de ${oldMeetingKind} van ${oldMeetingDate} werd opnieuw ingediend door kabinet ${submitterPerson.lastName}
+${agendaitemArticle} ${agendaitemText} "${params.submission.shortTitle}", uitgesteld op de ${oldMeetingKind} van ${oldMeetingDate} werd opnieuw ingediend door kabinet ${submitterPerson.lastName}
 `;
   } else if (params.resubmitted) {
     if (agendaitemText) {

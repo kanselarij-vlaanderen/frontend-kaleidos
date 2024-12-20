@@ -113,7 +113,8 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isResubmitted) &&
+        this.args.submission?.isResubmitted ||
+        this.args.submission?.isPostponedResubmitted) &&
       this.currentSession.may('edit-sent-back-submissions') &&
       this.requestedByIsCurrentMandatee
     );
@@ -131,7 +132,8 @@ export default class SubmissionHeaderComponent extends Component {
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isResubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isSendBackRequested) &&
+        this.args.submission?.isSendBackRequested ||
+        this.args.submission?.isPostponedResubmitted) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }

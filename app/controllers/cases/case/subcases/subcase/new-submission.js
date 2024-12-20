@@ -26,7 +26,6 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service subcaseService;
 
   defaultAccessLevel;
-  originalSubmission;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenCreateSubmissionModal = false;
@@ -255,35 +254,58 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const governmentAreas = await this.model.governmentAreas;
 
     let meeting;
-    if (_meeting) {
-      meeting = _meeting
-    } else if (this.originalSubmission) {
+    // this _meeting can be a pointer event when coming from the confirmation model
+    if (_meeting?.plannedStart) {
+      meeting = _meeting;
+    } else if (this.previousSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
+      // only open meetings should be found / submitted to
       meeting = await this.store.queryOne('meeting', {
         'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-        'filter[submissions][:id:]': this.originalSubmission.id
+        ':has-no:agenda': true,
+        'filter[submissions][:id:]': this.previousSubmission.id
       });
     }
 
     const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.model);
     const decisionResultCode = await decisionActivity?.decisionResultCode;
     const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.model);
-    let oldMeeting = null;
+    let oldMeeting = null; // -- 18/12
     if (relatedAgendas.length) {
       if (
         relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
         decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
       ) {
         oldMeeting = relatedAgendas[0].meeting;
+      } else if (relatedAgendas.length > 1 &&
+        relatedAgendas[1].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+        decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+      ) {
+        // if secretarie postponed/resubmitted, there is no correct "previousSubmission" to get the meeting from
+        // in that case, there will be 2 agendas but only a submission to the original one
+        // else if in case multiple postpone/resubmit happened we do not want to hit this when the first condition is true
+        oldMeeting = relatedAgendas[1].meeting;
+        meeting = relatedAgendas[0].meeting;
       }
     }
 
+    // originalSubmission points to the very first submission, which is not what we want when postponed and resubmitted.
+    // this.previousSubmission should be ok to verify if this was an update or postponed to get the plannedStart
     const status =  this.isForPostponedSubcase
       ? postponedSubmitted
-      : this.originalSubmission
+      : this.previousSubmission
       ? updateSubmitted
       : submitted;
-    const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
+    const plannedStart = meeting?.plannedStart; // we should have a meeting at this point    -- || this.previousSubmission?.plannedStart;
+    if (!plannedStart) {
+      // We should never continue without a meeting or plannedStart at this stage.
+      this.toaster.error(
+        this.intl.t('error-while-submitting-subcase-on-meeting', {
+          error: "no-meeting-found-for-submission",
+        }),
+        this.intl.t('warning-title')
+      );
+    }
 
     this.submission = this.store.createRecord('submission', {
       shortTitle: trimText(this.model.shortTitle),

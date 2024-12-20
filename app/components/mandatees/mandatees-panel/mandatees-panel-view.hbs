@@ -78,8 +78,6 @@
         </tbody>
       </table>
       {{#if @previousMandateePersons}}
-        <hr />
-        <div class="auk-u-m-4">
           {{#let
             (removed-from-list
               (map-by "fullName" @previousMandateePersons)
@@ -87,7 +85,9 @@
             )
             as |removedPersons|
           }}
-            {{#if removedPersons}}
+          {{#if removedPersons}}
+            <hr /> 
+            <div class="auk-u-m-4">
               <AuAlert
                 @skin="warning"
                 @icon="alert-triangle"
@@ -95,9 +95,9 @@
               >
                 {{join ", " removedPersons}}
               </AuAlert>
-            {{/if}}
-          {{/let}}
-        </div>
+            </div>
+          {{/if}}
+        {{/let}}
       {{/if}}
     </Auk::Panel::Body>
   {{else}}

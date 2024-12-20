@@ -80,16 +80,31 @@ export default class SubcaseDescriptionView extends Component {
         const meeting = await this.store.findRecord('meeting', visibleRecord.meeting.id);
         const agenda = await this.store.findRecord('agenda', visibleRecord.agenda.id);
         const agendaitem = await this.store.findRecord('agendaitem', visibleRecord.agendaitem.id);
-
+        this.latestMeetingModels = { meeting, agenda, agendaitem };
+      }
+      // if the record is not visible, it could be because the latest record is designAgenda.
+      // It is possible an earlier version of the record is visible, but we have to get that manually
+      const agendaitem = await this.store.queryOne('agendaitem', {
+        'filter[agenda-activity][subcase][:id:]': this.args.subcase.id, 
+        'filter[agenda][created-for][:id:]': lastRecord.meeting.id,
+        'filter[:has-no:next-version]': 't',
+        sort: '-agenda-activity.start-date,-created',
+      });
+      if (agendaitem) {
+        // we found an approved agendaitem on the meeting
+        const agenda = await agendaitem.agenda;
+        this.postponedMeetingModels = null;
+        const meeting = await this.store.findRecord('meeting', lastRecord.meeting.id);
+        this.latestMeetingModels = { meeting, agenda, agendaitem };
+      } else {
+        // the agendaitem is not approved yet for this profile but should show
         this.postponedMeetingModels =  {
           meeting: lastRecord.meeting,
           agenda: lastRecord.agenda,
           agendaitem: lastRecord.agendaitem
         };
-        this.latestMeetingModels = { meeting, agenda, agendaitem };
       }
     }
-
-    this.latestDecisionActivity = this.subcaseService.getLatestDecisionActivity(this.args.subcase);
+    this.latestDecisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
   });
 }

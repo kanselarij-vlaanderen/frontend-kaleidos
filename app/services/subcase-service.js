@@ -105,6 +105,7 @@ export default class SubcaseService extends Service {
       },
       meeting: {
         id: entry.attributes.meetingId,
+        uri: entry.attributes.uri,
         number: Number(entry.attributes.number),
         plannedStart: new Date(entry.attributes.plannedStart),
         kind: await this.store.findRecordByUri('concept', entry.attributes.kind),
