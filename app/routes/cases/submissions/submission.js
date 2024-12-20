@@ -83,6 +83,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     this.confidential = submission.confidential;
+    await submission.hasMany('pieces').reload();
     const newPieces = await submission.pieces;
     this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
