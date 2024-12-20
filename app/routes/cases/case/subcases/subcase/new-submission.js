@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { TrackedArray } from 'tracked-built-ins';
 
@@ -160,8 +161,21 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     controller.approvalComment = this.approvalComment;
     controller.notificationAddresses = this.notificationAddresses;
     controller.notificationComment = this.notificationComment;
-    // empty list of draft pieces in case user navigating away and back
-    // those pieces still exist but should no longer cause hidden BIS versions on real pieces.
-    controller.newDraftPieces = new TrackedArray([]);
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.isOpenPieceUploadModal = false;
+      controller.isOpenCreateSubmissionModal = false;
+      controller.hasConfidentialPieces = false;
+      controller.comment = null;
+
+      Promise.all(
+        controller.newPieces.map(async (piece) => await deletePiece(piece))
+      ).then(() => controller.newPieces = new TrackedArray([]));
+      Promise.all(
+        controller.newDraftPieces.map(async (piece) => await deletePiece(piece))
+      ).then(() => controller.newDraftPieces = new TrackedArray([]));
+    }
   }
 }
