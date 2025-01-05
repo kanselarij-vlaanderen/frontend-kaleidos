@@ -156,9 +156,6 @@
     "webpack": "^5.95.0",
     "xml-formatter": "^3.6.3"
   },
-  "overrides": {
-    "babel-plugin-ember-template-compilation": "2.2.1"
-  },
   "engines": {
     "node": ">= 18"
   }
