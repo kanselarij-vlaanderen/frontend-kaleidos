@@ -142,7 +142,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get canEmptyInternalReviews() {
     // action will do nothing on designAgenda A, so hide it instead. This method avoids having to yield async relations
-    const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.currentAgenda.serialnumber === 'A';
+    const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.reverseSortedAgendas.length == 1;
     // need permission and be on the latest agenda to do the action
     return this.currentSession.may('manage-agendaitems') && this.currentAgendaIsLatest && !isDesignAgendaA;
   }
@@ -380,7 +380,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       'filter[:has:previous-version]': agendaStatus.isDesignAgenda ? true : undefined,
       'filter[agenda][:id:]': this.args.currentAgenda.id,
     });
-    const savePromises = approvedAgendaitems.map((internalReview) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(internalReview));
+    const savePromises = approvedAgendaitems.map((agendaitem) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(agendaitem));
     await all(savePromises);
     // TODO KAS-4886 this can go when we no longer have to save agendaitems
     this.args.onStopLoading();
@@ -393,14 +393,15 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     })
     if (internalReview?.id && !isEmpty(internalReview.privateComment)) {
       internalReview.privateComment = '';
-      return await internalReview.save();
+      await internalReview.save();
     }
-    // This property is still filled in as of now, we should empty it to avoid showing this briefly in agenda overview
+    // This property was still filled prior to this code, we should empty it to avoid showing this briefly in agenda overview
     // TODO KAS-4886 remove when property is removed from model
     if (!isEmpty(agendaitem.privateComment)) {
       agendaitem.privateComment = '';
-      return await agendaitem.save();
+      await agendaitem.save();
     }
+    return;
   });
 
   @action
