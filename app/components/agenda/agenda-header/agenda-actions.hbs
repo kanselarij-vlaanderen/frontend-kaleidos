@@ -115,6 +115,15 @@
       {{t "approve-all-agendaitems"}}
     </AuButton>
   {{/if}}
+  {{#if this.canEmptyInternalReviews}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.openConfirmEmptyInternalReviews}}
+      role="menuitem"
+    >
+      {{t "empty-internal-review"}}
+    </AuButton>
+  {{/if}}
   {{#if this.canPublishDecisions}}
     <AuHr />
     <AuButton
@@ -348,3 +357,24 @@
     </div>
   </:body>
 </ConfirmationModal>
+
+{{#if this.showConfirmEmptyInternalReviews}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "empty-internal-review"}}
+      @onClose={{this.cancelEmptyInternalReviews}}
+    />
+    <Auk::Modal::Body>
+      <p class="auk-u-text-prewrap">{{t "empty-internal-review-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelEmptyInternalReviews}}>
+      <AuButton
+        @skin="primary"
+        @loading={{this.emptyInteralReviewsOfAgendaitemThrottled.isRunning}}
+        {{on "click" this.emptyInteralReviews}}
+      >
+        {{t "empty-internal-review"}}
+      </AuButton>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
