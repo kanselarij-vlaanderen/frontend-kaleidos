@@ -67,6 +67,13 @@ export default class PieceUploadService extends Service {
       sort: '-agenda-activity.start-date,-created',
     });
 
+    if (!agendaitem?.id) {
+      // should be unreachable. only use this method after verifying there is atleast 1 valid agenda-activity with
+      // local getAgendaActivity method
+      console.warn('updateRelatedAgendaitems should not be called without valid agenda-activity');
+      return;
+    }
+
     setNotYetFormallyOk(agendaitem);
     // save prior to adding pieces, micro-service does all the changes with docs
     await agendaitem.save();
