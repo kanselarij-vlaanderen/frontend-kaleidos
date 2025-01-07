@@ -37,6 +37,8 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked selectedAgenda;
   @tracked selectedMeeting;
 
+  @tracked isForPostponedSubcase = false;
+
   constructor() {
     super(...arguments);
     this.loadAgenda.perform();
@@ -59,6 +61,14 @@ export default class SubmissionHeaderComponent extends Component {
 
         this.selectedAgenda = agenda;
         this.selectedMeeting = agenda.createdFor;
+      }
+    }
+    if (this.args.subcase?.id) {
+      const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
+      const decisionResultCode = await decisionActivity?.decisionResultCode;
+      if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
+        // Check whether this subcase is already on a design agenda
+        this.isForPostponedSubcase = !(await this.subcaseService.isOnDesignAgenda(this.args.subcase));
       }
     }
   });
@@ -103,7 +113,8 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isResubmitted) &&
+        this.args.submission?.isResubmitted ||
+        this.args.submission?.isPostponedResubmitted) &&
       this.currentSession.may('edit-sent-back-submissions') &&
       this.requestedByIsCurrentMandatee
     );
@@ -121,7 +132,8 @@ export default class SubmissionHeaderComponent extends Component {
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isResubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isSendBackRequested) &&
+        this.args.submission?.isSendBackRequested ||
+        this.args.submission?.isPostponedResubmitted) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }

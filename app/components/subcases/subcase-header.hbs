@@ -13,7 +13,11 @@
             @icon="plus"
             @route="cases.case.subcases.subcase.new-submission"
           >
-            {{t "submit-new-documents"}}
+            {{#if this.isForPostponedSubcase}}
+              {{t "resubmit-postponed-agendaitem"}}
+            {{else}}
+              {{t "submit-new-documents"}}
+            {{/if}}
           </AuLink>
         </Auk::Toolbar::Item>
       {{/if}}
