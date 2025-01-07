@@ -6,7 +6,7 @@
   <ul class="br-styleguide-color-swatch-list">
     {{#each colorCategory.items as |item|}}
       <li class="br-styleguide-color-swatch">
-        <div class="br-styleguide-color-swatch__self" style="background:{{item.hex}}"></div>
+        <div class="br-styleguide-color-swatch__self" style={{html-safe (concat "background: " item.hex)}}></div>
         <span class="br-styleguide-color-swatch__line1">{{item.name}}<br></span>
         <span class="br-styleguide-color-swatch__line2">{{item.hex}}</span>
       </li>
