@@ -6,11 +6,11 @@
         @snippet="tabs.hbs"
 >
   {{!-- BEGIN-SNIPPET tabs --}}
-  <Auk::Tabs as |Tabs|>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+  <Auk::Tabs>
+    <Auk::Tab @route="styleguide.tabs">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -20,11 +20,11 @@
         @snippet="tabs-reversed.hbs"
 >
   {{!-- BEGIN-SNIPPET tabs-reversed --}}
-  <Auk::Tabs @reversed={{true}} as |Tabs|>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+  <Auk::Tabs @reversed={{true}}>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.tabs">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET tabs-reversed --}}
 </StyleguideSample>
@@ -34,9 +34,9 @@
         @snippet="tabs-icon.hbs"
 >
   {{!-- BEGIN-SNIPPET tabs-icon --}}
-  <Auk::Tabs as |Tabs|>
-    <Tabs.Tab @route="styleguide.colors" @icon="search">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs" @icon="search">Nav Item</Tabs.Tab>
+  <Auk::Tabs>
+    <Auk::Tab @route="styleguide.colors" @icon="search">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.tabs" @icon="search">Nav Item</Auk::Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -46,9 +46,9 @@
         @snippet="tabs-icon-right.hbs"
 >
   {{!-- BEGIN-SNIPPET tabs-icon-right --}}
-  <Auk::Tabs as |Tabs|>
-    <Tabs.Tab @route="styleguide.tabs" @icon="search" @layout="icon-right">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors" @icon="search" @layout="icon-right">Nav Item</Tabs.Tab>
+  <Auk::Tabs>
+    <Auk::Tab @route="styleguide.tabs" @icon="search" @layout="icon-right">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors" @icon="search" @layout="icon-right">Nav Item</Auk::Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -58,11 +58,11 @@
         @snippet="tabs-counter.hbs"
 >
   {{!-- BEGIN-SNIPPET tabs-counter --}}
-  <Auk::Tabs as |Tabs|>
-    <Tabs.Tab @route="styleguide.colors" @counter="3">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.tabs" @counter="12">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
-    <Tabs.Tab @route="styleguide.colors">Nav Item</Tabs.Tab>
+  <Auk::Tabs>
+    <Auk::Tab @route="styleguide.colors" @counter="3">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.tabs" @counter="12">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
+    <Auk::Tab @route="styleguide.colors">Nav Item</Auk::Tab>
   </Auk::Tabs>
   {{!-- END-SNIPPET --}}
 </StyleguideSample>
@@ -103,7 +103,7 @@
   <tr>
     <td>@icon</td>
     <td>string</td>
-    <td>Name of the icon, see <LinkTo @route="styleguide.icons">Icons</LinkTo> for all references.</td>
+    <td>Name of the icon, see <a href="https://appuniversum.github.io/ember-appuniversum/?path=/docs/components-brand-auicon--component">Icons</a> for all references.</td>
     <td>Displays the tab with an icon.</td>
   </tr>
   <tr>
