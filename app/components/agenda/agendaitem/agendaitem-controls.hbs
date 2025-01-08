@@ -59,7 +59,7 @@
           @route="cases.case.subcases.subcase.new-submission"
           role="menuitem"
         >
-          {{t "submit-new-documents"}}
+          {{t (if this.decisionActivity.isPostponed "resubmit-postponed-agendaitem" "submit-new-documents")}}
         </AuLink>
       {{else if this.ongoingSubmissionId}}
         <AuLink

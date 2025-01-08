@@ -81,6 +81,9 @@ export default class CasesIndexRoute extends Route {
         CONSTANTS.SUBCASE_TYPES.DEFINITIEVE_GOEDKEURING
       );
       options['filter[decisionmaking-flow][subcases][type][:not:label]'] = definitiveType.label;
+      // in an effort to also hide ratification subcases we can filter out where the ratification exists.
+      // this wont work for legacy or when the file has not been added yet.
+      options['filter[decisionmaking-flow][subcases][:has-no:ratification]'] = true;
     }
 
     return this.store.query('case', options);

@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "9.2.0",
+  "version": "9.3.0",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@appuniversum/appuniversum": "^1.2.0",
-    "@appuniversum/ember-appuniversum": "3.4.2",
+    "@appuniversum/ember-appuniversum": "3.7.0",
     "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-proposal-decorators": "^7.24.7",
@@ -155,9 +155,6 @@
     "tracked-built-ins": "^3.3.0",
     "webpack": "^5.95.0",
     "xml-formatter": "^3.6.3"
-  },
-  "overrides": {
-    "babel-plugin-ember-template-compilation": "2.2.1"
   },
   "engines": {
     "node": ">= 18"

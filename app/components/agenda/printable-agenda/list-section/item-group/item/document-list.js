@@ -15,12 +15,16 @@ export default class AgendaPrintableAgendaListSectionItemGroupItemDocumentListCo
         const accessLevel = await piece.accessLevel;
         const nextPiece = await piece.nextPiece;
         if (accessLevel.uri !== CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE) {
-          return !nextPiece ? piece : null; 
+          if (nextPiece?.uri) {
+            const nextPieceInAgendaitem = pieces.find((p) => p.uri === nextPiece.uri);
+            return !nextPieceInAgendaitem ? piece : null;
+          }
+          return piece;
         }
         return null;
       }));
       const filteredPieces = piecesNoNextVersion.filter((piece) => piece !== null);
-      
+
       // Use the filename from the filename mappings to sort
       for (const piece of pieces) {
         let mappedName;

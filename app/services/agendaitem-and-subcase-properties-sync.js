@@ -71,15 +71,21 @@ export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
       await setModifiedOnAgendaOfAgendaitem(item);
     } else {
       await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
-      const agendaitemsOnDesignAgendaToEdit = await this.store.query('agendaitem', {
-        'filter[agenda-activity][subcase][:id:]': item.id,
+      // in normal cases, only 1 agendaitem should exist on a design agenda.
+      // only in special cases, 2 agendaitems can exist on different meetings (different agenda-activity)
+      // fe. agendaitem gets retracted on friday agenda to be rushed on a wednesday agenda.
+      // Normally we don't want to update the friday agenda anymore then.
+      // this query will only get the agendaitem on a design agenda of the latest agenda-activity
+      // should result in max 1 agendaitem or 0 (everything approved but changes happen)
+      const agendaitemOnDesignAgenda = await this.store.queryOne('agendaitem', {
+        'filter[agenda-activity][subcase][:id:]': item.id, 
         'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
+        'filter[:has-no:next-version]': 't',
+        sort: '-agenda-activity.start-date,-created',
       });
-      if (agendaitemsOnDesignAgendaToEdit?.length > 0) {
-        await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async(agendaitem) => {
-          await setNewPropertiesToModel(agendaitem, propertiesToSetOnAgendaitem, resetFormallyOk);
-          await setModifiedOnAgendaOfAgendaitem(agendaitem);
-        }));
+      if (agendaitemOnDesignAgenda?.id) {
+        await setNewPropertiesToModel(agendaitemOnDesignAgenda, propertiesToSetOnAgendaitem, resetFormallyOk);
+        await setModifiedOnAgendaOfAgendaitem(agendaitemOnDesignAgenda);
       }
     }
   }

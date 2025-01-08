@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import sanitizeHtml from 'sanitize-html';
-import assign from 'lodash/merge';
+import assign from 'lodash.merge';
 import { isPresent } from '@ember/utils';
 
 const additionalAllowedTags = ['del'];
