@@ -139,6 +139,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
       .click();
     cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
 
+    cy.wait(100); // small timeout for datepickr to work
     // use command
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
       .click();

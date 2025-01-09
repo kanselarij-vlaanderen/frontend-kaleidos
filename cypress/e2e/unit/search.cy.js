@@ -58,6 +58,7 @@ function triggerSearchRadio(searchFlow, radioContains) {
 function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
+  cy.wait(100); // small timeout for datepickr to work
   cy.get(route.search.from)
     .find(auk.datepicker.datepicker)
     .click();

@@ -80,6 +80,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
 
   // Set the start date
   if (!kind || kind !== 'Ministerraad - Plan Vlaamse Veerkracht') {
+    cy.wait(100); // small timeout for datepickr to work
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
       .click();
     cy.setDateAndTimeInFlatpickr(date);
