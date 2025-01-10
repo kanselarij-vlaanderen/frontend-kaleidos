@@ -29,6 +29,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @service mandatees;
   @service decisionReportGeneration;
   @service intl;
+  @service router;
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
@@ -145,7 +146,7 @@ export default class MeetingEditMeetingComponent extends Component {
           await this.mandatees.getApplicationSecretary();
         this.secretary = currentApplicationSecretary;
       }
-      // if a meeting had no secretary yet we don't set the current active default one automatically     
+      // if a meeting had no secretary yet we don't set the current active default one automatically
     }
   });
 
@@ -294,7 +295,28 @@ export default class MeetingEditMeetingComponent extends Component {
         saveActivities.push(this.decisionPublicationActivity.save());
       }
 
+      // Check if an annex meeting exists, if so update its planned start
+      const annexMeeting = yield this.store.queryOne('meeting', {
+        filter: {
+          'main-meeting': {
+            ':id:': this.args.meeting.id,
+          }
+        }
+      });
+      if (annexMeeting?.id) {
+        annexMeeting.plannedStart = this.args.meeting.plannedStart;
+        saveActivities.push(annexMeeting.save());
+      }
+
       yield Promise.all(saveActivities);
+
+      if (annexMeeting?.id) {
+        this.toaster.success(this.intl.t('annex-meeting-was-saved', {
+          title: annexMeeting.numberRepresentation,
+          timeout: 10000,
+        }));
+      }
+
       if (!this.isPreKaleidos || !this.isNew) {
         if (
           currentMeetingSecretary?.uri !== this.secretary?.uri ||
