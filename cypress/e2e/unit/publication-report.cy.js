@@ -59,6 +59,7 @@ context('Publications reports tests', () => {
     cy.get('@currentPanelEntry').find(publication.reportsPanelEntry.create)
       .click();
 
+    cy.wait(100); // small timeout for datepickr to work
     cy.get(auk.datepicker.datepicker).eq(0)
       .click();
     cy.setDateInFlatpickr(oneMonthEarlier);
