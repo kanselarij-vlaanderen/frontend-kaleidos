@@ -5,6 +5,7 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import isSameDay from 'date-fns/isSameDay';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
@@ -17,7 +18,7 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
   @tracked isArchivingCase = false;
-  @tracked hasOngoingSubcases = false;
+  @tracked hasOngoingSubmissions = false;
   @tracked currentSubmission;
 
   constructor() {
@@ -44,7 +45,7 @@ export default class SubCasesOverviewHeader extends Component {
       this.router.currentRouteName !== 'cases.case.subcases.new-submission' &&
       this.loadLinkedMandatees.isIdle &&
       this.linkedMandatees?.length &&
-      !this.hasOngoingSubcases
+      !this.hasOngoingSubmissions
     );
   }
 
@@ -60,7 +61,7 @@ export default class SubCasesOverviewHeader extends Component {
     if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
       const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
       if (!latestSubmission?.id) {
-        this.hasOngoingSubcases = false;
+        this.hasOngoingSubmissions = false;
         return;
       }
       // const submissionSubcase = await latestSubmission?.subcase; // yields null when it exists, cache issue
@@ -69,13 +70,24 @@ export default class SubCasesOverviewHeader extends Component {
       });
       if (!subcase?.id) {
         // submission for new subcase is ongoing
-        this.hasOngoingSubcases = true;
+        this.hasOngoingSubmissions = true;
         this.currentSubmission = latestSubmission;
         return;
       }
       const relatedAgendas = await this.subcaseService.getRelatedAgendas(subcase);
-      if (relatedAgendas.length > 0)
-        this.hasOngoingSubcases = relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN;
+      if (relatedAgendas.length > 0) {
+        this.hasOngoingSubmissions = relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN;
+        // second case: the related agenda is closed and postponed, but a new submission is ongoing
+        if (
+          relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+          relatedAgendas[0].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+        ) {
+          const isSubmissionOnNewMeeting = !isSameDay(relatedAgendas[0].meeting.plannedStart, (latestSubmission.plannedStart));
+          if (isSubmissionOnNewMeeting) {
+            this.hasOngoingSubmissions = true;
+          }
+        }
+      }
     }
   });
 

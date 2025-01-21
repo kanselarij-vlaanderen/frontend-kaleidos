@@ -18,6 +18,7 @@ export default class AgendaitemControls extends Component {
   @service store;
   @service intl;
   @service agendaService;
+  @service subcaseService;
   @service currentSession;
   @service pieceAccessLevelService;
   @service signatureService;
@@ -38,6 +39,7 @@ export default class AgendaitemControls extends Component {
   @tracked isSendingBackToSubmitter = false;
   @tracked sendBackToSubmitterComment;
   @tracked ongoingSubmissionId;
+  @tracked canProposeForOtherAgendaWithSubmission = false;
 
   constructor() {
     super(...arguments);
@@ -70,9 +72,31 @@ export default class AgendaitemControls extends Component {
         this.canSendToVP = false;
       }
       this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+      if (this.decisionActivity.isPostponed && this.canSubmitNewDocuments) {
+        // there are 2 cases when both are true
+        // 1 - agendaitem was postponed but not yet submitted for a new meeting > should be able to "repropose" via submission
+        // 2 - agendaitem was postponed and already placed on a new meeting by secretarie >  should be able to "add new documents"
+        // the action should have a different translation key only in case 1
+        const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.args.subcase);
+        this.canProposeForOtherAgendaWithSubmission = true;
+        if (relatedAgendas.length > 1 && relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN) {
+          // is already resubmitted on design agenda
+          // no submission is ongoing
+          this.canProposeForOtherAgendaWithSubmission = false;
+        }
+      }
+      // when there are more than 1 agenda-activity and there are submissions, the action to send back to submitter will remove too much
+      // For now, we disable the action only in that case. (retracting or postponing and then resubmitting)
+      // It is still possible to remove the agendaitem from the agenda
+      const agendaActivities = await this.store.count('agenda-activity', {
+        'filter[subcase][:id:]': this.args.subcase.id,
+      });
+      this.subcaseIsOnMultipleAgendas = agendaActivities > 1;
+
     } else {
       this.canSendToVP = false;
       this.canSubmitNewDocuments = false;
+      this.canProposeForOtherAgendaWithSubmission = false;
     }
   });
 
