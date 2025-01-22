@@ -40,6 +40,7 @@ export default class AgendaitemControls extends Component {
   @tracked sendBackToSubmitterComment;
   @tracked ongoingSubmissionId;
   @tracked canProposeForOtherAgendaWithSubmission = false;
+  @tracked subcaseIsOnMultipleAgendas = false;
 
   constructor() {
     super(...arguments);
