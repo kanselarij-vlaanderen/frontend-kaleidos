@@ -287,6 +287,19 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
         oldMeeting = relatedAgendas[1].meeting;
         meeting = relatedAgendas[0].meeting;
       }
+      else if (relatedAgendas.length > 1 &&
+        relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN &&
+        relatedAgendas[0].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN &&
+        relatedAgendas[1].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN &&
+        relatedAgendas[1].agendaActivity.startDate > relatedAgendas[0].agendaActivity.startDate
+      ) {
+        // when secretarie retracts/resubmits, there is no correct "previousSubmission" to get the meeting from
+        // in that case, there will be 2 design agendas but only a submission to the original one.
+        // also, no decisionResultCode will be available at this time.
+        // the meeting will be earlier in time aswell, but the agenda-activity will be more recently started.
+        // We should not name oldMeeting here, since it will trigger the email to contain "uitgesteld".
+        meeting = relatedAgendas[1].meeting;
+      }
     }
 
     // originalSubmission points to the very first submission, which is not what we want when postponed and resubmitted.
