@@ -73,7 +73,7 @@ export default class AgendaitemControls extends Component {
         this.canSendToVP = false;
       }
       this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
-      if (this.decisionActivity.isPostponed && this.canSubmitNewDocuments) {
+      if (this.decisionActivity?.isPostponed && this.canSubmitNewDocuments) {
         // there are 2 cases when both are true
         // 1 - agendaitem was postponed but not yet submitted for a new meeting > should be able to "repropose" via submission
         // 2 - agendaitem was postponed and already placed on a new meeting by secretarie >  should be able to "add new documents"
