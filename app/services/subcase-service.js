@@ -114,6 +114,16 @@ export default class SubcaseService extends Service {
       agendaitem: {
         id: entry.attributes.agendaitemId,
       },
+      agendaActivity: {
+        id: entry.attributes.agendaActivityId,
+        startDate: new Date(entry.attributes.agendaActivityStart),
+      },
+      decisionResultCode: entry.attributes.decisionResultCode
+      ? await this.store.findRecordByUri(
+          'concept',
+          entry.attributes.decisionResultCode,
+        )
+      : null,
     })));
   }
 
