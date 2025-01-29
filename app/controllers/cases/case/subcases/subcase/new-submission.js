@@ -9,6 +9,7 @@ import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import isSameDay from 'date-fns/isSameDay';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Controller {
   @service cabinetMail;
@@ -271,20 +272,36 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const decisionResultCode = await decisionActivity?.decisionResultCode;
     const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.model);
     let oldMeeting = null; // -- 18/12
+    let isReSubmittingPostponed = false;
     if (relatedAgendas.length) {
       if (
         relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
         decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
       ) {
+        // in this case, getting decision result from data instead of sudo ensures decisions were released
+        // when Cabinet member requests the resubmitting of a postpone subcase
+        isReSubmittingPostponed = true;
         oldMeeting = relatedAgendas[0].meeting;
       } else if (relatedAgendas.length > 1 &&
         relatedAgendas[1].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
-        decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+        relatedAgendas[1].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD && 
+        !isSameDay(relatedAgendas[0].meeting.plannedStart, (meeting.plannedStart))
       ) {
         // if secretarie postponed/resubmitted, there is no correct "previousSubmission" to get the meeting from
         // in that case, there will be 2 agendas but only a submission to the original one
         // else if in case multiple postpone/resubmit happened we do not want to hit this when the first condition is true
-        oldMeeting = relatedAgendas[1].meeting;
+        // Cabinet member did not request the resubmitting in this case
+        const approvedAgendaitem = await this.store.queryOne('agendaitem', {
+          'filter[agenda-activity][:id:]': relatedAgendas[0].agendaActivity.id,
+          'filter[:has-no:next-version]': 't',
+          sort: '-created',
+        });
+        if (!approvedAgendaitem?.id) {
+          // this is the first update submission since resubmitting, mails need to reflect this
+          oldMeeting = relatedAgendas[1].meeting;
+          isReSubmittingPostponed = false;
+        }
+        // needs to happen in both cases. local variable meeting is the incorrect meeting
         meeting = relatedAgendas[0].meeting;
       }
       else if (relatedAgendas.length > 1 &&
@@ -359,7 +376,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting, oldMeeting);
+        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting, oldMeeting, isReSubmittingPostponed);
         this.preventUnload.disable();
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {

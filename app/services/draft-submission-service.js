@@ -172,6 +172,7 @@ export default class DraftSubmissionService extends Service {
         relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
         decisionResultCode?.uri !== CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
       ) {
+        // because we check the decisionActivity we also verify that decisions were released of the approved agenda
         return false;
       }
     }
