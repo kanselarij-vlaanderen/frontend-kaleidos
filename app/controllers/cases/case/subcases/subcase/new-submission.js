@@ -268,14 +268,17 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       });
     }
 
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.model);
+    const decisionResultCode = await decisionActivity?.decisionResultCode;
     const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.model);
     let oldMeeting = null; // -- 18/12
     let isReSubmittingPostponed = false;
     if (relatedAgendas.length) {
       if (
         relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
-        relatedAgendas[0].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+        decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
       ) {
+        // in this case, getting decision result from data instead of sudo ensures decisions were released
         // when Cabinet member requests the resubmitting of a postpone subcase
         isReSubmittingPostponed = true;
         oldMeeting = relatedAgendas[0].meeting;
