@@ -58,9 +58,9 @@ function triggerSearchRadio(searchFlow, radioContains) {
 function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
-  cy.wait(100); // small timeout for datepickr to work
   cy.get(route.search.from)
     .find(auk.datepicker.datepicker)
+    .not(auk.datepicker.loading)
     .click();
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}1`);
   cy.setDateInFlatpickr(dateFrom);
@@ -70,6 +70,7 @@ function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
 
   cy.get(route.search.to)
     .find(auk.datepicker.datepicker)
+    .not(auk.datepicker.loading)
     .click();
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}2`);
   cy.setDateInFlatpickr(dateTo);
@@ -92,6 +93,7 @@ function searchDateRange(searchFlow, dateFrom, dateTo, resultRow) {
 
   cy.get(route.search.from)
     .find(auk.datepicker.datepicker)
+    .not(auk.datepicker.loading)
     .click();
   cy.intercept('GET', `/${searchFlow}/search?**`).as(`searchCall${randomInt}5`);
   cy.setDateInFlatpickr(dateTo);

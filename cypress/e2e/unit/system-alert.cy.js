@@ -139,9 +139,9 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
       .click();
     cy.get(agenda.agendaActions.toggleEditingMeeting).forceClick();
 
-    cy.wait(100); // small timeout for datepickr to work
     // use command
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateAndTimeInFlatpickr(newDate);
     // click something outside the datepicker to close and update it
@@ -152,6 +152,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
 
     // manual year down
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.get(dependency.flatPickr.yearDown).click();
     cy.get(dependency.flatPickr.prevMonth).click();
