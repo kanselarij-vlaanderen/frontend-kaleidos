@@ -313,6 +313,7 @@ context('Publications proofs tests', () => {
     // set duedate
     cy.get(publication.proofInfoPanel.edit).click();
     cy.get(publication.proofInfoPanel.editView.dueDate).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(lateDueDate);
     cy.get(publication.proofInfoPanel.save).click();

@@ -81,6 +81,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the start date
   if (!kind || kind !== 'Ministerraad - Plan Vlaamse Veerkracht') {
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateAndTimeInFlatpickr(date);
     // At this point, the flatpickr is still open and covers the other fields
@@ -93,6 +94,7 @@ function createAgenda(kind, date, location, meetingNumber, meetingNumberVisualRe
   // Set the planned document release
   if (plannedRelease) {
     cy.get(agenda.editMeeting.documentPublicationDate).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateAndTimeInFlatpickr(plannedRelease);
     cy.get(agenda.editMeeting.meetingNumber).click({

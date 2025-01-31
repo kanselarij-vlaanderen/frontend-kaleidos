@@ -234,6 +234,7 @@ context('Publications overview tests', () => {
     cy.get(publication.publicationNav.publications).click();
     cy.get(publication.publicationsInfoPanel.edit).click();
     cy.get(publication.publicationsInfoPanel.editView.targetEndDate).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(fields1.targetEndDate);
     cy.get(publication.publicationsInfoPanel.editView.save).click();

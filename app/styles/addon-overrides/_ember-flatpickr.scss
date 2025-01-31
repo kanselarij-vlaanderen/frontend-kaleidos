@@ -4,6 +4,13 @@
    ember-flatpickr
    ========================================================================== */
 
+// Use the default styles for flatpickr
+
+@use "flatpickr/dist/flatpickr.css";
+
+
+// Custom styles for flatpickr
+
 $daySize: 35px;
 $padding: calc($daySize / 16);
 $dayMargin: 2px;

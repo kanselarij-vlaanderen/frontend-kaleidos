@@ -7,6 +7,8 @@
     <AuIcon @icon="calendar"/>
     <EmberFlatpickr
       data-test-auk-datepickr
+      {{!-- flatpickr will loadi for +-100 ms but no loader shows, input click does NOT open the popup --}}
+      data-test={{if (not this.flatpickrRef) "auk-datepickr-loading"}}
       class="au-c-input au-c-input--block {{this.error}}"
       placeholder={{this.placeholder}}
       @allowInput={{true}}
