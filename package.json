@@ -69,6 +69,7 @@
     "alphabet": "^1.0.0",
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-funnel": "^3.0.8",
+    "broccoli-sass-source-maps": "^4.3.0",
     "cypress": "^12.17.4",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.13",
