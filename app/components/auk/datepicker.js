@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
+import { tracked } from '@glimmer/tracking';
 
 /**
  * Kaleidos-styled wrapper for EmberFlatpickr. Takes the same arguments as EmberFlatpickr takes.
@@ -12,6 +13,8 @@ import { isPresent } from '@ember/utils';
  * @argument {Boolean} multiple. Determines if multiple dates can be selected
  */
 export default class Datepicker extends Component {
+  @tracked flatpickrRef;
+
   get enable() {
     if (this.args.enable) {
       return this.args.enable;

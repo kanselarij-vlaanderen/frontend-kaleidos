@@ -15,9 +15,11 @@ context('meeting actions tests', () => {
     cy.get(route.search.input).clear();
     cy.get(route.search.input).type(searchTerm);
     cy.get(route.search.from).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(date);
     cy.get(route.search.to).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(date);
     cy.get(route.search.trigger).click();

@@ -45,9 +45,11 @@ function checkPublicationSearchForDateType(dateType, date, pubNumber) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('GET', '/publication-flows/search?**').as(`publicationSearchCall${randomInt}`);
   cy.get(route.searchPublications.dateType).select(dateType);
-  cy.get(route.search.from).click();
+  cy.get(route.search.from).not(auk.datepicker.loading)
+    .click();
   cy.setDateInFlatpickr(date);
-  cy.get(route.search.to).click();
+  cy.get(route.search.to).not(auk.datepicker.loading)
+    .click();
   cy.setDateInFlatpickr(date);
   cy.get(route.search.trigger).click();
   cy.wait(`@publicationSearchCall${randomInt}`);
@@ -390,10 +392,12 @@ context('Search tests', () => {
     cy.get(route.searchPublications.dateType).select('Datum beslissing');
     cy.get(route.search.from)
       .find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
     cy.get(route.search.to)
       .find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(fields.decisionDate);
     triggerSearchPublication();

@@ -3,6 +3,7 @@
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const webpack = require('webpack');
+const compileSass = require('broccoli-sass-source-maps')(require('sass'));
 
 module.exports = async function (defaults) {
   const { setConfig } = await import('@warp-drive/build-config');
@@ -24,13 +25,6 @@ module.exports = async function (defaults) {
     flatpickr: {
       locales: ['nl'],
     },
-    outputPaths: {
-      app: {
-        css: {
-          'styleguide': '/assets/styleguide.css'
-        }
-      }
-    },
     'ember-simple-auth': {
       useSessionSetupMethod: true,
     },
@@ -43,7 +37,7 @@ module.exports = async function (defaults) {
     'ember-test-selectors': {
       strip: false
     },
-    //polyfill for insecure context (like cypress on jenkins) https://github.com/emberjs/data/tree/v5.0.0?tab=readme-ov-file#randomuuid-polyfill
+    // polyfill for insecure context (like cypress on jenkins) https://github.com/emberjs/data/tree/v5.0.0?tab=readme-ov-file#randomuuid-polyfill
     '@embroider/macros': {
       setConfig: {
         '@ember-data/store': {
@@ -79,5 +73,17 @@ module.exports = async function (defaults) {
     ],
   });
 
-  return app.toTree();
+  // instead of using `outputPaths` for building the styleguide CSS (which is deprecated now), we use a fork of `broccoli-sass` to do this
+  const styleguideCss = compileSass(
+    ['app/styles'],
+    'styleguide.scss',
+    'assets/styleguide/styleguide.css',
+    {
+      outputStyle: process.env.DEPLOY_ENV !== 'production' ? 'expanded' : 'compressed',
+      sourceMap: process.env.DEPLOY_ENV !== 'production',
+      sourceMapEmbed: process.env.DEPLOY_ENV !== 'production'
+    }
+  );
+
+  return app.toTree([styleguideCss]);
 };

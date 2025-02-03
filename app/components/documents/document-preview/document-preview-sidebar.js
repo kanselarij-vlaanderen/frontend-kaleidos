@@ -27,8 +27,12 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
 
   get isShownSignatureTab() {
     const hasPermission = this.currentSession.may('manage-signatures');
-    const isPiece = this.args.piece.constructor.modelName === 'piece';
-    return hasPermission && isPiece;
+    const isPiece = (this.args.piece.constructor.modelName === 'piece');
+    const isReport = (this.args.piece.constructor.modelName === 'report');
+    const isMinutes = (this.args.piece.constructor.modelName === 'minutes');
+    const canManageDecisions = this.currentSession.may('manage-decisions');
+    const canManageSignflow = isPiece || ((isReport || isMinutes) && canManageDecisions);
+    return hasPermission && canManageSignflow;
   }
 
   @task
