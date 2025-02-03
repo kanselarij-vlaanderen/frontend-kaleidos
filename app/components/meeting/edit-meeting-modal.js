@@ -304,7 +304,10 @@ export default class MeetingEditMeetingComponent extends Component {
         }
       });
       if (annexMeeting?.id) {
+        // these 2 properties cannot be changed on the annex meeting
         annexMeeting.plannedStart = this.args.meeting.plannedStart;
+        annexMeeting.number = this.args.meeting.number;
+        // numberRepresentation still needs to be updated manually and will trigger new reports/minutes
         saveActivities.push(annexMeeting.save());
       }
 

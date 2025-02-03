@@ -1496,5 +1496,5 @@
   "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring",
   "empty-internal-review": "Interne opmerkingen leegmaken",
   "empty-internal-review-message": "Bent u zeker dat u alle interne opmerkingen voor de goedgekeurde agendapunten op deze agenda wil leegmaken?\nDeze actie kan niet ongedaan worden gemaakt.\nDe interne opmerkingen van nieuwe agendapunten blijven ongewijzigd.",
-  "annex-meeting-was-saved": "De annex vergadering {title} is aangepast. Verifieer of de beslissingen nog up-to-date zijn."
+  "annex-meeting-was-saved": "De annex vergadering {title} is aangepast. Verifieer of de beslissingen en notulen nog up-to-date zijn."
 }
