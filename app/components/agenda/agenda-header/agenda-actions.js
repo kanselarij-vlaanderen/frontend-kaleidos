@@ -382,7 +382,6 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     });
     const savePromises = approvedAgendaitems.map((agendaitem) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(agendaitem));
     await all(savePromises);
-    // TODO KAS-4886 this can go when we no longer have to save agendaitems
     this.args.onStopLoading();
     this.args.didApproveAgendaitems(); // just calls a refresh route
   };
@@ -394,12 +393,6 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     if (internalReview?.id && !isEmpty(internalReview.privateComment)) {
       internalReview.privateComment = '';
       await internalReview.save();
-    }
-    // This property was still filled prior to this code, we should empty it to avoid showing this briefly in agenda overview
-    // TODO KAS-4886 remove when property is removed from model
-    if (!isEmpty(agendaitem.privateComment)) {
-      agendaitem.privateComment = '';
-      await agendaitem.save();
     }
     return;
   });
