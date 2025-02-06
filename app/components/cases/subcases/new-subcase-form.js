@@ -291,7 +291,7 @@ export default class NewSubcaseForm extends Component {
     if (mandatees?.length) {
       this.mandatees = mandatees;
     } else {
-      this.mandatees.clear();
+      this.mandatees = new TrackedArray([]);
       this.submitter = null;
     }
   }
