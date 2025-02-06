@@ -12,6 +12,8 @@ module.exports = function (environment) {
     },
     EmberENV: {
       EXTEND_PROTOTYPES: false,
+      // all array prototype methods we should no longer use are listed here
+      // https://deprecations.emberjs.com/id/deprecate-array-prototype-extensions
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
