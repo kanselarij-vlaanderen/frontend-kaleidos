@@ -314,10 +314,14 @@ export default class MeetingEditMeetingComponent extends Component {
       yield Promise.all(saveActivities);
 
       if (annexMeeting?.id) {
-        this.toaster.success(this.intl.t('annex-meeting-was-saved', {
-          title: annexMeeting.numberRepresentation,
-          timeout: 10000,
-        }));
+        this.toaster.success(this.intl.t('annex-meeting-was-saved',
+          { title: annexMeeting.numberRepresentation }),
+          null,
+          {
+            timeOut: 30000,
+            closable: true,
+          }
+        );
       }
 
       if (!this.isPreKaleidos || !this.isNew) {
