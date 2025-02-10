@@ -58,13 +58,13 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     // is not necessary since documents are not propagated by Yggdrasil if they
     // should not be visible yet for a specific profile.
     const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
-    if (this.currentSession.may('view-documents-before-release')) {
-      this.documentsAreVisible = true;
-    } else if (
-      !this.currentSession.may('view-postponed-and-retracted') &&
+    if (
+      !this.currentSession.may('view-documents-postponed-and-retracted-on-agendaitem') &&
       [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
     ) {
       this.documentsAreVisible = false;
+    } else if (this.currentSession.may('view-documents-before-release')) {
+      this.documentsAreVisible = true;
     } else {
       const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
       const documentPublicationStatus = await documentPublicationActivity?.status;

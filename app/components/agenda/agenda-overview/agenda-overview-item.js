@@ -72,17 +72,37 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     const decisionActivityResultCode = yield this.decisionActivity
       ?.decisionResultCode;
     const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if (!decisionActivityResultCode && this.currentSession.may('view-documents-before-release')) {
+      this.documentsAreVisible = true; // we don't know yet if documents are retracted or postponed (for non editors or when no result was chosen yet)
+      return;
+    }
+
+    const decisionPublicationActivity = yield this.args.meeting.internalDecisionPublicationActivity;
+    const decisionPublicationStatus = yield decisionPublicationActivity?.status;
+    const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    const mayViewPostponedDocsOnAgenda = this.currentSession.may('view-documents-postponed-and-retracted-on-agendaitem');
+    const mayViewPostponedDocs = this.currentSession.may('view-documents-postponed-and-retracted');
+    if ([INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)) {
+      if (mayViewPostponedDocsOnAgenda || !decisionsAreReleased) {
+        // if the decisions are not yet released we still show the documents (for editors who can see the decisions always)
+        return this.documentsAreVisible = true;
+      } else if (mayViewPostponedDocs) {
+        // decisions are released
+        // you are technically allowed to see the docs, but not in this view
+        // TODO show alert in this case??
+        return this.documentsAreVisible = false; // this will be true in subcase views
+      } else {
+        // can never see these docs
+        return this.documentsAreVisible = false;
+      }
+    }
+    // ANY DOCUMENT THAT IS APROVED
     if (this.currentSession.may('view-documents-before-release')) {
-      this.documentsAreVisible = true;
-    } else if (
-      !this.currentSession.may('view-postponed-and-retracted') &&
-      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
-    ) {
-      this.documentsAreVisible = false;
+      return this.documentsAreVisible = true;
     } else {
       const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
       const documentPublicationStatus = yield documentPublicationActivity?.status;
-      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+      return this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
   }
 

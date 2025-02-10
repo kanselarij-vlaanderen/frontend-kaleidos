@@ -144,7 +144,7 @@
       {{/unless}}
       {{#if (and this.documentsAreVisible (not @allowReorderItems))}}
         <div class="auk-u-mt-4">
-          {{#if (user-may "view-documents-postponed-and-retracted")}}
+          {{#if (user-may "view-documents-postponed-and-retracted-on-agendaitem")}}
             {{#if this.decisionActivity.isPostponed}}
               <AuAlert
                 @skin="warning"
@@ -183,7 +183,7 @@
             {{/if}}
           </AuButton>
         {{/if}}
-      {{else if (not (user-may "view-documents-postponed-and-retracted"))}}
+      {{else if (not (user-may "view-documents-postponed-and-retracted-on-agendaitem"))}}
         {{#if this.decisionActivity.isPostponed}}
           {{t "agendaitem-postponed-no-documents-available"}}
         {{else if this.decisionActivity.isRetracted}}

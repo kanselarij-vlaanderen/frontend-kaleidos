@@ -65,7 +65,8 @@ const {
 // - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
 // - send-only-specific-cases-to-vp: allow sending a restricted selection of cases' documents to the VP (Flemish Parliament).
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
-// - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
+// - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems (subcase view)
+// - view-documents-postponed-and-retracted-on-agendaitem: Allow viewing the documents of retracted or postponed agendaitems (agendaitem view)
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 // - create-submissions: Allow the creation of submissions (by cabinets)
 // - treat-and-accept-submissions: Allow the treating of submissions on placing the agenda
@@ -97,6 +98,7 @@ const groups = [
         'search-confidential-documents',
         'impersonate-users',
         'view-documents-postponed-and-retracted',
+        'view-documents-postponed-and-retracted-on-agendaitem',
         'view-mandatees-with-range',
         'view-access-level-pill-when-postponed',
         'view-submissions',
