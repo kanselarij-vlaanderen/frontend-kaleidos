@@ -14,7 +14,6 @@ export default class Agendaitem extends ModelWithModifier {
   @attr formallyOk;
   @attr('boolean') isApproval; // isGoedkeuringVanDeNotulen
   @attr comment;
-  @attr privateComment;
 
   @belongsTo('agenda', { inverse: 'agendaitems', async: true }) agenda;
   @belongsTo('agendaitem', { inverse: 'previousVersion', async: true })
