@@ -75,14 +75,18 @@ export default class AgendasRoute extends Route {
 
   resetController(controller, isExiting) {
     if (isExiting) {
-      if (controller.newMeeting) {
-        controller.newMeeting.deleteRecord();
+      // delete any non saved models
+      if (!controller.newMeeting?.id) {
+        controller.newMeeting?.deleteRecord();
+      }
+      if (controller.publicationActivities.length) {
+        controller.publicationActivities.forEach((activity) => {
+          if (!activity?.id) {
+            activity.deleteRecord();
+          }
+        });
       }
       controller.newMeeting = null;
-
-      if (controller.publicationActivities.length) {
-        controller.publicationActivities.forEach((activity) => activity.deleteRecord());
-      }
       controller.publicationActivities = [];
     }
   }

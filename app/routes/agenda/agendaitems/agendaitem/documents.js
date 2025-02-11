@@ -97,8 +97,14 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
 
   resetController(controller, isExiting) {
     if (isExiting) {
+      // cleanup any unsaved pieces
       Promise.all(
-        controller.newPieces.map(async (piece) => await deletePiece(piece))
+        controller.newPieces.map(async (piece) => {
+          if (!piece?.id) {
+            // don't delete the draft-piece here.
+            await deletePiece(piece, false);
+          }
+        }),
       ).then(() => (controller.newPieces = new TrackedArray([])));
     }
   }

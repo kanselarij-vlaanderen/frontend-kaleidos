@@ -88,7 +88,6 @@ export default class SettingsOrganizationsIndexRoute extends Route {
   resetController(controller, isExiting) {
     if (isExiting) {
       controller.organizationBeingBlocked = null;
-
       controller.showBlockOrganizationConfirmationModal = false;
       controller.showUnblockOrganizationConfirmationModal = false;
     }

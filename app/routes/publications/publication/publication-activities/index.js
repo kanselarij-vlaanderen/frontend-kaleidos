@@ -95,8 +95,8 @@ export default class PublicationsPublicationPublicationActivitiesIndexRoute exte
 
   resetController(controller, isExiting) {
     if (isExiting) {
-      this.isOpenRequestModal = false;
-      this.isOpenRegistrationModal = false;
+      controller.isOpenRequestModal = false;
+      controller.isOpenRegistrationModal = false;
     }
   }
 

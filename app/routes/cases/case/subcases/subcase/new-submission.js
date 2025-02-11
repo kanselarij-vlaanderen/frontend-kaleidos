@@ -180,11 +180,20 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       controller.hasConfidentialPieces = false;
       controller.comment = null;
 
+      // cleanup any unsaved pieces
       Promise.all(
-        controller.newPieces.map(async (piece) => await deletePiece(piece))
+        controller.newPieces.map(async (piece) => {
+          if (!piece?.id) {
+            await deletePiece(piece);
+          }
+        }),
       ).then(() => controller.newPieces = new TrackedArray([]));
       Promise.all(
-        controller.newDraftPieces.map(async (piece) => await deletePiece(piece))
+        controller.newDraftPieces.map(async (piece) => {
+          if (!piece?.id) {
+            await deletePiece(piece);
+          }
+        }),
       ).then(() => controller.newDraftPieces = new TrackedArray([]));
     }
   }
