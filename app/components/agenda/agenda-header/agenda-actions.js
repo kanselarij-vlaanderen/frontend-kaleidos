@@ -303,7 +303,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.selectedMandatees,
       decisions,
       this.store,
-      pdfOnly
+      pdfOnly,
     );
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
