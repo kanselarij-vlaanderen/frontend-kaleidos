@@ -161,7 +161,7 @@ export default class CabinetMailService extends Service {
     ]);
   }
 
-  async sendUpdateSubmissionMails(submission, meeting) {
+  async sendUpdateSubmissionMails(submission, meeting, oldMeeting=null, isReSubmittingPostponed=false) {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     const submissionUrl = this.getSubmissionUrl(submission);
     const submissionPieces = await submission.pieces;
@@ -178,6 +178,9 @@ export default class CabinetMailService extends Service {
       submission,
       meeting,
       agendaitem,
+      isForPostponedSubcase: !!oldMeeting,
+      isReSubmittingPostponed: isReSubmittingPostponed, // when cabinet wants to put the postponed subcase on a new agenda
+      oldMeeting,
     };
 
     const creator = await this.draftSubmissionService.getCreator(submission);

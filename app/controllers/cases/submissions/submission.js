@@ -37,6 +37,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @tracked notificationComment;
   @tracked beingTreatedBy;
   @tracked isUpdate;
+  @tracked wasPostponed;
   @tracked confidential;
 
   @tracked hasConfidentialPieces;
@@ -142,6 +143,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     this.mandatees = mandatees;
 
     this.model.requestedBy = submitter;
+    await this.model.mandatees;
     this.model.mandatees = this.mandatees;
 
     this.mandatees = this.mandatees

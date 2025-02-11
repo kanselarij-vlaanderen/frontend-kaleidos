@@ -5,23 +5,25 @@
     @onClose={{@onClose}}
   />
   <Auk::Modal::Body>
-    <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
-      <AuCheckbox
-        data-test-mandatees-selector-open-search
-        @checked={{this.openSearch}}
-        @onChange={{this.setOpenSearch}}
-      >
-        {{t "open-search-for-mandatee"}}
-      </AuCheckbox>
-      {{#let (concat "tooltip-trigger-" (unique-id)) as |tooltipTriggerId|}}
-        <AuIcon @icon="circle-info" id={{tooltipTriggerId}} class="au-u-muted auk-u-ml" />
-        <EmberTooltip @targetId={{tooltipTriggerId}} @tooltipClass="auk-tooltip" @side="bottom">
-          <p>
-            {{t "open-search-for-mandatee-tooltip"}}
-          </p>
-        </EmberTooltip>
-      {{/let}}
-    </div>
+    {{#if (user-may "add-past-mandatees")}}
+      <div class="auk-o-flex--inline auk-o-flex--vertical-center auk-u-mb-2">
+        <AuCheckbox
+          data-test-mandatees-selector-open-search
+          @checked={{this.openSearch}}
+          @onChange={{this.setOpenSearch}}
+        >
+          {{t "open-search-for-mandatee"}}
+        </AuCheckbox>
+        {{#let (concat "tooltip-trigger-" (unique-id)) as |tooltipTriggerId|}}
+          <AuIcon @icon="circle-info" id={{tooltipTriggerId}} class="au-u-muted auk-u-ml" />
+          <EmberTooltip @targetId={{tooltipTriggerId}} @tooltipClass="auk-tooltip" @side="bottom">
+            <p>
+              {{t "open-search-for-mandatee-tooltip"}}
+            </p>
+          </EmberTooltip>
+        {{/let}}
+      </div>
+    {{/if}}
     <Utils::LoadableContent
       @isLoading={{this.onAdd.isRunning}}
       @reserveSpace={{true}}

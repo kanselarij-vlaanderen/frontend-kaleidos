@@ -60,9 +60,11 @@ context('Publications reports tests', () => {
       .click();
 
     cy.get(auk.datepicker.datepicker).eq(0)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(oneMonthEarlier);
     cy.get(auk.datepicker.datepicker).eq(1)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(today);
 

@@ -12,12 +12,13 @@ import {
 } from 'frontend-kaleidos/utils/zip-agenda-files';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import bind from 'frontend-kaleidos/utils/bind';
-import { isPresent } from '@ember/utils';
+import { isEmpty, isPresent } from '@ember/utils';
 import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
 
 /**
  * @argument {Meeting} meeting
  * @argument {Agenda} currentAgenda
+ * @argument {[Agenda]} reverseSortedAgendas: the agendas of the meeting, reverse sorted on serial number
  * @argument {function} didApproveAgendaitems
  * @argument onStartLoading
  * @argument onStopLoading
@@ -53,6 +54,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showDownloadDocuments = false;
   @tracked selectedMandatees = [];
   @tracked showDownloadDecisions = false;
+  @tracked showConfirmEmptyInternalReviews = false;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -126,6 +128,23 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get isFinalMeeting() {
     return isPresent(this.args.meeting.agenda.get('id'));
+  }
+
+  get latestAgenda() {
+    return this.args.reverseSortedAgendas.slice().at(0);
+  }
+
+  get currentAgendaIsLatest() {
+    return (
+      this.latestAgenda.id === this.args.currentAgenda.id
+    );
+  }
+
+  get canEmptyInternalReviews() {
+    // action will do nothing on designAgenda A, so hide it instead. This method avoids having to yield async relations
+    const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.reverseSortedAgendas.length == 1;
+    // need permission and be on the latest agenda to do the action
+    return this.currentSession.may('manage-agendaitems') && this.currentAgendaIsLatest && !isDesignAgendaA;
   }
 
   @bind
@@ -352,6 +371,32 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.router.refresh(this.router.currentRouteName);
   }
 
+  emptyInteralReviews = async() => {
+    this.showConfirmEmptyInternalReviews = false;
+    this.args.onStartLoading(this.intl.t('empty-internal-review'));
+    // getting all valid agendaitems first gets better results than trying submission-internal-review directly via subcase
+    const agendaStatus = await this.args.currentAgenda.status;
+    const approvedAgendaitems = await this.store.queryAll('agendaitem', {
+      'filter[:has:previous-version]': agendaStatus.isDesignAgenda ? true : undefined,
+      'filter[agenda][:id:]': this.args.currentAgenda.id,
+    });
+    const savePromises = approvedAgendaitems.map((agendaitem) => this.emptyInteralReviewsOfAgendaitemThrottled.perform(agendaitem));
+    await all(savePromises);
+    this.args.onStopLoading();
+    this.args.didApproveAgendaitems(); // just calls a refresh route
+  };
+
+  emptyInteralReviewsOfAgendaitemThrottled = task({ maxConcurrency: 5}, async (agendaitem) => {
+    const internalReview = await this.store.queryOne('submission-internal-review', {
+      'filter[subcase][agenda-activities][agendaitems][:id:]': agendaitem.id,
+    })
+    if (internalReview?.id && !isEmpty(internalReview.privateComment)) {
+      internalReview.privateComment = '';
+      await internalReview.save();
+    }
+    return;
+  });
+
   @action
   print() {
     window.print();
@@ -463,4 +508,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   onChangeDownloadOption(selectedDownloadOption) {
     this.downloadOption = selectedDownloadOption;
   }
+
+  openConfirmEmptyInternalReviews = () => {
+  // TODO KAS-4886 this first line can go when we no longer have to save agendaitems
+  this.reloadAgendaitemsData.perform(); // Do we need to reload anything?? The interalreview may not be loaded yet, but the model itself cannot be stale
+  this.showConfirmEmptyInternalReviews = true;
+  };
+
+  cancelEmptyInternalReviews = () => {
+    this.showConfirmEmptyInternalReviews = false;
+  };
 }

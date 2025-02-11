@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "9.2.0",
+  "version": "9.3.3",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@appuniversum/appuniversum": "^1.2.0",
-    "@appuniversum/ember-appuniversum": "3.4.2",
+    "@appuniversum/ember-appuniversum": "3.7.0",
     "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-proposal-decorators": "^7.24.7",
@@ -59,7 +59,7 @@
     "@embroider/macros": "^1.16.9",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@kanselarij-vlaanderen/au-kaleidos-css": "4.0.0",
+    "@kanselarij-vlaanderen/au-kaleidos-css": "4.0.1",
     "@lblod/ember-acmidm-login": "^2.0.0",
     "@lblod/ember-mock-login": "^0.9.0",
     "@lblod/ember-rdfa-editor": "10.7.0",
@@ -69,6 +69,7 @@
     "alphabet": "^1.0.0",
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-funnel": "^3.0.8",
+    "broccoli-sass-source-maps": "^4.3.0",
     "cypress": "^12.17.4",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.13",
@@ -99,7 +100,7 @@
     "ember-element-helper": "^0.8.6",
     "ember-fetch": "^8.1.2",
     "ember-file-upload": "^8.4.1",
-    "ember-flatpickr": "^4.0.0",
+    "ember-flatpickr": "^8.0.1",
     "ember-functions-as-helper-polyfill": "^2.1.2",
     "ember-in-viewport": "git+https://github.com/ValenberghsSven/ember-in-viewport.git#04342ad6a1f923a2c0deb2b5f81be43e1ae9747d",
     "ember-intl": "^7.0.7",
@@ -155,9 +156,6 @@
     "tracked-built-ins": "^3.3.0",
     "webpack": "^5.95.0",
     "xml-formatter": "^3.6.3"
-  },
-  "overrides": {
-    "babel-plugin-ember-template-compilation": "2.2.1"
   },
   "engines": {
     "node": ">= 18"

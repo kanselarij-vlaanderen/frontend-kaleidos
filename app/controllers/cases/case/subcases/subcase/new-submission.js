@@ -9,6 +9,7 @@ import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import isSameDay from 'date-fns/isSameDay';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Controller {
   @service cabinetMail;
@@ -23,9 +24,9 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @service agendaService;
   @service draftSubmissionService;
   @service preventUnload;
+  @service subcaseService;
 
   defaultAccessLevel;
-  originalSubmission;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenCreateSubmissionModal = false;
@@ -41,6 +42,14 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   @tracked newDraftPieces = new TrackedArray([]);
   @tracked requestedBy = null;
   @tracked mandatees = new TrackedArray([]);
+
+  @tracked isForPostponedSubcase;
+
+  get confirmButtonLabel() {
+    return this.isForPostponedSubcase
+      ? this.intl.t('resubmit-postponed-agendaitem')
+      : this.intl.t('new-submission');
+  }
 
   get sortedNewPieces() {
     return this.newPieces.slice().sort((p1, p2) => {
@@ -222,7 +231,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  createSubmission = dropTask(async () => {
+  createSubmission = dropTask(async (_meeting) => {
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(
@@ -233,6 +242,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND
     );
+    const postponedSubmitted = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND
+    )
 
     const type = await this.model.type;
     const agendaItemType = await this.model.agendaItemType;
@@ -242,15 +255,87 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     const governmentAreas = await this.model.governmentAreas;
 
     let meeting;
-    if (this.originalSubmission) {
+    // this _meeting can be a pointer event when coming from the confirmation model
+    if (_meeting?.plannedStart) {
+      meeting = _meeting;
+    } else if (this.previousSubmission) {
       // this fixes a cache issue that leaves meeting null for KDB
+      // only open meetings should be found / submitted to
       meeting = await this.store.queryOne('meeting', {
         'filter[:has:planned-start]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-        'filter[submissions][:id:]': this.originalSubmission.id
+        ':has-no:agenda': true,
+        'filter[submissions][:id:]': this.previousSubmission.id
       });
     }
-    const status = this.originalSubmission ? updateSubmitted : submitted;
-    const plannedStart = meeting?.plannedStart || this.originalSubmission?.plannedStart;
+
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.model);
+    const decisionResultCode = await decisionActivity?.decisionResultCode;
+    const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.model);
+    let oldMeeting = null; // -- 18/12
+    let isReSubmittingPostponed = false;
+    if (relatedAgendas.length) {
+      if (
+        relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+        decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+      ) {
+        // in this case, getting decision result from data instead of sudo ensures decisions were released
+        // when Cabinet member requests the resubmitting of a postpone subcase
+        isReSubmittingPostponed = true;
+        oldMeeting = relatedAgendas[0].meeting;
+      } else if (relatedAgendas.length > 1 &&
+        relatedAgendas[1].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+        relatedAgendas[1].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD && 
+        !isSameDay(relatedAgendas[0].meeting.plannedStart, (meeting.plannedStart))
+      ) {
+        // if secretarie postponed/resubmitted, there is no correct "previousSubmission" to get the meeting from
+        // in that case, there will be 2 agendas but only a submission to the original one
+        // else if in case multiple postpone/resubmit happened we do not want to hit this when the first condition is true
+        // Cabinet member did not request the resubmitting in this case
+        const approvedAgendaitem = await this.store.queryOne('agendaitem', {
+          'filter[agenda-activity][:id:]': relatedAgendas[0].agendaActivity.id,
+          'filter[:has-no:next-version]': 't',
+          sort: '-created',
+        });
+        if (!approvedAgendaitem?.id) {
+          // this is the first update submission since resubmitting, mails need to reflect this
+          oldMeeting = relatedAgendas[1].meeting;
+          isReSubmittingPostponed = false;
+        }
+        // needs to happen in both cases. local variable meeting is the incorrect meeting
+        meeting = relatedAgendas[0].meeting;
+      }
+      else if (relatedAgendas.length > 1 &&
+        relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN &&
+        relatedAgendas[0].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN &&
+        relatedAgendas[1].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN &&
+        relatedAgendas[1].agendaActivity.startDate > relatedAgendas[0].agendaActivity.startDate
+      ) {
+        // when secretarie retracts/resubmits, there is no correct "previousSubmission" to get the meeting from
+        // in that case, there will be 2 design agendas but only a submission to the original one.
+        // also, no decisionResultCode will be available at this time.
+        // the meeting will be earlier in time aswell, but the agenda-activity will be more recently started.
+        // We should not name oldMeeting here, since it will trigger the email to contain "uitgesteld".
+        meeting = relatedAgendas[1].meeting;
+      }
+    }
+
+    // originalSubmission points to the very first submission, which is not what we want when postponed and resubmitted.
+    // this.previousSubmission should be ok to verify if this was an update or postponed to get the plannedStart
+    const status =  this.isForPostponedSubcase
+      ? postponedSubmitted
+      : this.previousSubmission
+      ? updateSubmitted
+      : submitted;
+    const plannedStart = meeting?.plannedStart; // we should have a meeting at this point    -- || this.previousSubmission?.plannedStart;
+    if (!plannedStart) {
+      // We should never continue without a meeting or plannedStart at this stage.
+      this.toaster.error(
+        this.intl.t('error-while-submitting-subcase-on-meeting', {
+          error: "no-meeting-found-for-submission",
+        }),
+        this.intl.t('warning-title')
+      );
+    }
 
     this.submission = this.store.createRecord('submission', {
       shortTitle: trimText(this.model.shortTitle),
@@ -291,7 +376,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
           meeting,
           this.submission
         );
-        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting);
+        await this.cabinetMail.sendUpdateSubmissionMails(this.submission, meeting, oldMeeting, isReSubmittingPostponed);
         this.preventUnload.disable();
         this.router.transitionTo('cases.submissions.submission', this.submission.id);
       } catch (error) {

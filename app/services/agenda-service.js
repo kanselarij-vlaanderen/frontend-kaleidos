@@ -159,7 +159,6 @@ export default class AgendaService extends Service {
       body: JSON.stringify({
         subcase: subcase.uri,
         formallyOkStatus: formallyStatusUri,
-        privateComment: privateComment,
       })
     });
     let json;
@@ -261,6 +260,10 @@ export default class AgendaService extends Service {
       }
     }
     if (!response.ok) {
+      this.toaster.error(
+        this.intl.t('error-with-message', { message: JSON.stringify(json) }),
+        this.intl.t('warning-title'),
+      );
       throw new Error(
         `Backend response contained an error (status: ${
           response.status

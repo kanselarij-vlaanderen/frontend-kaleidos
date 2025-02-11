@@ -38,7 +38,7 @@ export default class NewslettersIndexController extends Controller {
     const agendas = await meeting.agendas;
     return agendas
       ?.slice()
-      .sort((a1, a2) => a1.serialNumber.localeCompare(a2.serialNumber))
+      .sort((a1, a2) => a1.serialnumber.localeCompare(a2.serialnumber))
       .reverse()
       .at(0);
   }

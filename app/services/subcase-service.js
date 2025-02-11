@@ -72,4 +72,69 @@ export default class SubcaseService extends Service {
       });
     }
   }
+
+  async getRelatedAgendas(subcase) {
+    const url = `/subcases/${subcase.id}/agendas`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    let json;
+    try {
+      json = await response.json();      
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new Error(
+          `Backend response contained an error (status: ${response.status})`
+        );
+      } else {
+        throw error;
+      }
+    }
+    if (!response.ok) {
+      throw new Error(
+        `Backend response contained an error (status: ${
+          response.status
+        }): ${JSON.stringify(json)}`);
+    }
+    return await Promise.all(json.data.map(async (entry) => ({
+      visible: entry.attributes.visible,
+      agenda: {
+        id: entry.attributes.agendaId,
+        status: await this.store.findRecordByUri('concept', entry.attributes.status),
+      },
+      meeting: {
+        id: entry.attributes.meetingId,
+        uri: entry.attributes.uri,
+        number: Number(entry.attributes.number),
+        plannedStart: new Date(entry.attributes.plannedStart),
+        kind: await this.store.findRecordByUri('concept', entry.attributes.kind),
+        hasKindEP: entry.attributes.kind === CONSTANTS.MEETING_KINDS.EP,
+      },
+      agendaitem: {
+        id: entry.attributes.agendaitemId,
+      },
+      agendaActivity: {
+        id: entry.attributes.agendaActivityId,
+        startDate: new Date(entry.attributes.agendaActivityStart),
+      },
+      decisionResultCode: entry.attributes.decisionResultCode
+      ? await this.store.findRecordByUri(
+          'concept',
+          entry.attributes.decisionResultCode,
+        )
+      : null,
+    })));
+  }
+
+  async isOnDesignAgenda(subcase) {
+    const relatedAgendas = await this.getRelatedAgendas(subcase);
+    if (relatedAgendas.length) {
+      return (
+        relatedAgendas[0].agenda.status.uri ===
+        CONSTANTS.AGENDA_STATUSSES.DESIGN
+      );
+    }
+    return false;
+  }
 }

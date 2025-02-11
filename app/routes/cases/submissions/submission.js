@@ -114,6 +114,8 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     this.statusChangeActivities = await this.draftSubmissionService.getStatusChangeActivities(submission);
     this.beingTreatedBy = await this.draftSubmissionService.getLatestTreatedBy(submission, true);
     this.isUpdate = await this.draftSubmissionService.getIsUpdate(submission);
+    // in rare cases this is also true
+    this.wasPostponed = await this.draftSubmissionService.getWasPostponed(submission);
 
     this.previousMandateePersons = [];
     if (this.isUpdate && this.subcase) {

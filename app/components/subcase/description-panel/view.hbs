@@ -78,22 +78,38 @@
           <AuHeading @level="4" @skin="6">{{t "is-on-agenda"}}</AuHeading>
           {{#if this.loadAgendaData.isRunning}}
             <Auk::Loader />
-          {{else if this.modelsOfMeetings}}
-            {{#each this.modelsOfMeetings as |models| }}
-              {{#if (not (has-next models this.modelsOfMeetings))}}
-                {{#let (get models "0") (get models "1") (get models "2") as |meeting agenda agendaitem|}}
-                  <AuLink
-                    data-test-subcase-description-agenda-link
-                    @route="agenda.agendaitems.agendaitem"
-                    @models={{array
-                      meeting.id
-                      agenda.id
-                      agendaitem.id
-                    }}
+          {{else if this.latestMeetingModels}}
+            {{#let
+                this.latestMeetingModels.meeting
+                this.latestMeetingModels.agenda
+                this.latestMeetingModels.agendaitem
+              as |meeting agenda agendaitem|}}
+              <p>
+                <AuLink
+                  data-test-subcase-description-agenda-link
+                  @route="agenda.agendaitems.agendaitem"
+                  @models={{array
+                    meeting.id
+                    agenda.id
+                    agendaitem.id
+                  }}
+                >
+                  {{date-phrase meeting.plannedStart}}
+                </AuLink>
+                {{#if meeting.hasKindEP}}
+                  <AuPill
+                    @size="small"
                   >
-                    {{! prettier-ignore}}
-                    {{date-phrase meeting.plannedStart}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                  </AuLink>
+                    {{meeting.kind.label}}
+                  </AuPill>
+                {{/if}}
+              </p>
+            {{/let}}
+
+            {{#if this.postponedMeetingModels}}
+              {{#let this.postponedMeetingModels.meeting as |meeting|}}
+                <p>
+                  {{date-phrase meeting.plannedStart}}
                   {{#if meeting.hasKindEP}}
                     <AuPill
                       @size="small"
@@ -101,9 +117,9 @@
                       {{meeting.kind.label}}
                     </AuPill>
                   {{/if}}
-                {{/let}}
-              {{/if}}
-            {{/each}}
+                </p>
+              {{/let}}
+            {{/if}}
           {{else}}
             <p data-test-subcase-description-not-on-agenda>
               {{t "not-yet-on-agenda"}}
@@ -115,14 +131,15 @@
           <p data-test-subcase-description-meeting-number>
             {{#if this.loadAgendaData.isRunning}}
                 <Auk::Loader />
-              {{else if this.modelsOfMeetings}}
-                {{#each this.modelsOfMeetings as |models|}}
-                  {{#if (not (has-next models this.modelsOfMeetings))}}
-                    {{#let (get models "0") as |meeting|}}
-                      {{meeting.number}}{{if (has-next models this.modelsOfMeetings) ", "}}
-                    {{/let}}
-                  {{/if}}
-                {{/each}}
+              {{else if this.latestMeetingModels}}
+                {{#let this.latestMeetingModels.meeting as |meeting|}}
+                  <p>{{meeting.number}}</p>
+                {{/let}}
+                {{#if this.postponedMeetingModels}}
+                  {{#let this.postponedMeetingModels.meeting as |meeting|}}
+                    <p>{{meeting.number}}</p>
+                  {{/let}}
+                {{/if}}
               {{else}}
                 {{t "no-number-yet"}}
               {{/if}}

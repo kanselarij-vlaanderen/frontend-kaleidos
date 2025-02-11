@@ -11,6 +11,7 @@ const {
   TERUGGESTUURD,
   BEHANDELD,
   AANPASSING_AANGEVRAAGD,
+  UITGESTELD_PUNT_INGEDIEND
 } = CONSTANTS.SUBMISSION_STATUSES;
 
 export default class SubmissionStatusChangeActivityComponent extends Component {
@@ -25,6 +26,7 @@ export default class SubmissionStatusChangeActivityComponent extends Component {
     [UPDATE_INGEDIEND]: this.args.isHeader ? 'update-submitted-on-simple' : 'update-submitted-on',
     [BEHANDELD]: 'treated-on',
     [AANPASSING_AANGEVRAAGD]: 'sent-back-requested-on',
+    [UITGESTELD_PUNT_INGEDIEND]: 'retracted-resubmitted-on',
   };
 
   get label() {

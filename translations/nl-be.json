@@ -172,6 +172,7 @@
   "end-date": "Einddatum",
   "environment": "omgeving",
   "error": "Er is iets misgelopen..",
+  "error-with-message": "Er is iets misgelopen...\nDetail: {message}",
   "name-document": "Naam document",
   "file-type": "Bestandstype",
   "file-types": "Bestandstypes",
@@ -1441,7 +1442,9 @@
   "update-submitted-on": "Update ingediend door {userName} op {date} om {hour}",
   "update-submitted-on-simple": "Update ingediend door {userName}",
   "treated-on": "Behandeld op {date} om {hour}",
+  "retracted-resubmitted-on": "Uitgesteld agendapunt opnieuw ingediend door {userName} op {date} om {hour}",
   "delete-and-send-back-to-submitter": "Verwijder en terug naar indiener sturen",
+  "resubmit-postponed-agendaitem": "Dien uitgesteld agendapunt opnieuw in",
   "submit-new-documents": "Dien nieuwe documenten in",
   "submit-new-case": "Nieuw agendapunt indienen",
   "submit-new-agendaitem": "Nieuw agendapunt indienen",
@@ -1466,6 +1469,8 @@
   "submissions-history": "Historiek indieningen",
   "this-submission-is-an-update-title": "Deze indiening betreft een update",
   "this-submission-is-an-update": "Bij aanvaarding zullen de titels, documenten en ministers van de bestaande procedurestap worden aangepast.",
+  "this-submission-is-from-postponed-title": "Deze indiening betreft een nieuwe indiening van een uitgestelde procedurestap",
+  "this-submission-is-from-postponed": "Bij aanvaarding zullen de titels, documenten en ministers van de bestaande procedurestap worden aangepast. Er zal een nieuw agendapunt worden aangemaakt op de geselecteerde agenda.",
   "this-submission-has-send-back-requested": "Er is een aanpassing aangevraagd. De kabinetsdossierbeheerder ontvangt een e-mail van de kanselarij als de indiening open staat voor aanpassing.",
   "draft-piece-delete": "Ingediend document verwijderen",
   "delete-draft-piece-message": "Bent u zeker dat u dit document wilt verwijderen? Deze actie verwijdert enkel het nieuwe document, eventuele vorige versies blijven ongewijzigd.",
@@ -1486,6 +1491,10 @@
   "press-agenda": "Persagenda",
   "generate-press-agenda": "Genereer persagenda",
   "login-text" : "Meld u aan",
+  "warning-new-case-has-parliament-flow": "Deze procedurestap kan niet naar dit dossier verplaatst worden aangezien er al een koppeling is met het Vlaams Parlement",
+  "no-meeting-found-for-submission": "Er is geen geldige vergadering gevonden voor deze indiening",
   "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring",
-  "warning-new-case-has-parliament-flow": "Deze procedurestap kan niet naar dit dossier verplaatst worden aangezien er al een koppeling is met het Vlaams Parlement"
+  "empty-internal-review": "Interne opmerkingen leegmaken",
+  "empty-internal-review-message": "Bent u zeker dat u alle interne opmerkingen voor de goedgekeurde agendapunten op deze agenda wil leegmaken?\nDeze actie kan niet ongedaan worden gemaakt.\nDe interne opmerkingen van nieuwe agendapunten blijven ongewijzigd.",
+  "annex-meeting-was-saved": "De annex vergadering {title} is aangepast. Verifieer of de ID van de vergadering, de beslissingen en notulen nog up-to-date zijn, en pas deze zo nodig aan."
 }

@@ -3,19 +3,22 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import isSameDay from 'date-fns/isSameDay';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
   @service router;
   @service store;
   @service draftSubmissionService;
+  @service subcaseService;
 
   @tracked case;
   @tracked showEditCaseModal = false;
   @tracked publicationFlows;
   @tracked isArchivingCase = false;
-  @tracked hasOngoingSubcases = false;
+  @tracked hasOngoingSubmissions = false;
   @tracked currentSubmission;
 
   constructor() {
@@ -35,14 +38,14 @@ export default class SubCasesOverviewHeader extends Component {
 
   get mayCreateSubmissions() {
     return (
+      isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.loadSubmissionsData.isIdle &&
       this.currentSession.may('create-submissions') &&
       this.router.currentRouteName !== 'cases.case.subcases.new-submission' &&
       this.loadLinkedMandatees.isIdle &&
       this.linkedMandatees?.length &&
-      !this.hasOngoingSubcases &&
-      isEnabledCabinetSubmissions()
+      !this.hasOngoingSubmissions
     );
   }
 
@@ -58,7 +61,7 @@ export default class SubCasesOverviewHeader extends Component {
     if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
       const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
       if (!latestSubmission?.id) {
-        this.hasOngoingSubcases = false;
+        this.hasOngoingSubmissions = false;
         return;
       }
       // const submissionSubcase = await latestSubmission?.subcase; // yields null when it exists, cache issue
@@ -67,15 +70,24 @@ export default class SubCasesOverviewHeader extends Component {
       });
       if (!subcase?.id) {
         // submission for new subcase is ongoing
-        this.hasOngoingSubcases = true;
+        this.hasOngoingSubmissions = true;
         this.currentSubmission = latestSubmission;
         return;
       }
-      const meeting = await this.store.queryOne('meeting', {
-        'filter[submissions][:id:]': latestSubmission.id
-      });
-      const agenda = await meeting?.belongsTo('agenda').reload();
-      this.hasOngoingSubcases = agenda?.id ? false : true;
+      const relatedAgendas = await this.subcaseService.getRelatedAgendas(subcase);
+      if (relatedAgendas.length > 0) {
+        this.hasOngoingSubmissions = relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN;
+        // second case: the related agenda is closed and postponed, but a new submission is ongoing
+        if (
+          relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+          relatedAgendas[0].decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+        ) {
+          const isSubmissionOnNewMeeting = !isSameDay(relatedAgendas[0].meeting.plannedStart, (latestSubmission.plannedStart));
+          if (isSubmissionOnNewMeeting) {
+            this.hasOngoingSubmissions = true;
+          }
+        }
+      }
     }
   });
 
