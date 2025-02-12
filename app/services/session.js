@@ -1,6 +1,7 @@
 import SessionService from 'ember-simple-auth/services/session';
 import { inject as service } from '@ember/service';
 import ENV from 'frontend-kaleidos/config/environment';
+import { getOwner } from '@ember/application';
 
 export default class ExtendedSessionService extends SessionService {
   @service currentSession;
@@ -14,13 +15,57 @@ export default class ExtendedSessionService extends SessionService {
     }
   }
 
-  async handleAuthentication() {
+  requireAuthentication(transition, routeOrCallback) {
+    const { to } = transition;
+    let paramNames = to.paramNames;
+    let params = to.params;
+    let parent = to.parent;
+    while (parent) {
+      if (parent.paramNames?.length) {
+        paramNames = [...paramNames, ...parent.paramNames.reverse()];
+        params = { ...params, ...parent.params };
+      }
+      parent = parent.parent;
+    }
+    // store the attemptedTransition to support redirect after ACM/IDM login
+    localStorage.setItem('attemptedTransition',JSON.stringify({
+      name: to.name,
+      params: params,
+      paramNames: paramNames?.reverse()
+     }));
+    super.requireAuthentication(transition, routeOrCallback);
+  }
+
+  async handleAuthentication(routeAfterAuthentication) {
     try {
       await this.currentSession.load();
     } catch (error) { // eslint-disable-line no-unused-vars
       this.invalidate();
     }
-    super.handleAuthentication('index');
+    // The hack below handles a login attempt to ACM/IDM leaving the SPA
+    // it replaces the super.handleAuthentication, which simply calls
+    // ember-simple-auth/packages/ember-simple-auth/src/-internals/routing.js
+    let transitionTo = localStorage.getItem('attemptedTransition');
+    if (transitionTo) {
+      try {
+        transitionTo = JSON.parse(transitionTo);
+        if (transitionTo.name) {
+          let transitionParams = []; // params could be empty
+          if (transitionTo.paramNames?.length) {
+            transitionParams = transitionTo.paramNames.map((name) => {
+              return transitionTo.params[name];
+            });
+          }
+          this.router.transitionTo(transitionTo.name, ...transitionParams);
+        } else {
+          super.handleAuthentication(routeAfterAuthentication);
+        }
+      } catch {
+        super.handleAuthentication(routeAfterAuthentication);
+      }
+    } else {
+      super.handleAuthentication(routeAfterAuthentication);
+    }
   }
 
   async handleInvalidation() {
