@@ -11,9 +11,9 @@ export default class PublicationsRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
+    const isAuthenticated = this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
-    if (!this.currentSession.may('manage-publication-flows')) {
+    if (isAuthenticated && !this.currentSession.may('manage-publication-flows')) {
       this.router.transitionTo('index');
     }
   }

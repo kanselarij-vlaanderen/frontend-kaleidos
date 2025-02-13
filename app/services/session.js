@@ -15,24 +15,29 @@ export default class ExtendedSessionService extends SessionService {
   }
 
   requireAuthentication(transition, routeOrCallback) {
-    const { to } = transition;
-    let paramNames = to.paramNames;
-    let params = to.params;
-    let parent = to.parent;
-    while (parent) {
-      if (parent.paramNames?.length) {
-        paramNames = [...paramNames, ...parent.paramNames.reverse()];
-        params = { ...params, ...parent.params };
+    let authenticated = this.currentSession.isAuthenticated;
+    if (!authenticated) {
+      const { to } = transition;
+      let paramNames = to.paramNames;
+      let params = to.params;
+      let parent = to.parent;
+      while (parent) {
+        if (parent.paramNames?.length) {
+          paramNames = [...paramNames, ...parent.paramNames.reverse()];
+          params = { ...params, ...parent.params };
+        }
+        parent = parent.parent;
       }
-      parent = parent.parent;
+      // store the attemptedTransition to support redirect after ACM/IDM login
+      localStorage.setItem('attemptedTransition',JSON.stringify({
+        name: to.name,
+        params: params,
+        paramNames: paramNames?.reverse()
+       }));
+    } else {
+      localStorage.removeItem('attemptedTransition');
     }
-    // store the attemptedTransition to support redirect after ACM/IDM login
-    localStorage.setItem('attemptedTransition',JSON.stringify({
-      name: to.name,
-      params: params,
-      paramNames: paramNames?.reverse()
-     }));
-    super.requireAuthentication(transition, routeOrCallback);
+    return super.requireAuthentication(transition, routeOrCallback);
   }
 
   async handleAuthentication(routeAfterAuthentication) {
