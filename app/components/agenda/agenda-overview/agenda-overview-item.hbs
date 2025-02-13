@@ -144,7 +144,7 @@
       {{/unless}}
       {{#if (and this.documentsAreVisible (not @allowReorderItems))}}
         <div class="auk-u-mt-4">
-          {{#if (user-may "view-documents-postponed-and-retracted-on-agendaitem")}}
+          {{#if this.showDocumentsAreVisibleAlert}}
             {{#if this.decisionActivity.isPostponed}}
               <AuAlert
                 @skin="warning"
