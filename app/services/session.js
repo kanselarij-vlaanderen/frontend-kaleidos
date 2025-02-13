@@ -1,7 +1,6 @@
 import SessionService from 'ember-simple-auth/services/session';
 import { inject as service } from '@ember/service';
 import ENV from 'frontend-kaleidos/config/environment';
-import { getOwner } from '@ember/application';
 
 export default class ExtendedSessionService extends SessionService {
   @service currentSession;
