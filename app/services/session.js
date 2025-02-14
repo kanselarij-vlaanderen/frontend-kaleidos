@@ -34,8 +34,6 @@ export default class ExtendedSessionService extends SessionService {
         params: params,
         paramNames: paramNames?.reverse()
        }));
-    } else {
-      localStorage.removeItem('attemptedTransition');
     }
     return super.requireAuthentication(transition, routeOrCallback);
   }
@@ -53,6 +51,7 @@ export default class ExtendedSessionService extends SessionService {
     if (transitionTo) {
       try {
         transitionTo = JSON.parse(transitionTo);
+        localStorage.removeItem('attemptedTransition');
         if (transitionTo.name) {
           let transitionParams = []; // params could be empty
           if (transitionTo.paramNames?.length) {
