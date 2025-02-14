@@ -4,6 +4,11 @@ import { inject as service } from '@ember/service';
 export default class AgendaitemRoute extends Route {
   @service store;
   @service router;
+  @service('session') simpleAuthSession;
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
+  }
 
   model(params) {
     return this.store.findRecord('agendaitem', params.agendaitem_id);

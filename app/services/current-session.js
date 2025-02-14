@@ -73,4 +73,8 @@ export default class CurrentSessionService extends Service {
   get isImpersonator() {
     return isPresent(this.impersonation.role);
   }
+
+  get isAuthenticated() {
+    return this.session.isAuthenticated;
+  }
 }

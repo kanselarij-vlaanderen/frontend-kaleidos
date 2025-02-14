@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class NotSupportedRoute extends Route {
+export default class RouteNotFoundRoute extends Route {
   @service('session') simpleAuthSession;
 
   beforeModel(transition) {

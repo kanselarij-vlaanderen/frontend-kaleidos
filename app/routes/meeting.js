@@ -4,6 +4,11 @@ import { inject as service } from '@ember/service';
 export default class MeetingRoute extends Route {
   @service store;
   @service router;
+  @service('session') simpleAuthSession;
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
+  }
 
   model(params) {
     this.meetingId = params.meeting_id;
