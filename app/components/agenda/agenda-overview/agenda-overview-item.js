@@ -34,6 +34,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked decisionActivity;
   @tracked isShowingAllDocuments = false;
   @tracked documentsAreVisible = false;
+  @tracked showDocumentsAreVisibleAlert = false;
   @tracked isEditingFormallyOk = false;
 
   constructor() {
@@ -66,24 +67,45 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocumentsPublicationStatus() {
-    // Additional failsafe check on document visibility. Strictly speaking this check
-    // is not necessary since documents are not propagated by Yggdrasil if they
-    // should not be visible yet for a specific profile.
-    const decisionActivityResultCode = yield this.decisionActivity
-      ?.decisionResultCode;
-    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
-    if (this.currentSession.may('view-documents-before-release')) {
-      this.documentsAreVisible = true;
-    } else if (
-      !this.currentSession.may('view-postponed-and-retracted') &&
-      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
-    ) {
-      this.documentsAreVisible = false;
-    } else {
-      const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
-      const documentPublicationStatus = yield documentPublicationActivity?.status;
-      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    this.showDocumentsAreVisibleAlert = false;
+    // Additional failsafe check on document visibility.
+    // retracted and postponed documents are hidden for non admin because
+    // we cannot match the "historic name" of the documents due to resubmitting
+    const decisionPublicationActivity = yield this.args.meeting.internalDecisionPublicationActivity;
+    const decisionPublicationStatus = yield decisionPublicationActivity?.status;
+    const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+
+    const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
+    const documentPublicationStatus = yield documentPublicationActivity?.status;
+    const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    const decisionActivityResultCode = yield this.decisionActivity?.decisionResultCode;
+
+    if (!decisionsAreReleased || this.args.currentAgenda.status.get('isDesignAgenda')) {
+      this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+      return;
     }
+
+    // decisionsAreReleased
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if ([INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)) {
+      this.documentsAreVisible = this.currentSession.may('view-documents-postponed-and-retracted-on-agendaitem');
+      this.showDocumentsAreVisibleAlert = this.documentsAreVisible;
+      return;
+    }
+
+    if (!documentsAreReleased) {
+      this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+      return;
+    }
+    // documentsAreReleased
+    const { GOEDGEKEURD, KENNISNAME } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if ([GOEDGEKEURD, KENNISNAME].includes(decisionActivityResultCode?.uri)) {
+      this.documentsAreVisible = true;
+      return;
+    }
+    // no decisionResult after release
+    this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+    return;
   }
 
   @task
