@@ -12,6 +12,7 @@ export default class AgendaService extends Service {
   @service currentSession;
   @service newsletterService;
   @service signatureService;
+  @service decisionReportGeneration;
 
   @tracked addedPieces = null;
   @tracked addedAgendaitems = null;
@@ -183,6 +184,12 @@ export default class AgendaService extends Service {
     const agendaitem = await this.store.findRecord('agendaitem', json.data.id);
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
+    if (json.data.didReorder) {
+      const meeting = await this.store.queryOne('meeting', {
+        'filter[agendas][agendaitems][:id:]': json.data.id,
+      });
+      await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(meeting, true);
+    }
     return agendaitem;
   }
 
