@@ -87,7 +87,10 @@ context('Different session kinds should show different titles', () => {
     cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
 
     cy.createAgenda(null, agendaDate, null, agendaNumber);
-    // set kind to PVV
+    // wait for refresh/setup/reset of controller
+    cy.get(route.agendasOverview.dataTable).contains('Aan het laden');
+    cy.get(route.agendasOverview.dataTable).should('not.contain', 'Aan het laden');
+    // make PVV agenda
     cy.get(route.agendas.action.newMeeting).click();
     cy.get(utils.kindSelector.kind).click();
     cy.selectFromDropdown(vvKind);

@@ -1,8 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -81,6 +83,8 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
+    controller.isOpenSignFlowModal = false;
+    controller.isOpenWarnDocEditOnApproved = false;
     controller.hasConfirmedDocEditOnApproved = false;
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
@@ -89,5 +93,19 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.meeting = this.meeting;
     controller.decisionActivity = this.decisionActivity;
     controller.loadNewPieces.perform();
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      // cleanup any unsaved pieces
+      Promise.all(
+        controller.newPieces.map(async (piece) => {
+          if (!piece?.id) {
+            // don't delete the draft-piece here.
+            await deletePiece(piece, false);
+          }
+        }),
+      ).then(() => (controller.newPieces = new TrackedArray([])));
+    }
   }
 }
