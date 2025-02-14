@@ -104,4 +104,11 @@ export default class PublicationsPublicationTranslationsIndexRoute extends Route
     controller.publicationFlow = this.publicationFlow;
     controller.translationSubcase = this.translationSubcase;
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.showTranslationUploadModal = false;
+      controller.showTranslationRequestModal = false;
+    }
+  }
 }

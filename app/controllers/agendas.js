@@ -17,12 +17,14 @@ export default class AgendasController extends Controller {
   @service store;
   @service router;
   @service mandatees;
+
   defaultPublicationActivityStatus;
   @tracked newMeeting;
   @tracked publicationActivities = [];
 
   @tracked isLoadingModel = false;
   @tracked isCreatingNewSession = false;
+
   @tracked filterAgendas = null;
   @tracked pageAgendas = 0;
   @tracked sizeAgendas = 10;
@@ -97,7 +99,9 @@ export default class AgendasController extends Controller {
   closeNewSessionModal() {
     this.isCreatingNewSession = false;
     this.newMeeting.deleteRecord();
+    this.newMeeting = null;
     this.publicationActivities.forEach((activity) => activity.deleteRecord());
+    this.publicationActivities = [];
   }
 
   @action

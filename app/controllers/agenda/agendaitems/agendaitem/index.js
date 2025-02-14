@@ -17,7 +17,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @service parliamentService;
 
   @controller('agenda.agendaitems') agendaitemsController;
-  @controller('agenda') agendaController;
   @tracked meeting;
   @tracked agenda;
   @tracked agendaActivity;
@@ -28,8 +27,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked mandatees;
   @tracked decisionActivity;
   @tracked parliamentFlow;
-
-  @tracked isEditingAgendaItemTitles = false;
 
   get isClosedMeeting() {
     return isPresent(this.meeting.agenda.get('id'));
@@ -94,11 +91,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     // reload the agenda route, detail tab should no longer show if we deleted the last and only agendaitem
     // Also, if we deleted the first agendaitem, we should also reload the main route to reload <Agenda::agendaTabs>
     return this.router.refresh('agenda');
-  }
-
-  @action
-  async toggleIsEditingAgendaItemTitles() {
-    this.isEditingAgendaItemTitles = !this.isEditingAgendaItemTitles;
   }
 
   @action
