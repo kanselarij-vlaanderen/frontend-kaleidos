@@ -466,7 +466,7 @@ export default class SubmissionHeaderComponent extends Component {
         this.intl.t('submission-has-send-back-requested-after-reload'),
         this.intl.t('warning-title'),
         {
-          timeOut: 10000,
+          timeOut: 60000,
         }
       );
     }
