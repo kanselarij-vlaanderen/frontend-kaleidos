@@ -1451,7 +1451,7 @@
   "submit-new-case": "Nieuw agendapunt indienen",
   "submit-new-agendaitem": "Nieuw agendapunt indienen",
   "open-current-submission": "Open huidige indiening",
-  "delete-submission-confirmation": "Bent u zeker dat u de indiening wilt verwijderen?",
+  "delete-submission-confirmation": "Bent u zeker dat u de indiening wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden.",
   "document-naming--toast-generating--message": "De VR nummers worden toegepast.",
   "error-while-fetching-document-naming-mapping": "Er ging iets fout tijdens het berekenen van de VR nummers.",
   "no-document-naming-needed": "Er zijn geen nieuwe documenten om te nummeren voor deze agenda.",
@@ -1498,5 +1498,9 @@
   "show-definitive-cases-only": "Toon enkel dossiers zonder definitieve goedkeuring",
   "empty-internal-review": "Interne opmerkingen leegmaken",
   "empty-internal-review-message": "Bent u zeker dat u alle interne opmerkingen voor de goedgekeurde agendapunten op deze agenda wil leegmaken?\nDeze actie kan niet ongedaan worden gemaakt.\nDe interne opmerkingen van nieuwe agendapunten blijven ongewijzigd.",
-  "annex-meeting-was-saved": "De annex vergadering {title} is aangepast. Verifieer of de ID van de vergadering, de beslissingen en notulen nog up-to-date zijn, en pas deze zo nodig aan."
+  "annex-meeting-was-saved": "De annex vergadering {title} is aangepast. Verifieer of de ID van de vergadering, de beslissingen en notulen nog up-to-date zijn, en pas deze zo nodig aan.",
+  "submission-already-in-treatment": "Deze indiening is reeds in behandeling genomen, aanpassingen aanvragen is niet meer mogelijk via Kaleidos.",
+  "submission-already-in-treatment-title": "Aanpassingen aanvragen is niet meer mogelijk.",
+  "submission-has-send-back-requested-after-reload": "Er is een aanpassing aangevraagd sinds het openen van deze pagina en het in behandeling nemen. Controleer de aanvraag vooraleer de indiening te aanvaarden.",
+  "submission-edited-concurrently": "Deze indiening is recent door iemand anders bewerkt. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
 }
