@@ -586,9 +586,12 @@ export default class SubmissionHeaderComponent extends Component {
     // concurrency check
     await this.args.submission.belongsTo('status').reload();
     if (!this.canRequestSendBack) {
-      this.toaster.error(
+      this.toaster.warning(
         this.intl.t('submission-already-in-treatment'),
-        this.intl.t('submission-already-in-treatment-title')
+        this.intl.t('submission-already-in-treatment-title'),
+        {
+          timeOut: 60000,
+        }
       );
     }
     return this.canRequestSendBack;
