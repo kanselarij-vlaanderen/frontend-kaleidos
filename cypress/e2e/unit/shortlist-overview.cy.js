@@ -1014,7 +1014,10 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.wait('@postSigningActivities');
     cy.wait('@patchSignSubcases');
     cy.wait('@patchSignFlows');
-    cy.get(appuniversum.toaster).find(appuniversum.alert.close)
+    cy.get(appuniversum.toaster).as('failToast');
+    // any other exception should mean incorrect setup or something changed
+    cy.get('@failToast').contains('AuthenticationException');
+    cy.get('@failToast').find(appuniversum.alert.close)
       .click();
 
     // check succes
