@@ -19,6 +19,7 @@ context('Testing the application as Kort bestek user', {
     // cy.login does not trigger the transtition to the default route for this profile for some reason
     cy.loginFlow('Kort bestek');
     cy.wait(1000);
+    cy.visit('/'); // somewhere we try to visit overview route and that gets stored, which messes with the default routing
     cy.url().should('include', 'kort-bestek'); // make sure we transitioned to default route
   });
 

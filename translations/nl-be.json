@@ -1499,7 +1499,7 @@
   "empty-internal-review": "Interne opmerkingen leegmaken",
   "empty-internal-review-message": "Bent u zeker dat u alle interne opmerkingen voor de goedgekeurde agendapunten op deze agenda wil leegmaken?\nDeze actie kan niet ongedaan worden gemaakt.\nDe interne opmerkingen van nieuwe agendapunten blijven ongewijzigd.",
   "annex-meeting-was-saved": "De annex vergadering {title} is aangepast. Verifieer of de ID van de vergadering, de beslissingen en notulen nog up-to-date zijn, en pas deze zo nodig aan.",
-  "submission-already-in-treatment": "Deze indiening is reeds in behandeling genomen, aanpassingen aanvragen is niet meer mogelijk via Kaleidos.",
+  "submission-already-in-treatment": "De kanselarij heeft je indiening in behandeling genomen. Je kunt via Kaleidos geen aanpassing meer aanvragen. Neem contact op met de kanselarij via e-mail: ministerraad@vlaanderen.be.",
   "submission-already-in-treatment-title": "Aanpassingen aanvragen is niet meer mogelijk.",
   "submission-has-send-back-requested-after-reload": "Er is een aanpassing aangevraagd sinds het openen van deze pagina en het in behandeling nemen. Controleer de aanvraag vooraleer de indiening te aanvaarden.",
   "submission-edited-concurrently": "Deze indiening is recent door iemand anders bewerkt. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
