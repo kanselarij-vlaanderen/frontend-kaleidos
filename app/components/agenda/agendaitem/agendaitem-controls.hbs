@@ -59,7 +59,7 @@
           @route="cases.case.subcases.subcase.new-submission"
           role="menuitem"
         >
-          {{t (if this.decisionActivity.isPostponed "resubmit-postponed-agendaitem" "submit-new-documents")}}
+          {{t (if this.canProposeForOtherAgendaWithSubmission "resubmit-postponed-agendaitem" "submit-new-documents")}}
         </AuLink>
       {{else if this.ongoingSubmissionId}}
         <AuLink
@@ -71,7 +71,7 @@
         </AuLink>
       {{/if}}
       {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda)}}
-        {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
+        {{#if (and this.agendaItemWasSubmitted this.isDeletable (not this.subcaseIsOnMultipleAgendas))}}
           <AuButton
             data-test-agendaitem-controls-action-send-submission-back
             @skin="link"

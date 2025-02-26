@@ -60,13 +60,18 @@
               </div>
             {{/if}}
           {{/let}}
-          {{#if pieces}}
-            <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-              @pieces={{pieces}}
-              @fileNameMappings={{@fileNameMappings}}
-              @isBekrachtiging={{this.isBekrachtiging}}
-            />
-          {{/if}}
+          {{#let (await first.treatment.decisionActivity) as |decisionActivity| }}
+            {{! Hide retracted and postponed documents when released }}
+            {{#if (not (and @decisionsAreReleased (or decisionActivity.isPostponed decisionActivity.isRetracted)))}}
+              {{#if pieces}}
+                <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                  @pieces={{pieces}}
+                  @fileNameMappings={{@fileNameMappings}}
+                  @isBekrachtiging={{this.isBekrachtiging}}
+                />
+              {{/if}}
+            {{/if}}
+          {{/let}}
         {{/let}}
       </div>
     {{/if}}
@@ -97,13 +102,18 @@
                 </div>
               {{/if}}
             {{/let}}
-            {{#if pieces}}
-              <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                @pieces={{pieces}}
-                @fileNameMappings={{@fileNameMappings}}
-                @isBekrachtiging={{this.isBekrachtiging}}
-              />
-            {{/if}}
+            {{#let (await agendaitem.treatment.decisionActivity) as |decisionActivity| }}
+              {{! Hide retracted and postponed documents when released }}
+              {{#if (not (and @decisionsAreReleased (or decisionActivity.isPostponed decisionActivity.isRetracted)))}}
+                {{#if pieces}}
+                  <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                    @pieces={{pieces}}
+                    @fileNameMappings={{@fileNameMappings}}
+                    @isBekrachtiging={{this.isBekrachtiging}}
+                  />
+                {{/if}}
+              {{/if}}
+            {{/let}}
           {{/let}}
         </div>
       </div>

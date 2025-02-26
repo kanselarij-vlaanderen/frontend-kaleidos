@@ -89,6 +89,7 @@ const selectors = {
   datepicker: {
     datepicker: '[data-test-auk-datepickr]',
     clear: '[data-test-auk-datepickr-clear]',
+    loading: '[data-test="auk-datepickr-loading"]',
   },
 
   formHelpText: '.auk-form-help-text',

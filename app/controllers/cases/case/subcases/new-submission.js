@@ -7,6 +7,7 @@ export default class CasesCaseSubcasesNewSubmissionController extends Controller
 
   submitter;
   mandatees;
+  latestSubcase;
 
   onCancelSubmission = () => {
     this.preventUnload.disable();

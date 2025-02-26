@@ -43,9 +43,9 @@ export default class SubmissionsRoute extends Route {
   loadedDefaults = false;
 
   async beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
+    const isAuthenticated = this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
-    if (!this.currentSession.may('view-submissions')) {
+    if (isAuthenticated && !this.currentSession.may('view-submissions')) {
       this.router.transitionTo('cases.index');
     }
     // minister profile can see all but we will check their mandatee by default

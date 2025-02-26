@@ -63,6 +63,14 @@ async function getSubject(params) {
   if (mandatees?.length > 1) {
     prefix += 'Co-agendering - ';
   }
+  // In the case where secretarie already put postponed subcase on new agenda
+  // or when dossierbeheerder wants to resubmit a postponed subcase
+  // the agendaitemText will refer to the old agendaitem, but with a new meeting which is not correct
+  if (params.isForPostponedSubcase) {
+    const oldMeetingKind = await params.oldMeeting.kind;
+    let oldMeetingDate = dateFormat(params.oldMeeting.plannedStart, 'dd-MM-yyyy');
+    return `${prefix}${oldMeetingKind.label} VR ${oldMeetingDate}:${titlePrefix} ${params.submission.shortTitle}`;
+  }
   return `${prefix}${meetingKind.label} VR ${meetingDate}:${titlePrefix} ${params.submission.shortTitle}`;
 }
 
@@ -84,9 +92,16 @@ Uw ${params.resubmitted ? 'aangepaste ': ''}indiening is goed ontvangen. De volg
     const oldMeetingKind = await params.oldMeeting?.kind?.label;
     const oldMeetingDate = dateFormat(params.oldMeeting?.plannedStart, 'dd-MM-yyyy');
     const agendaitemArticle = await getAgendaitemArticle(params);
-    message += `
-${agendaitemArticle} ${agendaitemText} "${params.submission.shortTitle}", uitgesteld op de ${oldMeetingKind} van ${oldMeetingDate} werd opnieuw ingediend door kabinet ${submitterPerson.lastName}
-`;
+    if (params.isReSubmittingPostponed) {
+      message += `
+${agendaitemArticle} ${agendaitemText} "${params.submission.shortTitle}", uitgesteld op de ${oldMeetingKind} van ${oldMeetingDate} werd opnieuw ingediend door kabinet ${submitterPerson.lastName}.
+  `;
+    } else {
+      // Secretarie already resubmitted, just inform the user that this BIS update is on a postponed subcase
+      message += `
+Er werd een aanpassing gedaan aan ${agendaitemArticle.toLowerCase()} op de ${oldMeetingKind} van ${oldMeetingDate} uitgestelde ${agendaitemText} "${params.submission.shortTitle}" door kabinet ${submitterPerson.lastName}.
+      `;
+    }
   } else if (params.resubmitted) {
     if (agendaitemText) {
       message += `

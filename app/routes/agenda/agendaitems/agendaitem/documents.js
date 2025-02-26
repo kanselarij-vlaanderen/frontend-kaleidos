@@ -1,8 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
@@ -40,9 +42,6 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     this.subcase = await this.agendaActivity?.subcase;
     this.treatment = await this.agendaitem.treatment;
     this.decisionActivity = await this.treatment?.decisionActivity;
-    const decisionActivityResultCode = await this.decisionActivity
-      ?.decisionResultCode;
-    await this.decisionActivity?.decisionResultCode;
     this.confidentialAccessLevel = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
@@ -54,22 +53,45 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
-    // Additional failsafe check on document visibility. Strictly speaking this check
-    // is not necessary since documents are not propagated by Yggdrasil if they
-    // should not be visible yet for a specific profile.
-    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
-    if (this.currentSession.may('view-documents-before-release')) {
-      this.documentsAreVisible = true;
-    } else if (
-      !this.currentSession.may('view-postponed-and-retracted') &&
-      [INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)
-    ) {
-      this.documentsAreVisible = false;
-    } else {
-      const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
-      const documentPublicationStatus = await documentPublicationActivity?.status;
-      this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    this.showDocumentsAreVisibleAlert = false;
+    // Additional failsafe check on document visibility.
+    // retracted and postponed documents are hidden for non admin because
+    // we cannot match the "historic name" of the documents due to resubmitting
+    const decisionPublicationActivity = await this.meeting.internalDecisionPublicationActivity;
+    const decisionPublicationStatus = await decisionPublicationActivity?.status;
+    const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+
+    const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
+    const documentPublicationStatus = await documentPublicationActivity?.status;
+    const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
+    const decisionActivityResultCode = await this.decisionActivity?.decisionResultCode;
+
+    if (!decisionsAreReleased || this.currentAgenda.status.get('isDesignAgenda')) {
+      this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+      return;
     }
+
+    // decisionsAreReleased
+    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if ([INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)) {
+      this.documentsAreVisible = this.currentSession.may('view-documents-postponed-and-retracted-on-agendaitem');
+      this.showDocumentsAreVisibleAlert = this.documentsAreVisible;
+      return;
+    }
+
+    if (!documentsAreReleased) {
+      this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+      return;
+    }
+    // documentsAreReleased
+    const { GOEDGEKEURD, KENNISNAME } = CONSTANTS.DECISION_RESULT_CODE_URIS;
+    if ([GOEDGEKEURD, KENNISNAME].includes(decisionActivityResultCode?.uri)) {
+      this.documentsAreVisible = true;
+      return;
+    }
+    // no decisionResult after release
+    this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+    return;
   }
 
   setupController(controller) {
@@ -81,13 +103,30 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.isOpenBatchDetailsModal = false;
     controller.isOpenPieceUploadModal = false;
     controller.isOpenPublicationModal = false;
+    controller.isOpenSignFlowModal = false;
+    controller.isOpenWarnDocEditOnApproved = false;
     controller.hasConfirmedDocEditOnApproved = false;
     controller.currentAgenda = this.currentAgenda;
     controller.previousAgenda = this.previousAgenda;
     controller.agendaActivity = this.agendaActivity;
     controller.documentsAreVisible = this.documentsAreVisible;
+    controller.showDocumentsAreVisibleAlert = this.showDocumentsAreVisibleAlert;
     controller.meeting = this.meeting;
     controller.decisionActivity = this.decisionActivity;
     controller.loadNewPieces.perform();
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      // cleanup any unsaved pieces
+      Promise.all(
+        controller.newPieces.map(async (piece) => {
+          if (!piece?.id) {
+            // don't delete the draft-piece here.
+            await deletePiece(piece, false);
+          }
+        }),
+      ).then(() => (controller.newPieces = new TrackedArray([])));
+    }
   }
 }

@@ -7,9 +7,9 @@ export default class NewslettersRoute extends Route {
   @service router;
 
   beforeModel(transition) {
-    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
+    const isAuthenticated = this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
-    if (!this.currentSession.may('manage-news-items')) {
+    if (isAuthenticated && !this.currentSession.may('manage-news-items')) {
       this.router.transitionTo('index');
     }
   }

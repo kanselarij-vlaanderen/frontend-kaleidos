@@ -270,6 +270,7 @@ context('Publications translation tests', () => {
     // set duedate
     cy.get(publication.translationsInfoPanel.edit).click();
     cy.get(publication.translationsInfoPanel.editView.dueDate).find(auk.datepicker.datepicker)
+      .not(auk.datepicker.loading)
       .click();
     cy.setDateInFlatpickr(lateDueDate);
     cy.get(publication.translationsInfoPanel.save).click();

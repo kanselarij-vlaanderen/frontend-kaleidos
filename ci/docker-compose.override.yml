@@ -104,6 +104,8 @@ services:
   digital-signing:
     environment:
       SIGNINGHUB_API_URL: "https://fake.api.url"
+      # mock login users are in a different graph and we check better if you are logged in.
+      ACCOUNT_GRAPH: "http://mu.semte.ch/graphs/public"
     user: ${HOST_UID_GID}
   document-stamping:
     user: ${HOST_UID_GID}

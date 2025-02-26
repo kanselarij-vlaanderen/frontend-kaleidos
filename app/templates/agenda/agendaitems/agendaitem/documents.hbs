@@ -36,7 +36,7 @@
 </Auk::Toolbar>
 {{#unless this.loadData.isRunning}}
   {{#if this.documentsAreVisible}}
-    {{#if (user-may "view-documents-postponed-and-retracted")}}
+    {{#if this.showDocumentsAreVisibleAlert}}
       {{#if this.decisionActivity.isPostponed}}
         <AuAlert
           @skin="warning"
@@ -75,7 +75,7 @@
         @skin="info"
         @icon="info-circle"
       >
-        {{#if (not (user-may "view-documents-postponed-and-retracted"))}}
+        {{#if (not (user-may "view-documents-postponed-and-retracted-on-agendaitem"))}}
           {{#if this.decisionActivity.isPostponed}}
             {{t "agendaitem-postponed-no-documents-available"}}
           {{else if this.decisionActivity.isRetracted}}

@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubcaseDescriptionView extends Component {
   /**
@@ -64,14 +65,25 @@ export default class SubcaseDescriptionView extends Component {
     // has been propagated and we only care about the latest agenda
     const lastRecord = relatedAgendas[0];
     if (lastRecord.visible) {
+      let recordToUse = lastRecord;
+      if (
+        relatedAgendas.length > 1 &&
+        lastRecord.decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN &&
+        relatedAgendas[1].agendaActivity.startDate > relatedAgendas[0].agendaActivity.startDate
+      ) {
+        // this subcase has been retraced AND placed on a new agenda after retracting.
+        // in that case, the second meeting will be earlier and should be shown instead
+        recordToUse = relatedAgendas[1];
+      }
       // The latest meeting is visible to the current user
       // We can just fetch it using the store and use the real records
-      const meeting = await this.store.findRecord('meeting', lastRecord.meeting.id);
-      const agenda = await this.store.findRecord('agenda', lastRecord.agenda.id);
-      const agendaitem = await this.store.findRecord('agendaitem', lastRecord.agendaitem.id);
+      const meeting = await this.store.findRecord('meeting', recordToUse.meeting.id);
+      const agenda = await this.store.findRecord('agenda', recordToUse.agenda.id);
+      const agendaitem = await this.store.findRecord('agendaitem', recordToUse.agendaitem.id);
       this.latestMeetingModels = { meeting, agenda, agendaitem };
     } else {
       // The latest meeting is not visible, we should display it but not as a link
+      // TODO: if retracted and placed on an earlier meeting, we are not always showing the correct link to the most recent agenda activity
       const visibleRecord = relatedAgendas.find((record) => record.visible);
 
       // At least one meeting must be visible to the user to display
@@ -96,6 +108,19 @@ export default class SubcaseDescriptionView extends Component {
         this.postponedMeetingModels = null;
         const meeting = await this.store.findRecord('meeting', lastRecord.meeting.id);
         this.latestMeetingModels = { meeting, agenda, agendaitem };
+        // the next part is only in case of retracted/resubmit on earlier meetings, a rare case
+        if (
+          relatedAgendas.length > 1 &&
+          lastRecord.decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN &&
+          relatedAgendas[1].agendaActivity.startDate > relatedAgendas[0].agendaActivity.startDate
+        ) {
+          // more like retractedMeetingModels in this case
+          this.postponedMeetingModels =  {
+            meeting: relatedAgendas[1].meeting,
+            agenda: relatedAgendas[1].agenda,
+            agendaitem: relatedAgendas[1].agendaitem
+          };
+        }
       } else {
         // the agendaitem is not approved yet for this profile but should show
         this.postponedMeetingModels =  {

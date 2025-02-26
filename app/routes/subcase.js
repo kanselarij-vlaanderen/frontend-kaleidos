@@ -4,6 +4,11 @@ import { inject as service } from '@ember/service';
 export default class SubcaseRoute extends Route {
   @service store;
   @service router;
+  @service('session') simpleAuthSession;
+
+  beforeModel(transition) {
+    this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
+  }
 
   model(params) {
     return this.store.findRecord('subcase', params.subcase_id);
