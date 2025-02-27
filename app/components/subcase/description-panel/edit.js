@@ -152,7 +152,8 @@ export default class SubcaseDescriptionEdit extends Component {
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk
+      resetFormallyOk,
+      agendaitemTypeChanged,
     );
 
     if (this.confidentialChanged && this.args.subcase.confidential) {
