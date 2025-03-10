@@ -62,7 +62,7 @@ These commands are used in the above commands. you only need them if you want to
 2. Make sure your frontend is running on port 4200 also. Issueing the command `npm start` in the frontend should do the trick.
 3. Also in the frontend: issue the  `make run-cypress-tests-headless` command. Your tests are now running.
 
-### Deploying
+### Deploying 
 
 Specify what it takes to deploy your app.
 
