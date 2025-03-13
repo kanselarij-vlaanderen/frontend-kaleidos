@@ -48,6 +48,8 @@
             @multiple={{false}}
             @onUpload={{set this "replacementSourceFile"}}
             @onQueueUpdate={{this.handleReplacementSourceFileUploadQueue}}
+            @validateFile={{this.validateFile}}
+            @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
           />
         </c.content>
       {{/if}}
@@ -100,6 +102,8 @@
               @multiple={{false}}
               @onUpload={{set this "replacementDerivedFile"}}
               @onQueueUpdate={{this.handleReplacementDerivedFileUploadQueue}}
+              @validateFile={{this.validateFile}}
+              @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
             />
           </c.content>
         {{/if}}
@@ -125,6 +129,8 @@
               @multiple={{false}}
               @onUpload={{set this "uploadedSourceFile"}}
               @onQueueUpdate={{this.handleSourceFileUploadQueue}}
+              @validateFile={{this.validateFile}}
+              @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
             />
           </c.content>
         </AuCard>
@@ -154,6 +160,8 @@
               @multiple={{false}}
               @onUpload={{set this "uploadedDerivedFile"}}
               @onQueueUpdate={{this.handleDerivedFileUploadQueue}}
+              @validateFile={{this.validateFile}}
+              @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
             />
           </c.content>
         </AuCard>

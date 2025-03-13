@@ -15,6 +15,7 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
   @service intl;
   @service toaster;
   @service fileConversionService;
+  @service draftSubmissionService;
 
   @tracked isUploadingSourceFile = false;
   @tracked isReplacingSourceFile = false;
@@ -52,6 +53,10 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
         || this.isUploadingReplacementDerivedFile
         || this.isUploadingReplacementSourceFile
     );
+  }
+
+  validateFile = (file) => {
+    return this.draftSubmissionService.validateUploadedFile(file);
   }
 
   @action
