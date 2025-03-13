@@ -29,6 +29,14 @@ export default class NewsletterNotaUpdatesRoute extends Route {
   }
 
   async model(params) {
+    const nota = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.NOTA,
+    );
+    const visienota = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.VISIENOTA,
+    );
     const processedNotas = [];
     const newsletterModel = this.modelFor('newsletter');
     const meeting = newsletterModel.meeting;
@@ -38,7 +46,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     const notas = await this.store.queryAll('piece', {
       'filter[agendaitems][agenda][:id:]': agendaId,
       'filter[agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
-      'filter[document-container][type][:uri:]': CONSTANTS.DOCUMENT_TYPES.NOTA,
+      'filter[document-container][type][:id:]': [nota.id, visienota.id].join(','),
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       include: 'agendaitems',
