@@ -43,7 +43,7 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
  * container would otherwise be orphaned.
  *
  * @param pieceOrPromise {Piece | Promise<Piece>}
- * @param keepDraftPiece Boolean: if only the accepted piece of a submission should be removed
+ * @param removeDraftPiece Boolean: should the draft-piece of a submission document be removed
  * @returns {Promise}
  */
 export async function deletePiece(pieceOrPromise, removeDraftPiece=true) {
