@@ -175,10 +175,11 @@ export default class DocumentsDocumentDetailsPanel extends Component {
         }
       }
     }
+    yield this.args.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
     if (this.uploadedSourceFile) {
       // use-case: we have a pdf and we want to add docx but keep our pdf
       // derived file does not exist yet in this case
-      const oldFile = yield this.args.piece.file;
+      const oldFile = yield this.args.piece;
       this.uploadedSourceFile.derived = oldFile;
       this.args.piece.file = this.uploadedSourceFile;
       yield Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
