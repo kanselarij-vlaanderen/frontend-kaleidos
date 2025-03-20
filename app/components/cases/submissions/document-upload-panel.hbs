@@ -11,6 +11,8 @@
       @reusable={{true}}
       @onUpload={{this.uploadPiece}}
       @onQueueUpdate={{@onFileQueueUpdate}}
+      @validateFile={{this.validateFile}}
+      @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
     />
     <div class="upload-container">
       {{#each @pieces as |piece|}}

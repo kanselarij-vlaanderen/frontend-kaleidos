@@ -46,6 +46,13 @@ export const DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES = [
   'application/zip', // DOCX (Google Docs), XLSX (Google Docs, LibreOffice)
   'application/octet-stream' // DOCX (LibreOffice - Word 2010 - 365 format),
 ];
+
+export const SUBMISSION_ALLOWED_MIME_TYPES = [
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX (Word)
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // XLSX (Excel)
+  'application/zip', // DOCX (Google Docs), XLSX (Google Docs, LibreOffice)
+  'application/pdf' // PDF
+];
 export const EMAIL_ATTACHMENT_WARN_SIZE = 10 * 1000000; // 10 MB
 export const EMAIL_ATTACHMENT_MAX_SIZE = 30 * 1000000; // 30 MB
 

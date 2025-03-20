@@ -11,6 +11,11 @@ export default class CasesSubmissionsDocumentUploadPanelComponent extends Compon
   @service conceptStore;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
+
+  validateFile = (file) => {
+    return this.draftSubmissionService.validateUploadedFile(file);
+  }
 
   @action
   async uploadPiece(file) {

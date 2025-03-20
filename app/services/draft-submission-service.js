@@ -1,11 +1,14 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import { SUBMISSION_ALLOWED_MIME_TYPES } from 'frontend-kaleidos/config/config';
 
 export default class DraftSubmissionService extends Service {
   @service store;
   @service currentSession;
   @service subcaseService;
+  @service toaster;
+  @service intl;
 
   updateSubmissionStatus = async(submission, statusUri, comment='') => {
     const newStatus = await this.store.findRecordByUri('concept', statusUri);
@@ -192,5 +195,21 @@ export default class DraftSubmissionService extends Service {
   getLatestSubmissionForDecisionmakingFLow = async(decisionmakingFlow) => {
     const allSubmissions = await this.getAllSubmissionsForDecisionmakingFlow(decisionmakingFlow);
     return allSubmissions?.slice().at(0);
+  };
+
+  // for submissions we want to limit the amount of types certain profiles are allowed to upload
+  validateUploadedFile = (file) => {
+    const allowed = SUBMISSION_ALLOWED_MIME_TYPES.includes(file.type);
+    if (
+      !this.currentSession.may('upload-any-submission-document-extension') &&
+      !allowed
+    ) {
+      this.toaster.error(
+        this.intl.t('submission-document-incorrect-type', { name: file.name }),
+        this.intl.t('submission-document-accepted-types'),
+      );
+      return false;
+    }
+    return true;
   };
 }

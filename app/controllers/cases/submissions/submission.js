@@ -217,6 +217,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await this.checkIfHasConfidentialPiecesChanged.perform();
   };
 
+  validateFile = (file) => {
+    return this.draftSubmissionService.validateUploadedFile(file);
+  }
+
   @action
   async uploadPiece(file) {
     const name = file.filenameWithoutExtension;
