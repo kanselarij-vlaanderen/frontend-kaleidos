@@ -104,7 +104,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *loadDetailsData() {
-    this.documentType = yield this.args.documentContainer.type;
+    this.documentType = yield this.args.documentContainer?.type;
     this.accessLevel = yield this.args.piece.accessLevel;
     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
     this.retrievedPieces = yield this.args.piece.retrievedPieces;
