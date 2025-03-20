@@ -61,6 +61,11 @@ export default class FileUploader extends Component {
     maxConcurrency: 3,
   }) *uploadFileTask(file) {
     try {
+      const uppercasePDFIndex = file?.name?.lastIndexOf('.PDF');
+      if (uppercasePDFIndex === file?.name?.length - 4) {
+        const originalName = file.name;
+        file.name = originalName.slice(0, uppercasePDFIndex) + '.pdf';
+      }
       this.args.onQueueUpdate?.(this.queueInfo);
       const response = yield file.upload(
         (this.args.isSubmission && isEnabledCabinetSubmissions())
