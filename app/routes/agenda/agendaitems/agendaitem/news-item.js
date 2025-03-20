@@ -30,7 +30,15 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
   }
 
   async afterModel() {
-    // Get most recent version of document with type 'Nota',
+    const nota = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.NOTA,
+    );
+    const visienota = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.DOCUMENT_TYPES.VISIENOTA,
+    );
+    // Get most recent version of document with type 'Nota' or 'VisieNota',
     // but only if there are multiple versions of the document
     const latestNotaVersion = await this.store.queryOne('piece', {
       filter: {
@@ -39,7 +47,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
         },
         'document-container': {
           type: {
-            ':uri:': CONSTANTS.DOCUMENT_TYPES.NOTA,
+            ':id:': [nota.id, visienota.id].join(','),
           },
         },
         ':has-no:next-piece': 'yes',
