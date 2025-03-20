@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { task, timeout } from 'ember-concurrency';
-import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
+import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces, sortPieces } from 'frontend-kaleidos/utils/documents';
@@ -257,7 +257,6 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       submission: this.model,
     });
     this.newPieces.push(piece);
-    this.newDraftPieces.push(piece);
   }
 
   savePieces = task(async () => {
@@ -268,7 +267,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       try {
         await this.savePiece.perform(piece, index);
       } catch (error) {
-        await this.deletePiece.perform(piece);
+        await this.deletePiece(piece);
         throw error;
       }
     });
@@ -307,7 +306,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     this.isOpenPieceUploadModal = false;
   });
 
-  async deletePiece(piece) {
+  deletePiece = async(piece) => {
     const file = await piece.file;
     await file.destroyRecord();
     removeObject(this.newPieces, piece);
@@ -333,7 +332,8 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     const index = this.pieces.indexOf(piece);
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
-    addObject(this.newDraftPieces, newVersion);
+    // No need to add this version to this.newDraftPieces (we did before)
+    // since this.savePieces will now trigger this.updateDraftPiecePositions 
     await this.savePieces.perform();
     await this.checkIfHasConfidentialPiecesChanged.perform();
   };

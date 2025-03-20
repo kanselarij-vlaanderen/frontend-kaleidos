@@ -54,6 +54,9 @@ export default class SearchDocumentsRoute extends Route {
 
     const filter = {};
 
+    // We only want pieces with a document documentContainer
+    filter[':has:documentContainerId'] = 't';
+
     filter[`${searchModifier}${textSearchKey}`] = isEmpty(params.searchText)
     ? '*'
     : filterStopWords(params.searchText);
@@ -178,7 +181,7 @@ export default class SearchDocumentsRoute extends Route {
     const governmentAreaLabels = (
       await Promise.all(
         governmentAreas?.map((id) => this.store.findRecord('concept', id)))
-    ).map((concept) => concept.label);  
+    ).map((concept) => concept.label);
 
 
     this.plausible.trackEventWithRole('Zoekopdracht', {

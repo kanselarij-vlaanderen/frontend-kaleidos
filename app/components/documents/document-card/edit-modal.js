@@ -141,6 +141,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
         await piecePart.destroyRecord();
       }
     }
+    await this.args.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
     if (this.uploadedSourceFile) {
       // use-case: we have a pdf and we want to add docx but keep our pdf
       // derived file does not exist yet in this case

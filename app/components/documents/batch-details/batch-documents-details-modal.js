@@ -178,6 +178,7 @@ export default class BatchDocumentsDetailsModal extends Component {
           await this.signatureService.removeSignFlow(signFlow);
         }
         if (hasChanged) {
+          await piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
           await piece.save();
           await documentContainer.save();
           if (accessLevelHasChanged) {
