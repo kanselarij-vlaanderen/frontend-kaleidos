@@ -190,6 +190,8 @@
         @multiple={{true}}
         @reusable={{true}}
         @onUpload={{this.uploadPiece}}
+        @validateFile={{this.validateFile}}
+        @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
       />
       <div class="upload-container">
         {{#each this.newPieces as |piece|}}

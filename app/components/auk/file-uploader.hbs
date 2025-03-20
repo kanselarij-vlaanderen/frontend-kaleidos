@@ -50,6 +50,11 @@
       {{/if}}
     </div>
     {{#if (and (not this.uploadIsRunning) (not this.uploadIsCompleted))}}
+      {{#if @dropzoneMessage}}
+        <p>
+          {{t @dropzoneMessage}}
+        </p>
+      {{/if}}
       <p class="auk-u-text-muted">
         {{#if dropzone.active}}
           {{t "drop-text"}}

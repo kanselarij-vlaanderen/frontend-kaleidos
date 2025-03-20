@@ -215,7 +215,13 @@
         @onAccessLevelChanged={{set this.newPiece.accessLevel "accessLevel"}}
       />
     {{else}}
-      <Auk::FileUploader @isSubmission={{true}} @multiple={{false}} @onUpload={{perform this.uploadPiece}} />
+      <Auk::FileUploader
+        @isSubmission={{true}}
+        @multiple={{false}}
+        @onUpload={{perform this.uploadPiece}}
+        @validateFile={{this.validateFile}}
+        @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
+      />
     {{/if}}
   </:body>
 </ConfirmationModal>
