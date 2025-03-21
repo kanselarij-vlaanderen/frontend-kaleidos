@@ -154,14 +154,14 @@ function addSubcaseViaModal(subcase) {
   });
 
   // Set the type
-  if (subcase.agendaitemType) {
+  if (subcase.agendaitemType && !subcase.ratification) {
     cy.get(appuniversum.radio).contains(subcase.agendaitemType)
       .scrollIntoView()
       .click();
   }
 
   // toggle confidential
-  if (subcase.confidential) {
+  if (subcase.confidential && !subcase.ratification) {
     cy.get(cases.newSubcaseForm.toggleConfidential).parent()
       .scrollIntoView()
       .click();

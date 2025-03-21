@@ -19,7 +19,7 @@
             <AuRadioGroup
               @alignment="inline"
               @selected={{this.agendaItemType}}
-              @onChange={{this.onChangeAgendaItemType}}
+              @disabled={{true}}
               as |Group|
             >
               {{#each this.agendaItemTypes as |type|}}
