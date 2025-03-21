@@ -4,6 +4,7 @@ import { singularize } from '@ember-data/request-utils/string'
 import fetch from 'fetch';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 
 export default class AgendaService extends Service {
   @service store;
@@ -187,7 +188,29 @@ export default class AgendaService extends Service {
       const meeting = await this.store.queryOne('meeting', {
         'filter[agendas][agendaitems][:id:]': json.data.id,
       });
-      await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(meeting, true);
+      if (meeting?.id && agendaitem?.number) {
+        const reports = await this.store.queryAll('report', {
+          'filter[:has-no:next-piece]': true,
+          'filter[:has:piece-parts]': true,
+          'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]': meeting.id,
+          'filter[decision-activity][treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // announcements are not reordered
+          'filter[decision-activity][treatment][agendaitems][:gt:number]': agendaitem.number, // any report with a lower number should be ok
+        });
+        if (reports?.length) {
+          await Promise.all(reports.map(async (report) => {
+            const agendaitem = await this.store.queryOne('agendaitem', {
+              'filter[:has-no:next-version]': true,
+              'filter[treatment][decision-activity][report][:id:]': report.id,
+            });
+            const documentContainer = await report.documentContainer;
+            const pieces = await documentContainer.pieces;
+            report.name = await generateReportName(agendaitem, meeting, pieces.length);
+            await report.belongsTo('file').reload();
+            await report.save();
+          }));
+          await this.decisionReportGeneration.generateReplacementReports.perform(reports);
+        }
+      }
     }
     return agendaitem;
   }
