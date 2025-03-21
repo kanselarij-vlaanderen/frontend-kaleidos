@@ -241,6 +241,7 @@ export default class SubcaseDescriptionEdit extends Component {
         'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
       });
       const pieceParts = await report?.pieceParts;
+      await this._resetDecisionActivityResultCode(agendaitem, !!report);
       if (pieceParts?.length) {
         this.updateReportName(
           report,
@@ -289,5 +290,32 @@ export default class SubcaseDescriptionEdit extends Component {
         await newNewsItem.save();
       }
     }
+  }
+  /**
+   * Resets the decision result of an agendaitem after its type has changed.
+   * This function expects to be called AFTER the updates have been persisted,
+   * thus agendaitem.type contains the NEW type.
+   * @param {Agendaitem} agendaitem 
+   */
+  async _resetDecisionActivityResultCode(agendaitem, hasReport) {
+    const treatment = await agendaitem.treatment;
+    const decisionActivity = await treatment.decisionActivity;
+    const oldDecisionResultCode = await decisionActivity.decisionResultCode;
+
+    if (
+      this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      && oldDecisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+    ) {
+      const approvedResult = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD);
+      decisionActivity.decisionResultCode = hasReport? approvedResult : null;
+    } else if (
+      this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
+      && (!oldDecisionResultCode
+        || oldDecisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD)
+    ) {
+      const kennisname = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
+      decisionActivity.decisionResultCode = kennisname;
+    }
+    await decisionActivity.save();
   }
 }

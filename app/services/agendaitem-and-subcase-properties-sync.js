@@ -47,15 +47,12 @@ const setModifiedOnAgendaOfAgendaitem = async(agendaitem) => {
 export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
   @service store;
 
-  async saveChanges(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk, agendaitemTypeChanged=false) {
+  async saveChanges(agendaitemOrSubcase, propertiesToSetOnAgendaitem, propertiesToSetOnSubcase, resetFormallyOk) {
     const item = agendaitemOrSubcase;
     const isAgendaitem = item.modelName === 'agendaitem';
 
-    let agendaitem = null;
-
     await item.preEditOrSaveCheck();
     if (isAgendaitem) {
-      agendaitem = item;
       const agenda = await item.agenda;
       const agendaStatus = await agenda.status;
       const agendaActivity = await item.agendaActivity;
@@ -87,43 +84,9 @@ export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
         sort: '-agenda-activity.start-date,-created',
       });
       if (agendaitemOnDesignAgenda?.id) {
-        agendaitem = agendaitemOnDesignAgenda;
         await setNewPropertiesToModel(agendaitemOnDesignAgenda, propertiesToSetOnAgendaitem, resetFormallyOk);
         await setModifiedOnAgendaOfAgendaitem(agendaitemOnDesignAgenda);
       }
     }
-
-    if (agendaitem?.id && agendaitemTypeChanged) {
-      await this._resetDecisionActivityResultCode(agendaitem);
-    }
-  }
-
-
-  /**
-   * Resets the decision result of an agendaitem after its type has changed.
-   * This function expects to be called AFTER the updates have been persisted,
-   * thus agendaitem.type contains the NEW type.
-   * @param {Agendaitem} agendaitem 
-   */
-  async _resetDecisionActivityResultCode(agendaitem) {
-    const newType = await agendaitem.type;
-    const treatment = await agendaitem.treatment;
-    const decisionActivity = await treatment.decisionActivity;
-    const oldDecisionResultCode = await decisionActivity.decisionResultCode;
-
-    if (
-      newType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
-      && oldDecisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
-    ) {
-      decisionActivity.decisionResultCode = null;
-    } else if (
-      newType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
-      && (!oldDecisionResultCode
-        || oldDecisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD)
-    ) {
-      const kennisname = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
-      decisionActivity.decisionResultCode = kennisname;
-    }
-    await decisionActivity.save();
   }
 }
