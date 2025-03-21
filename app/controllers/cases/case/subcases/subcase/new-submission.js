@@ -103,6 +103,10 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     }
   };
 
+  validateFile = (file) => {
+    return this.draftSubmissionService.validateUploadedFile(file);
+  }
+
   uploadPiece = async (file) => {
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;

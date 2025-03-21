@@ -1502,5 +1502,8 @@
   "submission-already-in-treatment": "De kanselarij heeft je indiening in behandeling genomen. Je kunt via Kaleidos geen aanpassing meer aanvragen. Neem contact op met de kanselarij via e-mail: ministerraad@vlaanderen.be.",
   "submission-already-in-treatment-title": "Aanpassingen aanvragen is niet meer mogelijk.",
   "submission-has-send-back-requested-after-reload": "Er is een aanpassing aangevraagd sinds het openen van deze pagina en het in behandeling nemen. Controleer de aanvraag vooraleer de indiening te aanvaarden.",
-  "submission-edited-concurrently": "Deze indiening is recent door iemand anders bewerkt. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
+  "submission-edited-concurrently": "Deze indiening is recent door iemand anders bewerkt. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "uploaded-pieces-access-level-changed": "De rechten van de reeds opgeladen documenten werden aangepast",
+  "submission-document-accepted-types": "Geaccepteerde bestandsformaten: pdf, docx, xlsx, zip",
+  "submission-document-incorrect-type": "Het document \"{name}\" heeft een onaanvaardbaar formaat en is geweigerd."
 }

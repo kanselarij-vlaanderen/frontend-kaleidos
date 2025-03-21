@@ -149,6 +149,7 @@
           {{#if
             (and
               (user-may "manage-documents")
+              @documentContainer
               (not this.isDraftPiece)
               (or
                 this.canEditPieceWithSignFlow

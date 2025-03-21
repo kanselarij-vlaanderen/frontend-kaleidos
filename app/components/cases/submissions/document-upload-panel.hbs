@@ -2,13 +2,17 @@
   <Auk::Panel::Header class="au-u-background-gray-100">
     <h4 class="auk-panel__title">{{t "documents"}}</h4>
   </Auk::Panel::Header>
-  <Auk::Panel::Body>
+  <Auk::Panel::Body
+    {{did-update (perform this.onDidUpdate) @confidential}}
+  >
     <Auk::FileUploader
       @isSubmission={{true}}
       @multiple={{true}}
       @reusable={{true}}
       @onUpload={{this.uploadPiece}}
       @onQueueUpdate={{@onFileQueueUpdate}}
+      @validateFile={{this.validateFile}}
+      @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
     />
     <div class="upload-container">
       {{#each @pieces as |piece|}}
