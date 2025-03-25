@@ -55,6 +55,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked selectedMandatees = [];
   @tracked showDownloadDecisions = false;
   @tracked showConfirmEmptyInternalReviews = false;
+  @tracked showVerifyDeleteDecisionsSignFlows = false;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -370,6 +371,22 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     await this.signatureService.markReportsForSignature(reports);
     this.router.refresh(this.router.currentRouteName);
   }
+
+
+  removeSignFlowDataForAllDecisions = task(async () => {
+    this.showVerifyDeleteDecisionsSignFlows = false;
+    this.args.onStartLoading(this.intl.t('delete-all-decisions-sign-flow-data'));
+    const reports = await this.store.queryAll('report', {
+      'filter[:has-no:next-piece]': true,
+      'filter[:has:piece-parts]': true,
+      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
+        this.args.meeting.id,
+    });
+    for (const report of reports.slice()) {
+      await this.signatureService.removeSignFlowForPiece(report, true);
+    }
+    this.args.onStopLoading();
+  });
 
   emptyInteralReviews = async() => {
     this.showConfirmEmptyInternalReviews = false;
