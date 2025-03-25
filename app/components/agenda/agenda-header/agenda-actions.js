@@ -375,15 +375,14 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   removeSignFlowDataForAllDecisions = task(async () => {
     this.showVerifyDeleteDecisionsSignFlows = false;
-    this.args.onStartLoading(this.intl.t('delete-all-decisions-sign-flow-data'));
-    const reports = await this.store.queryAll('report', {
-      'filter[:has-no:next-piece]': true,
-      'filter[:has:piece-parts]': true,
-      'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]':
-        this.args.meeting.id,
-    });
-    for (const report of reports.slice()) {
-      await this.signatureService.removeSignFlowForPiece(report, true);
+    this.args.onStartLoading(this.intl.t('delete-all-decisions-sign-flow-data'))
+    const signFlows = await this.store.queryAll('sign-flow', {
+      'filter[sign-subcase][sign-marking-activity][piece][document-container][type][:uri:]' : CONSTANTS.DOCUMENT_TYPES.DECISION,
+      'filter[decision-activity][:has:treatment]': true,
+      'filter[meeting][:id:]': this.args.meeting.id,
+    })
+    for (const signFlow of signFlows.slice()) {
+      await this.signatureService.removeSignFlow(signFlow);
     }
     this.args.onStopLoading();
   });
