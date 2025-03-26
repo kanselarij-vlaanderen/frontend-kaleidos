@@ -56,6 +56,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showDownloadDecisions = false;
   @tracked showConfirmEmptyInternalReviews = false;
   @tracked showVerifyDeleteDecisionsSignFlows = false;
+  @tracked signFlowsToRemoveDoneCounter;
+  @tracked signFlowsToRemoveTotalCounter;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -146,6 +148,13 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const isDesignAgendaA = this.args.currentAgenda.status.get('isDesignAgenda') && this.args.reverseSortedAgendas.length == 1;
     // need permission and be on the latest agenda to do the action
     return this.currentSession.may('manage-agendaitems') && this.currentAgendaIsLatest && !isDesignAgendaA;
+  }
+
+  get removeSignFlowDataLoadingMessage() {
+    return this.intl.t('delete-all-decisions-sign-flow-data-counter', {
+      count: this.signFlowsToRemoveDoneCounter,
+      total: this.signFlowsToRemoveTotalCounter,
+    });
   }
 
   @bind
@@ -372,19 +381,26 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.router.refresh(this.router.currentRouteName);
   }
 
-
   removeSignFlowDataForAllDecisions = task(async () => {
     this.showVerifyDeleteDecisionsSignFlows = false;
-    this.args.onStartLoading(this.intl.t('delete-all-decisions-sign-flow-data'))
     const signFlows = await this.store.queryAll('sign-flow', {
       'filter[sign-subcase][sign-marking-activity][piece][document-container][type][:uri:]' : CONSTANTS.DOCUMENT_TYPES.DECISION,
       'filter[decision-activity][:has:treatment]': true,
       'filter[meeting][:id:]': this.args.meeting.id,
-    })
-    for (const signFlow of signFlows.slice()) {
-      await this.signatureService.removeSignFlow(signFlow);
-    }
+    });
+    this.signFlowsToRemoveDoneCounter = 0;
+    this.signFlowsToRemoveTotalCounter = signFlows.length;
+    this.args.onStartLoading(this.removeSignFlowDataLoadingMessage);
+
+    const savePromises = signFlows.map((signFlow) => this.removeSignFlowDataForAllDecisionsThrottled.perform(signFlow));
+    await all(savePromises);
     this.args.onStopLoading();
+  });
+
+  removeSignFlowDataForAllDecisionsThrottled = task({ maxConcurrency: 5, enqueue: true}, async (signFlow) => {
+    await this.signatureService.removeSignFlow(signFlow);
+    this.signFlowsToRemoveDoneCounter++;
+    this.args.onStartLoading(this.removeSignFlowDataLoadingMessage);
   });
 
   emptyInteralReviews = async() => {
@@ -402,7 +418,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     this.args.didApproveAgendaitems(); // just calls a refresh route
   };
 
-  emptyInteralReviewsOfAgendaitemThrottled = task({ maxConcurrency: 5}, async (agendaitem) => {
+  emptyInteralReviewsOfAgendaitemThrottled = task({ maxConcurrency: 5, enqueue: true}, async (agendaitem) => {
     const internalReview = await this.store.queryOne('submission-internal-review', {
       'filter[subcase][agenda-activities][agendaitems][:id:]': agendaitem.id,
     })

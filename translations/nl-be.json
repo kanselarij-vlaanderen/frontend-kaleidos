@@ -1508,5 +1508,6 @@
   "submission-document-accepted-types": "Geaccepteerde bestandsformaten: pdf, docx, xlsx, zip",
   "submission-document-incorrect-type": "Het document \"{name}\" heeft een onaanvaardbaar formaat en is geweigerd.",
   "delete-all-decisions-sign-flow-data":"Ondertekenflows voor alle beslissingen verwijderen",
+  "delete-all-decisions-sign-flow-data-counter":"{count} van {total} ondertekenflows verwijderd.",
   "verify-delete-all-decisions-sign-flow-data": "Bent u zeker dat u de ondertekenflows van alle beslissingen van deze agenda in Kaleidos wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden. Vergeet niet om de flows ook in het platform Digitaal Ondertekenen stop te zetten. Dit gebeurt niet automatisch."
 }
