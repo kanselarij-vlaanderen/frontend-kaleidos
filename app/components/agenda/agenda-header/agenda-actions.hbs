@@ -94,16 +94,19 @@
       {{t "edit-meeting"}}
     </AuButton>
   {{/if}}
-  {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-decisions"))}}
-    <AuHr />
-    <AuButton
-      data-test-agenda-actions-mark-decisions-for-signing
-      @skin="link"
-      {{on "click" this.markDecisionsForSigning}}
-      role="menuitem"
-    >
-      {{t "sign-decisions"}}
-    </AuButton>
+  {{#if (not @meeting.isPreDigitalDecisions)}}
+    {{#if (user-may "manage-decisions")}}
+      <AuHr />
+      <AuButton
+        data-test-agenda-actions-mark-decisions-for-signing
+        @skin="link"
+        {{on "click" this.markDecisionsForSigning}}
+        role="menuitem"
+      >
+        {{t "sign-decisions"}}
+      </AuButton>
+    {{/if}}
+    {{#if (user-may "remove-all-decisions")}}
       <AuButton
         @skin="link"
         @alert={{true}}
@@ -112,7 +115,8 @@
       >
         {{t "delete-all-decisions-sign-flow-data"}}
       </AuButton>
-    <AuHr />
+      <AuHr />
+    {{/if}}
   {{/if}}
   {{#if this.canEditDesignAgenda}}
     <AuButton
