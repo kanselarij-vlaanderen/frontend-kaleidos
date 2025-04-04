@@ -47,6 +47,7 @@ const {
 // - manage-retracted-agendaitems: Re-propose retracted agendaitems
 // - manage-press-agenda: Allow access to press agenda action
 // - manage-decisions: Change the decision result, upload a decision report
+// - remove-all-decisions: Shows a button to remove all decisions
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
 // - manage-alerts: Manage systeem notifications to be shown in the application
@@ -116,6 +117,7 @@ const groups = [
         'manage-agendaitems',
         'manage-retracted-agendaitems',
         'manage-decisions',
+        'remove-all-decisions',
         'manage-ratification',
         'manage-cases',
         'manage-meetings',
