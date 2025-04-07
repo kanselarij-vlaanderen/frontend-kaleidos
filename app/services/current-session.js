@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
+import { later } from '@ember/runloop';
 import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
 
 export default class CurrentSessionService extends Service {
@@ -9,11 +10,19 @@ export default class CurrentSessionService extends Service {
   @service store;
   @service impersonation;
   @service userAgent;
+  @service toaster;
+  @service intl;
 
   @tracked user;
   @tracked organization;
   @tracked membership;
   @tracked role;
+
+  constructor() {
+    super(...arguments);
+
+    this.lifecycle();
+  }
 
   /* eslint-disable ember/no-get */
   async load() {
@@ -76,5 +85,37 @@ export default class CurrentSessionService extends Service {
 
   get isAuthenticated() {
     return this.session.isAuthenticated;
+  }
+
+  /*****
+   * Polling for logged in status logic is below!
+   */
+  updateInterval = 60 * 1000;
+
+  async lifecycle() {
+    // For as long as the user is logged in, we continue periodically polling
+    if (await this._checkLoggedInStatus()) {
+      later(this, this.lifecycle, this.updateInterval);
+    }
+  }
+
+  async _checkLoggedInStatus() {
+    let isLoggedIn = true;
+
+    const currentSessionUrl = this.session.data?.authenticated?.links?.self;
+    if (currentSessionUrl) {
+      const response = await fetch(currentSessionUrl);
+      if (!response.ok) {
+        this.toaster.warning(
+          'Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten.',
+          null,
+          { timeOut: null }
+        );
+        this.session.invalidate();
+        isLoggedIn = false;
+      }
+    }
+
+    return isLoggedIn;
   }
 }
