@@ -107,7 +107,7 @@ export default class CurrentSessionService extends Service {
       const response = await fetch(currentSessionUrl);
       if (!response.ok) {
         this.toaster.warning(
-          'Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten.',
+          this.intl.t('your-session-is-invalid'),
           null,
           { timeOut: null }
         );
