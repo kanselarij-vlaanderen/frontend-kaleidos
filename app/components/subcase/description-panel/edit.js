@@ -312,8 +312,8 @@ export default class SubcaseDescriptionEdit extends Component {
       && (!oldDecisionResultCode
         || oldDecisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD)
     ) {
-      const kennisname = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
-      decisionActivity.decisionResultCode = kennisname;
+      const acknowledgedResult = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
+      decisionActivity.decisionResultCode = acknowledgedResult;
     }
     await decisionActivity.save();
   }
