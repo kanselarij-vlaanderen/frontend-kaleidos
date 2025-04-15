@@ -83,6 +83,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
 
     this.confidential = submission.confidential;
+    await submission.hasMany('pieces').reload();
     const newPieces = await submission.pieces;
     this.hasConfidentialPieces = await containsConfidentialPieces(newPieces.slice());
     let pieces = [];
@@ -137,24 +138,30 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     }
   }
 
-  setupController(controller, _model, _transition) {
+  setupController(controller, model, _transition) {
     super.setupController(...arguments);
+
+    controller.isOpenPieceUploadModal = false;
+    controller.isOpenBatchDetailsModal = false;
+
     controller.mandatees = this.mandatees;
     controller.pieces = this.pieces;
     controller.documentContainerIds = this.documentContainerIds;
     controller.newDraftPieces = this.newDraftPieces;
+    // controller.newPieces = this.newPieces;
     controller.statusChangeActivities = this.statusChangeActivities;
-    controller.currentLinkedMandatee = this.currentLinkedMandatee;
+    controller.approvalAddresses = model.approvalAddresses;
+    controller.notificationAddresses = model.notificationAddresses;
+    controller.approvalComment = model.approvalComment;
+    controller.notificationComment = model.notificationComment;
     controller.beingTreatedBy = this.beingTreatedBy;
     controller.isUpdate = this.isUpdate;
-    controller.wasPostponed = this.wasPostponed;
-    controller.subcase = this.subcase;
     controller.confidential = this.confidential;
+
     controller.hasConfidentialPieces = this.hasConfidentialPieces;
+    controller.currentLinkedMandatee = this.currentLinkedMandatee;
     controller.previousMandateePersons = this.previousMandateePersons;
-    controller.approvalAddresses = _model.approvalAddresses;
-    controller.notificationAddresses = _model.notificationAddresses;
-    controller.approvalComment = _model.approvalComment;
-    controller.notificationComment = _model.notificationComment;
+
+    controller.subcase = this.subcase;
   }
 }

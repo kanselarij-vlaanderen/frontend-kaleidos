@@ -446,6 +446,7 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @action
   async saveAccessLevel() {
+    await this.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
     await this.piece.save();
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     if (this.hasConfidentialityChanged && this.args.onChangeConfidentiality) {

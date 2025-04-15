@@ -49,6 +49,8 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
 
   @task
   *loadDecisionmakingFlow() {
+    yield this.args.submission.decisionmakingFlow;
+    // refresh if stale
     this.decisionmakingFlow = yield this.args.submission.belongsTo('decisionmakingFlow').reload();
     yield this.decisionmakingFlow?.case;
     this.decisionmakingFlowTitle = this.args.submission.decisionmakingFlowTitle;

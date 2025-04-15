@@ -28,12 +28,16 @@ export default class AgendaPrintRoute extends Route {
         announcements.push(agendaitem);
       }
     }
+    const decisionPublicationActivity = await meeting.internalDecisionPublicationActivity;
+    const decisionPublicationStatus = await decisionPublicationActivity?.status;
+    const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     await this.loadDocuments.perform(agendaitems);
 
     return {
       meeting,
       notas,
       announcements,
+      decisionsAreReleased
     };
   }
 

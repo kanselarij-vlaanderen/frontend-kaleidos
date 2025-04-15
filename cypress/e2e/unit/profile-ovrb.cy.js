@@ -20,6 +20,8 @@ context('Testing the application as OVRB', {
     // cy.login does not trigger the transtition to the default route for this profile for some reason
     cy.loginFlow('OVRB');
     cy.wait(1000);
+    cy.visit('/'); // somewhere we try to visit overview route and that gets stored, which messes with the default routing
+    cy.url().should('include', 'publicaties'); // make sure we transitioned to default route
   });
 
   after(() => {

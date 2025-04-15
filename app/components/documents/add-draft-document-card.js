@@ -28,6 +28,7 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   @service toaster;
   @service intl;
   @service pieceAccessLevelService;
+  @service draftSubmissionService;
 
   @tracked piece;
   @tracked documentContainer;
@@ -177,6 +178,10 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
       this.isOpenUploadModal = false;
       throw error;
     }
+  }
+
+  validateFile = (file) => {
+    return this.draftSubmissionService.validateUploadedFile(file);
   }
 
   @task

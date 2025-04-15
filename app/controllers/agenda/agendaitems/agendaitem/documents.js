@@ -29,6 +29,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @service documentService;
 
   documentsAreVisible;
+  showDocumentsAreVisibleAlert;
   defaultAccessLevel;
   meeting;
   @tracked isOpenBatchDetailsModal = false;
