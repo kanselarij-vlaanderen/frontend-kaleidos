@@ -14,7 +14,6 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
    */
   @service store;
   @service conceptStore;
-  @service decisionReportGeneration;
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
   @service pieceAccessLevelService;
