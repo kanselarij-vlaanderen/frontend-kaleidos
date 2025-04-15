@@ -113,12 +113,12 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
       resetFormallyOk
     );
 
-    // TODO ratifications shouldn't realistically be confidential, maybe disable the selector
+    // ratifications shouldn't realistically be confidential
     if (this.confidentialChanged && this.args.subcase.confidential) {
       await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
       await this.updateNewsItem.perform();
-      // TODO if this change is possible > regenerate report
+      // we do not regenerate report in this case, shouldn't really happen
     }
 
     this.args.onSave();
