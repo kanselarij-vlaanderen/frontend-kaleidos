@@ -30,6 +30,7 @@
               @alert={{true}}
               @icon="trash"
               @hideText={{true}}
+              @disabled={{@loading}}
               {{on "click" @onDelete}}
             >
               {{t "delete"}}

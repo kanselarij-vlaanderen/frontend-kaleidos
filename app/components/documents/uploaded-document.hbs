@@ -4,7 +4,8 @@
   @size={{@piece.file.size}}
   @downloadName={{@piece.file.filename}}
   @downloadLink={{@piece.file.namedDownloadLink}}
-  @onDelete={{@onDelete}}>
+  @onDelete={{@onDelete}}
+  @loading={{@loading}}>
   {{#if (or @allowDocumentContainerEdit @allowEditPieceAccessLevel)}}
     <div class="au-c-form au-u-margin-left-large scrollable-uploaded-document" data-test-uploaded-document-container>
       {{#if @allowDocumentContainerEdit}}
