@@ -104,7 +104,7 @@ export default class CurrentSessionService extends Service {
 
     const currentSessionUrl = this.session.data?.authenticated?.links?.self;
     if (currentSessionUrl) {
-      const response = await fetch(currentSessionUrl);
+      const response = await fetch(currentSessionUrl + '?skipLoginActivity=true');
       if (!response.ok) {
         this.toaster.warning(
           this.intl.t('your-session-is-invalid'),
