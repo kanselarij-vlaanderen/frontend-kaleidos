@@ -106,7 +106,7 @@ export default class CurrentSessionService extends Service {
     if (currentSessionUrl) {
       const response = await fetch(currentSessionUrl + '?skipLoginActivity=true');
       if (!response.ok) {
-        this.toaster.warning(
+        this.toaster.error(
           this.intl.t('your-session-is-invalid'),
           null,
           { timeOut: null }
