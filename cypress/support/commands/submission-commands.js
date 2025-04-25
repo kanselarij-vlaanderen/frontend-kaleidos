@@ -301,6 +301,7 @@ function openSubmission(shortTitle) {
  *  folder: String,
  *  fileName: String,
  *  fileExtension: String,
+ *  mimeType: String,
  *  newFileName: String,
  *  fileType: String,
  *  fileTypeParsed: Boolean,
@@ -320,7 +321,7 @@ function addDocumentsInSubmissionFileUpload(files) {
         'GET',
         '/concepts**559774e3-061c-4f4b-a758-57228d4b68cd**'
       ).as(`loadConceptsDocType_${randomInt}`);
-      cy.uploadDraftFile(file.folder, file.fileName, file.fileExtension);
+      cy.uploadDraftFile(file.folder, file.fileName, file.fileExtension, file.mimeType);
       // ensure the new uploadedDocument component is visible before trying to continue
       cy.get(document.uploadedDocument.nameInput, {
         timeout: 60000,
@@ -346,7 +347,7 @@ function addDocumentsInSubmissionFileUpload(files) {
       .find(document.uploadedDocument.documentTypes)
       .as('radioOptions');
     cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-    if (!file.fileTypeParsed) {
+    if (!file.fileTypeParsed && file.fileType) {
       cy.get('@radioOptions').within(($t) => {
         if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
           cy.get(utils.radioDropdown.input).check(file.fileType, {

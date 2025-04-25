@@ -71,6 +71,7 @@ const selectors = {
     container: '[data-test-uploaded-document-container]',
     nameInput: '[data-test-uploaded-document-name-input]',
     documentTypes: '[data-test-uploaded-document-types]',
+    accessLevel: '[data-test-uploaded-document-access-level]',
   },
 
   // add-existing-piece

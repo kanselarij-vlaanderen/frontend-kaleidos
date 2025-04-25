@@ -36,6 +36,7 @@
           <AuFormRow>
             <AuLabel>{{t (if @simplifiedOptions "confidential" "confidentiality-level")}}</AuLabel>
             <Utils::AccessLevelSelector
+              data-test-uploaded-document-access-level
               @selected={{@piece.accessLevel}}
               @allowClear={{false}}
               @simplifiedOptions={{@simplifiedOptions}}

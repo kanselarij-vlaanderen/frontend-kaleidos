@@ -1,4 +1,4 @@
-/* global context, it, cy, Cypress, before, afterEach, expect */
+/* global context, it, cy, Cypress, afterEach, expect */
 
 // / <reference types="Cypress" />
 // import cases from '../../selectors/case.selectors';
@@ -36,68 +36,6 @@ const linkedMandatee = {
   fullName: mandateeNames.current.second.fullName,
   submitter: true,
 };
-
-before(() => {
-  cy.login('Admin');
-  cy.createAgenda(null, agendaDate, 'indieningen kabinet');
-  cy.logoutFlow();
-});
-
-context('setup emails and mandatees', () => {
-  afterEach(() => {
-    cy.logout();
-  });
-
-  it('add one mandatee to dossierbeheerder', () => {
-    cy.login('Admin');
-    // setup: add minister to dossierbeheerder
-    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
-    cy.get(settings.organization.technicalInfo.showSelectMandateeModal).click();
-    cy.get(appuniversum.loader).should('not.exist');
-    cy.get(utils.mandateeSelector.container).click();
-    cy.get(dependency.emberPowerSelect.optionLoadingMessage).should(
-      'not.exist'
-    );
-    cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should(
-      'not.exist'
-    );
-    cy.get(dependency.emberPowerSelect.option)
-      .contains(linkedMandatee.fullName)
-      .scrollIntoView()
-      .click();
-    cy.intercept('PATCH', '/user-organizations/**').as(
-      'patchUserOrganizations'
-    );
-    cy.get(utils.mandateesSelector.add).should('not.be.disabled')
-      .click();
-    cy.wait('@patchUserOrganizations');
-  });
-
-  it('set email setting defaults', () => {
-    cy.login('Admin');
-    cy.get(utils.mHeader.settings).click();
-    cy.get(settings.overview.manageEmails).click();
-    cy.get(settings.email.publication.requestTo).click()
-      .clear()
-      .type('johan.delaure@redpencil.io');
-    cy.get(settings.email.submission.toSecretary).click()
-      .clear()
-      .type('johan.delaure+sec@redpencil.io');
-    cy.get(settings.email.submission.toIKW).click()
-      .clear()
-      .type('johan.delaure+ikw@redpencil.io');
-    cy.get(settings.email.submission.toKCGroup).click()
-      .clear()
-      .type('johan.delaure+KC@redpencil.io');
-    cy.get(settings.email.submission.replyTo).click()
-      .clear()
-      .type('johan.delaure+replyTo@redpencil.io');
-    cy.intercept('PATCH', '/email-notification-settings/**')
-      .as('patchEmailSettings');
-    cy.get(settings.email.save).click();
-    cy.wait('@patchEmailSettings');
-  });
-});
 
 // create Agenda for all? multiple agendas (1 of each type)? the list in the modal will be massive already
 
@@ -791,27 +729,5 @@ context.skip('change mandatees on organisation', () => {
     cy.get(utils.mandateesSelector.add).should('not.be.disabled')
       .click();
     cy.wait('@patchUserOrganizations');
-  });
-});
-
-context('cleanup mandatees from organisation', () => {
-  it('remove mandatees from organisation', () => {
-    cy.login('Admin');
-    cy.visit('instellingen/organisaties/40df7139-fdfb-4ab7-92cd-e73ceba32721');
-    // unlink first mandatee
-    cy.intercept('PATCH', '/user-organizations/**').as('patchorgs');
-    cy.get(settings.organization.technicalInfo.row.unlinkMandatee)
-      .eq(0)
-      .click();
-    cy.get(settings.organization.confirm.unlinkMandatee)
-      .click()
-      .wait('@patchorgs');
-    // unlink second mandatee
-    // cy.get(settings.organization.technicalInfo.row.unlinkMandatee).eq(0)
-    //   .click();
-    // cy.get(settings.organization.confirm.unlinkMandatee).click()
-    //   .wait('@patchorgs');
-    // cy.get(settings.organization.technicalInfo.row.mandatee).should('not.exist');
-    cy.logout();
   });
 });
