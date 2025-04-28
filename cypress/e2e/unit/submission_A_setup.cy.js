@@ -54,7 +54,7 @@ context('setup emails and mandatees', () => {
     cy.wait('@patchUserOrganizations');
   });
 
-  it.only('set email setting defaults', () => {
+  it('set email setting defaults', () => {
     cy.login('Admin');
     cy.get(utils.mHeader.settings).click();
     cy.get(settings.overview.manageEmails).click();
