@@ -66,7 +66,6 @@ export default class DocumentRoute extends Route {
 
   resetController(controller, isExiting) {
     if (isExiting) {
-      controller.isSigning = false;
       controller.tab = 'details';
     }
   }

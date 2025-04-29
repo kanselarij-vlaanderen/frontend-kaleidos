@@ -18,4 +18,14 @@ export default class SettingsUsersUserRoute extends Route {
     super.setupController(controller, model);
     controller.selectedPerson = model.person;
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.membershipBeingBlocked = null;
+      controller.showBlockUser = false;
+      controller.showUnblockUser = false;
+      controller.showBlockMembership = false;
+      controller.showUnblockMembership = false;
+    }
+  }
 }

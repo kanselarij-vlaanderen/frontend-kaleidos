@@ -35,6 +35,7 @@
               {{#each this.notaGroups.value as |notaGroup|}}
                 <Agenda::PrintableAgenda::ListSection::ItemGroup
                   @items={{notaGroup}}
+                  @decisionsAreReleased={{@model.decisionsAreReleased}}
                 />
               {{/each}}
             </div>
@@ -57,11 +58,16 @@
                       @item={{announcement}}
                     />
                   </div>
-                  {{#let (await announcement.pieces) as |pieces|}}
-                    {{#if pieces}}
-                      <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
-                        @pieces={{pieces}}
-                      />
+                  {{#let (await announcement.treatment.decisionActivity) as |decisionActivity| }}
+                    {{! Hide retracted and postponed documents when released }}
+                    {{#if (not (and @model.decisionsAreReleased (or decisionActivity.isPostponed decisionActivity.isRetracted)))}}
+                      {{#let (await announcement.pieces) as |pieces|}}
+                        {{#if pieces}}
+                          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
+                            @pieces={{pieces}}
+                          />
+                        {{/if}}
+                      {{/let}}
                     {{/if}}
                   {{/let}}
                 </div>

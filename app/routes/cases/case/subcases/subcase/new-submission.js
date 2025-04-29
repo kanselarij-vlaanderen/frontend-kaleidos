@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { TrackedArray } from 'tracked-built-ins';
 
@@ -10,16 +11,17 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
   @service currentSession;
   @service router;
   @service draftSubmissionService;
+  @service subcaseService;
 
   pieces;
   defaultAccessLevel;
   submitter;
   mandatees;
-  originalSubmission;
   approvalAddresses;
   approvalComment;
   notificationAddresses;
   notificationComment;
+  isForPostponedSubcase = false;
 
   async beforeModel(_transition) {
     if (!this.currentSession.may('create-submissions')) {
@@ -135,9 +137,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       .slice()
       .sort((m1, m2) => m1.priority - m2.priority);
 
-    // TODO verify this change. It makes sense that we check the latest submission to copy addresses rather than the original
-    this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here
-    this.originalSubmission = await this.draftSubmissionService.getOriginalSubmissionForSubcase(subcase); // used to get meeting in controller
+    this.previousSubmission = await this.draftSubmissionService.getLatestSubmissionForSubcase(subcase); // used to get addresses here and meeting in controller
 
     if (this.previousSubmission) {
       this.approvalAddresses = this.previousSubmission.approvalAddresses;
@@ -146,6 +146,13 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       this.notificationComment = this.previousSubmission.notificationComment;
     }
 
+    this.isForPostponedSubcase = false; // clear
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(subcase);
+    const decisionResultCode = await decisionActivity?.decisionResultCode;
+    if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
+      // Check whether this subcase is already on a design agenda
+      this.isForPostponedSubcase = !(await this.subcaseService.isOnDesignAgenda(subcase));
+    }
     return subcase;
   }
 
@@ -155,13 +162,39 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
     controller.defaultAccessLevel = this.defaultAccessLevel;
     controller.requestedBy = this.submitter;
     controller.mandatees = this.mandatees;
-    controller.originalSubmission = this.originalSubmission;
+    controller.previousSubmission = this.previousSubmission;
     controller.approvalAddresses = this.approvalAddresses;
     controller.approvalComment = this.approvalComment;
     controller.notificationAddresses = this.notificationAddresses;
     controller.notificationComment = this.notificationComment;
+    controller.isForPostponedSubcase = this.isForPostponedSubcase;
     // empty list of draft pieces in case user navigating away and back
     // those pieces still exist but should no longer cause hidden BIS versions on real pieces.
     controller.newDraftPieces = new TrackedArray([]);
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.isOpenPieceUploadModal = false;
+      controller.isOpenCreateSubmissionModal = false;
+      controller.hasConfidentialPieces = false;
+      controller.comment = null;
+
+      // cleanup any unsaved pieces
+      Promise.all(
+        controller.newPieces.map(async (piece) => {
+          if (!piece?.id) {
+            await deletePiece(piece);
+          }
+        }),
+      ).then(() => controller.newPieces = new TrackedArray([]));
+      Promise.all(
+        controller.newDraftPieces.map(async (piece) => {
+          if (!piece?.id) {
+            await deletePiece(piece);
+          }
+        }),
+      ).then(() => controller.newDraftPieces = new TrackedArray([]));
+    }
   }
 }

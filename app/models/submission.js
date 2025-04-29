@@ -92,6 +92,13 @@ export default class SubmissionModel extends Model {
     );
   }
 
+  get isPostponedResubmitted() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND
+    );
+  }
+
   save() {
     const dirtyType = this.dirtyType;
     const currentUser = this.currentSession.user;

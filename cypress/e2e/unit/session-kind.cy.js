@@ -76,9 +76,7 @@ context('Different session kinds should show different titles', () => {
     const vvKind = 'Ministerraad - Plan Vlaamse Veerkracht';
     const newsletterHeader = `Beslissingen van de Vlaamse Regering - ${vvKind}`;
     const formattedMeetingDateDots = agendaDate.format('DD-MM-YYYY');
-    // TODO-BUG KAS-3056 numbering not correct when creating agenda in different year
-    const fullmeetingNumber = `VR PV ${Cypress.dayjs().format('YYYY')}/${agendaNumber}`;
-    // const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
+    const fullmeetingNumber = `VR PV ${agendaDate.format('YYYY')}/${agendaNumber}`;
     const suffixVV = '-VV';
     const fullmeetingNumberVV = `${fullmeetingNumber}${suffixVV}`;
     const newCaseTitle = 'Dossier voor PVV agenda';
@@ -89,7 +87,10 @@ context('Different session kinds should show different titles', () => {
     cy.intercept('GET', '/concepts?filter**').as('loadConcepts');
 
     cy.createAgenda(null, agendaDate, null, agendaNumber);
-    // set kind to PVV
+    // wait for refresh/setup/reset of controller
+    cy.get(route.agendasOverview.dataTable).contains('Aan het laden');
+    cy.get(route.agendasOverview.dataTable).should('not.contain', 'Aan het laden');
+    // make PVV agenda
     cy.get(route.agendas.action.newMeeting).click();
     cy.get(utils.kindSelector.kind).click();
     cy.selectFromDropdown(vvKind);

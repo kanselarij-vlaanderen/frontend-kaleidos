@@ -2,7 +2,8 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -17,6 +18,7 @@ export default class AgendaitemControls extends Component {
   @service store;
   @service intl;
   @service agendaService;
+  @service subcaseService;
   @service currentSession;
   @service pieceAccessLevelService;
   @service signatureService;
@@ -37,18 +39,21 @@ export default class AgendaitemControls extends Component {
   @tracked isSendingBackToSubmitter = false;
   @tracked sendBackToSubmitterComment;
   @tracked ongoingSubmissionId;
+  @tracked canProposeForOtherAgendaWithSubmission = false;
+  @tracked subcaseIsOnMultipleAgendas = false;
 
   constructor() {
     super(...arguments);
 
     this.loadAgendaData.perform();
     this.loadDecisionActivity.perform();
-    this.loadPermittedAgendaItemActions.perform();
     this.loadSubmissions.perform();
+    this.loadPermittedAgendaItemActions.perform();
   }
 
   loadPermittedAgendaItemActions = task(async () => {
     if (this.args.subcase?.id) {
+      // VP
       const submitter = await this.args.subcase.requestedBy;
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
@@ -68,10 +73,37 @@ export default class AgendaitemControls extends Component {
       } else {
         this.canSendToVP = false;
       }
-      this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+      // submissions
+      if (this.submissions?.length) {
+        // need at least 1 submission to allow BIS submissions
+        this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+        if (this.decisionActivity?.isPostponed && this.canSubmitNewDocuments) {
+          // there are 2 cases when both are true
+          // 1 - agendaitem was postponed but not yet submitted for a new meeting > should be able to "repropose" via submission
+          // 2 - agendaitem was postponed and already placed on a new meeting by secretarie >  should be able to "add new documents"
+          // the action should have a different translation key only in case 1
+          const relatedAgendas = await this.subcaseService.getRelatedAgendas(this.args.subcase);
+          this.canProposeForOtherAgendaWithSubmission = true;
+          if (relatedAgendas.length > 1 && relatedAgendas[0].agenda.status.uri === CONSTANTS.AGENDA_STATUSSES.DESIGN) {
+            // is already resubmitted on design agenda
+            // no submission is ongoing
+            this.canProposeForOtherAgendaWithSubmission = false;
+          }
+        }
+        // when there are more than 1 agenda-activity and there are submissions, the action to send back to submitter will remove too much
+        // For now, we disable the action only in that case. (retracting or postponing and then resubmitting)
+        // It is still possible to remove the agendaitem from the agenda
+        const agendaActivities = await this.store.count('agenda-activity', {
+          'filter[subcase][:id:]': this.args.subcase.id,
+        });
+        this.subcaseIsOnMultipleAgendas = agendaActivities > 1;
+      } else {
+        this.canSubmitNewDocuments = false;
+      }
     } else {
       this.canSendToVP = false;
       this.canSubmitNewDocuments = false;
+      this.canProposeForOtherAgendaWithSubmission = false;
     }
   });
 
@@ -171,6 +203,49 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
+  async deleteItemAndSubcaseFullyForSubmission(agendaitem, submission) {
+    this.showLoader = true;
+    const agendaItemType = await agendaitem.type;
+    const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
+    if (this.isDeletable) {
+      await this.agendaService.deleteAgendaitem(agendaitem);
+    } else {
+      // should be unreachable if there is a submission
+      await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
+    }
+    // If decisionmaking flow & case are new & they don't have other subcases
+    //  → Delete
+    const subcase = await submission.subcase; // could this ever be stale? get subcase from agendaitem instead?
+    if (submission.decisionmakingFlowTitle) {
+      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
+      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+    // submission still has acceptedPieces connected to draftPieces, but are we always allowed to delete the acceptedpieces?
+    const acceptedPiecesOfSubmission = await this.store.queryAll('piece', {
+      'filter[draft-piece][submission][:id:]': submission.id,
+    });
+
+    const savePromises = acceptedPiecesOfSubmission.map(async (piece) => {
+      await deletePiece(piece, false);
+    });
+    await all(savePromises);
+
+    if (this.args.onDeleteAgendaitem) {
+      await this.args.onDeleteAgendaitem(agendaItemType, previousNumber);
+    }
+    this.showLoader = false;
+  }
+
   @task
   *postponeAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
@@ -213,24 +288,8 @@ export default class AgendaitemControls extends Component {
       this.sendBackToSubmitterComment,
       this.args.meeting,
     );
-    await this.deleteItem(agendaitem);
-    const subcase = await submission.subcase;
-    // If decisionmaking flow & case are new & they don't have other subcases
-    //  → Delete
-    if (submission.decisionmakingFlowTitle) {
-      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
-      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
-      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
-        const _case = await decisionmakingFlow.case;
-        await _case.destroyRecord();
-        await decisionmakingFlow.destroyRecord();
-      }
-    }
-    // Delete subcase
-    await subcase.destroyRecord();
-    // Delete submission activity
-    const submissionActivities = await submission.submissionActivities;
-    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+
+    await this.deleteItemAndSubcaseFullyForSubmission(agendaitem, submission);
     this.sendBackToSubmitterComment = '';
     this.isSendingBackToSubmitter = false;
   }

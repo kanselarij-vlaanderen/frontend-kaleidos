@@ -43,7 +43,7 @@ export default class SignaturesOngoingRatificationsController extends Controller
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[3];
   @tracked sort = [
-    '-meeting.planned-start',
+    '-decision-activity.treatment.agendaitems.agenda.created-for.planned-start',
     'sign-subcase.sign-marking-activity.piece.name',
   ].join(',');
   @tracked isLoadingModel;

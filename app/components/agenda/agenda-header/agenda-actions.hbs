@@ -94,16 +94,29 @@
       {{t "edit-meeting"}}
     </AuButton>
   {{/if}}
-  {{#if (and (not @meeting.isPreDigitalDecisions) (user-may "manage-decisions"))}}
-    <AuHr />
-    <AuButton
-      data-test-agenda-actions-mark-decisions-sor-signing
-      @skin="link"
-      {{on "click" this.markDecisionsForSigning}}
-      role="menuitem"
-    >
-      {{t "sign-decisions"}}
-    </AuButton>
+  {{#if (not @meeting.isPreDigitalDecisions)}}
+    {{#if (user-may "manage-decisions")}}
+      <AuHr />
+      <AuButton
+        data-test-agenda-actions-mark-decisions-for-signing
+        @skin="link"
+        {{on "click" this.markDecisionsForSigning}}
+        role="menuitem"
+      >
+        {{t "sign-decisions"}}
+      </AuButton>
+    {{/if}}
+    {{#if (user-may "remove-all-decisions")}}
+      <AuButton
+        @skin="link"
+        @alert={{true}}
+        {{on "click" (toggle "showVerifyDeleteDecisionsSignFlows" this)}}
+        role="menuitem"
+      >
+        {{t "delete-all-decisions-sign-flow-data"}}
+      </AuButton>
+      <AuHr />
+    {{/if}}
   {{/if}}
   {{#if this.canEditDesignAgenda}}
     <AuButton
@@ -113,6 +126,15 @@
       role="menuitem"
     >
       {{t "approve-all-agendaitems"}}
+    </AuButton>
+  {{/if}}
+  {{#if this.canEmptyInternalReviews}}
+    <AuButton
+      @skin="link"
+      {{on "click" this.openConfirmEmptyInternalReviews}}
+      role="menuitem"
+    >
+      {{t "empty-internal-review"}}
     </AuButton>
   {{/if}}
   {{#if this.canPublishDecisions}}
@@ -348,3 +370,34 @@
     </div>
   </:body>
 </ConfirmationModal>
+
+{{#if this.showConfirmEmptyInternalReviews}}
+  <Auk::Modal @size="small">
+    <Auk::Modal::Header
+      @title={{t "empty-internal-review"}}
+      @onClose={{this.cancelEmptyInternalReviews}}
+    />
+    <Auk::Modal::Body>
+      <p class="auk-u-text-prewrap">{{t "empty-internal-review-message"}}</p>
+    </Auk::Modal::Body>
+    <Auk::Modal::Footer @onCancel={{this.cancelEmptyInternalReviews}}>
+      <AuButton
+        @skin="primary"
+        @loading={{this.emptyInteralReviewsOfAgendaitemThrottled.isRunning}}
+        {{on "click" this.emptyInteralReviews}}
+      >
+        {{t "empty-internal-review"}}
+      </AuButton>
+    </Auk::Modal::Footer>
+  </Auk::Modal>
+{{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.showVerifyDeleteDecisionsSignFlows}}
+  @title={{t "delete-all-decisions-sign-flow-data"}}
+  @message={{t "verify-delete-all-decisions-sign-flow-data"}}
+  @onConfirm={{this.removeSignFlowDataForAllDecisions.perform}}
+  @onCancel={{toggle "showVerifyDeleteDecisionsSignFlows" this}}
+  @confirmMessage={{t "delete"}}
+  @alert={{true}}
+/>

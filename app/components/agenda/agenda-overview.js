@@ -40,13 +40,17 @@ export default class AgendaOverview extends Component {
 
   @action
   setNotas(reorderedNotas) {
-    this.args.toggleNotasHasChanged();
+    if (!this.args.notasHasChanged) {
+      this.args.toggleNotasHasChanged();
+    }
     this.notas = [...reorderedNotas];
   }
 
   @action
   setAnnouncements(reorderedAnnouncements) {
-    this.args.toggleAnnouncementsHasChanged();
+    if (!this.args.announcementsHasChanged) {
+      this.args.toggleAnnouncementsHasChanged();
+    }
     this.announcements = [...reorderedAnnouncements];
   }
 
@@ -98,7 +102,7 @@ export default class AgendaOverview extends Component {
         break;
       }
     }
-    if (agendaitemIndex > -1 && 
+    if (agendaitemIndex > -1 &&
       agendaitemIndex + offset > -1 &&
       agendaitemIndex + offset < itemArray.length) {
         itemArray[agendaitemIndex] = itemArray.splice(agendaitemIndex + offset, 1, itemArray[agendaitemIndex])[0];

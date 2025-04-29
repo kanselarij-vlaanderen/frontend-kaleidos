@@ -47,6 +47,11 @@ export default class CasesIndexController extends Controller {
         type: 'array',
       },
     },
+    {
+      noDefinitivePresent: {
+        type: 'boolean',
+      },
+    }
   ];
 
   @tracked page = 0;
@@ -58,6 +63,7 @@ export default class CasesIndexController extends Controller {
   @tracked caseFilter = null;
   @tracked isLoadingModel;
   @tracked filtersOpen = false;
+  @tracked noDefinitivePresent = false;
 
   constructor() {
     super(...arguments);

@@ -37,6 +37,8 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked selectedAgenda;
   @tracked selectedMeeting;
 
+  @tracked isForPostponedSubcase = false;
+
   constructor() {
     super(...arguments);
     this.loadAgenda.perform();
@@ -59,6 +61,14 @@ export default class SubmissionHeaderComponent extends Component {
 
         this.selectedAgenda = agenda;
         this.selectedMeeting = agenda.createdFor;
+      }
+    }
+    if (this.args.subcase?.id) {
+      const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
+      const decisionResultCode = await decisionActivity?.decisionResultCode;
+      if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
+        // Check whether this subcase is already on a design agenda
+        this.isForPostponedSubcase = !(await this.subcaseService.isOnDesignAgenda(this.args.subcase));
       }
     }
   });
@@ -103,7 +113,8 @@ export default class SubmissionHeaderComponent extends Component {
     return (
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isResubmitted) &&
+        this.args.submission?.isResubmitted ||
+        this.args.submission?.isPostponedResubmitted) &&
       this.currentSession.may('edit-sent-back-submissions') &&
       this.requestedByIsCurrentMandatee
     );
@@ -121,7 +132,8 @@ export default class SubmissionHeaderComponent extends Component {
       (this.args.submission?.isSubmitted ||
         this.args.submission?.isResubmitted ||
         this.args.submission?.isUpdateSubmitted ||
-        this.args.submission?.isSendBackRequested) &&
+        this.args.submission?.isSendBackRequested ||
+        this.args.submission?.isPostponedResubmitted) &&
       this.currentSession.may('edit-in-treatment-submissions')
     );
   }
@@ -148,6 +160,17 @@ export default class SubmissionHeaderComponent extends Component {
           this.canDeleteSubmission
         )
       )
+    );
+  }
+
+  get areTasksRunning() {
+    return (
+      this.takeInTreatment.isRunning ||
+      this.resubmitSubmission.isRunning ||
+      this.createSubcase.isRunning ||
+      this.sendBackToSubmitter.isRunning ||
+      this.deleteSubmission.isRunning ||
+      this.requestSendBackToSubmitter.isRunning
     );
   }
 
@@ -192,6 +215,13 @@ export default class SubmissionHeaderComponent extends Component {
   // In case of an update, the modal passes no parameters through,
   // so we just have to use the members of the component.
   resubmitSubmission = task(async (meeting, remarks) => {
+    await this.args.submission.belongsTo('status').reload();
+    if (!this.canResubmitSubmission) {
+      return this.toaster.error(
+        this.intl.t('submission-edited-concurrently'),
+        this.intl.t('warning-title')
+      );
+    }
     this.toggleResubmitModal();
     const selectedMeeting = meeting?.id ? meeting : this.selectedMeeting;
     const comment = meeting?.id ? remarks : this.comment;
@@ -275,6 +305,21 @@ export default class SubmissionHeaderComponent extends Component {
       formallyStatusUri,
       privateComment = null
     ) => {
+      // concurrency check with submission acceptors:
+      // concurrency shouldn't happen here since only 1 person should be able to edit a submission in this stage
+      // in reality any admin can accept a submission regardless of that and 1 non admin user could use 2 browser tabs
+      // so it remains possible to have concurrency here.
+      // we could check the modified date on submission here like we do for agendaitems and subcases
+      // internalReview already has a concurrency check on edit but happens after we saved some case data so not ideal.
+      // since status is that last thing to update, we hit internalReview concurrency before that in some cases
+      // this check will only work when the action was fully completed for the other user
+      await this.args.submission.belongsTo('status').reload();
+      if (!this.canCreateSubcase) {
+        return this.toaster.error(
+          this.intl.t('submission-edited-concurrently'),
+          this.intl.t('warning-title')
+        );
+      }
       this.toggleCreateSubcaseModal();
       const now = new Date();
       const trimmedShortTitle = trimText(this.args.submission.shortTitle);
@@ -410,7 +455,28 @@ export default class SubmissionHeaderComponent extends Component {
     }
   );
 
-  takeInTreatment = async () => {
+  takeInTreatment = task(async () => {
+    // concurrency with submission creators
+    const statusBeforeReload = this.args.submission?.isSendBackRequested;
+    await this.args.submission.belongsTo('status').reload();
+    const statusAfterReload = this.args.submission?.isSendBackRequested;
+    if (statusBeforeReload !== statusAfterReload && statusAfterReload) {
+      // ok to proceed with treatment but notify a request was made
+      this.toaster.warning(
+        this.intl.t('submission-has-send-back-requested-after-reload'),
+        this.intl.t('warning-title'),
+        {
+          timeOut: 60000,
+        }
+      );
+    }
+    // concurrency with submission acceptors, full stop here
+    if (!this.canTakeInTreatment) {
+      return this.toaster.error(
+        this.intl.t('submission-edited-concurrently'),
+        this.intl.t('warning-title')
+      );
+    }
     const subcase = await this.args.submission.subcase;
     if (subcase?.id) {
       const subcaseType = await subcase.type;
@@ -425,7 +491,7 @@ export default class SubmissionHeaderComponent extends Component {
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }
-  };
+  });
 
   createOrUpdateInternalReview = async () => {
     // Do we have a subcase already?
@@ -464,6 +530,13 @@ export default class SubmissionHeaderComponent extends Component {
   };
 
   sendBackToSubmitter = task(async () => {
+    await this.args.submission.belongsTo('status').reload();
+    if (!this.canSendBackToSubmitter) {
+      return this.toaster.error(
+        this.intl.t('submission-edited-concurrently'),
+        this.intl.t('warning-title')
+      );
+    }
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.TERUGGESTUURD,
       this.comment
@@ -479,6 +552,17 @@ export default class SubmissionHeaderComponent extends Component {
   });
 
   deleteSubmission = task(async () => {
+    const statusBefore = await this.args.submission.status;
+    const statusAfter = await this.args.submission.belongsTo('status').reload();
+    // since this based is based on a permission without status check
+    // this.canDeleteSubmission will always be true if you have the permission
+    // to slow down deletion, we can check if someone has recently changed the status and stop if true.
+    if (statusBefore.id !== statusAfter.id) {
+      return this.toaster.error(
+        this.intl.t('submission-edited-concurrently'),
+        this.intl.t('warning-title')
+      );
+    }
     const pieces = await this.args.submission.pieces;
     await Promise.all(pieces.map(async (piece) => deletePiece(piece)));
 
@@ -492,7 +576,31 @@ export default class SubmissionHeaderComponent extends Component {
     await this.router.transitionTo('submissions');
   });
 
+  openRequestSendBackModal = async() => {
+    if (await this.verifyCanRequestSendBack()) {
+      this.toggleRequestSendBackModal();
+    }
+  };
+
+  verifyCanRequestSendBack = async() => {
+    // concurrency check
+    await this.args.submission.belongsTo('status').reload();
+    if (!this.canRequestSendBack) {
+      this.toaster.warning(
+        this.intl.t('submission-already-in-treatment'),
+        this.intl.t('submission-already-in-treatment-title'),
+        {
+          timeOut: 60000,
+        }
+      );
+    }
+    return this.canRequestSendBack;
+  };
+
   requestSendBackToSubmitter = task(async () => {
+    if (!(await this.verifyCanRequestSendBack())) {
+      return;
+    }
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.AANPASSING_AANGEVRAAGD,
       this.comment

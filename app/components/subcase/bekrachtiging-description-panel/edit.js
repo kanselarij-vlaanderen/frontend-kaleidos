@@ -14,7 +14,6 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
    */
   @service store;
   @service conceptStore;
-  @service decisionReportGeneration;
   @service newsletterService;
   @service agendaitemAndSubcasePropertiesSync;
   @service pieceAccessLevelService;
@@ -48,8 +47,12 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
 
   @task
   *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+    const allAgendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
+    );
+    // ratification can only be NOTA, subcase type should be changed first (will open different edit modal)
+    this.agendaItemTypes = allAgendaItemTypes.filter(
+      (type) => type.uri !== CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
     );
   }
 
@@ -94,7 +97,6 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
     const propertiesToSetOnAgendaitem = {
       title: trimmedTitle,
       shortTitle: trimmedShortTitle,
-      type: this.agendaItemType,
     };
 
     const propertiesToSetOnSubCase = {
@@ -102,9 +104,7 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
       shortTitle: trimmedShortTitle,
       subcaseName: this.subcaseName,
       type: this.subcaseType,
-      agendaItemType: this.agendaItemType,
     };
-    const oldAgendaItemType = await this.args.subcase.agendaItemType;
     await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.subcase,
       propertiesToSetOnAgendaitem,
@@ -112,72 +112,16 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
       resetFormallyOk
     );
 
+    // ratifications shouldn't realistically be confidential
     if (this.confidentialChanged && this.args.subcase.confidential) {
       await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
       await this.updateNewsItem.perform();
-    }
-
-    if (this.agendaItemType.uri !== oldAgendaItemType.uri) {
-      await this.updateNewsletterAfterRemarkChange();
-      await this.updateDecisionReports();
+      // we do not regenerate report in this case, shouldn't really happen
     }
 
     this.args.onSave();
 
     this.isSaving = false;
-  }
-
-  async updateDecisionReports() {
-    const reports = await this.store.queryAll('report', {
-      'filter[decision-activity][subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:next-piece]': true,
-      sort: '-created',
-    });
-    for (const report of reports.slice()) {
-      const pieceParts = await report?.pieceParts;
-      if (pieceParts?.length) {
-        this.updateReportName(report, this.agendaItemType.uri);
-        await report.belongsTo('file').reload();
-        await report.save();
-        await this.decisionReportGeneration.generateReplacementReport.perform(
-          report
-        );
-      }
-    }
-  }
-
-  updateReportName(report, agendaitemTypeUri) {
-    if (agendaitemTypeUri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
-      report.name = report.name.replace('punt', 'mededeling');
-    } else {
-      report.name = report.name.replace('mededeling', 'punt');
-    }
-  }
-
-  async updateNewsletterAfterRemarkChange() {
-    const latestAgendaitem = await this.store.queryOne('agendaitem', {
-      'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
-      'filter[:has-no:next-version]': 't',
-      sort: '-created',
-    });
-    if (latestAgendaitem) {
-      const newsItem = await this.store.queryOne('news-item', {
-        'filter[agenda-item-treatment][agendaitems][:id:]': latestAgendaitem.id,
-      });
-      if (newsItem?.id) {
-        await newsItem.destroyRecord();
-      }
-      if (
-        this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
-      ) {
-        const newNewsItem =
-          await this.newsletterService.createNewsItemForAgendaitem(
-            latestAgendaitem,
-            true
-          );
-        await newNewsItem.save();
-      }
-    }
   }
 }

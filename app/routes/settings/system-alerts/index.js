@@ -7,4 +7,10 @@ export default class SystemAlertsRoute extends Route {
   model() {
     return this.store.findAll('alert');
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.selectedAlert = null;
+    }
+  }
 }

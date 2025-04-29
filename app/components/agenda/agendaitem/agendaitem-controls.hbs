@@ -59,7 +59,7 @@
           @route="cases.case.subcases.subcase.new-submission"
           role="menuitem"
         >
-          {{t "submit-new-documents"}}
+          {{t (if this.canProposeForOtherAgendaWithSubmission "resubmit-postponed-agendaitem" "submit-new-documents")}}
         </AuLink>
       {{else if this.ongoingSubmissionId}}
         <AuLink
@@ -71,8 +71,9 @@
         </AuLink>
       {{/if}}
       {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda)}}
-        {{#if (and this.agendaItemWasSubmitted this.isDeletable)}}
+        {{#if (and this.agendaItemWasSubmitted this.isDeletable (not this.subcaseIsOnMultipleAgendas))}}
           <AuButton
+            data-test-agendaitem-controls-action-send-submission-back
             @skin="link"
             @alert={{true}}
             role="menuitem"
@@ -114,7 +115,6 @@
 <ConfirmationModal
   @modalOpen={{this.isVerifyingSendBack}}
   @title={{t "send-back-to-submitter"}}
-  @message={{this.deleteWarningText}}
   @onConfirm={{fn this.verifySendBackToSubmitter @agendaitem}}
   @onCancel={{this.toggleIsVerifyingSendBack}}
   @confirmMessage={{t "delete"}}
@@ -124,6 +124,12 @@
   @loading={{this.isSendingBackToSubmitter}}
 >
   <:body>
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+    >
+      <p>{{t "send-back-to-submitter-message"}}</p>
+    </AuAlert>
     <div class="au-c-form">
       <AuFormRow>
         <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>
@@ -131,6 +137,7 @@
           id="comment-title-send-back"
           rows="2"
           @width="block"
+          @disabled={{this.isSendingBackToSubmitter}}
           {{on "input" (pick "target.value" (set this "sendBackToSubmitterComment"))}}
         />
       </AuFormRow>

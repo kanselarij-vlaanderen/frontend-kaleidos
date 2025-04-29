@@ -1,9 +1,11 @@
+@use "../auk";
+
 /* Printable agenda list
    ========================================================================== */
 
 .l-printable-agenda {
   p {
-    color: $auk-color-text;
+    color: auk.$color-text;
     line-height: 1.5;
   }
 }
@@ -41,7 +43,7 @@
 }
 
 .l-printable-agenda__item-group-header--muted { // we can't use `auk-u-text-muted` class here because because the light gray is not really suited (not light enough) for headings
-  color: $auk-gray-500 !important;
+  color: auk.$color-gray-500 !important;
 }
 
 .l-printable-agenda__item + div[value],

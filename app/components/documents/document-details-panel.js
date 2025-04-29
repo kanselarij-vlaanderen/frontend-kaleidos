@@ -35,6 +35,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   @tracked isLastVersionOfPiece;
   @tracked signedPieceCopy;
   @tracked internalReview;
+  @tracked retrievedPieces;
 
   @tracked canEditPieceWithSignFlow = false;
 
@@ -52,6 +53,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.cancelEditDetails.isRunning ||
       this.isUploadingReplacementSourceFile ||
       this.isUploadingSourceFile
+    );
+  }
+
+  get mayDelete() {
+    return (
+      this.isLastVersionOfPiece &&
+      this.canEditPieceWithSignFlow &&
+      (this.retrievedPieces?.length === 0 || this.currentSession.may('remove-piece-from-parliament'))
     );
   }
 
@@ -95,9 +104,10 @@ export default class DocumentsDocumentDetailsPanel extends Component {
 
   @task
   *loadDetailsData() {
-    this.documentType = yield this.args.documentContainer.type;
+    this.documentType = yield this.args.documentContainer?.type;
     this.accessLevel = yield this.args.piece.accessLevel;
     this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
+    this.retrievedPieces = yield this.args.piece.retrievedPieces;
   }
 
   @task
@@ -165,6 +175,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
         }
       }
     }
+    yield this.args.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
     if (this.uploadedSourceFile) {
       // use-case: we have a pdf and we want to add docx but keep our pdf
       // derived file does not exist yet in this case

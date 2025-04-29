@@ -37,15 +37,11 @@
         </div>
       </div>
       <div class="au-c-card au-o-box au-o-box--small">
-        {{#if this.loadSelectedRoles.isRunning}}
-          <Auk::Loader />
-        {{else}}
-          <UserRoleFilter
-            @selected={{this.selectedRoles}}
-            @onChange={{perform this.setRoles}}
-            @defaultEnableAllRoles={{is-empty this.selectedRoles}}
-          />
-        {{/if}}
+        <UserRoleFilter
+          @selected={{this.selectedRoles}}
+          @onChange={{perform this.setRoles}}
+          @defaultEnableAllRoles={{is-empty this.selectedRoles}}
+        />
       </div>
       <div class="au-c-card au-o-box au-o-box--small">
         <AuFieldset as |Fieldset|>

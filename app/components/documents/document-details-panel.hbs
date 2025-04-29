@@ -149,6 +149,7 @@
           {{#if
             (and
               (user-may "manage-documents")
+              @documentContainer
               (not this.isDraftPiece)
               (or
                 this.canEditPieceWithSignFlow
@@ -157,9 +158,7 @@
             )
           }}
             <Toolbar.Group @position="right" as |Group|>
-              {{#if
-                (and this.isLastVersionOfPiece this.canEditPieceWithSignFlow)
-              }}
+              {{#if this.mayDelete}}
                 <Group.Item>
                   <AuButton
                     data-test-details-tab-delete

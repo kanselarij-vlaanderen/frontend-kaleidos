@@ -3,8 +3,10 @@
 /* eslint-disable */
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 const webpack = require('webpack');
+const compileSass = require('broccoli-sass-source-maps')(require('sass'));
 
-module.exports = function (defaults) {
+module.exports = async function (defaults) {
+  const { setConfig } = await import('@warp-drive/build-config');
   const app = new EmberApp(defaults, {
     autoprefixer: {
       enabled: true,
@@ -23,13 +25,6 @@ module.exports = function (defaults) {
     flatpickr: {
       locales: ['nl'],
     },
-    outputPaths: {
-      app: {
-        css: {
-          'styleguide': '/assets/styleguide.css'
-        }
-      }
-    },
     'ember-simple-auth': {
       useSessionSetupMethod: true,
     },
@@ -42,10 +37,7 @@ module.exports = function (defaults) {
     'ember-test-selectors': {
       strip: false
     },
-    emberData: {
-      polyfillUUID: true,
-    },
-    //polyfill for insecure context (like cypress on jenkins) https://github.com/emberjs/data/tree/v5.0.0?tab=readme-ov-file#randomuuid-polyfill
+    // polyfill for insecure context (like cypress on jenkins) https://github.com/emberjs/data/tree/v5.0.0?tab=readme-ov-file#randomuuid-polyfill
     '@embroider/macros': {
       setConfig: {
         '@ember-data/store': {
@@ -67,6 +59,11 @@ module.exports = function (defaults) {
     },
   });
 
+  setConfig(app, __dirname, {
+    polyfillUUID: true
+    // WarpDrive/EmberData settings go here (if any)
+  });
+
   app.import('node_modules/sanitize-filename/index.js', {
     using: [
       {
@@ -76,5 +73,17 @@ module.exports = function (defaults) {
     ],
   });
 
-  return app.toTree();
+  // instead of using `outputPaths` for building the styleguide CSS (which is deprecated now), we use a fork of `broccoli-sass` to do this
+  const styleguideCss = compileSass(
+    ['app/styles'],
+    'styleguide.scss',
+    'assets/styleguide/styleguide.css',
+    {
+      outputStyle: process.env.DEPLOY_ENV !== 'production' ? 'expanded' : 'compressed',
+      sourceMap: process.env.DEPLOY_ENV !== 'production',
+      sourceMapEmbed: process.env.DEPLOY_ENV !== 'production'
+    }
+  );
+
+  return app.toTree([styleguideCss]);
 };

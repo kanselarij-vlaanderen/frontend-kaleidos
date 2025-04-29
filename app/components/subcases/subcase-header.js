@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 /*
  * @argument subcase
@@ -18,10 +19,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service intl;
   @service draftSubmissionService;
   @service parliamentService;
+  @service subcaseService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
   @tracked newDecisionmakingFlow = null;
+  @tracked newDecisionmakingFlowHasParliamentFlow = false;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
   @tracked isShowingOptions = false;
@@ -34,6 +37,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked canSubmitNewDocuments = false;
   @tracked currentSubmission = null;
   @tracked parliamentRetrievalActivity = null;
+  @tracked isForPostponedSubcase = false;
 
   constructor() {
     super(...arguments);
@@ -55,7 +59,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.loadData.isIdle &&
         this.currentSession.may('manage-agendaitems') &&
         (!this.args.parliamentFlow ||
-      (this.parliamentRetrievalActivity && this.args.subcases.length === 1))
+      (this.parliamentRetrievalActivity && this.args.subcases.length === 1 && this.currentSession.may('manage-agendaitems-with-parliament-flow')))
     );
   }
 
@@ -70,6 +74,12 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     }
     this.parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
+    const decisionActivity = yield this.subcaseService.getLatestDecisionActivity(this.args.subcase);
+    const decisionResultCode = yield decisionActivity?.decisionResultCode;
+    if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
+      // Check whether this subcase is already on a design agenda
+      this.isForPostponedSubcase = !(yield this.subcaseService.isOnDesignAgenda(this.args.subcase));
+    }
   }
 
   triggerDeleteCaseDialog() {
@@ -194,15 +204,16 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = true;
   }
 
-  @action
-  async selectDecisionmakingFlow(newDecisionmakingFlow) {
+  selectDecisionmakingFlow = task(async (newDecisionmakingFlow) => {
     this.newDecisionmakingFlow = newDecisionmakingFlow?.id
       ? await this.store.findRecord(
           'decisionmaking-flow',
           newDecisionmakingFlow.id
         )
       : null;
-  }
+    const _case = await this.newDecisionmakingFlow?.case;
+    this.newDecisionmakingFlowHasParliamentFlow = !!(await _case?.parliamentFlow);
+  });
 
   moveSubcase = task(async () => {
     const oldDecisionmakingFlow = this.args.decisionmakingFlow;

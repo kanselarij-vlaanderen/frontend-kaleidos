@@ -97,9 +97,13 @@ function logout(retries = 0) {
         cy.log('logout failed after 5 attempts');
       }
     }
-    cy.visit('/overzicht?sizeAgendas=2');
+    // when we visit this now it gets set in localStorage as a transitionattempt
+    // cy.visit('/overzicht?sizeAgendas=2');
+    // Depending on environment, you will end up on login page or mock-login page
+    // not visiting is causing issues with services denying call when not logged in, so visiting index instead
+    cy.visit('/');
   });
-  cy.wait(1000);
+  cy.wait(1000); // it takes a bit before we transition after a logout
   cy.log('/logout');
 }
 

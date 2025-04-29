@@ -1,0 +1,15 @@
+<div class="au-c-card au-o-box au-o-box--small">
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>{{capitalize (t "approval")}}</Fieldset.legend>
+    <Fieldset.content>
+      <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+        <AuCheckbox
+          @checked={{@noDefinitivePresent}}
+          @onChange={{@onChange}}
+        >
+          {{t "show-definitive-cases-only"}}
+        </AuCheckbox>
+      </AuCheckboxGroup>
+    </Fieldset.content>
+  </AuFieldset>
+</div>

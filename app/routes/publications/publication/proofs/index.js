@@ -112,4 +112,11 @@ export default class PublicationsPublicationProofsRoute extends Route {
     controller.publicationSubcase = this.publicationSubcase;
     controller.publicationActivitiesCount = this.publicationActivitiesCount;
   }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.showProofUploadModal = false;
+      controller.showProofRequestModal = false;
+    }
+  }
 }

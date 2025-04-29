@@ -107,7 +107,7 @@ const selectors = {
     downloadDecisions: '[data-test-agenda-actions-download-decisions]',
     generateSignedDecisionsBundle: '[data-test-agenda-actions-generate-signed-decisions-bundle]',
     toggleEditingMeeting: '[data-test-agenda-actions-toggle-editing-meeting]',
-    markDecisionsForSigning: '[data-test-agenda-actions-mark-decisions-sor-signing]',
+    markDecisionsForSigning: '[data-test-agenda-actions-mark-decisions-for-signing]',
     releaseDecisions: '[data-test-agenda-actions-release-decisions]',
     planReleaseDocuments: '[data-test-agenda-actions-release-documents-planning]',
     approveAllAgendaitems: '[data-test-agenda-actions-approve-all-agendaitems]',
@@ -219,6 +219,7 @@ const selectors = {
       delete: '[data-test-agendaitem-controls-action-delete]',
       postponeRevert: '[data-test-agendaitem-controls-action-postpone-revert]',
       postpone: '[data-test-agendaitem-controls-action-postpone]',
+      sendSubmissionBack: '[data-test-agendaitem-controls-action-send-submission-back]',
     },
   },
 

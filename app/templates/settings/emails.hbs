@@ -22,7 +22,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.translationRequestToEmail}}
-                {{on "input" (pick "target.value" (set this "model.translationRequestToEmail"))}}
+                @error={{this.validators.translationRequestToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "translationRequestToEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
@@ -31,7 +32,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.translationRequestCcEmail}}
-                {{on "input" (pick "target.value" (set this "model.translationRequestCcEmail"))}}
+                @error={{this.validators.translationRequestCcEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "translationRequestCcEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
@@ -40,7 +42,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.translationRequestReplyToEmail}}
-                {{on "input" (pick "target.value" (set this "model.translationRequestReplyToEmail"))}}
+                @error={{this.validators.translationRequestReplyToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "translationRequestReplyToEmail"))}}
               />
             </AuFormRow>
           </div>
@@ -56,7 +59,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.proofRequestToEmail}}
-                {{on "input" (pick "target.value" (set this "model.proofRequestToEmail"))}}
+                @error={{this.validators.proofRequestToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "proofRequestToEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
@@ -65,7 +69,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.proofRequestCcEmail}}
-                {{on "input" (pick "target.value" (set this "model.proofRequestCcEmail"))}}
+                @error={{this.validators.proofRequestCcEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "proofRequestCcEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
@@ -74,7 +79,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.proofRequestReplyToEmail}}
-                {{on "input" (pick "target.value" (set this "model.proofRequestReplyToEmail"))}}
+                @error={{this.validators.proofRequestReplyToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "proofRequestReplyToEmail"))}}
               />
             </AuFormRow>
           </div>
@@ -91,7 +97,8 @@
               <AuInput
                 data-test-route-settings-emails-publication-request-to
                 value={{this.model.publicationRequestToEmail}}
-                {{on "input" (pick "target.value" (set this "model.publicationRequestToEmail"))}}
+                @error={{this.validators.publicationRequestToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "publicationRequestToEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
@@ -100,7 +107,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.publicationRequestCcEmail}}
-                {{on "input" (pick "target.value" (set this "model.publicationRequestCcEmail"))}}
+                @error={{this.validators.publicationRequestCcEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "publicationRequestCcEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
@@ -109,7 +117,8 @@
               </AuLabel>
               <AuInput
                 value={{this.model.publicationRequestReplyToEmail}}
-                {{on "input" (pick "target.value" (set this "model.publicationRequestReplyToEmail"))}}
+                @error={{this.validators.publicationRequestReplyToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "publicationRequestReplyToEmail"))}}
               />
             </AuFormRow>
           </div>
@@ -120,43 +129,47 @@
           <h4>{{t "cabinet-submissions"}}</h4>
           <div class="au-c-form">
             <AuFormRow @alignment="inline">
-              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "secretary-mail"}}
               </AuLabel>
               <AuInput
                 data-test-route-settings-emails-submission-to-secretary
                 value={{this.model.cabinetSubmissionsSecretaryEmail}}
-                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsSecretaryEmail"))}}
+                @error={{this.validators.cabinetSubmissionsSecretaryEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "cabinetSubmissionsSecretaryEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
-              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "ikw"}}
               </AuLabel>
               <AuInput
                 data-test-route-settings-emails-submission-to-ikw
                 value={{this.model.cabinetSubmissionsIkwEmail}}
-                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsIkwEmail"))}}
+                @error={{this.validators.cabinetSubmissionsIkwEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "cabinetSubmissionsIkwEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
-              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "kc-group"}}
               </AuLabel>
               <AuInput
                 data-test-route-settings-emails-submission-to-kc-group
                 value={{this.model.cabinetSubmissionsIkwConfidentialEmail}}
-                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsIkwConfidentialEmail"))}}
+                @error={{this.validators.cabinetSubmissionsIkwConfidentialEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "cabinetSubmissionsIkwConfidentialEmail"))}}
               />
             </AuFormRow>
             <AuFormRow @alignment="inline">
-              <AuLabel class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
+              <AuLabel @required={{true}} class="au-u-2-6 au-u-max-width-tiny au-u-max-width-tiny">
                 {{t "email-reply-to"}}
               </AuLabel>
               <AuInput
                 data-test-route-settings-emails-submission-reply-to
                 value={{this.model.cabinetSubmissionsReplyToEmail}}
-                {{on "input" (pick "target.value" (set this "model.cabinetSubmissionsReplyToEmail"))}}
+                @error={{this.validators.cabinetSubmissionsReplyToEmail.showError}}
+                {{on "input" (pick "target.value" (fn this.onInputProperty "cabinetSubmissionsReplyToEmail"))}}
               />
             </AuFormRow>
           </div>

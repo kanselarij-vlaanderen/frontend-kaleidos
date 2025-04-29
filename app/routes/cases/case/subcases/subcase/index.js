@@ -1,8 +1,10 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
-import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
   @service store;
@@ -105,6 +107,12 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
       const documentPublicationStatus = await documentPublicationActivity?.status;
       this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
+
+    // show accepted but not propagated pieces as "new"
+    this.piecesNotOnAgenda = await this.store.queryAll('piece', {
+      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[:has-no:agendaitems]': true,
+    });
   }
 
   async setupController(controller) {
@@ -117,5 +125,23 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     controller.governmentAreas = this.governmentAreas;
     controller.documentsAreVisible = this.documentsAreVisible;
     controller.defaultAccessLevel = this.defaultAccessLevel;
+    controller.piecesNotOnAgenda = this.piecesNotOnAgenda;
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.isOpenPieceUploadModal = false;
+      controller.isOpenBatchDetailsModal = false;
+
+      // cleanup any unsaved pieces
+      Promise.all(
+        controller.newPieces.map(async (piece) => {
+          if (!piece?.id) {
+            // don't delete the draft-piece here.
+            await deletePiece(piece, false);
+          }
+        }),
+      ).then(() => controller.newPieces = new TrackedArray([]));
+    }
   }
 }

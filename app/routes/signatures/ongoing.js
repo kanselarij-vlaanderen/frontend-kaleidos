@@ -58,7 +58,16 @@ export default class SignaturesOngoingRoute extends Route {
       params.page = 0;
     }
 
-    const filter = { ':has-no:meeting': true };
+    const filter = {
+      ':has-no:meeting': true,
+      'sign-subcase': {
+        'sign-marking-activity': {
+          piece: {
+            ':has-no:ratification-subcase': true,
+          }
+        },
+      },
+    };
     if (this.currentSession.may('view-all-ongoing-signatures')) {
       filter[':has:creator'] = 't';
     } else {

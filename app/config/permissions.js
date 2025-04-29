@@ -47,6 +47,7 @@ const {
 // - manage-retracted-agendaitems: Re-propose retracted agendaitems
 // - manage-press-agenda: Allow access to press agenda action
 // - manage-decisions: Change the decision result, upload a decision report
+// - remove-all-decisions: Shows a button to remove all decisions
 // - manage-cases: Create and update cases
 // - manage-users: Block and archive users
 // - manage-alerts: Manage systeem notifications to be shown in the application
@@ -65,7 +66,8 @@ const {
 // - send-cases-to-vp: allow sending a case's documents to the VP (Flemish Parliament).
 // - send-only-specific-cases-to-vp: allow sending a restricted selection of cases' documents to the VP (Flemish Parliament).
 // - impersonate-users: Use the app as if you were a different user, without logging it with their credentials
-// - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems
+// - view-documents-postponed-and-retracted: Allow viewing the documents of retracted or postponed agendaitems (subcase view)
+// - view-documents-postponed-and-retracted-on-agendaitem: Allow viewing the documents of retracted or postponed agendaitems (agendaitem view)
 // - view-mandatees-with-range: Allow the viewing of the startDate and endDate for mandatees in agendaitem and subcase views
 // - create-submissions: Allow the creation of submissions (by cabinets)
 // - treat-and-accept-submissions: Allow the treating of submissions on placing the agenda
@@ -76,6 +78,9 @@ const {
 // - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
 // - create-subcases-from-submissions: Allow creating a real subcase (and pieces, files, ...) from a submission
 // - delete-submissions
+// - upload-any-submission-document-extension: no enforced restrictions on mime-type/extension of document uploaded (submission mostly)
+// - remove-piece-from-parliament
+// - manage-agendaitems-with-parliament-flow
 
 const groups = [
   {
@@ -95,6 +100,7 @@ const groups = [
         'search-confidential-documents',
         'impersonate-users',
         'view-documents-postponed-and-retracted',
+        'view-documents-postponed-and-retracted-on-agendaitem',
         'view-mandatees-with-range',
         'view-access-level-pill-when-postponed',
         'view-submissions',
@@ -111,6 +117,7 @@ const groups = [
         'manage-agendaitems',
         'manage-retracted-agendaitems',
         'manage-decisions',
+        'remove-all-decisions',
         'manage-ratification',
         'manage-cases',
         'manage-meetings',
@@ -134,6 +141,9 @@ const groups = [
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
         'delete-submissions',
+        'upload-any-submission-document-extension',
+        'remove-piece-from-parliament',
+        'manage-agendaitems-with-parliament-flow',
       ]
     }
   },
@@ -181,6 +191,7 @@ const groups = [
         'treat-and-accept-submissions',
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
+        'upload-any-submission-document-extension',
       ]
     }
   },
@@ -225,6 +236,7 @@ const groups = [
         'treat-and-accept-submissions',
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
+        'upload-any-submission-document-extension',
       ]
     }
   },

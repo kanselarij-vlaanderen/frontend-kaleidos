@@ -64,7 +64,7 @@
             </LinkTo>
             <div class="vlc-document-card-content__meta">
               {{! no piece.created in legacy data }}
-              {{#if this.dateToShow}}
+              {{#if (and this.dateToShow (not this.loadPieceRelatedData.isRunning))}}
                 <p
                   data-test-document-card-primary-source-created={{if
                     this.piece.file.derived
@@ -256,7 +256,7 @@
                     {{t "stop-sign-flow"}}
                   </AuButton>
                 {{/if}}
-                {{#if (not @hideDelete)}}
+                {{#if this.mayDelete}}
                   <AuHr />
                   <AuButton
                     data-test-document-card-delete
@@ -349,6 +349,7 @@
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
         @onDelete={{perform this.deleteUploadedPiece}}
+        @loading={{this.addPiece.isRunning}}
       />
     {{else}}
       <Auk::FileUploader @multiple={{false}} @onUpload={{perform this.uploadPiece}} />

@@ -144,7 +144,7 @@
         @disabled={{eq this.newDraftPieces.length 0}}
         {{on "click" (toggle "isOpenCreateSubmissionModal" this)}}
         >
-        {{t "new-submission"}}
+          {{this.confirmButtonLabel}}
       </AuButton>
     </Group>
   </AuToolbar>
@@ -168,6 +168,8 @@
         @multiple={{true}}
         @reusable={{true}}
         @onUpload={{this.uploadPiece}}
+        @validateFile={{this.validateFile}}
+        @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
       />
       <div class="upload-container">
         {{#each this.newPieces as |piece|}}
@@ -184,26 +186,35 @@
   </:body>
 </ConfirmationModal>
 
-<ConfirmationModal
-  @modalOpen={{this.isOpenCreateSubmissionModal}}
-  @title={{t "new-submission"}}
-  @onConfirm={{perform this.createSubmission}}
-  @onCancel={{this.cancelCreateSubmission}}
-  @confirmMessage={{t "new-submission"}}
-  @disabled={{this.createSubmission.isRunning}}
-  @loading={{this.createSubmission.isRunning}}
->
-  <:body>
-    <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
-    <AuTextarea
-      id="remarks"
-      rows="4"
-      value=""
-      @width="block"
-      {{on "input" (pick "target.value" (set this "comment"))}}
+{{#if this.isOpenCreateSubmissionModal}}
+  {{#if this.isForPostponedSubcase}}
+    <Cases::Submissions::ProposableAgendasModal
+      @onCancel={{this.cancelCreateSubmission}}
+      @onConfirm={{perform this.createSubmission}}
     />
-  </:body>
-</ConfirmationModal>
+  {{else}}
+    <ConfirmationModal
+      @modalOpen={{this.isOpenCreateSubmissionModal}}
+      @title={{t "new-submission"}}
+      @onConfirm={{perform this.createSubmission}}
+      @onCancel={{this.cancelCreateSubmission}}
+      @confirmMessage={{t "new-submission"}}
+      @disabled={{this.createSubmission.isRunning}}
+      @loading={{this.createSubmission.isRunning}}
+    >
+      <:body>
+        <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
+        <AuTextarea
+          id="remarks"
+          rows="4"
+          value=""
+          @width="block"
+          {{on "input" (pick "target.value" (set this "comment"))}}
+        />
+      </:body>
+    </ConfirmationModal>
+  {{/if}}
+{{/if}}
 
 {{#if this.createSubmission.isRunning}}
   <Auk::Modal @size="medium">

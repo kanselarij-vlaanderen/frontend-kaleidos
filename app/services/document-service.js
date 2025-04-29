@@ -54,6 +54,16 @@ export default class DocumentService extends Service {
           });
         }
       }
+    } else {
+      this.toaster.show(CopyErrorToClipboardToast, {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('error-while-stamping-document'),
+        errorContent: JSON.stringify(data),
+        showDatetime: true,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
+      });
     }
   }
 
@@ -79,6 +89,16 @@ export default class DocumentService extends Service {
           });
         }
       }
+    } else {
+      this.toaster.show(CopyErrorToClipboardToast, {
+        title: this.intl.t('warning-title'),
+        message: this.intl.t('error-while-stamping-document'),
+        errorContent: JSON.stringify(data),
+        showDatetime: true,
+        options: {
+          timeOut: 60 * 10 * 1000,
+        },
+      });
     }
   }
 
