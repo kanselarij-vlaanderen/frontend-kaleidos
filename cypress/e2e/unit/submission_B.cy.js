@@ -44,11 +44,17 @@ context('Submission happy flows', () => {
     cy.logout();
   });
 
+  const limitedAccess = 'Beperkte toegang';
+  const submittedStatus = 'Ingediend';
+  const treatedStatus = 'Behandeld';
+  const sentbackStatus = 'Teruggestuurd';
+  const reSubmittedStatus = 'Opnieuw ingediend';
+
   const accessCabinet = 'Intern Regering';
   const accessConfidential = 'Vertrouwelijk';
   const agendaDateFormatted = agendaDate.format('DD-MM-YYYY');
   const agendaTypeNota = 'Nota';
-  // const agendaTypeAnnouncement = 'Mededeling';
+  const agendaTypeAnnouncement = 'Mededeling';
   const mandatee1 = {
     fullName: mandateeNames.current.first.fullName,
     submitter: false,
@@ -92,6 +98,7 @@ context('Submission happy flows', () => {
 
   // first submission for new case
   const submissionNewCaseShortTitle = `Submission new case short title 1 - ${currentTimestamp()}`;
+  // const submissionNewCaseShortTitle = 'Submission new case short title 1 - 1745846633';
   const submissionNewCase = {
     newCase: true,
     agendaitemType: agendaTypeNota,
@@ -113,7 +120,7 @@ context('Submission happy flows', () => {
 
   // first submission for an existing case
   const submissionExistingCaseShortTitle = `Submission existing case short title 1 - ${currentTimestamp()}`;
-  // const submissionExistingCaseShortTitle = 'Submission existing case short title 1 - 1725621062'
+  // const submissionExistingCaseShortTitle = 'Submission existing case short title 1 - 1745846633';
   const previousSubcaseInfo = {
     agendaitemType: agendaTypeNota,
     shortTitle: 'Cypress test: profile rights - subcase 2 with decision - 1715070204',
@@ -457,6 +464,47 @@ context('Submission happy flows', () => {
     cy.get(submissions.statusChangeActivity.item).contains(submissionExistingCase.comment);
   });
 
+  it('check the submissions table after creating both', () => {
+    cy.login('Kabinetdossierbeheerder');
+    cy.visit('/indieningen?aantal=2');
+    // these 2 will only be in view if there is no submission on a later agenda
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionNewCaseShortTitle)
+      .parents('tr')
+      .as('submissionNewCaseRow');
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionExistingCaseShortTitle)
+      .parents('tr')
+      .as('submissionExistingCaseRow');
+
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.newCase);
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.limitedAccess)
+      .should('contain', limitedAccess);
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.plannedStart)
+      .should('contain', agendaDateFormatted);
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.subcaseType)
+      .contains(submissionNewCase.subcaseType, {
+        matchCase: false,
+      });
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', submittedStatus);
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.goToSubmission);
+
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.newCase)
+      .should('not.exist');
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.limitedAccess)
+      .should('not.exist');
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.plannedStart)
+      .should('contain', agendaDateFormatted);
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.subcaseType)
+      .contains(submissionExistingCase.subcaseType, {
+        matchCase: false,
+      });
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', submittedStatus);
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.goToSubmission);
+  });
+
   it('open the first submission as admin, check available options', () => {
     cy.login('Admin');
     // TODO-Setup move these to profile tests eventually per status per profile
@@ -636,6 +684,27 @@ context('Submission happy flows', () => {
     cy.acceptSubmissionCreateSubcase(submissionExistingCase);
   });
 
+  it('check the submissions table after accepting both', () => {
+    cy.login('Kabinetdossierbeheerder');
+    cy.visit('/indieningen?aantal=2');
+    // these 2 will only be in view if there is no submission on a later agenda
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionNewCaseShortTitle)
+      .parents('tr')
+      .as('submissionNewCaseRow');
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionExistingCaseShortTitle)
+      .parents('tr')
+      .as('submissionExistingCaseRow');
+
+    // only status changed
+    // a case was created but not visible yet to this profile
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', treatedStatus);
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', treatedStatus);
+  });
+
   it('send back the submission from the agenda', () => {
     cy.login('Kanselarij');
     const fileSpy = cy.spy();
@@ -681,6 +750,176 @@ context('Submission happy flows', () => {
     cy.get(document.draftDocumentCard.card).should('have.length', 2);
     // check we didn't get routed to a subcase view
     cy.url().should('contain', '/dossiers/indieningen');
+  });
+
+  it('check the submissions table after sending back one', () => {
+    cy.login('Kabinetdossierbeheerder');
+    cy.visit('/indieningen?aantal=2');
+    // these 2 will only be in view if there is no submission on a later agenda
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionNewCaseShortTitle)
+      .parents('tr')
+      .as('submissionNewCaseRow');
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionExistingCaseShortTitle)
+      .parents('tr')
+      .as('submissionExistingCaseRow');
+
+    // only status changed (The case was removed but was not yet visible to this profile)
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', sentbackStatus);
+
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', treatedStatus);
+  });
+
+  it('change and resubmit the first submission', () => {
+    const randomInt = Math.floor(Math.random() * Math.floor(10000));
+    cy.intercept('POST', '/submission-status-change-activities')
+      .as(`createNewSubmissionStatusChangeActivity${randomInt}`);
+    cy.intercept('PATCH', '/submissions/*').as(`patchSubmission${randomInt}`);
+
+    cy.login('Kabinetdossierbeheerder');
+    cy.openSubmission(submissionNewCase.shortTitle);
+    // can edit description
+    // can not change anything about the new case
+    cy.get(submissions.descriptionView.edit).click();
+    cy.get(submissions.decisionmakingFlowSelector.newCaseTitle)
+      .should('be.disabled')
+      .should('have.value', submissionNewCase.shortTitle);
+    cy.get(submissions.decisionmakingFlowSelector.useDifferentCase)
+      .should('not.exist');
+    cy.get(submissions.decisionmakingFlowSelector.useExistingCase)
+      .should('not.exist');
+    cy.get(submissions.decisionmakingFlowSelector.useNewCase)
+      .should('not.exist');
+    cy.get(submissions.decisionmakingFlowSelector.existingCaseTitle)
+      .should('not.exist');
+
+    // change to announcement
+    cy.get(submissions.descriptionEdit.agendaitemType).contains(agendaTypeAnnouncement)
+      .find('input')
+      .should('not.be.checked')
+      .parent()
+      .click();
+
+    // currently confidential
+    cy.get(submissions.descriptionEdit.confidential).should('be.checked');
+
+    cy.get(submissions.descriptionEdit.shortTitle).should('have.value', submissionNewCase.shortTitle);
+    cy.get(submissions.descriptionEdit.title).should('not.exist');
+    cy.get(submissions.descriptionEdit.subcaseType).should('contain', submissionNewCase.subcaseType, {
+      matchCase: false,
+    });
+    cy.get(submissions.descriptionEdit.shortcut).should('not.exist');
+    cy.get(submissions.descriptionEdit.shortcutEdit).should('not.exist');
+    cy.get(submissions.descriptionEdit.subcaseName).should('not.exist');
+    cy.get(submissions.descriptionEdit.subcaseNameCancel).should('not.exist');
+    cy.get(submissions.descriptionEdit.subcaseNameClear).should('not.exist');
+    cy.get(submissions.descriptionEdit.save).click();
+    cy.wait(`@patchSubmission${randomInt}`);
+
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
+    cy.get(mandatee.mandateePanelView.actions.edit).click();
+    cy.get(mandatee.mandateePanelEdit.rows)
+      .eq(0)
+      .within(() => {
+        cy.get(mandatee.mandateePanelEdit.row.submitter)
+          .find('input')
+          .should('not.be.checked')
+          .should('be.disabled');
+        cy.get(mandatee.mandateePanelEdit.row.delete).should('not.be.disabled');
+      });
+    cy.get(mandatee.mandateePanelEdit.rows)
+      .eq(1)
+      .within(() => {
+        cy.get(mandatee.mandateePanelEdit.row.submitter)
+          .find('input')
+          .should('be.checked')
+          .should('be.disabled');
+        cy.get(mandatee.mandateePanelEdit.row.delete).should('be.disabled');
+      });
+    // remove third mandatee
+    cy.get(mandatee.mandateePanelEdit.rows)
+      .eq(2)
+      .within(() => {
+        cy.get(mandatee.mandateePanelEdit.row.submitter)
+          .find('input')
+          .should('not.be.checked')
+          .should('be.disabled');
+        cy.get(mandatee.mandateePanelEdit.row.delete).should('not.be.disabled')
+          .click();
+      });
+    cy.get(mandatee.mandateePanelEdit.actions.save).click();
+    cy.wait(`@patchSubmission${randomInt}`);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 2);
+
+    // add a new mandatee
+    cy.addSubmissionMandatee(mandateeNames.current.fourth);
+    cy.get(mandatee.mandateePanelView.rows).should('have.length', 3);
+
+    // this util component is generic and has been tested in other specs
+    cy.get(utils.governmentAreasPanel.edit);
+    cy.get(utils.governmentAreasPanel.rows).as('listItemsAreas');
+    cy.get('@listItemsAreas').should('have.length', 2, {
+      timeout: 5000,
+    });
+    cy.get('@listItemsAreas')
+      .eq(0)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain1.name);
+    cy.get('@listItemsAreas')
+      .eq(0)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', '-');
+    cy.get('@listItemsAreas')
+      .eq(1)
+      .find(utils.governmentAreasPanel.row.label)
+      .should('contain', domain2.name);
+    cy.get('@listItemsAreas')
+      .eq(1)
+      .find(utils.governmentAreasPanel.row.fields)
+      .should('contain', domain2.fields[(0, 1)]);
+
+    // notification edits are allowed
+    cy.get(submissions.notificationsPanel.edit);
+
+    // header
+    cy.get(submissions.submissionHeader.actions).should('not.exist');
+    cy.get(submissions.submissionHeader.requestSendBack).should('not.exist');
+    cy.get(submissions.submissionHeader.resubmit).click();
+    // TODO-command, also used in the createSubmission command
+    // select the agenda for the submission
+    cy.get(submissions.proposableAgendas.agendaRow)
+      .children()
+      .contains(submissionNewCase.agendaDate)
+      .scrollIntoView()
+      .click();
+    // save the form
+    cy.get(submissions.proposableAgendas.save).click();
+    cy.wait(`@createNewSubmissionStatusChangeActivity${randomInt}`);
+    cy.wait(`@patchSubmission${randomInt}`);
+  });
+
+  it('check the submissions table after resubmitting', () => {
+    cy.login('Kabinetdossierbeheerder');
+    cy.visit('/indieningen?aantal=2');
+    // these 2 will only be in view if there is no submission on a later agenda
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionNewCaseShortTitle)
+      .parents('tr')
+      .as('submissionNewCaseRow');
+    cy.get(route.submissionsOverview.row.shortTitle)
+      .contains(submissionExistingCaseShortTitle)
+      .parents('tr')
+      .as('submissionExistingCaseRow');
+
+    // only status changed
+    cy.get('@submissionNewCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', reSubmittedStatus);
+
+    cy.get('@submissionExistingCaseRow').find(route.submissionsOverview.row.status)
+      .should('contain', treatedStatus);
   });
 
   // needs an existing subcase with at least 1 submission

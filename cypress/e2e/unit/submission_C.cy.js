@@ -16,12 +16,6 @@ import mandateeNames from '../../selectors/mandatee-names.selectors';
 import submissions from '../../selectors/submission.selectors';
 import utils from '../../selectors/utils.selectors';
 
-// TODO-submission test sending back, request sending back, removing, sending back when on agenda
-// TODO-submission more profile testing, who can see what when.
-// TODO-submission all update submission testing
-// TODO-submission change mandatee to co-mandatee and check actions
-// TODO-submission change mandatee to not a co-mandatee and check actions
-
 // function currentTimestamp() {
 //   return Cypress.dayjs().unix();
 // }

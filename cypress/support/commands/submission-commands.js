@@ -10,6 +10,7 @@ import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import submissions from '../../selectors/submission.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -289,6 +290,7 @@ function openSubmission(shortTitle) {
   }).contains(shortTitle)
     .parents('tr')
     .click();
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/openSubmission');
 }
 
@@ -475,12 +477,59 @@ function takeInTreatment() {
   cy.log('/takeInTreatment');
 }
 
+/**
+ * Adds a mandatee to a submission when used in the submission view
+ * Pass a valid entry from 'mandatee-names.selectors.js'
+ * @name addSubmissionMandatee
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
+ */
+function addSubmissionMandatee(mandateeNamesSelector = mandateeNames.current.first) {
+  cy.log('addSubmissionMandatee');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/mandatees?filter**government-body**').as(`getMandatees${randomInt}`);
+
+  cy.intercept('PATCH', '/submissions/*').as(`patchSubmission${randomInt}`);
+  cy.get(mandatee.mandateePanelView.actions.edit).click();
+  cy.get(mandatee.mandateePanelEdit.actions.add).click();
+  cy.wait(`@getGovernmentBodies${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`, {
+    timeout: 60000,
+  });
+  cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
+    .click();
+  cy.get(dependency.emberPowerSelect.searchInput).type(mandateeNamesSelector.lastName);
+  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+
+  // when searching we select the result with a specific title
+  if (mandateeNamesSelector.searchTitle) {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.searchTitle)
+      .click();
+  } else {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.title)
+      .click();
+  }
+  cy.get(dependency.emberPowerSelect.option).should('not.exist', {
+    timeout: 60000,
+  });
+  cy.get(utils.mandateesSelector.add).click();
+  cy.get(mandatee.mandateePanelEdit.actions.save).click();
+  cy.wait(`@patchSubmission${randomInt}`, {
+    timeout: 40000,
+  });
+  cy.log('/addSubmissionMandatee');
+}
+
 // Commands
 
 Cypress.Commands.add('createSubmission', createSubmission); // used for new or existing case
 Cypress.Commands.add('openSubmission', openSubmission);
 Cypress.Commands.add('acceptSubmissionCreateSubcase', acceptSubmissionCreateSubcase);
 Cypress.Commands.add('takeInTreatment', takeInTreatment);
+Cypress.Commands.add('addSubmissionMandatee', addSubmissionMandatee);
 // Cypress.Commands.add('openSubmissionInAgenda', openSubmissionInAgenda);
 // Cypress.Commands.add('createUpdateSubmission', createUpdateSubmission);
 

@@ -3,6 +3,7 @@
   <div class="au-u-flex au-u-flex--spaced-small auk-u-maximize-width">
     {{#if @selectedDecisionmakingFlow}}
       <AuInput
+        data-test-submission-decisionmaking-flow-selector-existing-case-title
         id="newCaseTitleId"
         value={{@selectedDecisionmakingFlow.case.shortTitle}}
         @width="block"
@@ -11,6 +12,7 @@
       {{#unless @disableEdit}}
         <AuButtonGroup class="au-u-flex--no-wrap">
           <AuButton
+            data-test-submission-decisionmaking-flow-selector-use-new-case
             @skin="secondary"
             @icon="pencil"
             {{on "click" (queue this.onClearSelectedDecisionmakingFlow this.setFocus)}}
@@ -18,6 +20,7 @@
             {{t "new-case"}}
           </AuButton>
           <AuButton
+            data-test-submission-decisionmaking-flow-selector-use-different-case
             @skin="secondary"
             @icon="add"
             {{on "click" (toggle "isUsingExistingDecisionmakingFlow" this)}}
@@ -28,6 +31,7 @@
       {{/unless}}
     {{else}}
       <AuInput
+        data-test-submission-decisionmaking-flow-selector-new-case-title
         id="newCaseTitleId"
         value={{@selectedDecisionmakingFlowTitle}}
         @width="block"
@@ -37,6 +41,7 @@
       {{#unless @disableEdit}}
         <AuButtonGroup class="au-u-flex--no-wrap">
           <AuButton
+            data-test-submission-decisionmaking-flow-selector-use-existing-case
             @skin="secondary"
             @icon="add"
             {{on "click" (toggle "isUsingExistingDecisionmakingFlow" this)}}
