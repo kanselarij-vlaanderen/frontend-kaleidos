@@ -34,6 +34,12 @@ export default class ExtendedSessionService extends SessionService {
         params: params,
         paramNames: paramNames?.reverse()
        }));
+    } else {
+      // When checking if current session is valid in DB, we are still "authenticated" here but no longer have a valid currentSession
+      // When navigating once after the forced logout, we hit this function and invalidate the session 
+      if (!this.currentSession.isLoggedIn) {
+        return this.handleInvalidation();
+      }
     }
     return super.requireAuthentication(transition, routeOrCallback);
   }
