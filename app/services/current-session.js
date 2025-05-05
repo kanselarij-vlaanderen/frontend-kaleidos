@@ -17,6 +17,7 @@ export default class CurrentSessionService extends Service {
   @tracked organization;
   @tracked membership;
   @tracked role;
+  @tracked isLoggedIn;
 
   constructor() {
     super(...arguments);
@@ -27,6 +28,7 @@ export default class CurrentSessionService extends Service {
   /* eslint-disable ember/no-get */
   async load() {
     if (this.session.isAuthenticated) {
+      this.isLoggedIn = true;
       const membershipId = get(this.session, 'data.authenticated.data.relationships.membership.data.id');
       if (membershipId) {
         this.membership = await this.store.findRecord('membership', membershipId, {
@@ -51,6 +53,7 @@ export default class CurrentSessionService extends Service {
     this.role = null;
     this.organization = null;
     this.impersonation.stopImpersonation();
+    this.isLoggedIn = false;
   }
 
   may(permission, checkImpersonator = false) {
@@ -87,6 +90,10 @@ export default class CurrentSessionService extends Service {
     return this.session.isAuthenticated;
   }
 
+  get isLoggedIn() {
+    return this.isLoggedIn;
+  }
+
   /*****
    * Polling for logged in status logic is below!
    */
@@ -94,7 +101,8 @@ export default class CurrentSessionService extends Service {
 
   async lifecycle() {
     // For as long as the user is logged in, we continue periodically polling
-    if (await this._checkLoggedInStatus()) {
+    this.isLoggedIn = await this._checkLoggedInStatus();
+    if (this.isLoggedIn) {
       later(this, this.lifecycle, this.updateInterval);
     }
   }
