@@ -282,14 +282,24 @@ function createSubmission(submission) {
  * @function
  * @param {shortTitle: String}
 */
-function openSubmission(shortTitle) {
+function openSubmission(shortTitle, index = 0) {
   cy.log('openSubmission');
   cy.visit('indieningen?aantal=50');
-  cy.get(route.submissionsOverview.dataTable, {
-    timeout: 60000,
-  }).contains(shortTitle)
-    .parents('tr')
-    .click();
+  if (shortTitle) {
+    cy.get(route.submissionsOverview.dataTable, {
+      timeout: 60000,
+    }).contains(shortTitle)
+      .parents('tr')
+      .click();
+  } else {
+    // try to open the first row or index from params
+    // there could be 0 rows and this could fail
+    cy.get(route.submissionsOverview.dataTable, {
+      timeout: 60000,
+    }).eq(index)
+      .parents('tr')
+      .click();
+  }
   cy.get(appuniversum.loader).should('not.exist');
   cy.log('/openSubmission');
 }
