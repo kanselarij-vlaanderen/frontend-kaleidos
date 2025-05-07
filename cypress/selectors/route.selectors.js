@@ -125,6 +125,14 @@ const selectors = {
     },
   },
 
+  // cases/case/subcases/subcase/new-submission (update submissions)
+  draftUpdateSubmission: {
+    addDraftDocuments: '[data-test-route-cases--new-submission-add-documents]',
+    cancel: '[data-test-route-cases--new-submission-cancel]',
+    save: '[data-test-route-cases--new-submission-save]',
+    submitComment: '[data-test-route-cases--new-submission-submit-comment]',
+  },
+
   /**
     ROUTE SEARCH
   */

@@ -3,7 +3,7 @@
 
 // ***********************************************
 // Functions
-// import auk from '../../selectors/auk.selectors';
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
@@ -321,10 +321,14 @@ function openSubmission(shortTitle, index = 0) {
  *  confidentialParsed: Boolean,
  * }[]} files
  */
-function addDocumentsInSubmissionFileUpload(files) {
+function addDocumentsInSubmissionFileUpload(files, updateView = false) {
   cy.log('addDocumentsInSubmissionFileUpload');
-  cy.get(submissions.documentUploadPanel.panel).as('fileUploadDialog');
-
+  if (updateView) {
+    cy.get(route.draftUpdateSubmission.addDraftDocuments).click();
+    cy.get(auk.auModal.container).as('fileUploadDialog');
+  } else {
+    cy.get(submissions.documentUploadPanel.panel).as('fileUploadDialog');
+  }
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   files.forEach((file, index) => {
@@ -381,6 +385,42 @@ function addDocumentsInSubmissionFileUpload(files) {
   });
 
   cy.log('/addDocumentsInSubmissionFileUpload');
+}
+
+/**
+ * @description Adds a new document for each file in the "files"-array to an opened document upload modal
+ * @name addDocumentsInUpdateSubmissionFileUpload
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {{
+*  folder: String,
+*  fileName: String,
+*  fileExtension: String,
+*  mimeType: String,
+*  newFileName: String,
+*  fileType: String,
+*  fileTypeParsed: Boolean,
+*  confidential: Boolean,
+*  confidentialParsed: Boolean,
+* }[]} files
+*/
+function addDocumentsInUpdateSubmissionFileUpload(files) {
+  cy.log('addDocumentsInUpdateSubmissionFileUpload');
+  // we are in the update view, updateView = true
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/draft-document-containers').as(`createNewDraftDocumentContainer_${randomInt}`);
+  cy.intercept('POST', '/draft-pieces').as(`createNewDraftPiece_${randomInt}`);
+  cy.addDocumentsInSubmissionFileUpload(files, true);
+  cy.get(auk.confirmationModal.footer.confirm).should('not.be.disabled')
+    .click();
+  cy.wait(`@createNewDraftDocumentContainer_${randomInt}`, {
+    timeout: 24000,
+  });
+  cy.wait(`@createNewDraftPiece_${randomInt}`, {
+    timeout: 24000,
+  });
+
+  cy.log('/addDocumentsInUpdateSubmissionFileUpload');
 }
 
 
@@ -533,6 +573,40 @@ function addSubmissionMandatee(mandateeNamesSelector = mandateeNames.current.fir
   cy.log('/addSubmissionMandatee');
 }
 
+/**
+ * @description Add a new piece to a decision.
+ * @name addNewDraftPiece
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} file - The name of the file without the extension
+ */
+function addNewDraftPiece(oldFileName, file) {
+  cy.log('addNewDraftPiece');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/draft-document-containers').as(`createNewDraftDocumentContainer_${randomInt}`);
+  cy.intercept('POST', '/draft-pieces').as(`createNewDraftPiece_${randomInt}`);
+
+  cy.get(document.addDraftDocumentCard.name.value).contains(oldFileName)
+    .parents(document.addDraftDocumentCard.card)
+    .find(document.addDraftDocumentCard.uploadDraftPiece)
+    .forceClick();
+
+  cy.get(auk.auModal.container).within(() => {
+    cy.uploadDraftFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
+
+    cy.get(auk.confirmationModal.footer.confirm).click({
+      force: true,
+    })
+      .wait(`@createNewDraftDocumentContainer_${randomInt}`)
+      .wait(`@createNewDraftPiece_${randomInt}`);
+  });
+  cy.get(auk.auModal.container).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
+  cy.log('/addNewDraftPiece');
+}
+
 // Commands
 
 Cypress.Commands.add('createSubmission', createSubmission); // used for new or existing case
@@ -540,8 +614,11 @@ Cypress.Commands.add('openSubmission', openSubmission);
 Cypress.Commands.add('acceptSubmissionCreateSubcase', acceptSubmissionCreateSubcase);
 Cypress.Commands.add('takeInTreatment', takeInTreatment);
 Cypress.Commands.add('addSubmissionMandatee', addSubmissionMandatee);
+
 // Cypress.Commands.add('openSubmissionInAgenda', openSubmissionInAgenda);
 // Cypress.Commands.add('createUpdateSubmission', createUpdateSubmission);
 
 Cypress.Commands.add('addDocumentsInSubmissionFileUpload', addDocumentsInSubmissionFileUpload);
+Cypress.Commands.add('addDocumentsInUpdateSubmissionFileUpload', addDocumentsInUpdateSubmissionFileUpload);
+Cypress.Commands.add('addNewDraftPiece', addNewDraftPiece);
 // Cypress.Commands.add('visitCaseWithLink', visitCaseWithLink);

@@ -3,6 +3,7 @@
     {{if (not this.bordered) 'vlc-document-card--borderless'}}"
   {{did-update (perform this.loadPieceRelatedData) @piece}}
   {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
+  data-test-add-draft-document-card
 >
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
@@ -27,7 +28,7 @@
             <div
               class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced"
             >
-              <span class="auk-overline">
+              <span data-test-add-draft-document-card-type class="auk-overline">
                 {{#unless this.loadPieceRelatedData.isRunning}}
                   {{this.documentContainer.type.altLabel}}
                 {{/unless}}
@@ -39,6 +40,7 @@
               </span>
             {{/if}}
             <LinkTo
+              data-test-add-draft-document-card-name-value
               @route="document"
               @model={{this.piece.id}}
               target="_blank"
@@ -75,6 +77,7 @@
                   }}
                     {{t "as"}}
                     <AuLinkExternal
+                      data-test-add-draft-document-card-primary-source-link
                       href={{await this.piece.namedDownloadLinkPromise}}
                       download
                     >
@@ -125,6 +128,7 @@
             >
               {{!-- template-lint-disable require-context-role --}}
               <AuButton
+                data-test-add-draft-document-card-upload-new-draft-piece
                 @skin="link"
                 @icon="plus"
                 {{on "click" (toggle "isOpenUploadModal" this)}}
@@ -141,6 +145,7 @@
             >
               {{!-- template-lint-disable require-context-role --}}
               <AuButton
+                data-test-add-draft-document-card-delete-draft-piece
                 @skin="naked"
                 @alert={{true}}
                 @icon="trash"
@@ -163,6 +168,7 @@
             @title={{t "previous-versions"}}
             @disabled={{this.loadPieceRelatedData.isRunning}}
             @expandTask={{this.loadVersionHistory}}
+            data-test-add-draft-document-card-version-history
           >
             {{#if this.loadVersionHistory.isRunning}}
               <div class="auk-u-p-3">

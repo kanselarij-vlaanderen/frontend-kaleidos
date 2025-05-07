@@ -110,6 +110,8 @@ const selectors = {
 
   // subcase-header
   subcaseHeader: {
+    createUpdateSubmission: '[data-test-subcase-header-create-update-submission]',
+    openCurrentSubmission: '[data-test-subcase-header-open-current-submission]',
     actionsDropdown: '[data-test-subcase-header-actions-dropdown]',
     actions: {
       showProposedAgendas: '[data-test-subcase-header-action-open-proposable-agendas]',
