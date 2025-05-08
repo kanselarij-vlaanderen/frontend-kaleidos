@@ -303,7 +303,6 @@ export default class CasesNewSubmissionComponent extends Component {
       if (!piece.accessLevel) {
         piece.accessLevel = defaultAccessLevel;
       }
-      piece.accessLevelLastModified = new Date();
       piece.name = piece.name.trim();
       piece.submission = this.submission;
       await piece.save();

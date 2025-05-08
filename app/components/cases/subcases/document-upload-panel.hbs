@@ -2,7 +2,9 @@
   <Auk::Panel::Header class="au-u-background-gray-100">
     <h4 class="auk-panel__title">{{t "documents"}}</h4>
   </Auk::Panel::Header>
-  <Auk::Panel::Body>
+  <Auk::Panel::Body
+    {{did-update (perform this.onDidUpdate) @confidential}}
+  >
     <Auk::FileUploader
       @multiple={{true}}
       @reusable={{true}}
