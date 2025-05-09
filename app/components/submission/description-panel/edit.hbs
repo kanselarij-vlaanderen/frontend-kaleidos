@@ -67,6 +67,7 @@
           value={{@submission.shortTitle}}
           @width="block"
           {{on "input" (pick "target.value" (set @submission "shortTitle"))}}
+          {{on "paste" this.pasteIntoShortTitle}}
         />
       </AuFormRow>
       {{#if (user-may "treat-and-accept-submissions")}}
@@ -80,6 +81,7 @@
             value={{@submission.title}}
             @width="block"
             {{on "input" (pick "target.value" (set @submission "title"))}}
+            {{on "paste" this.pasteIntoTitle}}
           />
         </AuFormRow>
       {{/if}}

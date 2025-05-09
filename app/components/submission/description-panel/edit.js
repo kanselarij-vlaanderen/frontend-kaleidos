@@ -4,7 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 
 export default class SubmissionDescriptionPanelEditComponent extends Component {
   /**
@@ -144,4 +144,12 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
       (type) => type.uri !== CONSTANTS.SUBCASE_TYPES.BEKRACHTIGING
     );
   };
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.args.submission.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-submission', this.args.submission.shortTitle);
+  }
+
+  pasteIntoTitle = (pasteEvent) => {
+    this.args.submission.title = cleanPasteInputForTextarea(pasteEvent, 'title-submission', this.args.submission.title);
+  }
 }

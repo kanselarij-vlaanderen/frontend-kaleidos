@@ -4,7 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
@@ -316,5 +316,13 @@ export default class SubcaseDescriptionEdit extends Component {
       decisionActivity.decisionResultCode = acknowledgedResult;
     }
     await decisionActivity.save();
+  }
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.args.subcase.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-subcase', this.args.subcase.shortTitle);
+  }
+
+  pasteIntoTitle = (pasteEvent) => {
+    this.args.subcase.title = cleanPasteInputForTextarea(pasteEvent, 'title-subcase', this.args.subcase.title);
   }
 }

@@ -55,6 +55,7 @@
           value={{@subcase.shortTitle}}
           @width="block"
           {{on "input" (pick "target.value" (set @subcase "shortTitle"))}}
+          {{on "paste" this.pasteIntoShortTitle}}
         />
       </AuFormRow>
       <AuFormRow>
@@ -67,6 +68,7 @@
           value={{@subcase.title}}
           @width="block"
           {{on "input" (pick "target.value" (set @subcase "title"))}}
+          {{on "paste" this.pasteIntoTitle}}
         />
       </AuFormRow>
       <AuFormRow>
