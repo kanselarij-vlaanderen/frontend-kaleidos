@@ -9,6 +9,8 @@ import CONSTANTS from "frontend-kaleidos/config/constants";
 export default class DocumentUploadPlanel extends Component {
   @service store;
   @service conceptStore;
+  @service toaster;
+  @service intl;
 
   @action
   async uploadPiece(file) {
@@ -46,4 +48,33 @@ export default class DocumentUploadPlanel extends Component {
   *deletePiece(piece) {
     yield this.args.onDeletePiece(piece);
   }
+
+  onDidUpdate = task(async () => {
+    if (this.args.confidential && this.args.pieces.length) {
+      // Strengthen the accessLevel of the new pieces (not persisted yet) to vertrouwelijk
+      let changedAccessLevelOfPieces = false;
+      const confidential = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+      );
+      const promises = this.args.pieces.map(async (piece) => {
+        const accessLevel = await piece.accessLevel;
+        if (
+          ![
+            CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+            CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+          ].includes(accessLevel.uri)
+        ) {
+          piece.accessLevel = confidential;
+          changedAccessLevelOfPieces = true;
+        }
+      });
+      await Promise.all(promises);
+      if (changedAccessLevelOfPieces) {
+        this.toaster.success(
+          this.intl.t('uploaded-pieces-access-level-changed'),
+        );
+      }
+    }
+  });
 }

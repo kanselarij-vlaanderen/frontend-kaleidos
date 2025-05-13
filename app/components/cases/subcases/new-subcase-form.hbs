@@ -180,6 +180,7 @@
             @disabled={{this.createSubcase.isRunning}}
           />
           <Cases::Subcases::DocumentUploadPanel
+            @confidential={{this.confidential}}
             @pieces={{this.sortedPieces}}
             @onAddPiece={{this.addPiece}}
             @onDeletePiece={{this.deletePiece}}

@@ -326,7 +326,19 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
-  addPiece(piece) {
+  async addPiece(piece) {
+    // update accessLevel based on confidentiality
+    const pieceAccessLevel = await piece.accessLevel;
+    if (pieceAccessLevel?.uri != CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {      
+      const defaultAccessLevel = await this.store.findRecordByUri(
+        'concept',
+        this.confidential
+          ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+          : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+      );
+      piece.accessLevel = defaultAccessLevel;
+    }
+
     addObject(this.pieces, piece);
   }
 
@@ -351,14 +363,7 @@ export default class NewSubcaseForm extends Component {
     const documentContainer = yield piece.documentContainer;
     documentContainer.position = index + 1;
     yield documentContainer.save();
-    const defaultAccessLevel = yield this.store.findRecordByUri(
-      'concept',
-      this.subcase.confidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
-    );
-    piece.accessLevel = defaultAccessLevel;
-    piece.accessLevelLastModified = new Date();
+    // at this point in time, the piece already has an accessLevel
     piece.name = piece.name.trim();
     yield piece.save();
     try {
