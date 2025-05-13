@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -145,5 +145,13 @@ export default class AgendaitemCasePanelEdit extends Component {
   clearSubcaseName() {
     this.selectedShortcut = null;
     this.subcaseName = null;
+  }
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.args.agendaitem.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-agendaitem', this.args.agendaitem.shortTitle);
+  }
+
+  pasteIntoTitle = (pasteEvent) => {
+    this.args.agendaitem.title = cleanPasteInputForTextarea(pasteEvent, 'title-agendaitem', this.args.agendaitem.title);
   }
 }

@@ -13,25 +13,27 @@
         </AuFormRow>
       {{/if}}
       <AuFormRow>
-        <AuLabel for="name-subcase">{{t "name-subcase"}}</AuLabel>
+        <AuLabel for="short-title-agendaitem">{{t "name-subcase"}}</AuLabel>
         <AuTextarea
           data-test-agendaitem-titles-edit-shorttitle={{true}}
-          id="name-subcase"
+          id="short-title-agendaitem"
           rows="2"
           value={{@agendaitem.shortTitle}}
           @width="block"
           {{on "input" (pick "target.value" (set @agendaitem "shortTitle"))}}
+          {{on "paste" this.pasteIntoShortTitle}}
         />
       </AuFormRow>
       <AuFormRow>
-        <AuLabel for="title-subcase">{{t "title-subcase"}}</AuLabel>
+        <AuLabel for="title-agendaitem">{{t "title-subcase"}}</AuLabel>
         <AuTextarea
           data-test-agendaitem-titles-edit-title={{true}}
-          id="title-subcase"
+          id="title-agendaitem"
           rows="4"
           value={{@agendaitem.title}}
           @width="block"
           {{on "input" (pick "target.value" (set @agendaitem "title"))}}
+          {{on "paste" this.pasteIntoTitle}}
         />
       </AuFormRow>
        {{#if @subcase}}
