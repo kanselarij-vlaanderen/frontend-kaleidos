@@ -4,6 +4,7 @@
       {{#if @model.length}}
         <div>
           <table
+            data-test-route-agenda-submissions-data-table
             class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header auk-table--sticky-action-column"
           >
             <thead>
@@ -55,20 +56,24 @@
                   {{on "click" (fn this.navigateToSubmission submission)}}
                 >
                   <td>
-                    <p>
+                    <p data-test-route-agenda-submissions-row-short-title>
                       {{#if submission.shortTitle}}
                         {{submission.shortTitle}}
                       {{else}}
                         -
                       {{/if}}
                       {{#if (not submission.decisionmakingFlow.id)}}
-                        <span class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2">
+                        <span
+                          data-test-route-agenda-submissions-row-new-case
+                          class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-mr-2"
+                        >
                           <Auk::ColorBadge @skin="success" />
                           {{t "new-case"}}
                         </span>
                       {{/if}}
                       {{#if submission.confidential}}
                         <AuPill
+                          data-test-route-agenda-submissions-row-limited-access
                           @size="small"
                           @skin="warning"
                           @icon="lock-closed"
@@ -78,10 +83,10 @@
                       {{/if}}
                     </p>
                   </td>
-                  <td>
+                  <td data-test-route-agenda-submissions-row-submitter>
                     {{or submission.requestedBy.person.fullName "-"}}
                   </td>
-                  <td>
+                  <td data-test-route-agenda-submissions-row-mandatees>
                     {{#let (await (this.getMandateeNames submission)) as |names|}}
                       {{#if names}}
                         {{join ", " names}}
@@ -90,7 +95,7 @@
                       {{/if}}
                     {{/let}}
                   </td>
-                  <td>
+                  <td data-test-route-agenda-submissions-row-subcase-type>
                     {{#if submission.type.label}}
                       <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>
                     {{else if submission.type.altLabel}}
@@ -99,10 +104,10 @@
                       -
                     {{/if}}
                   </td>
-                  <td>
+                  <td data-test-route-agenda-submissions-row-status>
                     <Cases::Submissions::StatusPill @status={{submission.status}}/>
                   </td>
-                  <td>
+                  <td data-test-route-agenda-submissions-row-treated-by>
                     {{#let (await (this.getTreatedBy submission)) as |beingTreatedBy|}}
                       {{#if beingTreatedBy}}
                         {{beingTreatedBy.fullName}}
@@ -113,6 +118,7 @@
                   </td>
                   <td class="auk-u-text-align--right">
                     <AuLink
+                      data-test-route-agenda-submissions-row-go-to-submission
                       @skin="button-naked"
                       @icon="chevron-right"
                       @hideText={{true}}
