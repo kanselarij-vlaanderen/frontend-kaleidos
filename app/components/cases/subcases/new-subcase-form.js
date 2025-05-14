@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import { TrackedArray } from 'tracked-built-ins';
 import { dropTask, task, all } from 'ember-concurrency';
 import {
@@ -415,5 +415,13 @@ export default class NewSubcaseForm extends Component {
     if (typesRequired) return;
 
     this.showProposableAgendaModal = true;
+  }
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-subcase', this.shortTitle);
+  }
+
+  pasteIntoTitle = (pasteEvent) => {
+    this.title = cleanPasteInputForTextarea(pasteEvent, 'title-subcase', this.title);
   }
 }

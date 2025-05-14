@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
+import { cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 
 /**
   * @argument didSave: action, passes down the newly created decisionmakingFlow
@@ -34,4 +35,8 @@ export default class NewCase extends Component {
     await decisionmakingFlow.save();
     return this.args.didSave(decisionmakingFlow);
   });
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'case-short-title', this.shortTitle);
+  }
 }
