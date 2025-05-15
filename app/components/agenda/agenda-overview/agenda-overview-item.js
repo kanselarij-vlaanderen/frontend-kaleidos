@@ -105,6 +105,11 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     }
     // no decisionResult after release
     this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+
+    // any legacy has no decisionResultCode, the document access level will determine who can view
+    if (this.args.meeting.isPreKaleidos) {
+      this.documentsAreVisible = true;
+    }
     return;
   }
 
