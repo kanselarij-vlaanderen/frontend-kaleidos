@@ -4,7 +4,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import addLeadingZeros from 'frontend-kaleidos/utils/add-leading-zeros';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 
@@ -152,7 +152,7 @@ export default class SubcaseDescriptionEdit extends Component {
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk
+      resetFormallyOk,
     );
 
     if (this.confidentialChanged && this.args.subcase.confidential) {
@@ -240,6 +240,7 @@ export default class SubcaseDescriptionEdit extends Component {
         'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
       });
       const pieceParts = await report?.pieceParts;
+      await this._resetDecisionActivityResultCode(agendaitem, !!report);
       if (pieceParts?.length) {
         this.updateReportName(
           report,
@@ -288,5 +289,40 @@ export default class SubcaseDescriptionEdit extends Component {
         await newNewsItem.save();
       }
     }
+  }
+  /**
+   * Resets the decision result of an agendaitem after its type has changed.
+   * This function expects to be called AFTER the updates have been persisted,
+   * thus agendaitem.type contains the NEW type.
+   * @param {Agendaitem} agendaitem 
+   */
+  async _resetDecisionActivityResultCode(agendaitem, hasReport) {
+    const treatment = await agendaitem.treatment;
+    const decisionActivity = await treatment.decisionActivity;
+    const oldDecisionResultCode = await decisionActivity.decisionResultCode;
+
+    if (
+      this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
+      && oldDecisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
+    ) {
+      const approvedResult = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD);
+      decisionActivity.decisionResultCode = hasReport? approvedResult : null;
+    } else if (
+      this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
+      && (!oldDecisionResultCode
+        || oldDecisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD)
+    ) {
+      const acknowledgedResult = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
+      decisionActivity.decisionResultCode = acknowledgedResult;
+    }
+    await decisionActivity.save();
+  }
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.args.subcase.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-subcase', this.args.subcase.shortTitle);
+  }
+
+  pasteIntoTitle = (pasteEvent) => {
+    this.args.subcase.title = cleanPasteInputForTextarea(pasteEvent, 'title-subcase', this.args.subcase.title);
   }
 }

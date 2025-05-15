@@ -349,6 +349,7 @@
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
         @onDelete={{perform this.deleteUploadedPiece}}
+        @loading={{this.addPiece.isRunning}}
       />
     {{else}}
       <Auk::FileUploader @multiple={{false}} @onUpload={{perform this.uploadPiece}} />

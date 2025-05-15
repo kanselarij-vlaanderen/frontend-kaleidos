@@ -71,6 +71,7 @@ const selectors = {
     container: '[data-test-uploaded-document-container]',
     nameInput: '[data-test-uploaded-document-name-input]',
     documentTypes: '[data-test-uploaded-document-types]',
+    accessLevel: '[data-test-uploaded-document-access-level]',
   },
 
   // add-existing-piece
@@ -182,5 +183,17 @@ const selectors = {
     versionHistory: '[data-test-draft-document-card-version-history]',
   },
 
+  // component add-draft-document-card
+  addDraftDocumentCard: {
+    card: '[data-test-add-draft-document-card]',
+    type: '[data-test-add-draft-document-card-type]',
+    name: {
+      value: '[data-test-add-draft-document-card-name-value]',
+    },
+    primarySourceLink: '[data-test-add-draft-document-card-primary-source-link]',
+    uploadDraftPiece: '[data-test-add-draft-document-card-upload-new-draft-piece]',
+    deleteDraftPiece: '[data-test-add-draft-document-card-delete-draft-piece]',
+    versionHistory: '[data-test-add-draft-document-card-version-history]',
+  },
 };
 export default selectors;

@@ -16,6 +16,7 @@
           value={{this.shortTitle}}
           @width="block"
           {{on "input" (pick "target.value" (set this "shortTitle"))}}
+          {{on "paste" this.pasteIntoShortTitle}}
         />
       </AuFormRow>
     </div>

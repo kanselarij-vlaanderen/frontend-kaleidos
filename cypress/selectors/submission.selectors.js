@@ -101,6 +101,14 @@ const selectors = {
     save: '[data-test-submission-description-edit-save]',
   },
 
+  decisionmakingFlowSelector: {
+    existingCaseTitle: '[data-test-submission-decisionmaking-flow-selector-existing-case-title]',
+    useNewCase: '[data-test-submission-decisionmaking-flow-selector-use-new-case]',
+    useDifferentCase: '[data-test-submission-decisionmaking-flow-selector-use-different-case]',
+    newCaseTitle: '[data-test-submission-decisionmaking-flow-selector-new-case-title]',
+    useExistingCase: '[data-test-submission-decisionmaking-flow-selector-use-existing-case]',
+  },
+
   // status-change-activity
   statusChangeActivity: {
     item: '[data-test-submission-status-change-activity-item]',

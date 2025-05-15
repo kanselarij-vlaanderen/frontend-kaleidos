@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask, timeout } from 'ember-concurrency';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import {
   addObject,
@@ -303,7 +303,6 @@ export default class CasesNewSubmissionComponent extends Component {
       if (!piece.accessLevel) {
         piece.accessLevel = defaultAccessLevel;
       }
-      piece.accessLevelLastModified = new Date();
       piece.name = piece.name.trim();
       piece.submission = this.submission;
       await piece.save();
@@ -331,4 +330,8 @@ export default class CasesNewSubmissionComponent extends Component {
 
     this.showProposableAgendaModal = true;
   });
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title', this.shortTitle);
+  }
 }

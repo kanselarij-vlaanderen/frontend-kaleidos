@@ -3,13 +3,14 @@
 
 // ***********************************************
 // Functions
-// import auk from '../../selectors/auk.selectors';
+import auk from '../../selectors/auk.selectors';
 import cases from '../../selectors/case.selectors';
 import dependency from '../../selectors/dependency.selectors';
 import document from '../../selectors/document.selectors';
 import route from '../../selectors/route.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
 import mandatee from '../../selectors/mandatee.selectors';
+import mandateeNames from '../../selectors/mandatee-names.selectors';
 import submissions from '../../selectors/submission.selectors';
 import utils from '../../selectors/utils.selectors';
 
@@ -281,14 +282,25 @@ function createSubmission(submission) {
  * @function
  * @param {shortTitle: String}
 */
-function openSubmission(shortTitle) {
+function openSubmission(shortTitle, index = 0) {
   cy.log('openSubmission');
   cy.visit('indieningen?aantal=50');
-  cy.get(route.submissionsOverview.dataTable, {
-    timeout: 60000,
-  }).contains(shortTitle)
-    .parents('tr')
-    .click();
+  if (shortTitle) {
+    cy.get(route.submissionsOverview.dataTable, {
+      timeout: 60000,
+    }).contains(shortTitle)
+      .parents('tr')
+      .click();
+  } else {
+    // try to open the first row or index from params
+    // there could be 0 rows and this could fail
+    cy.get(route.submissionsOverview.dataTable, {
+      timeout: 60000,
+    }).eq(index)
+      .parents('tr')
+      .click();
+  }
+  cy.get(appuniversum.loader).should('not.exist');
   cy.log('/openSubmission');
 }
 
@@ -301,6 +313,7 @@ function openSubmission(shortTitle) {
  *  folder: String,
  *  fileName: String,
  *  fileExtension: String,
+ *  mimeType: String,
  *  newFileName: String,
  *  fileType: String,
  *  fileTypeParsed: Boolean,
@@ -308,10 +321,14 @@ function openSubmission(shortTitle) {
  *  confidentialParsed: Boolean,
  * }[]} files
  */
-function addDocumentsInSubmissionFileUpload(files) {
+function addDocumentsInSubmissionFileUpload(files, updateView = false) {
   cy.log('addDocumentsInSubmissionFileUpload');
-  cy.get(submissions.documentUploadPanel.panel).as('fileUploadDialog');
-
+  if (updateView) {
+    cy.get(route.draftUpdateSubmission.addDraftDocuments).click();
+    cy.get(auk.auModal.container).as('fileUploadDialog');
+  } else {
+    cy.get(submissions.documentUploadPanel.panel).as('fileUploadDialog');
+  }
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   files.forEach((file, index) => {
@@ -320,7 +337,7 @@ function addDocumentsInSubmissionFileUpload(files) {
         'GET',
         '/concepts**559774e3-061c-4f4b-a758-57228d4b68cd**'
       ).as(`loadConceptsDocType_${randomInt}`);
-      cy.uploadDraftFile(file.folder, file.fileName, file.fileExtension);
+      cy.uploadDraftFile(file.folder, file.fileName, file.fileExtension, file.mimeType);
       // ensure the new uploadedDocument component is visible before trying to continue
       cy.get(document.uploadedDocument.nameInput, {
         timeout: 60000,
@@ -346,7 +363,7 @@ function addDocumentsInSubmissionFileUpload(files) {
       .find(document.uploadedDocument.documentTypes)
       .as('radioOptions');
     cy.get(utils.radioDropdown.input).should('exist'); // the radio buttons should be loaded before the within or the .length returns 0
-    if (!file.fileTypeParsed) {
+    if (!file.fileTypeParsed && file.fileType) {
       cy.get('@radioOptions').within(($t) => {
         if ($t.find(`input[type="radio"][value="${file.fileType}"]`).length) {
           cy.get(utils.radioDropdown.input).check(file.fileType, {
@@ -368,6 +385,42 @@ function addDocumentsInSubmissionFileUpload(files) {
   });
 
   cy.log('/addDocumentsInSubmissionFileUpload');
+}
+
+/**
+ * @description Adds a new document for each file in the "files"-array to an opened document upload modal
+ * @name addDocumentsInUpdateSubmissionFileUpload
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {{
+*  folder: String,
+*  fileName: String,
+*  fileExtension: String,
+*  mimeType: String,
+*  newFileName: String,
+*  fileType: String,
+*  fileTypeParsed: Boolean,
+*  confidential: Boolean,
+*  confidentialParsed: Boolean,
+* }[]} files
+*/
+function addDocumentsInUpdateSubmissionFileUpload(files) {
+  cy.log('addDocumentsInUpdateSubmissionFileUpload');
+  // we are in the update view, updateView = true
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/draft-document-containers').as(`createNewDraftDocumentContainer_${randomInt}`);
+  cy.intercept('POST', '/draft-pieces').as(`createNewDraftPiece_${randomInt}`);
+  cy.addDocumentsInSubmissionFileUpload(files, true);
+  cy.get(auk.confirmationModal.footer.confirm).should('not.be.disabled')
+    .click();
+  cy.wait(`@createNewDraftDocumentContainer_${randomInt}`, {
+    timeout: 24000,
+  });
+  cy.wait(`@createNewDraftPiece_${randomInt}`, {
+    timeout: 24000,
+  });
+
+  cy.log('/addDocumentsInUpdateSubmissionFileUpload');
 }
 
 
@@ -474,14 +527,98 @@ function takeInTreatment() {
   cy.log('/takeInTreatment');
 }
 
+/**
+ * Adds a mandatee to a submission when used in the submission view
+ * Pass a valid entry from 'mandatee-names.selectors.js'
+ * @name addSubmissionMandatee
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {Number} mandateeNamesSelector - The mandatee to search, must be a valid entry from 'mandatee-names.selectors.js'. Defaults to first current mandatee
+ */
+function addSubmissionMandatee(mandateeNamesSelector = mandateeNames.current.first) {
+  cy.log('addSubmissionMandatee');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/mandatees?filter**government-body**').as(`getMandatees${randomInt}`);
+
+  cy.intercept('PATCH', '/submissions/*').as(`patchSubmission${randomInt}`);
+  cy.get(mandatee.mandateePanelView.actions.edit).click();
+  cy.get(mandatee.mandateePanelEdit.actions.add).click();
+  cy.wait(`@getGovernmentBodies${randomInt}`);
+  cy.wait(`@getMandatees${randomInt}`, {
+    timeout: 60000,
+  });
+  cy.get(utils.mandateeSelector.container).find(dependency.emberPowerSelect.trigger)
+    .click();
+  cy.get(dependency.emberPowerSelect.searchInput).type(mandateeNamesSelector.lastName);
+  cy.get(dependency.emberPowerSelect.optionLoadingMessage).should('not.exist');
+  cy.get(dependency.emberPowerSelect.optionTypeToSearchMessage).should('not.exist');
+
+  // when searching we select the result with a specific title
+  if (mandateeNamesSelector.searchTitle) {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.searchTitle)
+      .click();
+  } else {
+    cy.get(dependency.emberPowerSelect.option).contains(mandateeNamesSelector.title)
+      .click();
+  }
+  cy.get(dependency.emberPowerSelect.option).should('not.exist', {
+    timeout: 60000,
+  });
+  cy.get(utils.mandateesSelector.add).click();
+  cy.get(mandatee.mandateePanelEdit.actions.save).click();
+  cy.wait(`@patchSubmission${randomInt}`, {
+    timeout: 40000,
+  });
+  cy.log('/addSubmissionMandatee');
+}
+
+/**
+ * @description Add a new piece to a decision.
+ * @name addNewDraftPiece
+ * @memberOf Cypress.Chainable#
+ * @function
+ * @param {String} oldFileName - The relative path to the file in the cypress/fixtures folder excluding the fileName
+ * @param {String} file - The name of the file without the extension
+ */
+function addNewDraftPiece(oldFileName, file) {
+  cy.log('addNewDraftPiece');
+  const randomInt = Math.floor(Math.random() * Math.floor(10000));
+  cy.intercept('POST', '/draft-document-containers').as(`createNewDraftDocumentContainer_${randomInt}`);
+  cy.intercept('POST', '/draft-pieces').as(`createNewDraftPiece_${randomInt}`);
+
+  cy.get(document.addDraftDocumentCard.name.value).contains(oldFileName)
+    .parents(document.addDraftDocumentCard.card)
+    .find(document.addDraftDocumentCard.uploadDraftPiece)
+    .forceClick();
+
+  cy.get(auk.auModal.container).within(() => {
+    cy.uploadDraftFile(file.folder, file.fileName, file.fileExtension);
+    cy.get(document.vlUploadedDocument.filename).should('contain', file.fileName);
+
+    cy.get(auk.confirmationModal.footer.confirm).click({
+      force: true,
+    })
+      .wait(`@createNewDraftDocumentContainer_${randomInt}`)
+      .wait(`@createNewDraftPiece_${randomInt}`);
+  });
+  cy.get(auk.auModal.container).should('not.exist');
+  cy.get(appuniversum.loader).should('not.exist');
+  cy.log('/addNewDraftPiece');
+}
+
 // Commands
 
 Cypress.Commands.add('createSubmission', createSubmission); // used for new or existing case
 Cypress.Commands.add('openSubmission', openSubmission);
 Cypress.Commands.add('acceptSubmissionCreateSubcase', acceptSubmissionCreateSubcase);
 Cypress.Commands.add('takeInTreatment', takeInTreatment);
+Cypress.Commands.add('addSubmissionMandatee', addSubmissionMandatee);
+
 // Cypress.Commands.add('openSubmissionInAgenda', openSubmissionInAgenda);
 // Cypress.Commands.add('createUpdateSubmission', createUpdateSubmission);
 
 Cypress.Commands.add('addDocumentsInSubmissionFileUpload', addDocumentsInSubmissionFileUpload);
+Cypress.Commands.add('addDocumentsInUpdateSubmissionFileUpload', addDocumentsInUpdateSubmissionFileUpload);
+Cypress.Commands.add('addNewDraftPiece', addNewDraftPiece);
 // Cypress.Commands.add('visitCaseWithLink', visitCaseWithLink);

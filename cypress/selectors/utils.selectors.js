@@ -97,6 +97,11 @@ const selectors = {
     cancel: '[data-test-formally-ok-edit-cancel]',
   },
 
+  checkboxTree: {
+    toggleAll: '[data-test-checkbox-tree-toggle-all]',
+    toggleSingle: '[data-test-checkbox-tree-toggle-single]',
+  },
+
   /** Section VL-components **/
 
   // vl-modal-verify

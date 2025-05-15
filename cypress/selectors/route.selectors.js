@@ -69,6 +69,22 @@ const selectors = {
     },
   },
 
+  // agenda/submissions/template
+  agendaSubmissions: {
+    dataTable: '[data-test-route-agenda-submissions-data-table]',
+    row: {
+      shortTitle: '[data-test-route-agenda-submissions-row-short-title]',
+      newCase: '[data-test-route-agenda-submissions-row-new-case]',
+      limitedAccess: '[data-test-route-agenda-submissions-row-limited-access]',
+      submitter: '[data-test-route-agenda-submissions-row-submitter]',
+      mandatees: '[data-test-route-agenda-submissions-row-mandatees]',
+      subcaseType: '[data-test-route-agenda-submissions-row-subcase-type]',
+      status: '[data-test-route-agenda-submissions-row-status]',
+      treatedBy: '[data-test-route-agenda-submissions-row-treated-by]',
+      goToSubmission: '[data-test-route-agenda-submissions-row-go-to-submission]',
+    },
+  },
+
   /**
     ROUTE CASES
   */
@@ -107,6 +123,14 @@ const selectors = {
       batchEdit: '[data-test-route-cases---submission-documents-batch-edit]',
       add: '[data-test-route-cases---submission-documents-batch-edit]',
     },
+  },
+
+  // cases/case/subcases/subcase/new-submission (update submissions)
+  draftUpdateSubmission: {
+    addDraftDocuments: '[data-test-route-cases--new-submission-add-documents]',
+    cancel: '[data-test-route-cases--new-submission-cancel]',
+    save: '[data-test-route-cases--new-submission-save]',
+    submitComment: '[data-test-route-cases--new-submission-submit-comment]',
   },
 
   /**

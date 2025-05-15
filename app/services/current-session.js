@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
+import { later } from '@ember/runloop';
 import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
 
 export default class CurrentSessionService extends Service {
@@ -9,15 +10,25 @@ export default class CurrentSessionService extends Service {
   @service store;
   @service impersonation;
   @service userAgent;
+  @service toaster;
+  @service intl;
 
   @tracked user;
   @tracked organization;
   @tracked membership;
   @tracked role;
+  @tracked isLoggedIn;
+
+  constructor() {
+    super(...arguments);
+
+    this.lifecycle();
+  }
 
   /* eslint-disable ember/no-get */
   async load() {
     if (this.session.isAuthenticated) {
+      this.isLoggedIn = true;
       const membershipId = get(this.session, 'data.authenticated.data.relationships.membership.data.id');
       if (membershipId) {
         this.membership = await this.store.findRecord('membership', membershipId, {
@@ -42,6 +53,7 @@ export default class CurrentSessionService extends Service {
     this.role = null;
     this.organization = null;
     this.impersonation.stopImpersonation();
+    this.isLoggedIn = false;
   }
 
   may(permission, checkImpersonator = false) {
@@ -76,5 +88,42 @@ export default class CurrentSessionService extends Service {
 
   get isAuthenticated() {
     return this.session.isAuthenticated;
+  }
+
+  get isLoggedIn() {
+    return this.isLoggedIn;
+  }
+
+  /*****
+   * Polling for logged in status logic is below!
+   */
+  updateInterval = 60 * 1000;
+
+  async lifecycle() {
+    // For as long as the user is logged in, we continue periodically polling
+    this.isLoggedIn = await this._checkLoggedInStatus();
+    if (this.isLoggedIn) {
+      later(this, this.lifecycle, this.updateInterval);
+    }
+  }
+
+  async _checkLoggedInStatus() {
+    let isLoggedIn = true;
+
+    const currentSessionUrl = this.session.data?.authenticated?.links?.self;
+    if (currentSessionUrl) {
+      const response = await fetch(currentSessionUrl + '?skipLoginActivity=true');
+      if (!response.ok) {
+        this.toaster.error(
+          this.intl.t('your-session-is-invalid'),
+          null,
+          { timeOut: null }
+        );
+        this.session.invalidate();
+        isLoggedIn = false;
+      }
+    }
+
+    return isLoggedIn;
   }
 }

@@ -9,6 +9,7 @@
       {{#if this.maySubmitNewDocuments}}
         <Auk::Toolbar::Item>
           <AuLink
+            data-test-subcase-header-create-update-submission
             @skin="button-secondary"
             @icon="plus"
             @route="cases.case.subcases.subcase.new-submission"
@@ -24,6 +25,7 @@
       {{#if this.currentSubmission}}
         <Auk::Toolbar::Item>
           <AuLink
+            data-test-subcase-header-open-current-submission
             @skin="button-secondary"
             @route="cases.submissions.submission"
             @model={{this.currentSubmission.id}}

@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { trimText } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import { TrackedArray } from 'tracked-built-ins';
 import { dropTask, task, all } from 'ember-concurrency';
 import {
@@ -326,7 +326,19 @@ export default class NewSubcaseForm extends Component {
   }
 
   @action
-  addPiece(piece) {
+  async addPiece(piece) {
+    // update accessLevel based on confidentiality
+    const pieceAccessLevel = await piece.accessLevel;
+    if (pieceAccessLevel?.uri != CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {      
+      const defaultAccessLevel = await this.store.findRecordByUri(
+        'concept',
+        this.confidential
+          ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+          : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
+      );
+      piece.accessLevel = defaultAccessLevel;
+    }
+
     addObject(this.pieces, piece);
   }
 
@@ -351,14 +363,7 @@ export default class NewSubcaseForm extends Component {
     const documentContainer = yield piece.documentContainer;
     documentContainer.position = index + 1;
     yield documentContainer.save();
-    const defaultAccessLevel = yield this.store.findRecordByUri(
-      'concept',
-      this.subcase.confidential
-        ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
-        : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
-    );
-    piece.accessLevel = defaultAccessLevel;
-    piece.accessLevelLastModified = new Date();
+    // at this point in time, the piece already has an accessLevel
     piece.name = piece.name.trim();
     yield piece.save();
     try {
@@ -410,5 +415,13 @@ export default class NewSubcaseForm extends Component {
     if (typesRequired) return;
 
     this.showProposableAgendaModal = true;
+  }
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-subcase', this.shortTitle);
+  }
+
+  pasteIntoTitle = (pasteEvent) => {
+    this.title = cleanPasteInputForTextarea(pasteEvent, 'title-subcase', this.title);
   }
 }

@@ -119,6 +119,7 @@
         </Auk::Panel::Body>
         <Auk::Panel::Footer>
           <AuButton
+            data-test-route-cases--new-submission-add-documents
             @skin="naked"
             @icon="plus"
             class="au-u-padding-left-none"
@@ -133,6 +134,7 @@
   <AuToolbar @reverse={{true}} @size="large" @border="top" as |Group|>
     <Group>
       <AuButton
+        data-test-route-cases--new-submission-cancel
         @skin="secondary"
         @disabled={{or this.createSubmission.isRunning}}
         {{on "click" (perform this.cancelForm)}}
@@ -140,6 +142,7 @@
         {{t "cancel"}}
       </AuButton>
       <AuButton
+        data-test-route-cases--new-submission-save
         @skin="primary"
         @disabled={{eq this.newDraftPieces.length 0}}
         {{on "click" (toggle "isOpenCreateSubmissionModal" this)}}
@@ -205,6 +208,7 @@
       <:body>
         <AuLabel for="remarks">{{t "remarks-for-secretary-about-submission"}}</AuLabel>
         <AuTextarea
+          data-test-route-cases--new-submission-submit-comment
           id="remarks"
           rows="4"
           value=""

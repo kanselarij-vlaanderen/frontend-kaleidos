@@ -44,14 +44,15 @@
                 />
               </div>
               <div class="auk-form-group">
-                <AuLabel for="shortTitle" @required={{true}} @inline={{true}}>{{t "name-subcase"}}</AuLabel>
+                <AuLabel for="short-title" @required={{true}} @inline={{true}}>{{t "name-subcase"}}</AuLabel>
                 <AuTextarea
                   data-test-cases-new-submission-form-short-title
                   @rows="2"
                   @width="block"
-                  id="shortTitle"
+                  id="short-title"
                   value={{this.shortTitle}}
-                  {{on "change" (pick "target.value" (fn (mut this.shortTitle)))}}
+                  {{on "input" (pick "target.value" (set this "shortTitle"))}}
+                  {{on "paste" this.pasteIntoShortTitle}}
                 />
               </div>
               <div class="auk-form-group">

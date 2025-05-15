@@ -59,15 +59,16 @@
                   />
                 </AuFormRow>
                 <AuFormRow>
-                  <AuLabel for="name-subcase">
+                  <AuLabel for="short-title-subcase">
                     {{t "name-subcase"}}</AuLabel>
                   <AuTextarea
                     data-test-new-subcase-form-shorttitle
-                    id="name-subcase"
+                    id="short-title-subcase"
                     rows="2"
                     value={{this.shortTitle}}
                     @width="block"
                     {{on "input" (pick "target.value" (set this "shortTitle"))}}
+                    {{on "paste" this.pasteIntoShortTitle}}
                   />
                 </AuFormRow>
                 <AuFormRow>
@@ -80,6 +81,7 @@
                     value={{this.title}}
                     @width="block"
                     {{on "input" (pick "target.value" (set this "title"))}}
+                    {{on "paste" this.pasteIntoTitle}}
                   />
                 </AuFormRow>
                 <AuFormRow>
@@ -180,6 +182,7 @@
             @disabled={{this.createSubcase.isRunning}}
           />
           <Cases::Subcases::DocumentUploadPanel
+            @confidential={{this.confidential}}
             @pieces={{this.sortedPieces}}
             @onAddPiece={{this.addPiece}}
             @onDeletePiece={{this.deletePiece}}

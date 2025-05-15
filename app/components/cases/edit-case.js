@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { task } from 'ember-concurrency';
+import { cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 
 /**
  * @param {Case} case
@@ -32,5 +33,9 @@ export default class EditCase extends Component {
   @action
   close() {
     this.args.onClose();
+  }
+
+  pasteIntoShortTitle = (pasteEvent) => {
+    this.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'case-short-title', this.shortTitle);
   }
 }
