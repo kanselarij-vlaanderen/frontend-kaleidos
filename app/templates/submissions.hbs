@@ -39,6 +39,12 @@
                 />
               </div>
             {{/if}}
+            {{#if (user-may "view-concept-submissions")}}
+              <Cases::Submissions::ConceptFilter
+                @showConcepts={{this.showConcepts}}
+                @onChange={{set this "showConcepts"}}
+              />
+            {{/if}}
           </div>
         </Auk::MobileFilters>
       </div>
@@ -63,13 +69,15 @@
                       @label={{t "name"}}
                       @onChange={{fn (mut this.sortSubmissions)}}
                     />
-                    <Utils::ThSortable
-                      class="auk-table__header-title"
-                      @currentSorting={{this.sortSubmissions}}
-                      @field="planned-start"
-                      @label={{t "date-meeting"}}
-                      @onChange={{fn (mut this.sortSubmissions)}}
-                    />
+                    {{#if (not this.showConcepts)}}
+                      <Utils::ThSortable
+                        class="auk-table__header-title"
+                        @currentSorting={{this.sortSubmissions}}
+                        @field="planned-start"
+                        @label={{t "date-meeting"}}
+                        @onChange={{fn (mut this.sortSubmissions)}}
+                      />
+                    {{/if}}
                     <Utils::ThSortable
                       class="auk-table__header-title"
                       @currentSorting={{this.sortSubmissions}}
@@ -129,9 +137,11 @@
                             {{/if}}
                           </p>
                         </td>
-                        <td data-test-route-cases-submissions-overview-row-planned-start>
-                          {{date submission.plannedStart}}
-                        </td>
+                        {{#if (not this.showConcepts)}}
+                          <td data-test-route-cases-submissions-overview-row-planned-start>
+                            {{date submission.plannedStart}}
+                          </td>
+                        {{/if}}
                         <td data-test-route-cases-submissions-overview-row-subcase-type>
                           {{#if submission.type.label}}
                             <AuPill @size="small" @skin="ongoing">{{capitalize submission.type.label}}</AuPill>

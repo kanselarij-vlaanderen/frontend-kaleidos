@@ -1432,8 +1432,10 @@
   "send-back-to-submitter": "Stuur terug naar indiener",
   "send-back-to-submitter-message": "Bij terugsturen zal dit agendapunt volledig verwijderd worden. Hierbij gaan ook de beslissing en het kort bestek verloren!",
   "delete-submission": "Verwijder indiening",
+  "delete-concept-submission": "Verwijder concept",
   "this-submission-is-being-treated-by-user": "Deze indiening is in behandeling genomen door {user}",
   "resubmit-submission": "Dien opnieuw in",
+  "submit-submission": "Dien in",
   "request-send-back-submission": "Aanpassing aanvragen",
   "request-send-back-submission-title": "Aanvraag om de indiening aan te passen",
   "submitted-on": "Ingediend door {userName} op {date} om {hour}",
@@ -1510,5 +1512,8 @@
   "delete-all-decisions-sign-flow-data":"Ondertekenflows voor alle beslissingen verwijderen",
   "delete-all-decisions-sign-flow-data-counter":"{count} van {total} ondertekenflows verwijderd.",
   "verify-delete-all-decisions-sign-flow-data": "Bent u zeker dat u de ondertekenflows van alle beslissingen van deze agenda in Kaleidos wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden. Vergeet niet om de flows ook in het platform Digitaal Ondertekenen stop te zetten. Dit gebeurt niet automatisch.",
-  "your-session-is-invalid": "Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten."
+  "your-session-is-invalid": "Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten.",
+  "save-as-concept": "Opslaan als concept",
+  "show-concepts": "Toon enkel concepten",
+  "concepts": "Concepten"
 }

@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubmissionsOverviewHeaderComponent extends Component {
   @service store;
@@ -31,8 +32,11 @@ export default class SubmissionsOverviewHeaderComponent extends Component {
         this.selectedMeeting = meeting;
       } else {
         // get meeting when not propagated yet
-        const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
-        this.selectedMeeting = agenda.createdFor;
+        const submissionStatus = await this.args.submission.status;
+        if (submissionStatus.uri !== CONSTANTS.SUBMISSION_STATUSES.CONCEPT) {
+          const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
+          this.selectedMeeting = agenda.createdFor;
+        }
       }
     }
   });

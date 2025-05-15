@@ -126,6 +126,14 @@
           {{t "cancel"}}
         </AuButton>
         <AuButton
+          data-test-cases-new-submission-form-save-concept
+          @skin="secondary"
+          @disabled={{this.saveIsDisabled}}
+          {{on "click" (perform this.createConceptSubmission)}}
+        >
+          {{t "save-as-concept"}}
+        </AuButton>
+        <AuButton
           data-test-cases-new-submission-form-save
           @skin="primary"
           @disabled={{this.saveIsDisabled}}
@@ -148,7 +156,7 @@
   />
 {{/if}}
 
-{{#if this.createSubmission.isRunning}}
+{{#if (or this.createSubmission.isRunning this.createConceptSubmission.isRunning)}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "new-submission"}} @closeable={{false}} />
     <Auk::Modal::Body>

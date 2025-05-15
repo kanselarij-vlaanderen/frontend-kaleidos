@@ -57,10 +57,12 @@ export default class SubmissionHeaderComponent extends Component {
         });
       } else {
         // get meeting when not propagated yet
-        const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
-
-        this.selectedAgenda = agenda;
-        this.selectedMeeting = agenda.createdFor;
+        const submissionStatus = await this.args.submission.status;
+        if (submissionStatus.uri !== CONSTANTS.SUBMISSION_STATUSES.CONCEPT) {
+          const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(this.args.submission);
+          this.selectedAgenda = agenda;
+          this.selectedMeeting = agenda.createdFor;
+        }
       }
     }
     if (this.args.subcase?.id) {
@@ -109,6 +111,14 @@ export default class SubmissionHeaderComponent extends Component {
     );
   }
 
+  get canSubmitConcept() {
+    return (
+      this.args.submission?.isConcept &&
+      this.currentSession.may('edit-concept-submissions') &&
+      this.requestedByIsCurrentMandatee
+    );
+  }
+
   get canRequestSendBack() {
     return (
       (this.args.submission?.isSubmitted ||
@@ -148,6 +158,14 @@ export default class SubmissionHeaderComponent extends Component {
 
   get canDeleteSubmission() {
     return this.currentSession.may('delete-submissions');
+  }
+
+  get canDeleteConceptSubmission() {
+    return (
+      this.args.submission?.isConcept &&
+      this.requestedByIsCurrentMandatee &&
+      this.currentSession.may('delete-concept-submissions')
+    );
   }
 
   get hasActions() {
@@ -216,6 +234,9 @@ export default class SubmissionHeaderComponent extends Component {
   // so we just have to use the members of the component.
   resubmitSubmission = task(async (meeting, remarks) => {
     await this.args.submission.belongsTo('status').reload();
+    if (this.args.submission.isConcept) {
+      return await this.submitConcept.perform(meeting, remarks);
+    }
     if (!this.canResubmitSubmission) {
       return this.toaster.error(
         this.intl.t('submission-edited-concurrently'),
@@ -233,6 +254,33 @@ export default class SubmissionHeaderComponent extends Component {
     if (meeting?.id)
       await this.agendaService.putDraftSubmissionOnAgenda(meeting, this.args.submission);
     await this.cabinetMail.sendResubmissionMails(this.args.submission, comment, selectedMeeting);
+    if (isPresent(this.args.onStatusUpdated)) {
+      this.args.onStatusUpdated();
+    }
+  });
+
+  submitConcept = task(async (meeting, remarks) => {
+    await this.args.submission.belongsTo('status').reload();
+    if (!this.canSubmitConcept) {
+      return this.toaster.error(
+        this.intl.t('submission-edited-concurrently'),
+        this.intl.t('warning-title')
+      );
+    }
+    this.toggleResubmitModal();
+    const selectedMeeting = meeting?.id ? meeting : this.selectedMeeting;
+    const comment = meeting?.id ? remarks : this.comment;
+
+    // TODO  remove old status change??
+
+    await this._updateSubmission(
+      CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
+      comment,
+    );
+    if (meeting?.id) {
+      await this.agendaService.putDraftSubmissionOnAgenda(selectedMeeting, this.args.submission);
+      await this.cabinetMail.sendFirstSubmissionMails(this.args.submission, selectedMeeting);
+    }
     if (isPresent(this.args.onStatusUpdated)) {
       this.args.onStatusUpdated();
     }

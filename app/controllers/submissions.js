@@ -41,6 +41,11 @@ export default class CasesSubmissionsIndexController extends Controller {
         type: 'array',
       },
     },
+    {
+      showConcepts: {
+        type: 'boolean',
+      },
+    }
   ];
 
   @tracked page = 0;
@@ -52,6 +57,7 @@ export default class CasesSubmissionsIndexController extends Controller {
   @tracked isLoadingModel;
   @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
+  @tracked showConcepts = false;
 
   constructor() {
     super(...arguments);

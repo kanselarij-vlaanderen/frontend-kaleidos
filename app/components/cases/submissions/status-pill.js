@@ -25,6 +25,11 @@ export default class CasesSubmissionsStatusPillComponent extends Component {
     const status = await this.args.status;
     // show status already
     this.label = status?.label || status?.altLabel;
+    // concept skin 
+    if (status?.uri === CONSTANTS.SUBMISSION_STATUSES.CONCEPT) {
+      this.draft = true;
+      this.skin = "border";
+    }
     // check if submission is on a visible agenda
     if (this.args.submission?.id) {
       const agenda = await this.store.queryOne('agenda', {

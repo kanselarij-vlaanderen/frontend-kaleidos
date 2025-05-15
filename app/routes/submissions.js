@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SubmissionsRoute extends Route {
   @service currentSession;
@@ -36,6 +37,10 @@ export default class SubmissionsRoute extends Route {
     submitters: {
       refreshModel: true,
       as: 'indieners',
+    },
+    showConcepts: {
+      refreshModel: true,
+      as: 'enkel_concepten',
     },
   };
 
@@ -108,6 +113,21 @@ export default class SubmissionsRoute extends Route {
     if (!this.currentSession.may('view-all-submissions')) {
       options['filter[mandatees][user-organizations][:id:]'] =
         this.currentSession.organization.id;
+    }
+
+    // filter on concepts only
+    const conceptStatus = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.CONCEPT
+    );
+    if (params.showConcepts) {
+      options['filter[status][:uri:]'] = conceptStatus.uri;
+      // only concepts for your own organization
+      options['filter[requested-by][user-organizations][:id:]'] =
+        this.currentSession.organization.id;
+    } else {
+      // show all but concepts
+      options['filter[status][:not:label]'] = conceptStatus.label;
     }
 
     return this.store.query('submission', options);

@@ -42,6 +42,10 @@ export default class DraftSubmissionService extends Service {
     await Promise.all(statusChangeActivities.map((a) => a.startedBy));
     return statusChangeActivities
       .slice()
+      .filter(
+        // We never want to see concept creation in the history, just for potential debugging
+        (a) => a.status.get('uri') !== CONSTANTS.SUBMISSION_STATUSES.CONCEPT,
+      )
       .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
       .reverse();
   };
@@ -50,7 +54,7 @@ export default class DraftSubmissionService extends Service {
     let statusChangeActivities = await this.getStatusChangeActivities(submission);
     if (currentlyBeingTreated) {
       // use only the latest activity
-      statusChangeActivities = [statusChangeActivities.at(0)];
+      statusChangeActivities = statusChangeActivities.length ? [statusChangeActivities?.at(0)] : null;
     }
     const treatedByActivity = statusChangeActivities?.filter((a) => a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING)
       .at(0);

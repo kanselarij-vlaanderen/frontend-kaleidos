@@ -52,6 +52,7 @@
             @icon="lock-closed">{{t "limited-access"}}
           </AuPill>
         {{/if}}
+        <Cases::Submissions::StatusPill @status={{@submission.status}}/>
       </div>
     </div>
     {{#if (user-may "treat-and-accept-submissions")}}

@@ -71,6 +71,24 @@
             {{t "resubmit-submission"}}
           </AuButton>
         {{/if}}
+        {{#if this.canSubmitConcept}}
+          <AuButton
+            data-test-submission-header-action-submit-concept
+            @skin="primary"
+            {{on "click" (toggle "isOpenResubmitModal" this)}}
+          >
+          {{t "submit-submission"}}
+          </AuButton>
+        {{/if}}
+        {{#if this.canDeleteConceptSubmission}}
+          <AuButton
+            data-test-submission-header-action-delete-concept
+            @alert={{true}}
+            {{on "click" (toggle "isOpenDeleteModal" this)}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        {{/if}}
         {{#if this.canRequestSendBack}}
           <AuButton
             data-test-submission-header-action-request-send-back
