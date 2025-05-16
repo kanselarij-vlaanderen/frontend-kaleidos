@@ -120,11 +120,13 @@ export default class SubmissionsRoute extends Route {
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.CONCEPT
     );
-    if (params.showConcepts) {
+    if (params.showConcepts && this.currentSession.may('view-concept-submissions')) {
       options['filter[status][:uri:]'] = conceptStatus.uri;
       // only concepts for your own organization
       options['filter[requested-by][user-organizations][:id:]'] =
         this.currentSession.organization.id;
+      // override viewing all mandatees
+      options['filter[requested-by][person][:id:]'] = undefined;
     } else {
       // show all but concepts
       options['filter[status][:not:label]'] = conceptStatus.label;
@@ -153,5 +155,9 @@ export default class SubmissionsRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.submitters = this.submitters;
+    // this clears the queryParam if it's present but not "allowed" (after the next refreshModel happens for any reason)
+    if (controller.showConcepts && !this.currentSession.may('view-concept-submissions')) {
+      controller.showConcepts = false;
+    }
   }
 }

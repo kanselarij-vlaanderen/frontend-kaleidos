@@ -157,7 +157,8 @@ export default class SubmissionHeaderComponent extends Component {
   }
 
   get canDeleteSubmission() {
-    return this.currentSession.may('delete-submissions');
+    // there are 2 deletes, if it's a concept don't show the delete in actions button
+    return this.currentSession.may('delete-submissions') && !this.canDeleteConceptSubmission;
   }
 
   get canDeleteConceptSubmission() {

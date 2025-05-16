@@ -69,16 +69,18 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
 
     await submission.requestedBy;
 
-    if (submission.confidential) {
-      if (!this.currentSession.may('view-all-submissions')) {
-        if (this.currentLinkedMandatee && this.mandatees.length) {
-          const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
-          if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
-            this.router.transitionTo('submissions');
-          }
-        } else {
+    if (
+      (submission.confidential || submission.isConcept) &&
+      !this.currentSession.may('view-all-submissions')
+    ) {
+      // your organization mandatee must be linked to submission to view these
+      if (this.currentLinkedMandatee && this.mandatees.length) {
+        const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
+        if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
           this.router.transitionTo('submissions');
         }
+      } else {
+        this.router.transitionTo('submissions');
       }
     }
 

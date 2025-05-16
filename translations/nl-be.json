@@ -1432,7 +1432,6 @@
   "send-back-to-submitter": "Stuur terug naar indiener",
   "send-back-to-submitter-message": "Bij terugsturen zal dit agendapunt volledig verwijderd worden. Hierbij gaan ook de beslissing en het kort bestek verloren!",
   "delete-submission": "Verwijder indiening",
-  "delete-concept-submission": "Verwijder concept",
   "this-submission-is-being-treated-by-user": "Deze indiening is in behandeling genomen door {user}",
   "resubmit-submission": "Dien opnieuw in",
   "submit-submission": "Dien in",
