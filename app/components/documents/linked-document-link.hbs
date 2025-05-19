@@ -22,12 +22,55 @@
               @model={{this.lastPiece.id}}
               class="auk-h4"
             >
-              {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
+              {{#let
+                (or
+                  this.lastPiece.file.derived.extension this.lastPiece.file.extension
+                )
+                as |extension|
+              }}
+                {{this.lastPiece.name}}{{#if extension}}.{{extension}}{{/if}}
+              {{/let}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
-              {{#if this.lastPiece.created}}
-                {{t "uploaded-at"}}
-                {{datetime-at (or this.lastPiece.file.created this.lastPiece.created)}}
+              {{#if (not this.loadData.isRunning)}}
+                <p>
+                  {{#if (or this.lastPiece.created this.lastPiece.file.created)}}
+                    {{t "uploaded-at"}}
+                    {{datetime-at (or this.lastPiece.file.created this.lastPiece.created)}}
+                  {{/if}}
+                  {{#if
+                    (and
+                      this.lastPiece.file.derived
+                      (await (this.canViewConfidentialPiece))
+                    )
+                  }}
+                    {{t "as"}}
+                    <AuLinkExternal
+                      href={{await this.lastPiece.namedDownloadLinkPromise}}
+                      download
+                    >
+                      {{t "source-file-lowercase"}}
+                    </AuLinkExternal>
+                  {{/if}}
+                </p>
+              {{/if}}
+              {{#if
+                (await (this.canViewConfidentialPiece))
+              }}
+                {{#if this.lastPiece.signedPieceCopy.file}}
+                  <p>
+                    <AuLinkExternal
+                      href={{await
+                        this.lastPiece.signedPieceCopy.namedDownloadLinkPromise
+                      }}
+                      download
+                    >
+                      {{t "signed-document"}}
+                    </AuLinkExternal>
+                    {{t "on"}}
+                    {{datetime-at (or this.lastPiece.signedPieceCopy.file.created this.lastPiece.signedPieceCopy.created)}}
+                  </p>
+                {{/if}}
               {{/if}}
             </div>
           </Group.Item>
