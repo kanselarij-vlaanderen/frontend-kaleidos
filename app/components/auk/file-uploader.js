@@ -20,6 +20,8 @@ import { isEnabledCabinetSubmissions } from '../../utils/feature-flag';
 export default class FileUploader extends Component {
   @service store;
   @service('file-queue') fileQueueService;
+  @service toaster;
+  @service intl;
 
   @tracked uploadedFileLength; // The amount of files that have been uploaded successfully
 
@@ -67,11 +69,22 @@ export default class FileUploader extends Component {
         file.name = originalName.slice(0, uppercasePDFIndex) + '.pdf';
       }
       this.args.onQueueUpdate?.(this.queueInfo);
-      const response = yield file.upload(
-        (this.args.isSubmission && isEnabledCabinetSubmissions())
-          ? '/draft-files'
-          : '/files'
-      );
+      let response;
+      try {
+        response = yield file.upload(
+          (this.args.isSubmission && isEnabledCabinetSubmissions())
+            ? '/draft-files'
+            : '/files'
+        );
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('could-not-upload-file', {name: file.name, error: error.message}),
+          this.intl.t('warning-title')
+        );
+        // manually remove failed file from queue to unblock the queue
+        this.fileQueue.remove(file);
+        throw error;
+      }
       const body = yield response.json();
       const fileFromStore = yield this.store.findRecord(
         (this.args.isSubmission && isEnabledCabinetSubmissions())
