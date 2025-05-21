@@ -201,8 +201,8 @@ export default class DraftSubmissionService extends Service {
   validateUploadedFile = (file) => {
     const mimetypeAllowed = SUBMISSION_ALLOWED_MIME_TYPES.includes(file.type);
     // extension is in the name
-    const extension = file?.name?.split('.').pop();
-    const extensionAllowed = SUBMISSION_ALLOWED_EXTENSION.includes(extension.toLowercase());
+    const extension = file.name.split('.').pop();
+    const extensionAllowed = SUBMISSION_ALLOWED_EXTENSION.includes(extension?.toLowerCase());
     if (
       !this.currentSession.may('upload-any-submission-document-extension') &&
       !mimetypeAllowed &&
