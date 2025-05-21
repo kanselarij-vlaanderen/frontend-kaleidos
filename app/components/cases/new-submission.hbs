@@ -119,7 +119,7 @@
       <Group>
         <AuButton
           data-test-cases-new-submission-form-cancel
-          @skin="secondary"
+          @skin="naked"
           @disabled={{or this.createSubmission.isRunning this.isUploadingFiles}}
           {{on "click" (perform this.cancelForm)}}
         >

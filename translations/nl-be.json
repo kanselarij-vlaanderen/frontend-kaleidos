@@ -1513,6 +1513,6 @@
   "verify-delete-all-decisions-sign-flow-data": "Bent u zeker dat u de ondertekenflows van alle beslissingen van deze agenda in Kaleidos wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden. Vergeet niet om de flows ook in het platform Digitaal Ondertekenen stop te zetten. Dit gebeurt niet automatisch.",
   "your-session-is-invalid": "Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten.",
   "save-as-concept": "Opslaan als concept",
-  "show-concepts": "Toon enkel concepten",
+  "show-concepts": "Toon concepten",
   "concepts": "Concepten"
 }

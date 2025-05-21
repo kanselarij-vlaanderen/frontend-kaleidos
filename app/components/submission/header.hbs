@@ -62,6 +62,16 @@
         </Auk::Toolbar::Group>
       {{/if}}
       <AuButtonGroup>
+        {{#if this.canDeleteConceptSubmission}}
+          <AuButton
+            data-test-submission-header-action-delete-concept
+            @alert={{true}}
+            @skin="secondary"
+            {{on "click" (toggle "isOpenDeleteModal" this)}}
+          >
+            {{t "delete"}}
+          </AuButton>
+        {{/if}}
         {{#if this.canResubmitSubmission}}
           <AuButton
             data-test-submission-header-action-resubmit
@@ -78,15 +88,6 @@
             {{on "click" (toggle "isOpenResubmitModal" this)}}
           >
           {{t "submit-submission"}}
-          </AuButton>
-        {{/if}}
-        {{#if this.canDeleteConceptSubmission}}
-          <AuButton
-            data-test-submission-header-action-delete-concept
-            @alert={{true}}
-            {{on "click" (toggle "isOpenDeleteModal" this)}}
-          >
-            {{t "delete"}}
           </AuButton>
         {{/if}}
         {{#if this.canRequestSendBack}}
