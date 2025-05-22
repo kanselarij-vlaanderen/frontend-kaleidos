@@ -116,21 +116,24 @@
               >
                 <div class="vlc-document-card-item" data-test-vl-document-piece>
                   <div class="vlc-document-card-item__title">
-                    {{#if (or (await  piece.file.derived) piece.file)}}
-                      {{#let
-                        (or
-                          piece.file.derived.extension piece.file.extension
-                        )
-                        as |extension|
-                      }}
-                        <LinkTo
-                          data-test-vl-document-name
-                          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                          @route="document"
-                          @model={{piece.id}}
-                        >
-                          {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
-                        </LinkTo>
+                    {{#if piece.file}}
+                    {{! explicit await, we don't want to load this data until it is needed}}
+                      {{#let (await piece.file.derived) as |derivedFile|}}
+                        {{#let
+                          (or
+                            derivedFile.extension piece.file.extension
+                          )
+                          as |extension|
+                        }}
+                          <LinkTo
+                            data-test-vl-document-name
+                            class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                            @route="document"
+                            @model={{piece.id}}
+                          >
+                            {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                          </LinkTo>
+                        {{/let}}
                       {{/let}}
                     {{else}}
                       <h6
