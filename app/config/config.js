@@ -53,6 +53,15 @@ export const SUBMISSION_ALLOWED_MIME_TYPES = [
   'application/zip', // DOCX (Google Docs), XLSX (Google Docs, LibreOffice)
   'application/pdf' // PDF
 ];
+
+// mimetype was not enough for zip, using extension as backup
+export const SUBMISSION_ALLOWED_EXTENSION = [
+  'docx',
+  'xlsx',
+  'zip',
+  'pdf'
+];
+
 export const EMAIL_ATTACHMENT_WARN_SIZE = 10 * 1000000; // 10 MB
 export const EMAIL_ATTACHMENT_MAX_SIZE = 30 * 1000000; // 30 MB
 
