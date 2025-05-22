@@ -7,45 +7,30 @@ import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /**
- * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
+ * @argument filterTitle
  * @argument onSetFilter
- * @argument caseFilter: filter's initial value
+ * @argument defaultFilter: filter's initial value
  */
-export default class CasesHeader extends Component {
-  @service currentSession;
+export default class TextFilter extends Component {
   @service router;
   @service store;
 
-  @tracked isOpenNewCaseAddSubcaseModal = false;
   @tracked filterText;
-
-  @tracked linkedMandatees;
+  @tracked isOpenAddSubmissionModal = false;
 
   constructor() {
     super(...arguments);
-    this.filterText = this.args.caseFilter || '';
-    this.loadLinkedMandatees.perform();
+    this.filterText = this.args.defaultFilter || '';
   }
 
-  loadLinkedMandatees = task(async () => {
-    this.linkedMandatees = await this.store.queryAll('mandatee', {
-      'filter[user-organizations][:id:]': this.currentSession.organization.id,
-      'filter[:has-no:end]': true,
-      include: 'mandate.role',
-      sort: 'start',
-    });
-  });
+  get enableFilter() {
+    return typeof this.args.onSetFilter === "function";
+  }
 
   @action
   onInputFilter(event) {
     this.filterText = event.target.value;
     this.debouncedSetFilter.perform();
-  }
-
-  @action
-  saveNewCaseAddSubcase(decisionmakingFlow) {
-    this.isOpenNewCaseAddSubcaseModal = false;
-    this.router.transitionTo('cases.case.subcases.add-subcase', decisionmakingFlow.id);
   }
 
   debouncedSetFilter = restartableTask(async () => {

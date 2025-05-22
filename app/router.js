@@ -63,7 +63,10 @@ Router.map(function() {
     });
   });
   if (isEnabledCabinetSubmissions()) {
-    this.route('submissions', { path: '/indieningen' });
+    this.route('submissions', { path: '/indieningen', }, function() {
+      this.route('index', { path: '/opvolgen' });
+      this.route('concepts', { path: '/concepten' });
+    });
   }
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {

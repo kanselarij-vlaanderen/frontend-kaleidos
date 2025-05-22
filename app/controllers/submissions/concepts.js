@@ -6,7 +6,7 @@ import { debounce } from '@ember/runloop';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
-export default class CasesSubmissionsIndexController extends Controller {
+export default class CasesSubmissionsConceptsController extends Controller {
   @service currentSession;
   @service router;
 
@@ -42,8 +42,8 @@ export default class CasesSubmissionsIndexController extends Controller {
       },
     },
     {
-      showConcepts: {
-        type: 'boolean',
+      submissionFilter: {
+        type: 'string',
       },
     }
   ];
@@ -57,12 +57,13 @@ export default class CasesSubmissionsIndexController extends Controller {
   @tracked isLoadingModel;
   @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
-  @tracked showConcepts = false;
+  @tracked submissionFilter = null;
 
   constructor() {
     super(...arguments);
     window.addEventListener('resize', () => debounce(this, this.updateToggleableFilters, 150));
     this.updateToggleableFilters();
+    this.submissionFilter = null;
   }
 
   willDestroy() {
@@ -85,16 +86,14 @@ export default class CasesSubmissionsIndexController extends Controller {
     this.submitters = submitters;
   }
 
+  setSubmissionFilter = (value) => (this.submissionFilter = value);
+
   selectSize = (size) => (this.size = size);
   nextPage = () => (this.page += 1);
   prevPage = () => (this.page -= 1);
 
   setDateFrom = (date) => (this.dateFrom = formatDate(date));
   setDateTo = (date) => (this.dateTo = formatDate(date));
-
-  get mayShowMinisterFilter() {
-    return this.currentSession.may('view-all-submissions');
-  }
 
   navigateToSubmission = (submission) => {
     this.router.transitionTo(

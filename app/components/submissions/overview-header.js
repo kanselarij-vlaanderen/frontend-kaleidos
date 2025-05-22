@@ -9,6 +9,7 @@ export default class SubmissionsOverviewHeaderComponent extends Component {
   @service store;
   @service currentSession;
   @service agendaService;
+  @service intl;
 
   @tracked selectedMeeting;
 
@@ -24,6 +25,14 @@ export default class SubmissionsOverviewHeaderComponent extends Component {
     this.loadMeeting.perform();
   }
 
+  get overviewRoute() {
+    return this.args.submission.isConcept ? 'submissions.concepts' : 'submissions.index';
+  }
+
+  get overviewRouteLabel() {
+    return this.args.submission.isConcept ? this.intl.t('all-submission-concepts') : this.intl.t('all-submissions');
+  }
+  
   loadMeeting = task(async () => {
     if (this.args.submission) {
       const meeting = await this.args.submission.meeting;

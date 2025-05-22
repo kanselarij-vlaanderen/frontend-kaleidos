@@ -5,10 +5,10 @@
         <AuLink
           @skin="button-naked"
           @icon="hierarchical-back"
-          @route="submissions"
+          @route="{{this.overviewRoute}}"
           class="au-u-padding-left-none"
         >
-          {{t "all-submissions"}}
+          {{this.overviewRouteLabel}}
         </AuLink>
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item class="au-u-padding-top-tiny au-u-padding-bottom-tiny">
@@ -43,6 +43,7 @@
                   {{! or when a unpropagated decisionmakingFlow is linked by editors, cabinet will not be able to see it}}
                 {{/if}}
               </h4>
+              <Cases::Submissions::StatusPill @status={{@submission.status}}/>
               {{#if @beingTreatedBy}}
                 <span data-test-submission-overview-header-treated-by class="auk-u-block">
                   {{t "this-submission-is-being-treated-by-user"
