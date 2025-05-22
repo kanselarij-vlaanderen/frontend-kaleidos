@@ -237,6 +237,7 @@
           data-test-route-settings---user-confirm-block-membership
           @alert={{true}}
           @loading={{this.blockMembership.isRunning}}
+          @loadingMessage={{t "loading"}}
           {{on
             "click"
             (queue
@@ -285,6 +286,7 @@
           data-test-route-settings---user-confirm-unblock-membership
           @alert={{true}}
           @loading={{this.unblockMembership.isRunning}}
+          @loadingMessage={{t "loading"}}
           {{on
             "click"
             (queue
@@ -330,6 +332,7 @@
           data-test-route-settings---user-confirm-block-user
           @alert={{true}}
           @loading={{this.blockUser.isRunning}}
+          @loadingMessage={{t "loading"}}
           {{on
             "click"
             (queue (perform this.blockUser) (toggle "showBlockUser" this))
@@ -376,6 +379,7 @@
           data-test-route-settings---user-confirm-unblock-user
           @alert={{true}}
           @loading={{this.unblockUser.isRunning}}
+          @loadingMessage={{t "loading"}}
           {{on
             "click"
             (queue (perform this.unblockUser) (toggle "showUnblockUser" this))

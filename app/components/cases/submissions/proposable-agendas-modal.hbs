@@ -78,6 +78,7 @@
         this.loadAgendas.isRunning
         (and this.saveSubmissionAndSubmitToAgenda.isRunning this.selectedAgenda)
       }}
+      @loadingMessage={{t "loading"}}
       {{on "click" (perform this.saveSubmissionAndSubmitToAgenda)}}
     >
       {{t "propose-for-agenda"}}

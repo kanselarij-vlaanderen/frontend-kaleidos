@@ -67,6 +67,7 @@
       @skin="primary"
       @disabled={{this.isDisabledSave}}
       @loading={{this.save.isRunning}}
+      @loadingMessage={{t "loading"}}
       {{on "click" (perform this.save)}}
     >
       {{t "confirm"}}

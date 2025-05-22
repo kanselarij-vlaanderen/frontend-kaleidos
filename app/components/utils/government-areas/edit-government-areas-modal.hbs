@@ -38,6 +38,7 @@
       data-test-edit-government-fields-modal-save
       @skin="primary"
       @loading={{this.save.isRunning}}
+      @loadingMessage={{t "loading"}}
       {{on "click" (perform this.save)}}
     >
       {{t "save"}}

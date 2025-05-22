@@ -166,6 +166,7 @@
             data-test-agendaitem-titles-edit-save={{true}}
             @skin="primary"
             @loading={{this.saveChanges.isRunning}}
+            @loadingMessage={{t "loading"}}
             {{on "click" (perform this.saveChanges)}}
           >
             {{t "save"}}

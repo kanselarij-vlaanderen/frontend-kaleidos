@@ -388,6 +388,7 @@
               data-test-publication-case-info-panel-cancel
               @skin="naked"
               @loading={{this.closeEditingPanel.isRunning}}
+              @loadingMessage={{t "loading"}}
               @disabled={{this.save.isRunning}}
               {{on "click" (perform this.closeEditingPanel)}}
             >
@@ -401,6 +402,7 @@
               data-test-publication-case-info-panel-save
               @skin="primary"
               @loading={{this.save.isRunning}}
+              @loadingMessage={{t "loading"}}
               @disabled={{or
                 (not this.isValid)
                 this.closeEditingPanel.isRunning
