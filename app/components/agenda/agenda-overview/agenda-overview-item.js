@@ -71,12 +71,12 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     // Additional failsafe check on document visibility.
     // retracted and postponed documents are hidden for non admin because
     // we cannot match the "historic name" of the documents due to resubmitting
-    const decisionPublicationActivity = yield this.args.meeting.internalDecisionPublicationActivity;
-    const decisionPublicationStatus = yield decisionPublicationActivity?.status;
+    const decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    const decisionPublicationStatus = yield decisionPublicationActivity?.belongsTo('status').reload();
     const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-    const documentPublicationActivity = yield this.args.meeting.internalDocumentPublicationActivity;
-    const documentPublicationStatus = yield documentPublicationActivity?.status;
+    const documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+    const documentPublicationStatus = yield documentPublicationActivity?.belongsTo('status').reload();
     const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     const decisionActivityResultCode = yield this.decisionActivity?.decisionResultCode;
 
@@ -130,7 +130,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.decisionResultCode;
+    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
     this.loadDocumentsPublicationStatus.perform();
   }
 

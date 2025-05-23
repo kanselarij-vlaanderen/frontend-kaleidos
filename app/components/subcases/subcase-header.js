@@ -75,7 +75,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     }
     this.parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
     const decisionActivity = yield this.subcaseService.getLatestDecisionActivity(this.args.subcase);
-    const decisionResultCode = yield decisionActivity?.decisionResultCode;
+    const decisionResultCode = yield decisionActivity?.belongsTo('decisionResultCode').reload();
     if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
       // Check whether this subcase is already on a design agenda
       this.isForPostponedSubcase = !(yield this.subcaseService.isOnDesignAgenda(this.args.subcase));

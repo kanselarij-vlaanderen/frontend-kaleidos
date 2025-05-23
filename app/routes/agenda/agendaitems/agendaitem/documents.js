@@ -57,14 +57,14 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     // Additional failsafe check on document visibility.
     // retracted and postponed documents are hidden for non admin because
     // we cannot match the "historic name" of the documents due to resubmitting
-    const decisionPublicationActivity = await this.meeting.internalDecisionPublicationActivity;
-    const decisionPublicationStatus = await decisionPublicationActivity?.status;
+    const decisionPublicationActivity = await this.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    const decisionPublicationStatus = await decisionPublicationActivity?.belongsTo('status').reload();
     const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-    const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
-    const documentPublicationStatus = await documentPublicationActivity?.status;
+    const documentPublicationActivity = await this.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+    const documentPublicationStatus = await documentPublicationActivity?.belongsTo('status').reload();
     const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-    const decisionActivityResultCode = await this.decisionActivity?.decisionResultCode;
+    const decisionActivityResultCode = await this.decisionActivity?.belongsTo('decisionResultCode').reload();
 
     if (!decisionsAreReleased || this.currentAgenda.status.get('isDesignAgenda')) {
       this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
