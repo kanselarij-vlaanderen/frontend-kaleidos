@@ -60,15 +60,15 @@ export default class FileConversionService extends Service {
             this.toaster.success(this.intl.t('document-converted'));
           }
         } else {
-          console.warn(`Couldn't convert file with id ${sourceFile.id}`);
-          let errorMessage = response.status;
+          let errorMessage = this.intl.t('document-failed-to-convert', {name: sourceFile.filename});
           if (response.headers.get('Content-Type').includes('application/vnd.api+json')) {
             const { errors } = await response.json();
-            errorMessage = JSON.stringify(errors);
+            errorMessage += JSON.stringify(errors);
           } else {
             // we don't get these headers when the http call times out
-            errorMessage= this.intl.t('document-failed-to-convert', {name: sourceFile.filename} )
+            errorMessage= this.intl.t('document-failed-to-convert-timed-out', {name: sourceFile.filename} )
           }
+          console.warn(errorMessage);
           throw new Error(errorMessage);
         }
       } catch (error) {

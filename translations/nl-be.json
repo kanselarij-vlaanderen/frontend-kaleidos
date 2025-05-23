@@ -1514,5 +1514,6 @@
   "convert-to-pdf": "Converteer naar PDF",
   "document-being-converted": "Document omzetten naar PDF",
   "document-converted": "Document omgezet naar PDF",
-  "document-failed-to-convert": "Document {name} kan mogelijk niet worden omgezet naar pdf. Vermoedelijk is het bron document te groot of zitten er objecten in die niet kunnen worden omgevormd. Dit document moet manueel worden opgezet naar pdf en daarna opgeladen als afgeleid bestand."
+  "document-failed-to-convert": "Document \"{name}\" kan niet worden omgezet naar pdf. Reden: ",
+  "document-failed-to-convert-timed-out": "Document \"{name}\" kan mogelijk niet worden omgezet naar pdf. Vermoedelijk is het bron document te groot of zitten er objecten in die niet kunnen worden omgevormd. Dit document moet manueel worden opgezet naar pdf en daarna opgeladen als afgeleid bestand."
 }
