@@ -44,7 +44,7 @@ export default class FileConversionService extends Service {
             'Content-Type': 'application/vnd.api+json',
           },
         });
-  
+
         if (response.ok) {
           if (oldDerivedFile) {
             oldDerivedFile.source = null;
@@ -74,7 +74,7 @@ export default class FileConversionService extends Service {
       } catch (error) {
         // errors are caught where this method is used and an error toast is shown
         // maybe we should only do that toast here once rather than duplicating
-        console.log('Could not convert document, possibly timed out');
+        console.warn('Could not convert document, possibly timed out');
         throw error;
       } finally {
         if (showFullProgress) {
