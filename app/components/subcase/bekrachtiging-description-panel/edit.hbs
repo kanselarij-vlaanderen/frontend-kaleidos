@@ -101,6 +101,7 @@
           <AuButton
             @skin="primary"
             @loading={{this.isSaving}}
+            @loadingMessage={{t "loading"}}
             {{on "click" this.saveChanges}}
           >
             {{t "save"}}

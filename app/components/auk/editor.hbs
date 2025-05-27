@@ -28,6 +28,7 @@
             <AuButton
               @skin="primary"
               @loading={{@onSaveTask.isRunning}}
+              @loadingMessage={{t "loading"}}
               @disabled={{@fullScreenSaveDisabled}}
               {{on "click" (perform @onSaveTask)}}
             >

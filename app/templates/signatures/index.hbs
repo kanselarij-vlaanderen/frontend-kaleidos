@@ -222,6 +222,7 @@
                   this.createSignFlow.isRunning
                   this.removeSignFlow.isRunning
                 }}
+                @loadingMessage={{t "loading"}}
                 @disabled={{or
                   (not this.signers.length)
                   (not this.allSignersHaveEmail.value)
@@ -237,6 +238,7 @@
                 @alert={{true}}
                 @skin="naked"
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                @loadingMessage={{t "loading"}}
                 {{on "click" this.removeSignFlow.perform}}
               >
                 {{t "stop-sign-flow"}}
