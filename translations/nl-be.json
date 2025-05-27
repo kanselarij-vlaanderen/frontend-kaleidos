@@ -1511,5 +1511,5 @@
   "delete-all-decisions-sign-flow-data-counter":"{count} van {total} ondertekenflows verwijderd.",
   "verify-delete-all-decisions-sign-flow-data": "Bent u zeker dat u de ondertekenflows van alle beslissingen van deze agenda in Kaleidos wilt verwijderen? Deze actie kan niet ongedaan gemaakt worden. Vergeet niet om de flows ook in het platform Digitaal Ondertekenen stop te zetten. Dit gebeurt niet automatisch.",
   "your-session-is-invalid": "Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten.",
-  "could-not-upload-file": "Volgend bestand kon niet worden opgeladen: {name}. Mogelijk zijn er netwerk problemen of heeft u dit bestand open staan. Sluit het bestand in alle applicaties en probeer het opnieuw. Als het probleem niet opgelost is, neem dan contact op met kaleidos.servicedesk@vlaanderen.be. Gelieve volgende boodschap te vermelden: {error}" 
+  "could-not-upload-file": "Volgend bestand kon niet worden opgeladen: {name}. Sluit het bestand in alle applicaties en probeer opnieuw. Als het probleem zich opnieuw voordoet, neem dan contact op met kaleidos.servicedesk@vlaanderen.be. Gelieve volgende boodschap te vermelden: {error}" 
 }
