@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { task, restartableTask, timeout } from 'ember-concurrency';
 import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /**
  * @argument didCreateNewCase: action passing down a newly created decisionmaking-flow.
