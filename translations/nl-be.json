@@ -1513,5 +1513,7 @@
   "your-session-is-invalid": "Uw sessie is verlopen, en u wordt zo meteen automatisch uitgelogd. Onvoltooid werk zal niet opgeslagen kunnen worden in Kaleidos. Gelieve dit indien nodig op uw eigen apparaat op te slaan alvorens deze pagina te verlaten.",
   "convert-to-pdf": "Converteer naar PDF",
   "document-being-converted": "Document omzetten naar PDF",
-  "document-converted": "Document omgezet naar PDF"
+  "document-converted": "Document omgezet naar PDF",
+  "document-failed-to-convert": "Document \"{name}\" kan niet worden omgezet naar pdf. Reden: ",
+  "document-failed-to-convert-timed-out": "Document \"{name}\" kon niet automatisch geconverteerd worden naar pdf."
 }
