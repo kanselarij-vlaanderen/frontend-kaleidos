@@ -1,0 +1,38 @@
+<AuButton
+  @skin="secondary"
+  {{on "click" this.openDownloadDocuments}}
+>
+  {{t "download-these-documents"}}
+</AuButton>
+
+<ConfirmationModal
+  @modalOpen={{this.showDownloadDocuments}}
+  @onCancel={{this.closeDownloadDocuments}}
+  @title={{t "download-all-documents"}}
+  @confirmMessage={{t "download-all-documents"}}
+  @onConfirm={{this.confirmDownloadDocuments}}
+>
+  <:body>
+    <div class="au-c-form">
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            @alignment="inline"
+            @selected={{this.selectedDownloadOption}}
+            @onChange={{this.onChangeDownloadOption}}
+            as |Group|
+          >
+            {{#each this.downloadOptions as |option|}}
+              <Group.Radio
+                @value={{option.value}}
+                >
+                {{option.label}}
+              </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
+    </div>
+  </:body>
+</ConfirmationModal>

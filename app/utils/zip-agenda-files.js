@@ -55,8 +55,37 @@ async function fileDownloadUrlFromJob(job, archiveName) {
   return `${file.downloadLink}?name=${archiveName}`;
 }
 
+function constructGenericArchiveName(name) {
+  const formattedDate = dateFormat(new Date(), 'dd_MM_yyyy_HH_mm_ss');
+  return `Documenten` + name ? `_${name}` : '' + `_${formattedDate}.zip`;
+}
+
+async function fetchGenericArchivingJobWithPath(path, store, pdfOnly) {
+  const job = await fetchGenericArchivingJob(path, pdfOnly);
+  if (job) {
+    return registerJobToStore(job, store);
+  }
+  return null;
+}
+
+async function fetchGenericArchivingJob(path, pdfOnly) {
+  let url = `${path}?pdfOnly=${pdfOnly}`;
+  const fetchedJob = await fetch(url, {
+    method: 'post',
+    headers: {
+      'Content-type': 'application/vnd.api+json',
+    },
+  });
+  if (fetchedJob.status > 201) {
+    return null;
+  }
+  return fetchedJob.json();
+}
+
 export {
   constructArchiveName,
   fetchArchivingJobForAgenda,
-  fileDownloadUrlFromJob
+  fileDownloadUrlFromJob,
+  constructGenericArchiveName,
+  fetchGenericArchivingJobWithPath
 };

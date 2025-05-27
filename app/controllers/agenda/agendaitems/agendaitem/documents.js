@@ -48,6 +48,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked subcase;
   @tracked decisionActivity;
 
+  get archivePath() {
+    return `agendaitems/${this.agendaitem.id}/pieces/files/archive`;
+  }
+
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');
     const hasCase = isPresent(this.agendaActivity);

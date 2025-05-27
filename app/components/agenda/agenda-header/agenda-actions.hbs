@@ -62,7 +62,7 @@
     {{on "click" this.openDownloadDocuments}}
     role="menuitem"
   >
-    {{t "download-documents"}}
+    {{t "download-all-documents"}}
   </AuButton>
   <AuButton
     data-test-agenda-actions-download-decisions
@@ -283,8 +283,8 @@
 <ConfirmationModal
   @modalOpen={{this.showDownloadDocuments}}
   @onCancel={{this.closeDownloadDocuments}}
-  @title={{t "download-documents"}}
-  @confirmMessage={{t "download-documents"}}
+  @title={{t "download-all-documents"}}
+  @confirmMessage={{t "download-all-documents"}}
   @onConfirm={{this.confirmDownloadDocuments}}
 >
   <:body>

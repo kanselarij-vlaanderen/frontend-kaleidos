@@ -302,7 +302,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
     const downloadFileToastOptions = {
       title: this.intl.t('file-ready'),
-      message: this.intl.t('agenda-documents-download-ready'),
+      message: this.intl.t('documents-download-ready'),
       timeOut: 60 * 10 * 1000,
     };
     const pdfOnly = this.downloadOption === 'pdf' ? true : false;
@@ -318,7 +318,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
       this.toaster.warning(
-        this.intl.t('no-documents-to-download-warning-text'),
+        this.intl.t('no-meeting-documents-to-download-warning-text'),
         this.intl.t('no-documents-to-download-warning-title'),
         {
           timeOut: 10000,
