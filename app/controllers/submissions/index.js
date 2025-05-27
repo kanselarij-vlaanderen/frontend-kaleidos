@@ -42,11 +42,6 @@ export default class CasesSubmissionsIndexController extends Controller {
       },
     },
     {
-      showConcepts: {
-        type: 'boolean',
-      },
-    },
-    {
       submissionFilter: {
         type: 'string',
       },
@@ -62,7 +57,6 @@ export default class CasesSubmissionsIndexController extends Controller {
   @tracked isLoadingModel;
   @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
-  @tracked showConcepts = false;
   @tracked submissionFilter = null;
 
   constructor() {

@@ -59,8 +59,7 @@ export default class SubmissionsConceptsRoute extends Route {
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       'filter[:has:pieces]': 't',
-      'filter[pieces][accepted-piece][agendaitems][agenda][created-for][:has-no:agenda]': 't', // filter out submissions on closed meetings
-      include: 'type,status,requested-by,mandatees.person,submission-activities,decisionmaking-flow',
+      include: 'type,status,requested-by,decisionmaking-flow',
       sort: params.sortSubmissions + (params.sortSubmissions ? ',' : '') + '-modified',
       page: {
         number: params.page,
@@ -89,8 +88,6 @@ export default class SubmissionsConceptsRoute extends Route {
     // only concepts for your own organization
     options['filter[requested-by][user-organizations][:id:]'] =
       this.currentSession.organization.id;
-    // override viewing all mandatees
-    options['filter[requested-by][person][:id:]'] = undefined;
 
     return this.store.query('submission', options);
   }
@@ -114,6 +111,5 @@ export default class SubmissionsConceptsRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.submitters = this.submitters;
   }
 }

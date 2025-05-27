@@ -37,11 +37,6 @@ export default class CasesSubmissionsConceptsController extends Controller {
       },
     },
     {
-      submitters: {
-        type: 'array',
-      },
-    },
-    {
       submissionFilter: {
         type: 'string',
       },
@@ -50,10 +45,9 @@ export default class CasesSubmissionsConceptsController extends Controller {
 
   @tracked page = 0;
   @tracked size = PAGINATION_SIZES[2];
-  @tracked sortSubmissions = '-planned-start';
+  @tracked sortSubmissions = '-created';
   @tracked dateFrom = null;
   @tracked dateTo = null;
-  @tracked submitters = [];
   @tracked isLoadingModel;
   @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
@@ -81,11 +75,6 @@ export default class CasesSubmissionsConceptsController extends Controller {
     this.filtersOpen = open;
   }
 
-  @action
-  setSubmitters(submitters) {
-    this.submitters = submitters;
-  }
-
   setSubmissionFilter = (value) => (this.submissionFilter = value);
 
   selectSize = (size) => (this.size = size);
@@ -101,17 +90,4 @@ export default class CasesSubmissionsConceptsController extends Controller {
       submission.id
     );
   }
-
-  getMandateeNames = async (submission) => {
-    const submitter = await submission.requestedBy;
-    const mandatees = await submission.mandatees;
-    const persons = await Promise.all(
-      mandatees
-        .slice()
-        .filter((m) => submitter?.id !== m.id)
-        .sort((m1, m2) => m1.priority - m2.priority)
-        .map((mandatee) => mandatee.person)
-    );
-    return persons.map((person) => person.fullName);
-  };
 }
