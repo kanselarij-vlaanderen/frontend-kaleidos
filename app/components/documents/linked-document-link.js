@@ -12,6 +12,7 @@ export default class LinkedDocumentLink extends Component {
 
   @tracked sortedPieces = new TrackedArray([]);
   @tracked accessLevel;
+  @tracked derived;
 
   constructor() {
     super(...arguments);
@@ -31,6 +32,10 @@ export default class LinkedDocumentLink extends Component {
       this.sortedPieces = sortedContainerPieces;
     }
     this.accessLevel = yield this.lastPiece.accessLevel;
+    const file = yield this.lastPiece.file;
+    this.derived = yield file?.derived;
+    const signedPieceCopy = yield this.lastPiece.signedPieceCopy;
+    yield signedPieceCopy?.file;
   }
 
   get lastPiece() {
@@ -39,6 +44,10 @@ export default class LinkedDocumentLink extends Component {
 
   get reverseSortedPieceHistory() {
     return this.sortedPieces.reverse().slice(1);
+  }
+
+  canViewConfidentialPiece = async () => {
+    return await this.pieceAccessLevelService.canViewConfidentialPiece(this.lastPiece);
   }
 
   @action
