@@ -8,11 +8,14 @@
   </Toolbar.Group>
   <Toolbar.Group @position="right" class="au-u-flex au-u-flex--wrap au-u-flex--spaced-tiny" as |Group|>
     {{#if this.model.pieces.length}}
-      {{#if this.documentsAreVisible}}
+      {{#if (and this.documentsAreVisible this.hasFilesToDownload)}}
         <Group.Item>
-          <Documents::DownloadDocuments
-            @archivePath={{this.archivePath}}
-          />
+          <AuButton
+            @skin="secondary"
+            {{on "click" this.openDownloadDocumentsModal}}
+          >
+            {{t "download-these-documents"}}
+          </AuButton>
         </Group.Item>
       {{/if}}
       {{#if (user-may "manage-documents")}}
@@ -179,3 +182,9 @@
       <p>{{t "documents-on-approved-agenda-message"}}</p>
   </:body>
 </ConfirmationModal>
+
+<Documents::DownloadDocumentsModal
+  @modalOpen={{this.isOpenDownloadDocumentsModal}}
+  @onCancel={{this.closeDownloadDocumentsModal}}
+  @archivePath={{this.archivePath}}
+/>

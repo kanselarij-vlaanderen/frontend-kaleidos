@@ -26,6 +26,7 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
   if (mandateeIds.length) {
     url += '&' + (new URLSearchParams({ mandateeIds }).toString());
   }
+  // This does not handle any errors send from the backend.
   const fetchedJob = await fetch(url, {
     method: 'post',
     headers: {
@@ -56,8 +57,9 @@ async function fileDownloadUrlFromJob(job, archiveName) {
 }
 
 function constructGenericArchiveName(name) {
+  const uniqueName = name ? `_${name}` : '';
   const formattedDate = dateFormat(new Date(), 'dd_MM_yyyy_HH_mm_ss');
-  return `Documenten` + name ? `_${name}` : '' + `_${formattedDate}.zip`;
+  return `Kaleidos_documenten${uniqueName}_${formattedDate}.zip`;
 }
 
 async function fetchGenericArchivingJobWithPath(path, store, pdfOnly) {

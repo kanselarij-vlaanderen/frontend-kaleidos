@@ -53,6 +53,12 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
+    // need at least 1 file before we show the download button
+    this.hasFilesToDownload = (await this.store.count('piece', {
+      'filter[agendaitems][:id:]': this.agendaitem.id,
+      'filter[:has:file]': true,
+    })) > 0;
+
     this.showDocumentsAreVisibleAlert = false;
     // Additional failsafe check on document visibility.
     // retracted and postponed documents are hidden for non admin because
@@ -118,6 +124,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.showDocumentsAreVisibleAlert = this.showDocumentsAreVisibleAlert;
     controller.meeting = this.meeting;
     controller.decisionActivity = this.decisionActivity;
+    controller.hasFilesToDownload = this.hasFilesToDownload;
     controller.loadNewPieces.perform();
   }
 

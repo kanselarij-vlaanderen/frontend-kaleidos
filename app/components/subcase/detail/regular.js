@@ -15,11 +15,17 @@ export default class SubcaseDetailRegular extends Component {
   @tracked latestDecisionActivity;
   @tracked isOpenBatchDetailsModal = false;
   @tracked statusChangeActivities;
+  @tracked isOpenDownloadDocumentsModal = false;
+  @tracked hasFilesToDownload = false;
 
   constructor() {
     super(...arguments);
     this.loadLatestDecisionActivity.perform();
     this.loadSubmissionData.perform();
+  }
+
+  get archivePath() {
+    return `/subcases/${this.args.subcase.id}/pieces/files/archive`;
   }
 
   @task
@@ -30,6 +36,11 @@ export default class SubcaseDetailRegular extends Component {
       !this.currentSession.may('view-access-level-pill-when-postponed'))) {
       this.hideAccessLevel = true;
     }
+    // need at least 1 file before we show the download button
+    this.hasFilesToDownload = (yield this.store.count('piece', {
+      'filter[submission-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[:has:file]': true,
+    })) > 0;
   }
 
   loadSubmissionData = task(async () => {
@@ -59,5 +70,13 @@ export default class SubcaseDetailRegular extends Component {
   saveBatchDetails() {
     this.args.refresh?.();
     this.isOpenBatchDetailsModal = false;
+  }
+
+  openDownloadDocumentsModal = () => {
+    this.isOpenDownloadDocumentsModal = true;
+  }
+
+  closeDownloadDocumentsModal = () => {
+    this.isOpenDownloadDocumentsModal = false;
   }
 }

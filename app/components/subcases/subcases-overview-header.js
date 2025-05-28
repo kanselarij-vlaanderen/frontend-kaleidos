@@ -20,6 +20,8 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked isArchivingCase = false;
   @tracked hasOngoingSubmissions = false;
   @tracked currentSubmission;
+  @tracked isOpenDownloadDocumentsModal = false;
+  @tracked hasFilesToDownload;
 
   constructor() {
     super(...arguments);
@@ -35,6 +37,10 @@ export default class SubCasesOverviewHeader extends Component {
       sort: 'start',
     });
   });
+
+  get archivePath() {
+    return `/cases/${this.case.id}/pieces/files/archive`;
+  }
 
   get mayCreateSubmissions() {
     return (
@@ -54,6 +60,10 @@ export default class SubCasesOverviewHeader extends Component {
     this.case = yield this.args.decisionmakingFlow.case;
     this.publicationFlows = yield this.case.publicationFlows;
     yield this.loadLinkedMandatees.perform();
+    this.hasFilesToDownload = (yield this.store.count('piece', {
+      'filter[cases][:id:]': this.case.id,
+      'filter[:has:file]': true,
+    })) > 0;
   }
 
   loadSubmissionsData = task(async () => {
@@ -149,5 +159,13 @@ export default class SubCasesOverviewHeader extends Component {
   @action
   navigateToAddSubmission() {
     this.router.transitionTo('cases.case.subcases.new-submission', this.args.decisionmakingFlow.id);
+  }
+
+  openDownloadDocumentsModal = () => {
+    this.isOpenDownloadDocumentsModal = true;
+  }
+  
+  closeDownloadDocumentsModal = () => {
+    this.isOpenDownloadDocumentsModal = false;
   }
 }

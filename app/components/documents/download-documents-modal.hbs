@@ -1,13 +1,6 @@
-<AuButton
-  @skin="secondary"
-  {{on "click" this.openDownloadDocuments}}
->
-  {{t "download-these-documents"}}
-</AuButton>
-
 <ConfirmationModal
-  @modalOpen={{this.showDownloadDocuments}}
-  @onCancel={{this.closeDownloadDocuments}}
+  @modalOpen={{@modalOpen}}
+  @onCancel={{@onCancel}}
   @title={{t "download-all-documents"}}
   @confirmMessage={{t "download-all-documents"}}
   @onConfirm={{this.confirmDownloadDocuments}}
@@ -24,9 +17,7 @@
             as |Group|
           >
             {{#each this.downloadOptions as |option|}}
-              <Group.Radio
-                @value={{option.value}}
-                >
+              <Group.Radio @value={{option.value}}>
                 {{option.label}}
               </Group.Radio>
             {{/each}}

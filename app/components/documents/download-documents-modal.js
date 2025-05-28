@@ -10,7 +10,21 @@ import {
 import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
 import { all } from 'rsvp';
 
-export default class DownloadDocumentsComponent extends Component {
+/**
+ * @argument modalOpen: if the modal is showing
+ * @argument onCancel
+ * @argument archivePath: the path to the download service endpoint
+ *
+ * The archivePath should look like this: `/${modeltype(plural)}/${model.id}/pieces/files/archive`
+ * first slash is needed or we attempt the current route instead (which fails).
+ * model type should be plural (agendaitem > /agendaitems/id/...)
+ * id should be of the model you want documents of
+ * the relevant path should exist in dispatcher and redirect to a known route in the file-bundling-job-creation service
+ *
+ * If no documents are found we will not get a job returned and show that in a pop-up
+ * If an error occurs we will do the same (no documents found pop-up)
+ */
+export default class DownloadDocumentsModalComponent extends Component {
   @service intl;
   @service toaster;
   @service store;
@@ -28,30 +42,21 @@ export default class DownloadDocumentsComponent extends Component {
   ];
 
   @tracked downloadOption = this.downloadOptions[0].value;
-  @tracked showDownloadDocuments = false;
 
   get selectedDownloadOption() {
     return this.downloadOption;
   }
 
-  openDownloadDocuments = () => {
-    this.showDownloadDocuments = true;
-  }
-
-  closeDownloadDocuments = () => {
-    this.showDownloadDocuments = false;
-  }
-
   onChangeDownloadOption = (selectedDownloadOption) => {
     this.downloadOption = selectedDownloadOption;
-  }
+  };
 
-  confirmDownloadDocuments = async() => {
+  confirmDownloadDocuments = async () => {
     await this.downloadDocuments();
-    this.closeDownloadDocuments();
-  }
+    this.args.onCancel();
+  };
 
-  downloadDocuments = async() => {
+  downloadDocuments = async () => {
     const downloadFileToastOptions = {
       title: this.intl.t('file-ready'),
       message: this.intl.t('documents-download-ready'),
@@ -63,7 +68,7 @@ export default class DownloadDocumentsComponent extends Component {
     const jobPromise = fetchGenericArchivingJobWithPath(
       this.args.archivePath,
       this.store,
-      pdfOnly
+      pdfOnly,
     );
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
@@ -72,7 +77,7 @@ export default class DownloadDocumentsComponent extends Component {
         this.intl.t('no-documents-to-download-warning-title'),
         {
           timeOut: 10000,
-        }
+        },
       );
       return;
     }
@@ -83,7 +88,7 @@ export default class DownloadDocumentsComponent extends Component {
         this.intl.t('archive-in-creation-title'),
         {
           timeOut: 3 * 60 * 1000,
-        }
+        },
       );
       this.jobMonitor.register(job, async (job) => {
         this.toaster.close(inCreationToast);
@@ -96,7 +101,7 @@ export default class DownloadDocumentsComponent extends Component {
           debug('Something went wrong while generating archive.');
           this.toaster.error(
             this.intl.t('error'),
-            this.intl.t('warning-title')
+            this.intl.t('warning-title'),
           );
         }
       });
@@ -106,5 +111,5 @@ export default class DownloadDocumentsComponent extends Component {
       downloadFileToastOptions.downloadLink = url;
       this.toaster.show(DownloadFileToast, downloadFileToastOptions);
     }
-  }
+  };
 }
