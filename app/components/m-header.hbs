@@ -30,7 +30,7 @@
             </Auk::Tab>
             {{#if (and (user-may "view-submissions") this.isEnabledCabinetSubmissions)}}
               <Auk::Tab
-                @route="submissions"
+                @route="submissions.ongoing"
                 @current-when="submissions cases.submissions cases.new-submission"
                 data-test-m-header-submissions>
                 {{t "submissions"}}

@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { debounce } from '@ember/runloop';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
@@ -49,25 +48,12 @@ export default class CasesSubmissionsConceptsController extends Controller {
   @tracked dateFrom = null;
   @tracked dateTo = null;
   @tracked isLoadingModel;
-  @tracked hasToggleableFilters = false;
   @tracked filtersOpen = false;
   @tracked submissionFilter = null;
 
   constructor() {
     super(...arguments);
-    window.addEventListener('resize', () => debounce(this, this.updateToggleableFilters, 150));
-    this.updateToggleableFilters();
     this.submissionFilter = null;
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    window.removeEventListener('resize', this.updateToggleableFilters);
-  }
-
-  @action
-  updateToggleableFilters() {
-    this.hasToggleableFilters = (window.innerWidth < 768) ? true : false;
   }
 
   @action

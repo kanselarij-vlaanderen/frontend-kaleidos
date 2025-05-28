@@ -26,7 +26,7 @@ export default class SubmissionsOverviewHeaderComponent extends Component {
   }
 
   get overviewRoute() {
-    return this.args.submission.isConcept ? 'submissions.concepts' : 'submissions.index';
+    return this.args.submission.isConcept ? 'submissions.concepts' : 'submissions.ongoing';
   }
 
   get overviewRouteLabel() {

@@ -64,7 +64,7 @@ Router.map(function() {
   });
   if (isEnabledCabinetSubmissions()) {
     this.route('submissions', { path: '/indieningen', }, function() {
-      this.route('index', { path: '/opvolgen' });
+      this.route('ongoing', { path: '/opvolgen' });
       this.route('concepts', { path: '/concepten' });
     });
   }
