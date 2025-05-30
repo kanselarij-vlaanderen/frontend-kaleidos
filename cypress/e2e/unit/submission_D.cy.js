@@ -84,7 +84,7 @@ context('change mandatees on organisation', () => {
 
   it('check the submissions table before changing mandatee', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(appuniversum.loader).should('not.exist');
     // at this point, there should be only 2 (may be altered by earlier tests)
     cy.get(route.submissionsOverview.row.shortTitle).should('have.length', 2);
@@ -144,7 +144,7 @@ context('change mandatees on organisation', () => {
 
   it('check the submissions table after changing mandatee', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(appuniversum.loader).should('not.exist');
     // We can see the submission where our mandatee was not the submitter
     cy.get(route.submissionsOverview.row.shortTitle).should('have.length', 1)
@@ -217,7 +217,7 @@ context('Create 2 submissions as first mandatee', () => {
 
   it('create 2 submissions for first mandatee', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(appuniversum.loader).should('not.exist');
     cy.createSubmission(submissionNewCase);
     cy.createSubmission(submissionAnotherNewCase);
@@ -225,7 +225,7 @@ context('Create 2 submissions as first mandatee', () => {
 
   it('check the submissions table after creating', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=5');
+    cy.visit('/indieningen/opvolgen?aantal=5');
 
     // 1 from _B.cy
     // 2 from this spec so far
@@ -374,7 +374,7 @@ context('Create 2 submissions as first mandatee', () => {
 
   it('test the submissions overview sorting and filter', () => {
     cy.login('Kanselarij');
-    cy.visit('/indieningen?aantal=5');
+    cy.visit('/indieningen/opvolgen?aantal=5');
     cy.get(route.submissionsOverview.row.shortTitle).should('have.length', 4);
     cy.get(route.submissionsOverview.row.shortTitle).contains(submissionOtherSpecNewCaseShortTitle)
       .parents('tr')
@@ -407,7 +407,7 @@ context('Create 2 submissions as first mandatee', () => {
 
   it('treated second submission is not propagated yet', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=5');
+    cy.visit('/indieningen/opvolgen?aantal=5');
     // creators see the submissions view after clicking
     cy.get(route.submissionsOverview.row.shortTitle).contains(submissionAnotherNewCaseShortTitle)
       .parents('tr')
@@ -425,7 +425,7 @@ context('Create 2 submissions as first mandatee', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=5');
+    cy.visit('/indieningen/opvolgen?aantal=5');
     // on agenda = propagated on open meeting. creators see the subcase view and can submit updates
     cy.get(route.submissionsOverview.row.shortTitle).contains(submissionNewCaseShortTitle)
       .parents('tr')
@@ -574,7 +574,7 @@ context('Create 2 submissions as first mandatee', () => {
 
   it('check views as kanselarij after creating update', () => {
     cy.login('Kanselarij');
-    cy.visit('/indieningen?aantal=5');
+    cy.visit('/indieningen/opvolgen?aantal=5');
     // since we sort on modified, the new update should always be at the top
     cy.get(route.submissionsOverview.row.shortTitle).should('have.length', 5);
     cy.get(route.submissionsOverview.row.shortTitle).contains(submissionOtherSpecNewCaseShortTitle)

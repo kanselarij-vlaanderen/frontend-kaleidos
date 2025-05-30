@@ -1,11 +1,7 @@
 {{page-title (t "submissions-ongoing")}}
-<Cases::SubmissionsHeader/>
 <AuMainContainer
   class="l-search-container
-    {{if
-      (and this.hasToggleableFilters this.filtersOpen)
-      'auk-u-scroll-no-overflow'
-    }}"
+    {{if (and (responsive "isMobile") this.filtersOpen) "auk-u-scroll-no-overflow"}}"
   as |m|
 >
   <m.sidebar>

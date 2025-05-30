@@ -40,9 +40,6 @@ export default class SubmissionsConceptsRoute extends Route {
     },
   };
 
-  // We only want to load the defaults once. Changes made after stay untill all checkboxes are cleared.
-  loadedDefaults = false;
-
   async beforeModel(transition) {
     const isAuthenticated = this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
 
@@ -50,7 +47,7 @@ export default class SubmissionsConceptsRoute extends Route {
       this.router.transitionTo('cases.index');
     }
     if (!this.currentSession.may('view-concept-submissions')) {
-      this.router.transitionTo('submissions.index');
+      this.router.transitionTo('submissions.ongoing');
     }
   }
 
@@ -107,9 +104,5 @@ export default class SubmissionsConceptsRoute extends Route {
     } else {
       return false;
     }
-  }
-
-  setupController(controller) {
-    super.setupController(...arguments);
   }
 }
