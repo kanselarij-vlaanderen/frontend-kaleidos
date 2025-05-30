@@ -194,6 +194,7 @@
             data-test-submission-description-edit-save
             @skin="primary"
             @loading={{this.isSaving}}
+            @loadingMessage={{t "loading"}}
             {{on "click" this.saveChanges}}
           >
             {{t "save"}}

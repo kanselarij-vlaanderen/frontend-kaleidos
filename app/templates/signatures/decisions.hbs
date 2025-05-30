@@ -186,6 +186,7 @@
               <AuButton
                 data-test-route-signatures-decisions-sidebar-start-signflow
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                @loadingMessage={{t "loading"}}
                 @disabled={{not this.signers.length}}
                 {{on "click" this.createSignFlow.perform}}
               >
@@ -198,6 +199,7 @@
                 @alert={{true}}
                 @skin="naked"
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
+                @loadingMessage={{t "loading"}}
                 {{on "click" this.removeSignFlow.perform}}
               >
                 {{t "stop-sign-flow"}}

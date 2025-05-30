@@ -226,6 +226,7 @@
               data-test-submission-notifications-save
               @skin="primary"
               @loading={{this.saveNotificationData.isRunning}}
+              @loadingMessage={{t "loading"}}
               @disabled={{this.saveNotificationData.isRunning}}
               {{on "click" (perform this.saveNotificationData)}}
             >

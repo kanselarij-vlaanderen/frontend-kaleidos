@@ -40,6 +40,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @service intl;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service fileConversionService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -62,6 +63,9 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @tracked dateToShowAltLabel;
   @tracked altDateToShow;
+
+  @tracked sourceFile;
+  @tracked derived;
 
   // model "report" only
   @tracked hasConfidentialityChanged = false;
@@ -132,6 +136,7 @@ export default class DocumentsDocumentCardComponent extends Component {
       && this.deleteMarkedSignFlow.isIdle
       && this.loadSignatureRelatedData.isIdle
       && this.loadSignatureRelatedData.performCount > 0
+      && this.loadFiles.isIdle
       && (!this.hasSignFlow || this.hasMarkedSignFlow)
     );
   }
@@ -160,6 +165,16 @@ export default class DocumentsDocumentCardComponent extends Component {
       !this.args.hideDelete &&
       (this.retrievedPieces?.length === 0 || this.currentSession.may('remove-piece-from-parliament'))
     );
+  }
+
+  get mayConvertSourceFile() {
+    const canConvertSourceFile = this.fileConversionService.canConvertSourceFile(this.sourceFile);
+    return (
+      this.loadPieceRelatedData.isIdle &&
+      this.loadFiles.isIdle &&
+      canConvertSourceFile &&
+      !this.derived?.id
+    )
   }
 
   @task
@@ -220,8 +235,8 @@ export default class DocumentsDocumentCardComponent extends Component {
 
   @task
   *loadFiles() {
-    const sourceFile = yield this.args.piece.file;
-    yield sourceFile?.belongsTo('derived').reload();
+    this.sourceFile = yield this.args.piece.file;
+    this.derived = yield this.sourceFile?.belongsTo('derived').reload();
   }
 
 
@@ -422,6 +437,19 @@ export default class DocumentsDocumentCardComponent extends Component {
     );
     yield this.loadPieceRelatedData.perform();
   }
+
+  convertSourceFile = task(async () => {
+    try {
+      await this.fileConversionService.convertSourceFile(this.sourceFile, true);
+      await this.loadPieceRelatedData.perform();
+      await this.loadFiles.perform();
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+  });
 
   @action
   async changeAccessLevel(accessLevel) {

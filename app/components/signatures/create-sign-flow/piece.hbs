@@ -24,6 +24,7 @@
             @skin="secondary"
             @icon="pencil"
             @loading={{this.loadSigners.isPending}}
+            @loadingMessage={{t "loading"}}
             {{on "click" this.startEditSigners}}
           >
             {{t "edit-list"}}

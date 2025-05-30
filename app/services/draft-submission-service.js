@@ -1,7 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
-import { SUBMISSION_ALLOWED_MIME_TYPES } from 'frontend-kaleidos/config/config';
+import { SUBMISSION_ALLOWED_MIME_TYPES, SUBMISSION_ALLOWED_EXTENSION } from 'frontend-kaleidos/config/config';
 
 export default class DraftSubmissionService extends Service {
   @service store;
@@ -203,10 +203,14 @@ export default class DraftSubmissionService extends Service {
 
   // for submissions we want to limit the amount of types certain profiles are allowed to upload
   validateUploadedFile = (file) => {
-    const allowed = SUBMISSION_ALLOWED_MIME_TYPES.includes(file.type);
+    const mimetypeAllowed = SUBMISSION_ALLOWED_MIME_TYPES.includes(file.type);
+    // extension is in the name
+    const extension = file.name.split('.').pop();
+    const extensionAllowed = SUBMISSION_ALLOWED_EXTENSION.includes(extension?.toLowerCase());
     if (
       !this.currentSession.may('upload-any-submission-document-extension') &&
-      !allowed
+      !mimetypeAllowed &&
+      !extensionAllowed
     ) {
       this.toaster.error(
         this.intl.t('submission-document-incorrect-type', { name: file.name }),

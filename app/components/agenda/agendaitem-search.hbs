@@ -22,6 +22,7 @@
             @skin="secondary"
             @hideText={{@hideButtonText}}
             @loading={{this.search.isRunning}}
+            @loadingMessage={{t "loading"}}
             @disabled={{@isEditingOverview}}
             {{on "click" @toggleIsEditingOverview}}
           >
@@ -35,6 +36,7 @@
             @icon="search"
             @hideText={{@hideButtonText}}
             @loading={{this.search.isRunning}}
+            @loadingMessage={{t "loading"}}
             {{on "click" (perform this.search)}}
           >
             {{t "search"}}

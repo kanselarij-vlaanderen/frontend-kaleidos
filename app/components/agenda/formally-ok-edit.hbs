@@ -26,6 +26,7 @@
     @icon="check"
     @hideText={{true}}
     @loading={{this.onSave.isRunning}}
+    @loadingMessage={{t "loading"}}
     {{on "click" (perform this.onSave)}}
     class="auk-u-ml"
   >
@@ -37,6 +38,7 @@
     @icon="x"
     @hideText={{true}}
     @loading={{this.onSave.isRunning}}
+    @loadingMessage={{t "loading"}}
     {{on "click" @cancelEdit}}
   >
     {{t "cancel"}}

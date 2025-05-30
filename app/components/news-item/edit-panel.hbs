@@ -100,6 +100,7 @@
                     <AuButton
                       data-test-news-item-edit-item-save-fullscreen
                       @loading={{this.confirmSave.isRunning}}
+                      @loadingMessage={{t "loading"}}
                       {{on "click" this.save}}
                     >
                       {{t "save"}}
@@ -173,6 +174,7 @@
               <AuButton
                 data-test-news-item-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
+                @loadingMessage={{t "loading"}}
                 {{on "click" this.save}}
               >
                 {{t "save"}}

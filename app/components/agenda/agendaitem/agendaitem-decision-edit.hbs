@@ -15,6 +15,7 @@
     @icon="check"
     @hideText={{true}}
     @loading={{this.saveDecisionActivity.isRunning}}
+    @loadingMessage={{t "loading"}}
     {{on "click" (perform this.saveDecisionActivity)}}
     class="auk-u-ml"
   >
@@ -26,6 +27,7 @@
     @icon="x"
     @hideText={{true}}
     @loading={{this.saveDecisionActivity.isRunning}}
+    @loadingMessage={{t "loading"}}
     {{on "click" this.cancelEdit}}
   >
     {{t "cancel"}}

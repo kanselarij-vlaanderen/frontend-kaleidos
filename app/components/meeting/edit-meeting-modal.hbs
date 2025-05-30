@@ -153,6 +153,7 @@
       @skin="primary"
       @disabled={{this.savingIsDisabled}}
       @loading={{this.saveMeeting.isRunning}}
+      @loadingMessage={{t "loading"}}
       {{on "click" (perform this.saveMeeting)}}
     >
       {{#if this.isNew}}

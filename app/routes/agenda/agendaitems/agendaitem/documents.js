@@ -91,6 +91,11 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     }
     // no decisionResult after release
     this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+
+    // any legacy has no decisionResultCode, the document access level will determine who can view
+    if (this.meeting.isPreKaleidos) {
+      this.documentsAreVisible = true;
+    }
     return;
   }
 

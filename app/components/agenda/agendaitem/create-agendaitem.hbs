@@ -117,6 +117,7 @@
       data-test-create-agendaitem-save
       @skin="primary"
       @loading={{this.addSubcasesToAgenda.isRunning}}
+      @loadingMessage={{t "loading"}}
       @disabled={{this.isSaveDisabled}}
       {{on "click" (perform this.addSubcasesToAgenda)}}
     >
