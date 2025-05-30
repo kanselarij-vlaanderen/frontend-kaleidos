@@ -47,6 +47,14 @@
             </Auk::Toolbar::Group>
             <Auk::Toolbar::Group @position="right">
               {{#if @pieces.length}}
+                {{#if (and @documentsAreVisible this.hasFilesToDownload)}}
+                  <AuButton
+                    @skin="secondary"
+                    {{on "click" this.openDownloadDocumentsModal}}
+                  >
+                    {{t "download-these-documents"}}
+                  </AuButton>
+                {{/if}}
                 <Auk::Toolbar::Item>
                   {{#if (user-may "manage-documents")}}
                     <AuButton
@@ -176,3 +184,9 @@
     @allowEditing={{user-may "manage-documents"}}
   />
 {{/if}}
+
+<Documents::DownloadDocumentsModal
+  @modalOpen={{this.isOpenDownloadDocumentsModal}}
+  @onCancel={{this.closeDownloadDocumentsModal}}
+  @archivePath={{this.archivePath}}
+/>

@@ -75,6 +75,15 @@
               @alignment="right"
               @skin="secondary"
             >
+              {{#if this.hasFilesToDownload}}
+                <AuButton
+                  @skin="link"
+                  role="menuitem"
+                  {{on "click" this.openDownloadDocumentsModal}}
+                >
+                  {{t "download-all-documents"}}
+                </AuButton>
+              {{/if}}
               <AuButton
                 data-test-subcase-overview-header-edit-case
                 @skin="link"
@@ -115,35 +124,45 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      {{else if this.mayCreateSubmissions}}
+      {{else}}
         <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
+          {{#if this.hasFilesToDownload}}
             <AuButton
-              data-test-subcase-overview-header-create-submission
-              @skin="primary"
-              @icon="plus"
-              {{on "click" this.navigateToAddSubmission}}
+              @skin="secondary"
+              {{on "click" this.openDownloadDocumentsModal}}
             >
-              {{t "submit-agendaitem-for-this-case"}}
+              {{t "download-all-documents"}}
             </AuButton>
-          </Auk::Toolbar::Item>
+          {{/if}}
+          {{#if this.mayCreateSubmissions}}
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-subcase-overview-header-create-submission
+                @skin="primary"
+                @icon="plus"
+                {{on "click" this.navigateToAddSubmission}}
+              >
+                {{t "submit-agendaitem-for-this-case"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          {{else if
+            (and
+              this.loadSubmissionsData.isIdle
+              this.currentSubmission
+              (not this.currentSubmission.isConcept)
+            )
+          }}
+            <Auk::Toolbar::Item>
+              <AuLink
+                @skin="button-secondary"
+                @route="cases.submissions.submission"
+                @model={{this.currentSubmission.id}}
+              >
+                {{t "open-current-submission"}}
+              </AuLink>
+            </Auk::Toolbar::Item>
+          {{/if}}
         </Auk::Toolbar::Group>
-      {{else if
-        (and
-          this.loadSubmissionsData.isIdle
-          this.currentSubmission
-          (not this.currentSubmission.isConcept)
-        )
-      }}
-        <Auk::Toolbar::Item>
-          <AuLink
-            @skin="button-secondary"
-            @route="cases.submissions.submission"
-            @model={{this.currentSubmission.id}}
-          >
-            {{t "open-current-submission"}}
-          </AuLink>
-        </Auk::Toolbar::Item>
       {{/if}}
     {{/unless}}
   </Auk::Toolbar>
@@ -166,4 +185,10 @@
   @onCancel={{this.closeArchiveCaseModal}}
   @confirmMessage={{t "delete"}}
   @alert={{true}}
+/>
+
+<Documents::DownloadDocumentsModal
+  @modalOpen={{this.isOpenDownloadDocumentsModal}}
+  @onCancel={{this.closeDownloadDocumentsModal}}
+  @archivePath={{this.archivePath}}
 />
