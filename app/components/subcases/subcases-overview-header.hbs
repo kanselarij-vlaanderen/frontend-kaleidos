@@ -128,7 +128,13 @@
             </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
-      {{else if (and this.loadSubmissionsData.isIdle this.currentSubmission)}}
+      {{else if
+        (and
+          this.loadSubmissionsData.isIdle
+          this.currentSubmission
+          (not this.currentSubmission.isConcept)
+        )
+      }}
         <Auk::Toolbar::Item>
           <AuLink
             @skin="button-secondary"

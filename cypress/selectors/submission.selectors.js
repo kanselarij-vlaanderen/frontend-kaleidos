@@ -25,6 +25,7 @@ const selectors = {
     shortTitle: '[data-test-cases-new-submission-form-short-title]',
     subcaseType: '[data-test-cases-new-submission-form-subcase-type]',
     cancel: '[data-test-cases-new-submission-form-cancel]',
+    saveConcept: '[data-test-cases-new-submission-form-save-concept]',
     save: '[data-test-cases-new-submission-form-save]',
   },
 

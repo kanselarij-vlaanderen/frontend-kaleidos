@@ -1,0 +1,15 @@
+<div class="au-c-card au-o-box au-o-box--small">
+  <AuFieldset as |Fieldset|>
+    <Fieldset.legend>{{capitalize (t "concepts")}}</Fieldset.legend>
+    <Fieldset.content>
+      <AuCheckboxGroup> {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
+        <AuToggleSwitch
+          @checked={{@showConcepts}}
+          @onChange={{@onChange}}
+        >
+          {{t "show-concepts"}}
+        </AuToggleSwitch>
+      </AuCheckboxGroup>
+    </Fieldset.content>
+  </AuFieldset>
+</div>

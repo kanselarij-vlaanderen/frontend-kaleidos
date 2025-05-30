@@ -18,7 +18,7 @@ export default class CasesNewSubmissionController extends Controller {
 
   onCancelSubmission = () => {
     this.preventUnload.disable();
-    this.router.transitionTo('submissions');
+    this.router.transitionTo('submissions.ongoing');
   }
 
   onCreateSubmission = (submission) => {
