@@ -622,7 +622,7 @@ export default class SubmissionHeaderComponent extends Component {
 
     await this.args.submission.destroyRecord();
 
-    await this.router.transitionTo('submissions');
+    await this.router.transitionTo('submissions.ongoing');
   });
 
   openRequestSendBackModal = async() => {

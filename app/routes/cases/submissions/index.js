@@ -7,7 +7,7 @@ export default class CasesSubmissionsIndexRoute extends Route {
 
   async model(params) {
     if (!params.submission_id || !this.currentSession.may('view-submissions')) {
-      this.router.transitionTo('submissions');
+      this.router.transitionTo('submissions.ongoing');
     }
   }
 }

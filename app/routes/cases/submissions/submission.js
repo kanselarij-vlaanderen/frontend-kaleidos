@@ -77,10 +77,10 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       if (this.currentLinkedMandatee && this.mandatees.length) {
         const mandateeUris = this.mandatees.map((mandatee) => mandatee.uri);
         if (!mandateeUris.includes(this.currentLinkedMandatee.uri)) {
-          this.router.transitionTo('submissions');
+          this.router.transitionTo('submissions.ongoing');
         }
       } else {
-        this.router.transitionTo('submissions');
+        this.router.transitionTo('submissions.ongoing');
       }
     }
 

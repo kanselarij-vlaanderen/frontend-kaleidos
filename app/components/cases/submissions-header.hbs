@@ -1,0 +1,68 @@
+<Auk::Navbar @skin="gray-100">
+  <Auk::Toolbar @auto={{true}} as |Toolbar|>
+    <Toolbar.Group @position="left" as |Group|>
+      <Group.Item class="au-u-visible-from@small">
+        <div class="auk-o-flex auk-o-flex--vertical">
+          <h4 class="auk-toolbar-complex__title">
+            {{t "submissions"}}
+          </h4>
+        </div>
+      </Group.Item>
+      <Group.Item>
+        <Auk::Tabs @responsive={{true}} @responsiveBreakpoint="large">
+          <Auk::Tab @route="submissions.ongoing">
+            {{t "to-follow-up"}}
+          </Auk::Tab>
+          {{#if (user-may "view-concept-submissions")}}
+            <Auk::Tab @route="submissions.concepts">
+              {{t "submissions-concepts"}}
+            </Auk::Tab>
+          {{/if}}
+        </Auk::Tabs>
+      </Group.Item>
+    </Toolbar.Group>
+    <Toolbar.Group @position="right" as |Group|>
+      {{#if (and this.mayCreateSubmissions)}}
+        <Group.Item>
+          <AuButton
+            data-test-cases-header-open-submission-modal
+            @skin="primary"
+            @icon="plus"
+            {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+          >
+            {{t "submit-agendaitem"}}
+          </AuButton>
+        </Group.Item>
+      {{/if}}
+    </Toolbar.Group>
+  </Auk::Toolbar>
+</Auk::Navbar>
+
+{{#if this.isOpenAddSubmissionModal}}
+  <Auk::Modal @size="medium">
+    <Auk::Modal::Header @title={{t "submit-agendaitem-which-type"}} @onClose={{toggle "isOpenAddSubmissionModal" this}} />
+    <Auk::Modal::Body>
+      <div class="auk-u-mb-6">
+        <AuHeading @level="3" @skin="6" class="au-u-margin-bottom-tiny">{{t "submit-agendaitem-search-case-title"}}</AuHeading>
+        <AuLink
+          data-test-cases-header-navigate-to-cases
+          @route="cases.index"
+          {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+        >
+          {{t "submit-agendaitem-search-case"}}
+        </AuLink>
+      </div>
+      <div class="auk-u-mb-6">
+        <AuHeading @level="3" @skin="6" class="au-u-margin-bottom-tiny">{{t "submit-agendaitem-here-title"}}</AuHeading>
+        <AuLink
+          data-test-cases-header-navigate-to-new-submission
+          @skin="button"
+          @route="cases.new-submission"
+          {{on "click" (toggle "isOpenAddSubmissionModal" this)}}
+        >
+          {{t "submit-agendaitem-here"}}
+        </AuLink>
+      </div>
+    </Auk::Modal::Body>
+  </Auk::Modal>
+{{/if}}
