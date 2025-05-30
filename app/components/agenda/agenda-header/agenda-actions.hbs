@@ -384,6 +384,7 @@
       <AuButton
         @skin="primary"
         @loading={{this.emptyInteralReviewsOfAgendaitemThrottled.isRunning}}
+        @loadingMessage={{t "loading"}}
         {{on "click" this.emptyInteralReviews}}
       >
         {{t "empty-internal-review"}}

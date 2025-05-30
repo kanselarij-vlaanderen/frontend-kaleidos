@@ -22,12 +22,55 @@
               @model={{this.lastPiece.id}}
               class="auk-h4"
             >
-              {{this.lastPiece.name}}{{#if this.lastPiece.file}}.{{this.lastPiece.file.extension}}{{/if}}
+              {{#let
+                (or
+                  this.lastPiece.file.derived.extension this.lastPiece.file.extension
+                )
+                as |extension|
+              }}
+                {{this.lastPiece.name}}{{#if extension}}.{{extension}}{{/if}}
+              {{/let}}
             </LinkTo>
             <div class="vlc-document-card-content__meta">
-              {{#if this.lastPiece.created}}
-                {{t "uploaded-at"}}
-                {{datetime-at (or this.lastPiece.file.created this.lastPiece.created)}}
+              {{#if (not this.loadData.isRunning)}}
+                <p>
+                  {{#if (or this.lastPiece.created this.lastPiece.file.created)}}
+                    {{t "uploaded-at"}}
+                    {{datetime-at (or this.lastPiece.file.created this.lastPiece.created)}}
+                  {{/if}}
+                  {{#if
+                    (and
+                      this.lastPiece.file.derived
+                      (await (this.canViewConfidentialPiece))
+                    )
+                  }}
+                    {{t "as"}}
+                    <AuLinkExternal
+                      href={{await this.lastPiece.namedDownloadLinkPromise}}
+                      download
+                    >
+                      {{t "source-file-lowercase"}}
+                    </AuLinkExternal>
+                  {{/if}}
+                </p>
+              {{/if}}
+              {{#if
+                (await (this.canViewConfidentialPiece))
+              }}
+                {{#if this.lastPiece.signedPieceCopy.file}}
+                  <p>
+                    <AuLinkExternal
+                      href={{await
+                        this.lastPiece.signedPieceCopy.namedDownloadLinkPromise
+                      }}
+                      download
+                    >
+                      {{t "signed-document"}}
+                    </AuLinkExternal>
+                    {{t "on"}}
+                    {{datetime-at (or this.lastPiece.signedPieceCopy.file.created this.lastPiece.signedPieceCopy.created)}}
+                  </p>
+                {{/if}}
               {{/if}}
             </div>
           </Group.Item>
@@ -74,11 +117,24 @@
                 <div class="vlc-document-card-item" data-test-vl-document-piece>
                   <div class="vlc-document-card-item__title">
                     {{#if piece.file}}
-                      <LinkTo @route="document" @model={{piece.id}}
-                        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-                        data-test-vl-document-name>
-                        {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
-                      </LinkTo>
+                    {{! explicit await, we don't want to load this data until it is needed}}
+                      {{#let (await piece.file.derived) as |derivedFile|}}
+                        {{#let
+                          (or
+                            derivedFile.extension piece.file.extension
+                          )
+                          as |extension|
+                        }}
+                          <LinkTo
+                            data-test-vl-document-name
+                            class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+                            @route="document"
+                            @model={{piece.id}}
+                          >
+                            {{piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                          </LinkTo>
+                        {{/let}}
+                      {{/let}}
                     {{else}}
                       <h6
                         class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
@@ -87,7 +143,7 @@
                         <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
                           {{t "document-not-consultable"}}
                         </EmberTooltip>
-                        {{piece.name}}{{#if piece.file}}.{{piece.file.extension}}{{/if}}
+                        {{piece.name}}
                       </h6>
                     {{/if}}
                     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>

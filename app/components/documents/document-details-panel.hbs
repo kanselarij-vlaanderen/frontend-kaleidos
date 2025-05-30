@@ -120,6 +120,7 @@
               @skin="primary"
               @disabled={{this.isProcessing}}
               @loading={{this.saveDetails.isRunning}}
+              @loadingMessage={{t "loading"}}
               {{on "click" (perform this.saveDetails)}}
             >
               {{t "save"}}

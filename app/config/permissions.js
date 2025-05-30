@@ -73,11 +73,14 @@ const {
 // - treat-and-accept-submissions: Allow the treating of submissions on placing the agenda
 // - view-submissions: Allow the viewing of submissions in general
 // - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
+// - view-concept-submissions: Allow the viewing of concept submissions
 // - always-edit-submissions: Allow editing submissions regardless of status
 // - edit-in-treatment-submissions: Allow editing submissions when they have the In treatment status
 // - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
+// - edit-concept-submissions: Allow editing submissions when they have the concept status
 // - create-subcases-from-submissions: Allow creating a real subcase (and pieces, files, ...) from a submission
 // - delete-submissions
+// - delete-concept-submissions: delete a concept submission
 // - upload-any-submission-document-extension: no enforced restrictions on mime-type/extension of document uploaded (submission mostly)
 // - remove-piece-from-parliament
 // - manage-agendaitems-with-parliament-flow
@@ -141,6 +144,7 @@ const groups = [
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
         'delete-submissions',
+        'delete-concept-submissions',
         'upload-any-submission-document-extension',
         'remove-piece-from-parliament',
         'manage-agendaitems-with-parliament-flow',
@@ -298,6 +302,7 @@ const groups = [
         'view-all-confidential-documents',
         'view-submissions',
         'view-all-submissions',
+        'view-concept-submissions',
       ],
       full: [
         'manage-signatures',
@@ -305,6 +310,8 @@ const groups = [
         'send-only-specific-cases-to-vp',
         'create-submissions',
         'edit-sent-back-submissions',
+        'edit-concept-submissions',
+        'delete-concept-submissions',
       ]
     }
   },
@@ -319,6 +326,7 @@ const groups = [
         'view-only-specific-confidential-documents',
         'view-documents-postponed-and-retracted',
         'view-submissions',
+        'view-concept-submissions'
       ],
       full: [
         'manage-signatures',
@@ -326,6 +334,8 @@ const groups = [
         'send-only-specific-cases-to-vp',
         'create-submissions',
         'edit-sent-back-submissions',
+        'edit-concept-submissions',
+        'delete-concept-submissions',
       ]
     }
   },

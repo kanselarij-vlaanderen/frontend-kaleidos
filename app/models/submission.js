@@ -99,6 +99,13 @@ export default class SubmissionModel extends Model {
     );
   }
 
+  get isConcept() {
+    return (
+      this.status?.get('uri') ===
+      CONSTANTS.SUBMISSION_STATUSES.CONCEPT
+    );
+  }
+
   save() {
     const dirtyType = this.dirtyType;
     const currentUser = this.currentSession.user;

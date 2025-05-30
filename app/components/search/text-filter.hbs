@@ -1,0 +1,28 @@
+{{#if this.enableFilter}}
+  <div class="au-c-card au-o-box au-o-box--small">
+    <div class="au-c-form">
+      <AuFormRow>
+        <AuLabel>{{@filterLabel}}</AuLabel>
+        <div class="auk-o-flex">
+          {{#if this.filterText}}
+            <AuButton
+              @skin="naked"
+              @icon="undo"
+              @hideText={{true}}
+              {{on "click" this.clearFilter}}
+            >
+              {{t "clear-filter"}}
+            </AuButton>
+          {{/if}}
+          <AuInput
+            autocomplete="off"
+            value={{this.filterText}}
+            @width="block"
+            @icon="search"
+            {{on "input" this.onInputFilter}}
+          />
+        </div>
+      </AuFormRow>
+    </div>
+  </div>
+{{/if}}

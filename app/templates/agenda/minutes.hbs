@@ -54,6 +54,7 @@
                   @icon="renew"
                   class="au-u-padding-left-none"
                   @loading={{this.updateEditorContent.isRunning}}
+                  @loadingMessage={{t "loading"}}
                   @disabled={{this.saveMinutes.isRunning}}
                   {{on "click" this.updateEditorContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
@@ -64,6 +65,7 @@
                     @icon="renew"
                     class="au-u-padding-left-none"
                     @loading={{this.updateEditorNotas.isRunning}}
+                    @loadingMessage={{t "loading"}}
                     @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" this.updateEditorNotas.perform}}
                   >{{t "update-thing" thing=(t "agendaitems-subtitle")}}</AuButton>
@@ -74,6 +76,7 @@
                     @icon="renew"
                     class="au-u-padding-left-none"
                     @loading={{this.updateEditorAnnouncements.isRunning}}
+                    @loadingMessage={{t "loading"}}
                     @disabled={{this.saveMinutes.isRunning}}
                     {{on "click" this.updateEditorAnnouncements.perform}}
                   >{{t "update-thing" thing=(t "announcements-subtitle")}}</AuButton>
@@ -106,6 +109,7 @@
                     data-test-route-agenda-minutes-editor-save
                     @skin="primary"
                     @loading={{this.saveMinutes.isRunning}}
+                    @loadingMessage={{t "loading"}}
                     @disabled={{this.saveDisabled}}
                     {{on "click" (perform this.saveMinutes)}}
                   >

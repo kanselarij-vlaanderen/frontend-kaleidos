@@ -222,6 +222,7 @@
               data-test-decisions-info-panel-edit-save
               @skin="primary"
               @loading={{this.save.isRunning}}
+              @loadingMessage={{t "loading"}}
               @disabled={{or
                 (not this.isValid)
                 this.closeEditingPanel.isRunning

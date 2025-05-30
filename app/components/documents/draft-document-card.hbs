@@ -124,6 +124,16 @@
                     {{t "edit"}}
                   </AuButton>
                 {{/if}}
+                {{#if this.mayConvertSourceFile}}
+                  <AuButton
+                    @skin="link"
+                    @disabled={{this.convertSourceFile.isRunning}}
+                    {{on "click" this.convertSourceFile.perform}}
+                    role="menuitem"
+                  >
+                    {{t "convert-to-pdf"}}
+                  </AuButton>
+                {{/if}}
                 <AuHr />
                 <AuButton
                   data-test-draft-document-card-delete

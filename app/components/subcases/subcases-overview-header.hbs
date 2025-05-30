@@ -145,7 +145,13 @@
                 {{t "submit-agendaitem-for-this-case"}}
               </AuButton>
             </Auk::Toolbar::Item>
-          {{else if (and this.loadSubmissionsData.isIdle this.currentSubmission)}}
+          {{else if
+            (and
+              this.loadSubmissionsData.isIdle
+              this.currentSubmission
+              (not this.currentSubmission.isConcept)
+            )
+          }}
             <Auk::Toolbar::Item>
               <AuLink
                 @skin="button-secondary"

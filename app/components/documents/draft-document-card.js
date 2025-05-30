@@ -33,6 +33,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @service intl;
   @service pieceAccessLevelService;
   @service draftSubmissionService;
+  @service fileConversionService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -48,6 +49,9 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @tracked dateToShowAltLabel;
   @tracked altDateToShow;
 
+  @tracked sourceFile;
+  @tracked derived;
+
   constructor() {
     super(...arguments);
     this.loadPieceRelatedData.perform();
@@ -55,7 +59,12 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   }
 
   get mayEdit() {
-    return this.args.isEditable && this.args.piece.constructor.modelName === 'draft-piece';
+    return (
+      this.args.isEditable &&
+      this.args.piece.constructor.modelName === 'draft-piece' &&
+      this.loadPieceRelatedData.isIdle &&
+      this.loadFiles.isIdle
+    );
   }
 
   get mayShowAddNewVersion() {
@@ -133,8 +142,8 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
 
   @task
   *loadFiles() {
-    const sourceFile = yield this.args.piece.file;
-    yield sourceFile?.derived;
+    this.sourceFile = yield this.args.piece.file;
+    this.derived = yield this.sourceFile?.belongsTo('derived').reload();
   }
 
   @task
@@ -171,6 +180,16 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   get visiblePieces() {
     const idx = this.reverseSortedPieces.indexOf(this.piece) + 1;
     return this.reverseSortedPieces.slice(idx);
+  }
+
+  get mayConvertSourceFile() {
+    const canConvertSourceFile = this.fileConversionService.canConvertSourceFile(this.sourceFile);
+    return (
+      this.loadPieceRelatedData.isIdle &&
+      this.loadFiles.isIdle &&
+      canConvertSourceFile &&
+      !this.derived?.id
+    )
   }
 
   @task
@@ -263,6 +282,19 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     yield deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
   }
+
+  convertSourceFile = task(async () => {
+    try {
+      await this.fileConversionService.convertSourceFile(this.sourceFile, true);
+      await this.loadPieceRelatedData.perform();
+      await this.loadFiles.perform();
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('error-convert-file', { message: error.message }),
+        this.intl.t('warning-title'),
+      );
+    }
+  });
 
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.args.piece);

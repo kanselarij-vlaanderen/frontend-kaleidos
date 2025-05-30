@@ -167,7 +167,7 @@ context('Submission happy flows', () => {
 
   it('Create new submission from cases or submission index', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
 
     cy.createSubmission(submissionNewCase).then((result) => {
       cy.url().should('contain', `/indieningen/${result.submissionId}`);
@@ -323,7 +323,7 @@ context('Submission happy flows', () => {
 
   it('Create new submission from existing case', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.createSubmission(submissionExistingCase);
     // cy.visit('/dossiers/indieningen/66DAE350F08D8D8342A44C07')
     // overview header, case title is the existing case short title
@@ -466,7 +466,7 @@ context('Submission happy flows', () => {
 
   it('check the submissions table after creating both', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     // these 2 will only be in view if there is no submission on a later agenda
     cy.get(route.submissionsOverview.row.shortTitle)
       .contains(submissionNewCaseShortTitle)
@@ -686,7 +686,7 @@ context('Submission happy flows', () => {
 
   it('check the submissions table after accepting both', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     // these 2 will only be in view if there is no submission on a later agenda
     cy.get(route.submissionsOverview.row.shortTitle)
       .contains(submissionNewCaseShortTitle)
@@ -754,7 +754,7 @@ context('Submission happy flows', () => {
 
   it('check the submissions table after sending back one', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     // these 2 will only be in view if there is no submission on a later agenda
     cy.get(route.submissionsOverview.row.shortTitle)
       .contains(submissionNewCaseShortTitle)
@@ -903,7 +903,7 @@ context('Submission happy flows', () => {
 
   it('check the submissions table after resubmitting', () => {
     cy.login('Kabinetdossierbeheerder');
-    cy.visit('/indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     // these 2 will only be in view if there is no submission on a later agenda
     cy.get(route.submissionsOverview.row.shortTitle)
       .contains(submissionNewCaseShortTitle)

@@ -39,7 +39,7 @@ export default class AgendaitemCasePanelView extends Component {
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.decisionResultCode;
+    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
   }
 
   @action
