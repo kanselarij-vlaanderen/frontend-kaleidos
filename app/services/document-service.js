@@ -39,7 +39,17 @@ export default class DocumentService extends Service {
         documentIds: pieceIds,
       }),
     });
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch(error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down.
+      if (error instanceof SyntaxError) {
+        data = `Backend response contained an error (status: ${response.status})`
+      }
+    }
     if (response.ok && data) {
       if (data.message) {
         if (data.job) {
@@ -74,7 +84,17 @@ export default class DocumentService extends Service {
         method: 'POST',
       }
     );
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch(error) {
+      // Errors returned from services *should* still
+      // be valid JSON(:API), but we could encounter
+      // non-JSON if e.g. a service is down.
+      if (error instanceof SyntaxError) {
+        data = `Backend response contained an error (status: ${response.status})`
+      }
+    }
     if (response.ok && data) {
       if (data.message) {
         if (data.job) {
