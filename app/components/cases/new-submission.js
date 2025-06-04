@@ -110,18 +110,6 @@ export default class CasesNewSubmissionComponent extends Component {
 
   get saveIsDisabled() {
     return !this.pieces.length || this.saveConceptIsDisabled;
-    // const decisionmakingFlowSet = this.args.isForNewCase
-    //   ? !!this.shortTitle
-    //   : !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitles;
-    // const subcaseTypeSet = !!this.type;
-    // return (
-    //   !decisionmakingFlowSet ||
-    //   !subcaseTypeSet ||
-    //   this.isUploadingFiles ||
-    //   !this.pieces.length ||
-    //   this.createSubmission.isRunning ||
-    //   this.createConceptSubmission.isRunning
-    // );
   }
 
   get sortedPieces() {
