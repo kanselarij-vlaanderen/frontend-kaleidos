@@ -128,7 +128,7 @@
         <AuButton
           data-test-cases-new-submission-form-save-concept
           @skin="secondary"
-          @disabled={{this.saveIsDisabled}}
+          @disabled={{this.saveConceptIsDisabled}}
           {{on "click" (perform this.createConceptSubmission)}}
         >
           {{t "save-as-concept"}}

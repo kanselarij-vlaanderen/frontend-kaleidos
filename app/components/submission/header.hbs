@@ -85,6 +85,7 @@
           <AuButton
             data-test-submission-header-action-submit-concept
             @skin="primary"
+            @disabled={{not @submission.pieces.length}}
             {{on "click" (toggle "isOpenResubmitModal" this)}}
           >
           {{t "submit-submission"}}
