@@ -55,7 +55,6 @@ export default class SubmissionsConceptsRoute extends Route {
     // *note: the cache busting delays the loading a bit, even locally with only 2 submissions it take half a second
     const options = {
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-      'filter[:has:pieces]': 't',
       include: 'type,status,requested-by,decisionmaking-flow',
       sort: params.sortSubmissions + (params.sortSubmissions ? ',' : '') + '-modified',
       page: {
