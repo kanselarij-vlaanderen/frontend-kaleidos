@@ -1,4 +1,4 @@
-{{#if @simplifiedOptions}}
+{{#if (and @simplifiedOptions @showSimplifiedToggle)}}
   <AuToggleSwitch
     @checked={{eq @selected.uri this.confidentialUri}}
     @onChange={{this.toggleConfidential}}

@@ -37,6 +37,7 @@ const {
 // - manage-publication-flows: General viewing and editing of publication flows
 // - manage-documents: modifying document details, uploading new versions, removing.
 // - manage-document-access-levels: modifying document access levels
+// - edit-draft-document-access-levels: modifying document access levels of draft pieces.
 // - manage-news-items: General viewing and editing of news items
 // - manage-decision-publications: Publishing agenda-item decisions to other Kaleidos profiles
 // - manage-document-publications: Publishing agenda-item related documents to other Kaleidos profiles
@@ -148,6 +149,7 @@ const groups = [
         'upload-any-submission-document-extension',
         'remove-piece-from-parliament',
         'manage-agendaitems-with-parliament-flow',
+        'edit-draft-document-access-levels',
       ]
     }
   },
@@ -196,6 +198,7 @@ const groups = [
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
+        'edit-draft-document-access-levels',
       ]
     }
   },
@@ -241,6 +244,7 @@ const groups = [
         'edit-in-treatment-submissions',
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
+        'edit-draft-document-access-levels',
       ]
     }
   },
@@ -312,6 +316,7 @@ const groups = [
         'edit-sent-back-submissions',
         'edit-concept-submissions',
         'delete-concept-submissions',
+        'edit-draft-document-access-levels',
       ]
     }
   },
@@ -336,6 +341,7 @@ const groups = [
         'edit-sent-back-submissions',
         'edit-concept-submissions',
         'delete-concept-submissions',
+        'edit-draft-document-access-levels',
       ]
     }
   },

@@ -92,7 +92,13 @@
               {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
-                  @isEditable={{this.mayEdit}}
+                  @isEditable={{and
+                    this.mayEdit
+                    (user-may "edit-draft-document-access-levels")
+                  }}
+                  @simplifiedOptions={{not
+                    (user-may "manage-document-access-levels")
+                  }}
                   @isDraft={{eq this.piece.constructor.modelName 'draft-piece'}}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
@@ -189,7 +195,6 @@
                 >
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
-                    @agendaContext={{@agendaContext}}
                     @isEditable={{false}}
                   />
                 </div>

@@ -164,7 +164,7 @@
               {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
-                  @isEditable={{@isEditable}}
+                  @isEditable={{and @isEditable (user-may "manage-document-access-levels")}}
                   @isDraft={{this.isDraftAccessLevel}}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}

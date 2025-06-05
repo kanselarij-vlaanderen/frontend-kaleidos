@@ -3,14 +3,11 @@
     <div class="auk-u-mb-2">
       <Documents::DraftDocumentCard
         @piece={{doc}}
-        @agendaContext={{@agendaContext}}
-        @agendaitem={{@agendaitem}}
         @isHighlighted={{includes doc @highlightedPieces}}
         @isEditable={{@isEditable}}
         @didDeleteContainer={{@didDeleteContainer}}
         @onOpenUploadModal={{@onOpenUploadModal}}
         @onAddPiece={{@onAddPiece}}
-        @decisionActivity={{@decisionActivity}}
         @hideAccessLevel={{@hideAccessLevel}}
         @onSaveAccessLevel={{@onSaveAccessLevel}}
       />
