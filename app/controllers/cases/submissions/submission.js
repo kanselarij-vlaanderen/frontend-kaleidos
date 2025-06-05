@@ -88,6 +88,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       // the notification panel updates the tracked properties of this controller when confidential changes
       await timeout(500);
       await this.saveNotificationDataOnModel();
+      if (this.confidential) {
+        // only strengthen if submission became confidential
+        await this.strengthenAccessLevelToConfidential();
+      }
     }
   });
 
@@ -339,4 +343,30 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     await this.savePieces.perform();
     await this.checkIfHasConfidentialPiecesChanged.perform();
   };
+
+  strengthenAccessLevelToConfidential = async() => {
+    const pieces = await this.model.pieces;
+      // Strengthen the accessLevel of the draft-pieces to confidential
+    const confidentialAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+    );
+
+    let changedAccessLevelOfPieces = false;
+    const promises = pieces.map(async (piece) => {
+      const accessLevel = await piece.accessLevel;
+      if (accessLevel.uri != confidentialAccessLevel.uri) {
+        // pieces are not persisted yet in the store at this point
+        piece.accessLevel = confidentialAccessLevel;
+        changedAccessLevelOfPieces = true;
+        await piece.save();
+      }
+    });
+    await Promise.all(promises);
+    if (changedAccessLevelOfPieces) {
+      this.toaster.success(
+        this.intl.t('uploaded-pieces-access-level-changed'),
+      );
+    }
+  }
 }
