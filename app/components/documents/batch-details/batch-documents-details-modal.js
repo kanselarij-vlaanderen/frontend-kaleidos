@@ -45,6 +45,12 @@ export default class BatchDocumentsDetailsModal extends Component {
     );
   }
 
+  get hasOnlyDraftPieces() {
+    return this.args.pieces.every(
+      (piece) => piece.constructor.modelName === 'draft-piece'
+    );
+  }
+
   get isSignaturesEnabled() {
     const hasPermission = this.currentSession.may('manage-signatures');
     return hasPermission && !this.hasDraftPieces;
@@ -54,7 +60,22 @@ export default class BatchDocumentsDetailsModal extends Component {
     // TODO not fully sure why we shouldn't show the access level? I would want to make sure my confidential file is marked as such..
     // or edit mistakes, maybe don't allow cabinet to edit 'intern-secretarie'
     // it is visible just fine in documents route either way
-    return !this.hasDraftPieces;
+    // return !this.hasDraftPieces;
+    const hasMixedPieces = this.hasDraftPieces && !this.hasOnlyDraftPieces;
+    const canEditDraftPieces =
+      this.hasOnlyDraftPieces &&
+      this.currentSession.may('edit-draft-document-access-levels');
+    const canEditAnyNonDraft = this.currentSession.may('manage-document-access-levels');
+    return (
+      !this.args.disableEditingAccessLevel &&
+      this.args.allowEditing &&
+      !hasMixedPieces &&
+      (canEditDraftPieces || canEditAnyNonDraft)
+    );
+  }
+
+  get showSimplifiedOptions() {
+    return this.isAccessLevelEnabled && !this.currentSession.may('manage-document-access-levels');
   }
 
   get isEditingEnabled() {

@@ -95,6 +95,7 @@
                   @isEditable={{and
                     this.mayEdit
                     (user-may "edit-draft-document-access-levels")
+                    (or (not @isUpdate) (user-may "manage-document-access-levels"))
                   }}
                   @simplifiedOptions={{not
                     (user-may "manage-document-access-levels")
