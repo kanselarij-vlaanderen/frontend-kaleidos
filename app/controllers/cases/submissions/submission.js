@@ -166,6 +166,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   saveBatchDetails = () => {
+    this.checkIfHasConfidentialPiecesChanged.perform();
     this.reloadPieces.perform();
     this.isOpenBatchDetailsModal = false;
   };
