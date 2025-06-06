@@ -34,6 +34,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @service pieceAccessLevelService;
   @service draftSubmissionService;
   @service fileConversionService;
+  @service currentSession;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -58,13 +59,22 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     this.loadFiles.perform();
   }
 
-  get mayEdit() {
+  get mayEditDraftPiece() {
     return (
       this.args.isEditable &&
       this.args.piece.constructor.modelName === 'draft-piece' &&
       this.loadPieceRelatedData.isIdle &&
       this.loadFiles.isIdle
     );
+  }
+
+  get mayEditAccessLevel() {
+    const mayEditIfUpdate =
+      !this.args.isUpdate ||
+      this.currentSession.may('manage-document-access-levels');
+    return this.mayEditDraftPiece &&
+      mayEditIfUpdate &&
+      this.currentSession.may('edit-draft-document-access-levels');
   }
 
   get mayShowAddNewVersion() {

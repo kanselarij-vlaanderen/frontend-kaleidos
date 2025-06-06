@@ -92,11 +92,7 @@
               {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
-                  @isEditable={{and
-                    this.mayEdit
-                    (user-may "edit-draft-document-access-levels")
-                    (or (not @isUpdate) (user-may "manage-document-access-levels"))
-                  }}
+                  @isEditable={{this.mayEditAccessLevel}}
                   @simplifiedOptions={{not
                     (user-may "manage-document-access-levels")
                   }}
@@ -108,7 +104,7 @@
               {{/unless}}
             {{/unless}}
           </Group.Item>
-          {{#if this.mayEdit}}
+          {{#if this.mayEditDraftPiece}}
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
