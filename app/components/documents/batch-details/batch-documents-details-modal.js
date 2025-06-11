@@ -11,6 +11,7 @@ import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**
  * @argument {Piece[]} pieces includes: documentContainer,accessLevel
+ * @argument {Boolean} isUpdate if the pieces are draft-pieces connected to pieces
  */
 export default class BatchDocumentsDetailsModal extends Component {
   @service pieceAccessLevelService;
@@ -45,16 +46,36 @@ export default class BatchDocumentsDetailsModal extends Component {
     );
   }
 
+  get hasOnlyDraftPieces() {
+    return this.args.pieces.every(
+      (piece) => piece.constructor.modelName === 'draft-piece'
+    );
+  }
+
   get isSignaturesEnabled() {
     const hasPermission = this.currentSession.may('manage-signatures');
     return hasPermission && !this.hasDraftPieces;
   }
 
   get isAccessLevelEnabled() {
-    // TODO not fully sure why we shouldn't show the access level? I would want to make sure my confidential file is marked as such..
-    // or edit mistakes, maybe don't allow cabinet to edit 'intern-secretarie'
-    // it is visible just fine in documents route either way
-    return !this.hasDraftPieces;
+    const hasMixedPieces = this.hasDraftPieces && !this.hasOnlyDraftPieces;
+    const canEditDraftPieces =
+      this.hasOnlyDraftPieces &&
+      this.currentSession.may('edit-draft-document-access-levels');
+    const canEditIfUpdate =
+      !this.args.isUpdate ||
+      this.currentSession.may('manage-document-access-levels');
+    const canEditAnyNonDraft = this.currentSession.may('manage-document-access-levels');
+    return (
+      canEditIfUpdate &&
+      this.args.allowEditing &&
+      !hasMixedPieces &&
+      (canEditDraftPieces || canEditAnyNonDraft)
+    );
+  }
+
+  get showSimplifiedOptions() {
+    return this.isAccessLevelEnabled && !this.currentSession.may('manage-document-access-levels');
   }
 
   get isEditingEnabled() {
@@ -181,7 +202,12 @@ export default class BatchDocumentsDetailsModal extends Component {
           await piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
           await piece.save();
           await documentContainer.save();
-          if (accessLevelHasChanged) {
+          if (
+            accessLevelHasChanged &&
+            !(piece.constructor.modelName === 'draft-piece')
+          ) {
+            // - "draft-pieces" have "pieces" as previous. we update those in a later step.
+            // - some profiles are allowed to edit "draft-piece" but not "piece" so this could error
             await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
           }
           changedPieces.push(piece);
