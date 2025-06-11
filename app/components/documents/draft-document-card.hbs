@@ -92,7 +92,10 @@
               {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
-                  @isEditable={{this.mayEdit}}
+                  @isEditable={{this.mayEditAccessLevel}}
+                  @simplifiedOptions={{not
+                    (user-may "manage-document-access-levels")
+                  }}
                   @isDraft={{eq this.piece.constructor.modelName 'draft-piece'}}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
@@ -101,7 +104,7 @@
               {{/unless}}
             {{/unless}}
           </Group.Item>
-          {{#if this.mayEdit}}
+          {{#if this.mayEditDraftPiece}}
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
@@ -189,7 +192,6 @@
                 >
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
-                    @agendaContext={{@agendaContext}}
                     @isEditable={{false}}
                   />
                 </div>

@@ -19,9 +19,10 @@
     <td>
       <Utils::AccessLevelSelector
         data-test-batch-editing-row-access-level
-        @allowClear={{true}}
+        @allowClear={{false}}
         @displayField="label"
         @sortField="position"
+        @simplifiedOptions={{@simplifiedOptions}}
         @disabled={{this.isDisabled}}
         @selected={{this.accessLevel}}
         @onChange={{this.setAccessLevel}}
