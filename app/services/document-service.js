@@ -227,7 +227,7 @@ export default class DocumentService extends Service {
       const types = await all(typesPromises);
       if (types.some(type => !type)) {
         this.toaster.error(
-          this.intl.t('document-type-required'),
+          this.intl.t('document-type-required-message'),
           this.intl.t('warning-title'),
         );
         return true;

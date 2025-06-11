@@ -235,6 +235,7 @@
         @onDelete={{perform this.deleteUploadedPiece}}
         @allowEditPieceAccessLevel={{true}}
         @simplifiedOptions={{true}}
+        @documentTypeRequired={{true}}
         @onAccessLevelChanged={{set this.newPiece.accessLevel "accessLevel"}}
       />
     {{else}}

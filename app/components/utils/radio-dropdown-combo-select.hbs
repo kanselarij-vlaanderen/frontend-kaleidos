@@ -1,6 +1,6 @@
 <AuRadioGroup {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
   @alignment="inline"
-  class="auk-u-mb-2"
+  class="auk-u-mb-2 {{if this.noOptionSelected "au-c-control-group--error"}}"
   as |Group|
 >
   {{#each this.radioOptions as |opt|}}
@@ -31,4 +31,15 @@
   as |opt|>
     {{get opt this.dropdownLabelKey}}
   </PowerSelect>
+{{/if}}
+{{#if this.noOptionSelected}}
+  <div class="auk-u-mt-2">
+    <AuAlert
+      @skin="error"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      {{t "document-type-required"}}
+    </AuAlert>
+  </div>
 {{/if}}
