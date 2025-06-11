@@ -68,13 +68,25 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     );
   }
 
+  get mayEditNonDraftPieceAccessLevel() {
+    return (
+      this.args.isEditable &&
+      this.args.piece.constructor.modelName === 'piece' &&
+      this.currentSession.may('manage-document-access-levels') &&
+      this.loadPieceRelatedData.isIdle &&
+      this.loadFiles.isIdle
+    );
+  }
+
   get mayEditAccessLevel() {
     const mayEditIfUpdate =
       !this.args.isUpdate ||
       this.currentSession.may('manage-document-access-levels');
-    return this.mayEditDraftPiece &&
+    const canEditDraft =
+      this.mayEditDraftPiece &&
       mayEditIfUpdate &&
       this.currentSession.may('edit-draft-document-access-levels');
+    return canEditDraft || this.mayEditNonDraftPieceAccessLevel;
   }
 
   get mayShowAddNewVersion() {
