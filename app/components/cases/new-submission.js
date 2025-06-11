@@ -277,6 +277,8 @@ export default class CasesNewSubmissionComponent extends Component {
   });
 
   createConceptSubmission = task(async () => {
+    const typesRequired = await this.documentService.enforceDocType(this.pieces);
+    if (typesRequired) return;
     const concept = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.SUBMISSION_STATUSES.CONCEPT
