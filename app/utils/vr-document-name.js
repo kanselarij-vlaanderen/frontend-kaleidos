@@ -88,6 +88,12 @@ export default class VRDocumentName {
     return this.name.replace(new RegExp(`${VRDocumentName.regexGroups.versionSuffix}$`, 'ui'), '');
   }
 
+  get withSubjectAndDocType() {
+    const regexGroup = VRDocumentName.regexGroups;
+    // return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(?<subject>.*?)?(?<docLabel> - .*?)${regexGroup.versionSuffix}?$`);
+    return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(?<subject>.*?)${regexGroup.versionSuffix}?$`);
+  }
+
   withOtherVersionSuffix(pieceNr) {
     return `${this.withoutVersionSuffix.trim()} ${CONFIG.latinAdverbialNumberals[pieceNr].toUpperCase()}`;
   }
@@ -120,6 +126,20 @@ export default class VRDocumentName {
     } catch(error) {
       return this.vrNumberWithSuffix();
     }
+  }
+
+  subjectOnly() {
+    const match = this.withSubjectAndDocType.exec(this.name);
+    if (!match || !match.groups.subject) {
+      return;
+    }
+    // remove document label
+    const subjectRegex = new RegExp(`(?<subject>.*)(?:.*(?<docLabel> - .*?))$`);
+    const match2 = subjectRegex.exec(match.groups.subject);
+    if (!match2 || !match2.groups.subject) {
+      return;
+    }
+    return match2.groups.subject.trim();
   }
 }
 
