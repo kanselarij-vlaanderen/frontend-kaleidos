@@ -109,7 +109,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   }
 
   uploadPiece = async (file) => {
-    const existingPieceName = this.pieces[0].name
+    const existingPieceName = this.pieces[0].name;
     const existingSubject = new VRDocumentName(existingPieceName).subjectOnly();
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;

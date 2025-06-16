@@ -90,7 +90,6 @@ export default class VRDocumentName {
 
   get withSubjectAndDocType() {
     const regexGroup = VRDocumentName.regexGroups;
-    // return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(?<subject>.*?)?(?<docLabel> - .*?)${regexGroup.versionSuffix}?$`);
     return new RegExp(`VR ${regexGroup.date}${regexGroup.casePrefix} ${regexGroup.docType}\\.${regexGroup.caseNr}([/-]${regexGroup.index})?(?<subject>.*?)${regexGroup.versionSuffix}?$`);
   }
 
