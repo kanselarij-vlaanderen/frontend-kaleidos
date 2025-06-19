@@ -231,7 +231,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
   @action
   async uploadPiece(file) {
-    const existingPieceName = this.pieces[0].name;
+    const existingPieceName = this.pieces[0]?.name || '';
     const existingSubject = new VRDocumentName(existingPieceName).subjectOnly();
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
