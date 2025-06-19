@@ -7,9 +7,6 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
   @service intl;
   @service toaster;
 
-  networkToast;
-  errorToast;
-
   // Method override from RESTAdapter base class
   // See: https://api.emberjs.com/ember-data/3.28/classes/RESTAdapter/methods/ajax?anchor=ajax
   // eslint-disable-next-line no-unused-vars
@@ -25,7 +22,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
           return;
         }
       }
-      this.errorToast = this.toaster.error(
+      this.toaster.error(
         this.intl.t('couldnt-answer-net-req'),
         this.intl.t('warning-title')
       );
@@ -60,7 +57,7 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
             return;
           }
         }
-        this.networkToast = this.toaster.warning(
+        this.toaster.warning(
           this.intl.t('invalid-net-req-answer'),
           this.intl.t('warning-title')
         );
