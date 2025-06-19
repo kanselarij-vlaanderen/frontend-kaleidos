@@ -20,9 +20,11 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       }
       return await this.retryOnError(super.ajax.bind(this), arguments); // return-await of importance to be able to catch errors
     } catch (error) {
-      if (this.toaster.toasts.includes(this.errorToast)) { // reduce visible toasts
+      for (const toast of this.toaster.toasts) {
+        if (toast.message === this.intl.t('couldnt-answer-net-req')) {
           return;
         }
+      }
       this.errorToast = this.toaster.error(
         this.intl.t('couldnt-answer-net-req'),
         this.intl.t('warning-title')
@@ -53,8 +55,10 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       return await ajax(...ajaxArgs);
     } catch (error) {
       if (retryCount === 0) { // Only warn on first-time occurence in order not to bug users with warnings on each retry.
-        if (this.toaster.toasts.includes(this.networkToast)) { // reduce visible toasts
-          return;
+        for (const toast of this.toaster.toasts) {
+          if (toast.message === this.intl.t('invalid-net-req-answer')) {
+            return;
+          }
         }
         this.networkToast = this.toaster.warning(
           this.intl.t('invalid-net-req-answer'),
