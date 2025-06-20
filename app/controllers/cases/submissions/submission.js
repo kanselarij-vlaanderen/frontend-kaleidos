@@ -239,7 +239,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     const numberOfContainers = this.documentContainerIds.length;
     // uploading a new doc on an update results in double numbering. fe uploading doc 2 results in doc 1, 2, 2, 3
     const position = this.isUpdate ? (numberOfContainers + 1) : parsed.index || (numberOfContainers + 1);
-    const documentContainer = this.store.createRecord(
+    const documentContainer = await this.store.createRecord(
       'draft-document-container',
       {
         created: now,
@@ -253,7 +253,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
-    const piece = this.store.createRecord('draft-piece', {
+    const piece = await this.store.createRecord('draft-piece', {
       created: now,
       modified: now,
       file: file,
@@ -264,6 +264,11 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       submission: this.model,
     });
     this.newPieces.push(piece);
+    this.newPieces.sort((a, b) => {
+      const posA = a.documentContainer.get('position');
+      const posB = b.documentContainer.get('position');
+      return posA - posB;
+    });
   }
 
   savePieces = task(async () => {
@@ -340,7 +345,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
     // No need to add this version to this.newDraftPieces (we did before)
-    // since this.savePieces will now trigger this.updateDraftPiecePositions 
+    // since this.savePieces will now trigger this.updateDraftPiecePositions
     await this.savePieces.perform();
     await this.checkIfHasConfidentialPiecesChanged.perform();
   };
