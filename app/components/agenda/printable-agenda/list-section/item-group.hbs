@@ -42,6 +42,7 @@
           <div value={{first.number}}>
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
               @item={{first}}
+              @isNew={{includes first @newAgendaitems}}
             />
           </div>
         </div>
@@ -88,6 +89,7 @@
           <div class="auk-u-non-breakable-group@print">
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
               @item={{agendaitem}}
+              @isNew={{includes agendaitem @newAgendaitems}}
             />
           </div>
           {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}

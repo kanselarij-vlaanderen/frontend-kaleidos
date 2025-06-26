@@ -14,6 +14,7 @@ import { inject as service } from '@ember/service';
 export default class AgendaHeaderAgendaCheck extends Component {
   @service toaster;
   @service intl;
+  @service agendaService;
 
   getAgendaitems = task(async () => {
     const notas = [];
@@ -57,6 +58,17 @@ export default class AgendaHeaderAgendaCheck extends Component {
   });
 
   fileNameMappings = trackedTask(this, this.getFileNameMappings);
+
+  getNewAgendaitems = task(async () => {
+    const previousAgenda = await this.args.agenda.previousVersion;
+    let newAgendaitems;
+    if (previousAgenda) {
+      newAgendaitems = await this.agendaService.newAgendaItems(this.args.agenda.id, previousAgenda.id);
+    }
+    return newAgendaitems;
+  });
+
+  newAgendaitems = trackedTask(this, this.getNewAgendaitems);
 
   get fileNameMap() {
     // this is always truthy if mappings exist (empty or not) (to enable approve button)

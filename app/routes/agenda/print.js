@@ -6,6 +6,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 export default class AgendaPrintRoute extends Route {
   @service store;
   @service throttledLoadingService;
+  @service agendaService;
 
   async model() {
     const { meeting, agenda } = this.modelFor('agenda');
@@ -33,11 +34,19 @@ export default class AgendaPrintRoute extends Route {
     const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     await this.loadDocuments.perform(agendaitems);
 
+    const previousAgenda = await agenda.previousVersion;
+    let newAgendaitems;
+    if (previousAgenda) {
+      newAgendaitems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
+    }
+
     return {
       meeting,
       notas,
       announcements,
-      decisionsAreReleased
+      decisionsAreReleased,
+      newAgendaitems,
+      previousAgenda
     };
   }
 
