@@ -32,7 +32,7 @@ export default class AgendaPrintRoute extends Route {
     const decisionPublicationActivity = await meeting.internalDecisionPublicationActivity;
     const decisionPublicationStatus = await decisionPublicationActivity?.status;
     const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-    await this.loadDocuments.perform(agendaitems);
+    await this.loadDocuments.perform(sortedAgendaitems);
 
     const previousAgenda = await agenda.previousVersion;
     let newAgendaitems;
@@ -40,13 +40,28 @@ export default class AgendaPrintRoute extends Route {
       newAgendaitems = await this.agendaService.newAgendaItems(agenda.id, previousAgenda.id);
     }
 
+    const newPiecesOnAgenda = [];
+    const agendaitemNewPieces = sortedAgendaitems.map(async (agendaitem) => {
+      if (previousAgenda) {
+        const newPieces = await this.agendaService.changedPieces(
+          agenda.id,
+          previousAgenda.id,
+          agendaitem.id
+        );
+        if (newPieces.length > 0) {
+          newPiecesOnAgenda.push(...newPieces);
+        }
+      }
+    });
+    await all(agendaitemNewPieces);
+
     return {
       meeting,
       notas,
       announcements,
       decisionsAreReleased,
       newAgendaitems,
-      previousAgenda
+      newPiecesOnAgenda
     };
   }
 

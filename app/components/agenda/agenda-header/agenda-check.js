@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { trackedTask } from 'reactiveweb/ember-concurrency';
-import { task } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { getNotaGroups } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { inject as service } from '@ember/service';
@@ -80,6 +80,28 @@ export default class AgendaHeaderAgendaCheck extends Component {
     // this is falsy (to disabled approve button, not loaded yet or error)
     return null;
   }
+
+  getNewPieces = task(async () => {
+    const agendaitems = await this.args.agenda.agendaitems;
+    const previousAgenda = await this.args.agenda.previousVersion;
+    const pieces = [];
+    const agendaitemNewPieces = agendaitems.map(async (agendaitem) => {
+      if (previousAgenda) {
+        const newPieces = await this.agendaService.changedPieces(
+          this.args.agenda.id,
+          previousAgenda.id,
+          agendaitem.id
+        );
+        if (newPieces.length > 0) {
+          pieces.push(...newPieces);
+        }
+      }
+    });
+    await all(agendaitemNewPieces);
+    return pieces;
+  });
+
+  newPieces = trackedTask(this, this.getNewPieces);
 
   @action
   onSave() {

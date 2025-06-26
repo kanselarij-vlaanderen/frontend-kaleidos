@@ -37,6 +37,7 @@
                   @items={{notaGroup}}
                   @newAgendaitems={{@model.newAgendaitems}}
                   @decisionsAreReleased={{@model.decisionsAreReleased}}
+                  @highlightedPieces={{@model.newPiecesOnAgenda}}
                 />
               {{/each}}
             </div>
@@ -67,6 +68,7 @@
                         {{#if pieces}}
                           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                             @pieces={{pieces}}
+                            @highlightedPieces={{@model.newPiecesOnAgenda}}
                           />
                         {{/if}}
                       {{/let}}

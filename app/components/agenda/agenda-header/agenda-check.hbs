@@ -17,7 +17,14 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      {{#if (or this.fileNameMappings.isRunning this.agendaitems.isRunning this.newAgendaitems.isRunning)}}
+      {{#if
+        (or
+          this.fileNameMappings.isRunning
+          this.agendaitems.isRunning
+          this.newAgendaitems.isRunning
+          this.newPieces.isRunning
+        )
+      }}
         <Auk::Loader />
       {{else}}
         <div class="auk-u-mx-2">
@@ -62,6 +69,7 @@
                       @fileNameMappings={{this.fileNameMap}}
                       @hideNotFormallyOk={{true}}
                       @newAgendaitems={{this.newAgendaitems.value}}
+                      @highlightedPieces={{this.newPieces.value}}
                     />
                   {{/each}}
                 </div>
@@ -92,6 +100,7 @@
                           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                             @pieces={{pieces}}
                             @fileNameMappings={{this.fileNameMap}}
+                            @highlightedPieces={{this.newPieces.value}}
                           />
                         {{/if}}
                       {{/let}}
