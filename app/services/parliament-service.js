@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class ParliamentService extends Service {
   @service toaster;
@@ -15,7 +16,7 @@ export default class ParliamentService extends Service {
     if (!resp.ok) {
       return false;
     } else {
-      const body = await resp.json();
+      const body = await getJsonPayloadOrThrow(resp);
       return body.isReady;
     }
   }
@@ -28,7 +29,7 @@ export default class ParliamentService extends Service {
     if (!resp.ok) {
       return { ready: [], missing: [], required: [] };
     } else {
-      const body = await resp.json();
+      const body = await getJsonPayloadOrThrow(resp);
       return body.data;
     }
   }
@@ -55,28 +56,13 @@ export default class ParliamentService extends Service {
       method: 'POST',
       body: JSON.stringify(params),
     });
-    if (!response.ok) {
-      let errorMessage = '';
-      try {
-        const data = await response.json();
-        if (data.message) {
-          errorMessage = data.message;
-        } else {
-          errorMessage = JSON.stringify(data);
-        }
-      } catch (error) {
-        if (error instanceof SyntaxError) {
-          errorMessage = response.status;
-        } else {
-          errorMessage = `Something went wrong while reading response: ${error}`;
-        }
-      }
-      this.closeToastAndError(sendingToast, errorMessage)
-    } else {
-      const job = await response.json();
+    try {
+      const job = await getJsonPayloadOrThrow(response);
       return { job, toast: sendingToast };
+    } catch (error) {
+      this.closeToastAndError(sendingToast, error.message);
+      return {};
     }
-    return {};
   }
 
   async relinkDecisionmakingFlow(decisionmakingFlow, _case, parliamentFlow) {
@@ -101,22 +87,11 @@ export default class ParliamentService extends Service {
       body: JSON.stringify(params),
     });
     if (!response.ok) {
-      let errorMessage = '';
       try {
-        const data = await response.json();
-        if (data.message) {
-          errorMessage = data.message;
-        } else {
-          errorMessage = JSON.stringify(data);
-        }
+        await getJsonPayloadOrThrow(response);
       } catch (error) {
-        if (error instanceof SyntaxError) {
-          errorMessage = response.status;
-        } else {
-          errorMessage = `Something went wrong while reading response: ${error}`;
-        }
+        this.closeToastAndError(sendingToast,  error?.message);
       }
-      this.closeToastAndError(sendingToast, errorMessage)
     } else {
       this.toaster.close(sendingToast);
       this.toaster.success(
@@ -185,34 +160,11 @@ export default class ParliamentService extends Service {
   }
 
   async getJob(job) {
-    let response;
-    try {
-      response = await fetch(
-        `/vlaams-parlement-sync/send-to-vp-jobs/${job.id}`
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `Backend response contained an error (status: ${
-            response.status
-          }): ${JSON.stringify(data)}`
-        );
-      }
-      return data.data.attributes;
-    } catch (error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down. If so,
-      // throw a nice error that only contains the
-      // response status.
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
+    const response = await fetch(
+      `/vlaams-parlement-sync/send-to-vp-jobs/${job.id}`
+    );
+    const data = await getJsonPayloadOrThrow(response);
+    return data.data.attributes;
   }
 
   closeToastAndError(toast, errorMessage) {

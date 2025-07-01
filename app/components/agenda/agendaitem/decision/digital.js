@@ -8,6 +8,7 @@ import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
@@ -74,13 +75,14 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     if (!nota) {
       return;
     }
-    const resp = await fetch(`/decision-extraction/${nota.id}`);
-    if (!resp.ok) {
-      this.toaster.warning(this.intl.t('error-while-fetching-nota-content'));
-      return;
+    try {
+      const resp = await fetch(`/decision-extraction/${nota.id}`);
+      const json = await getJsonPayloadOrThrow(resp);
+      this.nota = json.content;
+    } catch (error) {
+      const message = error?.message ? `: ${error?.message}` : '';
+      this.toaster.warning(this.intl.t('error-while-fetching-nota-content') + `${message}`);
     }
-    const json = await resp.json();
-    this.nota = json.content;
   });
 
   loadCodelists = task(async () => {

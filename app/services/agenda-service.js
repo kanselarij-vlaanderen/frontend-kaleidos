@@ -5,6 +5,7 @@ import fetch from 'fetch';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class AgendaService extends Service {
   @service store;
@@ -34,7 +35,7 @@ export default class AgendaService extends Service {
     endpoint.search = queryParams.toString();
     const response = await fetch(endpoint);
     if (response.ok) {
-      const result = await response.json();
+      const result = await getJsonPayloadOrThrow(response);
       this.addedPieces = result.addedDocuments;
       this.addedAgendaitems = result.addedAgendaitems;
     }
@@ -43,7 +44,7 @@ export default class AgendaService extends Service {
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
     const response = await fetch(url);
-    const payload = await response.json();
+    const payload = await getJsonPayloadOrThrow(response);
     const itemsFromStore = [];
     for (const item of payload.data) {
       let itemFromStore = this.store.peekRecord(
@@ -67,7 +68,7 @@ export default class AgendaService extends Service {
       ','
     )}`;
     const response = await fetch(url);
-    const payload = await response.json();
+    const payload = await getJsonPayloadOrThrow(response);
     const itemsFromStore = [];
     for (const item of payload.data) {
       let itemFromStore = this.store.peekRecord(
@@ -91,7 +92,7 @@ export default class AgendaService extends Service {
     }
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);
-    const payload = await response.json();
+    const payload = await getJsonPayloadOrThrow(response);
     const piecesFromStore = [];
     for (const piece of payload.data) {
       let pieceFromStore = this.store.peekRecord(
@@ -130,10 +131,7 @@ export default class AgendaService extends Service {
       headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
     });
     if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        })}`);
+      await getJsonPayloadOrThrow(response);
     }
     await agenda.hasMany('agendaitems').reload();
   }
@@ -163,24 +161,7 @@ export default class AgendaService extends Service {
         formallyOkStatus: formallyStatusUri,
       })
     });
-    let json;
-    try {
-      json = await response.json();
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-    if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     const agendaitem = await this.store.findRecord('agendaitem', json.data.id);
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
@@ -234,10 +215,7 @@ export default class AgendaService extends Service {
     });
     await submission.belongsTo('meeting').reload();
     if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${response.statusText}`);
+      await getJsonPayloadOrThrow(response);
     }
   }
 
@@ -250,24 +228,7 @@ export default class AgendaService extends Service {
       method: 'GET',
       headers: { 'Accept': 'application/vnd.api+json' },
     });
-    let json;
-    try {
-      json = await response.json();
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-    if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     return json;
   }
 
@@ -277,43 +238,29 @@ export default class AgendaService extends Service {
       method: 'GET',
       headers: { 'Accept': 'application/vnd.api+json' },
     });
-    let json;
     try {
-      json = await response.json();      
+      const json = await getJsonPayloadOrThrow(response);
+      const agenda = {
+        id: json.data.attributes.agendaId,
+        uri: json.data.attributes.agenda,
+        serialnumber: json.data.attributes.serialnumber,
+        createdFor: {
+          id: json.data.id,
+          uri: json.data.attributes.uri,
+          plannedStart: new Date(json.data.attributes.plannedStart),
+          kind: {
+            uri: json.data.attributes.kind,
+            label: json.data.attributes.type,
+          }
+        },
+      };
+      return agenda;
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-    if (!response.ok) {
-      this.toaster.error(
-        this.intl.t('error-with-message', { message: JSON.stringify(json) }),
+       this.toaster.error(
+        this.intl.t('error-with-message', { message: error?.message }),
         this.intl.t('warning-title'),
       );
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
     }
-    const agenda = {
-      id: json.data.attributes.agendaId,
-      uri: json.data.attributes.agenda,
-      serialnumber: json.data.attributes.serialnumber,
-      createdFor: {
-        id: json.data.id,
-        uri: json.data.attributes.uri,
-        plannedStart: new Date(json.data.attributes.plannedStart),
-        kind: {
-          uri: json.data.attributes.kind,
-          label: json.data.attributes.type,
-        }
-      },
-    };
-    return agenda;
   }
 
   /* No API */

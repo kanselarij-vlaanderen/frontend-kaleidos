@@ -1,6 +1,7 @@
 import fetch from 'fetch';
 import ArrayProxy from '@ember/array/proxy';
 import getPaginationMetadata from './get-pagination-metadata';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 function sortOrder(sort) {
   if (sort.startsWith('-')) {
@@ -59,7 +60,8 @@ async function muSearch(
 
   endpoint.search = params.toString();
 
-  const { count, data } = await (await fetch(endpoint)).json();
+  const response = await fetch(endpoint);
+  const { count, data } = await getJsonPayloadOrThrow(response);
   const pagination = getPaginationMetadata(page, size, count);
   const entries = await Promise.all(data.map(dataMapping));
 
