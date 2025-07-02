@@ -181,6 +181,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
+      await this.report.belongsTo('file').reload();
       await this.loadAnnotatiePiecePart.perform();
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
