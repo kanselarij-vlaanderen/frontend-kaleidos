@@ -348,25 +348,6 @@
           @onChange={{set this "selectedMandatees"}}
         />
       </AuFormRow>
-      <AuFieldset as |Fieldset|>
-        <Fieldset.legend>{{t "file-types"}}</Fieldset.legend>
-        <Fieldset.content>
-          <AuRadioGroup
-            @alignment="inline"
-            @selected={{this.selectedDownloadOption}}
-            @onChange={{this.onChangeDownloadOption}}
-            as |Group|
-          >
-            {{#each this.downloadOptions as |option|}}
-            <Group.Radio
-              @value={{option.value}}
-              >
-              {{option.label}}
-            </Group.Radio>
-            {{/each}}
-          </AuRadioGroup>
-        </Fieldset.content>
-      </AuFieldset>
     </div>
   </:body>
 </ConfirmationModal>
