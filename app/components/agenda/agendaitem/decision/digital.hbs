@@ -330,7 +330,7 @@
             <AuContent @size="small">
               <SanitizeHtml
                 @raw={{true}}
-                @value={{this.betreftPiecePart.htmlContent}}
+                @value={{this.betreftPiecePart.htmlContentWithReducedBreaks}}
               />
             </AuContent>
           {{/if}}
@@ -413,7 +413,7 @@
             <AuContent @size="small">
               <SanitizeHtml
                 @raw={{true}}
-                @value={{this.beslissingPiecePart.htmlContent}}
+                @value={{this.beslissingPiecePart.htmlContentWithReducedBreaks}}
               />
             </AuContent>
           {{/if}}
