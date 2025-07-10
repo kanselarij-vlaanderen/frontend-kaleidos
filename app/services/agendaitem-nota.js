@@ -40,4 +40,20 @@ export default class AgendaitemNotaService extends Service {
       include: 'document-container,document-container.type,access-level',
     });
   }
+
+  async getExtractedDecision(agendaitem) {
+    const nota = await this.notaOrVisieNota(agendaitem);
+    if (!nota) {
+      return;
+    }
+    // TODO error handling will be changed in upcoming PR, grab that instead
+    // KAS-5070 depending on who merges first there will be a conflict
+    const resp = await fetch(`/decision-extraction/${nota.id}`);
+    if (!resp.ok) {
+      this.toaster.warning(this.intl.t('error-while-fetching-nota-content'));
+      return;
+    }
+    const json = await resp.json();
+    return json.content;
+  };
 }
