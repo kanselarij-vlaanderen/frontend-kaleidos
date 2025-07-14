@@ -449,6 +449,16 @@ context('signatures shortlist overview tests', () => {
     const staticResponse = {
       statusCode: 200,
       ok: true,
+      body: {
+        data: {
+          id: 'somejobid',
+          signFlowUris: [
+            'http://themis.vlaanderen.be/id/handtekenaangelegenheid/somesignflowid'
+          ],
+          status: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+          uri: 'http://mu.semte.ch/services/digital-signing/prepare-signing-flow-job/somesignflowpreparationid',
+        },
+      },
     };
 
     cy.visit('ondertekenen/opstarten');
@@ -505,6 +515,8 @@ context('signatures shortlist overview tests', () => {
     cy.wait('@postSigningActivities2');
     cy.wait('@patchSignSubcases2');
     cy.wait('@patchSignFlows2');
+    // close the error popup. There was no job found since we gave it stubbed data
+    cy.get(appuniversum.alert.close).click();
 
     // this works because signflow-status-sync service is not active.
     // Normally the status becomes 'Marked' because there is no preparation-activity created.
@@ -981,6 +993,16 @@ context('decisions and minutes shortlist overview tests', () => {
     const staticResponse = {
       statusCode: 200,
       ok: true,
+      body: {
+        data: {
+          id: 'somejobid',
+          signFlowUris: [
+            'http://themis.vlaanderen.be/id/handtekenaangelegenheid/somesignflowid'
+          ],
+          status: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+          uri: 'http://mu.semte.ch/services/digital-signing/prepare-signing-flow-job/somesignflowpreparationid',
+        },
+      },
     };
 
     cy.intercept('GET', '/sign-flows*').as('getShortlist1');
@@ -1039,6 +1061,8 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.wait('@postSigningActivities2');
     cy.wait('@patchSignSubcases2');
     cy.wait('@patchSignFlows2');
+    // close the error popup. There was no job found since we gave it stubbed data
+    cy.get(appuniversum.alert.close).click();
 
     // this works because signflow-status-sync service is not active.
     // Normally the status becomes 'Marked' because there is no preparation-activity created.

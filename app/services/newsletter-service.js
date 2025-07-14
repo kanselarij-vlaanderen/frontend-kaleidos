@@ -33,8 +33,9 @@ export default class NewsletterService extends Service {
       return mailCampaign;
     } catch (error) {
       if (!silent) {
+        const message = error?.message ? `: ${error?.message}` : '';
         this.toaster.error(
-          this.intl.t('error-create-newsletter'),
+          this.intl.t('error-create-newsletter') + message,
           this.intl.t('warning-title')
         );
       }
