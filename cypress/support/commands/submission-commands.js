@@ -503,6 +503,7 @@ function acceptSubmissionCreateSubcase(submission) {
   cy.wait(`@submitToMeeting${randomInt}`);
   cy.wait('@createNewSubmissionStatusChangeActivity');
   cy.wait(`@patchSubmission${randomInt}`);
+  cy.wait(5000); // we transition after this, loading a different route.
   cy.log('/acceptSubmissionCreateSubcase');
 }
 
