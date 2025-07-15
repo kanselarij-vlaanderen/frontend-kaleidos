@@ -137,9 +137,9 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
-              @loading={{or this.loadNota.isRunning this.updateBeslissingContent.isRunning}}
+              @loading={{or this.loadNotaExtraction.isRunning this.updateBeslissingContent.isRunning}}
               @loadingMessage={{t "loading"}}
-              @disabled={{not (or this.nota @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
+              @disabled={{not (or this.extractedDecision @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
               {{on "click" this.updateBeslissingContent.perform}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -346,9 +346,9 @@
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
-                  @loading={{or this.loadNota.isRunning this.updateBeslissingContent.isRunning}}
+                  @loading={{or this.loadNotaExtraction.isRunning this.updateBeslissingContent.isRunning}}
                   @loadingMessage={{t "loading"}}
-                  @disabled={{not (or this.nota @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
+                  @disabled={{not (or this.extractedDecision @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
                   {{on "click" this.updateBeslissingContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
