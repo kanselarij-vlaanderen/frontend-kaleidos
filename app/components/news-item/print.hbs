@@ -35,7 +35,10 @@
             {{/if}}
           </div>
           {{#if (and (not @newsItem) @agendaitem.title)}}
-            <div class="auk-u-mt auk-u-border-left l-printable-newsletter__title">
+            <div
+              class="auk-u-mt auk-u-border-left l-printable-newsletter__title
+              auk-o-flex--inline auk-u-text-pre-line"
+            >
               {{@agendaitem.title}}
             </div>
           {{/if}}

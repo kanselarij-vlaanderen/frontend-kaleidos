@@ -55,7 +55,12 @@
       </div>
     </div>
     {{#if (user-may "treat-and-accept-submissions")}}
-      <p data-test-submission-description-title>{{capitalize @submission.title}}</p>
+      <p
+        data-test-submission-description-title
+        class="auk-o-flex--inline auk-u-text-pre-line"
+      >
+        {{capitalize @submission.title}}
+      </p>
     {{/if}}
   </Auk::Panel::Body>
   <Auk::Panel::Body>
