@@ -56,7 +56,12 @@
         </div>
       </div>
       {{#if @subcase.title}}
-        <p data-test-subcase-description-title>{{capitalize @subcase.title}}</p>
+        <p
+          data-test-subcase-description-title
+          class="auk-o-flex--inline auk-u-text-pre-line"
+        >
+          {{capitalize @subcase.title}}
+        </p>
       {{/if}}
       {{#if @subcase.parliamentRetrievalActivity}}
         <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>

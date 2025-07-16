@@ -40,7 +40,11 @@
         </AuHeading>
       </div>
       {{#if @subcase.title}}
-        <p>{{capitalize @subcase.title}}</p>
+        <p
+          class="auk-o-flex--inline auk-u-text-pre-line"
+        >
+          {{capitalize @subcase.title}}
+        </p>
       {{/if}}
       {{#if (and @subcase.isBekrachtiging @subcase.parliamentRetrievalActivity)}}
         <AuHelpText @skin="secondary">{{t "from-parliament"}}</AuHelpText>

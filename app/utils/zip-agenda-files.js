@@ -41,6 +41,7 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
 }
 
 async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly) {
+  // pdfOnly is not applicable to decisions since KAS-5059
   const job = await fetchArchivingJob(agenda, mandateeIds, decisions, pdfOnly);
   if (job) {
     return registerJobToStore(job, store);

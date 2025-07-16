@@ -8,7 +8,6 @@ import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import { generateBetreft, generateApprovalText } from 'frontend-kaleidos/utils/decision-minutes-formatting';
-import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 function editorContentChanged(piecePartRecord, piecePartEditor) {
   return piecePartRecord.htmlContent !== piecePartEditor.htmlContent;
@@ -35,7 +34,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @tracked annotatiePiecePart;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
-  @tracked nota;
+  @tracked extractedDecision;
 
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
@@ -68,21 +67,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     })
   }
 
-  loadNota = task(async () => {
-    const nota = await this.agendaitemNota.nota(
-      this.args.agendaitem
-    );
-    if (!nota) {
-      return;
-    }
-    try {
-      const resp = await fetch(`/decision-extraction/${nota.id}`);
-      const json = await getJsonPayloadOrThrow(resp);
-      this.nota = json.content;
-    } catch (error) {
-      const message = error?.message ? `: ${error?.message}` : '';
-      this.toaster.warning(this.intl.t('error-while-fetching-nota-content') + `${message}`);
-    }
+  loadNotaExtraction = task(async () => {
+    this.extractedDecision = await this.agendaitemNota.getExtractedDecision(this.args.agendaitem);
   });
 
   loadCodelists = task(async () => {
@@ -391,7 +377,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
           const { shortTitle, title } = this.args.agendaitem;
           newBeslissingHtmlContent = generateApprovalText(shortTitle, title);
         } else {
-          newBeslissingHtmlContent = this.nota || '';
+          newBeslissingHtmlContent = this.extractedDecision || '';
         }
         break;
     }
@@ -768,21 +754,21 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @action
   startEditingConcern() {
     this.loadDocuments.perform();
-    this.loadNota.perform();
+    this.loadNotaExtraction.perform();
     this.isEditingConcern = true;
   }
 
   @action
   startEditingTreatment() {
     this.loadDocuments.perform();
-    this.loadNota.perform();
+    this.loadNotaExtraction.perform();
     this.isEditingTreatment = true;
   }
 
   @action
   startEditing() {
     this.loadDocuments.perform();
-    this.loadNota.perform();
+    this.loadNotaExtraction.perform();
     this.editorValueAnnotatie = '';
     this.isEditing = true;
   }
