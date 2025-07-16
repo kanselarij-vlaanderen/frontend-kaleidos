@@ -114,10 +114,10 @@ export default class AgendaOverview extends Component {
   @action
   save() {
     if (this.args.notasHasChanged) {
-      this.args.onReorderAgendaitems(this.notas);
+      this.args.onReorderAgendaitems(this.notas, CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
     }
     if (this.args.announcementsHasChanged) {
-      this.args.onReorderAgendaitems(this.announcements);
+      this.args.onReorderAgendaitems(this.announcements, CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT);
     }
     this.args.toggleIsEditingOverview?.();
   }

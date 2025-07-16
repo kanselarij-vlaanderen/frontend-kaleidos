@@ -34,7 +34,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @tracked annotatiePiecePart;
   @tracked betreftPiecePart;
   @tracked beslissingPiecePart;
-  @tracked nota;
+  @tracked extractedDecision;
 
   @tracked hasSignFlow = false;
   @tracked hasMarkedSignFlow = false;
@@ -67,20 +67,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     })
   }
 
-  loadNota = task(async () => {
-    const nota = await this.agendaitemNota.nota(
-      this.args.agendaitem
-    );
-    if (!nota) {
-      return;
-    }
-    const resp = await fetch(`/decision-extraction/${nota.id}`);
-    if (!resp.ok) {
-      this.toaster.warning(this.intl.t('error-while-fetching-nota-content'));
-      return;
-    }
-    const json = await resp.json();
-    this.nota = json.content;
+  loadNotaExtraction = task(async () => {
+    this.extractedDecision = await this.agendaitemNota.getExtractedDecision(this.args.agendaitem);
   });
 
   loadCodelists = task(async () => {
@@ -181,6 +169,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   loadReport = task(async () => {
     this.report = await this.args.decisionActivity.belongsTo('report').reload();
     if (this.report) {
+      await this.report.belongsTo('file').reload();
       await this.loadAnnotatiePiecePart.perform();
       await this.loadBetreftPiecePart.perform();
       await this.loadBeslissingPiecePart.perform();
@@ -388,7 +377,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
           const { shortTitle, title } = this.args.agendaitem;
           newBeslissingHtmlContent = generateApprovalText(shortTitle, title);
         } else {
-          newBeslissingHtmlContent = this.nota || '';
+          newBeslissingHtmlContent = this.extractedDecision || '';
         }
         break;
     }
@@ -765,21 +754,21 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   @action
   startEditingConcern() {
     this.loadDocuments.perform();
-    this.loadNota.perform();
+    this.loadNotaExtraction.perform();
     this.isEditingConcern = true;
   }
 
   @action
   startEditingTreatment() {
     this.loadDocuments.perform();
-    this.loadNota.perform();
+    this.loadNotaExtraction.perform();
     this.isEditingTreatment = true;
   }
 
   @action
   startEditing() {
     this.loadDocuments.perform();
-    this.loadNota.perform();
+    this.loadNotaExtraction.perform();
     this.editorValueAnnotatie = '';
     this.isEditing = true;
   }

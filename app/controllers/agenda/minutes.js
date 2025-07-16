@@ -147,7 +147,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   return `
   <h4 ${pagebreak}><u>${
     agendaitem.number
-  }. ${betreft.toUpperCase()}</u></h4>
+  }. ${betreft.toUpperCase().replace(/\n/g, '<br />')}</u></h4>
   <p>${text}</p>`
 }
 function capitalizeFirstLetter(string) {

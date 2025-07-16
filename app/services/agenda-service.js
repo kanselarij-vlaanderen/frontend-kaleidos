@@ -189,12 +189,15 @@ export default class AgendaService extends Service {
         'filter[agendas][agendaitems][:id:]': json.data.id,
       });
       if (meeting?.id && agendaitem?.number) {
+        const reportsToRegenerate = [];
         const reports = await this.store.queryAll('report', {
           'filter[:has-no:next-piece]': true,
           'filter[:has:piece-parts]': true,
           'filter[decision-activity][treatment][agendaitems][agenda][created-for][:id:]': meeting.id,
           'filter[decision-activity][treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA, // announcements are not reordered
-          'filter[decision-activity][treatment][agendaitems][:gt:number]': agendaitem.number, // any report with a lower number should be ok
+          // before we filtered on [:gt:number]': agendaitem.number , but there is a scenario where the service reorders agendaitems with numbers that are lower.
+          // this scenario involves manual changes made by users to the numbers. The service will overwrite those changes while inserting the new agendaitem
+          // we need to regenerate the reports in those scenarios as well if the reports exist.
         });
         if (reports?.length) {
           await Promise.all(reports.map(async (report) => {
@@ -204,11 +207,15 @@ export default class AgendaService extends Service {
             });
             const documentContainer = await report.documentContainer;
             const pieces = await documentContainer.pieces;
-            report.name = await generateReportName(agendaitem, meeting, pieces.length);
-            await report.belongsTo('file').reload();
-            await report.save();
+            const newName = await generateReportName(agendaitem, meeting, pieces.length);
+            if (report.name !== newName) {
+              reportsToRegenerate.push(report);
+              report.name = newName;
+              await report.belongsTo('file').reload();
+              await report.save();
+            }
           }));
-          await this.decisionReportGeneration.generateReplacementReports.perform(reports);
+          await this.decisionReportGeneration.generateReplacementReports.perform(reportsToRegenerate);
         }
       }
     }

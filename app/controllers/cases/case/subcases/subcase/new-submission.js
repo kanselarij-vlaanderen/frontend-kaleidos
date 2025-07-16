@@ -5,6 +5,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask, all } from 'ember-concurrency';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -108,9 +109,12 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
   }
 
   uploadPiece = async (file) => {
+    const existingPieceName = this.pieces[0].name;
+    const existingSubject = new VRDocumentName(existingPieceName).subjectOnly();
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
     const type = await findDocType(this.conceptStore, parsed.type);
+    const nameToSet = existingSubject ? existingSubject : parsed.subject;
     const accessLevel = parsed.confidential ? await this.store.findRecordByUri(
       'concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
     ) : this.defaultAccessLevel;
@@ -126,7 +130,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
       modified: now,
       file: file,
       accessLevel: accessLevel,
-      name: parsed.subject,
+      name: nameToSet,
       documentContainer: documentContainer,
     });
     this.newPieces.push(piece);
