@@ -195,6 +195,7 @@ export const reorderAgendaitemsOnAgenda = async(agenda, store, decisionReportGen
   const actualAnnouncements = [];
   const sortedAgendaitems = agendaitems.slice().sort((a1, a2) => a1.number - a2.number)
   for (const agendaitem of sortedAgendaitems) {
+    await agendaitem.belongsTo('type').reload(); // type could have changed concurrently
     if (!agendaitem.isDeleted) {
       const type = await agendaitem.type;
       if (type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA) {

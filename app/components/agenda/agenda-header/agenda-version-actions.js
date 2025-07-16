@@ -1,9 +1,8 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { task, timeout, all } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import { all } from 'rsvp'; // TODO KAS-2399 better way then this ?
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import {

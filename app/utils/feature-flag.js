@@ -21,8 +21,16 @@ function isEnabledCabinetSubmissions() {
   );
 }
 
+function isDisabledSessionPolling() {
+  return (
+    ENV.APP.DISABLE_SESSION_POLLING === 'true' ||
+    ENV.APP.DISABLE_SESSION_POLLING === true
+  );
+}
+
 export {
   isEnabledVlaamsParlement,
   isEnabledImpersonation,
   isEnabledCabinetSubmissions,
+  isDisabledSessionPolling,
 }

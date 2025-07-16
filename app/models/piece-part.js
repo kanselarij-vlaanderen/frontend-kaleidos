@@ -11,4 +11,8 @@ export default class PiecePart extends Model {
   nextPiecePart;
   @belongsTo('piece-part', { inverse: 'nextPiecePart', async: true })
   previousPiecePart;
+
+  get htmlContentWithReducedBreaks() {
+    return this.htmlContent?.replace(/(<br\s*[/]?>)+/gi, '<br/>');
+  }
 }

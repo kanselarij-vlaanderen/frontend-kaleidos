@@ -29,6 +29,7 @@ export default class AgendaAgendaitemsController extends Controller {
   @service intl;
   @service decisionReportGeneration;
   @service throttledLoadingService;
+  @service toaster;
 
   @lastValue('groupNotasOnGroupName') notaGroups = [];
   @tracked meeting;
@@ -97,7 +98,25 @@ export default class AgendaAgendaitemsController extends Controller {
   }
 
   @task
-  *assignNewPriorities(reorderedAgendaitems) {
+  *assignNewPriorities(reorderedAgendaitems, agendaitemType) {
+    const agendaitemsCount = yield this.store.count('agendaitem', {
+      'filter[agenda][:id:]': this.agenda.id,
+      'filter[type][:uri:]': agendaitemType,
+    });
+    // concurrency check if agendaitems were added or removed
+    if (reorderedAgendaitems?.length !== agendaitemsCount) {
+      this.toaster.error(
+        this.intl.t('agendaitem-positions-cannot-be-changed'),
+        this.intl.t('changes-could-not-be-saved-title'),
+        {
+          timeOut: 60000,
+        }
+      );
+      // we don't want the changes anymore, but we are not going to refresh the page
+      this.notasHasChanged = false;
+      this.announcementsHasChanged = false;
+      return;
+    }
     yield setAgendaitemsNumber(
       reorderedAgendaitems,
       this.agenda,
