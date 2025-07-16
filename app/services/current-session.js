@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
 import { later } from '@ember/runloop';
 import { findGroupByRole } from 'frontend-kaleidos/config/permissions';
+import { isDisabledSessionPolling } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class CurrentSessionService extends Service {
   @service session;
@@ -21,7 +22,10 @@ export default class CurrentSessionService extends Service {
 
   constructor() {
     super(...arguments);
-
+  
+    if (isDisabledSessionPolling()) {
+      return;
+    }
     this.lifecycle();
   }
 

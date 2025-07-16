@@ -272,6 +272,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     }
 
     this.args.subcase.decisionmakingFlow = this.newDecisionmakingFlow;
+    const linkedPieces = await this.args.subcase.linkedPieces;
+    linkedPieces.length = 0;
     await this.args.subcase.save();
     this.isAssigningToOtherCase = false;
 
