@@ -120,6 +120,7 @@
               @skin="primary"
               @disabled={{this.isProcessing}}
               @loading={{this.saveDetails.isRunning}}
+              @loadingMessage={{t "loading"}}
               {{on "click" (perform this.saveDetails)}}
             >
               {{t "save"}}
@@ -319,7 +320,7 @@
               <div class="auk-o-flex__item--fix">
                 <AccessLevelPill
                   @accessLevel={{this.signedPieceCopy.accessLevel}}
-                  @isEditable={{true}}
+                  @isEditable={{user-may "manage-document-access-levels"}}
                   @onChangeAccessLevel={{fn this.changeAccessLevelOfSignedPiece this.signedPieceCopy}}
                   @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfSignedPiece this.signedPieceCopy}}
                   @onCancelChangeAccessLevel={{perform this.loadSignedPieces}}

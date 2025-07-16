@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+// import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util'; // TODO KAS-5070
 
 export default class AgendaitemNotaService extends Service {
   @service store;
@@ -39,5 +40,29 @@ export default class AgendaitemNotaService extends Service {
       },
       include: 'document-container,document-container.type,access-level',
     });
+  }
+
+  async getExtractedDecision(agendaitem) {
+    const nota = await this.notaOrVisieNota(agendaitem);
+    if (!nota) {
+      return;
+    }
+    const resp = await fetch(`/decision-extraction/${nota.id}`);
+    if (!resp.ok) {
+      this.toaster.warning(this.intl.t('error-while-fetching-nota-content'));
+      return;
+    }
+    const json = await resp.json();
+    return json.content;
+
+    // TODO KAS-5070 error handling will be changed in upcoming PR, use this instead
+    // try {
+    //   const resp = await fetch(`/decision-extraction/${nota.id}`);
+    //   const json = await getJsonPayloadOrThrow(resp);
+    //   return json.content;
+    // } catch (error) {
+    //   const message = error?.message ? `: ${error?.message}` : '';
+    //   this.toaster.warning(this.intl.t('error-while-fetching-nota-content') + `${message}`);
+    // };
   }
 }

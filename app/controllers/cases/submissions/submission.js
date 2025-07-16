@@ -6,6 +6,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { task, timeout } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
+import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces, sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -54,8 +55,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       this.model.isInTreatment;
 
     const mayIfCabinet =
-      this.currentSession.may('edit-sent-back-submissions') &&
-      this.model.isSentBack &&
+      ((this.currentSession.may('edit-sent-back-submissions') &&
+        this.model.isSentBack) ||
+        (this.currentSession.may('edit-concept-submissions') &&
+          this.model.isConcept)) &&
       this.currentLinkedMandatee?.id ===
         this.model.belongsTo('requestedBy').value().id; // requestedBy is loaded in the route
     return mayIfAdmin || mayIfSecretarie || mayIfCabinet;
@@ -86,6 +89,10 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       // the notification panel updates the tracked properties of this controller when confidential changes
       await timeout(500);
       await this.saveNotificationDataOnModel();
+      if (this.confidential) {
+        // only strengthen if submission became confidential
+        await this.strengthenAccessLevelToConfidential();
+      }
     }
   });
 
@@ -160,6 +167,7 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   saveBatchDetails = () => {
+    this.checkIfHasConfidentialPiecesChanged.perform();
     this.reloadPieces.perform();
     this.isOpenBatchDetailsModal = false;
   };
@@ -223,16 +231,19 @@ export default class CasesSubmissionsSubmissionController extends Controller {
 
   @action
   async uploadPiece(file) {
+    const existingPieceName = this.pieces[0]?.name || '';
+    const existingSubject = new VRDocumentName(existingPieceName).subjectOnly();
     const name = file.filenameWithoutExtension;
     const parsed = new VRCabinetDocumentName(name).parsed;
     const type = await findDocType(this.conceptStore, parsed.type);
+    const nameToSet = this.isUpdate && existingSubject ? existingSubject : parsed.subject;
 
     const now = new Date();
     const confidential = this.model.confidential || false;
     const numberOfContainers = this.documentContainerIds.length;
     // uploading a new doc on an update results in double numbering. fe uploading doc 2 results in doc 1, 2, 2, 3
     const position = this.isUpdate ? (numberOfContainers + 1) : parsed.index || (numberOfContainers + 1);
-    const documentContainer = this.store.createRecord(
+    const documentContainer = await this.store.createRecord(
       'draft-document-container',
       {
         created: now,
@@ -246,17 +257,22 @@ export default class CasesSubmissionsSubmissionController extends Controller {
         ? CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
-    const piece = this.store.createRecord('draft-piece', {
+    const piece = await this.store.createRecord('draft-piece', {
       created: now,
       modified: now,
       file: file,
       confidential: confidential,
       accessLevel: defaultAccessLevel,
-      name: parsed.subject,
+      name: nameToSet,
       documentContainer: documentContainer,
       submission: this.model,
     });
     this.newPieces.push(piece);
+    this.newPieces.sort((a, b) => {
+      const posA = a.documentContainer.get('position');
+      const posB = b.documentContainer.get('position');
+      return posA - posB;
+    });
   }
 
   savePieces = task(async () => {
@@ -333,8 +349,34 @@ export default class CasesSubmissionsSubmissionController extends Controller {
     this.pieces[index] = newVersion;
     this.pieces = [...this.pieces];
     // No need to add this version to this.newDraftPieces (we did before)
-    // since this.savePieces will now trigger this.updateDraftPiecePositions 
+    // since this.savePieces will now trigger this.updateDraftPiecePositions
     await this.savePieces.perform();
     await this.checkIfHasConfidentialPiecesChanged.perform();
   };
+
+  strengthenAccessLevelToConfidential = async() => {
+    const pieces = await this.model.pieces;
+      // Strengthen the accessLevel of the draft-pieces to confidential
+    const confidentialAccessLevel = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+    );
+
+    let changedAccessLevelOfPieces = false;
+    const promises = pieces.map(async (piece) => {
+      const accessLevel = await piece.accessLevel;
+      if (accessLevel.uri != confidentialAccessLevel.uri) {
+        // pieces are not persisted yet in the store at this point
+        piece.accessLevel = confidentialAccessLevel;
+        changedAccessLevelOfPieces = true;
+        await piece.save();
+      }
+    });
+    await Promise.all(promises);
+    if (changedAccessLevelOfPieces) {
+      this.toaster.success(
+        this.intl.t('uploaded-pieces-access-level-changed'),
+      );
+    }
+  }
 }

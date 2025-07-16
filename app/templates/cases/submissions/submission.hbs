@@ -128,6 +128,7 @@
               @isEditable={{this.mayEdit}}
               @onAddPiece={{this.onAddNewPieceVersion}}
               @hideAccessLevel={{false}}
+              @isUpdate={{this.isUpdate}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
               @onSaveAccessLevel={{perform this.checkIfHasConfidentialPiecesChanged}}
@@ -161,14 +162,16 @@
       </Auk::Panel>
     </div>
 
-    <Cases::Submissions::HistoryPanel
-      @statusChangeActivities={{this.statusChangeActivities}}
-      {{! everyone who can edit this submission can see the comments }}
-      @canSeePrivateComments={{or
-        (user-may "treat-and-accept-submissions")
-        (user-may "create-submissions")
-      }}
-    />
+    {{#if (not @model.isConcept)}}
+      <Cases::Submissions::HistoryPanel
+        @statusChangeActivities={{this.statusChangeActivities}}
+        {{! everyone who can edit this submission can see the comments }}
+        @canSeePrivateComments={{or
+          (user-may "treat-and-accept-submissions")
+          (user-may "create-submissions")
+        }}
+      />
+    {{/if}}
   </div>
 </div>
 
@@ -200,6 +203,7 @@
             @allowDocumentContainerEdit={{true}}
             @allowEditPieceAccessLevel={{true}}
             @simplifiedOptions={{true}}
+            @documentTypeRequired={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}
@@ -215,6 +219,7 @@
     @onSave={{this.saveBatchDetails}}
     @disableDelete={{true}}
     @allowEditing={{this.mayEdit}}
+    @isUpdate={{this.isUpdate}}
     @disableEditingPosition={{this.isUpdate}}
   />
 {{/if}}

@@ -46,6 +46,7 @@
             <LinkTo
               @route="document"
               @model={{this.piece.id}}
+              target="_blank"
               class="auk-h4"
               data-test-draft-document-card-name-value
             >
@@ -59,6 +60,7 @@
                   as |extension|
                 }}
                   {{this.piece.name}}{{#if extension}}.{{extension}}{{/if}}
+                  <AuIcon @icon="external-link" @alignment="right"/>
                 {{/let}}
               {{/if}}
             </LinkTo>
@@ -92,7 +94,10 @@
               {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
-                  @isEditable={{this.mayEdit}}
+                  @isEditable={{this.mayEditAccessLevel}}
+                  @simplifiedOptions={{not
+                    (user-may "manage-document-access-levels")
+                  }}
                   @isDraft={{eq this.piece.constructor.modelName 'draft-piece'}}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
@@ -101,7 +106,7 @@
               {{/unless}}
             {{/unless}}
           </Group.Item>
-          {{#if this.mayEdit}}
+          {{#if this.mayEditDraftPiece}}
             <Group.Item
               class="auk-o-flex auk-o-flex--vertical-center"
             >
@@ -122,6 +127,16 @@
                     role="menuitem"
                   >
                     {{t "edit"}}
+                  </AuButton>
+                {{/if}}
+                {{#if this.mayConvertSourceFile}}
+                  <AuButton
+                    @skin="link"
+                    @disabled={{this.convertSourceFile.isRunning}}
+                    {{on "click" this.convertSourceFile.perform}}
+                    role="menuitem"
+                  >
+                    {{t "convert-to-pdf"}}
                   </AuButton>
                 {{/if}}
                 <AuHr />
@@ -179,8 +194,8 @@
                 >
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
-                    @agendaContext={{@agendaContext}}
                     @isEditable={{false}}
+                    @external={{true}}
                   />
                 </div>
               {{/each}}
@@ -223,6 +238,7 @@
         @onDelete={{perform this.deleteUploadedPiece}}
         @allowEditPieceAccessLevel={{true}}
         @simplifiedOptions={{true}}
+        @documentTypeRequired={{true}}
         @onAccessLevelChanged={{set this.newPiece.accessLevel "accessLevel"}}
       />
     {{else}}

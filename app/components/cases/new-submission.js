@@ -12,6 +12,7 @@ import {
   removeObjects,
 } from 'frontend-kaleidos/utils/array-helpers';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+
 /**
  * @param decisionmakingFlow
  * @param latestSubcase
@@ -93,7 +94,7 @@ export default class CasesNewSubmissionComponent extends Component {
 
   // TODO short title of submission should be mandatory
   // also when choosing an existing case, we could copy shortTitle of Case into submission shortTitle
-  get saveIsDisabled() {
+  get saveConceptIsDisabled() {
     const decisionmakingFlowSet = this.args.isForNewCase
       ? !!this.shortTitle
       : !!this.selectedDecisionmakingFlow || !!this.decisionmakingFlowTitles;
@@ -102,9 +103,13 @@ export default class CasesNewSubmissionComponent extends Component {
       !decisionmakingFlowSet ||
       !subcaseTypeSet ||
       this.isUploadingFiles ||
-      !this.pieces.length ||
-      this.createSubmission.isRunning
+      this.createSubmission.isRunning ||
+      this.createConceptSubmission.isRunning
     );
+  }
+
+  get saveIsDisabled() {
+    return !this.pieces.length || this.saveConceptIsDisabled;
   }
 
   get sortedPieces() {
@@ -206,13 +211,7 @@ export default class CasesNewSubmissionComponent extends Component {
     this.isUploadingFiles = uploadIsRunning && !uploadIsCompleted;
   };
 
-  createSubmission = dropTask(async (meeting, comment) => {
-    this.showProposableAgendaModal = false;
-    const submitted = await this.store.findRecordByUri(
-      'concept',
-      CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
-    );
-
+  createSubmissionRecord = async (status, comment = '') => {
     const _case = await this.selectedDecisionmakingFlow?.case;
     const decisionmakingFlowTitle =
       this.decisionmakingFlowTitle ??
@@ -239,16 +238,24 @@ export default class CasesNewSubmissionComponent extends Component {
         ...this.selectedGovernmentFields,
         ...this.selectedGovernmentDomains,
       ],
-      status: submitted,
+      status: status,
       pieces: this.pieces,
     });
 
     await this.submission.save();
-
     await this.savePieces.perform();
-
     // Create submission change
-    await this.draftSubmissionService.createStatusChange(this.submission, submitted.uri, comment);
+    await this.draftSubmissionService.createStatusChange(this.submission, status.uri, comment);
+  }
+
+  createSubmission = dropTask(async (meeting, comment) => {
+    this.showProposableAgendaModal = false;
+    const submitted = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.INGEDIEND
+    );
+
+    await this.createSubmissionRecord(submitted, comment);
     await this.createNotificationMailResources(meeting);
 
     if (meeting) {
@@ -268,6 +275,17 @@ export default class CasesNewSubmissionComponent extends Component {
       }
     }
   });
+
+  createConceptSubmission = task(async () => {
+    const typesRequired = await this.documentService.enforceDocType(this.pieces);
+    if (typesRequired) return;
+    const concept = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.CONCEPT
+    );
+    await this.createSubmissionRecord(concept);
+    this.args.onCreateSubmission?.(this.submission);
+  })
 
   async createNotificationMailResources(meeting) {
     if (this.approvalAddresses.length && this.notificationAddresses.length) {

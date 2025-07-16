@@ -33,7 +33,7 @@
     <AccessLevelPill
       @accessLevel={{@piece.accessLevel}}
       @isDraft={{this.isDraftAccessLevel}}
-      @isEditable={{@isEditable}}
+      @isEditable={{and @isEditable (user-may "manage-document-access-levels")}}
       @onChangeAccessLevel={{this.changeAccessLevel}}
       @onConfirmChangeAccessLevel={{@onConfirmChangeAccessLevel}}
       @onCancelChangeAccessLevel={{@onCancelChangeAccessLevel}}

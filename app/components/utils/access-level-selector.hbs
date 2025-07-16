@@ -1,4 +1,4 @@
-{{#if @simplifiedOptions}}
+{{#if (and @simplifiedOptions @showSimplifiedToggle)}}
   <AuToggleSwitch
     @checked={{eq @selected.uri this.confidentialUri}}
     @onChange={{this.toggleConfidential}}
@@ -9,6 +9,7 @@
     @modelName="concept"
     @selected={{@selected}}
     @disabled={{@disabled}}
+    {{! clearing access-level should be avoided except legacy and publications}}
     @allowClear={{@allowClear}}
     @searchField={{@searchField}}
     @placeholder={{@placeholder}}

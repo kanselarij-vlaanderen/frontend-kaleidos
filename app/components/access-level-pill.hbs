@@ -2,7 +2,7 @@
   <Auk::Loader />
 {{else}}
   {{#if (not this.isEditing)}}
-    {{#if (not this.canEdit)}}
+    {{#if (not @isEditable)}}
       <AuPill
         @skin={{this.pillSkin}}
         @icon={{this.pillIcon}}
@@ -32,6 +32,8 @@
           @allowClear={{false}}
           @displayField="label"
           @sortField="position"
+          @simplifiedOptions={{@simplifiedOptions}}
+          @showSimplifiedToggle={{@showSimplifiedToggle}}
           @selected={{@accessLevel}}
           @onChange={{this.changeAccessLevel}}
           data-test-access-level-pill-selector

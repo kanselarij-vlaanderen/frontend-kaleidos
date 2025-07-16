@@ -85,7 +85,7 @@ export default class SubcaseBekrachtigingDescriptionPanelView extends Component 
       // agenda-activities are propagated by yggdrail on agenda approval, treatments/decision-activities only when decisions are released
       const treatment = yield agendaitem?.treatment;
       const decisionActivity = yield treatment?.decisionActivity;
-      yield decisionActivity?.decisionResultCode;
+      yield decisionActivity?.belongsTo('decisionResultCode').reload();
       // Other profiles should not have the latest decision when decisions have not been released yet
       if (decisionActivity) {
         // the last decision might be null, keep only the last one that exists

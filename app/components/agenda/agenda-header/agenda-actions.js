@@ -169,9 +169,9 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   *loadPublicationActivities() {
     // Ensure we get fresh data to avoid concurrency conflicts
     this.decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-    yield this.decisionPublicationActivity?.status; // used in get-functions above
+    yield this.decisionPublicationActivity?.belongsTo('status').reload(); // used in get-functions above
     this.documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
-    yield this.documentPublicationActivity?.status; // used in get-functions above
+    yield this.documentPublicationActivity?.belongsTo('status').reload(); // used in get-functions above
     // Documents can be published multiple times to Themis.
     // We're only interested in the first (earliest) publication.
     this.themisPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
@@ -302,7 +302,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     // timeout options is in milliseconds. when the download is ready, the toast should last very long so users have a time to click it
     const downloadFileToastOptions = {
       title: this.intl.t('file-ready'),
-      message: this.intl.t('agenda-documents-download-ready'),
+      message: this.intl.t('documents-download-ready'),
       timeOut: 60 * 10 * 1000,
     };
     const pdfOnly = this.downloadOption === 'pdf' ? true : false;
@@ -318,7 +318,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
       this.toaster.warning(
-        this.intl.t('no-documents-to-download-warning-text'),
+        this.intl.t('no-meeting-documents-to-download-warning-text'),
         this.intl.t('no-documents-to-download-warning-title'),
         {
           timeOut: 10000,

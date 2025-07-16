@@ -25,6 +25,7 @@ module.exports = function (environment) {
       ENABLE_DEBUG: '{{ENABLE_DEBUG}}',
       ENABLE_VLAAMS_PARLEMENT: '{{ENABLE_VLAAMS_PARLEMENT}}',
       ENABLE_CABINET_SUBMISSIONS: '{{ENABLE_CABINET_SUBMISSIONS}}',
+      DISABLE_SESSION_POLLING: '{{DISABLE_SESSION_POLLING}}',
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -90,6 +91,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     ENV.APP.ENABLE_DEBUG = false;
+    ENV.APP.DISABLE_SESSION_POLLING = true;
     ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
   }
 

@@ -48,6 +48,7 @@
       @icon="plus"
       @disabled={{not this.canAdd}}
       @loading={{this.onAdd.isRunning}}
+      @loadingMessage={{t "loading"}}
       {{on "click" (perform this.onAdd)}}
     >
       {{t "add"}}

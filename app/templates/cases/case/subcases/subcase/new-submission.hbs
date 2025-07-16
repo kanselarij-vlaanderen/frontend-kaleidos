@@ -98,7 +98,7 @@
           {{#if this.pieces.length}}
             <Documents::AddDraftDocumentCardList
               @pieces={{this.pieces}}
-              @isEditable={{this.mayEdit}}
+              @isEditable={{this.mayEdit}} {{! KAS-4991 no getter exists}}
               @hideAccessLevel={{true}}
               @onAddPiece={{this.onAddNewPieceVersion}}
               @onDeletePiece={{this.onDeletePiece}}
@@ -181,6 +181,7 @@
             @allowDocumentContainerEdit={{true}}
             @allowEditPieceAccessLevel={{true}}
             @simplifiedOptions={{true}}
+            @documentTypeRequired={{true}}
             @onDelete={{fn this.deletePiece piece}}
           />
         {{/each}}

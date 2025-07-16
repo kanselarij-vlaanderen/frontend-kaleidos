@@ -130,8 +130,9 @@ export default class NewsletterService extends Service {
     const agendaItemType = await agendaitem.type;
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
+      const contentWithBreaks = content.replace(/\n/g, '<br />');
       news.title = agendaitem.shortTitle || content;
-      news.htmlContent = content;
+      news.htmlContent = contentWithBreaks;
       news.finished = true;
       // We should check if the decision activity has "postponed" or "retracted" or subcase is confidential
       // but right now, we always create newsitems for announcements in the `agenda-submission` service

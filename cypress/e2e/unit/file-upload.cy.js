@@ -23,6 +23,10 @@ context('Add files to an agenda', () => { // At the meeting-level
 
     // Open the modal, add files
     cy.get(route.agendaDocuments.addDocuments).click();
+    // can fake a bad upload, use later
+    // cy.intercept('POST', '/files', {
+    //   forceNetworkError: true,
+    // }).as('uploadPecesError');
     cy.addNewDocumentsInUploadModal([{
       folder: 'files', fileName: 'test', fileExtension: 'pdf', newFileName: 'test pdf', fileType: 'Nota',
     }], 'meeting');

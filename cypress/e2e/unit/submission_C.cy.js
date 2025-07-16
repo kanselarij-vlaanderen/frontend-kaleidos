@@ -89,7 +89,7 @@ context('Cancel editing tests on new submission form for new case', () => {
   it('Cancel form with documents', () => {
     cy.intercept('DELETE', '/draft-files/*').as('deleteNewDraftFile');
 
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
     cy.addDocumentsInSubmissionFileUpload([pdfFile]);
@@ -100,7 +100,7 @@ context('Cancel editing tests on new submission form for new case', () => {
   it('Remove document from form', () => {
     cy.intercept('DELETE', '/draft-files/*').as('deleteNewDraftFile');
 
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
     cy.addDocumentsInSubmissionFileUpload([pdfFile]);
@@ -122,7 +122,7 @@ context('Cancel editing tests on new submission form for new case', () => {
 
     cy.intercept('DELETE', '/draft-files/*').as('deleteNewDraftFile');
 
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
     // cy.addDocumentsInSubmissionFileUpload([fileTxt]);
@@ -148,7 +148,7 @@ context('Cancel editing tests on new submission form for new case', () => {
   it('Confidentiality effect on docs and email', () => {
     cy.intercept('DELETE', '/draft-files/*').as('deleteNewDraftFile');
 
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
 
@@ -230,7 +230,7 @@ context('Cancel editing tests on new submission form for new case', () => {
   });
 
   it('Can not remove your own mandatee / other mandatees get added or removed when clicked', () => {
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
 
@@ -348,7 +348,7 @@ context('Cancel editing tests on new submission form for new case', () => {
 
   it('Add and delete emails, default emails can not be deleted', () => {
     const emailToAdd = 'test@email.com';
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
 
@@ -426,7 +426,7 @@ context('Cancel editing tests on new submission form for new case', () => {
   });
 
   it('Scenarios preventing the creation of a submission', () => {
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
     cy.get(cases.casesHeader.openSubmissionModal).click();
     cy.get(cases.casesHeader.navigateToNewSubmission).click();
     // these are mandatory:

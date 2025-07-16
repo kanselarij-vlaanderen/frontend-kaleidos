@@ -7,6 +7,7 @@
     @itemStructure={{hash label="fullName"}}
     @selectedItems={{this.selectedCurrentMinisters}}
     @didUpdate={{this.onChangeCurrentMinisters}}
+    @disabled={{@disabled}}
   />
   {{#if @showPastMinisters}}
     {{#if this.pastMinistersHidden}}
@@ -16,6 +17,7 @@
         @skin="link"
         class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
         @icon="add"
+        @disabled={{@disabled}}
       >
         {{t "show-past-ministers"}}
       </AuButton>
@@ -28,12 +30,14 @@
         @itemStructure={{hash label="fullName"}}
         @selectedItems={{this.selectedPastMinisters}}
         @didUpdate={{this.onChangePastMinisters}}
+        @disabled={{@disabled}}
       />
       <AuButton
         {{on "click" (toggle "pastMinistersHidden" this)}}
         @skin="link"
         class="au-u-h-functional au-u-padding-left-none au-u-margin-top-tiny"
         @icon="remove"
+        @disabled={{@disabled}}
       >
         {{t "hide-past-ministers"}}
       </AuButton>

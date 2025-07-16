@@ -8,18 +8,29 @@
   </Toolbar.Group>
   <Toolbar.Group @position="right" class="au-u-flex au-u-flex--wrap au-u-flex--spaced-tiny" as |Group|>
     {{#if this.model.pieces.length}}
-      <Group.Item>
-        {{#if (user-may "manage-documents")}}
+      {{#if (and this.documentsAreVisible this.hasFilesToDownload)}}
+        <Group.Item>
+          <AuButton
+            @skin="secondary"
+            {{on "click" this.openDownloadDocumentsModal}}
+          >
+            {{t "download-these-documents"}}
+          </AuButton>
+        </Group.Item>
+      {{/if}}
+      {{#if (user-may "manage-documents")}}
+        <Group.Item>
           <AuButton
             data-test-route-agenda---agendaitem-documents-batch-edit
             @icon="pencil"
             @loading={{this.ensureFreshData.isRunning}}
+            @loadingMessage={{t "loading"}}
             {{on "click" this.openBatchDetails}}
           >
             {{t "batch-edit"}}
           </AuButton>
-        {{/if}}
-      </Group.Item>
+        </Group.Item>
+      {{/if}}
     {{/if}}
     {{#if this.isShownOpenPublicationModal}}
       <Group.Item>
@@ -34,6 +45,7 @@
     {{/if}}
   </Toolbar.Group>
 </Auk::Toolbar>
+
 {{#unless this.loadData.isRunning}}
   {{#if this.documentsAreVisible}}
     {{#if this.showDocumentsAreVisibleAlert}}
@@ -103,6 +115,10 @@
   </div>
 {{/if}}
 
+<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />
+
+{{! modals}}
+
 {{#if this.isOpenBatchDetailsModal}}
   <Documents::BatchDetails::BatchDocumentsDetailsModal
     @pieces={{this.model.pieces}}
@@ -146,6 +162,7 @@
             @allowEditPieceAccessLevel={{true}}
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
+            @documentTypeRequired={{true}}
             @onDelete={{perform this.deletePiece piece}}
           />
         {{/each}}
@@ -168,4 +185,8 @@
   </:body>
 </ConfirmationModal>
 
-<Documents::LinkedDocuments @agendaitemOrSubcase={{this.agendaitem}} />
+<Documents::DownloadDocumentsModal
+  @modalOpen={{this.isOpenDownloadDocumentsModal}}
+  @onCancel={{this.closeDownloadDocumentsModal}}
+  @archivePath={{this.archivePath}}
+/>

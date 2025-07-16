@@ -26,6 +26,7 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
   if (mandateeIds.length) {
     url += '&' + (new URLSearchParams({ mandateeIds }).toString());
   }
+  // This does not handle any errors send from the backend.
   const fetchedJob = await fetch(url, {
     method: 'post',
     headers: {
@@ -39,6 +40,7 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
 }
 
 async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly) {
+  // pdfOnly is not applicable to decisions since KAS-5059
   const job = await fetchArchivingJob(agenda, mandateeIds, decisions, pdfOnly);
   if (job) {
     return registerJobToStore(job, store);
@@ -55,8 +57,38 @@ async function fileDownloadUrlFromJob(job, archiveName) {
   return `${file.downloadLink}?name=${archiveName}`;
 }
 
+function constructGenericArchiveName(name) {
+  const uniqueName = name ? `_${name}` : '';
+  const formattedDate = dateFormat(new Date(), 'dd_MM_yyyy_HH_mm_ss');
+  return `Kaleidos_documenten${uniqueName}_${formattedDate}.zip`;
+}
+
+async function fetchGenericArchivingJobWithPath(path, store, pdfOnly) {
+  const job = await fetchGenericArchivingJob(path, pdfOnly);
+  if (job) {
+    return registerJobToStore(job, store);
+  }
+  return null;
+}
+
+async function fetchGenericArchivingJob(path, pdfOnly) {
+  let url = `${path}?pdfOnly=${pdfOnly}`;
+  const fetchedJob = await fetch(url, {
+    method: 'post',
+    headers: {
+      'Content-type': 'application/vnd.api+json',
+    },
+  });
+  if (fetchedJob.status > 201) {
+    return null;
+  }
+  return fetchedJob.json();
+}
+
 export {
   constructArchiveName,
   fetchArchivingJobForAgenda,
-  fileDownloadUrlFromJob
+  fileDownloadUrlFromJob,
+  constructGenericArchiveName,
+  fetchGenericArchivingJobWithPath
 };

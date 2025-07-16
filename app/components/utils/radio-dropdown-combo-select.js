@@ -23,6 +23,10 @@ export default class RadioDropdownComboSelectComponent extends Component {
     return this.args.dropdownLabelKey || this.args.labelKey || 'label';
   }
 
+  get noOptionSelected() {
+    return this.args.required && !this.selectedOption;
+  }
+
   get radioOptionsSize() {
     return this.args.radioOptionsSize || 5;
   }

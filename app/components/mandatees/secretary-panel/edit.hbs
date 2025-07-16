@@ -35,6 +35,7 @@
             data-test-secretary-panel-edit-save
             @skin="primary"
             @loading={{this.save.isRunning}}
+            @loadingMessage={{t "loading"}}
             @disabled={{not this.secretary}}
             {{on "click" (perform this.save)}}
           >

@@ -66,6 +66,7 @@
               data-test-inscription-edit-save
               @skin="primary"
               @loading={{this.save.isRunning}}
+              @loadingMessage={{t "loading"}}
               @disabled={{not this.isShortTitleValid}}
               {{on "click" (perform this.save)}}
             >

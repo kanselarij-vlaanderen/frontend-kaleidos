@@ -15,6 +15,7 @@
     <AuButton
       data-test-signatures-select-ministers-apply
       @loading={{@loading}}
+      @loadingMessage={{t "loading"}}
       {{on "click" (fn @onConfirm this.selectedMinisters)}}
     >
       {{t "apply"}}

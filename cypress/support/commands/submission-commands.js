@@ -60,7 +60,7 @@ function createSubmission(submission) {
   if (submission.caseShortTitle) {
     cy.openCase(submission.caseShortTitle);
   } else {
-    cy.visit('indieningen?aantal=2');
+    cy.visit('/indieningen/opvolgen?aantal=2');
   }
 
   // if case page is loading
@@ -284,7 +284,7 @@ function createSubmission(submission) {
 */
 function openSubmission(shortTitle, index = 0) {
   cy.log('openSubmission');
-  cy.visit('indieningen?aantal=50');
+  cy.visit('/indieningen/opvolgen?aantal=50');
   if (shortTitle) {
     cy.get(route.submissionsOverview.dataTable, {
       timeout: 60000,
@@ -503,6 +503,7 @@ function acceptSubmissionCreateSubcase(submission) {
   cy.wait(`@submitToMeeting${randomInt}`);
   cy.wait('@createNewSubmissionStatusChangeActivity');
   cy.wait(`@patchSubmission${randomInt}`);
+  cy.wait(5000); // we transition after this, loading a different route.
   cy.log('/acceptSubmissionCreateSubcase');
 }
 

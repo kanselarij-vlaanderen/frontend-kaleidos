@@ -24,6 +24,7 @@
             <Utils::RadioDropdownComboSelect
               @options={{this.sortedDocumentTypes}}
               @onSelect={{this.selectDocumentType}}
+              @required={{@documentTypeRequired}}
               @dropdownLabelKey="altLabel"
               @radioOptionsSize="8"
               @selected={{this.selectedDocumentType}}
@@ -40,6 +41,7 @@
               @selected={{@piece.accessLevel}}
               @allowClear={{false}}
               @simplifiedOptions={{@simplifiedOptions}}
+              @showSimplifiedToggle={{@simplifiedOptions}}
               @onChange={{this.setAccessLevel}}
               @displayField="label"
               @sortField="position"

@@ -87,6 +87,7 @@
             data-test-mandatee-panel-edit-save
             @skin="primary"
             @loading={{this.save.isRunning}}
+            @loadingMessage={{t "loading"}}
             {{on "click" (perform this.save)}}
           >
             {{t "save"}}

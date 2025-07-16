@@ -32,12 +32,15 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   showDocumentsAreVisibleAlert;
   defaultAccessLevel;
   meeting;
+  hasFilesToDownload;
+
   @tracked isOpenBatchDetailsModal = false;
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenPublicationModal = false;
   @tracked isOpenSignFlowModal = false;
   @tracked isOpenWarnDocEditOnApproved = false;
   @tracked hasConfirmedDocEditOnApproved = false;
+  @tracked isOpenDownloadDocumentsModal = false;
 
   @tracked newPieces = new TrackedArray([]);
   @tracked newAgendaitemPieces;
@@ -47,6 +50,10 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @tracked agendaActivity;
   @tracked subcase;
   @tracked decisionActivity;
+
+  get archivePath() {
+    return `/agendaitems/${this.agendaitem.id}/pieces/files/archive`;
+  }
 
   get isShownOpenPublicationModal() {
     const mayPublish = this.currentSession.may('manage-publication-flows');
@@ -389,5 +396,13 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   @action
   refresh() {
     this.router.refresh('agenda.agendaitems.agendaitem.documents');
+  }
+
+  openDownloadDocumentsModal = () => {
+    this.isOpenDownloadDocumentsModal = true;
+  }
+  
+  closeDownloadDocumentsModal = () => {
+    this.isOpenDownloadDocumentsModal = false;
   }
 }

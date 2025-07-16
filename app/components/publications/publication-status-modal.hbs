@@ -51,6 +51,7 @@
       data-test-publication-status-save
       @skin="primary"
       @loading={{this.savePublicationStatus.isRunning}}
+      @loadingMessage={{t "loading"}}
       @disabled={{this.isDisabledSave}}
       {{on "click" (perform this.savePublicationStatus)}}
     >

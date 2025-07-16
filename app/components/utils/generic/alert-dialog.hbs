@@ -20,6 +20,7 @@
       @icon={{this.confirmIcon}}
       @disabled={{this.isLoading}}
       @loading={{this.confirm.isRunning}}
+      @loadingMessage={{t "loading"}}
       {{on "click" (perform this.confirm)}}
     >
       {{this.confirmText}}

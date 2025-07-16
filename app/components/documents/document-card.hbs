@@ -164,7 +164,7 @@
               {{#unless @hideAccessLevel}}
                 <AccessLevelPill
                   @accessLevel={{this.piece.accessLevel}}
-                  @isEditable={{@isEditable}}
+                  @isEditable={{and @isEditable (user-may "manage-document-access-levels")}}
                   @isDraft={{this.isDraftAccessLevel}}
                   @onChangeAccessLevel={{this.changeAccessLevel}}
                   @onConfirmChangeAccessLevel={{this.saveAccessLevel}}
@@ -201,7 +201,7 @@
                 @icon="three-dots"
                 @title={{t "more"}}
                 @hideText={{true}}
-                @disabled={{this.loadPieceRelatedData.isRunning}}
+                @disabled={{or this.loadPieceRelatedData.isRunning this.loadFiles.isRunning}}
                 @alignment="right"
               >
                 {{#if @showCreateNewVersion}}
@@ -243,6 +243,16 @@
                     role="menuitem"
                   >
                     {{t "present-for-signing"}}
+                  </AuButton>
+                {{/if}}
+                {{#if this.mayConvertSourceFile}}
+                  <AuButton
+                    @skin="link"
+                    @disabled={{this.convertSourceFile.isRunning}}
+                    {{on "click" this.convertSourceFile.perform}}
+                    role="menuitem"
+                  >
+                    {{t "convert-to-pdf"}}
                   </AuButton>
                 {{/if}}
                 {{#if this.hasMarkedSignFlow}}

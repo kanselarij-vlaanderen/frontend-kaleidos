@@ -116,6 +116,7 @@
               @icon="renew"
               class="au-u-padding-left-none"
               @loading={{or this.loadDocuments.isRunning this.updateBetreftContent.isRunning}}
+              @loadingMessage={{t "loading"}}
               {{on "click" this.updateBetreftContent.perform}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -136,8 +137,9 @@
               @skin="link"
               @icon="renew"
               class="au-u-padding-left-none"
-              @loading={{or this.loadNota.isRunning this.updateBeslissingContent.isRunning}}
-              @disabled={{not (or this.nota @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
+              @loading={{or this.loadNotaExtraction.isRunning this.updateBeslissingContent.isRunning}}
+              @loadingMessage={{t "loading"}}
+              @disabled={{not (or this.extractedDecision @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
               {{on "click" this.updateBeslissingContent.perform}}
             >{{t "update-thing" thing=(t "content")}}</AuButton>
             <VersionsDropdown
@@ -167,6 +169,7 @@
                 @disabled={{this.disableSaveButton}}
                 @skin="primary"
                 @loading={{this.onSaveReport.isRunning}}
+                @loadingMessage={{t "loading"}}
                 {{on "click" (perform this.onSaveReport)}}
               >
                 {{t "update"}}
@@ -205,6 +208,7 @@
                     @disabled={{this.disableSaveAnnotationButton}}
                     @skin="primary"
                     @loading={{this.onUpdateAnnotation.isRunning}}
+                    @loadingMessage={{t "loading"}}
                     {{on "click" (perform this.onUpdateAnnotation)}}
                   >
                     {{t "update"}}
@@ -261,6 +265,7 @@
                   @icon="renew"
                   class="au-u-padding-left-none"
                   @loading={{or this.loadDocuments.isRunning this.updateBetreftContent.isRunning}}
+                  @loadingMessage={{t "loading"}}
                   {{on "click" this.updateBetreftContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
@@ -288,6 +293,7 @@
                     @disabled={{this.disableSaveConcernButton}}
                     @skin="primary"
                     @loading={{this.onUpdateConcern.isRunning}}
+                    @loadingMessage={{t "loading"}}
                     {{on "click" (perform this.onUpdateConcern)}}
                   >
                     {{t "update"}}
@@ -324,7 +330,7 @@
             <AuContent @size="small">
               <SanitizeHtml
                 @raw={{true}}
-                @value={{this.betreftPiecePart.htmlContent}}
+                @value={{this.betreftPiecePart.htmlContentWithReducedBreaks}}
               />
             </AuContent>
           {{/if}}
@@ -340,8 +346,9 @@
                   @skin="link"
                   @icon="renew"
                   class="au-u-padding-left-none"
-                  @loading={{or this.loadNota.isRunning this.updateBeslissingContent.isRunning}}
-                  @disabled={{not (or this.nota @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
+                  @loading={{or this.loadNotaExtraction.isRunning this.updateBeslissingContent.isRunning}}
+                  @loadingMessage={{t "loading"}}
+                  @disabled={{not (or this.extractedDecision @agendaitem.isApproval @decisionActivity.subcase.isBekrachtiging)}}
                   {{on "click" this.updateBeslissingContent.perform}}
                 >{{t "update-thing" thing=(t "content")}}</AuButton>
                 <VersionsDropdown
@@ -369,6 +376,7 @@
                     @disabled={{this.disableSaveTreatmentButton}}
                     @skin="primary"
                     @loading={{this.onUpdateTreatment.isRunning}}
+                    @loadingMessage={{t "loading"}}
                     {{on "click" (perform this.onUpdateTreatment)}}
                   >
                     {{t "update"}}
@@ -405,7 +413,7 @@
             <AuContent @size="small">
               <SanitizeHtml
                 @raw={{true}}
-                @value={{this.beslissingPiecePart.htmlContent}}
+                @value={{this.beslissingPiecePart.htmlContentWithReducedBreaks}}
               />
             </AuContent>
           {{/if}}

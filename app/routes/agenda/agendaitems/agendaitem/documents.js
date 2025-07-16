@@ -53,18 +53,24 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
         : CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
 
+    // need at least 1 file before we show the download button
+    this.hasFilesToDownload = (await this.store.count('piece', {
+      'filter[agendaitems][:id:]': this.agendaitem.id,
+      'filter[:has:file]': true,
+    })) > 0;
+
     this.showDocumentsAreVisibleAlert = false;
     // Additional failsafe check on document visibility.
     // retracted and postponed documents are hidden for non admin because
     // we cannot match the "historic name" of the documents due to resubmitting
-    const decisionPublicationActivity = await this.meeting.internalDecisionPublicationActivity;
-    const decisionPublicationStatus = await decisionPublicationActivity?.status;
+    const decisionPublicationActivity = await this.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    const decisionPublicationStatus = await decisionPublicationActivity?.belongsTo('status').reload();
     const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-    const documentPublicationActivity = await this.meeting.internalDocumentPublicationActivity;
-    const documentPublicationStatus = await documentPublicationActivity?.status;
+    const documentPublicationActivity = await this.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+    const documentPublicationStatus = await documentPublicationActivity?.belongsTo('status').reload();
     const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-    const decisionActivityResultCode = await this.decisionActivity?.decisionResultCode;
+    const decisionActivityResultCode = await this.decisionActivity?.belongsTo('decisionResultCode').reload();
 
     if (!decisionsAreReleased || this.currentAgenda.status.get('isDesignAgenda')) {
       this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
@@ -91,6 +97,11 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     }
     // no decisionResult after release
     this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
+
+    // any legacy has no decisionResultCode, the document access level will determine who can view
+    if (this.meeting.isPreKaleidos) {
+      this.documentsAreVisible = true;
+    }
     return;
   }
 
@@ -113,6 +124,7 @@ export default class DocumentsAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.showDocumentsAreVisibleAlert = this.showDocumentsAreVisibleAlert;
     controller.meeting = this.meeting;
     controller.decisionActivity = this.decisionActivity;
+    controller.hasFilesToDownload = this.hasFilesToDownload;
     controller.loadNewPieces.perform();
   }
 

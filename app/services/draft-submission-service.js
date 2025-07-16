@@ -1,7 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
-import { SUBMISSION_ALLOWED_MIME_TYPES } from 'frontend-kaleidos/config/config';
+import { SUBMISSION_ALLOWED_MIME_TYPES, SUBMISSION_ALLOWED_EXTENSION } from 'frontend-kaleidos/config/config';
 
 export default class DraftSubmissionService extends Service {
   @service store;
@@ -42,6 +42,10 @@ export default class DraftSubmissionService extends Service {
     await Promise.all(statusChangeActivities.map((a) => a.startedBy));
     return statusChangeActivities
       .slice()
+      .filter(
+        // We never want to see concept creation in the history, just for potential debugging
+        (a) => a.status.get('uri') !== CONSTANTS.SUBMISSION_STATUSES.CONCEPT,
+      )
       .sort((a1, a2) => a1.startedAt.getTime() - a2.startedAt.getTime())
       .reverse();
   };
@@ -50,7 +54,7 @@ export default class DraftSubmissionService extends Service {
     let statusChangeActivities = await this.getStatusChangeActivities(submission);
     if (currentlyBeingTreated) {
       // use only the latest activity
-      statusChangeActivities = [statusChangeActivities.at(0)];
+      statusChangeActivities = statusChangeActivities.length ? [statusChangeActivities?.at(0)] : null;
     }
     const treatedByActivity = statusChangeActivities?.filter((a) => a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING)
       .at(0);
@@ -199,10 +203,14 @@ export default class DraftSubmissionService extends Service {
 
   // for submissions we want to limit the amount of types certain profiles are allowed to upload
   validateUploadedFile = (file) => {
-    const allowed = SUBMISSION_ALLOWED_MIME_TYPES.includes(file.type);
+    const mimetypeAllowed = SUBMISSION_ALLOWED_MIME_TYPES.includes(file.type);
+    // extension is in the name
+    const extension = file.name.split('.').pop();
+    const extensionAllowed = SUBMISSION_ALLOWED_EXTENSION.includes(extension?.toLowerCase());
     if (
       !this.currentSession.may('upload-any-submission-document-extension') &&
-      !allowed
+      !mimetypeAllowed &&
+      !extensionAllowed
     ) {
       this.toaster.error(
         this.intl.t('submission-document-incorrect-type', { name: file.name }),

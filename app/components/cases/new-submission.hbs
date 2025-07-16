@@ -119,11 +119,19 @@
       <Group>
         <AuButton
           data-test-cases-new-submission-form-cancel
-          @skin="secondary"
+          @skin="naked"
           @disabled={{or this.createSubmission.isRunning this.isUploadingFiles}}
           {{on "click" (perform this.cancelForm)}}
         >
           {{t "cancel"}}
+        </AuButton>
+        <AuButton
+          data-test-cases-new-submission-form-save-concept
+          @skin="secondary"
+          @disabled={{this.saveConceptIsDisabled}}
+          {{on "click" (perform this.createConceptSubmission)}}
+        >
+          {{t "save-as-concept"}}
         </AuButton>
         <AuButton
           data-test-cases-new-submission-form-save
@@ -148,7 +156,7 @@
   />
 {{/if}}
 
-{{#if this.createSubmission.isRunning}}
+{{#if (or this.createSubmission.isRunning this.createConceptSubmission.isRunning)}}
   <Auk::Modal @size="medium">
     <Auk::Modal::Header @title={{t "new-submission"}} @closeable={{false}} />
     <Auk::Modal::Body>

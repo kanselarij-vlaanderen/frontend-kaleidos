@@ -55,7 +55,10 @@
         <div class="au-c-form">
           <AuFormRow>
             <AuLabel>{{t "title"}}</AuLabel>
-            <p data-test-news-item-edit-item-long-title>
+            <p
+              data-test-news-item-edit-item-long-title
+              class="auk-o-flex--inline auk-u-text-pre-line"
+            >
               {{@agendaitem.title}}
             </p>
           </AuFormRow>
@@ -100,6 +103,7 @@
                     <AuButton
                       data-test-news-item-edit-item-save-fullscreen
                       @loading={{this.confirmSave.isRunning}}
+                      @loadingMessage={{t "loading"}}
                       {{on "click" this.save}}
                     >
                       {{t "save"}}
@@ -173,6 +177,7 @@
               <AuButton
                 data-test-news-item-edit-item-save
                 @loading={{this.confirmSave.isRunning}}
+                @loadingMessage={{t "loading"}}
                 {{on "click" this.save}}
               >
                 {{t "save"}}

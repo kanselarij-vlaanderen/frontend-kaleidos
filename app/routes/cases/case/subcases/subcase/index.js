@@ -103,8 +103,8 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
     if (this.currentSession.may('view-documents-before-release')) {
       this.documentsAreVisible = true;
     } else {
-      const documentPublicationActivity = await this.latestMeeting?.internalDocumentPublicationActivity;
-      const documentPublicationStatus = await documentPublicationActivity?.status;
+      const documentPublicationActivity = await this.latestMeeting?.belongsTo('internalDocumentPublicationActivity').reload();
+      const documentPublicationStatus = await documentPublicationActivity?.belongsTo('status').reload();
       this.documentsAreVisible = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
     }
 
