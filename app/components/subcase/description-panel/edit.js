@@ -310,7 +310,7 @@ export default class SubcaseDescriptionEdit extends Component {
     } else if (
       this.agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
       && (!oldDecisionResultCode
-        || oldDecisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD)
+        || oldDecisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD)
     ) {
       const acknowledgedResult = await this.store.findRecordByUri('concept', CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME);
       decisionActivity.decisionResultCode = acknowledgedResult;
