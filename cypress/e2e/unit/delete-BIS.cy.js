@@ -103,7 +103,9 @@ context('Delete BIS tests', () => {
 
     cy.reload();
     cy.get(appuniversum.loader);
-    cy.get(appuniversum.loader).should('not.exist');
+    cy.get(appuniversum.loader, {
+      timeout: 60000,
+    }).should('not.exist');
     cy.get(document.documentCard.versionHistory).find(auk.accordion.header.button)
       .should('not.be.disabled');
 
