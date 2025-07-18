@@ -26,15 +26,45 @@ export default class PreventUnloadService extends Service {
     event.returnValue = true;
   }
 
-  __emberListener = (transition) => {
-    if (
-      !transition.to.find(route => route.name === this.router.currentRouteName) &&
-      transition.to.localName !== 'loading') {
-      if(!confirm('Als u de pagina nu verlaat bent u alle aanpassingen kwijt. Bent u zeker dat u weg wilt navigeren?')) {
-        transition.abort();
-      } else {
-        this.disable();
+  confirmTransition = (transition) => {
+    if(transition.to.localName !== 'loading' && !confirm('Als u de pagina nu verlaat bent u alle aanpassingen kwijt. Bent u zeker dat u weg wilt navigeren?')) {
+      transition.abort();
+    } else {
+      this.disable();
+    }
+  }
+
+  getParams = (transitionToOrFrom) => {
+    let params = transitionToOrFrom.params;
+    let parent = transitionToOrFrom.parent;
+    while (parent) {
+      if (parent.paramNames?.length) {
+        params = { ...params, ...parent.params };
       }
+      parent = parent.parent;
+    }
+    return params;
+  }
+
+  __emberListener = (transition) => {
+    // either the route changed entirely
+    const routeChanged = !transition.to.find(route => route.name === this.router.currentRouteName);
+    if (routeChanged) {
+      return this.confirmTransition(transition);
+    }
+    // or the params changed within the same route (for example when switching agendaitems)
+    let paramsChanged = false;
+    let fromParams = this.getParams(transition.from);
+    let toParams = this.getParams(transition.to);
+    for (const fromParamName in fromParams) {
+      if (!paramsChanged && fromParams.hasOwnProperty(fromParamName)) {
+        if (toParams[fromParamName] !== fromParams[fromParamName]) {
+          paramsChanged = true;
+        }
+      }
+    }
+    if (paramsChanged) {
+      return this.confirmTransition(transition);
     }
   }
 }
