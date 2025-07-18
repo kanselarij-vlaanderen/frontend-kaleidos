@@ -6,7 +6,7 @@
 >
   <AuLabel class="auk-u-sr-only">{{t "result-decision"}}</AuLabel>
   <Decision::DecisionResultSelect
-    @selected={{this.decisionActivity.decisionResultCode}}
+    @selected={{this.decisionResultCode}}
     @onChange={{this.changeDecisionResultCode}}
   />
   <AuButton
@@ -14,9 +14,9 @@
     @skin="naked"
     @icon="check"
     @hideText={{true}}
-    @loading={{this.saveDecisionActivity.isRunning}}
+    @loading={{or this.saveDecisionActivity.isRunning this.loadDecisionActivityResult.isRunning}}
     @loadingMessage={{t "loading"}}
-    {{on "click" (perform this.saveDecisionActivity)}}
+    {{on "click" this.saveDecisionActivity.perform}}
     class="auk-u-ml"
   >
     {{t "save"}}
@@ -26,7 +26,7 @@
     @skin="naked"
     @icon="x"
     @hideText={{true}}
-    @loading={{this.saveDecisionActivity.isRunning}}
+    @loading={{or this.saveDecisionActivity.isRunning this.loadDecisionActivityResult.isRunning}}
     @loadingMessage={{t "loading"}}
     {{on "click" this.cancelEdit}}
   >

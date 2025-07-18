@@ -29,7 +29,7 @@ export default class SubcaseSideNavSubcaseComponent extends Component {
 
   loadData = task(async () => {
     this.decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
-    this.decisionResultCode = await this.decisionActivity?.decisionResultCode;
+    this.decisionResultCode = await this.decisionActivity?.belongsTo('decisionResultCode').reload();
   });
 
   loadLabel = async () => {
