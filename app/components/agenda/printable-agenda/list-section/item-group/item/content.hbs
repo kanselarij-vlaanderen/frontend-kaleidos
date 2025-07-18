@@ -5,6 +5,12 @@
   {{! The following line is formatted on a single line because of the way browsers treat whitespaces & breaks in combination with `white-space: pre-line` }}
   {{! prettier-ignore }}
   <h4 class="auk-u-m-0 auk-u-text-pre-line"><SanitizeHtml @raw={{true}} @value={{if @item.shortTitle @item.shortTitle @item.title}}/></h4>
+  {{#if @isNew}}
+    <span class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-ml-2">
+      <Auk::ColorBadge @skin="success" />
+      {{t "new-agendaitem"}}
+    </span>
+  {{/if}}
 </div>
 <div class="auk-u-mb-4 l-printable-agenda__item-indented">
   {{#if @item.title}}

@@ -17,7 +17,14 @@
       </Auk::Toolbar>
     </Auk::Panel::Header>
     <Auk::Panel::Body>
-      {{#if (or this.fileNameMappings.isRunning this.agendaitems.isRunning)}}
+      {{#if
+        (or
+          this.fileNameMappings.isRunning
+          this.agendaitems.isRunning
+          this.newAgendaitems.isRunning
+          this.newPieces.isRunning
+        )
+      }}
         <Auk::Loader />
       {{else}}
         <div class="auk-u-mx-2">
@@ -61,6 +68,8 @@
                       @items={{notaGroup}}
                       @fileNameMappings={{this.fileNameMap}}
                       @hideNotFormallyOk={{true}}
+                      @newAgendaitems={{this.newAgendaitems.value}}
+                      @highlightedPieces={{this.newPieces.value}}
                     />
                   {{/each}}
                 </div>
@@ -83,6 +92,7 @@
                       <div class="auk-u-non-breakable-group@print">
                         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
                           @item={{announcement}}
+                          @isNew={{includes announcement this.newAgendaitems.value}}
                         />
                       </div>
                       {{#let (await announcement.pieces) as |pieces|}}
@@ -90,10 +100,14 @@
                           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                             @pieces={{pieces}}
                             @fileNameMappings={{this.fileNameMap}}
+                            @highlightedPieces={{this.newPieces.value}}
                           />
                         {{/if}}
                       {{/let}}
                     </div>
+                    <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Comment
+                      @item={{announcement}}
+                    />
                   {{/each}}
                 </div>
               </div>

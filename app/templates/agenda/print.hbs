@@ -35,7 +35,9 @@
               {{#each this.notaGroups.value as |notaGroup|}}
                 <Agenda::PrintableAgenda::ListSection::ItemGroup
                   @items={{notaGroup}}
+                  @newAgendaitems={{@model.newAgendaitems}}
                   @decisionsAreReleased={{@model.decisionsAreReleased}}
+                  @highlightedPieces={{@model.newPiecesOnAgenda}}
                 />
               {{/each}}
             </div>
@@ -56,6 +58,7 @@
                   <div class="auk-u-non-breakable-group@print">
                     <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
                       @item={{announcement}}
+                      @isNew={{includes announcement @model.newAgendaitems}}
                     />
                   </div>
                   {{#let (await announcement.treatment.decisionActivity) as |decisionActivity| }}
@@ -65,11 +68,15 @@
                         {{#if pieces}}
                           <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::DocumentList
                             @pieces={{pieces}}
+                            @highlightedPieces={{@model.newPiecesOnAgenda}}
                           />
                         {{/if}}
                       {{/let}}
                     {{/if}}
                   {{/let}}
+                  <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Comment
+                    @item={{announcement}}
+                  />
                 </div>
               {{/each}}
             </div>

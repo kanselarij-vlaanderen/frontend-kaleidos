@@ -1,4 +1,10 @@
 <span>{{this.pieceName}}</span>
+{{#if @isHighlighted}}
+    <span class="auk-u-text-small au-u-muted auk-u-text-nowrap auk-u-ml-2">
+      <Auk::ColorBadge @skin="success" class="au-u-padding-right-none" />
+      <span>{{t "new-document"}}</span>
+    </span>
+  {{/if}}
 {{#if this.showAccessLevel}}
   <div class="auk-u-ml-2">
     <AccessLevelPill @accessLevel={{@accessLevel}} />
