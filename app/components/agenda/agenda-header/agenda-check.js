@@ -5,6 +5,7 @@ import { task, all } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { getNotaGroups } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { inject as service } from '@ember/service';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 /**
  * @argument onSave
@@ -40,15 +41,10 @@ export default class AgendaHeaderAgendaCheck extends Component {
   getFileNameMappings = task(async () => {
     try {
       const res = await fetch(`/document-naming/agenda/${this.args.agenda.id}`);
-      const mappings = await res.json();
-      // if service threw an error for some reason
-      if (mappings.error) {
-        throw new Error(mappings.error);
-      }
+      const mappings = await getJsonPayloadOrThrow(res);
       // this is falsy if no mappings exist (nothing to do)
       return mappings;
     } catch (error) {
-      // if service did not respond or self thrown errors
       this.toaster.error(
         error?.message || '',
         this.intl.t('error-while-fetching-document-naming-mapping')

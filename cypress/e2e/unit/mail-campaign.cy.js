@@ -49,9 +49,19 @@ function checkUncheckInNewsletter(index) {
 }
 
 context('newsletter tests, both in agenda detail view and newsletter route', () => {
-  const staticResponse = {
-    statusCode: 200,
-    ok: true,
+  // for stubbing a response from newsletter service (which is disabled)
+  const staticBadResponse = {
+    statusCode: 500,
+    ok: false,
+    body: {
+      errors: [
+        {
+          status: '500',
+          title: 'Server is not enabled in cypress tests',
+          detail: 'This should have worked, but service is not enabled',
+        }
+      ],
+    },
   };
 
   beforeEach(() => {
@@ -214,20 +224,21 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .children(appuniversum.button)
       .click();
     cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-    cy.intercept('POST', '/newsletter/mail-campaigns').as('postMailCampaigns');
+    cy.intercept('POST', '/newsletter/mail-campaigns', staticBadResponse).as('postMailCampaigns');
 
     cy.get(auk.confirmationModal.footer.confirm).click()
       .wait('@postMailCampaigns')
       .then((responseBody) => {
         if (responseBody.error || responseBody.response?.statusCode === 500) {
-          cy.get(appuniversum.alert.container).should('not.exist');
+          // service is not enabled, so we always get errors unless we use a cypress spy
+          cy.get(appuniversum.alert.container).should('exist');
         }
       });
   });
 
   it.skip('should test the post mailchimp stuff', () => {
     cy.visit('vergadering/64F9AD0070A5523DE5126B7A/kort-bestek');
-    cy.intercept('POST', '/newsletter/mail-campaigns', staticResponse).as('stubUploadMailCampaigns');
+    cy.intercept('POST', '/newsletter/mail-campaigns', staticBadResponse).as('stubUploadMailCampaigns');
 
     cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
       .children(appuniversum.button)

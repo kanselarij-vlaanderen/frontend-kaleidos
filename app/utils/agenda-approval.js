@@ -1,12 +1,5 @@
 import fetch from 'fetch';
-
-function responseHasJson(response) {
-  return response.headers.get('Content-Type').includes('json');
-}
-
-function formatErrorPayload(payload) {
-  return payload.errors.map((e) => e.title).join('\n');
-}
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 /* API: agenda-approve-service */
 
@@ -18,14 +11,8 @@ async function reopenMeeting(meeting) {
       'Content-Type': 'application/vnd.api+json',
     },
   });
-  if (responseHasJson(response)) {
-    const payload = await response.json();
-    if (payload.errors) {
-      throw new Error(formatErrorPayload(payload));
-    }
-    return payload.data.id;
-  }
-  throw new Error(response.statusText);
+  const payload = await getJsonPayloadOrThrow(response);
+  return payload.data.id;
 }
 
 async function approveDesignAgenda(currentAgenda) {
@@ -36,14 +23,8 @@ async function approveDesignAgenda(currentAgenda) {
       'Content-Type': 'application/vnd.api+json',
     },
   });
-  if (responseHasJson(response)) {
-    const payload = await response.json();
-    if (payload.errors) {
-      throw new Error(formatErrorPayload(payload));
-    }
-    return payload.data.id;
-  }
-  throw new Error(response.statusText);
+  const payload = await getJsonPayloadOrThrow(response);
+  return payload.data.id;
 }
 
 async function approveAgendaAndCloseMeeting(currentAgenda) {
@@ -56,11 +37,7 @@ async function approveAgendaAndCloseMeeting(currentAgenda) {
   });
 
   if (!response.ok) {
-    if (responseHasJson) {
-      const payload = await response.json();
-      throw new Error(formatErrorPayload(payload));
-    }
-    throw new Error(response.statusText);
+    await getJsonPayloadOrThrow(response);
   }
 }
 
@@ -72,14 +49,8 @@ async function closeMeeting(currentMeeting) {
       'Content-Type': 'application/vnd.api+json',
     },
   });
-  if (responseHasJson(response)) {
-    const payload = await response.json();
-    if (payload.errors) {
-      throw new Error(formatErrorPayload(payload));
-    }
-    return payload.data.id;
-  }
-  throw new Error(response.statusText);
+  const payload = await getJsonPayloadOrThrow(response);
+  return payload.data.id;
 }
 
 async function reopenPreviousAgenda(currentAgenda) {
@@ -90,14 +61,8 @@ async function reopenPreviousAgenda(currentAgenda) {
       'Content-Type': 'application/vnd.api+json',
     },
   });
-  if (responseHasJson(response)) {
-    const payload = await response.json();
-    if (payload.errors) {
-      throw new Error(formatErrorPayload(payload));
-    }
-    return payload.data.id;
-  }
-  throw new Error(response.statusText);
+  const payload = await getJsonPayloadOrThrow(response);
+  return payload.data.id;
 }
 
 async function deleteAgenda(currentAgenda) {
@@ -108,14 +73,8 @@ async function deleteAgenda(currentAgenda) {
       'Content-Type': 'application/vnd.api+json',
     },
   });
-  if (responseHasJson(response)) {
-    const payload = await response.json();
-    if (payload.errors) {
-      throw new Error(formatErrorPayload(payload));
-    }
-    return payload.data?.id;
-  }
-  throw new Error(response.statusText);
+  const payload = await getJsonPayloadOrThrow(response);
+  return payload.data?.id;
 }
 
 export {

@@ -1527,5 +1527,7 @@
   "save-as-concept": "Opslaan als concept",
   "show-concepts": "Toon concepten",
   "concepts": "Concepten",
-  "agendaitem-positions-cannot-be-changed": "De volgorde van de agendapunten op deze agenda is intussen gewijzigd. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien."
+  "agendaitem-positions-cannot-be-changed": "De volgorde van de agendapunten op deze agenda is intussen gewijzigd. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
+  "shortlist-publication-error-message": "De lijst op te starten publicaties kon niet opgevraagd worden",
+  "error-getting-related-subcase-agendas": "De lijst relevante agendas van deze procedurestap kan niet worden geladen"
 }

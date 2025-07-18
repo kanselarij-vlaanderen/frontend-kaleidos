@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
 import { isEnabledImpersonation } from 'frontend-kaleidos/utils/feature-flag';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class ImpersonationService extends Service {
   @service store;
@@ -16,14 +17,15 @@ export default class ImpersonationService extends Service {
           'Accept': 'application/vnd.api+json',
         },
       });
-      const result = await response.json();
-      if (response.ok) {
+      try {
+        const result = await getJsonPayloadOrThrow(response);
         const impersonatedRoleId = result.data.relationships?.['impersonated-role']?.data?.id;
         if (impersonatedRoleId) {
           this.role = await this.store.findRecord('role', impersonatedRoleId);
         }
-      } else {
-        throw new Error('An exception occurred while loading impersonation data: ' + JSON.stringify(result.errors));
+      } catch (error) {
+        console.log('Could not continue impersonated session');
+        throw error;
       }
     }
   }
@@ -53,8 +55,7 @@ export default class ImpersonationService extends Service {
       if (response.ok) {
         this.role = role;
       } else {
-        const result = await response.json();
-        throw new Error('An exception occurred while impersonating someone: ' + JSON.stringify(result.errors));
+        await getJsonPayloadOrThrow(response);
       }
     }
   }

@@ -3,6 +3,7 @@ import fetch from 'fetch';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 import { all } from 'ember-concurrency';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class DocumentService extends Service {
   @service jobMonitor;
@@ -41,14 +42,9 @@ export default class DocumentService extends Service {
     });
     let data;
     try {
-      data = await response.json();
+      data = await getJsonPayloadOrThrow(response);
     } catch(error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down.
-      if (error instanceof SyntaxError) {
-        data = `Backend response contained an error (status: ${response.status})`
-      }
+      data = error.message;
     }
     if (response.ok && data) {
       if (data.message) {
@@ -86,14 +82,9 @@ export default class DocumentService extends Service {
     );
     let data;
     try {
-      data = await response.json();
+      data = await getJsonPayloadOrThrow(response);
     } catch(error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down.
-      if (error instanceof SyntaxError) {
-        data = `Backend response contained an error (status: ${response.status})`
-      }
+      data = error.message;
     }
     if (response.ok && data) {
       if (data.message) {
@@ -139,10 +130,7 @@ export default class DocumentService extends Service {
         }),
       }
     );
-    const json = await response.json();
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     // TODO: this only deals with successful jobs, we need to handle errors as well
     if (json?.data?.id) {
       const job = await this.store.findRecord('job', json.data.id);
@@ -181,10 +169,7 @@ export default class DocumentService extends Service {
         headers: { 'Accept': 'application/vnd.api+json' },
       }
     );
-    const json = await response.json();
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     if (json?.data?.id) {
       const file = await this.store.findRecord('file', json.data.id);
       return file;

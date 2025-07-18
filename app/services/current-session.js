@@ -47,7 +47,15 @@ export default class CurrentSessionService extends Service {
         this.user = user;
         this.role = role;
       }
-      await this.impersonation.load();
+      try {
+        await this.impersonation.load();
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-change-roles', { message: error.message }),
+          this.intl.t('warning-title'),
+        );
+        console.trace(error);
+      }
     }
   }
   /* eslint-enable ember/no-get */
