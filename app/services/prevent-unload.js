@@ -57,7 +57,7 @@ export default class PreventUnloadService extends Service {
     let fromParams = this.getParams(transition.from);
     let toParams = this.getParams(transition.to);
     for (const fromParamName in fromParams) {
-      if (!paramsChanged && fromParams.hasOwnProperty(fromParamName)) {
+      if (!paramsChanged && Object.prototype.hasOwnProperty.call(fromParams, fromParamName)) {
         if (toParams[fromParamName] !== fromParams[fromParamName]) {
           paramsChanged = true;
         }
