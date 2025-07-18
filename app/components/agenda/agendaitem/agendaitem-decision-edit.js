@@ -4,16 +4,27 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 
 export default class AgendaitemDecisionEditComponent extends Component {
-  @tracked decisionActivity = this.args.decisionActivity;
+  @tracked decisionResultCode;
+
+  constructor() {
+    super(...arguments);
+    this.loadDecisionActivityResult.perform();
+  }
+
+  @task
+  *loadDecisionActivityResult() {
+    this.decisionResultCode = yield this.args.decisionActivity?.decisionResultCode;
+  }
 
   @action
   changeDecisionResultCode(resultCode) {
-    this.decisionActivity.set('decisionResultCode', resultCode);
+    this.decisionResultCode = resultCode;
   }
 
   @task
   *saveDecisionActivity() {
-    yield this.decisionActivity.save();
+    this.args.decisionActivity.decisionResultCode = this.decisionResultCode;
+    yield this.args.decisionActivity.save();
     if (this.args.onSave) {
       this.args.onSave();
     }
@@ -21,10 +32,8 @@ export default class AgendaitemDecisionEditComponent extends Component {
 
   @action
   cancelEdit() {
-    this.decisionActivity.belongsTo('decisionResultCode').reload(); // "rollback relationship"
     if (this.args.onCancel) {
       this.args.onCancel();
     }
-    return this.decisionActivity;
   }
 }

@@ -79,7 +79,7 @@ export default class AgendaAgendaitemDecisionLegacyComponent extends Component {
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
     if (
-      decisionResultCode.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
+      decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
     ) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.slice()) {
