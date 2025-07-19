@@ -1082,6 +1082,7 @@
   "close-fullscreen": "Sluit volledig scherm",
   "previous-versions": "Vorige versies",
   "decisions-were-released-at": "Beslissingen zijn vrijgegeven op {date} om {time}",
+  "newsitems-were-published-at": "Beslissingen zijn gepubliceerd op {date} om {time}",
   "documents-were-released-at": "Documenten zijn vrijgegeven op {date} om {time}",
   "documents-are-planned-to-release-at": "Vrijgave van documenten gepland op {date} om {time}",
   "documents-were-published-at": "Documenten zijn gepubliceerd op {date} om {time}",
