@@ -23,6 +23,7 @@ export default class AgendaAgendaitemsRoute extends Route {
 
   @service agendaService;
   @service store;
+  @service throttledLoadingService;
 
   async model(params) {
     const {
@@ -137,6 +138,7 @@ export default class AgendaAgendaitemsRoute extends Route {
       // when rapidly switching to an agenda with 0 notas
       controller.groupNotasOnGroupName.cancelAll();
       controller.loadDocuments.cancelAll();
+      this.throttledLoadingService.loadPieces.cancelAll(); // loadDocuments task started a lot of these
     }
   }
 
