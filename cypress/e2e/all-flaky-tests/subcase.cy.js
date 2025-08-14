@@ -623,5 +623,7 @@ context('Subcase tests', () => {
     cy.get(document.documentCard.card).should('have.length', 2)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName} BIS`);
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.wait(2000); // other data is still loading so wait before ending
   });
 });
