@@ -8,31 +8,26 @@
   @disabled={{this.isDisabled}}
 >
   <:body>
-    <AuCard
-      @flex={{true}}
-      @size="small"
-      as |c|
-    >
-      <c.header
-        @badgeIcon={{document-icon @piece.file.extension}}
-      >
-        <p class="vlc-subline au-u-medium au-u-muted">
-          {{uppercase @piece.file.extension}}
-        </p>
-        <div class="au-u-flex au-u-flex--spaced-small">
-          <AuInput
-            value={{this.name}}
-            @width="block"
-            {{on "input" (pick "target.value" (set this "name"))}}
-          />
-          <AuButtonGroup class="au-u-flex--no-wrap">
-            <AuButton
-              @skin="secondary"
-              {{on "click" this.toggleUploadReplacementSourceFile}}
-            >
-              {{t "replace"}}
-            </AuButton>
-          </AuButtonGroup>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.header>
+        <div class="auk-form-group">
+          <AuLabel for="name">{{t "name-document"}}</AuLabel>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <AuInput
+              value={{this.name}}
+              @width="block"
+              {{on "input" (pick "target.value" (set this "name"))}}
+            />
+            <AuButtonGroup class="au-u-flex--no-wrap">
+              <AuButton
+                @skin="secondary"
+                @disabled={{this.isDisabled}}
+                {{on "click" this.toggleUploadReplacementFile}}
+              >
+                {{t "replace"}}
+              </AuButton>
+            </AuButtonGroup>
+          </div>
         </div>
         {{#if @piece.created}}
           <AuHelpText @skin="secondary">
@@ -41,137 +36,30 @@
           </AuHelpText>
         {{/if}}
       </c.header>
-      {{#if this.isReplacingSourceFile}}
+      {{#if this.isReplacingFile}}
         <c.content>
+          {{#if this.replacementFile}}
+            <AuAlert @skin="warning" @icon="alert-triangle">
+              {{t "replace-submission-document-warning"}}
+            </AuAlert>
+          {{/if}}
           <Auk::FileUploader
             @isSubmission={{true}}
             @multiple={{false}}
-            @onUpload={{set this "replacementSourceFile"}}
-            @onQueueUpdate={{this.handleReplacementSourceFileUploadQueue}}
+            @onUpload={{set this "replacementFile"}}
+            @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
             @validateFile={{this.validateFile}}
             @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
           />
         </c.content>
       {{/if}}
     </AuCard>
-    {{#if @piece.file.derived}}
-      <AuCard
-        @flex={{true}}
-        @size="small"
-        class="au-u-margin-top-small {{if this.isDeletingDerivedFile 'vlc-document--deleted-state'}}"
-        as |c|
-      >
-        <c.header
-          @badgeIcon={{document-icon @piece.file.derived.extension}}
-        >
-          <p class="vlc-subline au-u-medium au-u-muted">
-            {{uppercase @piece.file.derived.extension}}
-          </p>
-          <div class="au-u-flex au-u-flex--between au-u-flex--spaced-small">
-            <p>
-              {{@piece.name}}
-            </p>
-            <AuButtonGroup class="au-u-flex--no-wrap">
-              <AuButton
-                @skin="secondary"
-                {{on "click" this.toggleUploadReplacementDerivedFile}}
-              >
-                {{t "replace"}}
-              </AuButton>
-              <AuButton
-                @skin="secondary"
-                @alert={{true}}
-                @icon="trash"
-                @hideText={{true}}
-                {{on "click" (toggle "isDeletingDerivedFile" this)}}
-              >
-              </AuButton>
-            </AuButtonGroup>
-          </div>
-          {{#if @piece.file.derived.created}}
-            <AuHelpText @skin="secondary">
-              {{t "uploaded-at"}}
-              {{datetime-at @piece.file.derived.created}}
-            </AuHelpText>
-          {{/if}}
-        </c.header>
-        {{#if this.isReplacingDerivedFile}}
-          <c.content>
-            <Auk::FileUploader
-              @isSubmission={{true}}
-              @multiple={{false}}
-              @onUpload={{set this "replacementDerivedFile"}}
-              @onQueueUpdate={{this.handleReplacementDerivedFileUploadQueue}}
-              @validateFile={{this.validateFile}}
-              @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
-            />
-          </c.content>
-        {{/if}}
-      </AuCard>
-    {{else}}
-      {{#unless this.uploadedDerivedFile}}
-        <AuCard
-          @flex={{true}}
-          @size="small"
-          class="au-u-margin-top-small"
-          as |c|
-        >
-          <c.header
-            @badgeIcon="document"
-          >
-            <div class="au-u-flex au-u-flex--spaced-small">
-              <AuHeading @skin="5" @level="3">{{t "upload-source-document"}}</AuHeading>
-            </div>
-          </c.header>
-          <c.content>
-            <Auk::FileUploader
-              @isSubmission={{true}}
-              @multiple={{false}}
-              @onUpload={{set this "uploadedSourceFile"}}
-              @onQueueUpdate={{this.handleSourceFileUploadQueue}}
-              @validateFile={{this.validateFile}}
-              @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
-            />
-          </c.content>
-        </AuCard>
-      {{/unless}}
-      {{#unless (or this.uploadedDerivedFile this.uploadedSourceFile)}}
-        <div class="auk-u-mt-2 auk-u-text-align--center">
-          <p>{{t "or"}}</p>
-        </div>
-      {{/unless}}
-      {{#unless this.uploadedSourceFile}}
-        <AuCard
-          @flex={{true}}
-          @size="small"
-          class="au-u-margin-top-small"
-          as |c|
-        >
-          <c.header
-            @badgeIcon="document"
-          >
-            <div class="au-u-flex au-u-flex--spaced-small">
-              <AuHeading @skin="5" @level="3">{{t "upload-derived-document"}}</AuHeading>
-            </div>
-          </c.header>
-          <c.content>
-            <Auk::FileUploader
-              @isSubmission={{true}}
-              @multiple={{false}}
-              @onUpload={{set this "uploadedDerivedFile"}}
-              @onQueueUpdate={{this.handleDerivedFileUploadQueue}}
-              @validateFile={{this.validateFile}}
-              @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
-            />
-          </c.content>
-        </AuCard>
-      {{/unless}}
-    {{/if}}
     <AuCard @size="small" class="au-u-margin-top-small" as |c|>
       <c.content>
         <div class="auk-form-group">
           <AuLabel for="type">{{t "document-type"}}</AuLabel>
           <Utils::DocumentTypeSelector
+            @disabled={{this.isDisabled}}
             @selectedDocumentType={{this.documentType}}
             @onChange={{this.selectDocumentType}}
           />

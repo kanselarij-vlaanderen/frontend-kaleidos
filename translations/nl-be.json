@@ -1530,5 +1530,6 @@
   "concepts": "Concepten",
   "agendaitem-positions-cannot-be-changed": "De volgorde van de agendapunten op deze agenda is intussen gewijzigd. Noteer je wijzigingen en hernieuw deze pagina om de laatste aanpassingen te zien.",
   "shortlist-publication-error-message": "De lijst op te starten publicaties kon niet opgevraagd worden",
-  "error-getting-related-subcase-agendas": "De lijst relevante agendas van deze procedurestap kan niet worden geladen"
+  "error-getting-related-subcase-agendas": "De lijst relevante agendas van deze procedurestap kan niet worden geladen",
+  "replace-submission-document-warning": "Let op, bij opslaan wordt het originele document in Kaleidos volledig vervangen door het nieuwe bestand. Deze actie kan niet ongedaan worden gemaakt."
 }
