@@ -16,7 +16,6 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
   @service fileConversionService;
   @service draftSubmissionService;
 
-  @tracked isReplacingFile = false;
   @tracked isUploadingReplacementFile = false;
   @tracked replacementFile;
 
@@ -48,13 +47,6 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
   }
 
   @action
-  async toggleUploadReplacementFile() {
-    await this.replacementFile?.destroyRecord();
-    this.replacementFile = null;
-    this.isReplacingFile = !this.isReplacingFile;
-  }
-
-  @action
   selectDocumentType(value) {
     this.documentType = value;
   }
@@ -64,7 +56,6 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
     this.name = null;
 
     await this.replacementFile?.destroyRecord();
-    this.isReplacingFile = false;
     this.replacementFile = null;
 
     this.args.onCancel?.();
@@ -103,7 +94,6 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
 
     this.args.onSave?.();
 
-    this.isReplacingFile = false;
     this.replacementFile = null;
   });
 }

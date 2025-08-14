@@ -9,7 +9,7 @@
 >
   <:body>
     <AuCard @size="small" class="au-u-margin-top-small" as |c|>
-      <c.header>
+      <c.content>
         <div class="auk-form-group">
           <AuLabel for="name">{{t "name-document"}}</AuLabel>
           <div class="au-u-flex au-u-flex--spaced-small">
@@ -18,15 +18,6 @@
               @width="block"
               {{on "input" (pick "target.value" (set this "name"))}}
             />
-            <AuButtonGroup class="au-u-flex--no-wrap">
-              <AuButton
-                @skin="secondary"
-                @disabled={{this.isDisabled}}
-                {{on "click" this.toggleUploadReplacementFile}}
-              >
-                {{t "replace"}}
-              </AuButton>
-            </AuButtonGroup>
           </div>
         </div>
         {{#if @piece.created}}
@@ -35,9 +26,12 @@
             {{datetime-at (or @piece.file.created @piece.created)}}
           </AuHelpText>
         {{/if}}
-      </c.header>
-      {{#if this.isReplacingFile}}
-        <c.content>
+      </c.content>
+    </AuCard>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="type">{{t "replace-file"}}</AuLabel>
           {{#if this.replacementFile}}
             <AuAlert @skin="warning" @icon="alert-triangle">
               {{t "replace-submission-document-warning"}}
@@ -51,8 +45,8 @@
             @validateFile={{this.validateFile}}
             @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
           />
-        </c.content>
-      {{/if}}
+        </div>
+      </c.content>
     </AuCard>
     <AuCard @size="small" class="au-u-margin-top-small" as |c|>
       <c.content>
