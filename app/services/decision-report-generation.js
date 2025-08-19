@@ -61,6 +61,7 @@ export default class DecisionReportGeneration extends Service {
       this.intl.t('decision-report-bundle-generation--toast-generating--title'),
       {
         timeOut: 10 * 60 * 1000,
+        closable: true,
       }
     );
     try {
@@ -130,6 +131,7 @@ export default class DecisionReportGeneration extends Service {
         this.intl.t('decision-report-generation--toast-generating--title'),
         {
           timeOut: 10 * 60 * 1000,
+          closable: true,
         }
       );
       try {
@@ -264,6 +266,7 @@ export default class DecisionReportGeneration extends Service {
       this.intl.t('minutes-report-generation--toast-generating--title'),
       {
         timeOut: 3 * 60 * 1000,
+        closable: true,
       }
     );
     try {
