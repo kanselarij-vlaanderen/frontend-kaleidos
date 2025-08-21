@@ -46,14 +46,25 @@ export async function deleteDocumentContainer(documentContainerOrPromise) {
  * @param removeDraftPiece Boolean: should the draft-piece of a submission document be removed
  * @returns {Promise}
  */
-export async function deletePiece(pieceOrPromise, removeDraftPiece=true) {
+export async function deletePiece(pieceOrPromise, removeDraftPiece=true, removeSignedPieces=true) {
   const piece = await pieceOrPromise;
   const documentContainer = await piece.documentContainer;
   if (piece) {
     if (removeDraftPiece) {
       const draftPiece = await piece.draftPiece;
       if (draftPiece) {
-        await deletePiece(draftPiece);
+        await deletePiece(draftPiece, false, false); // draft pieces should not have draft or signed pieces
+      }
+    }
+
+    if (removeSignedPieces) {
+      const signedPiece = await piece.signedPiece;
+      const signedPieceCopy = await piece.signedPieceCopy;
+      if (signedPiece) {
+        await deletePiece(signedPiece, false, false);
+      }
+      if (signedPieceCopy) {
+        await deletePiece(signedPieceCopy, false, false);
       }
     }
 

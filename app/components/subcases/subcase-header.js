@@ -27,6 +27,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @tracked newDecisionmakingFlowHasParliamentFlow = false;
   @tracked promptDeleteCase = false;
   @tracked isDeletingSubcase = false;
+  @tracked isRestoringSubmission = false;
   @tracked isShowingOptions = false;
   @tracked isLoading = false;
   @tracked isAssigning = false;
@@ -63,6 +64,15 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     );
   }
 
+  get canRestoreSubmission() {
+    return (
+      this.loadData.isIdle &&
+      this.currentSession.may('restore-submissions') &&
+      this.canDelete &&
+      this.submissions.length == 1 // when no update submissions exist 
+    )
+  }
+
   @task
   *loadData() {
     this.submissions = yield this.args.subcase.hasMany('submissions').reload();
@@ -93,6 +103,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   toggleAllPropertiesBackToDefault() {
     this.isAssigningToAgenda = false;
     this.isDeletingSubcase = false;
+    this.isRestoringSubmission = false;
     this.selectedSubcase = null;
     this.subcaseToDelete = null;
     this.isLoading = false;
@@ -125,6 +136,10 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   requestDeleteSubcase(subcase) {
     this.isDeletingSubcase = true;
     this.subcaseToDelete = subcase;
+  }
+  
+  confirmRestoreSubmission = () => {
+    this.isRestoringSubmission = true;
   }
 
   get hasActions() {
@@ -176,10 +191,6 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     const itemToDelete = await this.store.findRecord('subcase', subcaseToDelete.id, {
       reload: true,
     });
-    const newsItem = await itemToDelete.newsItem;
-    if (newsItem) {
-      await newsItem.destroyRecord();
-    }
     /*
     In v3.26.x, we used to call `await itemToDelete.destroyRecord();` here
     In theory, destroyRecord() is the same as deleteRecord() followed by save(). Problem is, in the tests that's not the case.
@@ -296,5 +307,21 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.promptDeleteCase = false;
     this.caseToDelete = null;
     this.args.onMoveSubcase();
+  }
+
+  restoreSubmission = async() => {
+    this.isLoading = true;
+    const submission = this.submissions.at(0); // should only be 1
+    await this.subcaseService.deleteSubcaseFullyForSubmission(this.args.subcase, submission);
+    // restore the status so submission can be treated again
+    const treatedStatus = await this.draftSubmissionService.getTreatedStatus(submission);
+    await treatedStatus?.destroyRecord();
+    const inTreatmentStatus = await this.store.findRecordByUri(
+      'concept',
+      CONSTANTS.SUBMISSION_STATUSES.IN_BEHANDELING
+    );
+    submission.status = inTreatmentStatus;
+    await submission.save();
+    this.router.transitionTo('cases.submissions.submission', submission.id);
   }
 }

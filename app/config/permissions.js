@@ -85,6 +85,7 @@ const {
 // - upload-any-submission-document-extension: no enforced restrictions on mime-type/extension of document uploaded (submission mostly)
 // - remove-piece-from-parliament
 // - manage-agendaitems-with-parliament-flow
+// - restore-submissions: removing the treated status from submission so it's treatable again
 
 const groups = [
   {
@@ -150,6 +151,7 @@ const groups = [
         'remove-piece-from-parliament',
         'manage-agendaitems-with-parliament-flow',
         'edit-draft-document-access-levels',
+        'restore-submissions'
       ]
     }
   },

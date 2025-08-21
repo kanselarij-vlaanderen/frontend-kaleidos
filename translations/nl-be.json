@@ -1532,5 +1532,7 @@
   "shortlist-publication-error-message": "De lijst op te starten publicaties kon niet opgevraagd worden",
   "error-getting-related-subcase-agendas": "De lijst relevante agendas van deze procedurestap kan niet worden geladen",
   "replace-submission-document-warning": "Let op, bij opslaan wordt het originele document in Kaleidos volledig vervangen door het nieuwe bestand. Deze actie kan niet ongedaan worden gemaakt.",
-  "replace-file": "Bestand vervangen"
+  "replace-file": "Bestand vervangen",
+  "delete-subcase-and-restore-submission": "Procedurestap verwijderen en behoud indiening",
+  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\"."
 }
