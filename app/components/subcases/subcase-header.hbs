@@ -69,7 +69,7 @@
                 <AuButton
                   @skin="link"
                   @alert={{true}}
-                  {{on "click" (fn this.confirmRestoreSubmission @subcase)}}
+                  {{on "click" this.confirmRestoreSubmission}}
                   role="menuitem"
                 >
                   {{t "delete-subcase-and-restore-submission"}}
