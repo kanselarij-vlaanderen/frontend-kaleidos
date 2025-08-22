@@ -145,7 +145,6 @@ export default class SubcaseService extends Service {
         await decisionmakingFlow.destroyRecord();
       }
     }
-    // TODO could these documents be on any other subcase? after subcase copy maybe?
     const piecesNotOnSubmission = await this.store.queryAll('piece', {
       'filter[submission-activity][subcase][:id:]': subcase.id,
       'filter[:has-no:draft-piece]': true,

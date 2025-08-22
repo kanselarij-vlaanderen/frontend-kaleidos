@@ -53,7 +53,8 @@ export async function deletePiece(pieceOrPromise, removeDraftPiece=true, removeS
     if (removeDraftPiece) {
       const draftPiece = await piece.draftPiece;
       if (draftPiece) {
-        await deletePiece(draftPiece, false, false); // draft pieces should not have draft or signed pieces
+        // draft pieces should not have any draft or signed pieces
+        await deletePiece(draftPiece, false, false);
       }
     }
 
