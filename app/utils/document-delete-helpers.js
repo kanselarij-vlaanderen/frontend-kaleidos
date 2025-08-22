@@ -58,8 +58,8 @@ export async function deletePiece(pieceOrPromise, removeDraftPiece=true, removeS
     }
 
     if (removeSignedPieces) {
-      const signedPiece = await piece.signedPiece;
-      const signedPieceCopy = await piece.signedPieceCopy;
+      const signedPiece = await piece.belongsTo('signedPiece').reload();
+      const signedPieceCopy = await piece.belongsTo('signedPieceCopy').reload();
       if (signedPiece) {
         await deletePiece(signedPiece, false, false);
       }
