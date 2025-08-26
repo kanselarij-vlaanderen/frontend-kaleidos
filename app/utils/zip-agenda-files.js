@@ -37,7 +37,7 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
   if (fetchedJob.status > 201) {
     return null;
   }
-  return getJsonPayloadOrThrow(fetchedJob);
+  return await getJsonPayloadOrThrow(fetchedJob);
 }
 
 async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly) {
@@ -83,7 +83,7 @@ async function fetchGenericArchivingJob(path, pdfOnly) {
   if (fetchedJob.status > 201) {
     return null;
   }
-  return getJsonPayloadOrThrow(fetchedJob);
+  return await getJsonPayloadOrThrow(fetchedJob);
 }
 
 export {

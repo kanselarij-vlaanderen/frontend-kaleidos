@@ -68,7 +68,7 @@ export default class SignatureService extends Service {
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
     try {
-      const job = getJsonPayloadOrThrow(response);
+      const job = await getJsonPayloadOrThrow(response);
       await this.pollPrepareSignFlow(job);
     } catch (error) {
       for (let signFlow of signFlows) {
