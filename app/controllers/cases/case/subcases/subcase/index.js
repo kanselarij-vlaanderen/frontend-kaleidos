@@ -149,7 +149,7 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
   *savePiece(piece, index) {
     const documentContainer = yield piece.documentContainer;
     const containerCount = yield this.store.count('document-container', {
-      'filter[pieces][submission-activity][subcase][id]': this.model.subcase.id,
+      'filter[pieces][submission-activities][subcase][id]': this.model.subcase.id,
     });
     documentContainer.position = index + 1 + (containerCount ?? 0);
     yield documentContainer.save();
