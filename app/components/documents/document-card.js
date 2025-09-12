@@ -45,6 +45,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
+  @tracked isAddingSignedPiece = false;
 
   @tracked piece;
   @tracked documentContainer;
@@ -112,6 +113,18 @@ export default class DocumentsDocumentCardComponent extends Component {
         (!this.args.agendaitem && this.args.decisionActivity) ||
         (!this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
       )
+    );
+  }
+
+  /**
+   * see if the user may add a signed piece (by replacing the current pdf by a signed one)
+   * Afterwards we will trigger the strip/flatten features on that new pdf
+   */
+  get mayAddSignedPiece() {
+    return (
+      !this.signMarkingActivity &&
+      !this.piece.signedPiece?.get('id') && // TODO this could be removed, it also works if signedPieces exist
+      this.currentSession.may('add-signed-piece')
     );
   }
 
@@ -510,5 +523,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();
     this.isEditingPiece = false;
+  }
+
+  cancelAddSignedPiece = async() => {
+    await this.loadPieceRelatedData.perform();
+    this.isAddingSignedPiece = false;
   }
 }
