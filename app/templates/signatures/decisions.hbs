@@ -123,6 +123,20 @@
           />
         </div>
         <div data-test-route-signatures-decisions-sidebar-info class="auk-sidebar__body">
+          {{#if
+            (and
+              this.allSignersHaveEmail.isResolved
+              (not this.allSignersHaveEmail.value)
+            )
+          }}
+            <AuAlert
+              @title={{t "cannot-start-signing"}}
+              @skin="warning"
+              @icon="alert-triangle"
+            >
+              {{t "cannot-start-signing-message"}}
+            </AuAlert>
+          {{/if}}
           {{#unless this.selectedSignFlows.length}}
             <p class="au-u-muted auk-u-mt-2">
               {{or this.piece.documentContainer.type.label (t "no-document-type")}}
@@ -187,7 +201,10 @@
                 data-test-route-signatures-decisions-sidebar-start-signflow
                 @loading={{or this.createSignFlow.isRunning this.removeSignFlow.isRunning}}
                 @loadingMessage={{t "loading"}}
-                @disabled={{not this.signers.length}}
+                @disabled={{or
+                  (not this.signers.length)
+                  (not this.allSignersHaveEmail.value)
+                }}
                 {{on "click" this.createSignFlow.perform}}
               >
                 {{t "start-signing"}}
