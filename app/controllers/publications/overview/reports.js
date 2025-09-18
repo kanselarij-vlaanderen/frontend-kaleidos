@@ -48,7 +48,7 @@ export default class PublicationsOverviewReportsController extends Controller {
     const thisRouteName = this.router.currentRouteName;
     this.jobMonitor.register(job, async (job) => {
       this.toaster.close(generatingToast);
-      if (job.status === job.SUCCESS) {
+      if (job.isSuccess) {
         const file = await job.generated;
         const downloadFileToastOptions = {
           title: this.intl.t('publication-reports--toast-ready--title'),

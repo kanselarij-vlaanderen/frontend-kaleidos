@@ -92,7 +92,7 @@ export default class DownloadDocumentsModalComponent extends Component {
       );
       this.jobMonitor.register(job, async (job) => {
         this.toaster.close(inCreationToast);
-        if (job.status === job.SUCCESS) {
+        if (job.isSuccess) {
           const url = await fileDownloadUrlFromJob(job, name);
           debug(`Archive ready. Prompting for download now (${url})`);
           downloadFileToastOptions.downloadLink = url;

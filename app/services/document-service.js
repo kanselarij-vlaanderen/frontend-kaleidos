@@ -183,7 +183,7 @@ export default class DocumentService extends Service {
       setTimeout(() => {
         this.toaster.close(toasterToClose);
       }, 2000);
-      if (job.status === job.SUCCESS) {
+      if (job.isSuccess) {
         this.toaster.success(
           this.intl.t('succes-stamping-documents'),
         );
