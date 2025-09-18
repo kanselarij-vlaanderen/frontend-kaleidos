@@ -1,11 +1,7 @@
 import Model, { attr } from '@ember-data/model';
-import CONFIG from 'frontend-kaleidos/config/constants';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class JobModel extends Model {
-  RUNNING = CONFIG.JOB_STATUSSES.RUNNING;
-  SUCCESS = CONFIG.JOB_STATUSSES.SUCCESS;
-  FAILED = CONFIG.JOB_STATUSSES.FAILED;
-
   @attr('string') uri;
   @attr('datetime') created;
   @attr('string') status;
@@ -13,7 +9,23 @@ export default class JobModel extends Model {
   @attr('datetime') timeEnded;
   @attr('string') message;
 
+  get isScheduled() {
+    return this.status === CONSTANTS.JOB_STATUSES.SCHEDULED;
+  }
+
+  get isBusy() {
+    return this.status === CONSTANTS.JOB_STATUSES.BUSY;
+  }
+
+  get isSuccess() {
+    return this.status === CONSTANTS.JOB_STATUSES.SUCCESS;
+  }
+
+  get isFailed() {
+    return this.status === CONSTANTS.JOB_STATUSES.FAILED;
+  }
+
   get hasEnded() {
-    return this.status === this.SUCCESS || this.status === this.FAILED;
+    return this.isSuccess || this.isFailed;
   }
 }

@@ -70,10 +70,11 @@ export default {
     BEKRACHTIGING: 'http://themis.vlaanderen.be/id/concept/document-type/609cf883-b52c-43fe-84b1-eed02527173b',
     BIJLAGE_TER_INZAGE: 'http://themis.vlaanderen.be/id/concept/document-type/075bc7a9-75fd-423b-be88-571d3fa3d043',
   },
-  JOB_STATUSSES: {
-    RUNNING: 'http://vocab.deri.ie/cogs#Running',
-    SUCCESS: 'http://vocab.deri.ie/cogs#Success',
-    FAILED: 'http://vocab.deri.ie/cogs#Fail',
+  JOB_STATUSES: {
+    SCHEDULED: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+    BUSY: 'http://redpencil.data.gift/id/concept/JobStatus/busy',
+    SUCCESS: 'http://redpencil.data.gift/id/concept/JobStatus/success',
+    FAILED: 'http://redpencil.data.gift/id/concept/JobStatus/failed',
   },
   DECISION_REPORT_JOB_STATUSSES: {
       SCHEDULED: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/scheduled',

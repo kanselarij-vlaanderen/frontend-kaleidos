@@ -33,7 +33,7 @@ export default class PublicationsOverviewReportsRoute extends Route {
         'publication-metrics-export-job',
         {
           sort: '-created',
-          'filter[status][:uri:]': CONSTANTS.JOB_STATUSSES.SUCCESS,
+          'filter[status][:uri:]': CONSTANTS.JOB_STATUSES.SUCCESS,
           'filter[report-type][:uri:]': reportType.uri,
           include: ['generated', 'generated-by'].join(','),
         }
