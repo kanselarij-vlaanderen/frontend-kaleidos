@@ -336,6 +336,10 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @action
   async saveAccessLevel() {
     await this.piece.save();
+    if (this.piece.constructor.modelName === 'piece' && this.currentSession.may('manage-document-access-levels')) {
+      await this.pieceAccessLevelService.updateSignedPieceAccessLevels(this.piece);
+      await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
+    }
     await this.loadPieceRelatedData.perform();
     this.args.onSaveAccessLevel?.();
   }

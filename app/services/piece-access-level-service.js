@@ -73,6 +73,7 @@ export default class PieceAccessLevelService extends Service {
     if (previousAccessLevel.uri !== accessLevelToSet.uri) {
       previousPiece.accessLevel = accessLevelToSet;
       await previousPiece.save();
+      await this.updateSignedPieceAccessLevels(previousPiece);
     }
     return true;
   }
@@ -109,6 +110,7 @@ export default class PieceAccessLevelService extends Service {
       );
       piece.accessLevel = internRegering;
       await piece.save();
+      await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
   }
@@ -129,6 +131,7 @@ export default class PieceAccessLevelService extends Service {
       const confidential = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
       piece.accessLevel = confidential;
       await piece.save();
+      await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
   }
@@ -164,6 +167,70 @@ export default class PieceAccessLevelService extends Service {
     await Promise.all(pieces.slice().map(async (piece) => {
       await this.strengthenAccessLevelToConfidential(piece);
     }));
+  }
+
+  /**
+   * Ensures that the signedPieceCopy of a piece always has the correct accessLevel
+   * Either the same accessLevel or at be at least "intern overheid"
+   * !this is one of the rare occurences where weakening accessLevel is OK, since it reflects the main piece
+   */
+  async _updateSignedPieceCopyOfPiece(piece) {
+    const accessLevel = await piece.accessLevel;
+    const signedPieceCopy = await piece.belongsTo('signedPieceCopy').reload();
+    if (!signedPieceCopy) {
+      return;
+    }
+    let accessLevelToSet;
+    const signedPieceCopyAccessLevel = await signedPieceCopy.accessLevel;
+    if (accessLevel.uri == CONSTANTS.ACCESS_LEVELS.PUBLIEK) {
+      const internOverheid = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID);
+      accessLevelToSet = internOverheid;
+    } else {
+      accessLevelToSet = accessLevel;
+    }
+    if (signedPieceCopyAccessLevel.uri !== accessLevelToSet.uri) {
+      signedPieceCopy.accessLevel = accessLevelToSet;
+      await signedPieceCopy.save();
+    }
+  }
+
+  /**
+   * Ensures that the signedPieceCopy of a piece always has the correct accessLevel
+   * Either the same accessLevel or be at least "intern regering"
+   * !this is one of the rare occurences where weakening accessLevel is OK, since it reflects the main piece
+   */
+  async _updateSignedPieceOfPiece(piece) {
+    const accessLevel = await piece.accessLevel;
+    const signedPiece = await piece.belongsTo('signedPiece').reload();
+    if (!signedPiece) {
+      return;
+    }
+    let accessLevelToSet;
+    const signedPieceAccessLevel = await signedPiece.accessLevel;
+    if (
+      [
+        CONSTANTS.ACCESS_LEVELS.PUBLIEK,
+        CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID,
+      ].includes(accessLevel.uri)
+    ) {
+      const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+      accessLevelToSet = internRegering;
+    } else {
+      accessLevelToSet = accessLevel;
+    }
+    if (signedPieceAccessLevel.uri !== accessLevelToSet.uri) {
+      signedPiece.accessLevel = accessLevelToSet;
+      await signedPiece.save();
+    }
+  }
+
+  /**
+   * Update signedPiece and signedPieceCopy based on updates on main piece
+   * strengthening or weakening accordingly
+   */ 
+  async updateSignedPieceAccessLevels(piece) {
+    await this._updateSignedPieceOfPiece(piece);
+    await this._updateSignedPieceCopyOfPiece(piece);
   }
 
   /*
