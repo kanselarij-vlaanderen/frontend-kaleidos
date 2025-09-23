@@ -955,8 +955,7 @@ context('decisions and minutes shortlist overview tests', () => {
     // it should be enabled, but it is now disabled because of missing email
     // cy.get(route.decisions.sidebar.startSignflow).should('be.enabled');
     cy.get(appuniversum.alert.message).contains(missingMailMessage);
-    cy.get(route.decisions.sidebar.startSignflow).invoke('removeAttr', 'disabled')
-      .click();
+    cy.get(route.decisions.sidebar.startSignflow).should('be.disabled');
 
     // change secretary
 
