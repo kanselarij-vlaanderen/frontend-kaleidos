@@ -123,7 +123,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayAddSignedPiece() {
     return (
       !this.signMarkingActivity &&
-      !this.piece.signedPiece?.get('id') && // TODO this could be removed, it also works if signedPieces exist
+      // !this.piece.signedPiece?.get('id') && // Only allow upload if no signed piece exists yet
       this.currentSession.may('add-signed-piece')
     );
   }
