@@ -729,7 +729,7 @@ context('decisions and minutes shortlist overview tests', () => {
   const defaultSecretary = mandateeNames.current.firstSecretary.fullName;
   const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
-  const missingMailMessage = 'Eén of meerdere ondertekenaars van de geselecteerde documenten moeten zich nog authentificeren';
+  const missingMailMessage = 'ondertekenaars van de geselecteerde documenten moeten zich nog authentificeren';
   const alertMessage = 'De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.';
 
   beforeEach(() => {
