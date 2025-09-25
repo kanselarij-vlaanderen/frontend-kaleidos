@@ -1,9 +1,13 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { trackedFunction } from 'reactiveweb/function';
+import { TrackedArray } from 'tracked-built-ins';
+import { tracked } from '@glimmer/tracking';
 
 export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Component {
   @service store;
+
+  @tracked signers = new TrackedArray([]);
 
   constructor() {
     super(...arguments);
@@ -13,10 +17,6 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
     return this.loadSigners.value?.hasConflictingSigners ?? false;
   }
 
-  get signers() {
-    return this.loadSigners.value?.signers ?? [];
-  }
-
   loadSigners = trackedFunction(this, async () => {
     if (!this.args.decisionActivities) {
       return;
@@ -24,7 +24,6 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
     const decisionActivitiesOrMeetings = this.args.decisionActivities.slice();
 
     let hasConflictingSigners = false;
-    let signers = [];
 
     const [head, ...tail] = decisionActivitiesOrMeetings;
     const secretary = await head.secretary;
@@ -37,13 +36,12 @@ export default class SignaturesCreateSignFlowReportOrMinutesComponent extends Co
         break;
       }
     }
-    signers = [];
+    this.signers = new TrackedArray([]);
     if (!hasConflictingSigners && secretary) {
-      signers = [secretary];
+      this.signers = new TrackedArray([secretary]);
     }
-    this.args.onChangeSigners?.(signers);
+    this.args.onChangeSigners?.(this.signers);
     return {
-      signers,
       hasConflictingSigners,
     };
   });
