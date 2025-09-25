@@ -133,7 +133,7 @@ export default class NewsletterService extends Service {
     const agendaItemType = await agendaitem.type;
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
-      const contentWithBreaks = content.replace(/\n/g, '<br />');
+      const contentWithBreaks = content?.replace(/\n/g, '<br />');
       news.title = agendaitem.shortTitle || content;
       news.htmlContent = contentWithBreaks;
       news.finished = true;

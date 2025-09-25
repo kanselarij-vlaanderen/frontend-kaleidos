@@ -80,7 +80,7 @@ export default class SignaturesIndexController extends Controller {
   allSignersHaveEmail = trackedFunction(this, async () => {
     for (const signer of this.signers) {
       const person = await signer.person;
-      const user = await person.user;
+      const user = await person?.user;
       if (!user?.email) {
         return false;
       }
@@ -188,14 +188,14 @@ export default class SignaturesIndexController extends Controller {
     this.agenda = null;
     this.agendaitem = null;
     this.decisionActivity = null;
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
     this.approvers = [];
     this.notificationAddresses = [];
   }
 
   clearSidebarContentMultiItem() {
     this.selectedSignFlows = new TrackedArray([]);
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
     this.approvers = [];
     this.notificationAddresses = [];
   }
@@ -208,7 +208,7 @@ export default class SignaturesIndexController extends Controller {
     [this.meeting, this.agenda, this.agendaitem] =
       await this.getAgendaitemRouteModels(piece);
     this.decisionActivity = await this.getDecisionActivity(piece);
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
     this.approvers = [];
     this.notificationAddresses = [];
     this.showSidebar = true;
@@ -216,7 +216,7 @@ export default class SignaturesIndexController extends Controller {
 
   @action
   async openSidebarMultiItem() {
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
     this.approvers = [];
     this.notificationAddresses = [];
     this.showSidebar = true;
