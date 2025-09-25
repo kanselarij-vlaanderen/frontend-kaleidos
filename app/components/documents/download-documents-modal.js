@@ -100,16 +100,22 @@ export default class DownloadDocumentsModalComponent extends Component {
         } else {
           debug('Something went wrong while generating archive.');
           this.toaster.error(
-            this.intl.t('error'),
+            `${this.intl.t('documents-download-failed')} ${job.message}`,
             this.intl.t('warning-title'),
           );
         }
       });
-    } else {
+    } else if (job.isSuccess) {
       const url = await fileDownloadUrlFromJob(job, name);
       debug(`Archive ready. Prompting for download now (${url})`);
       downloadFileToastOptions.downloadLink = url;
       this.toaster.show(DownloadFileToast, downloadFileToastOptions);
+    } else {
+      debug('Something went wrong while generating archive.');
+      this.toaster.error(
+        `${this.intl.t('documents-download-failed')} ${job.message}`,
+        this.intl.t('warning-title'),
+      );
     }
   };
 }
