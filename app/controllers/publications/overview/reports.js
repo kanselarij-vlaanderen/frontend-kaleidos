@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import DownloadFileToast from 'frontend-kaleidos/components/utils/toaster/download-file-toast';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class PublicationsOverviewReportsController extends Controller {
   @service store;
@@ -30,6 +31,7 @@ export default class PublicationsOverviewReportsController extends Controller {
       generatedBy: this.currentSession.user,
       reportType: reportTypeEntry.model,
       config: jobParams,
+      status: CONSTANTS.JOB_STATUSES.SCHEDULED,
     });
     return job;
   }
@@ -61,7 +63,10 @@ export default class PublicationsOverviewReportsController extends Controller {
           this.router.refresh(thisRouteName);
         }
       } else {
-        this.toaster.error(this.intl.t('error'), this.intl.t('warning-title'));
+        this.toaster.error(
+          `${this.intl.t('error-with-message', { message: job?.message })}`,
+          this.intl.t('warning-title'),
+        );
       }
     });
   }
