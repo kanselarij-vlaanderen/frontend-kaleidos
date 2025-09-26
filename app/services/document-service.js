@@ -131,7 +131,7 @@ export default class DocumentService extends Service {
       }
     );
     const json = await getJsonPayloadOrThrow(response);
-    // TODO: this only deals with successful jobs, we need to handle errors as well
+    // TODO: this only deals with successful jobs, we need to handle errors as well job.message
     if (json?.data?.id) {
       const job = await this.store.findRecord('job', json.data.id);
       if (mapping.size) {
