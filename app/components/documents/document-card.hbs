@@ -266,6 +266,15 @@
                     {{t "stop-sign-flow"}}
                   </AuButton>
                 {{/if}}
+                {{#if this.mayAddSignedPiece}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" (toggle "isAddingSignedPiece" this)}}
+                    role="menuitem"
+                  >
+                    {{t "upload-signed-file"}}
+                  </AuButton>
+                {{/if}}
                 {{#if this.mayDelete}}
                   <AuHr />
                   <AuButton
@@ -376,3 +385,11 @@
   @confirmIcon="trash"
   @alert={{true}}
 />
+
+{{#if this.isAddingSignedPiece}}
+  <Documents::DocumentCard::AddSignedPieceModal
+    @piece={{this.piece}}
+    @onCancel={{this.cancelAddSignedPiece}}
+    @onSave={{queue (toggle "isAddingSignedPiece" this) (perform this.loadPieceRelatedData)}}
+  />
+{{/if}}

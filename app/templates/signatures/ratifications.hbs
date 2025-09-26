@@ -7,6 +7,7 @@
     {{#if this.selectedSignFlows.length}}
       <AuButton
         @icon="sign"
+        @disabled={{this.showSidebar}}
         {{on "click" this.openSidebarMultiItem}}
       >
         {{t "start-signing-for-n-selected-documents" n=this.selectedSignFlows.length}}
@@ -121,6 +122,20 @@
           />
         </div>
         <div class="auk-sidebar__body">
+          {{#if
+            (and
+              this.allSignersHaveEmail.isResolved
+              (not this.allSignersHaveEmail.value)
+            )
+          }}
+            <AuAlert
+              @title={{t "cannot-start-signing"}}
+              @skin="warning"
+              @icon="alert-triangle"
+            >
+              {{t "cannot-start-signing-message"}}
+            </AuAlert>
+          {{/if}}
           {{#unless this.selectedSignFlows.length}}
             <p class="au-u-muted auk-u-mt-2">
               {{or this.piece.documentContainer.type.label (t "no-document-type")}}
