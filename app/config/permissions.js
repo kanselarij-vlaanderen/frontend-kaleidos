@@ -203,6 +203,7 @@ const groups = [
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
         'edit-draft-document-access-levels',
+        'restore-submissions',
       ]
     }
   },
@@ -249,6 +250,7 @@ const groups = [
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
         'edit-draft-document-access-levels',
+        'restore-submissions',
       ]
     }
   },
