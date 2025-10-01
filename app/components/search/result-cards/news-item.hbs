@@ -29,10 +29,12 @@
   </c.header>
   {{#if @text}}
     <c.content data-test-route-search-result-cards-news-item-text>
-      <SanitizeHtml
-        @raw={{true}}
-        @value={{@text}}
-      />
+      <AuContent>
+        <SanitizeHtml
+          @raw={{true}}
+          @value={{@text}}
+        />
+      </AuContent>
     </c.content>
   {{/if}}
   <c.footer>

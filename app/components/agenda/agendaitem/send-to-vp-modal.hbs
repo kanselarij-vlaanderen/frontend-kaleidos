@@ -151,8 +151,9 @@
             {{t "possible-pieces-missing"}}
           </AuHeading>
         </c.header>
-              <c.content>
-          <p>{{t "automatic-check-performed-possible-pieces-missing"}}</p>
+        <c.content>
+          <AuContent>
+            <p>{{t "automatic-check-performed-possible-pieces-missing"}}</p>
             <ul>
               {{#each this.subcasesWithMissingPieces as |subcaseWithMissingPieces|}}
                 <li>
@@ -178,6 +179,7 @@
                 </li>
               {{/each}}
             </ul>
+          </AuContent>
         </c.content>
       </AuCard>
       {{/if}}
