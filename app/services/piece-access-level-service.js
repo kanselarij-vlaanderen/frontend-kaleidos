@@ -160,7 +160,7 @@ export default class PieceAccessLevelService extends Service {
 
   async updateSubmissionAccessLevelOfSubcase(subcase) {
     const pieces = await this.store.queryAll('piece', {
-      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[submission-activities][subcase][:id:]': subcase.id,
       'filter[:has-no:next-piece]': true,
     });
     

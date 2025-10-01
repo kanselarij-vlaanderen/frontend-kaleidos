@@ -1543,6 +1543,7 @@
   "strip-signature-success-message": "Bestand omgezet naar een ongetekend bestand.",
   "strip-signature-error-message": "Het opgeladen getekend pdf bestand kan niet worden omgezet naar een ongetekend bestand.",
   "action-cannot-be-undone": "Deze actie kan niet ongedaan gemaakt worden.",
+  "dont-close-the-page": "Gelieve de pagina niet te sluiten.",
   "delete-subcase-and-restore-submission": "Procedurestap verwijderen en indiening behouden",
   "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\"."
 }

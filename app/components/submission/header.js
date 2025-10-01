@@ -23,6 +23,7 @@ export default class SubmissionHeaderComponent extends Component {
   @service draftSubmissionService;
   @service pieceAccessLevelService;
   @service signatureService;
+  @service preventUnload;
 
   @tracked isOpenResubmitModal;
   @tracked isOpenCreateSubcaseModal;
@@ -272,8 +273,6 @@ export default class SubmissionHeaderComponent extends Component {
     const selectedMeeting = meeting?.id ? meeting : this.selectedMeeting;
     const comment = meeting?.id ? remarks : this.comment;
 
-    // TODO  remove old status change??
-
     await this._updateSubmission(
       CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
       comment,
@@ -369,6 +368,7 @@ export default class SubmissionHeaderComponent extends Component {
           this.intl.t('warning-title')
         );
       }
+      this.preventUnload.enable();
       this.toggleCreateSubcaseModal();
       const now = new Date();
       const trimmedShortTitle = trimText(this.args.submission.shortTitle);
@@ -496,6 +496,7 @@ export default class SubmissionHeaderComponent extends Component {
 
       this.args.submission.subcase = subcase;
       await this._updateSubmission(CONSTANTS.SUBMISSION_STATUSES.BEHANDELD);
+      this.preventUnload.disable();
       this.router.transitionTo(
         'cases.case.subcases.subcase',
         decisionmakingFlow.id,

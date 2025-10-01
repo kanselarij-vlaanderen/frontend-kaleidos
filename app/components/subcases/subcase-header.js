@@ -273,7 +273,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     }
 
     let signFlows = await this.store.queryAll('sign-flow', {
-      'filter[sign-subcase][sign-marking-activity][piece][submission-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[sign-subcase][sign-marking-activity][piece][submission-activities][subcase][:id:]': this.args.subcase.id,
     });
     signFlows = signFlows?.slice();
     for (const signFlow of signFlows) {
