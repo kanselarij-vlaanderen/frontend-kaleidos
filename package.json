@@ -99,7 +99,7 @@
     "ember-data": "~5.3.8",
     "ember-element-helper": "^0.8.6",
     "ember-fetch": "^8.1.2",
-    "ember-file-upload": "^8.4.1",
+    "ember-file-upload": "^9.5.0",
     "ember-flatpickr": "^8.0.1",
     "ember-functions-as-helper-polyfill": "^2.1.2",
     "ember-in-viewport": "git+https://github.com/ValenberghsSven/ember-in-viewport.git#04342ad6a1f923a2c0deb2b5f81be43e1ae9747d",
