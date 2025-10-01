@@ -1542,5 +1542,6 @@
   "strip-signature-loading-message": "Bestand omzetten naar een ongetekend bestand.",
   "strip-signature-success-message": "Bestand omgezet naar een ongetekend bestand.",
   "strip-signature-error-message": "Het opgeladen getekend pdf bestand kan niet worden omgezet naar een ongetekend bestand.",
-  "action-cannot-be-undone": "Deze actie kan niet ongedaan gemaakt worden."
+  "action-cannot-be-undone": "Deze actie kan niet ongedaan gemaakt worden.",
+  "dont-close-the-page": "Gelieve de pagina niet te sluiten."
 }
