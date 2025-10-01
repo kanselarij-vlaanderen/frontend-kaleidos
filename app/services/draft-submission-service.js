@@ -145,7 +145,17 @@ export default class DraftSubmissionService extends Service {
         }
         // pieces may be propagated because of pav:previousVersion between piece on approved agenda and accepted piece on draft agenda
         // in that case we should check if the submissionActivity exists, that only gets propagated with approved agendas
-        const submissionActivity = await actualPiece.submissionActivity;
+        const submissionActivity = await this.store.queryOne(
+          'submission-activity',
+          {
+            filter: {
+              pieces: {
+                ':id:': actualPiece?.id,
+              },
+            },
+            sort: '-start-date',
+          },
+        );
         if (!submissionActivity) {
           return false;
         }
