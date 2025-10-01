@@ -100,6 +100,17 @@ export default class DraftSubmissionService extends Service {
     return creationActivity ? true : false;
   };
 
+  getTreatedStatus = async(submission) => {
+    const statusChangeActivities = await this.getStatusChangeActivities(submission);
+    const treatedActivity = statusChangeActivities
+      ?.filter(
+        (a) =>
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD
+      )
+      .at(0);
+    return treatedActivity;
+  };
+
   getAllSubmissionsForSubcase = async(subcase) => {
     const allSubmissions = await this.store.query('submission', {
       'filter[subcase][:id:]': subcase.id,

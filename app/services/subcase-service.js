@@ -2,11 +2,13 @@ import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class SubcaseService extends Service {
   @service store;
   @service toaster;
   @service intl;
+  @service draftSubmissionService;
 
   async loadSubcasePieces(subcase) {
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
@@ -131,5 +133,37 @@ export default class SubcaseService extends Service {
       );
     }
     return false;
+  }
+
+  async deleteSubcaseFullyForSubmission(subcase, submission) {
+    if (submission.decisionmakingFlowTitle) {
+      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
+      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    const piecesNotOnSubmission = await this.store.queryAll('piece', {
+      'filter[submission-activities][subcase][:id:]': subcase.id,
+      'filter[:has-no:draft-piece]': true,
+    });
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+    // submission still has acceptedPieces connected to draftPieces, but are we always allowed to delete the acceptedpieces?
+    const acceptedPiecesOfSubmission = await this.store.queryAll('piece', {
+      'filter[draft-piece][submission][:id:]': submission.id,
+    });
+
+    await Promise.all(acceptedPiecesOfSubmission.map(async (piece) => {
+      await deletePiece(piece, false);
+    }));
+    await Promise.all(piecesNotOnSubmission.map(async (piece) => {
+      await deletePiece(piece, false);
+    }));
   }
 }

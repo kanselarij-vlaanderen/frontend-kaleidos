@@ -86,6 +86,7 @@ const {
 // - remove-piece-from-parliament
 // - manage-agendaitems-with-parliament-flow
 // - add-signed-piece: replacing a main piece or derived piece with a signed pdf and run strip/flatten
+// - restore-submissions: removing the treated status from submission so it's treatable again
 
 const groups = [
   {
@@ -152,6 +153,7 @@ const groups = [
         'manage-agendaitems-with-parliament-flow',
         'edit-draft-document-access-levels',
         'add-signed-piece',
+        'restore-submissions'
       ]
     }
   },
@@ -201,6 +203,7 @@ const groups = [
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
         'edit-draft-document-access-levels',
+        'restore-submissions',
       ]
     }
   },
@@ -247,6 +250,7 @@ const groups = [
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
         'edit-draft-document-access-levels',
+        'restore-submissions',
       ]
     }
   },
