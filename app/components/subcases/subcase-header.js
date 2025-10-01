@@ -69,7 +69,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       this.loadData.isIdle &&
       this.currentSession.may('restore-submissions') &&
       this.canDelete &&
-      this.submissions.length == 1 // when no update submissions exist 
+      this.submissions.length == 1 // when no update submissions exist
     )
   }
 
@@ -137,13 +137,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isDeletingSubcase = true;
     this.subcaseToDelete = subcase;
   }
-  
+
   confirmRestoreSubmission = () => {
     this.isRestoringSubmission = true;
   }
 
   get hasActions() {
-    return this.canDelete || this.canPropose || this.canMove;
+    return this.loadData.isIdle &&
+      (this.canDelete || this.canPropose || this.canMove);
   }
 
   /**
