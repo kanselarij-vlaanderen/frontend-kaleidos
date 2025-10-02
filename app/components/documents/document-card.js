@@ -123,6 +123,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   get mayAddSignedPiece() {
     return (
       !this.signMarkingActivity &&
+      this.args.piece.constructor.modelName === 'piece' && // action only works on pieces, not subclasses
       // !this.piece.signedPiece?.get('id') && // Only allow upload if no signed piece exists yet
       this.currentSession.may('add-signed-piece')
     );
