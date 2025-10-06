@@ -40,7 +40,7 @@ $au-region-breakpoint: large;
 
 // Global overrides & addons (merged from auk-base)
 body {
-  color: $au-gray-800;
+  color: var(--au-gray-900);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: none;
