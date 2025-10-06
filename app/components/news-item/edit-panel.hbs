@@ -53,6 +53,20 @@
     {{#unless this.ensureNewsItem.isRunning}}
       <Auk::Panel::Body>
         <div class="au-c-form">
+          {{#if this.showBeingEditedByWarning}}
+            <AuAlert
+              @skin="warning"
+              @icon="alert-triangle"
+              @size="small"
+            >
+              {{t
+                "newsitems-being-edited-by"
+                date=(date-phrase this.newsItem.modified)
+                time=(time this.newsItem.modified)
+                name=this.newsItem.isBeingEditedBy.fullName
+              }}
+            </AuAlert>
+          {{/if}}
           <AuFormRow>
             <AuLabel>{{t "title"}}</AuLabel>
             <p

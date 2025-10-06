@@ -24,6 +24,15 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
     return !this.hideNotaModificationWarning && this.notaHasChanged;
   }
 
+  get showBeingEditedByWarning() {
+    return (
+      !this.isEditing &&
+      this.model &&
+      this.model.isBeingEditedBy?.id &&
+      this.model.isBeingEditedBy.id != this.currentSession.user.id
+    );
+  }
+
   @action
   async openFullscreenEdit() {
     await this.model?.preEditOrSaveCheck();
@@ -44,9 +53,9 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
       // there is no model here on first creation.
       const agendaitemTreatment = await this.agendaitem.treatment;
       const newsItem = await agendaitemTreatment.belongsTo('newsItem').reload();
-      await newsItem?.stopEditingOnCancel();
+      await newsItem?.stopEditingOnCancel(this.currentSession.user);
     } else {
-      await this.model.stopEditingOnCancel();
+      await this.model.stopEditingOnCancel(this.currentSession.user);
     }
     this.isEditing = false;
     this.preventUnload.disable();

@@ -56,16 +56,6 @@
     @buttonText={{t "close"}}
     @onConfirm={{this.dismissNotaModifiedWarning}} />
 {{/if}}
-{{!-- there is no model yet to show on initial create --}}
-{{#if this.model.isBeingEditedBy}}
-  <AuAlert
-    @skin="warning"
-    @icon="alert-triangle"
-    @size="small"
-  >
-    {{t "newsitems-being-edited-by" name=this.model.isBeingEditedBy.fullName}}
-  </AuAlert>
-{{/if}}
 {{#if this.isEditing}}
   <NewsItem::EditPanel
     @newsItem={{this.model}}
@@ -75,6 +65,20 @@
     @onSave={{perform this.saveNewsItem}}
   />
 {{else}}
+  {{#if this.showBeingEditedByWarning}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      {{t
+        "newsitems-being-edited-by"
+        date=(date-phrase this.model.modified)
+        time=(time this.model.modified)
+        name=this.model.isBeingEditedBy.fullName
+      }}
+    </AuAlert>
+  {{/if}}
   {{#if this.model}}
     <NewsItem::ViewPanel
       @newsItem={{this.model}}
