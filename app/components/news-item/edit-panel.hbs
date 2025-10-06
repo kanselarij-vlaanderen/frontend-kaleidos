@@ -166,7 +166,7 @@
               <AuButton
                 data-test-news-item-edit-item-cancel
                 @skin="naked"
-                {{on "click" @onCancel}}
+                {{on "click" this.cancel}}
               >
                 {{t "cancel"}}
               </AuButton>
@@ -195,7 +195,7 @@
   @title={{t "no-themes-selected"}}
   @message={{t "no-themes-selected-message"}}
   @onConfirm={{perform this.confirmSave}}
-  @onCancel={{this.cancelSave}}
+  @onCancel={{this.cancel}}
   @confirmMessage={{t "save"}}
   @loading={{this.confirmSave.isRunning}}
 />

@@ -1545,5 +1545,6 @@
   "action-cannot-be-undone": "Deze actie kan niet ongedaan gemaakt worden.",
   "dont-close-the-page": "Gelieve de pagina niet te sluiten.",
   "delete-subcase-and-restore-submission": "Procedurestap verwijderen en indiening behouden",
-  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\"."
+  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\".",
+  "newsitems-being-edited-by": "Dit kort bestek wordt momenteel bewerkt door {name}"
 }

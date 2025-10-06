@@ -8,6 +8,7 @@ import { action } from '@ember/object';
 export default class NewsItemEditPanelComponent extends Component {
   @service newsletterService;
   @service agendaitemNota;
+  @service preventUnload;
 
   editorController;
   @tracked newsItem;
@@ -43,11 +44,15 @@ export default class NewsItemEditPanelComponent extends Component {
       this.newsItem = yield this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
       if (this.newsItem) {
         // If the service call returned a newsItem, it is new and we save immediately to avoid concurrency issues
-        yield this.newsItem.save();
+        yield this.newsItem.startEditing(this.newsItemIsNew);
+        this.preventUnload.enable();
       } else {
         // If the service call returned nothing, it means someone else created a newsitem and we have to refresh
         return this.args.onCancel(this.newsItemIsNew);
       }
+    } else {
+      yield this.newsItem.startEditing();
+      this.preventUnload.enable();
     }
 
     this.title = this.newsItem.title;
@@ -116,12 +121,15 @@ export default class NewsItemEditPanelComponent extends Component {
     } catch {
       // pass
     }
+    this.preventUnload.disable();
     yield this.args.onSave(this.newsItem, this.newsItemIsNew);
     this.isOpenMissingThemesModal = false;
   }
 
   @action
-  cancelSave() {
+  async cancel() {
+    this.preventUnload.disable();
+    await this.args.onCancel();
     this.isOpenMissingThemesModal = false;
   }
 
