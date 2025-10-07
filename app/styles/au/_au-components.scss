@@ -47,6 +47,7 @@ $au-unit-medium: 1.6rem;
 @import '@appuniversum/ember-appuniversum/styles/components/c-textarea';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toaster';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toolbar';
+@import '@appuniversum/ember-appuniversum/styles/components/c-tooltip';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toggle-switch';
 
 
@@ -888,5 +889,56 @@ $au-unit-medium: 1.6rem;
     bottom: 0;
 
     outline-offset: calc(var(--au-outline-offset) * -1);
+  }
+}
+
+// Tooltip
+
+.au-c-tooltip {
+  border-color: var(--au-border-color);
+  border-radius: 3px;
+  padding: .6rem 1rem;
+  background: var(--au-white);
+
+  color: var(--au-gray-900);
+
+  &[data-tooltip-placement^="top"] {
+    .au-c-tooltip__arrow {
+      border-top-color: var(--au-border-color);
+
+      &::after {
+        border-top-color: var(--au-white);
+      }
+    }
+  }
+
+  &[data-tooltip-placement^="right"] {
+    .au-c-tooltip__arrow {
+      border-right-color: var(--au-border-color);
+
+      &::after {
+        border-right-color: var(--au-white);
+      }
+    }
+  }
+
+  &[data-tooltip-placement^="bottom"] {
+    .au-c-tooltip__arrow {
+      border-bottom-color: var(--au-border-color);
+
+      &::after {
+        border-bottom-color: var(--au-white);
+      }
+    }
+  }
+
+  &[data-tooltip-placement^="left"] {
+    .au-c-tooltip__arrow {
+      border-left-color: var(--au-border-color);
+
+      &::after {
+        border-left-color: var(--au-white);
+      }
+    }
   }
 }
