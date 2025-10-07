@@ -39,6 +39,7 @@ export default class NewsItemEditPanelComponent extends Component {
 
   get showBeingEditedByWarning() {
     return (
+      this.currentSession.may('manage-news-items') &&
       this.ensureNewsItem.isIdle &&
       this.newsItem.isBeingEditedBy?.id &&
       this.newsItem.isBeingEditedBy?.id != this.currentSession.user.id

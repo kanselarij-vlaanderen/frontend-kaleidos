@@ -26,6 +26,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   get showBeingEditedByWarning() {
     return (
+      this.currentSession.may('manage-news-items') &&
       !this.isEditing &&
       this.model &&
       this.model.isBeingEditedBy?.id &&
