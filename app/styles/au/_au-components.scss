@@ -900,7 +900,7 @@ $au-unit-medium: 1.6rem;
   padding: .6rem 1rem;
   background: var(--au-white);
 
-  color: var(--au-gray-900);
+  color: var(--au-text-color);
 
   &[data-tooltip-placement^="top"] {
     .au-c-tooltip__arrow {
@@ -942,3 +942,8 @@ $au-unit-medium: 1.6rem;
     }
   }
 }
+
+// REMARK: the styling below is commented for the time being as AuTooltip seems to have a possible bug regarding the large version
+// .au-c-tooltip--large {
+//   padding: 1.2rem 2rem;
+// }
