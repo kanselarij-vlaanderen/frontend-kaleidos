@@ -18,14 +18,16 @@
             </th>
             <th>
               {{t "publication-number"}}
-              {{#let (concat "tooltip-trigger-" (unique-id)) as |tooltipTriggerId|}}
-                <AuIcon @icon="circle-info" id={{tooltipTriggerId}} class="au-u-muted" />
-                <EmberTooltip @targetId={{tooltipTriggerId}} @tooltipClass="auk-tooltip" @side="bottom">
-                  <p>
-                    {{t "batch-document-publication-modal-publication-number-info"}}
-                  </p>
-                </EmberTooltip>
-              {{/let}}
+              <AuTooltip @placement="bottom" as |tooltip|>
+                <AuIcon
+                  {{tooltip.target}}
+                  @icon="circle-info"
+                  class="au-u-muted"
+                />
+                <tooltip.Content>
+                  {{t "batch-document-publication-modal-publication-number-info"}}
+                </tooltip.Content>
+              </AuTooltip>
             </th>
             <th />
           </tr>

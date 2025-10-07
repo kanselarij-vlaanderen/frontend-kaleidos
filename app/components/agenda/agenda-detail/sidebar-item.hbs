@@ -31,39 +31,45 @@
         {{#unless @agendaitem.aboutToDelete}}
           <div class="vlc-agenda-detail-sidebar__labels auk-o-flex--align-end">
             {{#if this.newsItem.inNewsletter}}
-              <AuPill
-                data-test-agenda-detail-sidebar-item-in-newsletter
-                @size="small"
-                @skin="border"
-                @icon="website"
-                @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
-              >
-                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+              <AuTooltip @placement="top" as |tooltip|>
+                <AuPill
+                  {{tooltip.target}}
+                  data-test-agenda-detail-sidebar-item-in-newsletter
+                  @size="small"
+                  @skin="border"
+                  @icon="website"
+                  @draft={{and @agendaitem.isDesignAgenda @agendaitem.formallyOkToShow @isNew}}
+                ></AuPill>
+                <tooltip.Content>
                   {{t "on-the-website"}}
-                </EmberTooltip>
-              </AuPill>
+                </tooltip.Content>
+              </AuTooltip>
             {{/if}}
             {{#if this.subcase.confidential}}
-              <AuPill
-                @size="small"
-                @skin="warning"
-                @icon="lock-closed"
-                data-test-agenda-detail-sidebar-item-confidential
-              >
-                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+              <AuTooltip @placement="top" as |tooltip|>
+                <AuPill
+                  {{tooltip.target}}
+                  @size="small"
+                  @skin="warning"
+                  @icon="lock-closed"
+                  data-test-agenda-detail-sidebar-item-confidential
+                ></AuPill>
+                <tooltip.Content>
                   {{t "limited-access"}}
-                </EmberTooltip>
-              </AuPill>
+                </tooltip.Content>
+              </AuTooltip>
             {{/if}}
 
             {{#if @showFormallyOkStatus}}
               {{!-- TODO: Needs to be replaced with AuPill component with 'blank' skin, but option is not available yet --}}
-              <div class="au-c-pill au-c-pill--blank au-c-pill--small" data-test-agenda-detail-sidebar-item-status-pill>
-                <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} class="{{if @agendaitem.formallyOkToShow.svg.color (concat "au-u-" @agendaitem.formallyOkToShow.svg.color)}}" />
-                <EmberTooltip @side="top-end" @tooltipClass="tooltip-custom">
+              <AuTooltip @placement="top" as |tooltip|>
+                <div {{tooltip.target}} class="au-c-pill au-c-pill--blank au-c-pill--small" data-test-agenda-detail-sidebar-item-status-pill>
+                  <AuIcon @icon={{@agendaitem.formallyOkToShow.svg.icon}} class="{{if @agendaitem.formallyOkToShow.svg.color (concat "au-u-" @agendaitem.formallyOkToShow.svg.color)}}" />
+                </div>
+                <tooltip.Content>
                   {{@agendaitem.formallyOkToShow.label}}
-                </EmberTooltip>
-              </div>
+                </tooltip.Content>
+              </AuTooltip>
             {{/if}}
           </div>
         {{/unless}}

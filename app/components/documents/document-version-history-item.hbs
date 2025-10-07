@@ -19,15 +19,18 @@
         {{/let}}
       </LinkTo>
     {{else}}
-      <h6
-        class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
-        data-test-vl-document-name
-      >
-        <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+      <AuTooltip @placement="bottom" as |tooltip|>
+        <h6
+          {{tooltip.target}}
+          class="auk-h4 auk-u-m-0 auk-u-mr-4 vlc-document-card-item__title-link"
+          data-test-vl-document-name
+        >
+          {{@piece.name}}
+        </h6>
+        <tooltip.Content>
           {{t "document-not-consultable"}}
-        </EmberTooltip>
-        {{@piece.name}}
-      </h6>
+        </tooltip.Content>
+      </AuTooltip>
     {{/if}}
     <div class="auk-o-flex auk-o-flex--spaced auk-o-flex--vertical-center"></div>
     <AccessLevelPill

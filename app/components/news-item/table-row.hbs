@@ -81,31 +81,33 @@
         </AuButton>
       {{/if}}
       {{#if this.loadNotaOrVisienota.isRunning}}
-        <div class="au-c-loader au-c-loader--small">
-          <div class="au-c-loader__animation" aria-hidden="true"></div>
-          <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+        <AuTooltip @placement="bottom" as |tooltip|>
+          <div {{tooltip.target}} class="au-c-loader au-c-loader--small">
+            <div class="au-c-loader__animation" aria-hidden="true"></div>
+          </div>
+          <tooltip.Content>
             {{t "nota-loading-text"}}
-          </EmberTooltip>
-        </div>
+          </tooltip.Content>
+        </AuTooltip>
       {{else}}
-        <Auk::Button
-          data-test-news-item-table-button-toolbar-open-nota
-          @skin="borderless"
-          @layout="icon-only"
-          @icon="document"
-          @disabled={{not this.notaOrVisieNota}}
-          {{on "click" this.openNota}}
-        >
-          <:floater>
-            <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
-              {{if
-                  this.notaOrVisieNota
-                  (t "open-note")
-                  (t "no-nota")
-              }}
-            </EmberTooltip>
-          </:floater>
-        </Auk::Button>
+        <AuTooltip @placement="bottom" as |tooltip|>
+          <Auk::Button
+            {{tooltip.target}}
+            data-test-news-item-table-button-toolbar-open-nota
+            @skin="borderless"
+            @layout="icon-only"
+            @icon="document"
+            @disabled={{not this.notaOrVisieNota}}
+            {{on "click" this.openNota}}
+          ></Auk::Button>
+          <tooltip.Content>
+            {{if
+              this.notaOrVisieNota
+              (t "open-note")
+              (t "no-nota")
+            }}
+          </tooltip.Content>
+        </AuTooltip>
       {{/if}}
       <AuLink
         data-test-news-item-table-button-toolbar-link-to-agendaitem

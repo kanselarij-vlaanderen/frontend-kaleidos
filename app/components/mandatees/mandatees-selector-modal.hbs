@@ -14,14 +14,16 @@
         >
           {{t "open-search-for-mandatee"}}
         </AuCheckbox>
-        {{#let (concat "tooltip-trigger-" (unique-id)) as |tooltipTriggerId|}}
-          <AuIcon @icon="circle-info" id={{tooltipTriggerId}} class="au-u-muted auk-u-ml" />
-          <EmberTooltip @targetId={{tooltipTriggerId}} @tooltipClass="auk-tooltip" @side="bottom">
-            <p>
-              {{t "open-search-for-mandatee-tooltip"}}
-            </p>
-          </EmberTooltip>
-        {{/let}}
+        <AuTooltip @placement="bottom" as |tooltip|>
+          <AuIcon
+            {{tooltip.target}}
+            @icon="circle-info"
+            class="au-u-muted auk-u-ml"
+          />
+          <tooltip.Content>
+            {{t "open-search-for-mandatee-tooltip"}}
+          </tooltip.Content>
+        </AuTooltip>
       </div>
     {{/if}}
     <Utils::LoadableContent

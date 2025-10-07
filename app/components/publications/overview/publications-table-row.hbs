@@ -52,23 +52,18 @@ request the whole row and not only the arrow at the end to be clickable }}
   {{#if @tableColumnDisplayOptions.remark}}
     <td class="auk-u-text-align--center">
       {{#if @publicationFlow.remark}}
-        <Auk::ButtonLink
-          @layout="icon-only"
-          @icon="comment"
-          @skin="muted"
-          class="auk-u-inline"
-        >
-          <:floater>
-            <EmberTooltip
-              @tooltipClass="auk-tooltip"
-              @side="left"
-            >
-              <p>
-                {{@publicationFlow.remark}}
-              </p>
-            </EmberTooltip>
-          </:floater>
-        </Auk::ButtonLink>
+        <AuTooltip @placement="left" as |tooltip|>
+          <Auk::ButtonLink
+            {{tooltip.target}}
+            @layout="icon-only"
+            @icon="comment"
+            @skin="muted"
+            class="auk-u-inline"
+          ></Auk::ButtonLink>
+          <tooltip.Content>
+            {{@publicationFlow.remark}}
+          </tooltip.Content>
+        </AuTooltip>
       {{else}}
         {{t "dash"}}
       {{/if}}
