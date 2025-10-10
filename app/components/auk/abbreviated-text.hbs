@@ -6,13 +6,15 @@
       {{this.abbreviatedText}}
     {{/if}}
     <AuTooltip @placement="bottom" as |tooltip|>
-      <Auk::ButtonLink
+      <AuLink
         {{tooltip.target}}
+        @skin="secondary"
         @icon="circle-three-dots"
-        @skin="muted"
-        @layout="icon-only"
-        class="auk-o-flex--vertical-center"
-      ></Auk::ButtonLink>
+        @hideText={{true}}
+        class="au-u-margin-left-tiny"
+      >
+        {{t "show-full-text"}}
+      </AuLink>
       <tooltip.Content>
         {{@text}}
       </tooltip.Content>

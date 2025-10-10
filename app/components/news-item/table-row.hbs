@@ -91,15 +91,21 @@
         </AuTooltip>
       {{else}}
         <AuTooltip @placement="bottom" as |tooltip|>
-          <Auk::Button
+          <AuButton
             {{tooltip.target}}
-            data-test-news-item-table-button-toolbar-open-nota
-            @skin="borderless"
-            @layout="icon-only"
+            @skin="naked"
             @icon="document"
+            @hideText={{true}}
             @disabled={{not this.notaOrVisieNota}}
             {{on "click" this.openNota}}
-          ></Auk::Button>
+            data-test-news-item-table-button-toolbar-open-nota
+          >
+            {{if
+              this.notaOrVisieNota
+              (t "open-note")
+              (t "no-nota")
+            }}
+          </AuButton>
           <tooltip.Content>
             {{if
               this.notaOrVisieNota

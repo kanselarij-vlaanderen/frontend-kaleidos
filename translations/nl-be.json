@@ -360,6 +360,7 @@
   "show-as-remark": "Dit is een mededeling",
   "show-piece": "Viewer",
   "show-pieces": "Toon versies",
+  "show-remark": "Toon opmerking",
   "show-remarks": "Toon opmerkingen",
   "sign-out": "Afmelden",
   "signed-decision-add": "Beslissingsfiche uploaden",
@@ -1545,5 +1546,7 @@
   "action-cannot-be-undone": "Deze actie kan niet ongedaan gemaakt worden.",
   "dont-close-the-page": "Gelieve de pagina niet te sluiten.",
   "delete-subcase-and-restore-submission": "Procedurestap verwijderen en indiening behouden",
-  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\"."
+  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\".",
+  "show-full-text": "Toon volledige tekst",
+  "show-information": "Toon informatie"
 }

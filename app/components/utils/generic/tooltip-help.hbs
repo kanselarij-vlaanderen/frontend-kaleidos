@@ -1,12 +1,13 @@
 <AuTooltip @placement="{{this.position}}" as |tooltip|>
-  <Auk::ButtonLink
+  <AuLink
     {{tooltip.target}}
-    @layout="icon-only"
+    @skin="secondary"
     @icon="circle-info"
-    @skin="muted"
-    class="auk-u-inline auk-m-l"
+    @hideText={{true}}
     ...attributes
-  ></Auk::ButtonLink>
+  >
+    {{t "show-information"}}
+  </AuLink>
   <tooltip.Content>
     {{yield}}
   </tooltip.Content>

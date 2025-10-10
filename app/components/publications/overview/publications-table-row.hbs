@@ -53,14 +53,15 @@ request the whole row and not only the arrow at the end to be clickable }}
     <td class="auk-u-text-align--center">
       {{#if @publicationFlow.remark}}
         <AuTooltip @placement="left" as |tooltip|>
-          <Auk::ButtonLink
+          <AuLink
             {{tooltip.target}}
-            @layout="icon-only"
+            @skin="secondary"
             @icon="comment"
-            @skin="muted"
-            class="auk-u-inline"
+            @hideText={{true}}
             data-test-publication-table-row-remark
-          ></Auk::ButtonLink>
+          >
+            {{t "show-remark"}}
+          </AuLink>
           <tooltip.Content>
             {{@publicationFlow.remark}}
           </tooltip.Content>
