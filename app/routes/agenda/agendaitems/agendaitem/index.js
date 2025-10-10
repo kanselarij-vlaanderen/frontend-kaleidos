@@ -1,8 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import CONSTANTS from 'frontend-kaleidos/config/constants';
+const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
 
 export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
   @service store;
+  @service agendaService;
+  @service currentSession;
 
   model() {
     const agendaItem = this.modelFor('agenda.agendaitems.agendaitem');
@@ -36,6 +40,12 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.decisionActivity = await agendaItemTreatment?.decisionActivity;
     await this.decisionActivity?.belongsTo('decisionResultCode').reload();
     await this.decisionActivity?.secretary;
+    if (!this.decisionActivity?.uri && this.currentSession.may('view-documents-before-release')) {
+     // get the preliminary decisionResultCode. Will only return something when postponed or retracted
+     const decisionActivityResultCode = await this.agendaService.getPreliminaryDecisionResultCode(model);
+     this.isPreliminaryPostponed = (decisionActivityResultCode?.uri == UITGESTELD);
+     this.isPreliminaryRetracted = (decisionActivityResultCode?.uri == INGETROKKEN);
+   }
     // When routing here from agenda overview with stale data, we need to reload several relations
     // The reload in model refreshes only the attributes and includes relations, makes saves with stale relation data possible
     await model.hasMany('mandatees').reload();
@@ -58,5 +68,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     controller.mandatees = this.mandatees;
     controller.submitter = this.submitter;
     controller.decisionActivity = this.decisionActivity;
+    controller.isPreliminaryPostponed = this.isPreliminaryPostponed;
+    controller.isPreliminaryRetracted = this.isPreliminaryRetracted;
   }
 }
