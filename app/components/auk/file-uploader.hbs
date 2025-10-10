@@ -38,7 +38,7 @@
           {{on "click" this.clickInput}}
           {{on "key-up" this.clickInputOnEnter}}
         >
-          {{t "upload-files" numFiles=(if @multiple "multiple" "one")}}
+          {{t "upload-files" numFiles=(if @multiple "multiple" "1")}} 
         </AuButton>
       {{else if this.uploadIsRunning}}
         {{t "uploading-files" numFiles=this.fileQueue.files.length}}
@@ -59,7 +59,7 @@
         {{#if dropzone.active}}
           {{t "drop-text"}}
         {{else if dropzone.supported}}
-          {{t "drag-or-click-for-upload" numFiles=(if @multiple "many" "one")}}
+          {{t "drag-or-click-for-upload" numFiles=(if @multiple "many" "1")}}
         {{/if}}
       </p>
     {{/if}}

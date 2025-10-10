@@ -38,7 +38,7 @@ export default class SignaturesRatificationsController extends Controller {
   @tracked sortSignaturesRatifications = DEFAULT_SORT_OPTIONS.join(`,`);
   @tracked sortField;
 
-  signers = [];
+  @tracked signers = new TrackedArray([]);
 
   queryParams = [
     { sizeSignaturesRatifications: { type: 'number' } },
@@ -63,6 +63,18 @@ export default class SignaturesRatificationsController extends Controller {
   get isSelectedSomeItems() {
     return this.model.some((signFlow) => this.selectedSignFlows.indexOf(signFlow) >= 0);
   }
+
+  allSignersHaveEmail = trackedFunction(this, async () => {
+    for (const signer of this.signers) {
+      const person = await signer.person;
+      const user = await person?.user;
+      if (!user?.email) {
+        return false;
+      }
+    }
+
+    return true;
+  });
 
   @action
   selectAll() {
@@ -172,12 +184,12 @@ export default class SignaturesRatificationsController extends Controller {
     this.agenda = null;
     this.agendaitem = null;
     this.decisionActivityOrMeeting = null;
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
   }
 
   clearSidebarContentMultiItem() {
     this.selectedSignFlows = new TrackedArray([]);
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
   }
 
   @action
@@ -189,13 +201,13 @@ export default class SignaturesRatificationsController extends Controller {
     [this.meeting, this.agenda, this.agendaitem] =
       await this.getAgendaRouteModels(this.piece);
     this.decisionActivityOrMeeting = await this.getDecisionActivityOrMeeting(signFlow);
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
     this.showSidebar = true;
   }
 
   @action
   async openSidebarMultiItem() {
-    this.signers = [];
+    this.signers  = new TrackedArray([]);
     this.showSidebar = true;
   }
 

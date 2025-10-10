@@ -100,6 +100,17 @@ export default class DraftSubmissionService extends Service {
     return creationActivity ? true : false;
   };
 
+  getTreatedStatus = async(submission) => {
+    const statusChangeActivities = await this.getStatusChangeActivities(submission);
+    const treatedActivity = statusChangeActivities
+      ?.filter(
+        (a) =>
+          a.status.get('uri') === CONSTANTS.SUBMISSION_STATUSES.BEHANDELD
+      )
+      .at(0);
+    return treatedActivity;
+  };
+
   getAllSubmissionsForSubcase = async(subcase) => {
     const allSubmissions = await this.store.query('submission', {
       'filter[subcase][:id:]': subcase.id,
@@ -145,7 +156,17 @@ export default class DraftSubmissionService extends Service {
         }
         // pieces may be propagated because of pav:previousVersion between piece on approved agenda and accepted piece on draft agenda
         // in that case we should check if the submissionActivity exists, that only gets propagated with approved agendas
-        const submissionActivity = await actualPiece.submissionActivity;
+        const submissionActivity = await this.store.queryOne(
+          'submission-activity',
+          {
+            filter: {
+              pieces: {
+                ':id:': actualPiece?.id,
+              },
+            },
+            sort: '-start-date',
+          },
+        );
         if (!submissionActivity) {
           return false;
         }

@@ -162,7 +162,7 @@ export default class DocumentsDocumentCardEditModalComponent extends Component {
       // reload after the possible oldFile.save happened
       const fileToDestroy = await this.args.piece.file;
       this.args.piece.file = this.replacementSourceFile;
-      await fileToDestroy.destroyRecord();
+      await fileToDestroy?.destroyRecord();
       try {
         await this.fileConversionService.convertSourceFile(
           this.replacementSourceFile

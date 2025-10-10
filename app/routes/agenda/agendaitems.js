@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import search from 'frontend-kaleidos/utils/mu-search';
-import { animationFrame } from 'ember-concurrency';
+import { animationFrame, didCancel } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class AgendaAgendaitemsRoute extends Route {
@@ -23,6 +23,7 @@ export default class AgendaAgendaitemsRoute extends Route {
 
   @service agendaService;
   @service store;
+  @service throttledLoadingService;
 
   async model(params) {
     const {
@@ -116,8 +117,15 @@ export default class AgendaAgendaitemsRoute extends Route {
       // Documents are only shown in agendaitems overview and not in agendaitems sidebar
       promises.push(controller.loadDocuments.perform());
     }
-    await Promise.all(promises);
-
+    try {
+      await Promise.all(promises);
+    } catch (error) {
+      if (!didCancel(error)) {
+        // tasks may be cancelled to reduce excessive loads and incorrect data viewed
+        // re-throw the non-cancelation error
+        throw error;
+      }
+    }
     await animationFrame(); // make sure rendering has happened before trying to scroll
     controller.scrollToAnchor();
   }
@@ -126,6 +134,11 @@ export default class AgendaAgendaitemsRoute extends Route {
     if (isExiting) {
       // isExiting would be false if only the route's model was changing
       controller.set('filter', null);
+      // cancel the task to group notas to prevent this task from completing with incorrect notas
+      // when rapidly switching to an agenda with 0 notas
+      controller.groupNotasOnGroupName.cancelAll();
+      controller.loadDocuments.cancelAll();
+      this.throttledLoadingService.loadPieces.cancelAll(); // loadDocuments task started a lot of these
     }
   }
 

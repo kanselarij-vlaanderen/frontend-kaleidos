@@ -65,8 +65,6 @@ export default class Piece extends Model {
   // resources with pieces linked:
 
   @belongsTo('draft-piece', { inverse: 'acceptedPiece', async: true, as: 'draft-piece' }) draftPiece;
-  @belongsTo('submission-activity', { inverse: 'pieces', async: true, as: 'piece' })
-  submissionActivity;
   @belongsTo('meeting', { inverse: 'pieces', async: true, as: 'piece' }) meeting;
   @belongsTo('publication-flow', { inverse: 'referenceDocuments', async: true, as: 'piece' })
   publicationFlow;
@@ -115,6 +113,12 @@ export default class Piece extends Model {
     as: 'piece',
   })
   retrievedPieces;
+  @hasMany('submission-activity', {
+    inverse: 'pieces',
+    async: true,
+    as: 'piece'
+  })
+  submissionActivities;
 
   get viewDocumentURL() {
     return `/document/${this.id}`;

@@ -6,6 +6,9 @@ services:
       - default
     build: ../.
     user: ${HOST_UID_GID}
+  identifier:
+    environment:
+      SESSION_COOKIE_SECURE: "false"
   elasticsearch:
     volumes:
       - /usr/share/elasticsearch/data

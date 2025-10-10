@@ -2,8 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, all } from 'ember-concurrency';
-import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -27,6 +26,7 @@ export default class AgendaitemControls extends Component {
   @service newsletterService;
   @service cabinetMail;
   @service draftSubmissionService;
+  @service subcaseService;
 
   @tracked isVerifying = false;
   @tracked isVerifyingSendBack = false;
@@ -216,29 +216,7 @@ export default class AgendaitemControls extends Component {
     // If decisionmaking flow & case are new & they don't have other subcases
     //  → Delete
     const subcase = await submission.subcase; // could this ever be stale? get subcase from agendaitem instead?
-    if (submission.decisionmakingFlowTitle) {
-      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
-      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
-      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
-        const _case = await decisionmakingFlow.case;
-        await _case.destroyRecord();
-        await decisionmakingFlow.destroyRecord();
-      }
-    }
-    // Delete subcase
-    await subcase.destroyRecord();
-    // Delete submission activity
-    const submissionActivities = await submission.submissionActivities;
-    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
-    // submission still has acceptedPieces connected to draftPieces, but are we always allowed to delete the acceptedpieces?
-    const acceptedPiecesOfSubmission = await this.store.queryAll('piece', {
-      'filter[draft-piece][submission][:id:]': submission.id,
-    });
-
-    const savePromises = acceptedPiecesOfSubmission.map(async (piece) => {
-      await deletePiece(piece, false);
-    });
-    await all(savePromises);
+    await this.subcaseService.deleteSubcaseFullyForSubmission(subcase, submission);
 
     if (this.args.onDeleteAgendaitem) {
       await this.args.onDeleteAgendaitem(agendaItemType, previousNumber);
