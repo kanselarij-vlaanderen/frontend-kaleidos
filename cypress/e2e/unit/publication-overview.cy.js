@@ -125,18 +125,18 @@ context('Publications overview tests', () => {
     cy.get(publication.publicationHeader.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
       .parent()
-      .find(dependency.emberTooltip.target)
+      .find(publication.publicationTableRow.row.remark)
       .trigger('mouseenter');
-    cy.get(dependency.emberTooltip.inner).should('be.visible')
+    cy.get(appuniversum.tooltip).should('be.visible')
       .should('contain', 'end');
     // test in overview table
     cy.get(publication.publicationNav.goBack).click();
     cy.get(publication.publicationTableRow.row.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
       .parent()
-      .find(dependency.emberTooltip.target)
+      .find(publication.publicationTableRow.row.remark)
       .trigger('mouseenter');
-    cy.get(dependency.emberTooltip.inner).should('be.visible')
+    cy.get(appuniversum.tooltip).should('be.visible')
       .should('contain', 'end');
   });
 

@@ -22,5 +22,6 @@ const selectors = {
   icon: {
     warning: '.au-c-icon.au-u-warning',
   },
+  tooltip: 'au-c-tooltip',
 };
 export default selectors;
