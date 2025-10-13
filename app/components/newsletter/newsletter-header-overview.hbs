@@ -183,26 +183,57 @@
 <ConfirmationModal
   @modalOpen={{this.showConfirmPublishMail}}
   @title={{t "send-newsitem-to-mail"}}
-  @message={{t "send-newsitem-to-mail-verification"}}
   @onConfirm={{perform this.publishToMail}}
   @onCancel={{this.cancelPublishMail}}
   @confirmMessage={{t "send-newsitem-to-mail"}}
   @loading={{this.publishToMail.isRunning}}
-  @disabled={{this.publishToMail.isRunning}}
-/>
+  @disabled={{this.disableConfirm}}
+>
+  <:body>
+  {{#if this.messageOnConfirm}}
+    <AuAlert
+      @title={{t "warning-title"}}
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      <p>{{this.messageOnConfirm}}</p>
+    </AuAlert>
+  {{else}}
+    {{t "send-newsitem-to-mail-verification"}}
+  {{/if}}
+  </:body>
+</ConfirmationModal>
+
 <ConfirmationModal
   @modalOpen={{this.showConfirmPublishBelga}}
   @title={{t "send-newsitem-to-belga"}}
-  @message={{t "send-newsitem-to-belga-verification"}}
   @onConfirm={{perform this.publishToBelga}}
   @onCancel={{this.cancelPublishBelga}}
   @confirmMessage={{t "send-newsitem-to-belga"}}
   @loading={{this.publishToBelga.isRunning}}
-  @disabled={{this.publishToBelga.isRunning}}
-/>
+  @disabled={{this.disableConfirm}}
+>
+  <:body>
+  {{#if this.messageOnConfirm}}
+    <AuAlert
+      @title={{t "warning-title"}}
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      <p>{{this.messageOnConfirm}}</p>
+    </AuAlert>
+  {{else}}
+    {{t "send-newsitem-to-belga-verification"}}
+  {{/if}}
+  </:body>
+</ConfirmationModal>
+
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
     @scope={{this.themisPublicationScopes}}
+    @warningMessage={{this.messageOnConfirm}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
@@ -217,6 +248,7 @@
   <ThemisPublications::PublishConfirmationModal
     @title={{t "send-newsitem-to-all"}}
     @scope={{this.themisPublicationScopes}}
+    @warningMessage={{this.messageOnConfirm}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
   />

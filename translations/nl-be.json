@@ -1545,5 +1545,8 @@
   "action-cannot-be-undone": "Deze actie kan niet ongedaan gemaakt worden.",
   "dont-close-the-page": "Gelieve de pagina niet te sluiten.",
   "delete-subcase-and-restore-submission": "Procedurestap verwijderen en indiening behouden",
-  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\"."
+  "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\".",
+  "newsletter-nothing-to-send": "Er zijn geen agendapunten of mededelingen gevonden 'in kort bestek' met een thema",
+  "newsletter-only-announcements-to-send": "U staat op het punt om enkel mededelingen te publiceren",
+  "publish-anyway": "Toch publiceren"
 }

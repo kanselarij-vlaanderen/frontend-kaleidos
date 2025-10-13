@@ -27,11 +27,15 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @tracked showConfirmPublishThemis = false;
   @tracked showConfirmUnpublishThemis = false;
   @tracked showConfirmPublishMail = false;
+  @tracked notaWithThemeCount;
+  @tracked announcementWithThemeCount;
+  @tracked messageOnConfirm;
 
   constructor() {
     super(...arguments);
     this.loadMailCampaign.perform();
     this.loadLatestPublicationActivity.perform();
+    this.calculateTotals.perform();
   }
 
   // Scope of the Themis publication from the newsletter-side depends on the most recent publication.
@@ -61,6 +65,42 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       'filter[status][:uri:]': CONSTANTS.RELEASE_STATUSES.RELEASED,
       sort: '-start-date',
     });
+  }
+
+  calculateTotals = task(async () => {
+    const agenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': this.args.meeting.id,
+      sort: '-created', // serialnumber
+    });
+    this.notaWithThemeCount = (await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.NOTA));
+    this.announcementWithThemeCount = (await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT));
+    this.messageOnConfirm = '';
+    if (this.notaWithThemeCount === 0) {
+      if (this.announcementWithThemeCount === 0) {
+        this.messageOnConfirm = this.intl.t('newsletter-nothing-to-send');
+        return;
+      }
+      this.messageOnConfirm = this.intl.t('newsletter-only-announcements-to-send');
+      return;
+    }
+  })
+
+  countNewsItemsWithValidTheme = async(agenda, agendaitemType) => {
+    return await this.store.count('news-item', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+      'filter[agenda-item-treatment][agendaitems][type][:uri:]': agendaitemType,
+      'filter[:has:themes]': true,
+      'filter[in-newsletter]': true,
+      'filter[themes][:has:mailchimp-id]': true, // has mailchimp thema
+    });
+  }
+
+  get disableConfirm() {
+    return this.calculateTotals.isRunning ||
+    (this.notaWithThemeCount == 0 && this.announcementWithThemeCount == 0) ||
+    this.publishToAll.isRunning ||
+    this.publishToBelga.isRunning ||
+    this.publishToMail.isRunning;
   }
 
   get shouldShowPrintButton() {
@@ -123,7 +163,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     } catch(e) {
       console.log(e);
       this.toaster.error(
-        this.intl.t('error-send-belga'),
+        `${this.intl.t('error-send-belga')}. ${e.message}`,
         this.intl.t('warning-title')
       );
     }
@@ -184,6 +224,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     // Although belga is independent of mailchimp, if there is no valid campaign we should maybe avoid sending belga
     // Specific example: no newsletters (for notes) present! we need at least one note to avoid an empty mail/belga
     // A different example is a note without themes, valid for belga but not for mailchimp (no recipients)
+    // Belga will now throw an error when attempting to send without any newsitems
     yield this.publishToBelga.perform();
     if (this.currentSession.may('manage-themis-publications')) {
       yield this.publishThemis.perform(scope);
@@ -203,14 +244,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     const themisPublicationActivity = themisPublicationActivities.find((activity) => activity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.DOCUMENTS));
 
     const hasDocumentPublicationPlanned = isPresent(themisPublicationActivity?.plannedDate);
-    const hasNotasWithThemes = (await this.store.count('news-item', {
-      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
-      'filter[agenda-item-treatment][agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
-      'filter[:has:themes]': true,
-      'filter[in-newsletter]': true,
-    })) > 0;
-
-    return hasDocumentPublicationPlanned && hasNotasWithThemes;
+    const hasNotasWithThemes = await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.NOTA) > 0;
+    const hasAnnouncementsWithThemes = await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) > 0;
+    return hasDocumentPublicationPlanned && (hasNotasWithThemes || hasAnnouncementsWithThemes);
   }
 
   async validateMailCampaign() {
@@ -292,6 +328,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @action
   openConfirmPublishAll() {
+    this.calculateTotals.perform();
     this.showConfirmPublishAll = true;
   }
 
@@ -302,6 +339,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @action
   openConfirmPublishMail() {
+    this.calculateTotals.perform();
     this.showConfirmPublishMail = true;
   }
 
@@ -312,6 +350,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @action
   openConfirmPublishBelga() {
+    this.calculateTotals.perform();
     this.showConfirmPublishBelga = true;
   }
 
@@ -322,6 +361,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
 
   @action
   openConfirmPublishThemis() {
+    this.calculateTotals.perform();
     this.showConfirmPublishThemis = true;
   }
 
