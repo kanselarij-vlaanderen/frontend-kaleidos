@@ -23,9 +23,9 @@ function checkCSS(row) {
   cy.get(row).find('em')
     .should('have.css', 'font-style', 'italic');
   cy.get(row).find('u')
-    .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
+    .should('have.css', 'text-decoration', 'underline solid rgb(51, 51, 50)'); // This color value has already been updated to the 'appuniversum' equivalent
   cy.get(row).find('del')
-    .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+    .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)'); // This color value is still the orginal 'auk' value (but will be refactored in the near future)
   cy.get(row).find('sub')
     .should('have.css', 'vertical-align', 'sub');
   cy.get(row).find('sup')
