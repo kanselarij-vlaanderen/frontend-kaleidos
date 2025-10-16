@@ -128,7 +128,13 @@
       @skin="warning"
       @icon="alert-triangle"
     >
-      <p>{{t "send-back-to-submitter-message"}}</p>
+      <p>
+        {{#if (is-nota @agendaitem.type)}}
+          {{t "send-back-to-submitter-keep-newsitem-message"}}
+        {{else}}
+          {{t "send-back-to-submitter-message"}}
+        {{/if}}
+      </p>
     </AuAlert>
     <div class="au-c-form">
       <AuFormRow>

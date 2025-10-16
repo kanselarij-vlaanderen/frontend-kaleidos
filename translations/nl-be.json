@@ -1438,6 +1438,7 @@
   "accept-update-and-put-on-agenda": "Aanvaard update en agendeer",
   "send-back-to-submitter": "Stuur terug naar indiener",
   "send-back-to-submitter-message": "Bij terugsturen zal dit agendapunt volledig verwijderd worden. Hierbij gaan ook de beslissing en het kort bestek verloren!",
+  "send-back-to-submitter-keep-newsitem-message": "Bij terugsturen zal dit agendapunt volledig verwijderd worden. De beslissingsfiche en het kort bestek zullen worden bijgehouden en hersteld bij het heragenderen van de indiening",
   "delete-submission": "Verwijder indiening",
   "this-submission-is-being-treated-by-user": "Deze indiening is in behandeling genomen door {user}",
   "resubmit-submission": "Dien opnieuw in",
