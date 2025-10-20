@@ -28,6 +28,7 @@
     </AuLink>
   {{else if this.decisionPublicationActivity.startDate}}
     <AuLink
+      data-test-agenda-actions-navigate-to-newsletter
       @route="newsletter.print"
       @model={{@meeting.id}}
       role="menuitem"
