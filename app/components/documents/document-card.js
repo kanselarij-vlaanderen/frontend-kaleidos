@@ -45,6 +45,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
   @tracked isEditingPiece = false;
+  @tracked isAddingSignedPiece = false;
 
   @tracked piece;
   @tracked documentContainer;
@@ -112,6 +113,19 @@ export default class DocumentsDocumentCardComponent extends Component {
         (!this.args.agendaitem && this.args.decisionActivity) ||
         (!this.args.agendaitem && !this.args.decisionActivity && this.args.meeting)
       )
+    );
+  }
+
+  /**
+   * see if the user may add a signed piece (by replacing the current pdf by a signed one)
+   * Afterwards we will trigger the strip/flatten features on that new pdf
+   */
+  get mayAddSignedPiece() {
+    return (
+      !this.signMarkingActivity &&
+      this.args.piece.constructor.modelName === 'piece' && // action only works on pieces, not subclasses
+      // !this.piece.signedPiece?.get('id') && // Only allow upload if no signed piece exists yet
+      this.currentSession.may('add-signed-piece')
     );
   }
 
@@ -476,6 +490,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   async saveAccessLevel() {
     await this.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
     await this.piece.save();
+    await this.pieceAccessLevelService.updateSignedPieceAccessLevels(this.piece);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(this.piece);
     if (this.hasConfidentialityChanged && this.args.onChangeConfidentiality) {
       await this.args?.onChangeConfidentiality();
@@ -493,6 +508,7 @@ export default class DocumentsDocumentCardComponent extends Component {
   @action
   async saveAccessLevelOfPiece(piece) {
     await piece.save();
+    await this.pieceAccessLevelService.updateSignedPieceAccessLevels(piece);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
   }
 
@@ -510,5 +526,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   async cancelEditPiece() {
     await this.loadPieceRelatedData.perform();
     this.isEditingPiece = false;
+  }
+
+  cancelAddSignedPiece = async() => {
+    await this.loadPieceRelatedData.perform();
+    this.isAddingSignedPiece = false;
   }
 }

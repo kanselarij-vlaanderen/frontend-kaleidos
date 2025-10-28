@@ -110,7 +110,7 @@ export default class CasesCaseSubcasesSubcaseIndexRoute extends Route {
 
     // show accepted but not propagated pieces as "new"
     this.piecesNotOnAgenda = await this.store.queryAll('piece', {
-      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[submission-activities][subcase][:id:]': subcase.id,
       'filter[:has-no:agendaitems]': true,
     });
   }

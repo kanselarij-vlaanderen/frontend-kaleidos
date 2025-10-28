@@ -1,6 +1,7 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class NewsletterService extends Service {
   @service store;
@@ -26,18 +27,20 @@ export default class NewsletterService extends Service {
       },
       body: JSON.stringify(body),
     });
-    const result = await response.json();
-    if (!response.ok) {
+    try {
+      const result = await getJsonPayloadOrThrow(response);
+      const mailCampaign = this.store.findRecord('mail-campaign', result.data.id);
+      return mailCampaign;
+    } catch (error) {
       if (!silent) {
+        const message = error?.message ? `: ${error?.message}` : '';
         this.toaster.error(
-          this.intl.t('error-create-newsletter'),
+          this.intl.t('error-create-newsletter') + message,
           this.intl.t('warning-title')
         );
       }
-      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
+      throw error;
     }
-    const mailCampaign = this.store.findRecord('mail-campaign', result.data.id);
-    return mailCampaign;
   }
 
   async sendMailCampaign(id) {
@@ -49,12 +52,12 @@ export default class NewsletterService extends Service {
       },
     });
     if (!response.ok) {
+      // TODO are showing we these toasts twice if we throw here? looks like it
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
-      const result = await response.json();
-      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
+      await getJsonPayloadOrThrow(response);
     }
   }
 
@@ -77,15 +80,15 @@ export default class NewsletterService extends Service {
       },
       body: JSON.stringify(body),
     });
-    const result = await response.json();
-    if (!response.ok) {
+    try {
+      const result = await getJsonPayloadOrThrow(response);
+      return result;
+    } catch (error) {
       this.toaster.error(
         this.intl.t('error-send-belga'),
         this.intl.t('warning-title')
       );
-      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
-    } else {
-      return result;
+      throw error;
     }
   }
 
@@ -97,15 +100,15 @@ export default class NewsletterService extends Service {
         'Content-Type': 'application/vnd.api+json',
       },
     });
-    const result = await response.json();
-    if (!response.ok) {
+    try {
+      const result = await getJsonPayloadOrThrow(response);
+      return result.data;
+    } catch (error) {
       this.toaster.error(
         this.intl.t('error-send-newsletter'),
         this.intl.t('warning-title')
       );
-      throw new Error('An exception ocurred: ' + JSON.stringify(result.errors));
-    } else {
-      return result.data;
+      throw error;
     }
   }
 
@@ -130,7 +133,7 @@ export default class NewsletterService extends Service {
     const agendaItemType = await agendaitem.type;
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
       const content = agendaitem.title;
-      const contentWithBreaks = content.replace(/\n/g, '<br />');
+      const contentWithBreaks = content?.replace(/\n/g, '<br />');
       news.title = agendaitem.shortTitle || content;
       news.htmlContent = contentWithBreaks;
       news.finished = true;

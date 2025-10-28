@@ -3,6 +3,7 @@ import fetch from 'fetch';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 import { all } from 'ember-concurrency';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class DocumentService extends Service {
   @service jobMonitor;
@@ -41,14 +42,9 @@ export default class DocumentService extends Service {
     });
     let data;
     try {
-      data = await response.json();
+      data = await getJsonPayloadOrThrow(response);
     } catch(error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down.
-      if (error instanceof SyntaxError) {
-        data = `Backend response contained an error (status: ${response.status})`
-      }
+      data = error.message;
     }
     if (response.ok && data) {
       if (data.message) {
@@ -57,7 +53,7 @@ export default class DocumentService extends Service {
           const stampingToaster = this.toaster.loading(data.message, null, {
             timeOut: 60000,
           });
-          await this.handleStampingErrors(stampingJob, stampingToaster);
+          await this.handleStampingErrors(stampingJob, stampingToaster, pieceIds.length > 1);
         } else {
           this.toaster.warning(data.message, null, {
             timeOut: 5000,
@@ -86,14 +82,9 @@ export default class DocumentService extends Service {
     );
     let data;
     try {
-      data = await response.json();
+      data = await getJsonPayloadOrThrow(response);
     } catch(error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down.
-      if (error instanceof SyntaxError) {
-        data = `Backend response contained an error (status: ${response.status})`
-      }
+      data = error.message;
     }
     if (response.ok && data) {
       if (data.message) {
@@ -139,10 +130,7 @@ export default class DocumentService extends Service {
         }),
       }
     );
-    const json = await response.json();
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     // TODO: this only deals with successful jobs, we need to handle errors as well
     if (json?.data?.id) {
       const job = await this.store.findRecord('job', json.data.id);
@@ -181,10 +169,7 @@ export default class DocumentService extends Service {
         headers: { 'Accept': 'application/vnd.api+json' },
       }
     );
-    const json = await response.json();
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     if (json?.data?.id) {
       const file = await this.store.findRecord('file', json.data.id);
       return file;
@@ -193,14 +178,19 @@ export default class DocumentService extends Service {
     }
   }
 
-  async handleStampingErrors(job, toasterToClose) {
+  async handleStampingErrors(job, toasterToClose, multiplePieces = true) {
     await this.jobMonitor.register(job, async (job) => {
       setTimeout(() => {
         this.toaster.close(toasterToClose);
       }, 2000);
       if (job.status === job.SUCCESS) {
+        this.toaster.close(toasterToClose);
         this.toaster.success(
-          this.intl.t('succes-stamping-documents'),
+          this.intl.t(
+            multiplePieces
+              ? 'success-stamping-documents'
+              : 'success-stamping-single-document',
+          ),
         );
       } else {
         this.toaster.show(CopyErrorToClipboardToast, {
@@ -234,5 +224,36 @@ export default class DocumentService extends Service {
       }
     }
     return false;
+  }
+
+  // PDF-signature-remover service
+
+  async triggerSignatureRemoval(piece) {
+    const loadingToast = this.toaster.loading(
+      this.intl.t('strip-signature-loading-message'),
+      null,
+      {
+        timeOut: 10 * 60 * 1000,
+      },
+    );
+    const response = await fetch(
+      `/pdf-signature-remover/pieces/${piece.id}/strip`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/vnd.api+json',
+        },
+      },
+    );
+    try {
+      this.toaster.close(loadingToast);
+      await getJsonPayloadOrThrow(response);
+      this.toaster.success(this.intl.t('strip-signature-success-message'));
+    } catch (error) {
+      const message = error?.message ? `: ${error?.message}` : '';
+      throw new Error(
+        this.intl.t('strip-signature-error-message') + `${message}`,
+      );
+    }
   }
 }

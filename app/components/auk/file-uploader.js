@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { enqueueTask } from 'ember-concurrency';
 import { isEnabledCabinetSubmissions } from '../../utils/feature-flag';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 /**
  * @argument {Boolean} fullHeight Stretch the upload zone over the full height
@@ -69,13 +70,14 @@ export default class FileUploader extends Component {
         file.name = originalName.slice(0, uppercasePDFIndex) + '.pdf';
       }
       this.args.onQueueUpdate?.(this.queueInfo);
-      let response;
+      let body;
       try {
-        response = yield file.upload(
+        const response = yield file.upload(
           (this.args.isSubmission && isEnabledCabinetSubmissions())
             ? '/draft-files'
             : '/files'
         );
+        body = yield getJsonPayloadOrThrow(response);
       } catch (error) {
         this.toaster.error(
           this.intl.t('could-not-upload-file', {name: file.name, error: error.message}),
@@ -85,7 +87,6 @@ export default class FileUploader extends Component {
         this.fileQueue.remove(file);
         throw error;
       }
-      const body = yield response.json();
       const fileFromStore = yield this.store.findRecord(
         (this.args.isSubmission && isEnabledCabinetSubmissions())
           ? 'draft-file'

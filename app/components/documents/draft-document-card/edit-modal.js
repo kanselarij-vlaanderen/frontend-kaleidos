@@ -11,28 +11,16 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
    * @param {Function} onSave: the action to execute after saving changes
    * @param {Function} onCancel: the action to execute after cancelling the edit
    */
-  @service documentService;
   @service intl;
   @service toaster;
   @service fileConversionService;
   @service draftSubmissionService;
 
-  @tracked isUploadingSourceFile = false;
-  @tracked isReplacingSourceFile = false;
-  @tracked isReplacingDerivedFile = false;
-  @tracked isUploadingDerivedFile = false;
-  @tracked isDeletingDerivedFile = false;
-
-  @tracked isUploadingReplacementSourceFile = false;
-  @tracked isUploadingReplacementDerivedFile = false;
+  @tracked isUploadingReplacementFile = false;
+  @tracked replacementFile;
 
   @tracked name;
   @tracked documentType;
-
-  @tracked uploadedSourceFile;
-  @tracked uploadedDerivedFile;
-  @tracked replacementSourceFile;
-  @tracked replacementDerivedFile;
 
   constructor() {
     super(...arguments);
@@ -46,51 +34,16 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
   });
 
   get isDisabled() {
-    return (
-      this.saveEdit.isRunning
-        || this.isUploadingSourceFile
-        || this.isUploadingDerivedFile
-        || this.isUploadingReplacementDerivedFile
-        || this.isUploadingReplacementSourceFile
-    );
+    return this.saveEdit.isRunning || this.isUploadingReplacementFile;
   }
 
   validateFile = (file) => {
     return this.draftSubmissionService.validateUploadedFile(file);
-  }
+  };
 
   @action
-  handleSourceFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
-    this.isUploadingSourceFile = uploadIsRunning && !uploadIsCompleted;
-  }
-
-  @action
-  handleDerivedFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
-    this.isUploadingDerivedFile = uploadIsRunning && !uploadIsCompleted;
-  }
-
-  @action
-  handleReplacementSourceFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
-    this.isUploadingReplacementSourceFile = uploadIsRunning && !uploadIsCompleted;
-  }
-
-  @action
-  handleReplacementDerivedFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
-    this.isUploadingReplacementDerivedFile = uploadIsRunning && !uploadIsCompleted;
-  }
-
-  @action
-  async toggleUploadReplacementSourceFile() {
-    await this.replacementSourceFile?.destroyRecord();
-    this.replacementSourceFile = null;
-    this.isReplacingSourceFile = !this.isReplacingSourceFile;
-  }
-
-  @action
-  async toggleUploadReplacementDerivedFile() {
-    await this.replacementDerivedFile?.destroyRecord();
-    this.replacementDerivedFile = null;
-    this.isReplacingDerivedFile = !this.isReplacingDerivedFile;
+  handleReplacementFileUploadQueue({ uploadIsRunning, uploadIsCompleted }) {
+    this.isUploadingReplacementFile = uploadIsRunning && !uploadIsCompleted;
   }
 
   @action
@@ -102,22 +55,8 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
   async cancelEdit() {
     this.name = null;
 
-    await this.uploadedSourceFile?.destroyRecord();
-    this.isUploadingSourceFile = false;
-    this.uploadedSourceFile = null;
-
-    await this.replacementSourceFile?.destroyRecord();
-    this.isReplacingSourceFile = false;
-    this.replacementSourceFile = null;
-
-    await this.replacementDerivedFile?.destroyRecord();
-    this.isReplacingDerivedFile = false;
-    this.replacementDerivedFile = null;
-
-    await this.uploadedDerivedFile?.destroyRecord();
-    this.uploadedDerivedFile = null;
-
-    this.isDeletingDerivedFile = false;
+    await this.replacementFile?.destroyRecord();
+    this.replacementFile = null;
 
     this.args.onCancel?.();
   }
@@ -125,64 +64,29 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
   saveEdit = task(async () => {
     this.args.piece.name = this.name?.trim();
     this.args.documentContainer.type = this.documentType;
-    if (this.uploadedSourceFile) {
-      // use-case: we have a pdf and we want to add docx but keep our pdf
-      // derived file does not exist yet in this case
-      const oldFile = await this.args.piece.file;
-      this.uploadedSourceFile.derived = oldFile;
-      this.args.piece.file = this.uploadedSourceFile;
-      await Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
-    }
-    if (this.replacementSourceFile) {
+    if (this.replacementFile) {
+      // 1 use case: remove all current files (of this draft-piece) and use the new file
       const oldFile = await this.args.piece.file;
       const derivedFile = await oldFile.derived;
       if (derivedFile) {
         oldFile.derived = null;
-        this.replacementSourceFile.derived = derivedFile;
-        await Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
+        await derivedFile.destroyRecord();
       }
-      this.args.piece.file = this.replacementSourceFile;
+      this.args.piece.file = this.replacementFile;
       await oldFile.destroyRecord();
       try {
         await this.fileConversionService.convertSourceFile(
-          this.replacementSourceFile
+          this.replacementFile,
         );
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-convert-file', { message: error.message }),
-          this.intl.t('warning-title')
+          this.intl.t('warning-title'),
         );
       }
     }
-    if (this.replacementDerivedFile) {
-      const file = await this.args.piece.file;
-      const oldDerived = await file.derived;
-      file.derived = this.replacementDerivedFile;
-      await file.save();
-      await oldDerived.destroyRecord();
-    }
-    if (this.uploadedDerivedFile) {
-      const file = await this.args.piece.file;
-      file.derived = this.uploadedDerivedFile;
-      await file.save();
-    }
-    if (this.isDeletingDerivedFile) {
-      const file = await this.args.piece.file;
-      const derivedFile = await file.derived;
-      file.derived = null;
-      await file.save();
-      await derivedFile.destroyRecord();
-    }
     await this.args.piece.save();
     await this.args.documentContainer.save();
-
-    if (this.replacementSourceFile) {
-      if (this.args.piece.stamp) {
-        await this.documentService.stampDocuments([this.args.piece]);
-      }
-    } else {
-      await this.documentService.checkAndRestamp([this.args.piece]);
-    }
 
     this.name = null;
 
@@ -190,16 +94,6 @@ export default class DocumentsDraftDocumentCardEditModalComponent extends Compon
 
     this.args.onSave?.();
 
-    this.isUploadingSourceFile = false;
-    this.uploadedSourceFile = null;
-
-    this.isReplacingSourceFile = false;
-    this.replacementSourceFile = null;
-
-    this.isReplacingDerivedFile = false;
-    this.replacementDerivedFile = false;
-
-    this.uploadedDerivedFile = null;
-    this.isDeletingDerivedFile = false;
+    this.replacementFile = null;
   });
 }

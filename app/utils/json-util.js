@@ -29,6 +29,9 @@ async function getJsonPayloadOrThrow(maybeJsonResponse) {
   if (!responseHasJson(maybeJsonResponse)) {
     // service most likely down or encountered database issues
     // TODO throw custom named error? this means timeout or database issues?? a non JSON response
+    if (maybeJsonResponse.status === 204) {
+      return; // no content, no errors
+    }
     throw new Error(
       `Backend returned an unexpected response (status: ${maybeJsonResponse.statusText}) from fetching url: ${maybeJsonResponse.url}`
     );

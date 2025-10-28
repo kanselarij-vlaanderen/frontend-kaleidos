@@ -1,9 +1,14 @@
 import Service, { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
+import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class SubcaseService extends Service {
   @service store;
+  @service toaster;
+  @service intl;
+  @service draftSubmissionService;
 
   async loadSubcasePieces(subcase) {
     // 2-step procees (submission-activity -> pieces). Querying pieces directly doesn't
@@ -79,52 +84,44 @@ export default class SubcaseService extends Service {
       method: 'GET',
       headers: { 'Accept': 'application/vnd.api+json' },
     });
-    let json;
     try {
-      json = await response.json();      
+      const json = await getJsonPayloadOrThrow(response);
+      return await Promise.all(json.data.map(async (entry) => ({
+        visible: entry.attributes.visible,
+        agenda: {
+          id: entry.attributes.agendaId,
+          status: await this.store.findRecordByUri('concept', entry.attributes.status),
+        },
+        meeting: {
+          id: entry.attributes.meetingId,
+          uri: entry.attributes.uri,
+          number: Number(entry.attributes.number),
+          plannedStart: new Date(entry.attributes.plannedStart),
+          kind: await this.store.findRecordByUri('concept', entry.attributes.kind),
+          hasKindEP: entry.attributes.kind === CONSTANTS.MEETING_KINDS.EP,
+        },
+        agendaitem: {
+          id: entry.attributes.agendaitemId,
+        },
+        agendaActivity: {
+          id: entry.attributes.agendaActivityId,
+          startDate: new Date(entry.attributes.agendaActivityStart),
+        },
+        decisionResultCode: entry.attributes.decisionResultCode
+        ? await this.store.findRecordByUri(
+            'concept',
+            entry.attributes.decisionResultCode,
+          )
+        : null,
+      })));
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
+      const message = error?.message ? `: ${error?.message}` : '';
+      this.toaster.error(
+        this.intl.t('error-getting-related-subcase-agendas') + `${message}`,
+        this.intl.t('warning-title')
+      );
+      throw error;
     }
-    if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
-    }
-    return await Promise.all(json.data.map(async (entry) => ({
-      visible: entry.attributes.visible,
-      agenda: {
-        id: entry.attributes.agendaId,
-        status: await this.store.findRecordByUri('concept', entry.attributes.status),
-      },
-      meeting: {
-        id: entry.attributes.meetingId,
-        uri: entry.attributes.uri,
-        number: Number(entry.attributes.number),
-        plannedStart: new Date(entry.attributes.plannedStart),
-        kind: await this.store.findRecordByUri('concept', entry.attributes.kind),
-        hasKindEP: entry.attributes.kind === CONSTANTS.MEETING_KINDS.EP,
-      },
-      agendaitem: {
-        id: entry.attributes.agendaitemId,
-      },
-      agendaActivity: {
-        id: entry.attributes.agendaActivityId,
-        startDate: new Date(entry.attributes.agendaActivityStart),
-      },
-      decisionResultCode: entry.attributes.decisionResultCode
-      ? await this.store.findRecordByUri(
-          'concept',
-          entry.attributes.decisionResultCode,
-        )
-      : null,
-    })));
   }
 
   async isOnDesignAgenda(subcase) {
@@ -136,5 +133,37 @@ export default class SubcaseService extends Service {
       );
     }
     return false;
+  }
+
+  async deleteSubcaseFullyForSubmission(subcase, submission) {
+    if (submission.decisionmakingFlowTitle) {
+      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
+      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
+      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
+        const _case = await decisionmakingFlow.case;
+        await _case.destroyRecord();
+        await decisionmakingFlow.destroyRecord();
+      }
+    }
+    const piecesNotOnSubmission = await this.store.queryAll('piece', {
+      'filter[submission-activities][subcase][:id:]': subcase.id,
+      'filter[:has-no:draft-piece]': true,
+    });
+    // Delete subcase
+    await subcase.destroyRecord();
+    // Delete submission activity
+    const submissionActivities = await submission.submissionActivities;
+    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
+    // submission still has acceptedPieces connected to draftPieces, but are we always allowed to delete the acceptedpieces?
+    const acceptedPiecesOfSubmission = await this.store.queryAll('piece', {
+      'filter[draft-piece][submission][:id:]': submission.id,
+    });
+
+    await Promise.all(acceptedPiecesOfSubmission.map(async (piece) => {
+      await deletePiece(piece, false);
+    }));
+    await Promise.all(piecesNotOnSubmission.map(async (piece) => {
+      await deletePiece(piece, false);
+    }));
   }
 }

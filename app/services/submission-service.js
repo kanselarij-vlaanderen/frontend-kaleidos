@@ -53,16 +53,20 @@ export default class SubmissionService extends Service {
         }
       }
       if (newPieces) {
-        for (const piece of newPieces) {
-          const previousPiece = await piece.previousPiece;
-          if (previousPiece && previousPiece.constructor.modelName === 'piece') {
+        for (const newPiece of newPieces) {
+          const previousPiece = await newPiece.previousPiece;
+          const acceptedPiece = await newPiece.acceptedPiece;
+          if (acceptedPiece) {
+            // if the submission was accepted on an existing subcase, the accepted piece may be shown instead of the draft piece
+            pieces.push(acceptedPiece);
+          } else if (previousPiece && previousPiece.constructor.modelName === 'piece') {
             for (let i = 0; i < pieces.length; i++) {
               if (pieces[i].id === previousPiece.id) {
-                pieces[i] = piece;
+                pieces[i] = newPiece;
               }
             }
           } else {
-            pieces.push(piece);
+            pieces.push(newPiece);
           }
         }
       }

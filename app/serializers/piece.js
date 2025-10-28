@@ -2,7 +2,7 @@ import ApplicationSerializer from './application';
 
 const SKIP_SERIALIZED = [
   'agendaitems',
-  'submissionActivity',
+  'submissionActivities',
   'signedPiece',
   'signedPieceCopy',
   'signMarkingActivity',

@@ -3,6 +3,7 @@ import { uploadPiecesToSigninghub } from 'frontend-kaleidos/utils/digital-signin
 import { task } from 'ember-concurrency';
 import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 const { MARKED, PREPARED } = constants.SIGNFLOW_STATUSES;
 
@@ -66,23 +67,16 @@ export default class SignatureService extends Service {
     }
     // Prepare sign flow: create preparation activity and send to SH
     const response = await uploadPiecesToSigninghub(signFlows);
-    if (response.ok) {
-      const job = await response.json();
+    try {
+      const job = await getJsonPayloadOrThrow(response);
       await this.pollPrepareSignFlow(job);
-    } else {
+    } catch (error) {
       for (let signFlow of signFlows) {
         await signFlow.reload();
         await signFlow.belongsTo('status').reload();
         await signFlow.belongsTo('creator').reload();
       }
-      let stringifiedJson;
-      try {
-        const json = await response?.json();
-        stringifiedJson = JSON.stringify(json);
-      } catch (error) {
-        // cannot stringify could mean digital-signing is down
-      }
-      throw new Error(stringifiedJson ?? response.statusText);
+      throw error;
     }
   }
 
@@ -108,32 +102,8 @@ export default class SignatureService extends Service {
   };
 
   getJob = task(async (job) => {
-    let response;
-    try {
-      response = await fetch(`/signing-flows/job/${job.id}`);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `Backend response contained an error (status: ${
-            response.status
-          }): ${JSON.stringify(data)}`
-        );
-      }
-      return data;
-    } catch (error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down. If so,
-      // throw a nice error that only contains the
-      // response status.
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
+    const response = await fetch(`/signing-flows/job/${job.id}`);
+    return await getJsonPayloadOrThrow(response);
   });
 
   /**
@@ -318,7 +288,7 @@ export default class SignatureService extends Service {
       `/signing-flows/${signFlow.id}/pieces/${piece.id}/signinghub-url?collapse_panels=false`
     );
     if (response.ok && response.status === 200) {
-      const result = await response.json();
+      const result = await getJsonPayloadOrThrow(response);
       return result.url;
     }
   }
