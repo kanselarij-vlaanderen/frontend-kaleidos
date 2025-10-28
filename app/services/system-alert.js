@@ -4,8 +4,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import { tracked } from '@glimmer/tracking';
 import { later } from '@ember/runloop';
-import { action } from '@ember/object';
-import { set } from '@ember/object';
+import { action, set } from '@ember/object';
 
 export default class SystemAlertService extends Service {
   @service store;

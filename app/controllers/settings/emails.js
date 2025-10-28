@@ -1,10 +1,9 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
+import { action, set, get } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { isBlank, isEmpty } from '@ember/utils';
 import { task } from 'ember-concurrency';
 import { EMAIL_VALIDATION_REGEX_MULTIPLE } from 'frontend-kaleidos/config/config';
-import { set, get } from '@ember/object';
 import {
   ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
