@@ -82,7 +82,7 @@ export default class NewsItemEditPanelComponent extends Component {
     if (themes?.length) {
       this.selectedThemes = themes;
     } else {
-      this.selectedThemes.clear();
+      this.selectedThemes = new TrackedArray([]);
     }
   }
 

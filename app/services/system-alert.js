@@ -68,7 +68,6 @@ export default class SystemAlertService extends Service {
     const prevConfirmedAlerts = alerts.filter((alert) =>
       confirmedAlertIds.includes(alert.id)
     );
-    // setEach might be deprecated, test this
     prevConfirmedAlerts.forEach(alert => {
       set(alert, 'confirmed', true);
     });

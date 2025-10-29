@@ -58,7 +58,7 @@ export default class GovernmentAreasPanel extends Component {
     );
 
     let uniqueDomains = domainsFromAvailableFields
-      .uniq()
+      .filter((value, index, array) => array.indexOf(value) === index) // like .uniq()
       .slice()
       .sort((d1, d2) => d1.label - d2.label);
 
