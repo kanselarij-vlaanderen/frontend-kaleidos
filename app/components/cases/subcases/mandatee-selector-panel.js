@@ -84,7 +84,7 @@ export default class MandateeSelectorPanel extends Component {
 
   @task // run once
   *prepareCurrentMinisters() {
-    const currentMandatees = yield this.mandatees.getMandateesActiveOn.linked().perform(
+    const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(
       startOfDay(new Date())
     );
     // filter out the MP's other role as a MINISTER

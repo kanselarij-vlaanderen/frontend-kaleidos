@@ -115,7 +115,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
 
   @task
   *loadDocuments() {
-    let pieces = yield this.throttledLoadingService.loadPieces.linked().perform(this.args.agendaitem);
+    let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
     pieces = pieces.slice();
     this.agendaitemDocuments = yield sortPieces(
       pieces,
