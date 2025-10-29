@@ -7,3 +7,11 @@
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
   font-size: 1.3rem !important;
 }
+
+.shiki {
+  margin: 1.2rem 0 0;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
+  .line {
+    font-size: 1.3rem !important;
+  }
+}
