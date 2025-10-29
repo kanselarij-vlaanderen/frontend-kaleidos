@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { task, lastValue } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
@@ -11,7 +11,9 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   @service router;
   @service store;
 
-  @lastValue('loadFirstAgendaitem') firstAgendaitem;
+  get firstAgendaitem() {
+    return this.loadFirstAgendaitem.lastSuccessful?.value;
+  }
 
   constructor() {
     super(...arguments);
