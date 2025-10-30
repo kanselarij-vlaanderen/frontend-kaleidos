@@ -43,7 +43,6 @@
     "edition": "octane"
   },
   "devDependencies": {
-    "@appuniversum/appuniversum": "^1.2.0",
     "@appuniversum/ember-appuniversum": "3.7.0",
     "@babel/core": "^7.27.1",
     "@babel/eslint-parser": "^7.27.1",
@@ -53,9 +52,9 @@
     "@codemirror/lang-xml": "^0.20.0",
     "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.2.0",
-    "@ember/render-modifiers": "^2.1.0",
+    "@ember/render-modifiers": "^3.0.0",
     "@ember/string": "^4.0.1",
-    "@ember/test-helpers": "^5.2.1",
+    "@ember/test-helpers": "^5.4.0",
     "@embroider/macros": "^1.19.2",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
@@ -96,7 +95,7 @@
     "ember-concurrency": "^2.3.7",
     "ember-copy": "^2.0.1",
     "ember-data": "~5.3.13",
-    "ember-element-helper": "^0.8.6",
+    "ember-element-helper": "^0.8.8",
     "ember-fetch": "^8.1.2",
     "ember-file-upload": "^9.5.0",
     "ember-flatpickr": "^8.0.1",
@@ -157,7 +156,7 @@
     "xml-formatter": "^3.6.7"
   },
   "engines": {
-    "node": ">= 18"
+    "node": ">= 20"
   },
   "overrides": {
     "@appuniversum/ember-appuniversum": {
