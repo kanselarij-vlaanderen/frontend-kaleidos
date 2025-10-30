@@ -134,6 +134,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     if (isExiting) {
       // isExiting would be false if only the route's model was changing
       controller.set('filter', null);
+      controller.set('isEditingOverview', false);
       // cancel the task to group notas to prevent this task from completing with incorrect notas
       // when rapidly switching to an agenda with 0 notas
       controller.groupNotasOnGroupName.cancelAll();
