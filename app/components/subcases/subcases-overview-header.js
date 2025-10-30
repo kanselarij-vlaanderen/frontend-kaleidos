@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay } from 'date-fns';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;

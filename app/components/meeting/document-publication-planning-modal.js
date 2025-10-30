@@ -6,8 +6,7 @@ import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { ESTIMATED_PUBLICATION_DURATION } from 'frontend-kaleidos/config/config';
-import subMilliseconds from 'date-fns/subMilliseconds';
-import isPast from 'date-fns/isPast';
+import { subMilliseconds, isPast } from 'date-fns';
 
 export default class MeetingDocumentPublicationPlanningModalComponent extends Component {
   @service currentSession;

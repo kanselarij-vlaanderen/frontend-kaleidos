@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import subDays from 'date-fns/subDays';
+import { subDays } from 'date-fns';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**

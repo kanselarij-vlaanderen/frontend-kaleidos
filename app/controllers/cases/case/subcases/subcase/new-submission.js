@@ -10,7 +10,7 @@ import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay } from 'date-fns';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Controller {
   @service cabinetMail;

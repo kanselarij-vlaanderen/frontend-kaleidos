@@ -4,8 +4,7 @@ import { action } from '@ember/object';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { isPresent } from '@ember/utils';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
-import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
+import { startOfDay, endOfDay } from 'date-fns';
 
 export default class SignaturesOngoingDecisionsRoute extends Route {
   @service currentSession;

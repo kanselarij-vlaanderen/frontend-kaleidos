@@ -5,8 +5,7 @@ import { inject as service } from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
-import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
+import { startOfDay, endOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SettingsUsersIndexRoute extends Route {
