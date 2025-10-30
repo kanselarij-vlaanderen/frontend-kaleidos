@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import config from 'frontend-kaleidos/config/environment';
 import buildUrlFromConfig from '@lblod/ember-acmidm-login/utils/build-url-from-config';
-const providerConfig = config.torii.providers['acmidm-oauth2'];
+const providerConfig = config.acmidm;
 
 export default class LoginController extends Controller {
   loginUrl = buildUrlFromConfig(providerConfig);

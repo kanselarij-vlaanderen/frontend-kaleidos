@@ -60,11 +60,11 @@ export default class CurrentSessionService extends Service {
   }
   /* eslint-enable ember/no-get */
 
-  clear() {
+  async clear() {
     this.user = null;
     this.role = null;
     this.organization = null;
-    this.impersonation.stopImpersonation();
+    await this.impersonation.stopImpersonation();
     this.isLoggedIn = false;
   }
 

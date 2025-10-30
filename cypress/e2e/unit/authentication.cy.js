@@ -30,4 +30,23 @@ context('Authentication tests', () => {
     // cy.get(route.login.acmidmContainer).get(route.login.loginButton)
     //   .contains(acmidmButtonText);
   });
+
+  it('should login/logout multiple times', () => {
+    const amountToRun = 3;
+    // idea behind this. there is an ongoing issue with using cy.login() right after cy.logoutFlow()
+    // mocklogin service does not play nice if we try to login too fast after logging out
+    // this stress test can indicate if the problem is getting worse or is resurfacing
+    for (let int = 0; int < amountToRun; int++) {
+      cy.login('Admin');
+      cy.url().should('include', 'overzicht');
+      cy.logoutFlow();
+      cy.visit('/overzicht?sizeAgendas=2');
+    }
+    for (let int = 0; int < amountToRun; int++) {
+      cy.login('Admin');
+      cy.url().should('include', 'overzicht');
+      cy.logout();
+      cy.visit('/overzicht?sizeAgendas=2');
+    }
+  });
 });

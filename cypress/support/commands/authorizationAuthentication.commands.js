@@ -41,6 +41,10 @@ function login(name, retries = 0) {
           relationships: resp.body.relationships,
         },
       }));
+      // trying to get currentSession too fast seems to remove the localStorage authenticated content
+      // unsure what is causing it, but waiting seems to help
+      // could be the mock-login package or service, or the newer ember-simple-auth v8.
+      cy.wait(500);
     });
   });
   cy.intercept('GET', '/memberships/*').as('getMembership');
@@ -146,7 +150,8 @@ function logoutFlow() {
     .forceClick();
   cy.wait(`@mockLogout_${randomInt}`);
   cy.wait(`@impersonationLogout_${randomInt}`);
-  cy.wait(2000);
+  cy.wait(500);
+  // the below comment may be incorrect, it seems that the cy.login is the root cause. added await there after setting local storage
   // with this lower than 2000 we sometimes hit the following error in mock-login on getting the session between delete and insert
   // "ruby template: not setting allowed groups because header already provided with value "CLEAR""
   cy.log('/logoutFlow');
