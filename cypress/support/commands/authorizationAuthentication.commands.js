@@ -151,7 +151,7 @@ function logoutFlow() {
   cy.wait(`@mockLogout_${randomInt}`);
   cy.wait(`@impersonationLogout_${randomInt}`);
   cy.wait(500);
-  // the below comment may be incorrect, it seems that the cy.login is the root cause. added await there after setting local storage 
+  // the below comment may be incorrect, it seems that the cy.login is the root cause. added await there after setting local storage
   // with this lower than 2000 we sometimes hit the following error in mock-login on getting the session between delete and insert
   // "ruby template: not setting allowed groups because header already provided with value "CLEAR""
   cy.log('/logoutFlow');
