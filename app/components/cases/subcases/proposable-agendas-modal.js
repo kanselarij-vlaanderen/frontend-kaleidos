@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { addWeeks, subWeeks } from 'date-fns';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';

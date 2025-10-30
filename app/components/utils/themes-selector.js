@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
 /**

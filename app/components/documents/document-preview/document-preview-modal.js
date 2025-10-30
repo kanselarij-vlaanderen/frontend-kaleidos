@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import sanitize from 'sanitize-filename';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {

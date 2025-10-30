@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { timeout, restartableTask } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';

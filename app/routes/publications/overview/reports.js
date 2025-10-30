@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import REPORT_TYPES_CONFIG from 'frontend-kaleidos/config/publications/report-types';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 

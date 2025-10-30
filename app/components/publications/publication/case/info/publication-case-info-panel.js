@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { timeout, task, restartableTask } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';

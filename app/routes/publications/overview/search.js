@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import {
   getPublicationStatusPillKey,
   getPublicationStatusPillStep

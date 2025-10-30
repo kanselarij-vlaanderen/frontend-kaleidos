@@ -4,7 +4,7 @@ import {
   task, timeout
 } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class NewsletterNotaUpdatesRoute extends Route {
   queryParams = {

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class NewsItemViewPanelComponent extends Component {
   @service newsletterService;

@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { isPresent } from '@ember/utils';
