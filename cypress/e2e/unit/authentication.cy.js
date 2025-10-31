@@ -32,7 +32,7 @@ context('Authentication tests', () => {
   });
 
   it('should login/logout multiple times', () => {
-    const amountToRun = 3;
+    const amountToRun = 5;
     // idea behind this. there is an ongoing issue with using cy.login() right after cy.logoutFlow()
     // mocklogin service does not play nice if we try to login too fast after logging out
     // this stress test can indicate if the problem is getting worse or is resurfacing
