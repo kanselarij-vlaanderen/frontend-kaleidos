@@ -13,7 +13,7 @@ export default class NewsletterController extends Controller {
   @tracked sort = 'number';
 
   @action
-  async saveNewsItem(wasNewsItemNew) {
+  saveNewsItem(wasNewsItemNew) {
     if (wasNewsItemNew) {
       this.router.refresh('newsletter.index');
     }
@@ -21,7 +21,7 @@ export default class NewsletterController extends Controller {
   }
 
   @action
-  async cancelEdit(wasNewsItemNew) {
+  cancelEdit(wasNewsItemNew) {
     if (wasNewsItemNew) {
       this.router.refresh('newsletter.index');
     }
