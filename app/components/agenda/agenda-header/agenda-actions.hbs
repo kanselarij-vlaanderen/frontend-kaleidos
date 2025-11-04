@@ -17,14 +17,25 @@
     </AuButton>
     <AuHr />
   {{/if}}
-  <AuLink
-    data-test-agenda-actions-navigate-to-newsletter
-    @route="newsletter"
-    @model={{@meeting.id}}
-    role="menuitem"
-  >
-    {{t "print-newsletter"}}
-  </AuLink>
+  {{#if (user-may "manage-news-items")}}
+    <AuLink
+      data-test-agenda-actions-navigate-to-newsletter
+      @route="newsletter"
+      @model={{@meeting.id}}
+      role="menuitem"
+    >
+      {{t "print-newsletter"}}
+    </AuLink>
+  {{else if this.decisionPublicationActivity.startDate}}
+    <AuLink
+      data-test-agenda-actions-navigate-to-newsletter
+      @route="newsletter.print"
+      @model={{@meeting.id}}
+      role="menuitem"
+    >
+      {{t "print-newsletter"}}
+    </AuLink>
+  {{/if}}
   {{#if this.showPrintButton}}
     <AuLink
       @route="agenda.agendaitems"
