@@ -276,6 +276,19 @@ export default class AgendaService extends Service {
     return json;
   }
 
+  async getPreliminaryDecisionResultCode(agendaitem) {
+    if (!agendaitem?.id) {
+      return;
+    }
+    const url = `/agendaitem/${agendaitem.id}/preliminary-decision-result-code`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    const json = await getJsonPayloadOrThrow(response);
+    return json.data;
+  }
+
   async getAgendaAndMeetingForSubmission(submission) {
     const url = `/submissions/${submission.id}/for-meeting`;
     const response = await fetch(url, {

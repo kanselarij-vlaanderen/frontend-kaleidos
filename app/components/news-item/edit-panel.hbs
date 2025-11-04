@@ -53,6 +53,20 @@
     {{#unless this.ensureNewsItem.isRunning}}
       <Auk::Panel::Body>
         <div class="au-c-form">
+          {{#if this.showBeingEditedByWarning}}
+            <AuAlert
+              @skin="warning"
+              @icon="alert-triangle"
+              @size="small"
+            >
+              {{t
+                "newsitems-being-edited-by"
+                date=(date-phrase this.newsItem.modified)
+                time=(time this.newsItem.modified)
+                name=this.newsItem.isBeingEditedBy.fullName
+              }}
+            </AuAlert>
+          {{/if}}
           <AuFormRow>
             <AuLabel>{{t "title"}}</AuLabel>
             <p
@@ -166,7 +180,7 @@
               <AuButton
                 data-test-news-item-edit-item-cancel
                 @skin="naked"
-                {{on "click" @onCancel}}
+                {{on "click" this.cancel}}
               >
                 {{t "cancel"}}
               </AuButton>
@@ -195,7 +209,7 @@
   @title={{t "no-themes-selected"}}
   @message={{t "no-themes-selected-message"}}
   @onConfirm={{perform this.confirmSave}}
-  @onCancel={{this.cancelSave}}
+  @onCancel={{this.cancel}}
   @confirmMessage={{t "save"}}
   @loading={{this.confirmSave.isRunning}}
 />
