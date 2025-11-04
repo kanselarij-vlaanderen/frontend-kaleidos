@@ -42,7 +42,7 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.decisionActivity = await agendaItemTreatment?.decisionActivity;
     await this.decisionActivity?.belongsTo('decisionResultCode').reload();
     await this.decisionActivity?.secretary;
-    if (!this.decisionActivity?.uri && this.currentSession.may('view-documents-before-release')) {
+    if (!this.decisionActivity?.uri && this.currentSession.may('view-preliminary-decisions')) {
      // get the preliminary decisionResultCode. Will only return something when postponed or retracted
      const decisionActivityResultCode = await this.agendaService.getPreliminaryDecisionResultCode(model);
      this.isPreliminaryPostponed = (decisionActivityResultCode?.uri == UITGESTELD);

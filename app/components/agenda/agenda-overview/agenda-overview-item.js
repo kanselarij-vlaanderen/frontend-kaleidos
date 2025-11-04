@@ -133,7 +133,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
     this.decisionActivityResultCode = yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
-    if (!this.decisionActivity?.uri && this.currentSession.may('view-documents-before-release')) {
+    if (!this.decisionActivity?.uri && this.currentSession.may('view-preliminary-decisions')) {
       // get the preliminary decisionResultCode. Will only return something when postponed or retracted
       this.decisionActivityResultCode = yield this.agendaService.getPreliminaryDecisionResultCode(this.args.agendaitem);
       this.isPreliminaryPostponed = (this.decisionActivityResultCode?.uri == UITGESTELD);
