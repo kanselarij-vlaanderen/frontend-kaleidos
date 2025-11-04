@@ -219,12 +219,10 @@ export default class AgendaService extends Service {
           await report.belongsTo('file').reload();
           await report.save();
         }
-        // TODO we will do this twice if the logic above on didReorder is executed
         await this.decisionReportGeneration.generateReplacementReport.perform(report);
-        // TODO generate concerns needed? like if more files were added (no VR number yet)
 
-        // since we have a "restored" report, we also need a decision result. approved is the only logical one (nota and not postponed/retracted yet)
-        // TODO do this in the backend maybe??
+        // since we have a "restored" report, we also need a decision result.
+        // approved is the only logical one (nota and not postponed/retracted yet)
         const decisionActivity = await this.store.queryOne('decision-activity', {
           'filter[treatment][agendaitems][:id:]': agendaitem.id,
         });
@@ -234,7 +232,6 @@ export default class AgendaService extends Service {
         );
         decisionActivity.decisionResultCode = decisionResultCode;
         await decisionActivity.save();
-        // toast to prompt the user to check/verify?
       }
     }
     return agendaitem;
