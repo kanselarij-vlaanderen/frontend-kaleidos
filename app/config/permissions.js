@@ -367,7 +367,6 @@ const groups = [
       readOnly: [
         'view-document-version-info',
         'view-documents-before-release',
-        'view-preliminary-decisions',
         'view-documents-postponed-and-retracted',
         'view-submissions',
       ],
