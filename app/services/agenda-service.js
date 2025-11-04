@@ -147,7 +147,7 @@ export default class AgendaService extends Service {
     subcase,
     formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
     privateComment = null
-  ) {  
+  ) {
     const internalReview = await subcase.internalReview;
     if (!internalReview?.id) {
       await this.createInternalReview(subcase, null, privateComment);
@@ -237,6 +237,19 @@ export default class AgendaService extends Service {
     });
     const json = await getJsonPayloadOrThrow(response);
     return json;
+  }
+
+  async getPreliminaryDecisionResultCode(agendaitem) {
+    if (!agendaitem?.id) {
+      return;
+    }
+    const url = `/agendaitem/${agendaitem.id}/preliminary-decision-result-code`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    const json = await getJsonPayloadOrThrow(response);
+    return json.data;
   }
 
   async getAgendaAndMeetingForSubmission(submission) {

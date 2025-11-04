@@ -1366,6 +1366,10 @@
   "subcase-document-retracted--message": "De documenten van een ingetrokken procedurestap zijn niet zichtbaar voor de overheid.",
   "agendaitem-document-postponed--message": "Dit agendapunt is uitgesteld op deze agenda, de documenten zijn daarom niet zichtbaar voor andere profielen.",
   "agendaitem-document-retracted--message": "Dit agendapunt is ingetrokken op deze agenda, de documenten zijn daarom niet zichtbaar voor andere profielen.",
+  "agendaitem-preliminary-postponed--title": "Dit agendapunt wordt uitgesteld.",
+  "agendaitem-preliminary-retracted--title": "Dit agendapunt wordt ingetrokken.",
+  "agendaitem-preliminary-postponed--message": "Dit agendapunt wordt mogelijk uitgesteld op deze agenda, de beslissing is echter nog niet finaal.",
+  "agendaitem-preliminary-retracted--message": "Dit agendapunt wordt mogelijk ingetrokken op deze agenda, de beslissing is echter nog niet finaal.",
   "search-not-allowed-during-reordering": "Zoeken is niet mogelijk tijdens het aanpassen van de volgorde",
   "from-parliament": "Van het Vlaams Parlement",
   "all-agendas": "Alle agenda's",
@@ -1546,5 +1550,6 @@
   "dont-close-the-page": "Gelieve de pagina niet te sluiten.",
   "delete-subcase-and-restore-submission": "Procedurestap verwijderen en indiening behouden",
   "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\".",
-  "newsitems-being-edited-by": "Dit kort bestek wordt bewerkt door {name} sinds {date} om {time}."
+  "newsitems-being-edited-by": "Dit kort bestek wordt bewerkt door {name} sinds {date} om {time}.",
+  "no-visible-news-items": "Geen kort bestek beschikbaar"
 }
