@@ -482,7 +482,8 @@ export default class SubmissionHeaderComponent extends Component {
             meeting,
             subcase,
             formallyStatusUri,
-            privateComment
+            privateComment,
+            this.args.submission
           );
         } catch (error) {
           this.toaster.error(

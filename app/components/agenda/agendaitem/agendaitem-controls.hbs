@@ -124,12 +124,20 @@
   @loading={{this.isSendingBackToSubmitter}}
 >
   <:body>
-    <AuAlert
-      @skin="warning"
-      @icon="alert-triangle"
-    >
-      <p>{{t "send-back-to-submitter-message"}}</p>
-    </AuAlert>
+    {{#if (not this.isSendingBackToSubmitter)}}
+      <AuAlert
+        @skin="warning"
+        @icon="alert-triangle"
+      >
+        <p>
+          {{#if (is-nota @agendaitem.type)}}
+            {{t "send-back-to-submitter-keep-newsitem-message"}}
+          {{else}}
+            {{t "send-back-to-submitter-message"}}
+          {{/if}}
+        </p>
+      </AuAlert>
+    {{/if}}
     <div class="au-c-form">
       <AuFormRow>
         <AuLabel for="comment-title-send-back">{{t "comment-title"}}</AuLabel>

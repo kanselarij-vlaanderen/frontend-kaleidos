@@ -208,7 +208,11 @@ export default class AgendaitemControls extends Component {
     const agendaItemType = await agendaitem.type;
     const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
     if (this.isDeletable) {
-      await this.agendaService.deleteAgendaitem(agendaitem);
+      const keepDecisionAndNewsitem = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
+      if (keepDecisionAndNewsitem) {
+        await this.agendaService.keepDraftDecisionAndNewsItem(agendaitem, submission);
+      }
+      await this.agendaService.deleteAgendaitem(agendaitem, keepDecisionAndNewsitem);
     } else {
       // should be unreachable if there is a submission
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
