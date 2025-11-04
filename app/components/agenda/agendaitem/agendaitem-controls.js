@@ -207,8 +207,6 @@ export default class AgendaitemControls extends Component {
     this.showLoader = true;
     const agendaItemType = await agendaitem.type;
     const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
-    // TODO save newsitem and decision report on submission, don't delete the newsitem and repor
-    // Do I want to do this with a query instead of on the model?. maybe not having it in the frontend is better to avoid concurrency/graph issues
     if (this.isDeletable) {
       const keepDecisionAndNewsitem = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
       if (keepDecisionAndNewsitem) {
