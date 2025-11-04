@@ -42,7 +42,7 @@ export default class PrintNewsletterRoute extends Route {
         'type': {
           ':uri:': params.showDraft ? CONSTANTS.AGENDA_ITEM_TYPES.NOTA : undefined,
         },
-        ':has:treatment': 'yes' // TODO could this be an issue for legacy?
+        ':has:treatment': 'yes'
       },
       include: 'treatment.news-item',
       sort: 'number',
