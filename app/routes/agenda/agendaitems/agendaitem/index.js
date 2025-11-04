@@ -31,6 +31,8 @@ export default class DetailAgendaitemAgendaitemsAgendaRoute extends Route {
     this.case = await this.decisionmakingFlow?.case;
     this.parliamentFlow = await this.case?.parliamentFlow;
     this.submitter = undefined;
+    this.isPreliminaryPostponed = false;
+    this.isPreliminaryRetracted = false;
     if (this.subcase?.id) {
       this.submitter = await this.subcase.requestedBy;
       await this.subcase.governmentAreas;
