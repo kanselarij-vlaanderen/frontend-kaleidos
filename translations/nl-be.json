@@ -1550,5 +1550,6 @@
   "dont-close-the-page": "Gelieve de pagina niet te sluiten.",
   "delete-subcase-and-restore-submission": "Procedurestap verwijderen en indiening behouden",
   "delete-subcase-and-restore-submission-confirmation": "Bent u zeker dat u de procedurestap wilt verwijderen? De indiening status zal worden teruggezet naar \"in behandeling\".",
+  "newsitems-being-edited-by": "Dit kort bestek wordt bewerkt door {name} sinds {date} om {time}.",
   "no-visible-news-items": "Geen kort bestek beschikbaar"
 }

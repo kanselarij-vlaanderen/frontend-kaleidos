@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
@@ -13,9 +12,8 @@ export default class NewsletterController extends Controller {
 
   @tracked sort = 'number';
 
-  @task
-  *saveNewsItem(newsItem, wasNewsItemNew) {
-    yield newsItem.save();
+  @action
+  async saveNewsItem(wasNewsItemNew) {
     if (wasNewsItemNew) {
       this.router.refresh('newsletter.index');
     }
@@ -23,7 +21,7 @@ export default class NewsletterController extends Controller {
   }
 
   @action
-  cancelEdit(wasNewsItemNew) {
+  async cancelEdit(wasNewsItemNew) {
     if (wasNewsItemNew) {
       this.router.refresh('newsletter.index');
     }
