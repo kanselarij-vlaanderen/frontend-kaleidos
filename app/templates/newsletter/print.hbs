@@ -24,6 +24,15 @@
             @onSave={{perform this.saveNewsItem nota.newsItem}}
           />
         </div>
+      {{else}}
+        <div class="auk-u-mt-2">
+          <AuAlert
+            @skin="info"
+            @icon="info-circle"
+          >
+            {{t "no-visible-news-items"}}
+          </AuAlert>
+        </div>
       {{/each}}
       {{#if this.model.announcements.length}}
         <h2 class="auk-h1">

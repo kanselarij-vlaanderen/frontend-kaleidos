@@ -20,6 +20,16 @@ export default class PrintNewsletterRoute extends Route {
 
   @service agendaService;
   @service store;
+  @service currentSession;
+  @service router;
+
+  beforeModel(transition) {
+    const showDraft = transition.to.queryParams["klad"];
+    if (!this.currentSession.may('manage-news-items') && showDraft) {
+      // force incorrect users to only view the non-draft view
+      this.router.replaceWith('newsletter.print', { queryParams: { klad: false}});
+    }
+  }
 
   async model(params) {
     const newsletterModel = this.modelFor('newsletter');
@@ -32,6 +42,7 @@ export default class PrintNewsletterRoute extends Route {
         'type': {
           ':uri:': params.showDraft ? CONSTANTS.AGENDA_ITEM_TYPES.NOTA : undefined,
         },
+        ':has:treatment': 'yes'
       },
       include: 'treatment.news-item',
       sort: 'number',
