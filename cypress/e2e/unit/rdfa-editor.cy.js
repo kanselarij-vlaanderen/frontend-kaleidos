@@ -48,8 +48,10 @@ context('rdfa editor tests', () => {
   // RDFA tests can be flaky locally when having dev tools open or when running in background (not in focus)
   it('should test the rdfa editor keypresses', () => {
     cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
+    cy.wait('@patchNewsItems1');
 
     cy.get(dependency.rdfaEditor.inner).type('{ctrl+u}Underline')
       .type('{ctrl+u} ');
@@ -84,11 +86,15 @@ context('rdfa editor tests', () => {
       .type('{del}')
       .type('{del}');
     cy.get(dependency.rdfaEditor.inner).should('not.contain', 'old');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems2');
     cy.get(newsletter.editItem.cancel).click();
+    cy.wait('@patchNewsItems2');
 
     // check enter
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems3');
     cy.get(newsletter.buttonToolbar.edit).eq(0)
       .click();
+    cy.wait('@patchNewsItems3');
     cy.get(dependency.rdfaEditor.inner).find('br')
       .should('have.length', 1); // 1 br exists by default
     cy.get(dependency.rdfaEditor.inner).type('{enter}');
@@ -105,7 +111,9 @@ context('rdfa editor tests', () => {
       .type('test  test');
     cy.get(dependency.rdfaEditor.inner).should('contain', ' ');
     cy.get(dependency.rdfaEditor.inner).should('not.contain', '\u00a0');
+    cy.intercept('PATCH', '/news-items/*').as('patchNewsItems4');
     cy.get(newsletter.editItem.cancel).click();
+    cy.wait('@patchNewsItems4');
   });
 
   it('should test the rdfa editor buttonpresses', () => {
@@ -268,13 +276,16 @@ context('rdfa editor tests', () => {
       // in zebra view
       cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
       cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown).should('be.visible');
+      cy.intercept('PATCH', '/news-items/*').as('patchNewsItems1');
       cy.get(newsletter.buttonToolbar.edit).eq(0)
-        .click();
+        .click();  // a patch happens here
+      cy.wait('@patchNewsItems1');
       cy.get(auk.expand).scrollIntoView()
         .click();
       cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown).scrollIntoView()
         .shouldNotBeActionable(done);
       // no further testing possible
+      // we can't cancel here since the shouldNotBeActionable ends the testing, but isBeingEditedBy is still set
     });
 
     it('should test the zebra view fullscreen mode covers m-header', (done) => {
@@ -282,7 +293,7 @@ context('rdfa editor tests', () => {
       cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');+
       cy.get(utils.mHeader.search).should('be.visible');
       cy.get(newsletter.buttonToolbar.edit).eq(0)
-        .click();
+        .click(); // no patch happens here since isBeingEditedBy is still set from previous test
       cy.get(newsletter.editItem.save).scrollIntoView()
         .should('be.visible');
       cy.get(newsletter.editItem.cancel).should('be.visible');
@@ -290,6 +301,7 @@ context('rdfa editor tests', () => {
         .click();
       cy.get(utils.mHeader.search).shouldNotBeActionable(done);
       // no further testing possible
+      // we can't cancel here since the shouldNotBeActionable ends the testing, but isBeingEditedBy is still set
     });
 
 
@@ -298,7 +310,7 @@ context('rdfa editor tests', () => {
       cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/kort-bestek');
       cy.get(newsletter.editItem.saveFullscreen).should('not.exist');
       cy.get(newsletter.buttonToolbar.edit).eq(0)
-        .click();
+        .click(); // no patch happens here since isBeingEditedBy is still set from previous test
       cy.get(auk.expand).scrollIntoView()
         .click();
       cy.get(newsletter.editItem.saveFullscreen).should('be.visible');
@@ -307,7 +319,10 @@ context('rdfa editor tests', () => {
       cy.get(newsletter.editItem.saveFullscreen).should('not.exist');
       cy.get(newsletter.editItem.save).scrollIntoView()
         .should('be.visible');
-      cy.get(newsletter.editItem.cancel).should('be.visible');
+      cy.intercept('PATCH', '/news-items/*').as('patchNewsItems');
+      cy.get(newsletter.editItem.cancel).should('be.visible')
+        .click();
+      cy.wait('@patchNewsItems'); // unset the isBeingEditedBy
     });
   });
 });

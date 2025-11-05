@@ -48,6 +48,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[agendaitems][type][:uri:]': CONSTANTS.AGENDA_ITEM_TYPES.NOTA,
       'filter[document-container][type][:id:]': [nota.id, visienota.id].join(','),
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
+      'filter[:has-no:next-piece]': 'yes', // enkel laatste versie
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       include: 'agendaitems',
       'fields[agendaitems]': 'id,number,short-title',
@@ -70,6 +71,20 @@ export default class NewsletterNotaUpdatesRoute extends Route {
           }
         }
       }
+      // don't process postponed/retracted agendaitems
+      const decisionActivity = await this.store.queryOne('decision-activity', {
+        'filter[treatment][agendaitems][:id:]': agendaitemOnLatestAgenda.id,
+      });
+      const decisionResultCode = await decisionActivity.decisionResultCode;
+      if (
+        [
+          CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
+          CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
+        ].includes(decisionResultCode?.uri)
+      ) {
+        continue;
+      }
+
       const agendaitemNumber = agendaitemOnLatestAgenda.get('number');
       const agendaitemId = agendaitemOnLatestAgenda.get('id');
       const agendaitemShortTitle = agendaitemOnLatestAgenda.get('shortTitle');
