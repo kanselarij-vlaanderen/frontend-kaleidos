@@ -9,6 +9,7 @@ export default class NewsItemTableRowComponent extends Component {
   @service toaster;
   @service intl;
   @service agendaitemNota;
+  @service currentSession;
 
   @tracked isOpenEditView = false;
   @tracked notaOrVisieNota;
@@ -37,8 +38,9 @@ export default class NewsItemTableRowComponent extends Component {
 
   @task
   *saveNewsItem(newsItem, wasNewsItemNew) {
-    yield this.args.onSave(newsItem, wasNewsItemNew);
-    this.closeEditView();
+    yield newsItem.stopEditingOnSave();
+    yield this.args.onSave(wasNewsItemNew);
+    this.isOpenEditView = false;
   }
 
   @task
@@ -51,7 +53,8 @@ export default class NewsItemTableRowComponent extends Component {
   @task
   *toggleInNewsletterFlag(checked) {
     this.args.newsItem.inNewsletter = checked;
-    yield this.saveNewsItem.perform(this.args.newsItem);
+    yield this.args.newsItem.save(); // not setting/unsetting isbeingEditedBy
+    yield this.args.onSave();
   }
 
   @action
@@ -68,7 +71,8 @@ export default class NewsItemTableRowComponent extends Component {
   }
 
   @action
-  closeEditView(wasNewsItemNew) {
+  async closeEditView(newsItem, wasNewsItemNew) {
+    await newsItem?.stopEditingOnCancel(this.currentSession.user);
     this.args.onCancel(wasNewsItemNew);
     this.isOpenEditView = false;
   }

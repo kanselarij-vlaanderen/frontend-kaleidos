@@ -9,7 +9,7 @@
       {{#if this.isEditing}}
         <AuButton
           @skin="link"
-          {{on "click" this.closeEdit}}
+          {{on "click" this.stopEditing}}
         >
           {{t "cancel"}}
         </AuButton>
@@ -61,10 +61,24 @@
     @newsItem={{this.model}}
     @agendaitem={{this.agendaitem}}
     @isFullscreen={{this.isFullscreen}}
-    @onCancel={{this.closeEdit}}
+    @onCancel={{perform this.closeEdit}}
     @onSave={{perform this.saveNewsItem}}
   />
 {{else}}
+  {{#if this.showBeingEditedByWarning}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      {{t
+        "newsitems-being-edited-by"
+        date=(date-phrase this.model.modified)
+        time=(time this.model.modified)
+        name=this.model.isBeingEditedBy.fullName
+      }}
+    </AuAlert>
+  {{/if}}
   {{#if this.model}}
     <NewsItem::ViewPanel
       @newsItem={{this.model}}

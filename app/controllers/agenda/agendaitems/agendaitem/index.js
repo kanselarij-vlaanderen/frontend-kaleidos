@@ -27,6 +27,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
   @tracked mandatees;
   @tracked decisionActivity;
   @tracked parliamentFlow;
+  @tracked isPreliminaryPostponed;
+  @tracked isPreliminaryRetracted;
 
   get isClosedMeeting() {
     return isPresent(this.meeting.agenda.get('id'));

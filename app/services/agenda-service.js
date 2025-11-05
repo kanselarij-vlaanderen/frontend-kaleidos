@@ -6,6 +6,7 @@ import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-fla
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
+import { deleteDocumentContainer } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class AgendaService extends Service {
   @service store;
@@ -146,7 +147,8 @@ export default class AgendaService extends Service {
     meeting,
     subcase,
     formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
-    privateComment = null
+    privateComment = null,
+    submission = null
   ) {  
     const internalReview = await subcase.internalReview;
     if (!internalReview?.id) {
@@ -159,6 +161,7 @@ export default class AgendaService extends Service {
       body: JSON.stringify({
         subcase: subcase.uri,
         formallyOkStatus: formallyStatusUri,
+        submission: submission?.uri,
       })
     });
     const json = await getJsonPayloadOrThrow(response);
@@ -200,6 +203,37 @@ export default class AgendaService extends Service {
         }
       }
     }
+    if (json.data.didRestoreFromSubmission) {
+      // There may be a decision now with stale name or content.
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[:has:piece-parts]': true,
+        'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+      });
+      if (report) {
+        const documentContainer = await report.documentContainer;
+        const pieces = await documentContainer.pieces;
+        const newName = await generateReportName(agendaitem, meeting, pieces.length);
+        if (report.name !== newName) {
+          report.name = newName;
+          await report.belongsTo('file').reload();
+          await report.save();
+        }
+        await this.decisionReportGeneration.generateReplacementReport.perform(report);
+
+        // since we have a "restored" report, we also need a decision result.
+        // approved is the only logical one (nota and not postponed/retracted yet)
+        const decisionActivity = await this.store.queryOne('decision-activity', {
+          'filter[treatment][agendaitems][:id:]': agendaitem.id,
+        });
+        const decisionResultCode = await this.store.findRecordByUri(
+          'concept',
+          CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        );
+        decisionActivity.decisionResultCode = decisionResultCode;
+        await decisionActivity.save();
+      }
+    }
     return agendaitem;
   }
 
@@ -239,6 +273,19 @@ export default class AgendaService extends Service {
     return json;
   }
 
+  async getPreliminaryDecisionResultCode(agendaitem) {
+    if (!agendaitem?.id) {
+      return;
+    }
+    const url = `/agendaitem/${agendaitem.id}/preliminary-decision-result-code`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    const json = await getJsonPayloadOrThrow(response);
+    return json.data;
+  }
+
   async getAgendaAndMeetingForSubmission(submission) {
     const url = `/submissions/${submission.id}/for-meeting`;
     const response = await fetch(url, {
@@ -267,6 +314,24 @@ export default class AgendaService extends Service {
         this.intl.t('error-with-message', { message: error?.message }),
         this.intl.t('warning-title'),
       );
+    }
+  }
+
+  /**
+   * @argument agendaitem
+   * @argument submission
+   */
+  async keepDraftDecisionAndNewsItem(agendaitem, submission) {
+    const url = `/submissions/${submission.id}/keep-draft-decision-and-news-item`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+      body: JSON.stringify({
+        agendaitem: agendaitem.uri,
+      })
+    });
+    if (!response.ok) {
+      await getJsonPayloadOrThrow(response);
     }
   }
 
@@ -306,7 +371,7 @@ export default class AgendaService extends Service {
     );
   }
 
-  async deleteAgendaitem(agendaitem) {
+  async deleteAgendaitem(agendaitem, keepDecisionAndNewsItem = false) {
     const agendaitemToDelete = await this.store.findRecord(
       'agendaitem',
       agendaitem.get('id'),
@@ -325,13 +390,17 @@ export default class AgendaService extends Service {
       if (treatment) {
         const decisionActivity = await treatment.decisionActivity;
         const newsItem = await treatment.newsItem;
-        if (newsItem) {
+        if (newsItem && !keepDecisionAndNewsItem) {
           await newsItem.destroyRecord();
         }
         if (decisionActivity) {
+          const report = await decisionActivity.belongsTo('report').reload();
           await decisionActivity.destroyRecord();
+          if (report && !keepDecisionAndNewsItem) {
+            const documentContainer = await report.documentContainer;
+            await deleteDocumentContainer(documentContainer);
+          }
         }
-        // TODO DELETE REPORT !
         await treatment.destroyRecord();
       }
       await Promise.all(
