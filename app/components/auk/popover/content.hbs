@@ -1,0 +1,43 @@
+{{#if @isShown}}
+  <div
+    class="au-c-tooltip"
+    role="tooltip"
+    ...attributes
+    {{this.floatingUi
+      @targetElement
+      this.arrowElement
+      defaultPlacement=@placement
+    }}
+    {{this.closeOnEscapePress}}
+    {{focus-trap
+      shouldSelfFocus=true
+      focusTrapOptions=(hash
+        clickOutsideDeactivates=this.clickOutsideDeactivates
+      )
+    }}
+  >
+    <div {{this.arrow}} class="au-c-tooltip__arrow"></div>
+    <div class="au-c-tooltip__content">
+      <Auk::Toolbar as |Toolbar|>
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <h4 class="auk-toolbar__title">{{@title}}</h4>
+            </Group.Item>
+          </Toolbar.Group>
+          <Toolbar.Group @position="right" as |Group|>
+            <Group.Item>
+              <AuButton
+                @skin="naked"
+                @icon="x"
+                @hideText={{true}}
+                {{on "click" @hide}}
+              >
+                {{t "close"}}
+              </AuButton>
+            </Group.Item>
+          </Toolbar.Group>
+        </Auk::Toolbar>
+      {{yield}}
+    </div>
+  </div>
+{{/if}}
