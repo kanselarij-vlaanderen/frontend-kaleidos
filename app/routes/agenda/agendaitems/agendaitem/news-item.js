@@ -29,7 +29,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
     });
   }
 
-  async afterModel() {
+  async afterModel(model) {
     const nota = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.DOCUMENT_TYPES.NOTA,
@@ -38,6 +38,7 @@ export default class NewsitemAgendaitemAgendaitemsAgendaRoute extends Route {
       'concept',
       CONSTANTS.DOCUMENT_TYPES.VISIENOTA,
     );
+    await model?.belongsTo('isBeingEditedBy').reload();
     // Get most recent version of document with type 'Nota' or 'VisieNota',
     // but only if there are multiple versions of the document
     const latestNotaVersion = await this.store.queryOne('piece', {

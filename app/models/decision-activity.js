@@ -3,7 +3,7 @@ import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class decisionActivity extends Model {
   @attr('date') startDate; // for publications: displayed as: Datum beslissing
-
+  @attr('string') uri;
   @belongsTo('agenda-item-treatment', {
     inverse: 'decisionActivity',
     async: true,
