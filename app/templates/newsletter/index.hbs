@@ -42,7 +42,7 @@
           <NewsItem::TableRow
             @agendaitem={{item.agendaitem}}
             @newsItem={{item.newsItem}}
-            @onSave={{perform this.saveNewsItem}}
+            @onSave={{this.saveNewsItem}}
             @onCancel={{this.cancelEdit}}
           />
         {{/each}}
