@@ -5,6 +5,7 @@ import dependency from '../../selectors/dependency.selectors';
 import publication from '../../selectors/publication.selectors';
 import auk from '../../selectors/auk.selectors';
 import appuniversum from '../../selectors/appuniversum.selectors';
+import utils from '../../selectors/utils.selectors';
 
 context('Publications overview tests', () => {
   beforeEach(() => {
@@ -125,7 +126,7 @@ context('Publications overview tests', () => {
     cy.get(publication.publicationHeader.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
       .parent()
-      .find(publication.publicationTableRow.row.remark)
+      .find(utils.abbreviatedText.tooltipTarget)
       .trigger('mouseenter');
     cy.get(appuniversum.tooltip).should('be.visible')
       .should('contain', 'end');
@@ -134,7 +135,7 @@ context('Publications overview tests', () => {
     cy.get(publication.publicationTableRow.row.shortTitle).contains('test met extra lange korte titel,')
       .should('not.contain', 'end')
       .parent()
-      .find(publication.publicationTableRow.row.remark)
+      .find(utils.abbreviatedText.tooltipTarget)
       .trigger('mouseenter');
     cy.get(appuniversum.tooltip).should('be.visible')
       .should('contain', 'end');

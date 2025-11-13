@@ -98,7 +98,6 @@ const selectors = {
       status: '[data-test-publication-table-row-status]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
-      remark: '[data-test-publication-table-row-remark]',
     },
   },
 
