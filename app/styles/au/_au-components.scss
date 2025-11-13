@@ -894,6 +894,10 @@ $au-unit-medium: 1.6rem;
 
 // Tooltip
 
+.au-c-tooltip {
+  white-space: normal;
+}
+
 .au-c-tooltip--large {
   padding: 1.2rem 1.6rem;
 
