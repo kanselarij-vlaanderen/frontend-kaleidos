@@ -9,7 +9,7 @@
 }
 
 .auk-tabs--border-bottom {
-  border-bottom: 0.1rem solid auk.$color-gray-300;
+  border-bottom: 0.1rem solid var(--au-gray-300);
 }
 
 .auk-tabs__tab__link {
@@ -22,7 +22,7 @@
   border-bottom: 0.3rem solid transparent;
   background-color: transparent;
 
-  color: auk.$color-blue-500;
+  color: var(--au-blue-700);
   font-family: flanders-sans, sans-serif;
   font-weight: 500;
   font-size: 1.5rem;
@@ -34,7 +34,7 @@
   }
 
   &:hover {
-    background-color: auk.$color-gray-100;
+    background-color: var(--au-gray-100);
   }
 
   @include auk.mixin-element-focus;
@@ -55,19 +55,19 @@
 
 .auk-tabs__tab__counter {
   font-weight: 400;
-  color: auk.$color-blue-500;
+  color: var(--au-blue-700);
 }
 
 .auk-tabs__tab__link--active {
-  color: auk.$color-gray-900;
+  color: var(--au-gray-900);
 
   &,
   &:focus {
-    border-bottom: 0.3rem solid auk.$color-gray-900;
+    border-bottom: 0.3rem solid var(--au-gray-900);
   }
 
   .auk-tabs__tab__counter {
-    color: auk.$color-gray-600;
+    color: var(--au-gray-600);
   }
 }
 
@@ -81,7 +81,7 @@
   ========================================================================== */
 
 .auk-tabs--reversed {
-  border-top: 0.1rem solid auk.$color-gray-300;
+  border-top: 0.1rem solid var(--au-gray-300);
   margin-top: 1.2rem;
 }
 
@@ -99,11 +99,11 @@
 }
 
 .auk-tabs--reversed .auk-tabs__tab__link--active {
-  color: auk.$color-gray-900;
+  color: var(--au-gray-900);
 
   &,
   &:focus {
-    border-top: 0.3rem solid auk.$color-gray-900;
+    border-top: 0.3rem solid var(--au-gray-900);
     border-bottom: none;
   }
 }
@@ -152,7 +152,7 @@
 
     width: .4rem;
     height: 100%;
-    background-color: auk.$color-primary;
+    background-color: var(--au-primary);
 
     content: "";
   }
@@ -212,7 +212,7 @@
 
 .auk-tabs__hierarchical-back {
   .auk-tabs__tab__link--active {
-    color: auk.$color-blue-500;
+    color: var(--au-blue-700);
     border-bottom: 0.3rem solid transparent;
   }
 }

@@ -43,6 +43,9 @@ module.exports = async function (defaults) {
         '@ember-data/store': {
           polyfillUUID: true,
         },
+        '@appuniversum/ember-appuniversum': {
+          disableInternalAuContentUsage: true,
+        },
       },
     },
     autoImport: {
