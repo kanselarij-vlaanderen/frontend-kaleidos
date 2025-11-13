@@ -894,56 +894,6 @@ $au-unit-medium: 1.6rem;
 
 // Tooltip
 
-.au-c-tooltip {
-  border-color: var(--au-border-color);
-  border-radius: 3px;
-  padding: .6rem 1rem;
-  background: var(--au-white);
-
-  color: var(--au-text-color);
-  font-size: var(--au-global-font-size);
-
-  &[data-tooltip-placement^="top"] {
-    .au-c-tooltip__arrow {
-      border-top-color: var(--au-border-color);
-
-      &::after {
-        border-top-color: var(--au-white);
-      }
-    }
-  }
-
-  &[data-tooltip-placement^="right"] {
-    .au-c-tooltip__arrow {
-      border-right-color: var(--au-border-color);
-
-      &::after {
-        border-right-color: var(--au-white);
-      }
-    }
-  }
-
-  &[data-tooltip-placement^="bottom"] {
-    .au-c-tooltip__arrow {
-      border-bottom-color: var(--au-border-color);
-
-      &::after {
-        border-bottom-color: var(--au-white);
-      }
-    }
-  }
-
-  &[data-tooltip-placement^="left"] {
-    .au-c-tooltip__arrow {
-      border-left-color: var(--au-border-color);
-
-      &::after {
-        border-left-color: var(--au-white);
-      }
-    }
-  }
-}
-
 .au-c-tooltip--large {
   padding: 1.2rem 1.6rem;
 
