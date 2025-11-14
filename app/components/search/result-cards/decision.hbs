@@ -31,12 +31,14 @@
   </c.header>
   {{#if @title}}
     <c.content>
-      <p>
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@title}}
-        />
-      </p>
+      <AuContent>
+        <p>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@title}}
+          />
+        </p>
+      </AuContent>
     </c.content>
   {{/if}}
   {{#if @decisionResultCode}}

@@ -11,12 +11,14 @@
       <Toolbar.Group @position="right" as |Group|>
         <Group.Item>
           {{#if this.loadNotaOrVisienota.isRunning}}
-            <div class="au-c-loader au-c-loader--small">
-              <div class="au-c-loader__animation" aria-hidden="true"></div>
-              <EmberTooltip @side="bottom" @tooltipClass="auk-tooltip">
+            <AuTooltip @placement="bottom" as |tooltip|>
+              <div {{tooltip.target}} class="au-c-loader au-c-loader--small">
+                <div class="au-c-loader__animation" aria-hidden="true"></div>
+              </div>
+              <tooltip.Content>
                 {{t "nota-loading-text"}}
-              </EmberTooltip>
-            </div>
+              </tooltip.Content>
+            </AuTooltip>
           {{else}}
             {{#if this.notaOrVisieNota}}
               <AuButton
