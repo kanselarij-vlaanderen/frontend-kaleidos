@@ -1558,5 +1558,7 @@
   "no-visible-news-items": "Geen kort bestek beschikbaar",
   "newsletter-nothing-to-send": "Er zijn geen agendapunten of mededelingen gevonden 'in kort bestek' met een thema",
   "newsletter-only-announcements-to-send": "U staat op het punt om enkel mededelingen te publiceren",
-  "publish-anyway": "Toch publiceren"
+  "publish-anyway": "Toch publiceren",
+  "agendaitems-confidential-warning-title": "Agendapunten met beperkte toegang",
+  "agendaitems-confidential-warning-message": "Er zijn agendapunten met beperkte toegang opgenomen in het kort bestek, Deze zullen mee gepubliceerd worden als u bevestigt."
 }
