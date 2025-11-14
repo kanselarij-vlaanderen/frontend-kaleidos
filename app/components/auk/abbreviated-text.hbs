@@ -5,20 +5,21 @@
     {{else}}
       {{this.abbreviatedText}}
     {{/if}}
-    <Auk::ButtonLink
-      @icon="circle-three-dots"
-      @skin="muted"
-      @layout="icon-only"
-      class="auk-o-flex--vertical-center"
-    >
-      <:floater>
-        <EmberTooltip @tooltipClass="auk-tooltip" @side="bottom">
-          <p>
-            {{@text}}
-          </p>
-        </EmberTooltip>
-      </:floater>
-    </Auk::ButtonLink>
+    <AuTooltip @placement="bottom" as |tooltip|>
+      <AuLink
+        data-test-abbreviated-text-tooltip-target
+        {{tooltip.target}}
+        @skin="secondary"
+        @icon="circle-three-dots"
+        @hideText={{true}}
+        class="au-u-margin-left-tiny"
+      >
+        {{t "show-full-text"}}
+      </AuLink>
+      <tooltip.Content>
+        {{@text}}
+      </tooltip.Content>
+    </AuTooltip>
   </div>
 {{else}}
   {{#if (has-block)}}
