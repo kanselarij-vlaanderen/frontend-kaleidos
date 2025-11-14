@@ -101,20 +101,14 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       'filter[created-for][:id:]': this.args.meeting.id,
       sort: '-created',
     });
-    const confidentialNotaCount = (await this.countConfidentialNewsItems(agenda, CONSTANTS.AGENDA_ITEM_TYPES.NOTA));
-    const confidentialAnnouncementCount = (await this.countConfidentialNewsItems(agenda, CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT));
-    this.hasConfidentialNewsletters = confidentialNotaCount != 0 || confidentialAnnouncementCount != 0;
-  });
-
-  countConfidentialNewsItems = async(agenda, agendaitemType) => {
-    return await this.store.count('news-item', {
+    const confidentialNewslettersCount = await this.store.count('news-item', {
       'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
-      'filter[agenda-item-treatment][agendaitems][type][:uri:]': agendaitemType,
       'filter[in-newsletter]': true,
       'filter[agenda-item-treatment][agendaitems][agenda-activity][subcase][confidential]': true,
       'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
     });
-  }
+    this.hasConfidentialNewsletters = confidentialNewslettersCount != 0;
+  });
 
   get disableConfirm() {
     return this.calculateTotals.isRunning ||
