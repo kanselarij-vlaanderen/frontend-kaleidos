@@ -226,7 +226,8 @@ function checkColumnsIfUnchecked(columnKeyNames) {
         }
       });
   });
-  cy.get(publication.tableDisplayConfig.close).forceClick(); // close button may be out of view top right
+  cy.get(auk.popover.close)
+    .forceClick(); // close button may be out of view top right
 }
 
 /**
