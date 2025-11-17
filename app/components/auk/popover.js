@@ -14,9 +14,9 @@ export default class Popover extends Component {
     return this.args.placement || 'top';
   }
 
-  show = () => {
-    this.isShown = true;
-  };
+  get isWide() {
+    return this.args.isWide || false;
+  }
 
   hide = () => {
    this.isShown = false;
@@ -32,7 +32,7 @@ export default class Popover extends Component {
     element.addEventListener('click', this.toggle);
 
     return () => {
-      element.removeEventListener('click', this.show);
+      element.removeEventListener('click', this.toggle);
     };
   });
 }

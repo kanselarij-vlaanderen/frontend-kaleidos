@@ -1,8 +1,7 @@
 {{#if @isShown}}
   <div
-    class="au-c-tooltip"
+    class="auk-popover {{if @isWide "auk-popover--wide"}}"
     role="tooltip"
-    ...attributes
     {{this.floatingUi
       @targetElement
       this.arrowElement
@@ -16,27 +15,32 @@
       )
     }}
   >
-    <div {{this.arrow}} class="au-c-tooltip__arrow"></div>
-    <div class="au-c-tooltip__content">
+    <div {{this.arrow}} class="auk-popover__arrow"></div>
+    <div class="auk-popover__header">
       <Auk::Toolbar as |Toolbar|>
+        {{#if @title}}
           <Toolbar.Group @position="left" as |Group|>
             <Group.Item>
               <h4 class="auk-toolbar__title">{{@title}}</h4>
             </Group.Item>
           </Toolbar.Group>
-          <Toolbar.Group @position="right" as |Group|>
-            <Group.Item>
-              <AuButton
-                @skin="naked"
-                @icon="x"
-                @hideText={{true}}
-                {{on "click" @hide}}
-              >
-                {{t "close"}}
-              </AuButton>
-            </Group.Item>
-          </Toolbar.Group>
-        </Auk::Toolbar>
+        {{/if}}
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
+            <AuButton
+              data-test-auk-popover-close
+              @skin="naked"
+              @icon="x"
+              @hideText={{true}}
+              {{on "click" @hide}}
+            >
+              {{t "close"}}
+            </AuButton>
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </div>
+    <div class="auk-popover__content">
       {{yield}}
     </div>
   </div>
