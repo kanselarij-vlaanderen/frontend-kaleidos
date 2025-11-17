@@ -17,15 +17,25 @@ function pressRdfaButton(buttonTitle) {
     .click();
 }
 
-function checkCSS(row) {
+function checkCSS(row, printableNewsletter) {
   cy.get(row).find('strong')
     .should('have.css', 'font-weight', '500');
   cy.get(row).find('em')
     .should('have.css', 'font-style', 'italic');
-  cy.get(row).find('u')
-    .should('have.css', 'text-decoration', 'underline solid rgb(51, 51, 50)'); // This color value has already been updated to the 'appuniversum' equivalent
-  cy.get(row).find('del')
-    .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)'); // This color value is still the orginal 'auk' value (but will be refactored in the near future)
+  if (printableNewsletter) {
+    // --au-text-color inherited from .l-printable-newsletter p
+    cy.get(row).find('u')
+      .should('have.css', 'text-decoration', 'underline solid rgb(51, 51, 50)');
+    cy.get(row).find('del')
+      .should('have.css', 'text-decoration', 'line-through solid rgb(51, 51, 50)');
+  } else {
+    // --grey-800 inherited from au-c-content
+    cy.get(row).find('u')
+      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
+    cy.get(row).find('del')
+      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
+  }
+
   cy.get(row).find('sub')
     .should('have.css', 'vertical-align', 'sub');
   cy.get(row).find('sup')
@@ -219,12 +229,12 @@ context('rdfa editor tests', () => {
     cy.clickReverseTab('Klad');
     cy.get(newsletter.newsletterPrint.htmlContent).eq(0)
       .as('firstRowKlad');
-    checkCSS('@firstRowKlad');
+    checkCSS('@firstRowKlad', true);
 
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.newsletterPrint.htmlContent).eq(0)
       .as('firstRowDefinitief');
-    checkCSS('@firstRowDefinitief');
+    checkCSS('@firstRowDefinitief', true);
 
     cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/kort-bestek');
     cy.get(newsletter.agendaitemNewsItem.content).as('agendaitemNewsItemContent');

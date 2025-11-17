@@ -17,17 +17,23 @@
               {{t "link-publication"}}
             </th>
             <th>
-              {{t "publication-number"}}
-              <AuTooltip @placement="bottom" as |tooltip|>
-                <AuIcon
-                  {{tooltip.target}}
-                  @icon="circle-info"
-                  class="au-u-muted"
-                />
-                <tooltip.Content>
-                  {{t "batch-document-publication-modal-publication-number-info"}}
-                </tooltip.Content>
-              </AuTooltip>
+              <span class="au-u-flex--inline au-u-flex--vertical-center">
+                {{t "publication-number"}}
+                <AuTooltip @placement="bottom" as |tooltip|>
+                  <AuButton
+                    {{tooltip.target}}
+                    @skin="link-secondary"
+                    @icon="circle-info"
+                    @hideText={{true}}
+                    class="au-u-padding-none auk-u-ml"
+                  >
+                    {{t "batch-document-publication-modal-publication-number-info"}}
+                  </AuButton>
+                  <tooltip.Content>
+                    {{t "batch-document-publication-modal-publication-number-info"}}
+                  </tooltip.Content>
+                </AuTooltip>
+              </span>
             </th>
             <th />
           </tr>

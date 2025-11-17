@@ -97,6 +97,10 @@ const selectors = {
     cancel: '[data-test-formally-ok-edit-cancel]',
   },
 
+  abbreviatedText: {
+    tooltipTarget: '[data-test-abbreviated-text-tooltip-target]',
+  },
+
   checkboxTree: {
     toggleAll: '[data-test-checkbox-tree-toggle-all]',
     toggleSingle: '[data-test-checkbox-tree-toggle-single]',
