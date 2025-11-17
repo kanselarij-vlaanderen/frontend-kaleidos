@@ -32,7 +32,7 @@
 // @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-pagination';
 // @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-panel-layout';
 @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-panel';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-popover';
+// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-popover';
 @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-progress-bar';
 @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-scroll-wrapper';
 @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-section-header';
@@ -56,6 +56,7 @@
 @import 'auk-sidebar';
 @import 'auk-tabs';
 @import 'auk-toolbar-complex';
+@import 'auk-popover';
 
 // Local AUK extensions & additions
 @import 'auk-additions';
