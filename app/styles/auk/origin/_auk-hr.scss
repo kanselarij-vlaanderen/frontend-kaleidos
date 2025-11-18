@@ -1,7 +1,13 @@
+@use "settings";
+
 /* ==========================================================================
-   Kaleidos base
+  auk-hr
    ========================================================================== */
 
-// Objects
-@use 'origin/auk-o-grid';
-@use 'origin/auk-o-flex';
+.auk-hr {
+  margin: 2.4rem 0;
+  border-bottom: .1rem solid settings.$color-gray-300;
+  hr {
+    display: none;
+  }
+}

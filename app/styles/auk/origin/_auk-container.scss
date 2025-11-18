@@ -1,0 +1,19 @@
+/* ==========================================================================
+  auk-container
+  ========================================================================== */
+
+.auk-container {
+  max-width: 90rem;
+}
+
+.auk-container--small {
+  max-width: 70rem;
+}
+
+.auk-container--large {
+  max-width: 110rem;
+}
+
+.auk-container--center {
+  margin: 0 auto;
+}
