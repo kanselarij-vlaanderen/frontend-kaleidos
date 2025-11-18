@@ -107,3 +107,9 @@
 .auk-u-overflow-wrap-anywhere {
   overflow-wrap: anywhere !important;
 }
+
+.auk-u-text-hyphenate-breaking-words {
+  white-space: normal;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
