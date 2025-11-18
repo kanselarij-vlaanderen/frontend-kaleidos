@@ -35,6 +35,8 @@
 @use 'auk-table';
 @use 'auk-toolbar';
 
+// Still uses '@import' for the moment
+
 // Local component overrides (responsive versions)
 @import 'auk-brand';
 @import 'auk-mobile-filters';
