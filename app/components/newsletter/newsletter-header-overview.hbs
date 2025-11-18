@@ -2,16 +2,21 @@
   <Auk::Toolbar as |Toolbar|>
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
-        <div class="auk-o-flex auk-o-flex--vertical-center">
-          <h4
-            class="auk-toolbar-complex__title auk-u-text-capitalize"
-            data-test-newsletter-header-overview-title
-          >
-            {{t "newsletter-overview-pdf-name"}}
-            -
-            {{@meeting.kind.label}}
-            {{date @meeting.plannedStart}}
-          </h4>
+        <div class="auk-o-flex auk-o-flex--vertical auk-u-my-2">
+          <div class="auk-o-flex auk-o-flex--vertical-center">
+            <h4
+              class="auk-toolbar-complex__title auk-u-text-capitalize"
+              data-test-newsletter-header-overview-title
+            >
+              {{t "newsletter-overview-pdf-name"}}
+              -
+              {{@meeting.kind.label}}
+              {{date @meeting.plannedStart}}
+            </h4>
+          </div>
+          {{#unless this.areTasksRunning}}
+            <Newsletter::PublicationPills @meeting={{@meeting}} />
+          {{/unless}}
         </div>
       </Group.Item>
     </Toolbar.Group>
@@ -21,7 +26,7 @@
   <Auk::Toolbar as |Toolbar|>
     <Toolbar.Group @position="left" as |Group|>
       <Group.Item>
-        <Auk::Tabs @reversed={{true}} @responsive={{true}} @responsiveBreakpoint="small">
+        <Auk::Tabs @reversed={{true}} @responsive={{true}} @responsiveBreakpoint="small" class="au-u-margin-top-none">
           <Auk::Tab
             @route="newsletters"
             @isHierarchicalBack={{true}}

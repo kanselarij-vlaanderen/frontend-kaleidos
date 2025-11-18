@@ -72,6 +72,14 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.latestPublicationActivity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS);
   }
 
+  get areTasksRunning() {
+    return this.publishToMail.isRunning ||
+    this.publishToBelga.isRunning ||
+    this.publishThemis.isRunning ||
+    this.publishToAll.isRunning ||
+    this.unpublishThemis.isRunning
+  }
+
   @action
   print() {
     window.print();

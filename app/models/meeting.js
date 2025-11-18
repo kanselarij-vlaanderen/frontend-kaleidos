@@ -26,6 +26,7 @@ export default class Meeting extends Model {
   })
   mainMeeting;
   @belongsTo('mail-campaign', { inverse: 'meeting', async: true }) mailCampaign; // mail-campaign is read-only to prevent concurrency issues
+  @belongsTo('belga-publication', { inverse: 'meeting', async: true }) belgaPublication; // belga-publication is read-only to prevent concurrency issues
   @belongsTo('agenda', { inverse: 'meeting', async: true }) agenda; // The final agenda for this meeting, not saved on agenda side
 
   @belongsTo('internal-decision-publication-activity', {

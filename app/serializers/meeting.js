@@ -6,6 +6,7 @@ const SKIP_SERIALIZED = [
   'mailCampaign',
   'minutes',
   'submissions',
+  'belgaPublication',
 ];
 
 export default class MeetingSerializer extends ApplicationSerializer {
