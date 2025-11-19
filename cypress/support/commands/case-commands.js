@@ -135,7 +135,7 @@ function addSubcaseViaModal(subcase) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.log('addSubcaseViaModal');
-  cy.intercept('GET', '/government-bodies**').as(`getGovernmentBodies${randomInt}`);
+  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
   cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
   cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
   cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
