@@ -15,17 +15,17 @@
   position: relative;
   font-size: 1.3rem;
   text-decoration: none;
-  color: auk.$color-black;
+  color: var(--au-black);
 }
 
 .vlc-agenda-items__sub-item a {
   &:hover,
   &:focus {
-    background-color: auk.$color-gray-200;
-    color: auk.$color-blue-700;
+    background-color: var(--au-gray-200);
+    color: var(--au-blue-700);
 
     span {
-      color: auk.$color-blue-700;
+      color: var(--au-blue-700);
     }
   }
 }
@@ -33,7 +33,7 @@
 a.vlc-agenda-items__sub-item--active,
 a.vlc-agenda-items__sub-item--active:hover,
 a.vlc-agenda-items__sub-item--active:active {
-  background: auk.$color-primary;
+  background: var(--au-primary);
   color: #fff;
 
   span {
@@ -50,7 +50,7 @@ a.vlc-agenda-items__sub-item--active:active {
 }
 
 a.vlc-agenda-items__sub-item--active:focus {
-  background: color.adjust(auk.$color-primary, $lightness: -5%);
+  background: var(--au-blue-900);
 }
 
 .vlc-agenda-meta {
@@ -86,12 +86,12 @@ a.vlc-agenda-items__sub-item--active:focus {
 .vlc-agenda-items__sub-item--active a,
 .vlc-agenda-items__sub-item--active a:hover,
 .vlc-agenda-items__sub-item--active a:active {
-  background: auk.$color-primary;
+  background: var(--au-primary);
   color: #FFF;
 }
 
 .vlc-agenda-items__sub-item--active a:focus {
-  background: color.adjust(auk.$color-primary, $lightness: -5%);
+  background: var(--au-blue-900);
 }
 
 .vlc-agenda-items-sub-item__numbering {
@@ -139,7 +139,7 @@ $i: 0;
 .vlc-agenda-items__status--positive {
   font-weight: 500;
   opacity: 1;
-  color: auk.$color-green-700 !important;
+  color: var(--au-green-700) !important;
 }
 
 .vlc-agenda-items__body {
@@ -147,7 +147,7 @@ $i: 0;
   flex-direction: row;
   padding: 2rem;
   background-color: #FFF;
-  border-bottom: .1rem solid auk.$color-border;
+  border-bottom: .1rem solid var(--au-border-color);
 
   // Override HR spacing
   .auk-hr {
