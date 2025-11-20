@@ -37,6 +37,7 @@ function createCase(shortTitle) {
 
   let caseId;
   cy.log('/createCase');
+  cy.intercept('GET', '/government-bodies?filter**').as('getGovernmentBodies');
   cy.wait('@createNewCase')
     .its('response.body')
     .then((responseBody) => {
@@ -135,7 +136,8 @@ function addSubcaseViaModal(subcase) {
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
   cy.log('addSubcaseViaModal');
-  cy.intercept('GET', '/government-bodies?filter**').as(`getGovernmentBodies${randomInt}`);
+  // no randomInt on government-bodies, in some rare cases this call already happened but was not intercepted with cypress v15
+  cy.intercept('GET', '/government-bodies?filter**').as('getGovernmentBodies');
   cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
   cy.intercept('POST', '/subcases').as(`createNewSubcase${randomInt}`);
   cy.intercept('POST', '/meetings/*/submit').as(`submitToMeeting${randomInt}`);
@@ -146,7 +148,7 @@ function addSubcaseViaModal(subcase) {
     cy.get(cases.subcaseOverviewHeader.openAddSubcase).click();
   }
 
-  cy.wait(`@getGovernmentBodies${randomInt}`, {
+  cy.wait('@getGovernmentBodies', {
     timeout: 60000,
   });
   cy.wait(`@getMandatees${randomInt}`, {
