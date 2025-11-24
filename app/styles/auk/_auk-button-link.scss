@@ -1,7 +1,7 @@
 @use "settings";
 
 /* ==========================================================================
-  auk-button-link
+   auk-button-link
    ========================================================================== */
 
 .auk-button-link {
@@ -15,10 +15,10 @@
   text-decoration: none;
 
   // Build styles
-  font-family: flanders-sans,  sans-serif;
+  font-family: var(--au-font);
   font-size: 1.6rem;
   font-weight: 500;
-  color: settings.$color-blue-500;
+  color: var(--au-blue-500);
   display: flex;
   cursor: pointer;
 
@@ -26,12 +26,12 @@
 
   &:hover,
   &:active {
-    color: settings.$color-blue-700;
+    color: var(--au-blue-700);
   }
 
   &:focus {
-    border-color: settings.$color-yellow-500;
-    outline: 0.3rem solid settings.$color-yellow-500;
+    border-color: var(--au-yellow-400);
+    outline: 0.3rem solid var(--au-yellow-400);
     outline-offset: 0.2rem;
  }
 }
@@ -40,7 +40,7 @@
   &[disabled],
   &:disabled,
   &.auk-button--disabled {
-    color: settings.$color-gray-400;
+    color: var(--au-gray-400);
     text-decoration: none;
     pointer-events: none;
     &:hover,
@@ -52,10 +52,10 @@
 }
 
 .auk-button-link--muted {
-  color: settings.$color-gray-600;
+  color: var(--au-gray-600);
   &:hover,
   &:active {
-    color: settings.$color-gray-800;
+    color: var(--au-gray-800);
   }
 }
 

@@ -1,22 +1,20 @@
-@use "settings";
-
 /* ==========================================================================
-  auk-panel
+   auk-panel
    ========================================================================== */
 
 .auk-panel {
-  background: #FFF;
-  border: .1rem solid #C6CDD3;
+  background: var(--au-white);
+  border: .1rem solid var(--au-border-color);
   border-radius: .3rem;
 }
 
 .auk-panel--gray-100 {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 .auk-panel__header {
   padding: 0 2rem;
-  border-bottom: .1rem solid #C6CDD3;
+  border-bottom: .1rem solid var(--au-border-color);
   display: flex;
   align-items: center;
 }
@@ -36,7 +34,7 @@
 
 .auk-panel__title {
   margin: 0;
-  
+
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 1.2;
@@ -58,7 +56,7 @@
   }
 
   + .auk-panel__body {
-    border-top: .1rem solid #C6CDD3;
+    border-top: .1rem solid var(--au-border-color);
   }
 
   // Padding for tables inside of panels
@@ -75,7 +73,7 @@
   .auk-document-card {
     border: none;
     &:not(:last-of-type) {
-      border-bottom: .1rem solid settings.$color-gray-300;
+      border-bottom: .1rem solid var(--au-gray-300);
     }
   }
 }
@@ -87,11 +85,11 @@
 .auk-panel__footer {
   padding: 0 2rem;
   height: 5.5rem;
-  border-top: .1rem solid #C6CDD3;
+  border-top: .1rem solid var(--au-border-color);
   display: flex;
   align-items: center;
 }
 
 .auk-panel--editing {
-  background: #F3F5F6;
+  background: var(--au-gray-100);
 }

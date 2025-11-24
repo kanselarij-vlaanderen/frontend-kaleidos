@@ -1,12 +1,10 @@
-@use "settings";
-
 /* ==========================================================================
   auk-button-loading
    ========================================================================== */
 
 .auk-button-loading {
-  font-family: flanders-sans, sans-serif;
-  background-color: settings.$color-gray-200;
+  font-family: var(--au-font);
+  background-color: var(--au-gray-200);
   font-size: 1.6rem;
   border: none;
   appearance: none;

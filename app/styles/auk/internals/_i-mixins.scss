@@ -9,7 +9,7 @@
 @mixin style-warning($message) {
    position: relative;
 
-   outline: .3rem solid settings.$color-red-500;
+   outline: .3rem solid var(--au-red-500);
    outline-offset: .3rem;
 
    &:after {
@@ -21,9 +21,9 @@
       min-width: 15rem;
       width: calc(100% + 1.2rem);
       padding: .3rem .6rem;
-      background-color: settings.$color-red-500;
+      background-color: var(--au-red-500);
 
-      color: settings.$color-white;
+      color: var(--au-white);
       content: $message;
    }
 }

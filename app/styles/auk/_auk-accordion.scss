@@ -1,7 +1,5 @@
-@use "settings";
-
 /* ==========================================================================
-  auk-accordion
+   auk-accordion
    ========================================================================== */
 
 .auk-accordion__item {
@@ -25,36 +23,36 @@
     width: 100%;
     border: .15rem solid transparent;
     border-radius: .3rem;
-    background-color: settings.$color-white;
+    background-color: var(--au-white);
 
     cursor: pointer;
 
-    color: settings.$color-blue-500;
-    font-family: settings.$global-base-font-family;
+    color: var(--au-blue-500);
+    font-family: var(--au-font);
     font-size: 1.5rem;
 
     &:hover {
-      background-color: settings.$color-gray-100;
+      background-color: var(--au-gray-100);
     }
 
     &:focus {
-      border: .15rem solid settings.$color-yellow-500;
-      background-color: settings.$color-gray-100;
+      border: .15rem solid var(--au-yellow-400);
+      background-color: var(--au-gray-100);
     }
 
     &:active {
-      background-color: settings.$color-gray-200;
+      background-color: var(--au-gray-200);
     }
 
     &[disabled],
     &:disabled {
       pointer-events: none;
 
-      color: settings.$color-gray-700;
+      color: var(--au-gray-700);
       opacity: .3;
 
       .au-c-icon {
-        color: settings.$color-gray-600;
+        color: var(--au-gray-600);
       }
     }
   }

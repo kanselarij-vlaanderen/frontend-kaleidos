@@ -1,7 +1,5 @@
-@use "settings";
-
 /* ==========================================================================
-  auk-key-value
+   auk-key-value
    ========================================================================== */
 
 .auk-key-values-list {
@@ -11,7 +9,7 @@
 }
 
 .auk-key-value-item__label {
-  color: settings.$color-muted;
+  color: var(--au-muted);
   font-weight: 500;
   max-width: 22rem;
   margin-bottom: 0.5rem;
