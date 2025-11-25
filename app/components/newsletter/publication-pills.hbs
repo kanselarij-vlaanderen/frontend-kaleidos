@@ -19,12 +19,12 @@
           }}
         </AuPill>
       {{/if}}
-      {{#if this.belgaPublication}}
+      {{#if this.latestBelgaPublication.isSent}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "newsitems-were-published-to-belga-at"
-            date=(date this.belgaPublication.sentAt)
-            time=(time this.belgaPublication.sentAt)
+            date=(date this.latestBelgaPublication.sentAt)
+            time=(time this.latestBelgaPublication.sentAt)
           }}
         </AuPill>
       {{/if}}

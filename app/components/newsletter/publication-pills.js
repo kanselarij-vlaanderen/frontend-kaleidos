@@ -14,7 +14,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
   @tracked latestThemisNewsitemPublicationActivity;
   @tracked retractedThemisNewsitemPublicationActivity;
   @tracked mailCampaign;
-  @tracked belgaPublication;
+  @tracked latestBelgaPublication;
 
   constructor() {
     super(...arguments);
@@ -62,7 +62,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     });
 
     // there should only be one belga-publication
-    this.belgaPublication = yield this.store.queryOne('belga-publication', {
+    this.latestBelgaPublication = yield this.store.queryOne('belga-publication', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       sort: '-sent-at',
     });

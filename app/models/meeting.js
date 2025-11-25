@@ -26,7 +26,6 @@ export default class Meeting extends Model {
   })
   mainMeeting;
   @belongsTo('mail-campaign', { inverse: 'meeting', async: true }) mailCampaign; // mail-campaign is read-only to prevent concurrency issues
-  @belongsTo('belga-publication', { inverse: 'meeting', async: true }) belgaPublication; // belga-publication is read-only to prevent concurrency issues
   @belongsTo('agenda', { inverse: 'meeting', async: true }) agenda; // The final agenda for this meeting, not saved on agenda side
 
   @belongsTo('internal-decision-publication-activity', {
@@ -56,6 +55,7 @@ export default class Meeting extends Model {
   @hasMany('sign-flow', { inverse: 'meeting', async: true })
   signFlows;
   @hasMany('submission', { inverse: 'meeting', async: true }) submissions;
+  @hasMany('belga-publication', { inverse: 'meeting', async: true }) belgaPublications; // belga-publication is read-only to prevent concurrency issues
 
   get isPreKaleidos() {
     return this.plannedStart < KALEIDOS_START_DATE;
