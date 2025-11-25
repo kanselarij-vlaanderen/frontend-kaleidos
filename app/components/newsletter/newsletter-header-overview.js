@@ -30,6 +30,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @tracked notaWithThemeCount;
   @tracked announcementWithThemeCount;
   @tracked messageOnConfirm;
+  @tracked hasConfidentialNewsletters;
 
   constructor() {
     super(...arguments);
@@ -95,9 +96,24 @@ export default class NewsletterHeaderOverviewComponent extends Component {
     });
   }
 
+  checkConfidentiality = task(async () => {
+    const agenda = await this.store.queryOne('agenda', {
+      'filter[created-for][:id:]': this.args.meeting.id,
+      sort: '-created',
+    });
+    const confidentialNewslettersCount = await this.store.count('news-item', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': agenda.id,
+      'filter[in-newsletter]': true,
+      'filter[agenda-item-treatment][agendaitems][agenda-activity][subcase][confidential]': true,
+      'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+    });
+    this.hasConfidentialNewsletters = confidentialNewslettersCount != 0;
+  });
+
   get disableConfirm() {
     return this.calculateTotals.isRunning ||
     (this.notaWithThemeCount == 0 && this.announcementWithThemeCount == 0) ||
+    this.checkConfidentiality.isRunning ||
     this.publishToAll.isRunning ||
     this.publishToBelga.isRunning ||
     this.publishToMail.isRunning;
@@ -329,6 +345,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   openConfirmPublishAll() {
     this.calculateTotals.perform();
+    this.checkConfidentiality.perform();
     this.showConfirmPublishAll = true;
   }
 
@@ -340,6 +357,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   openConfirmPublishMail() {
     this.calculateTotals.perform();
+    this.checkConfidentiality.perform();
     this.showConfirmPublishMail = true;
   }
 
@@ -351,6 +369,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   openConfirmPublishBelga() {
     this.calculateTotals.perform();
+    this.checkConfidentiality.perform();
     this.showConfirmPublishBelga = true;
   }
 
@@ -362,6 +381,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @action
   openConfirmPublishThemis() {
     this.calculateTotals.perform();
+    this.checkConfidentiality.perform();
     this.showConfirmPublishThemis = true;
   }
 

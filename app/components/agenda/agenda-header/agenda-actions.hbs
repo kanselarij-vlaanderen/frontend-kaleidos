@@ -279,6 +279,8 @@
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
     @scope={{this.themisPublicationScopes}}
+    @loading={{this.checkConfidentiality.isRunning}}
+    @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />

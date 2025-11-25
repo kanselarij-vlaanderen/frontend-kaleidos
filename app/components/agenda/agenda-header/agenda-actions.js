@@ -58,6 +58,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showVerifyDeleteDecisionsSignFlows = false;
   @tracked signFlowsToRemoveDoneCounter;
   @tracked signFlowsToRemoveTotalCounter;
+  @tracked hasConfidentialNewsletters;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -429,6 +430,16 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return;
   });
 
+  checkConfidentiality = task(async () => {
+    const confidentialNewslettersCount = await this.store.count('news-item', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': this.args.currentAgenda.id,
+      'filter[in-newsletter]': true,
+      'filter[agenda-item-treatment][agendaitems][agenda-activity][subcase][confidential]': true,
+      'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+    });
+    this.hasConfidentialNewsletters = confidentialNewslettersCount != 0;
+  });
+
   @action
   print() {
     window.print();
@@ -466,6 +477,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   openConfirmPublishThemis() {
+    this.checkConfidentiality.perform();
     this.showConfirmPublishThemis = true;
   }
 

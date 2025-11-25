@@ -190,18 +190,28 @@
   @disabled={{this.disableConfirm}}
 >
   <:body>
-  {{#if this.messageOnConfirm}}
-    <AuAlert
-      @title={{t "warning-title"}}
-      @skin="warning"
-      @icon="alert-triangle"
-      @size="small"
-    >
-      <p>{{this.messageOnConfirm}}</p>
-    </AuAlert>
-  {{else}}
-    {{t "send-newsitem-to-mail-verification"}}
-  {{/if}}
+    {{#if this.hasConfidentialNewsletters}}
+      <AuAlert
+        @title={{t "agendaitems-confidential-warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{t "agendaitems-confidential-warning-message"}}</p>
+      </AuAlert>
+    {{/if}}
+    {{#if this.messageOnConfirm}}
+      <AuAlert
+        @title={{t "warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{this.messageOnConfirm}}</p>
+      </AuAlert>
+    {{else}}
+      <p>{{t "send-newsitem-to-mail-verification"}}</p>
+    {{/if}}
   </:body>
 </ConfirmationModal>
 
@@ -215,18 +225,28 @@
   @disabled={{this.disableConfirm}}
 >
   <:body>
-  {{#if this.messageOnConfirm}}
-    <AuAlert
-      @title={{t "warning-title"}}
-      @skin="warning"
-      @icon="alert-triangle"
-      @size="small"
-    >
-      <p>{{this.messageOnConfirm}}</p>
-    </AuAlert>
-  {{else}}
-    {{t "send-newsitem-to-belga-verification"}}
-  {{/if}}
+    {{#if this.hasConfidentialNewsletters}}
+      <AuAlert
+        @title={{t "agendaitems-confidential-warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{t "agendaitems-confidential-warning-message"}}</p>
+      </AuAlert>
+    {{/if}}
+    {{#if this.messageOnConfirm}}
+      <AuAlert
+        @title={{t "warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{this.messageOnConfirm}}</p>
+      </AuAlert>
+    {{else}}
+      <p>{{t "send-newsitem-to-belga-verification"}}</p>
+    {{/if}}
   </:body>
 </ConfirmationModal>
 
@@ -234,6 +254,7 @@
   <ThemisPublications::PublishConfirmationModal
     @scope={{this.themisPublicationScopes}}
     @warningMessage={{this.messageOnConfirm}}
+    @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
@@ -249,6 +270,7 @@
     @title={{t "send-newsitem-to-all"}}
     @scope={{this.themisPublicationScopes}}
     @warningMessage={{this.messageOnConfirm}}
+    @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
   />

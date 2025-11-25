@@ -5,6 +5,16 @@
     @closeDisabled={{this.confirmPublish.isRunning}}
   />
   <Auk::Modal::Body>
+    {{#if @showConfidentialWarning}}
+      <AuAlert
+        @title={{t "agendaitems-confidential-warning-title"}}
+        @skin="warning"
+        @icon="alert-triangle"
+        @size="small"
+      >
+        <p>{{t "agendaitems-confidential-warning-message"}}</p>
+      </AuAlert>
+    {{/if}}
     {{#if @warningMessage}}
       <AuAlert
         @title={{t "warning-title"}}
@@ -23,12 +33,12 @@
   >
     <AuButton
       @skin="primary"
-      @alert={{@warningMessage}}
-      @loading={{this.confirmPublish.isRunning}}
+      @alert={{or @warningMessage @showConfidentialWarning}}
+      @loading={{or this.confirmPublish.isRunning @loading}}
       @loadingMessage={{t "loading"}}
       {{on "click" (perform this.confirmPublish)}}
     >
-      {{t (if @warningMessage "publish-anyway" "publish-to-public")}}
+      {{t (if (or @warningMessage @showConfidentialWarning)  "publish-anyway" "publish-to-public")}}
     </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

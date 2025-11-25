@@ -14,18 +14,13 @@ export default class NewsItemTableRowComponent extends Component {
   @tracked isOpenEditView = false;
   @tracked notaOrVisieNota;
   @tracked decisionActivity;
+  @tracked subcase;
 
   constructor() {
     super(...arguments);
     this.loadNotaOrVisienota.perform();
     this.loadDecisionActivity.perform();
-  }
-
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+    this.loadSubcase.perform();
   }
 
   get class() {
@@ -35,6 +30,18 @@ export default class NewsItemTableRowComponent extends Component {
     }
     return classes.join(' ');
   }
+
+  @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+  }
+
+  loadSubcase = task(async () => {
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    this.subcase = await agendaActivity?.subcase;
+  })
 
   @task
   *saveNewsItem(newsItem, wasNewsItemNew) {
