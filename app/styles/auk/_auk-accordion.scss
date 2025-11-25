@@ -1,0 +1,106 @@
+@use "settings";
+
+/* ==========================================================================
+  auk-accordion
+   ========================================================================== */
+
+.auk-accordion__item {
+  & + .auk-accordion__item {
+    margin-top: 1.6rem;
+  }
+
+  .auk-accordion__header {
+    display: flex;
+    align-items: center;
+    border-radius: .3rem;
+    height: 4rem;
+
+    .auk-toolbar-complex {
+      min-height: 4rem - (2 * .15rem); // height of the header minus top + bottom border
+    }
+  }
+
+  .auk-accordion__button {
+    appearance: none;
+    width: 100%;
+    border: .15rem solid transparent;
+    border-radius: .3rem;
+    background-color: settings.$color-white;
+
+    cursor: pointer;
+
+    color: settings.$color-blue-500;
+    font-family: settings.$global-base-font-family;
+    font-size: 1.5rem;
+
+    &:hover {
+      background-color: settings.$color-gray-100;
+    }
+
+    &:focus {
+      border: .15rem solid settings.$color-yellow-500;
+      background-color: settings.$color-gray-100;
+    }
+
+    &:active {
+      background-color: settings.$color-gray-200;
+    }
+
+    &[disabled],
+    &:disabled {
+      pointer-events: none;
+
+      color: settings.$color-gray-700;
+      opacity: .3;
+
+      .au-c-icon {
+        color: settings.$color-gray-600;
+      }
+    }
+  }
+
+  .auk-accordion__header--controls-left {
+    .auk-accordion__button {
+      padding: 0 1.5rem;
+    }
+  }
+
+  .auk-accordion__header--controls-right {
+    .auk-accordion__button {
+      padding: 0 1.5rem 0 0;
+    }
+  }
+
+  .auk-accordion__title {
+    padding: 0 1.5rem;
+
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .auk-accordion__content {
+    display: block;
+    margin-top: 2rem;
+  }
+
+  .auk-accordion__toggle-icon {
+    transform: rotate(90deg);
+    transition: .150s ease-in-out;
+  }
+
+  &.auk-accordion__item--closed {
+    .auk-accordion__content {
+      display: none;
+    }
+
+    .auk-accordion__toggle-icon {
+      transform: rotate(0deg);
+    }
+  }
+
+  .auk-toolbar-complex__item {
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,22 @@
+/* ==========================================================================
+   auk-loadable-content
+   ========================================================================== */
+
+.auk-loadable-content {
+  display: grid;
+  height: 100%;
+
+  &--is-loading {
+    .auk-loadable-content__content {
+      visibility: hidden;
+    }
+  }
+}
+
+.auk-loadable-content > * {
+  grid-area: 1/1/1/1;
+}
+
+.auk-loadable-content__content {
+  min-width: 0;
+}

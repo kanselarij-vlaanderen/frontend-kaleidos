@@ -1,0 +1,70 @@
+@use "sass:color";
+
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+
+// Tint & shade helper functions
+// ---
+// Makes a color lighter
+@function tint($color, $percent) {
+  @return color.mix(#fff, $color, $percent);
+}
+
+// Makes a color darker
+@function shade($color, $percent) {
+  @return color.mix(#000, $color, $percent);
+}
+
+// Color palette
+$white       : #FFFFFF;
+$black       : #000000;
+
+$gray-100    : #F4F5F6;
+$gray-200    : #E6E8EB;
+$gray-300    : #CCD1D9;
+$gray-400    : #A1ABBA;
+$gray-500    : #8E98A6;
+$gray-600    : #69717C;
+$gray-700    : #545961;
+$gray-800    : #2A2D31;
+$gray-900    : #212326;
+$gray-1000   : #000000;
+
+$blue-100    : #D4E3F7;
+$blue-500    : #0055CC;
+$blue-700    : #004099;
+$blue-800    : #002A64;
+
+$yellow-100  : #FCF1CF;
+$yellow-300  : #FEE85C;
+$yellow-500  : #FFC515;
+$yellow-700  : #997300;
+$yellow-800  : #664D00;
+$brand       : #FEEA52;
+
+$red-50      : #FBE9E9;
+$red-100     : #F7D4D4;
+$red-300     : #E87878;
+$red-500     : #DB3434;
+$red-700     : #990000;
+$red-800     : #5E0000;
+
+$green-100   : #F7FAE5;
+$green-300   : #D8E878;
+$green-500   : #8BAE00;
+$green-700   : #238000;
+$green-800   : #165100;
+
+// Additional colors (not for regular use)
+$pink: #E86AB9;
+
+
+/* Semantic colors
+ ========================================================================== */
+ 
+$primary: $blue-500;
+$heading: $gray-900;
+$text: $gray-800;
+$muted: $gray-600;
+$border: $gray-300;

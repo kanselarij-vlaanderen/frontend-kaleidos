@@ -530,6 +530,13 @@ $au-unit-medium: 1.6rem;
   }
 }
 
+.au-c-control-group--error {
+  background-color: $au-alert-error-background-color;
+  border: 0.1rem solid $au-input-border-color;
+  border-color: $au-alert-error-border-color;
+  border-radius: $au-input-border-radius;
+}
+
 // Alert
 
 .au-c-alert {

@@ -1,0 +1,113 @@
+/* ==========================================================================
+    Object: Flex
+    ---
+    Object to make a container use flexbox
+   ========================================================================== */
+
+/* Variables
+   ========================================================================== */
+
+$o-flex-gutter-width: 0.8rem !default;
+
+/* Utility classes
+   ========================================================================== */
+
+.auk-o-flex {
+  display: flex !important;
+}
+
+.auk-o-flex--inline {
+  display: inline-flex !important;
+}
+
+.auk-o-flex--vertical {
+  flex-direction: column !important;
+}
+
+.auk-o-flex--vertical-center {
+  align-items: center !important;
+}
+
+.auk-o-flex--horizontal-center {
+  justify-content: center !important;
+}
+
+.auk-o-flex--center {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.auk-o-flex--justify-between {
+  justify-content: space-between !important;
+}
+
+.auk-o-flex--justify-around {
+  justify-content: space-around !important;
+}
+
+.auk-o-flex--justify-end {
+  justify-content: flex-end !important;
+}
+
+.auk-o-flex--align-start {
+  align-items: flex-start !important;
+}
+
+.auk-o-flex--align-end {
+  align-items: flex-end !important;
+}
+
+.auk-o-flex--align-baseline {
+  align-items: baseline !important;
+}
+
+.auk-o-flex--wrap {
+  flex-wrap: wrap !important;
+}
+
+.auk-o-flex--no-wrap {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
+.auk-o-flex--align-self-start {
+  align-self: flex-start !important;
+}
+
+.auk-o-flex--spaced > *:not(:last-child) {
+  margin-right: $o-flex-gutter-width !important;
+}
+
+.auk-o-flex--spaced-wide > *:not(:last-child) {
+  margin-right: $o-flex-gutter-width * 2 !important;
+}
+
+/* Gap classes
+   ========================================================================== */
+
+.auk-o-flex-gap--small {
+  gap: .5rem;
+}
+
+.auk-o-flex-gap--medium {
+  gap: 1rem;
+}
+
+.auk-o-flex-gap--large {
+  gap: 1.5rem;
+}
+
+/* Flexible items
+   ========================================================================== */
+
+.auk-o-flex__item {
+  flex: 1 !important;
+}
+
+.auk-o-flex__item--shrink {
+  flex: 0 1 0 !important;
+}
+
+.auk-o-flex__item--fix {
+  flex: 0 0 auto !important;
+}
