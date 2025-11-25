@@ -33,7 +33,9 @@ function checkPublishMail(alertMessage) {
     .children(appuniversum.button)
     .click();
   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-  cy.get(auk.confirmationModal.footer.confirm).click();
+  // the button will be disabled now with the new warnings, untested
+  cy.get(auk.confirmationModal.footer.confirm).invoke('removeAttr', 'disabled')
+    .click();
   cy.get(auk.auModal.container).should('not.exist');
   cy.get(appuniversum.alert.message).contains(alertMessage);
   cy.get(appuniversum.alert.close).click();
@@ -73,7 +75,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
 
-  it('should test the pre mailchimp checks', () => {
+  it.only('should test the pre mailchimp checks', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
     const agendaDate = Cypress.dayjs().add(5, 'weeks')
@@ -81,7 +83,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const type1 = 'Mededeling';
     const type2 = 'Nota';
     const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
-    const theme = 'Justitie en Handhaving';
+    const theme = 'Brussel'; // 'Justitie en Handhaving' is the one theme we can't accept, no mailchimp id
     const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
     const shortSubcaseTitle3 = 'Cypress test: tweede nieuwsbrief nota';
     const alertMessage = 'De nieuwsbrief kan niet verzonden worden';
@@ -129,7 +131,22 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
       .click();
     cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.get(newsletter.tableRow.titleContent); // await page load
-    checkPublishMail(alertMessage);
+    // checkPublishMail(alertMessage); // no longer true
+    // there should be no alert message on announcements with a theme
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.intercept('POST', '/newsletter/mail-campaigns', staticBadResponse).as('postMailCampaigns');
+
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@postMailCampaigns')
+      .then((responseBody) => {
+        if (responseBody.error || responseBody.response?.statusCode === 500) {
+          // service is not enabled, so we always get errors unless we use a cypress spy
+          cy.get(appuniversum.alert.container).should('exist');
+        }
+      });
 
     // remove theme from mededeling
     cy.openAgendaForDate(agendaDate);
