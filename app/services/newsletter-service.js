@@ -132,6 +132,7 @@ export default class NewsletterService extends Service {
     });
     const agendaItemType = await agendaitem.type;
     if (agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT) {
+      const announcementTheme = await this.store.findRecordByUri('theme', CONSTANTS.NEWSLETTER_THEMES.ANNOUNCEMENT);
       const content = agendaitem.title;
       const contentWithBreaks = content?.replace(/\n/g, '<br />');
       news.title = agendaitem.shortTitle || content;
@@ -140,9 +141,10 @@ export default class NewsletterService extends Service {
       // We should check if the decision activity has "postponed" or "retracted" or subcase is confidential
       // but right now, we always create newsitems for announcements in the `agenda-submission` service
       // when creating the initial agendaitem
-      // there is no way for a user to remove an announcement newsItem so this should be next to unreachable code
-      // the only possible way is on legacy, where announcements do not have a newsItem (or even a subcase)
+      // there is no way for a user to remove an announcement newsItem besides changing the agendaitemType
       news.inNewsletter = true;
+      // all announcements have this theme
+      news.themes = [announcementTheme];
     } else {
       news.title = agendaitem.shortTitle;
       news.subtitle = agendaitem.title;
