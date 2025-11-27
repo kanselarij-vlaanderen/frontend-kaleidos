@@ -19,7 +19,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @service currentSession;
 
   @tracked mailCampaign;
-  @tracked newsletterHTML = null;
+  // @tracked newsletterHTML = null;
   @tracked latestPublicationActivity;
 
   @tracked showConfirmPublishAll = false;
