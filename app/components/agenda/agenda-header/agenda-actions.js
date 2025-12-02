@@ -44,6 +44,17 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     },
   ];
 
+  currentAgendaOnlyOptions = [
+    {
+      label: this.intl.t('download-documents-agenda-selection-all'),
+      value: false,
+    },
+    {
+      label: this.intl.t('download-documents-agenda-selection-current-only'),
+      value: true,
+    },
+  ];
+
   @tracked isAddingAgendaitems = false;
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
@@ -66,6 +77,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked latestThemisPublicationActivity;
 
   @tracked downloadOption = this.downloadOptions[0].value;
+  @tracked currentAgendaOnlyOption = this.currentAgendaOnlyOptions[0].value;
 
   constructor() {
     super(...arguments);
@@ -74,6 +86,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get selectedDownloadOption() {
     return this.downloadOption;
+  }
+
+  get selectedCurrentAgendaOnlyOptions() {
+    return this.currentAgendaOnlyOption;
   }
 
   get showPrintButton() {
@@ -307,6 +323,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       timeOut: 60 * 10 * 1000,
     };
     const pdfOnly = this.downloadOption === 'pdf' ? true : false;
+    const currentAgendaOnly = this.currentAgendaOnlyOption;
     const namePromise = constructArchiveName(this.args.currentAgenda);
     debug('Checking if archive exists ...');
     const jobPromise = fetchArchivingJobForAgenda(
@@ -314,7 +331,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.selectedMandatees,
       decisions,
       this.store,
-      pdfOnly
+      pdfOnly,
+      currentAgendaOnly
     );
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
@@ -551,6 +569,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   onChangeDownloadOption(selectedDownloadOption) {
     this.downloadOption = selectedDownloadOption;
+  }
+
+  @action
+  onChangeCurrentAgendaOnlyOption(selectedDownloadOption) {
+    this.currentAgendaOnlyOption = selectedDownloadOption;
   }
 
   openConfirmEmptyInternalReviews = () => {

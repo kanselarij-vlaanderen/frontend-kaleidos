@@ -22,8 +22,8 @@ async function constructArchiveName(agenda) {
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
 }
 
-async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly) {
-  let url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive?decisions=${decisions}&pdfOnly=${pdfOnly}`;
+async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly, currentAgendaOnly) {
+  let url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive?decisions=${decisions}&pdfOnly=${pdfOnly}&currentAgendaOnly=${currentAgendaOnly}`;
   if (mandateeIds.length) {
     url += '&' + (new URLSearchParams({ mandateeIds }).toString());
   }
@@ -40,9 +40,9 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
   return await getJsonPayloadOrThrow(fetchedJob);
 }
 
-async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly) {
+async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly, currentAgendaOnly) {
   // pdfOnly is not applicable to decisions since KAS-5059
-  const job = await fetchArchivingJob(agenda, mandateeIds, decisions, pdfOnly);
+  const job = await fetchArchivingJob(agenda, mandateeIds, decisions, pdfOnly ,currentAgendaOnly);
   if (job) {
     return registerJobToStore(job, store);
   }
