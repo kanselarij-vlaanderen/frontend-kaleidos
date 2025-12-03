@@ -340,11 +340,11 @@
         <Fieldset.content>
           <AuRadioGroup
             @alignment="inline"
-            @selected={{this.selectedCurrentAgendaOnlyOptions}}
-            @onChange={{this.onChangeCurrentAgendaOnlyOption}}
+            @selected={{this.selectedNewDocumentsOnlyOptions}}
+            @onChange={{this.onChangeNewDocumentsOnlyOption}}
             as |Group|
           >
-            {{#each this.currentAgendaOnlyOptions as |option|}}
+            {{#each this.newDocumentsOnlyOptions as |option|}}
             <Group.Radio
               @value={{option.value}}
               >

@@ -44,7 +44,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     },
   ];
 
-  currentAgendaOnlyOptions = [
+  newDocumentsOnlyOptions = [
     {
       label: this.intl.t('download-documents-agenda-selection-all'),
       value: false,
@@ -77,7 +77,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked latestThemisPublicationActivity;
 
   @tracked downloadOption = this.downloadOptions[0].value;
-  @tracked currentAgendaOnlyOption = this.currentAgendaOnlyOptions[0].value;
+  @tracked newDocumentsOnlyOption = this.newDocumentsOnlyOptions[0].value;
 
   constructor() {
     super(...arguments);
@@ -88,8 +88,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return this.downloadOption;
   }
 
-  get selectedCurrentAgendaOnlyOptions() {
-    return this.currentAgendaOnlyOption;
+  get selectedNewDocumentsOnlyOptions() {
+    return this.newDocumentsOnlyOption;
   }
 
   get showPrintButton() {
@@ -323,7 +323,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       timeOut: 60 * 10 * 1000,
     };
     const pdfOnly = this.downloadOption === 'pdf' ? true : false;
-    const currentAgendaOnly = this.currentAgendaOnlyOption;
+    const newDocumentsOnly = this.newDocumentsOnlyOption;
     const namePromise = constructArchiveName(this.args.currentAgenda);
     debug('Checking if archive exists ...');
     const jobPromise = fetchArchivingJobForAgenda(
@@ -332,7 +332,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       decisions,
       this.store,
       pdfOnly,
-      currentAgendaOnly
+      newDocumentsOnly
     );
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
@@ -572,8 +572,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   }
 
   @action
-  onChangeCurrentAgendaOnlyOption(selectedDownloadOption) {
-    this.currentAgendaOnlyOption = selectedDownloadOption;
+  onChangeNewDocumentsOnlyOption(selectedDownloadOption) {
+    this.newDocumentsOnlyOption = selectedDownloadOption;
   }
 
   openConfirmEmptyInternalReviews = () => {
