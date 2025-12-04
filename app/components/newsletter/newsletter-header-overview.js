@@ -19,7 +19,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   @service currentSession;
 
   @tracked mailCampaign;
-  @tracked newsletterHTML = null;
+  // @tracked newsletterHTML = null;
   @tracked latestPublicationActivity;
 
   @tracked showConfirmPublishAll = false;
@@ -69,13 +69,14 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   calculateTotals = task(async () => {
+    this.messageOnConfirm = '';
     const agenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': this.args.meeting.id,
       sort: '-created', // serialnumber
     });
-    this.notaWithThemeCount = (await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.NOTA));
-    this.announcementWithThemeCount = (await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT));
-    this.messageOnConfirm = '';
+    this.notaWithThemeCount = await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.NOTA);
+    this.announcementWithThemeCount = await this.countNewsItemsWithValidTheme(agenda, CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT);
+    
     if (this.notaWithThemeCount === 0) {
       if (this.announcementWithThemeCount === 0) {
         this.messageOnConfirm = this.intl.t('newsletter-nothing-to-send');
@@ -97,6 +98,7 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   }
 
   checkConfidentiality = task(async () => {
+    this.hasConfidentialNewsletters = false;
     const agenda = await this.store.queryOne('agenda', {
       'filter[created-for][:id:]': this.args.meeting.id,
       sort: '-created',
@@ -111,12 +113,9 @@ export default class NewsletterHeaderOverviewComponent extends Component {
   });
 
   get disableConfirm() {
-    return this.calculateTotals.isRunning ||
+    return this.areCalculateTasksRunning ||
     (this.notaWithThemeCount == 0 && this.announcementWithThemeCount == 0) ||
-    this.checkConfidentiality.isRunning ||
-    this.publishToAll.isRunning ||
-    this.publishToBelga.isRunning ||
-    this.publishToMail.isRunning;
+    this.arePublishTasksRunning;
   }
 
   get shouldShowPrintButton() {
@@ -128,12 +127,17 @@ export default class NewsletterHeaderOverviewComponent extends Component {
       this.latestPublicationActivity.scope.includes(CONSTANTS.THEMIS_PUBLICATION_SCOPES.NEWSITEMS);
   }
 
-  get areTasksRunning() {
+  get arePublishTasksRunning() {
     return this.publishToMail.isRunning ||
-    this.publishToBelga.isRunning ||
-    this.publishThemis.isRunning ||
-    this.publishToAll.isRunning ||
-    this.unpublishThemis.isRunning
+      this.publishToBelga.isRunning ||
+      this.publishThemis.isRunning ||
+      this.publishToAll.isRunning ||
+      this.unpublishThemis.isRunning
+  }
+
+  get areCalculateTasksRunning() {
+    return this.calculateTotals.isRunning ||
+      this.checkConfidentiality.isRunning
   }
 
   @action

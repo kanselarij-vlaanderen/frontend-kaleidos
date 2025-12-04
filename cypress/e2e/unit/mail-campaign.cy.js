@@ -75,7 +75,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
   });
 
 
-  it.only('should test the pre mailchimp checks', () => {
+  it('should test the pre mailchimp checks', () => {
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
 
     const agendaDate = Cypress.dayjs().add(5, 'weeks')
@@ -84,6 +84,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const type2 = 'Nota';
     const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
     const theme = 'Brussel'; // 'Justitie en Handhaving' is the one theme we can't accept, no mailchimp id
+    const announcementTheme = 'Mededeling'; // default theme on all NEW announcement newsitems
     const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
     const shortSubcaseTitle3 = 'Cypress test: tweede nieuwsbrief nota';
     const alertMessage = 'De nieuwsbrief kan niet verzonden worden';
@@ -113,19 +114,7 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.addAgendaitemToAgenda(shortSubcaseTitle2);
     cy.addAgendaitemToAgenda(shortSubcaseTitle3);
 
-    // test without kort bestek and no theme in mededeling
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
-    cy.get(newsletter.tableRow.titleContent); // await page load
-    checkPublishMail(alertMessage);
-
-    // add theme to mededeling
-    cy.openAgendaForDate(agendaDate);
-    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme);
-
-    // test without kort bestek and with theme in mededeling
+    // test without kort bestek and with theme in mededeling (new announcement newsitems have a theme to start)
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
@@ -148,11 +137,19 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
         }
       });
 
-    // remove theme from mededeling
+    // remove theme from mededeling, test without any valid nota or announcements
     cy.openAgendaForDate(agendaDate);
-    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme, true);
+    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, announcementTheme, true);
+
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+    cy.get(newsletter.tableRow.titleContent); // await page load
+    checkPublishMail(alertMessage);
 
     // add kort bestek
+    cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
     cy.intercept('GET', '/themes**').as('getAgendaitemThemes1');
     cy.intercept('POST', '/news-items').as('newsItemsPost');

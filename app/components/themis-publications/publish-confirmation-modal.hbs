@@ -5,27 +5,31 @@
     @closeDisabled={{this.confirmPublish.isRunning}}
   />
   <Auk::Modal::Body>
-    {{#if @showConfidentialWarning}}
-      <AuAlert
-        @title={{t "agendaitems-confidential-warning-title"}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @size="small"
-      >
-        <p>{{t "agendaitems-confidential-warning-message"}}</p>
-      </AuAlert>
+    {{#if @loading}}
+      <Auk::Loader @message={{t "loading" }} />
+    {{else}}
+      {{#if @showConfidentialWarning}}
+        <AuAlert
+          @title={{t "agendaitems-confidential-warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{t "agendaitems-confidential-warning-message"}}</p>
+        </AuAlert>
+      {{/if}}
+      {{#if @warningMessage}}
+        <AuAlert
+          @title={{t "warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{@warningMessage}}</p>
+        </AuAlert>
+      {{/if}}
+      <p>{{this.confirmationMessage}}</p>
     {{/if}}
-    {{#if @warningMessage}}
-      <AuAlert
-        @title={{t "warning-title"}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @size="small"
-      >
-        <p>{{@warningMessage}}</p>
-      </AuAlert>
-    {{/if}}
-    <p>{{this.confirmationMessage}}</p>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @onCancel={{@onCancel}}
