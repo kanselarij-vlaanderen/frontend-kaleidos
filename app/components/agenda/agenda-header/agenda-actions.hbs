@@ -335,6 +335,25 @@
           </AuRadioGroup>
         </Fieldset.content>
       </AuFieldset>
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "download-documents-agenda-selection"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            @alignment="inline"
+            @selected={{this.selectedNewDocumentsOnlyOptions}}
+            @onChange={{this.onChangeNewDocumentsOnlyOption}}
+            as |Group|
+          >
+            {{#each this.newDocumentsOnlyOptions as |option|}}
+            <Group.Radio
+              @value={{option.value}}
+              >
+              {{option.label}}
+            </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
     </div>
   </:body>
 </ConfirmationModal>
