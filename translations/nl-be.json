@@ -1564,5 +1564,8 @@
   "newsletter-only-announcements-to-send": "U staat op het punt om enkel mededelingen te publiceren",
   "publish-anyway": "Toch publiceren",
   "agendaitems-confidential-warning-title": "Agendapunten met beperkte toegang",
-  "agendaitems-confidential-warning-message": "Er zijn agendapunten met beperkte toegang opgenomen in het kort bestek, Deze zullen mee gepubliceerd worden als u bevestigt."
+  "agendaitems-confidential-warning-message": "Er zijn agendapunten met beperkte toegang opgenomen in het kort bestek, Deze zullen mee gepubliceerd worden als u bevestigt.",
+  "download-documents-agenda-selection": "Selectie documenten",
+  "download-documents-agenda-selection-all": "Alle documenten op deze agendaversie",
+  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie"
 }

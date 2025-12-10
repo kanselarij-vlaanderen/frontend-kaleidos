@@ -68,12 +68,17 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     });
 
     // this also contains the double scoped one. which will not be released yet.
-    this.latestThemisNewsitemPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+    // sorting on undefined startDate yields unexpected results
+    const allThemisNewsitemPublicationActivities = yield this.store.queryAll('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[scope]': 'newsitems',
-      sort: '-start-date', // this sorting can give issues with undefined
       include: 'status',
     });
+    this.latestThemisNewsitemPublicationActivity =  allThemisNewsitemPublicationActivities
+      .slice()
+      .filter((a) => a.startDate)
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
 
     // check if the newsitems weren't retracted at a later time
     this.retractedThemisNewsitemPublicationActivity = yield this.store.queryOne('themis-publication-activity', {

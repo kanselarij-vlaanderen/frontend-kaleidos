@@ -14,7 +14,7 @@
               {{date @meeting.plannedStart}}
             </h4>
           </div>
-          {{#unless this.areTasksRunning}}
+          {{#unless this.arePublishTasksRunning}}
             <Newsletter::PublicationPills @meeting={{@meeting}} />
           {{/unless}}
         </div>
@@ -193,29 +193,34 @@
   @confirmMessage={{t "send-newsitem-to-mail"}}
   @loading={{this.publishToMail.isRunning}}
   @disabled={{this.disableConfirm}}
+  @alert={{or this.messageOnConfirm this.hasConfidentialNewsletters}}
 >
   <:body>
-    {{#if this.hasConfidentialNewsletters}}
-      <AuAlert
-        @title={{t "agendaitems-confidential-warning-title"}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @size="small"
-      >
-        <p>{{t "agendaitems-confidential-warning-message"}}</p>
-      </AuAlert>
-    {{/if}}
-    {{#if this.messageOnConfirm}}
-      <AuAlert
-        @title={{t "warning-title"}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @size="small"
-      >
-        <p>{{this.messageOnConfirm}}</p>
-      </AuAlert>
+    {{#if this.areCalculateTasksRunning}}
+      <Auk::Loader @message={{t "loading" }} />
     {{else}}
-      <p>{{t "send-newsitem-to-mail-verification"}}</p>
+      {{#if this.hasConfidentialNewsletters}}
+        <AuAlert
+          @title={{t "agendaitems-confidential-warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{t "agendaitems-confidential-warning-message"}}</p>
+        </AuAlert>
+      {{/if}}
+      {{#if this.messageOnConfirm}}
+        <AuAlert
+          @title={{t "warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{this.messageOnConfirm}}</p>
+        </AuAlert>
+      {{else}}
+        <p>{{t "send-newsitem-to-mail-verification"}}</p>
+      {{/if}}
     {{/if}}
   </:body>
 </ConfirmationModal>
@@ -228,29 +233,34 @@
   @confirmMessage={{t "send-newsitem-to-belga"}}
   @loading={{this.publishToBelga.isRunning}}
   @disabled={{this.disableConfirm}}
+  @alert={{or this.messageOnConfirm this.hasConfidentialNewsletters}}
 >
   <:body>
-    {{#if this.hasConfidentialNewsletters}}
-      <AuAlert
-        @title={{t "agendaitems-confidential-warning-title"}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @size="small"
-      >
-        <p>{{t "agendaitems-confidential-warning-message"}}</p>
-      </AuAlert>
-    {{/if}}
-    {{#if this.messageOnConfirm}}
-      <AuAlert
-        @title={{t "warning-title"}}
-        @skin="warning"
-        @icon="alert-triangle"
-        @size="small"
-      >
-        <p>{{this.messageOnConfirm}}</p>
-      </AuAlert>
+    {{#if this.areCalculateTasksRunning}}
+      <Auk::Loader @message={{t "loading" }} />
     {{else}}
-      <p>{{t "send-newsitem-to-belga-verification"}}</p>
+      {{#if this.hasConfidentialNewsletters}}
+        <AuAlert
+          @title={{t "agendaitems-confidential-warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{t "agendaitems-confidential-warning-message"}}</p>
+        </AuAlert>
+      {{/if}}
+      {{#if this.messageOnConfirm}}
+        <AuAlert
+          @title={{t "warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{this.messageOnConfirm}}</p>
+        </AuAlert>
+      {{else}}
+        <p>{{t "send-newsitem-to-belga-verification"}}</p>
+      {{/if}}
     {{/if}}
   </:body>
 </ConfirmationModal>
@@ -259,6 +269,7 @@
   <ThemisPublications::PublishConfirmationModal
     @scope={{this.themisPublicationScopes}}
     @warningMessage={{this.messageOnConfirm}}
+    @loading={{this.areCalculateTasksRunning}}
     @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
@@ -275,13 +286,14 @@
     @title={{t "send-newsitem-to-all"}}
     @scope={{this.themisPublicationScopes}}
     @warningMessage={{this.messageOnConfirm}}
+    @loading={{this.areCalculateTasksRunning}}
     @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishAll}}
     @onConfirm={{perform this.publishToAll}}
   />
 {{/if}}
 
-{{#if (or this.loadNewsletterHTML.isRunning this.newsletterHTML)}}
+{{!-- {{#if (or this.loadNewsletterHTML.isRunning this.newsletterHTML)}}
   <Auk::Modal @size="full-screen-padded">
     <Auk::Modal::Header @title={{t "show-newsletter"}} @onClose={{this.clearNewsletterHTML}} />
     <Auk::Modal::Body>
@@ -294,4 +306,4 @@
       {{/if}}
     </Auk::Modal::Body>
   </Auk::Modal>
-{{/if}}
+{{/if}} --}}
