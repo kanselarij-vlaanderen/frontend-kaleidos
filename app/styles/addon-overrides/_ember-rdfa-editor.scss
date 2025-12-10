@@ -22,14 +22,18 @@ $say-editor-border-radius: $au-input-border-radius;
 // @import 'ember-rdfa-editor/custom-components';
 // This used to be the only import regarding the rdfa-editor styling but because we only use the basic functionality for the moment & we don't really need the deprecated styling from that package, we'll be only importing the necessary SCSS files (see below)
 
-@import 'ember-rdfa-editor/c-container';
-@import 'ember-rdfa-editor/c-dropdown';
-@import 'ember-rdfa-editor/c-content';
-@import 'ember-rdfa-editor/c-editor';
-@import 'ember-rdfa-editor/c-icon';
-@import 'ember-rdfa-editor/c-toolbar';
-@import 'ember-rdfa-editor/c-table';
-@import 'ember-rdfa-editor/shame';
+@import "@lblod/ember-rdfa-editor";
+
+// @import "@lblod/ember-rdfa-editor/scss/c-container";
+
+// @import 'ember-rdfa-editor/c-container';
+// @import 'ember-rdfa-editor/c-dropdown';
+// @import 'ember-rdfa-editor/c-content';
+// @import 'ember-rdfa-editor/c-editor';
+// @import 'ember-rdfa-editor/c-icon';
+// @import 'ember-rdfa-editor/c-toolbar';
+// @import 'ember-rdfa-editor/c-table';
+// @import 'ember-rdfa-editor/shame';
 
 
 // Copy from ember-rdfa-editor package as we can't individually import this yet
