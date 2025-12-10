@@ -148,7 +148,6 @@ Router.map(function() {
     this.route('button-skins');
     this.route('button-types');
     this.route('checkbox-tree');
-    this.route('colors');
     this.route('color-badge');
     this.route('datepicker');
     this.route('empty-state');
