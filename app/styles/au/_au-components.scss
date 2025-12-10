@@ -152,7 +152,7 @@ $au-unit-medium: 1.6rem;
 
 .au-c-content {
   @include au-font-size(1.5rem, 1.6); // default font size in Kaleidos
-  color: $au-gray-800; // default text color in Kaleidos
+  color: var(--au-text-color); // default text color in Kaleidos
 
   h1, h2, h3, h4, h5, h6, // default heading styling in Kaleidos
   .au-c-heading--1,
@@ -161,7 +161,7 @@ $au-unit-medium: 1.6rem;
   .au-c-heading--4,
   .au-c-heading--5,
   .au-c-heading--6 {
-    color: $au-gray-900;
+    color: var(--au-text-color)0;
     font-weight: 500;
   }
 
