@@ -1,11 +1,35 @@
-<Auk::Modal @size="small">
+<Auk::Modal @size="medium">
   <Auk::Modal::Header
     @title={{or @title (t "publish-publication-modal-title")}}
     @onClose={{@onCancel}}
     @closeDisabled={{this.confirmPublish.isRunning}}
   />
   <Auk::Modal::Body>
-    {{this.confirmationMessage}}
+    {{#if @loading}}
+      <Auk::Loader @message={{t "loading" }} />
+    {{else}}
+      {{#if @showConfidentialWarning}}
+        <AuAlert
+          @title={{t "agendaitems-confidential-warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{t "agendaitems-confidential-warning-message"}}</p>
+        </AuAlert>
+      {{/if}}
+      {{#if @warningMessage}}
+        <AuAlert
+          @title={{t "warning-title"}}
+          @skin="warning"
+          @icon="alert-triangle"
+          @size="small"
+        >
+          <p>{{@warningMessage}}</p>
+        </AuAlert>
+      {{/if}}
+      <p>{{this.confirmationMessage}}</p>
+    {{/if}}
   </Auk::Modal::Body>
   <Auk::Modal::Footer
     @onCancel={{@onCancel}}
@@ -13,11 +37,12 @@
   >
     <AuButton
       @skin="primary"
-      @loading={{this.confirmPublish.isRunning}}
+      @alert={{or @warningMessage @showConfidentialWarning}}
+      @loading={{or this.confirmPublish.isRunning @loading}}
       @loadingMessage={{t "loading"}}
       {{on "click" (perform this.confirmPublish)}}
     >
-      {{t "publish-to-public"}}
+      {{t (if (or @warningMessage @showConfidentialWarning)  "publish-anyway" "publish-to-public")}}
     </AuButton>
   </Auk::Modal::Footer>
 </Auk::Modal>

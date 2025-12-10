@@ -1,0 +1,109 @@
+@use "settings";
+
+/* ==========================================================================
+  auk-file-upload
+   ========================================================================== */
+
+.auk-file-upload {
+  background: transparent;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  .auk-progress-bar {
+    width: 60%;
+  }
+}
+
+.auk-file-upload--full-height {
+  height: 100%;
+  .auk-file-upload__content {
+    flex: 1 1 auto;
+  }
+}
+
+.auk-file-upload__content {
+  border: 0.1rem dashed settings.$color-gray-300;
+  border-radius: .3rem;
+  width: 100%;
+  padding: 3rem;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-height: 12rem;
+}
+
+.auk-file-upload--gray-100 {
+  .auk-file-upload__content {
+    background-color: settings.$color-gray-100;
+  }
+}
+
+.auk-file-upload--success {
+  .auk-file-upload__content {
+    background-color: settings.$color-green-100;
+    border-color: settings.$color-green-300;
+  }
+}
+
+.auk-file-upload--error {
+  .auk-file-upload__content {
+    background-color: settings.$color-red-50;
+    border-color: settings.$color-red-300;
+  }
+}
+
+.auk-file-upload input[type="file"] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.0001;
+}
+
+.auk-file-upload input[type="file"]:hover:not([disabled]) {
+  cursor: pointer;
+}
+
+.auk-file-upload input[type="file"]:focus:not([disabled]) ~ .auk-file-upload__content {
+  outline: 0;
+  border-color: transparent;
+  box-shadow: inset 0 0 0 0.2rem settings.$color-yellow-500;
+}
+
+.auk-file-upload input[type="file"]:hover:not([disabled]) ~ .auk-file-upload__content {
+  background-color: settings.$color-gray-100;
+}
+
+.auk-file-upload__action-button {
+  pointer-events: none;
+}
+
+.auk-file-upload input[type="file"] {
+  &:hover,
+  &:focus,
+  &:active {
+    &:not([disabled]) ~ .auk-file-upload__content {
+      .auk-file-upload__action-button {
+        box-shadow: none;
+
+        color: var(--au-blue-900);
+        background-color: transparent;
+        border-color: var(--au-blue-900);
+      }
+    }
+  }
+}
+
+.auk-button--redo {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}

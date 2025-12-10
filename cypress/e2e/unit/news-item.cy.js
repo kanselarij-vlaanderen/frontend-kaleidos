@@ -116,10 +116,25 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.openAgendaitemKortBestekTab(subcaseTitle1);
     cy.get(utils.changesAlert.container).should('not.exist');
     cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
+    // decision is postponed now, nothing to see
+    cy.get(route.notaUpdates.dataTable).find('tbody')
+      .children('tr')
+      .should('have.length', 1)
+      .contains('Geen resultaten gevonden');
+    // change status to approved, newsitem will show in updates
+    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008/kort-bestek');
+    cy.openAgendaitemKortBestekTab(subcaseTitle1);
+    cy.changeDecisionResult('Goedgekeurd');
+
+    cy.visit('/vergadering/5EBA84900A655F0008000004/kort-bestek/nota-updates');
     cy.get(route.notaUpdates.dataTable).find('tbody')
       .children('tr')
       .should('have.length', 1)
       .contains(subcaseTitle1);
+    // this was postponed before, so setting it back to not mess with other tests
+    cy.visitAgendaWithLink('/vergadering/5EBA84900A655F0008000004/agenda/5EBA84910A655F0008000005/agendapunten/5EBA84AE0A655F0008000008/kort-bestek');
+    cy.openAgendaitemKortBestekTab(subcaseTitle1);
+    cy.changeDecisionResult('Uitgesteld');
   });
 
   it('should test default newsletter values on nota', () => {

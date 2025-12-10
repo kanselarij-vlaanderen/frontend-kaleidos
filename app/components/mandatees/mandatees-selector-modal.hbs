@@ -15,11 +15,15 @@
           {{t "open-search-for-mandatee"}}
         </AuCheckbox>
         <AuTooltip @placement="bottom" as |tooltip|>
-          <AuIcon
+           <AuButton
             {{tooltip.target}}
+            @skin="link-secondary"
             @icon="circle-info"
-            class="au-u-muted auk-u-ml"
-          />
+            @hideText={{true}}
+            class="au-u-padding-none auk-u-ml"
+          >
+            {{t "open-search-for-mandatee-tooltip"}}
+          </AuButton>
           <tooltip.Content>
             {{t "open-search-for-mandatee-tooltip"}}
           </tooltip.Content>

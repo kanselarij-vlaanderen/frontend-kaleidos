@@ -72,7 +72,6 @@ const selectors = {
 
   // overview-table-display-config-modal
   tableDisplayConfig: {
-    close: '[data-test-publications-table-display-config-close]',
     option: 'data-test-overview-table-display-config-option-checkbox=',
   },
 
@@ -98,7 +97,6 @@ const selectors = {
       status: '[data-test-publication-table-row-status]',
       source: '[data-test-publication-table-row-source]',
       goToPublication: '[data-test-publication-table-row-go-to-publication]',
-      remark: '[data-test-publication-table-row-remark]',
     },
   },
 

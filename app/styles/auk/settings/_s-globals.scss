@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Variables
+   ---
+   Global SCSS variables (override default values defined in component files)
+   ========================================================================== */
+
+/* Typography
+   ========================================================================== */
+
+$base-font-family: flanders-sans, sans-serif;
+$code-font-family: Consolas, "Lucida Console", "Lucida Sans Typewriter",
+  "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono",
+  "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+$base-font-size: 1.5rem;
+$base-line-height: 1.5;
+$headings-font-weight: 500;
+$headings-font-family: flanders-sans, sans-serif;
+
+/* Breakpoints
+   ========================================================================== */
+
+$breakpoints: (
+  screen-xsmall: 400px, 
+  screen-small: 768px,
+  screen-medium: 992px,
+  screen-large: 1200px,
+  screen-xlarge: 1600px
+);
+
+/* Dimensions
+   ========================================================================== */
+
+$dimensions: (
+   xsmall: 6rem, 
+   small: 15rem,
+   medium: 30rem,
+   large: 40rem,
+   xlarge: 50rem,
+   xxlarge: 65rem
+);

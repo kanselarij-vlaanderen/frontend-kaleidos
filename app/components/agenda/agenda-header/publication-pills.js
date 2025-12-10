@@ -82,21 +82,32 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
       include: 'status',
     });
 
-    this.latestThemisNewsitemPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+    // sorting on undefined startDate yields unexpected results
+    const allThemisNewsitemPublicationActivities = yield this.store.queryAll('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[scope]': 'newsitems',
-      sort: '-start-date',
       include: 'status',
     });
+    this.latestThemisNewsitemPublicationActivity =  allThemisNewsitemPublicationActivities
+      .slice()
+      .filter((a) => a.startDate)
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
 
-    this.latestThemisDocumentPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+    // sorting on undefined startDate yields unexpected results
+    const allThemisDocumentPublicationActivities = yield this.store.queryAll('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[scope]': 'documents',
-      sort: '-start-date',
       include: 'status',
     });
+    this.latestThemisDocumentPublicationActivity =  allThemisDocumentPublicationActivities
+      .slice()
+      .filter((a) => a.startDate)
+      .sort((a1, a2) => a1.startDate - a2.startDate)
+      .at(-1);
 
     // check if the newsitems weren't retracted at a later time
+    // sorting on undefined startDate here is fine, since scopeless activities always have a startDate
     this.retractedThemisNewsitemPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[:has-no:scope]': 't',

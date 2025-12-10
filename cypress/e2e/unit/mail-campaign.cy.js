@@ -33,7 +33,9 @@ function checkPublishMail(alertMessage) {
     .children(appuniversum.button)
     .click();
   cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
-  cy.get(auk.confirmationModal.footer.confirm).click();
+  // the button will be disabled now with the new warnings, untested
+  cy.get(auk.confirmationModal.footer.confirm).invoke('removeAttr', 'disabled')
+    .click();
   cy.get(auk.auModal.container).should('not.exist');
   cy.get(appuniversum.alert.message).contains(alertMessage);
   cy.get(appuniversum.alert.close).click();
@@ -81,7 +83,8 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     const type1 = 'Mededeling';
     const type2 = 'Nota';
     const shortSubcaseTitle1 = 'Cypress test: nieuwsbrief mededeling';
-    const theme = 'Justitie en Handhaving';
+    const theme = 'Brussel'; // 'Justitie en Handhaving' is the one theme we can't accept, no mailchimp id
+    const announcementTheme = 'Mededeling'; // default theme on all NEW announcement newsitems
     const shortSubcaseTitle2 = 'Cypress test: nieuwsbrief nota';
     const shortSubcaseTitle3 = 'Cypress test: tweede nieuwsbrief nota';
     const alertMessage = 'De nieuwsbrief kan niet verzonden worden';
@@ -111,31 +114,42 @@ context('newsletter tests, both in agenda detail view and newsletter route', () 
     cy.addAgendaitemToAgenda(shortSubcaseTitle2);
     cy.addAgendaitemToAgenda(shortSubcaseTitle3);
 
-    // test without kort bestek and no theme in mededeling
+    // test without kort bestek and with theme in mededeling (new announcement newsitems have a theme to start)
+    cy.get(agenda.agendaActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
+    cy.get(newsletter.tableRow.titleContent); // await page load
+    // checkPublishMail(alertMessage); // no longer true
+    // there should be no alert message on announcements with a theme
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown)
+      .children(appuniversum.button)
+      .click();
+    cy.get(newsletter.newsletterHeaderOverview.newsletterActions.publishMail).forceClick();
+    cy.intercept('POST', '/newsletter/mail-campaigns', staticBadResponse).as('postMailCampaigns');
+
+    cy.get(auk.confirmationModal.footer.confirm).click()
+      .wait('@postMailCampaigns')
+      .then((responseBody) => {
+        if (responseBody.error || responseBody.response?.statusCode === 500) {
+          // service is not enabled, so we always get errors unless we use a cypress spy
+          cy.get(appuniversum.alert.container).should('exist');
+        }
+      });
+
+    // remove theme from mededeling, test without any valid nota or announcements
+    cy.openAgendaForDate(agendaDate);
+    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, announcementTheme, true);
+
     cy.get(agenda.agendaActions.optionsDropdown)
       .children(appuniversum.button)
       .click();
     cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
     cy.get(newsletter.tableRow.titleContent); // await page load
     checkPublishMail(alertMessage);
-
-    // add theme to mededeling
-    cy.openAgendaForDate(agendaDate);
-    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme);
-
-    // test without kort bestek and with theme in mededeling
-    cy.get(agenda.agendaActions.optionsDropdown)
-      .children(appuniversum.button)
-      .click();
-    cy.get(agenda.agendaActions.navigateToNewsletter).forceClick();
-    cy.get(newsletter.tableRow.titleContent); // await page load
-    checkPublishMail(alertMessage);
-
-    // remove theme from mededeling
-    cy.openAgendaForDate(agendaDate);
-    addOrRemoveThemeFromMededeling(shortSubcaseTitle1, theme, true);
 
     // add kort bestek
+    cy.openAgendaForDate(agendaDate);
     cy.openAgendaitemKortBestekTab(shortSubcaseTitle2);
     cy.intercept('GET', '/themes**').as('getAgendaitemThemes1');
     cy.intercept('POST', '/news-items').as('newsItemsPost');

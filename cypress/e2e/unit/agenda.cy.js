@@ -44,7 +44,7 @@ function downloadDocs(postAgenda = true) {
   cy.wait(2000); // wait for deltas or file replacement from document-stamping service
 
   cy.get(appuniversum.loader).should('not.exist');
-  cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true').as(`postAgendas${randomInt}`);
+  cy.intercept('POST', 'agendas/*/agendaitems/pieces/files/archive?decisions=false&pdfOnly=true&newDocumentsOnly=false').as(`postAgendas${randomInt}`);
   cy.intercept('GET', '/file-bundling-jobs/**').as(`fileBundlingJobs${randomInt}`);
   cy.get(auk.confirmationModal.footer.confirm).click();
   cy.get(utils.downloadFileToast.link).eq(0)
