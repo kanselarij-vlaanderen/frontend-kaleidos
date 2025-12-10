@@ -1,6 +1,6 @@
 <div class="wc-rdfa-editor {{this.sizeClass}}" ...attributes>
   {{#if this.browserIsSupported}}
-    <EditorContainer>
+    <EditorContainer @controller={{this.controller}} @editorOptions={{hash showPaper=true}}>
       <:top>
         <ResponsiveToolbar>
           <:main as |Tb|>

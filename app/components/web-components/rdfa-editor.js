@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
-import { Schema } from 'prosemirror-model';
+import { Schema } from '@lblod/ember-rdfa-editor';
 import {
   em,
   strikethrough,
