@@ -182,7 +182,6 @@
             <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
               <AuLink
                 data-test-route-signatures-sidebar-preview
-                @skin="naked"
                 @icon="book"
                 @route="document"
                 @model={{this.piece.id}}
@@ -191,7 +190,6 @@
               </AuLink>
               <AuLink
                 data-test-route-signatures-sidebar-last-agendaitem
-                @skin="naked"
                 @icon="document"
                 @route="agenda.agendaitems.agendaitem"
                 @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}

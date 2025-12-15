@@ -147,7 +147,6 @@
             <h5 class="auk-h4">{{this.piece.name}}</h5>
             <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
               <AuLink
-                @skin="naked"
                 @icon="book"
                 @route="document"
                 @model={{this.piece.id}}
@@ -156,7 +155,6 @@
               </AuLink>
               {{#if (and this.meeting.id this.agenda.id this.agendaitem.id)}}
                 <AuLink
-                  @skin="naked"
                   @icon="document"
                   @route="agenda.agendaitems.agendaitem.ratification"
                   @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
