@@ -147,13 +147,15 @@
           <h4 class="auk-toolbar-complex__title">
             {{t "start-signing"}}
           </h4>
-          <Auk::Button
+          <AuButton
             data-test-route-signatures-sidebar-close
+            @skin="naked"
             @icon="x"
-            @skin="borderless"
-            @layout="icon-only"
+            @hideText={{true}}
             {{on "click" this.closeSidebar}}
-          />
+          >
+            {{t "close"}}
+          </AuButton>
         </div>
         <div data-test-route-signatures-sidebar-info class="auk-sidebar__body">
           {{#if
