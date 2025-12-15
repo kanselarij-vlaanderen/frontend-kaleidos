@@ -31,9 +31,9 @@ function checkCSS(row, printableNewsletter) {
   } else {
     // --grey-900 inherited from au-c-content
     cy.get(row).find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(51,51,50)');
+      .should('have.css', 'text-decoration', 'underline solid rgb(51, 51, 50)');
     cy.get(row).find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(51,51,50)');
+      .should('have.css', 'text-decoration', 'line-through solid rgb(51, 51, 50)');
   }
 
   cy.get(row).find('sub')
