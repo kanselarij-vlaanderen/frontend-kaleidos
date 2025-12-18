@@ -285,13 +285,18 @@ export default class DocumentService extends Service {
         }
       );
       await this.handleNamingErrors(namingJob, namingToaster);
-      // list of pieces on agenda. Signed and flattened pieces have been renamed but are not stamped.
-      // reports should not be renamed
+      // list of pieces on agenda.
+      // Signed and flattened pieces have been renamed but are not stamped.
       const allAgendaitemPiecesOfMeeting = await this.store.queryAll('piece', {
-        'filter[agendaitems][agenda][created-for][:id:]':meetingId,
+        'filter[agendaitems][agenda][created-for][:id:]': meetingId,
         'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       });
-      await this.checkAndRestamp(allAgendaitemPiecesOfMeeting);
+      const allRatficationsOfMeeting = await this.store.queryAll('piece', {
+        'filter[ratification-subcase][agenda-activities][agendaitems][agenda][created-for][:id:]' : meetingId,
+        'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+      });
+      const allPieces = [...allAgendaitemPiecesOfMeeting.slice(), ...allRatficationsOfMeeting.slice()];
+      await this.checkAndRestamp(allPieces);
     } catch (error) {
       const message = error?.message ? `: ${error?.message}` : '';
       this.toaster.error(
