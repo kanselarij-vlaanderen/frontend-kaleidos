@@ -100,9 +100,13 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
       'filter[scope]': 'documents',
       include: 'status',
     });
+    // 2 scenarios:
+    // - we have 1 without a start-date between release of decisions and planned release of documents
+    // - we have 1 or more released/retracted with start-dates (any new one has startDate of now)
+    // - in both cases sorting on date should be fine.
     this.latestThemisDocumentPublicationActivity =  allThemisDocumentPublicationActivities
       .slice()
-      .filter((a) => a.startDate)
+      // .filter((a) => a.startDate) // we also need to show "planned only" activities, which have no startDate
       .sort((a1, a2) => a1.startDate - a2.startDate)
       .at(-1);
 
