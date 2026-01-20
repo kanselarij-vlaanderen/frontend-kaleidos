@@ -21,7 +21,7 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
     if (!this.currentSession.may('view-submissions')) {
       this.router.transitionTo('cases.index');
     }
-    const linkedMandatees = await this.store.queryAll('mandatee', {
+    let linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
       'filter[:has-no:end]': true,
       include: 'mandate.role',
@@ -32,8 +32,9 @@ export default class CasesSubmissionsSubmissionRoute extends Route {
       const role = mandate?.belongsTo('role')?.value();
       return role?.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT;
     });
+    linkedMandatees = linkedMandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
     this.currentLinkedMandatee =
-      ministerPresident ?? linkedMandatees.slice().at(0);
+      ministerPresident ?? linkedMandatees.at(0);
   }
 
   async model(params) {

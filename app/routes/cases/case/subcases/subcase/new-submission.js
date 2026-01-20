@@ -30,7 +30,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       }
       return this.router.transitionTo('cases.index');
     }
-    const linkedMandatees = await this.store.queryAll('mandatee', {
+    let linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
       'filter[:has-no:end]': true,
       include: 'mandate.role',
@@ -41,7 +41,8 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionRoute extends Route {
       const role = mandate?.belongsTo('role')?.value();
       return role?.uri === CONSTANTS.MANDATE_ROLES.MINISTER_PRESIDENT;
     });
-    this.submitter = ministerPresident ?? linkedMandatees.slice().at(0);
+    linkedMandatees = linkedMandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
+    this.submitter = ministerPresident ?? linkedMandatees.at(0);
     this.mandatees = this.submitter ? [this.submitter] : [];
 
     const { subcase } = this.modelFor('cases.case.subcases.subcase');
