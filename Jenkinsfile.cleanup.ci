@@ -1,0 +1,97 @@
+def getBranchName(branch) {
+  return branch
+}
+
+pipeline {
+  agent any
+
+  environment {
+    branch = "${env.GIT_BRANCH}".replaceAll("/", "-").replaceAll(" ", "-").toLowerCase()
+    backendProjectDir = "app-kaleidos-${branch}-${env.BUILD_NUMBER}"
+  }
+
+  stages {
+    stage('Linting') {
+      steps {
+        sh "npm install"
+        sh "npm run lint"
+      }
+    }
+    stage('Checkout backend project') {
+      steps {
+        // Try to checkout the same frontend branch for the backend.
+        // If that fails, checkout the branch we're merging to, this way
+        // if we're merging to acceptance we test against acceptance.
+        // If that also fails, just check out development
+        sh """
+          git clone --depth 1 -b ${env.CHANGE_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
+          git clone --depth 1 -b ${env.CHANGE_TARGET} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
+          git clone --depth 1 -b development https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}
+        """
+      }
+    }
+    stage('Prepare for automated tests') {
+      steps {
+        sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
+        sh "cd ${WORKSPACE}/${backendProjectDir}"
+
+        sh "cp ${env.WORKSPACE}/Dockerfile.ci ./Dockerfile"
+        sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ."
+        sh "docker compose pull"
+        sh "docker compose build"
+
+        // Reset the contents of DB an search
+        sh "docker compose stop -t 0 elasticsearch search"
+        sh "docker compose rm -f elasticsearch search"
+        sh "unzip -o testdata.zip"
+        sh "unzip -o testdata-elasticsearch.zip"
+        sh "mv testdata-elasticsearch/* ./testdata"
+        sh "rm -rf data/*"
+        sh "cp -rf testdata/* data"
+        sh "docker compose up -d triplestore migrations database cache forever-cache"
+        sh "sleep 30"
+        sh "docker compose up -d"
+        sh "sleep 600"
+      }
+    }
+    stage('Automated tests: Cypress') {
+      steps {
+        sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
+        sh "cd ${WORKSPACE}/${backendProjectDir}"
+        sh "docker compose exec -T e2e-electron cypress run"
+        // run specific specs example
+        // sh "docker compose exec -T e2e-electron cypress run --spec '**/e2e/e2e/propagatie-overheid.cy.js'"
+      }
+    }
+  }
+  post {
+    always {
+      // Cypress reports and screenshots
+      sh "mkdir -p ${WORKSPACE}/reports/cypress_screenshots/"
+      sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
+      sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
+      publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+
+      // Stack service logs
+      sh "cd ${WORKSPACE}/${backendProjectDir}"
+      sh "ls -l ./data/files"
+      sh "mkdir -p ${WORKSPACE}/service-logs"
+      sh '''
+      for container_name in $(docker compose ps | awk '{print $1}' | tail -n +3)
+      do
+      docker logs -t $container_name > $WORKSPACE/service-logs/$container_name.log 2>&1
+      done
+      '''
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
+    }
+    cleanup {
+      sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
+      sh "cd ${WORKSPACE}/${backendProjectDir}"
+      sh "docker compose down"
+      sh "docker network prune -f"
+      cleanWs()
+    }
+  }
+}
