@@ -1,13 +1,12 @@
 def getBranchName(branch) {
-  return branch
+  return "${branch}".replaceAll("/", "-").replaceAll(" ", "-").toLowerCase()
 }
 
 pipeline {
   agent any
 
   environment {
-    branch = "${env.GIT_BRANCH}".replaceAll("/", "-").replaceAll(" ", "-").toLowerCase()
-    backendProjectDir = "app-kaleidos-${branch}-${env.BUILD_NUMBER}"
+    backendProjectDir = "app-kaleidos-${getBranchName(env.GIT_BRANCH)}-${env.BUILD_NUMBER}"
   }
 
   stages {
@@ -24,7 +23,7 @@ pipeline {
         // if we're merging to acceptance we test against acceptance.
         // If that also fails, just check out development
         sh """
-          git clone --depth 1 -b ${env.CHANGE_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
+          git clone --depth 1 -b ${env.GIT_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
           git clone --depth 1 -b ${env.CHANGE_TARGET} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
           git clone --depth 1 -b development https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}
         """
