@@ -31,35 +31,35 @@ pipeline {
     }
     stage('Prepare for automated tests') {
       steps {
-        sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
-        sh "cd ${WORKSPACE}/${backendProjectDir}"
+        dir("${backendProjectDir}") {
+          sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
 
-        sh "cp ${env.WORKSPACE}/Dockerfile.ci ./Dockerfile"
-        sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ."
-        sh "docker compose pull"
-        sh "docker compose build"
+          sh "cp ${env.WORKSPACE}/Dockerfile.ci Dockerfile"
+          sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ."
+          sh "docker compose pull"
+          sh "docker compose build"
 
-        // Reset the contents of DB an search
-        sh "docker compose stop -t 0 elasticsearch search"
-        sh "docker compose rm -f elasticsearch search"
-        sh "unzip -o testdata.zip"
-        sh "unzip -o testdata-elasticsearch.zip"
-        sh "mv testdata-elasticsearch/* ./testdata"
-        sh "rm -rf data/*"
-        sh "cp -rf testdata/* data"
-        sh "docker compose up -d triplestore migrations database cache forever-cache"
-        sh "sleep 30"
-        sh "docker compose up -d"
-        sh "sleep 600"
+          // Reset the contents of DB an search
+          sh "unzip -o testdata.zip"
+          sh "unzip -o testdata-elasticsearch.zip"
+          sh "mv testdata-elasticsearch/* ./testdata"
+          sh "rm -rf data/*"
+          sh "cp -rf testdata/* data"
+          sh "docker compose up -d triplestore migrations database cache forever-cache"
+          sh "sleep 30"
+          sh "docker compose up -d"
+          sh "sleep 600"
+        }
       }
     }
     stage('Automated tests: Cypress') {
       steps {
-        sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
-        sh "cd ${WORKSPACE}/${backendProjectDir}"
-        sh "docker compose exec -T e2e-electron cypress run"
-        // run specific specs example
-        // sh "docker compose exec -T e2e-electron cypress run --spec '**/e2e/e2e/propagatie-overheid.cy.js'"
+        dir("${backendProjectDir}") {
+          sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
+          sh "docker compose exec -T e2e-electron cypress run"
+          // run specific specs example
+          // sh "docker compose exec -T e2e-electron cypress run --spec '**/e2e/e2e/propagatie-overheid.cy.js'"
+        }
       }
     }
   }
@@ -71,25 +71,35 @@ pipeline {
       sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
 
       archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
-      publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports', reportFiles: 'index.html', reportName: 'Build Reports', reportTitles: 'Build report'])
+      publishHTML([
+        allowMissing: false,
+        alwaysLinkToLastBuild: false,
+        keepAll: false,
+        reportDir: 'reports',
+        reportFiles: 'index.html',
+        reportName: 'Build Reports',
+        reportTitles: 'Build report'
+      ])
 
-      // Stack service logs
-      sh "cd ${WORKSPACE}/${backendProjectDir}"
-      sh "ls -l ./data/files"
-      sh "mkdir -p ${WORKSPACE}/service-logs"
-      sh '''
-      for container_name in $(docker compose ps | awk '{print $1}' | tail -n +3)
-      do
-      docker logs -t $container_name > $WORKSPACE/service-logs/$container_name.log 2>&1
-      done
-      '''
+      dir("${backendProjectDir}") {
+        // Stack service logs
+        sh "ls -l ./data/files"
+        sh "mkdir -p ${WORKSPACE}/service-logs"
+        sh '''
+        for container_name in $(docker compose ps | awk '{print $1}' | tail -n +3)
+        do
+        docker logs -t $container_name > $WORKSPACE/service-logs/$container_name.log 2>&1
+        done
+        '''
+      }
       archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
     }
     cleanup {
-      sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
-      sh "cd ${WORKSPACE}/${backendProjectDir}"
-      sh "docker compose down"
-      sh "docker network prune -f"
+      dir("${backendProjectDir}") {
+        sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
+        sh "docker compose down"
+        sh "docker network prune -f"
+      }
       cleanWs()
     }
   }
