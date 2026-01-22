@@ -32,8 +32,6 @@ pipeline {
     stage('Prepare for automated tests') {
       steps {
         dir("${backendProjectDir}") {
-          sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
-
           sh "cp ${env.WORKSPACE}/Dockerfile.ci Dockerfile"
           sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ."
           sh "docker compose pull"
@@ -55,7 +53,6 @@ pipeline {
     stage('Automated tests: Cypress') {
       steps {
         dir("${backendProjectDir}") {
-          sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
           sh "docker compose exec -T e2e-electron cypress run"
           // run specific specs example
           // sh "docker compose exec -T e2e-electron cypress run --spec '**/e2e/e2e/propagatie-overheid.cy.js'"
@@ -96,7 +93,6 @@ pipeline {
     }
     cleanup {
       dir("${backendProjectDir}") {
-        sh "export HOST_UID_GID=0:0" // TODO remove once docker-compose.override.yml has been modified
         sh "docker compose down"
         sh "docker network prune -f"
       }
