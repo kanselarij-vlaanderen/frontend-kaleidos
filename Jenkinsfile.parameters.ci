@@ -18,7 +18,7 @@ pipeline {
     }
     stage('Checkout project') {
       steps {
-        sh "git clone --depth 1 -b ${env.backend_branch} https://github.com/kanselarij-vlaanderen/app-kaleidos.git" ${backendProjectDir}
+        sh "git clone --depth 1 -b ${params.BACKEND_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}"
       }
     }
     stage('Prepare for automated tests') {
@@ -38,7 +38,17 @@ pipeline {
           sh "docker compose up -d triplestore migrations database cache forever-cache"
           sh "sleep 30"
           sh "docker compose up -d"
-          sh "sleep 600"
+          timeout(time: 5, unit: 'MINUTES') {
+            sh '''
+              SEARCH_CONTAINER_IP=$(docker inspect $(docker compose ps -q search) --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')
+              until curl -s -o /dev/null -w "%{http_code}" \
+                http://${SEARCH_CONTAINER_IP}/agendaitems/search | grep -q "200"; do
+                echo "Waiting for 200 OK from mu-search... (sleeping 5s)"
+                sleep 5
+              done
+              echo "Stack is ready for tests"
+            '''
+          }
         }
       }
     }
@@ -51,6 +61,7 @@ pipeline {
         }
       }
     }
+  }
 
   post {
     always {
