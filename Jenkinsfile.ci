@@ -19,12 +19,9 @@ pipeline {
     stage('Checkout backend project') {
       steps {
         // Try to checkout the same frontend branch for the backend.
-        // If that fails, checkout the branch we're merging to, this way
-        // if we're merging to acceptance we test against acceptance.
-        // If that also fails, just check out development
+        // If that fails, just check out development
         sh """
           git clone --depth 1 -b ${env.GIT_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
-          git clone --depth 1 -b ${env.CHANGE_TARGET} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
           git clone --depth 1 -b development https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}
         """
       }
