@@ -32,7 +32,6 @@ pipeline {
     stage('Prepare for automated tests') {
       steps {
         dir("${backendProjectDir}") {
-          sh "cp ${env.WORKSPACE}/Dockerfile.ci Dockerfile"
           sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ."
           sh "docker compose pull"
           sh "docker compose build"

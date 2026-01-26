@@ -1,6 +1,8 @@
 services:
   frontend:
-    build: ../.
+    build:
+      context: ..
+      dockerfile: Dockerfile.ci
   identifier:
     environment:
       SESSION_COOKIE_SECURE: "false"
