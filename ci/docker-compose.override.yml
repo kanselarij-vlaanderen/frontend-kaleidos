@@ -1,14 +1,9 @@
 services:
   frontend:
-    networks:
-      - default
     build: ../.
   identifier:
     environment:
       SESSION_COOKIE_SECURE: "false"
-  elasticsearch:
-    volumes:
-      - /usr/share/elasticsearch/data
   e2e-electron:
     image: "kanselarij/kaleidos-cypress:3.0.1"
     ipc: host
@@ -17,6 +12,11 @@ services:
     volumes:
       - ../cypress:/app/cypress
       - ../cypress.test.config.js:/app/cypress.config.js
+  database:
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
   mocklogin:
     ulimits:
       nofile:
