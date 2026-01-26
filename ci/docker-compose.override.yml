@@ -17,6 +17,11 @@ services:
     volumes:
       - ../cypress:/app/cypress
       - ../cypress.test.config.js:/app/cypress.config.js
+  mocklogin:
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
