@@ -35,8 +35,6 @@ pipeline {
 
           // Reset the contents of DB an search
           sh "unzip -o testdata.zip"
-          sh "unzip -o testdata-elasticsearch.zip"
-          sh "mv testdata-elasticsearch/* ./testdata"
           sh "rm -rf data/*"
           sh "cp -rf testdata/* data"
           sh "docker compose up -d triplestore migrations database cache forever-cache"

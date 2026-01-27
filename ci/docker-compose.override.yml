@@ -36,6 +36,9 @@ services:
   search:
     environment:
       UPDATE_WAIT_INTERVAL_MINUTES: 0
+  elasticsearch:
+    volumes:
+      - /usr/share/elasticsearch/data
   # The DELTA_INTERVAL_MS is the value that yggdrasil waits between runs in milliseconds
   # Default is 5 minutes but results in 10 minutes between runs
   yggdrasil:
