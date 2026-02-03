@@ -36,6 +36,9 @@ export default class AccessLevelPillComponent extends Component {
         case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
           icon = 'lock-closed';
           break;
+        case CONSTANTS.ACCESS_LEVELS.INGETROKKEN:
+          icon = 'lock-closed'; // TODO KAS-4715 what icon?
+          break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
           icon = 'circle';
           break;
@@ -59,6 +62,9 @@ export default class AccessLevelPillComponent extends Component {
           skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
+          skin = 'warning';
+          break;
+        case CONSTANTS.ACCESS_LEVELS.INGETROKKEN:
           skin = 'warning';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:

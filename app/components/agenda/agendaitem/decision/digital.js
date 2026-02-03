@@ -231,16 +231,19 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
   updateAgendaitemPiecesAccessLevels = task(async () => {
     const decisionResultCode = await this.args.decisionActivity
       .decisionResultCode;
-    if (
-      [
-        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
-        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-      ].includes(decisionResultCode?.uri)
-    ) {
+    if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
       const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.slice()) {
         await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
-          piece
+          piece,
+        );
+      }
+    }
+    if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+      const pieces = await this.args.agendaitem.pieces;
+      for (const piece of pieces.slice()) {
+        await this.pieceAccessLevelService.strengthenAccessLevelToRetracted(
+          piece,
         );
       }
     }
