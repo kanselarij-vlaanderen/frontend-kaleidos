@@ -10,7 +10,7 @@ import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
  * @returns {Promise<*>}
  */
 const setNewPropertiesToModel = async(model, propertiesToSet, resetFormallyOk = true) => {
-  if (resetFormallyOk) {
+  if (resetFormallyOk && model.modelName === 'agendaitem') {
     setNotYetFormallyOk(model);
   }
 

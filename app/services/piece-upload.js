@@ -74,6 +74,7 @@ export default class PieceUploadService extends Service {
       return;
     }
 
+    // because this agendaitem is always on a design agenda (from query), the formally ok needs to change
     setNotYetFormallyOk(agendaitem);
     // save prior to adding pieces, micro-service does all the changes with docs
     await agendaitem.save();
