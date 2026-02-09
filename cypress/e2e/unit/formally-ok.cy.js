@@ -64,10 +64,12 @@ context('Formally ok/nok tests', () => {
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     cy.addAgendaitemToAgenda(shortSubcaseTitle);
     cy.setFormalOkOnItemWithIndex(1, true, 'Formeel OK');
-    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
 
     // Change government domains
     cy.openDetailOfAgendaitem(shortSubcaseTitle);
+    // verify both are formally ok
+    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
+
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     // await retrieval of government-fields in multiple pages
