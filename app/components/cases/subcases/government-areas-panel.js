@@ -32,9 +32,8 @@ export default class GovernmentAreasPanel extends Component {
     );
   }
 
-  @task
-  *loadGovernmentAreas() {
-    const concepts = yield this.conceptStore.queryAllGovernmentFields();
+  loadGovernmentAreas = task(async () => {
+    const concepts = await this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
     const referenceDate = new Date();
     for (const concept of concepts.slice()) {
@@ -49,11 +48,10 @@ export default class GovernmentAreasPanel extends Component {
     }
     this.governmentFields = governmentFields;
     this.calculateDomainSelections.perform();
-  }
+  });
 
-  @task
-  *calculateDomainSelections() {
-    let domainsFromAvailableFields = yield Promise.all(
+  calculateDomainSelections = task(async () => {
+    let domainsFromAvailableFields = await Promise.all(
       this.governmentFields.map((c) => c.broader)
     );
 
@@ -66,7 +64,7 @@ export default class GovernmentAreasPanel extends Component {
     const selectedDomains = [];
     const selectedFields = [];
     for (let governmentArea of this.args.governmentAreas.slice()) {
-      const topConceptSchemes = yield governmentArea.topConceptSchemes;
+      const topConceptSchemes = await governmentArea.topConceptSchemes;
       if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
         selectedDomains.push(governmentArea);
       } else if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD)) {
@@ -77,7 +75,7 @@ export default class GovernmentAreasPanel extends Component {
       }
     }
 
-    const domainsFromSelectedFields = yield Promise.all(
+    const domainsFromSelectedFields = await Promise.all(
       selectedFields.map((c) => c.broader)
     );
 
@@ -108,7 +106,7 @@ export default class GovernmentAreasPanel extends Component {
         selectedFieldsForDomain
       )
     })
-  }
+  });
   
   @action
   toggleDomainSelection(domainSelection, checked) {

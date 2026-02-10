@@ -11,6 +11,7 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   @service router;
   @service store;
 
+  // TODO KAS-5171 replace lastValue
   @lastValue('loadFirstAgendaitem') firstAgendaitem;
 
   constructor() {
@@ -26,17 +27,16 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
     return isEnabledCabinetSubmissions();
   }
 
-  @task
-  *loadFirstAgendaitem() {
+  loadFirstAgendaitem = task(async () => {
     if (this.args.currentAgenda) {
       // sorting on type prevents defaulting to an announcement when there are notas
-      return yield this.store.queryOne('agendaitem', {
+      return await this.store.queryOne('agendaitem', {
         'filter[agenda][:id:]': this.args.currentAgenda.id,
         sort: 'type.position,number',
       });
     }
     return null;
-  }
+  });
 
   get modelsForDetailRoute() {
     return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem?.id];

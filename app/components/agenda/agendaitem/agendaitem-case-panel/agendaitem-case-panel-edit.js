@@ -45,17 +45,15 @@ export default class AgendaitemCasePanelEdit extends Component {
     return this.args.newsItem;
   }
 
-  @task
-  *loadSubcaseType() {
-    this.subcaseType = yield this.args.subcase?.type;
-  }
+  loadSubcaseType = task(async () => {
+    this.subcaseType = await this.args.subcase?.type;
+  })
 
-  @task
-  *loadInternalReview() {
+  loadInternalReview = task(async () => {
     if (this.currentSession.may('manage-agendaitems')) {
-      this.internalReview = yield this.args.subcase?.internalReview;
+      this.internalReview = await this.args.subcase?.internalReview;
     }
-  }
+  });
 
   @action
   async onChangeConfidentiality(checked) {
@@ -74,8 +72,7 @@ export default class AgendaitemCasePanelEdit extends Component {
     this.args.onCancel();
   }
 
-  @task
-  *saveChanges() {
+  saveChanges = task(async () => {
     const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
 
     const trimmedTitle = trimText(this.args.agendaitem.title);
@@ -93,45 +90,45 @@ export default class AgendaitemCasePanelEdit extends Component {
       confidential: this.args.subcase?.confidential,
     };
 
-    yield this.agendaitemAndSubcasePropertiesSync.saveChanges(
+    await this.agendaitemAndSubcasePropertiesSync.saveChanges(
       this.args.agendaitem,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
       shouldResetFormallyOk,
     );
     if (this.confidentialChanged && this.args.subcase?.confidential) {
-      yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
-      yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
+      await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
+      await this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
       // update report contents
-      const report = yield this.store.queryOne('report', {
+      const report = await this.store.queryOne('report', {
         'filter[:has-no:next-piece]': true,
         'filter[:has:piece-parts]': true,
         'filter[decision-activity][treatment][agendaitems][:id:]': this.args.agendaitem.id,
       });
       if (report) {
-        yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+        await this.decisionReportGeneration.generateReplacementReport.perform(report);
       }
     }
 
     if (this.newsItem) {
-      const agendaItemType = yield this.args.agendaitem.type;
+      const agendaItemType = await this.args.agendaitem.type;
       const isAnnouncement = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
       if (isAnnouncement) {
         // Keep generated newsItem for announcement automatically in sync
         this.newsItem.htmlContent = trimmedTitle;
         this.newsItem.title = trimmedShortTitle;
-        yield this.newsItem.save();
+        await this.newsItem.save();
       } else if (this.newsItem.hasDirtyAttributes) {
-        yield this.newsItem.save();
+        await this.newsItem.save();
       }
     }
     if (this.internalReview?.hasDirtyAttributes) {
-      yield this.internalReview.hasMany('submissions').reload();
-      yield this.internalReview.save();
+      await this.internalReview.hasMany('submissions').reload();
+      await this.internalReview.save();
     }
     this.preventUnload.disable();
     this.args.onSave();
-  }
+  });
 
   @action
   async selectSubcaseType(type) {

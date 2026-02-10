@@ -51,20 +51,18 @@ export default class UtilsModelSelectorComponent extends Component {
     return options;
   }
 
-  @task
-  *findAll() {
+  findAll = task(async () => {
     if (this.args.modelName) {
-      let items = yield this.store.query(this.args.modelName, this.queryOptions);
+      let items = await this.store.query(this.args.modelName, this.queryOptions);
       if (this.args.filterOptions) {
         items = this.args.filterOptions(items);
       }
       this.items = items;
     }
-  }
+  });
 
-  @task
-  *searchTask (searchValue) {
-    yield timeout(300);
+  searchTask = task(async (searchValue) => {
+    await timeout(300);
     const queryOptions = this.queryOptions;
     if (queryOptions.filter) {
       queryOptions.filter[this.args.searchField] = searchValue;
@@ -74,10 +72,10 @@ export default class UtilsModelSelectorComponent extends Component {
       queryOptions.filter = filter;
     }
 
-    let results = yield this.store.query(this.args.modelName, queryOptions);
+    let results = await this.store.query(this.args.modelName, queryOptions);
     if (this.args.filterOptions) {
       results = this.args.filterOptions(results);
     }
     return results;
-  }
+  });
 }

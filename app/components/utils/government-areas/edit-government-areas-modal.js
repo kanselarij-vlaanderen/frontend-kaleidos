@@ -19,9 +19,8 @@ export default class EditGovernmentAreasModal extends Component {
       this.args.governmentDomains?.slice(0) || []; // making a copy
   }
 
-  @task
-  *loadGovernmentAreas() {
-    const concepts = yield this.conceptStore.queryAllGovernmentFields();
+  loadGovernmentAreas = task(async () => {
+    const concepts = await this.conceptStore.queryAllGovernmentFields();
     const governmentFields = [];
     for (const concept of concepts.slice()) {
       const isInDateRange =
@@ -34,15 +33,14 @@ export default class EditGovernmentAreasModal extends Component {
       }
     }
     this.governmentFields = governmentFields;
-  }
+  });
 
-  @task
-  *save() {
-    yield this.args.onSave(
+  save = task(async () => {
+    await this.args.onSave(
       this.selectedGovernmentDomains,
       this.selectedGovernmentFields
     );
-  }
+  });
 
   @action
   selectField(selectedFields) {

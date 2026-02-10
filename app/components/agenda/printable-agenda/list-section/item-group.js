@@ -13,14 +13,13 @@ export default class AgendaPrintableAgendaListSectionItemGroupComponent extends 
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     const agendaitem = this.args.items.at(0);
-    const agendaActivity = yield agendaitem.agendaActivity;
-    const subcase = yield agendaActivity?.subcase;
-    yield subcase?.type;
+    const agendaActivity = await agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+    await subcase?.type;
     this.isBekrachtiging = subcase?.isBekrachtiging;
-  }
+  });
 
   getPiecesForAgendaitem = async (agendaitem) => {
     let pieces = await agendaitem.pieces;

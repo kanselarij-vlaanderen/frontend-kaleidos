@@ -28,12 +28,11 @@ export default class AgendaHeader extends Component {
     this.loadAgendaIsFinal.perform();
   }
 
-  @task
-  *loadAgendaIsFinal() {
+  loadAgendaIsFinal = task(async () => {
     const meeting = this.args.meeting;
-    const agenda = yield meeting.agenda;
+    const agenda = await meeting.agenda;
     this.isFinalAgenda = isPresent(agenda?.id);
-  }
+  });
 
   /**
    * This method will toggle a modal component with a custom message

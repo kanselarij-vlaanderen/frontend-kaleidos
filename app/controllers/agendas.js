@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addBusinessDays, setHours, setMinutes } from 'date-fns';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
@@ -33,11 +33,10 @@ export default class AgendasController extends Controller {
 
   dateRegex = /^(?:(\d{1,2})[/-])??(?:(\d{1,2})[/-])?(\d{4})$/;
 
-  @restartableTask
-  *debouncedSetFilter(event) {
-    yield timeout(500);
+  debouncedSetFilter = task({ restartable: true }, async (event) => {
+    await timeout(500);
     this.setFilter(event.target.value);
-  }
+  });
 
   @action
   onEnterKeyFilter(event) {

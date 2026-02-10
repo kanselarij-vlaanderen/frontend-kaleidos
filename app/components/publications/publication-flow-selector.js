@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { timeout, restartableTask } from 'ember-concurrency';
+import { timeout, task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 
@@ -12,9 +12,8 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 export default class PublicationsPublicationFlowSelectorComponent extends Component {
   @service store;
 
-  @restartableTask
-  *debouncedSearch(searchText) {
-    yield timeout(300);
+  debouncedSearch = task({ restartable: true }, async (searchText) => {
+    await timeout(300);
 
     // Filter on all publication-flows linked to the same case
     // because multiple reference documents on 1 publication-flow must belong to the same case
@@ -58,7 +57,7 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
       include: 'identification',
     });
 
-    const [publicationsByCase, publicationsNotViaCouncilOfMinisters] = yield Promise.all([
+    const [publicationsByCase, publicationsNotViaCouncilOfMinisters] = await Promise.all([
       searchByCase,
       searchNotViaCouncilOfMinisters
     ]);
@@ -67,5 +66,5 @@ export default class PublicationsPublicationFlowSelectorComponent extends Compon
       ...publicationsByCase.slice(),
       ...publicationsNotViaCouncilOfMinisters.slice()
     ];
-  }
+  });
 }

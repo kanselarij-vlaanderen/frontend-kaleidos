@@ -50,13 +50,11 @@ export default class AlertDialog extends Component {
     return undefined;
   }
 
-  @task
-  *cancel() {
-    yield this.args.onCancel();
-  }
+  cancel = task(async () => {
+    await this.args.onCancel();
+  });
 
-  @task
-  *confirm() {
-    yield this.args.onConfirm();
-  }
+  confirm = task(async () => {
+    await this.args.onConfirm();
+  });
 }

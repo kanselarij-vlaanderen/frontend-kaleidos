@@ -164,27 +164,24 @@ export default class AgendaitemControls extends Component {
     return null;
   }
 
-  @task
-  *loadAgendaData() {
-    const status = yield this.args.currentAgenda.status;
+  loadAgendaData = task(async () => {
+    const status = await this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
-  }
+  });
 
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.decisionResultCode;
-  }
+  loadDecisionActivity = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.decisionResultCode;
+  });
 
-  @task
-  *loadSubmissions() {
+  loadSubmissions = task(async () => {
     if (this.args.subcase?.id) {
-      this.submissions = yield this.args.subcase.submissions;
-      const ongoingSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
+      this.submissions = await this.args.subcase.submissions;
+      const ongoingSubmission = await this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
       this.ongoingSubmissionId = ongoingSubmission?.id;
     }
-  }
+  });
 
   async deleteItem(agendaitem) {
     this.isVerifying = false;
@@ -228,19 +225,17 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
-  @task
-  *postponeAgendaitem() {
-    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
-    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
-  }
+  postponeAgendaitem = task(async () => {
+    await this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
+    await this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
+    await this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+  });
 
-  @task
-  *retractAgendaitem() {
-    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
-    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
-  }
+  retractAgendaitem = task(async () => {
+    await this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
+    await this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    await this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+  });
 
   @action
   toggleIsVerifying() {
@@ -276,15 +271,14 @@ export default class AgendaitemControls extends Component {
     this.isSendingBackToSubmitter = false;
   }
 
-  @task
-  *updateDecisionPiecePart(message) {
-    const report = yield this.store.queryOne('report', {
+  updateDecisionPiecePart = task(async (message) => {
+    const report = await this.store.queryOne('report', {
       filter: {
         'decision-activity': { ':id:': this.decisionActivity.id },
       },
     });
     if (report) {
-      const beslissingPiecePart = yield this.store.queryOne('piece-part', {
+      const beslissingPiecePart = await this.store.queryOne('piece-part', {
         filter: {
           report: { ':id:': report.id },
           ':has-no:next-piece-part': true,
@@ -293,7 +287,7 @@ export default class AgendaitemControls extends Component {
       });
       if (beslissingPiecePart) {
         const now = new Date();
-        const newBeslissingPiecePart = yield this.store.createRecord(
+        const newBeslissingPiecePart = await this.store.createRecord(
           'piece-part',
           {
             title: 'Beslissing',
@@ -303,52 +297,50 @@ export default class AgendaitemControls extends Component {
             created: now,
           }
         );
-        yield newBeslissingPiecePart.save();
-        yield this.decisionReportGeneration.generateReplacementReport.perform(
+        await newBeslissingPiecePart.save();
+        await this.decisionReportGeneration.generateReplacementReport.perform(
           report
         );
       }
     }
     return;
-  }
+  });
 
-  @task
-  *resetDecisionResultCode() {
-    const agendaItemType = yield this.args.agendaitem.type;
+  resetDecisionResultCode = task(async () => {
+    const agendaItemType = await this.args.agendaitem.type;
     const isAnnouncement =
       agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const defaultDecisionResultCodeUri = isAnnouncement
       ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    yield this.setDecisionResultCode.perform(defaultDecisionResultCodeUri);
-  }
+    await this.setDecisionResultCode.perform(defaultDecisionResultCodeUri);
+  });
 
-  @task
-  *setDecisionResultCode(decisionResultCodeUri) {
-    const decisionResultCodeConcept = yield this.store.findRecordByUri(
+  setDecisionResultCode = task(async (decisionResultCodeUri) => {
+    const decisionResultCodeConcept = await this.store.findRecordByUri(
       'concept',
       decisionResultCodeUri
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
-    yield this.decisionActivity.save();
+    await this.decisionActivity.save();
     if (
       [
         CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
         CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
       ].includes(decisionResultCodeUri)
     ) {
-      const pieces = yield this.args.agendaitem.pieces;
+      const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.slice()) {
-        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece
         );
         if (
           decisionResultCodeUri ===
           CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
         ) {
-          yield this.signatureService.removeSignFlowForPiece(piece);
+          await this.signatureService.removeSignFlowForPiece(piece);
         }
       }
     }
-  }
+  });
 }

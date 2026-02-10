@@ -35,10 +35,9 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
     return hasPermission && canManageSignflow;
   }
 
-  @task
-  *loadPieceData() {
-    this.documentContainer = yield this.args.piece.documentContainer;
-  }
+  loadPieceData = task(async () => {
+    this.documentContainer = await this.args.piece.documentContainer;
+  });
 
   @action
   setTab(tabName) {

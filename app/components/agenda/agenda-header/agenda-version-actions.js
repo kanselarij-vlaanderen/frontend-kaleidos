@@ -63,13 +63,12 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     this.loadAgendaData.perform();
   }
 
-  @task
-  *loadAgendaData() {
-    const status = yield this.args.currentAgenda.status;
+  loadAgendaData = task(async () => {
+    const status = await this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
 
     for (const agenda of this.args.reverseSortedAgendas.slice()) {
-      const status = yield agenda.status;
+      const status = await agenda.status;
       if (status.isDesignAgenda) {
         this.designAgenda = agenda;
         break;
@@ -77,13 +76,13 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
     }
 
     for (const agenda of this.args.reverseSortedAgendas.slice()) {
-      const status = yield agenda.status;
+      const status = await agenda.status;
       if (!status.isDesignAgenda) {
         this.lastApprovedAgenda = agenda;
         break;
       }
     }
-  }
+  });
 
   get isFinalMeeting() {
     return isPresent(this.args.meeting.agenda.get('id'));
@@ -186,37 +185,35 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
    * This task will reload the agendaitems of the current agenda
    * Any new agendaitem or changed formality is picked up by this, to avoid stale data created by concurrent edits of agendaitem
    */
-  @task
-  *reloadAgendaitemsData() {
+  reloadAgendaitemsData = task(async () => {
     /**
      * This hasMany reload will:
      * - Refresh the amount of agendaitems there are (if new were added)
      * - Reload the agendaitems attributes (titles, formal ok status (uri), etc)
      * - Reload the agendaitems concurrency (modified attribute)
      */
-    yield this.args.currentAgenda.hasMany('agendaitems').reload();
+    await this.args.currentAgenda.hasMany('agendaitems').reload();
     // When reloading the data for this use-case, only the agendaitems that are not "formally ok" have to be fully reloaded
     // If not reloaded, any following PATCH call on these agendaitems will succeed (due to the hasMany reload above) but with old relation data
     // *NOTE* since we only load the "nok/not yet ok" items, it is still possible to save old relations on formally ok items (although most changes should reset the formality)
-    const agendaitemsNotOk = yield this.allAgendaitemsNotOk();
+    const agendaitemsNotOk = await this.allAgendaitemsNotOk();
     for (const agendaitem of agendaitemsNotOk) {
       // Reloading some relationships of agendaitem most likely to be changed by concurrency
-      yield agendaitem.reload();
-      yield agendaitem.hasMany('pieces').reload();
-      yield agendaitem.hasMany('mandatees').reload();
-      yield agendaitem.hasMany('linkedPieces').reload();
+      await agendaitem.reload();
+      await agendaitem.hasMany('pieces').reload();
+      await agendaitem.hasMany('mandatees').reload();
+      await agendaitem.hasMany('linkedPieces').reload();
     }
-  }
+  });
 
   /**
    * This task will get all pieces that are new on the current designAgenda
    * Excluding the pieces from new agendaitems, they don't have to be deleted
    * Used in reopenPreviousAgenda action
    */
-  @task
-  *loadPiecesToDelete() {
-    const agendaitems = yield this.args.currentAgenda.agendaitems;
-    const previousAgenda = yield this.args.currentAgenda.previousVersion;
+  loadPiecesToDelete = task(async () => {
+    const agendaitems = await this.args.currentAgenda.agendaitems;
+    const previousAgenda = await this.args.currentAgenda.previousVersion;
     const pieces = [];
     const agendaitemNewPieces = agendaitems.map(async (agendaitem) => {
       const previousVersion = await agendaitem.previousVersion;
@@ -231,9 +228,9 @@ export default class AgendaAgendaHeaderAgendaVersionActions extends Component {
         }
       }
     });
-    yield all(agendaitemNewPieces);
-    this.piecesToDeleteReopenPreviousAgenda = yield sortPieces(pieces);
-  }
+    await all(agendaitemNewPieces);
+    this.piecesToDeleteReopenPreviousAgenda = await sortPieces(pieces);
+  });
 
   // TODO KAS-2399 could we get rid of this when we reload the model with agendaitems includes?
   /**

@@ -35,38 +35,34 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
     this.loadAgendaItemTypes.perform();
   }
 
-  @task
-  *loadSubcaseType() {
-    this.subcaseType = yield this.args.subcase.type;
-  }
+  loadSubcaseType = task(async () => {
+    this.subcaseType = await this.args.subcase.type;
+  });
 
-  @task
-  *loadAgendaItemType() {
-    this.agendaItemType = yield this.args.subcase.agendaItemType;
-  }
+  loadAgendaItemType = task(async () => {
+    this.agendaItemType = await this.args.subcase.agendaItemType;
+  });
 
-  @task
-  *loadAgendaItemTypes() {
-    const allAgendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+  loadAgendaItemTypes = task(async () => {
+    const allAgendaItemTypes = await this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
     // ratification can only be NOTA, subcase type should be changed first (will open different edit modal)
     this.agendaItemTypes = allAgendaItemTypes.filter(
       (type) => type.uri !== CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT
     );
-  }
+  });
 
-  @task
-  *updateNewsItem() {
-    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+  updateNewsItem = task(async () => {
+    const latestAgendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
     if (latestAgendaitem) {
-      yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
+      await this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
     }
-  }
+  });
 
   @action
   async cancelEditing() {

@@ -38,12 +38,11 @@ export default class ProposableAgendasModal extends Component {
     return true;
   }
 
-  @task
-  *loadAgendas() {
+  loadAgendas = task(async () => {
     const dateOfToday = subWeeks(new Date(), 1).toISOString();
     const futureDate = addWeeks(new Date(), 20).toISOString();
 
-    this.agendas = yield this.store.query('agenda', {
+    this.agendas = await this.store.query('agenda', {
       filter: {
         status: {
           ':uri:': CONSTANTS.AGENDA_STATUSSES.DESIGN,
@@ -57,16 +56,15 @@ export default class ProposableAgendasModal extends Component {
       include: 'status,created-for,created-for.kind',
       sort: 'created-for.planned-start',
     });
-  }
+  });
 
-  @task
-  *loadInternalReview() {
+  loadInternalReview = task(async () => {
     if (this.currentSession.may('manage-agendaitems')) {
-      const internalReviewOfSubcase = yield this.args.subcase?.internalReview;
-      const internalReviewOfSubmission = yield this.args.submission?.internalReview;
+      const internalReviewOfSubcase = await this.args.subcase?.internalReview;
+      const internalReviewOfSubmission = await this.args.submission?.internalReview;
       const argsAgendaItemType = this.args.agendaItemType;
-      const subcaseAgendaItemType = yield this.args.subcase?.agendaItemType;
-      const submissionAgendaItemType = yield this.args.submission?.agendaItemType;
+      const subcaseAgendaItemType = await this.args.subcase?.agendaItemType;
+      const submissionAgendaItemType = await this.args.submission?.agendaItemType;
       this.internalReview = internalReviewOfSubcase || internalReviewOfSubmission;
       const agendaitemType = argsAgendaItemType || subcaseAgendaItemType || submissionAgendaItemType;
       if (this.internalReview?.id) {
@@ -81,20 +79,19 @@ export default class ProposableAgendasModal extends Component {
         this.privateComment = CONSTANTS.PRIVATE_COMMENT_TEMPLATE.ANNOUNCEMENT;
       }
     }
-  }
+  });
 
-  @task
-  *saveSubcaseAndSubmitToAgenda() {
-    yield this.updateInternalReview();
-    const meeting = yield this.selectedAgenda.createdFor;
-    // don't yield this, the confirm closes this model so the task is aborted midway
+  saveSubcaseAndSubmitToAgenda = task(async () => {
+    await this.updateInternalReview();
+    const meeting = await this.selectedAgenda.createdFor;
+    // don't await this, the confirm closes this model so the task is aborted midway
     this.args.onConfirm(
       false,
       meeting,
       this.selectedFormallyOkUri,
       this.privateComment
     );
-  }
+  });
 
   @action
   async saveSubcase() {

@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
@@ -38,34 +38,31 @@ export default class PublicationsPublicationProofsProofUploadModalComponent exte
     this.uploadedPieces.push(piece);
   }
 
-  @dropTask
-  *cancel() {
-    yield Promise.all(
+  cancel = task({ drop: true }, async () => {
+    await Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
       )
     );
     this.args.onCancel();
-  }
+  });
 
-  @task
-  *save() {
-    yield this.args.onSave({
+  save = task(async () => {
+    await this.args.onSave({
       proofPrintCorrector: this.proofPrintCorrector,
       receivedDate: this.receivedDate,
       pieces: this.uploadedPieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
-  }
+  });
 
   @action
   setMustUpdatePublicationStatus(checked) {
     this.mustUpdatePublicationStatus = checked;
   }
 
-  @task
-  *deleteUploadedPiece(piece) {
-    yield this.publicationService.deletePiece(piece);
+  deleteUploadedPiece = task(async (piece) => {
+    await this.publicationService.deletePiece(piece);
     removeObject(this.uploadedPieces, piece);
-  }
+  });
 }

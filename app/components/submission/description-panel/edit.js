@@ -47,38 +47,33 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
     this.loadInternalReview.perform();
   }
 
-  @task
-  *loadDecisionmakingFlow() {
-    yield this.args.submission.decisionmakingFlow;
+  loadDecisionmakingFlow = task(async () => {
+    await this.args.submission.decisionmakingFlow;
     // refresh if stale
-    this.decisionmakingFlow = yield this.args.submission.belongsTo('decisionmakingFlow').reload();
-    yield this.decisionmakingFlow?.case;
+    this.decisionmakingFlow = await this.args.submission.belongsTo('decisionmakingFlow').reload();
+    await this.decisionmakingFlow?.case;
     this.decisionmakingFlowTitle = this.args.submission.decisionmakingFlowTitle;
-  }
+  });
 
-  @task
-  *loadSubcaseType() {
-    this.subcaseType = yield this.args.submission.type;
-  }
+  loadSubcaseType = task(async () => {
+    this.subcaseType = await this.args.submission.type;
+  });
 
-  @task
-  *loadAgendaItemType() {
-    this.agendaItemType = yield this.args.submission.agendaItemType;
-  }
+  loadAgendaItemType = task(async () => {
+    this.agendaItemType = await this.args.submission.agendaItemType;
+  });
 
-  @task
-  *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+  loadAgendaItemTypes = task(async () => {
+    this.agendaItemTypes = await this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
-  }
+  });
   
-  @task
-  *loadInternalReview() {
+  loadInternalReview = task(async () => {
     if (this.currentSession.may('treat-and-accept-submissions')) {
-      this.internalReview = yield this.args.submission.internalReview;
+      this.internalReview = await this.args.submission.internalReview;
     }
-  }
+  });
 
   @action
   selectSubcaseName(shortcut) {

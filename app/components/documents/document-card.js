@@ -191,16 +191,14 @@ export default class DocumentsDocumentCardComponent extends Component {
     )
   }
 
-  @task
-  *loadCodelists() {
-    this.defaultAccessLevel = yield this.store.findRecordByUri(
+  loadCodelists = task(async () => {
+    this.defaultAccessLevel = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
     );
-  }
+  });
 
-  @task
-  *loadPieceRelatedData() {
+  loadPieceRelatedData = task(async () => {
     const loadPiece = (id) =>
       this.store.queryOne('piece', {
         'filter[:id:]': id,
@@ -208,13 +206,13 @@ export default class DocumentsDocumentCardComponent extends Component {
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
-      this.piece = yield loadPiece(this.piece.id);
-      this.retrievedPieces = yield this.piece.retrievedPieces;
-      this.documentContainer = yield this.piece.documentContainer;
-      yield this.loadVersionHistory.perform();
+      this.piece = await loadPiece(this.piece.id);
+      this.retrievedPieces = await this.piece.retrievedPieces;
+      this.documentContainer = await this.piece.documentContainer;
+      await this.loadVersionHistory.perform();
       // check for alternative label
       if (!isPresent(this.args.dateToShowLabel)) {
-        yield this.piece.belongsTo('file').reload();
+        await this.piece.belongsTo('file').reload();
         const fileCreated = this.piece.file?.get('created');
         const hasPieceBeenEdited = this.piece.created?.getTime() !== this.piece.modified?.getTime();
         // file is always create first, if file.created is larger it has been edited
@@ -233,9 +231,9 @@ export default class DocumentsDocumentCardComponent extends Component {
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
-      yield this.loadVersionHistory.perform();
+      await this.loadVersionHistory.perform();
       const lastPiece = this.reverseSortedPieces.at(-1);
-      this.piece = yield loadPiece(lastPiece.id);
+      this.piece = await loadPiece(lastPiece.id);
     } else {
       throw new Error(
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.name}`
@@ -245,49 +243,43 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.loadAccessLevelRelatedData.perform();
     this.loadPublicationFlowRelatedData.perform();
     this.loadSignatureRelatedData.perform();
-  }
+  });
 
-  @task
-  *loadFiles() {
-    this.sourceFile = yield this.args.piece.file;
-    this.derived = yield this.sourceFile?.belongsTo('derived').reload();
-  }
+  loadFiles = task(async () => {
+    this.sourceFile = await this.args.piece.file;
+    this.derived = await this.sourceFile?.belongsTo('derived').reload();
+  });
 
-
-  @task
-  *loadAccessLevelRelatedData() {
-    const accessLevel = yield this.piece.accessLevel;
+  loadAccessLevelRelatedData = task(async () => {
+    const accessLevel = await this.piece.accessLevel;
     const context = this.args.agendaContext || {};
-    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.piece);
-  }
+    this.isDraftAccessLevel = await this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.piece);
+  });
 
-  @task
-  *loadPublicationFlowRelatedData() {
+  loadPublicationFlowRelatedData = task(async () => {
     if (this.currentSession.may('manage-publication-flows')) {
-      const publicationFlow = yield this.piece.publicationFlow;
-      yield publicationFlow?.identification;
+      const publicationFlow = await this.piece.publicationFlow;
+      await publicationFlow?.identification;
     }
-  }
+  });
 
-  @task
-  *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
-    const signSubcase = yield this.signMarkingActivity?.signSubcase;
-    this.signFlow = yield signSubcase?.signFlow;
-    this.hasSignFlow = yield this.signatureService.hasSignFlow(this.piece);
-    this.hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.piece);
-    yield this.piece.belongsTo('signedPiece').reload();
-    yield this.piece.belongsTo('signedPieceCopy').reload();
-  }
+  loadSignatureRelatedData = task(async () => {
+    this.signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = await this.signMarkingActivity?.signSubcase;
+    this.signFlow = await signSubcase?.signFlow;
+    this.hasSignFlow = await this.signatureService.hasSignFlow(this.piece);
+    this.hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.piece);
+    await this.piece.belongsTo('signedPiece').reload();
+    await this.piece.belongsTo('signedPieceCopy').reload();
+  });
 
-  @task
-  *loadVersionHistory() {
-    const piecesFromModel = yield this.documentContainer.hasMany('pieces').reload();
+  loadVersionHistory = task(async () => {
+    const piecesFromModel = await this.documentContainer.hasMany('pieces').reload();
     this.pieces = piecesFromModel.slice();
     for (const piece of this.pieces) {
-      yield piece.belongsTo('accessLevel').reload();
+      await piece.belongsTo('accessLevel').reload();
     }
-  }
+  });
 
   get sortedPieces() {
     return sortPieceVersions(this.pieces.slice()).reverse();
@@ -314,11 +306,10 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenUploadModal = true;
   }
 
-  @task
-  *uploadPiece(file) {
-    yield this.loadVersionHistory.perform();
+  uploadPiece = task(async (file) => {
+    await this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.at(-1);
-    const previousAccessLevel = yield previousPiece.accessLevel;
+    const previousAccessLevel = await previousPiece.accessLevel;
     const now = new Date();
     const newName = new VRDocumentName(previousPiece.name).withOtherVersionSuffix(
         this.sortedPieces.length + 1
@@ -333,15 +324,14 @@ export default class DocumentsDocumentCardComponent extends Component {
       documentContainer: this.documentContainer,
       originalName: previousPiece.originalName,
     });
-  }
+  });
 
-  @task
-  *addPiece() {
+  addPiece = task(async () => {
     if (this.signFlow) {
-      const status = yield this.signFlow.belongsTo('status').reload();
+      const status = await this.signFlow.belongsTo('status').reload();
       if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-        yield this.deleteUploadedPiece.perform();
-        yield this.loadPieceRelatedData.perform();
+        await this.deleteUploadedPiece.perform();
+        await this.loadPieceRelatedData.perform();
         this.toaster.error(
           this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-add-new-version'),
           this.intl.t('action-could-not-be-executed-title'),
@@ -353,32 +343,30 @@ export default class DocumentsDocumentCardComponent extends Component {
 
     try {
       this.newPiece.name = this.newPiece.name.trim();
-      yield this.args.onAddPiece(this.newPiece);
+      await this.args.onAddPiece(this.newPiece);
       this.pieceAccessLevelService.updatePreviousAccessLevel(this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
       this.isOpenUploadModal = false;
     } catch (error) {
-      yield this.deleteUploadedPiece.perform();
+      await this.deleteUploadedPiece.perform();
       this.isOpenUploadModal = false;
       throw error;
     }
-  }
+  });
 
-  @task
-  *deleteUploadedPiece() {
+  deleteUploadedPiece = task(async () => {
     if (this.newPiece) {
       removeObject(this.pieces, this.newPiece);
-      yield deletePiece(this.newPiece);
+      await deletePiece(this.newPiece);
       this.newPiece = null;
     }
-  }
+  });
 
-  @task
-  *cancelUploadPiece() {
-    yield this.deleteUploadedPiece.perform();
+  cancelUploadPiece = task(async () => {
+    await this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
-  }
+  });
 
   @action
   deleteDocumentContainer() {
@@ -417,40 +405,37 @@ export default class DocumentsDocumentCardComponent extends Component {
     this.isOpenVerifyDeleteModal = false;
   }
 
-  @task
-  *deleteDocumentContainerWithUndo() {
-    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
+  deleteDocumentContainerWithUndo = task(async () => {
+    await timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
     if (this.signFlow) {
-      yield this.signatureService.removeSignFlow(this.signFlow);
+      await this.signatureService.removeSignFlow(this.signFlow);
     }
-    yield deleteDocumentContainer(this.documentContainer);
+    await deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
-  }
+  });
 
-  @task
-  *deleteMarkedSignFlow() {
-    const status = yield this.signFlow.belongsTo('status').reload();
+  deleteMarkedSignFlow = task(async () => {
+    const status = await this.signFlow.belongsTo('status').reload();
     if (status.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
       this.toaster.error(
         this.intl.t('sign-flow-was-sent-cannot-stop-it'),
         this.intl.t('action-could-not-be-executed-title'),
       );
-      yield this.loadPieceRelatedData.perform();
+      await this.loadPieceRelatedData.perform();
       return;
     }
-    yield this.signatureService.removeSignFlow(this.signFlow);
-    yield this.loadPieceRelatedData.perform();
-  }
+    await this.signatureService.removeSignFlow(this.signFlow);
+    await this.loadPieceRelatedData.perform();
+  });
 
-  @task
-  *markDocumentForSigning() {
-    yield this.signatureService.markDocumentForSignature(
+  markDocumentForSigning = task(async () => {
+    await this.signatureService.markDocumentForSignature(
       this.piece,
       this.args.decisionActivity,
       this.args.meeting,
     );
-    yield this.loadPieceRelatedData.perform();
-  }
+    await this.loadPieceRelatedData.perform();
+  });
 
   convertSourceFile = task(async () => {
     try {

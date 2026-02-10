@@ -55,16 +55,15 @@ export default class SubCasesOverviewHeader extends Component {
     );
   }
 
-  @task
-  *loadData() {
-    this.case = yield this.args.decisionmakingFlow.case;
-    this.publicationFlows = yield this.case.publicationFlows;
-    yield this.loadLinkedMandatees.perform();
-    this.hasFilesToDownload = (yield this.store.count('piece', {
+  loadData = task(async () => {
+    this.case = await this.args.decisionmakingFlow.case;
+    this.publicationFlows = await this.case.publicationFlows;
+    await this.loadLinkedMandatees.perform();
+    this.hasFilesToDownload = (await this.store.count('piece', {
       'filter[submission-activities][subcase][decisionmaking-flow][:id:]': this.args.decisionmakingFlow.id,
       'filter[:has:file]': true,
     })) > 0;
-  }
+  });
 
   loadSubmissionsData = task(async () => {
     this.currentSubmission = null;

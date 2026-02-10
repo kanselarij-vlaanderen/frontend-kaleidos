@@ -114,8 +114,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     return isPresent(this.args.bordered) ? this.args.bordered : true;
   }
 
-  @task
-  *loadPieceRelatedData() {
+  loadPieceRelatedData = task(async () => {
     const loadPiece = (id) =>
       this.store.queryOne(this.piece.constructor.modelName, {
         'filter[:id:]': id,
@@ -123,13 +122,13 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
       });
     if (this.args.piece) {
       this.piece = this.args.piece; // Assign what we already have, so that can be rendered already
-      this.piece = yield loadPiece(this.piece.id);
-      yield this.piece.accessLevel;
-      this.documentContainer = yield this.piece.documentContainer;
-      yield this.loadVersionHistory.perform();
+      this.piece = await loadPiece(this.piece.id);
+      await this.piece.accessLevel;
+      this.documentContainer = await this.piece.documentContainer;
+      await this.loadVersionHistory.perform();
       // check for alternative label
       if (!isPresent(this.args.dateToShowLabel)) {
-        yield this.piece.file;
+        await this.piece.file;
         const fileCreated = this.piece.file?.get('created');
         const hasPieceBeenEdited =
           this.piece.created?.getTime() !== this.piece.modified?.getTime();
@@ -152,44 +151,41 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     } else if (this.args.documentContainer) {
       // This else does not seem used (no <Documents::DocumentCard> that passes this arg)
       this.documentContainer = this.args.documentContainer;
-      yield this.loadVersionHistory.perform();
+      await this.loadVersionHistory.perform();
       const lastPiece = this.reverseSortedPieces.at(-1);
-      this.piece = yield loadPiece(lastPiece.id);
+      this.piece = await loadPiece(lastPiece.id);
     } else {
       throw new Error(
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.modelName}`
       );
     }
-  }
+  });
 
-  @task
-  *loadFiles() {
-    this.sourceFile = yield this.args.piece.file;
-    this.derived = yield this.sourceFile?.belongsTo('derived').reload();
-  }
+  loadFiles = task(async () => {
+    this.sourceFile = await this.args.piece.file;
+    this.derived = await this.sourceFile?.belongsTo('derived').reload();
+  });
 
-  @task
-  *loadVersionHistory() {
+  loadVersionHistory = task(async () => {
     if (this.piece.constructor.modelName === 'piece') {
-      const piecesFromModel = yield this.documentContainer
+      const piecesFromModel = await this.documentContainer
         .hasMany('pieces')
         .reload();
       this.pieces = piecesFromModel.slice();
     } else {
-      const previousPiece = yield this.piece.previousPiece;
+      const previousPiece = await this.piece.previousPiece;
       if (previousPiece) {
-        const documentContainer = yield previousPiece.documentContainer;
-        const piecesFromModel = yield documentContainer
+        const documentContainer = await previousPiece.documentContainer;
+        const piecesFromModel = await documentContainer
           .hasMany('pieces')
           .reload();
         this.pieces = [this.piece, ...piecesFromModel.slice()];
       }
     }
     for (const piece of this.pieces) {
-      yield piece.belongsTo('accessLevel').reload();
+      await piece.belongsTo('accessLevel').reload();
     }
-
-  }
+  });
 
   get sortedPieces() {
     return sortPieceVersions(this.pieces.slice()).reverse();
@@ -214,40 +210,38 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     )
   }
 
-  @task
-  *addPiece() {
+  addPiece = task(async () => {
     try {
       this.newPiece.name = this.newPiece.name.trim();
-      yield this.args.onAddPiece?.(this.piece, this.newPiece);
+      await this.args.onAddPiece?.(this.piece, this.newPiece);
       this.loadVersionHistory.perform();
       this.newPiece = null;
       this.isOpenUploadModal = false;
     } catch (error) {
-      yield this.deleteUploadedPiece.perform();
+      await this.deleteUploadedPiece.perform();
       this.isOpenUploadModal = false;
       throw error;
     }
-  }
+  });
 
   validateFile = (file) => {
     return this.draftSubmissionService.validateUploadedFile(file);
   }
 
-  @task
-  *uploadPiece(file) {
-    yield this.loadVersionHistory.perform();
+  uploadPiece = task(async (file) => {
+    await this.loadVersionHistory.perform();
     const previousPiece = this.sortedPieces.at(-1);
     const now = new Date();
     const newName = new VRDocumentName(
       previousPiece.name
     ).withOtherVersionSuffix(this.sortedPieces.length + 1);
-    const type = yield this.documentContainer.type;
+    const type = await this.documentContainer.type;
     const draftDocumentContainer = this.store.createRecord('draft-document-container', {
       created: this.documentContainer.created,
       position: this.documentContainer.position,
       type,
     });
-    const accessLevel = yield previousPiece.accessLevel;
+    const accessLevel = await previousPiece.accessLevel;
     this.newPiece = this.store.createRecord('draft-piece', {
       name: newName,
       created: now,
@@ -257,22 +251,20 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
       documentContainer: draftDocumentContainer,
       accessLevel,
     });
-  }
+  });
 
-  @task
-  *deleteUploadedPiece() {
+  deleteUploadedPiece = task(async () => {
     if (this.newPiece) {
       removeObject(this.pieces, this.newPiece);
-      yield deletePiece(this.newPiece);
+      await deletePiece(this.newPiece);
       this.newPiece = null;
     }
-  }
+  });
 
-  @task
-  *cancelUploadPiece() {
-    yield this.deleteUploadedPiece.perform();
+  cancelUploadPiece = task(async () => {
+    await this.deleteUploadedPiece.perform();
     this.isOpenUploadModal = false;
-  }
+  });
 
   @action
   deleteDocumentContainer() {
@@ -298,12 +290,11 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     this.isOpenVerifyDeleteModal = false;
   }
 
-  @task
-  *deleteDocumentContainerWithUndo() {
-    yield timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
-    yield deleteDocumentContainer(this.documentContainer);
+  deleteDocumentContainerWithUndo = task(async () => {
+    await timeout(DOCUMENT_DELETE_UNDO_TIME_MS);
+    await deleteDocumentContainer(this.documentContainer);
     this.args.didDeleteContainer?.(this.documentContainer);
-  }
+  });
 
   convertSourceFile = task(async () => {
     try {

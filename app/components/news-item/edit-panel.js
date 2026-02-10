@@ -46,22 +46,21 @@ export default class NewsItemEditPanelComponent extends Component {
     );
   }
 
-  @task
-  *ensureNewsItem() {
+  ensureNewsItem = task(async () => {
     this.newsItem = this.args.newsItem;
     if (!this.newsItem) {
       this.newsItemIsNew = true;
-      this.newsItem = yield this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
+      this.newsItem = await this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
       if (this.newsItem) {
         // If the service call returned a newsItem, it is new and we save immediately to avoid concurrency issues
-        yield this.newsItem.startEditingByUser(this.currentSession.user, this.newsItemIsNew);
+        await this.newsItem.startEditingByUser(this.currentSession.user, this.newsItemIsNew);
         this.preventUnload.enable();
       } else {
         // If the service call returned nothing, it means someone else created a newsitem and we have to refresh
         return this.args.onCancel(null, this.newsItemIsNew);
       }
     } else {
-      yield this.newsItem.startEditingByUser(this.currentSession.user);
+      await this.newsItem.startEditingByUser(this.currentSession.user);
       this.preventUnload.enable();
     }
 
@@ -71,17 +70,16 @@ export default class NewsItemEditPanelComponent extends Component {
     // Therefore we pass an empty string instead.
     this.htmlContent = this.newsItem.htmlContent || '';
     this.isFinished = this.newsItem.finished;
-    yield this.newsItem.hasMany('themes').reload(); // concurrency in some cases
-    const themes = yield this.newsItem.themes;
+    await this.newsItem.hasMany('themes').reload(); // concurrency in some cases
+    const themes = await this.newsItem.themes;
     this.selectedThemes = themes?.slice();
 
-    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.newsItem);
-  }
+    this.proposalText = await this.newsletterService.generateNewsItemMandateeProposalText(this.newsItem);
+  });
 
-  @task
-  *loadNotaOrVisienota() {
-    this.notaOrVisieNota = yield this.agendaitemNota.notaOrVisieNota(this.args.agendaitem);
-  }
+  loadNotaOrVisienota = task(async () => {
+    this.notaOrVisieNota = await this.agendaitemNota.notaOrVisieNota(this.args.agendaitem);
+  });
 
   @action
   save() {
@@ -101,8 +99,7 @@ export default class NewsItemEditPanelComponent extends Component {
     }
   }
 
-  @task
-  *confirmSave() {
+  confirmSave = task(async () => {
     if (!this.editorController) {
       throw new Error("Can't get rich text since editor-instance isn't available!");
     }
@@ -132,9 +129,9 @@ export default class NewsItemEditPanelComponent extends Component {
       // pass
     }
     this.preventUnload.disable();
-    yield this.args.onSave(this.newsItem, this.newsItemIsNew);
+    await this.args.onSave(this.newsItem, this.newsItemIsNew);
     this.isOpenMissingThemesModal = false;
-  }
+  });
 
   @action
   async cancel() {

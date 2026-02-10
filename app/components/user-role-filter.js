@@ -35,9 +35,8 @@ export default class UserRoleFilterComponent extends Component {
     this.args.onChange?.(this.selected);
   }
 
-  @task
-  *loadData() {
-    this.roles = yield this.store.queryAll('role', {
+  loadData = task(async () => {
+    this.roles = await this.store.queryAll('role', {
       filter: {
         'concept-scheme': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
@@ -49,5 +48,5 @@ export default class UserRoleFilterComponent extends Component {
       this.selected = this.roles.slice();
       this.args.onChange?.(this.selected);
     }
-  }
+  });
 }

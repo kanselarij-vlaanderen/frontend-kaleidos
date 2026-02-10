@@ -23,11 +23,10 @@ export default class MandateesMandateesPanelComponent extends Component {
     this.isEditing = false;
   }
 
-  @task
-  *save() {
+  save = task(async (mandateeData) => {
     if (this.args.onSave) {
-      yield this.args.onSave(...arguments);
+      await this.args.onSave(mandateeData);
     }
     this.isEditing = false;
-  }
+  });
 }
