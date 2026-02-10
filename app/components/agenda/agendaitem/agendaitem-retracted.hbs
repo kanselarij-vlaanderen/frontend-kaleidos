@@ -54,7 +54,7 @@
               {{#each this.loadProposableMeetings.lastSuccessful.value as |meeting|}}
                 <AuButton
                   @skin="link"
-                  {{on "click" (perform this.reProposeForMeeting meeting)}}
+                  {{on "click" (fn this.reProposeForMeeting.perform meeting)}}
                   role="menuitem"
                 >
                   {{t "agenda-for"}}
@@ -94,7 +94,7 @@
 {{#if this.isProposingForOtherMeeting}}
   <Subcases::ProposableMeetings
     @meeting={{@meeting}}
-    @onProposeForMeeting={{perform this.reProposeForMeeting}}
+    @onProposeForMeeting={{this.reProposeForMeeting.perform}}
     @onCancel={{this.closeProposingForOtherMeetingModal}}
   />
 {{/if}}

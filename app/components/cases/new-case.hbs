@@ -1,7 +1,7 @@
 <ConfirmationModal
   @modalOpen={{true}}
   @title={{t "create-case"}}
-  @onConfirm={{perform this.createCase}}
+  @onConfirm={{this.createCase.perform}}
   @onCancel={{@onCancel}}
   @confirmMessage={{t "create-case"}}
   @disabled={{this.isCreateDisabled}}

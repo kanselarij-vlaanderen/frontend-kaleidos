@@ -111,7 +111,7 @@
       @modalOpen={{this.isOpenResubmitModal}}
       @onCancel={{this.toggleResubmitModal}}
       @title={{t "resubmit-submission"}}
-      @onConfirm={{perform this.resubmitSubmission}}
+      @onConfirm={{this.resubmitSubmission.perform}}
       @loading={{this.resubmitSubmission.isRunning}}
     >
       <:body>
@@ -131,7 +131,7 @@
   {{else}}
     <Cases::Submissions::ProposableAgendasModal
       @onCancel={{this.toggleResubmitModal}}
-      @onConfirm={{perform this.resubmitSubmission}}
+      @onConfirm={{this.resubmitSubmission.perform}}
     />
   {{/if}}
 {{/if}}
@@ -150,7 +150,7 @@
     <Cases::Subcases::ProposableAgendasModal
       @submission={{@submission}}
       @onCancel={{this.toggleCreateSubcaseModal}}
-      @onConfirm={{perform this.createSubcase}}
+      @onConfirm={{this.createSubcase.perform}}
       @defaultAgenda={{this.selectedAgenda}}
       @showSaveWithoutAgenda={{true}}
     />
@@ -159,7 +159,7 @@
       @modalOpen={{this.isOpenCreateSubcaseModal}}
       @onCancel={{this.toggleCreateSubcaseModal}}
       @title={{t "update-subcase"}}
-      @onConfirm={{perform this.createSubcase false null false null}}
+      @onConfirm={{fn this.createSubcase.perform false null false null}}
       @alert={{true}}
       @loading={{this.createSubcase.isRunning}}
       @message={{t "confirm-accept-subcase-update"}}
@@ -171,7 +171,7 @@
   @modalOpen={{this.isOpenSendBackModal}}
   @onCancel={{this.toggleSendBackModal}}
   @title={{t "send-back-to-submitter"}}
-  @onConfirm={{queue (perform this.sendBackToSubmitter) this.toggleSendBackModal}}
+  @onConfirm={{queue this.sendBackToSubmitter.perform this.toggleSendBackModal}}
   @alert={{true}}
   @loading={{this.sendBackToSubmitter.isRunning}}
 >
@@ -194,7 +194,7 @@
   @modalOpen={{this.isOpenDeleteModal}}
   @onCancel={{this.toggleDeleteModal}}
   @title={{t "delete-submission"}}
-  @onConfirm={{queue (perform this.deleteSubmission) this.toggleDeleteModal}}
+  @onConfirm={{queue this.deleteSubmission.perform this.toggleDeleteModal}}
   @alert={{true}}
   @loading={{this.deleteSubmission.isRunning}}
   @disabled={{this.createSubcase.isRunning}}
@@ -234,7 +234,7 @@
   @modalOpen={{this.isOpenRequestSendBackModal}}
   @onCancel={{this.toggleRequestSendBackModal}}
   @title={{t "request-send-back-submission-title"}}
-  @onConfirm={{queue (perform this.requestSendBackToSubmitter) this.toggleRequestSendBackModal}}
+  @onConfirm={{queue this.requestSendBackToSubmitter.perform this.toggleRequestSendBackModal}}
   @alert={{true}}
   @loading={{this.requestSendBackToSubmitter.isRunning}}
 >

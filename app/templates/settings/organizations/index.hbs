@@ -145,7 +145,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.showBlockOrganizationConfirmationModal}}
-  @onConfirm={{queue (perform this.blockOrganization) (toggle "showBlockOrganizationConfirmationModal" this)}}
+  @onConfirm={{queue this.blockOrganization.perform (toggle "showBlockOrganizationConfirmationModal" this)}}
   @onCancel={{toggle "showBlockOrganizationConfirmationModal" this}}
   @confirmMessage={{t "block-organization"}}
   @alert={{true}}
@@ -165,7 +165,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.showUnblockOrganizationConfirmationModal}}
-  @onConfirm={{queue (perform this.unblockOrganization) (toggle "showUnblockOrganizationConfirmationModal" this)}}
+  @onConfirm={{queue this.unblockOrganization.perform (toggle "showUnblockOrganizationConfirmationModal" this)}}
   @onCancel={{toggle "showUnblockOrganizationConfirmationModal" this}}
   @confirmMessage={{t "unblock-organization"}}
   @loading={{this.unblockOrganization.isRunning}}

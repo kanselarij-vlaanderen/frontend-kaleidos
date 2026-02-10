@@ -102,7 +102,7 @@
         (and this.saveSubcaseAndSubmitToAgenda.isRunning this.selectedAgenda)
       }}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.saveSubcaseAndSubmitToAgenda)}}
+      {{on "click" this.saveSubcaseAndSubmitToAgenda.perform}}
     >
       {{t "place-on-agenda"}}
     </AuButton>

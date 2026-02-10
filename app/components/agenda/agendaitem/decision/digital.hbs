@@ -53,7 +53,7 @@
           @hideEdit={{true}}
           @hideUpload={{true}}
           @showCreateNewVersion={{true}}
-          @onCreateNewVersion={{perform this.onCreateNewVersion}}
+          @onCreateNewVersion={{this.onCreateNewVersion.perform}}
           @bordered={{true}}
           @didDeleteContainer={{this.didDeleteReport}}
           @onChangeConfidentiality={{this.generateNewReport}}
@@ -80,7 +80,7 @@
           {{else}}
             <Agenda::Agendaitem::AgendaitemDecisionEdit
               @decisionActivity={{@decisionActivity}}
-              @onSave={{perform this.onDecisionEdit}}
+              @onSave={{this.onDecisionEdit.perform}}
               @onCancel={{this.toggleEditPill}}
               class="auk-u-my-2"
             />
@@ -170,7 +170,7 @@
                 @skin="primary"
                 @loading={{this.onSaveReport.isRunning}}
                 @loadingMessage={{t "loading"}}
-                {{on "click" (perform this.onSaveReport)}}
+                {{on "click" this.onSaveReport.perform}}
               >
                 {{t "update"}}
               </AuButton>
@@ -209,7 +209,7 @@
                     @skin="primary"
                     @loading={{this.onUpdateAnnotation.isRunning}}
                     @loadingMessage={{t "loading"}}
-                    {{on "click" (perform this.onUpdateAnnotation)}}
+                    {{on "click" this.onUpdateAnnotation.perform}}
                   >
                     {{t "update"}}
                   </AuButton>
@@ -294,7 +294,7 @@
                     @skin="primary"
                     @loading={{this.onUpdateConcern.isRunning}}
                     @loadingMessage={{t "loading"}}
-                    {{on "click" (perform this.onUpdateConcern)}}
+                    {{on "click" this.onUpdateConcern.perform}}
                   >
                     {{t "update"}}
                   </AuButton>
@@ -377,7 +377,7 @@
                     @skin="primary"
                     @loading={{this.onUpdateTreatment.isRunning}}
                     @loadingMessage={{t "loading"}}
-                    {{on "click" (perform this.onUpdateTreatment)}}
+                    {{on "click" this.onUpdateTreatment.perform}}
                   >
                     {{t "update"}}
                   </AuButton>
