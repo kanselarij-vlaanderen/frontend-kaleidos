@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, lastValue, all, animationFrame } from 'ember-concurrency';
+import { task, all, animationFrame } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
   AgendaitemGroup
@@ -31,8 +31,8 @@ export default class AgendaAgendaitemsController extends Controller {
   @service throttledLoadingService;
   @service toaster;
 
-  // TODO KAS-5171 replace lastValue
-  @lastValue('groupNotasOnGroupName') notaGroups = [];
+  @tracked notaGroups = [];
+
   @tracked meeting;
   @tracked agenda;
   @tracked previousAgenda;
@@ -151,7 +151,7 @@ export default class AgendaAgendaitemsController extends Controller {
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }
-    return agendaitemGroups;
+    this.notaGroups = agendaitemGroups;
   });
 
   loadDocuments = task(async () => {
