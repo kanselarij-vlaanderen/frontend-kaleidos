@@ -67,7 +67,8 @@ export default class AgendaitemAndSubcasePropertiesSyncService extends Service {
         await agendaitemSubcase.preEditOrSaveCheck();
         await setNewPropertiesToModel(agendaitemSubcase, propertiesToSetOnSubcase, false);
       }
-      await setNewPropertiesToModel(item, propertiesToSetOnAgendaitem, resetFormallyOk);
+      // formally ok reset only on design agenda
+      await setNewPropertiesToModel(item, propertiesToSetOnAgendaitem, agendaStatus.isDesignAgenda ? resetFormallyOk : false);
       await setModifiedOnAgendaOfAgendaitem(item);
     } else {
       await setNewPropertiesToModel(item, propertiesToSetOnSubcase, false);
