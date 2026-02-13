@@ -84,10 +84,10 @@ context('Agendaitem document warning tests', () => {
     .day(4);
   const agendaitemTitle = 'Goedkeuring van het verslag van de vergadering van';
   const file = {
-    folder: 'files', fileName: 'test', fileExtension: 'pdf',
+    folder: 'files', fileName: 'test', newFileName: `VR PV ${agendaDate.format('YYYY')}/1 test`, fileExtension: 'pdf',
   };
   const newFile = {
-    folder: 'files', fileName: 'replace', fileExtension: 'pdf',
+    folder: 'files', fileName: 'replace', newFileName: `VR PV ${agendaDate.format('YYYY')}/1 replace`, fileExtension: 'pdf',
   };
 
   beforeEach(() => {
