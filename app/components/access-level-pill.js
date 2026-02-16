@@ -37,7 +37,7 @@ export default class AccessLevelPillComponent extends Component {
           icon = 'lock-closed';
           break;
         case CONSTANTS.ACCESS_LEVELS.INGETROKKEN:
-          icon = 'lock-closed'; // TODO KAS-4715 what icon?
+          icon = 'lock-closed';
           break;
         case CONSTANTS.ACCESS_LEVELS.INTERN_REGERING:
           icon = 'circle';

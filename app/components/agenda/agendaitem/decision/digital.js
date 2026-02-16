@@ -200,6 +200,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       return;
     }
     let newBeslissingHtmlContent = this.beslissingPiecePart.htmlContent;
+    let regenerateConcerns = false;
     const decisionResultCode = await this.args.decisionActivity.decisionResultCode;
     switch (decisionResultCode?.uri) {
       case CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD:
@@ -207,6 +208,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         break;
       case CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN:
         newBeslissingHtmlContent = this.intl.t('retracted-item-decision');
+        regenerateConcerns = true;
         break;
       default:
         break;
@@ -222,10 +224,14 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       });
       await newBeslissingPiecePart.save();
       await this.decisionReportGeneration.generateReplacementReport.perform(
-        this.report
+        this.report,
+        regenerateConcerns
       );
     }
     await this.loadBeslissingPiecePart.perform();
+    if (regenerateConcerns) {
+      await this.loadBetreftPiecePart.perform();
+    }
   });
 
   updateAgendaitemPiecesAccessLevels = task(async () => {

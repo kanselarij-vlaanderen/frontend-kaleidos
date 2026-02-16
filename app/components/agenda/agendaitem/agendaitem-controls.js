@@ -238,7 +238,7 @@ export default class AgendaitemControls extends Component {
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'), true);
     yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
@@ -277,7 +277,7 @@ export default class AgendaitemControls extends Component {
   }
 
   @task
-  *updateDecisionPiecePart(message) {
+  *updateDecisionPiecePart(message, regenerateConcerns) {
     const report = yield this.store.queryOne('report', {
       filter: {
         'decision-activity': { ':id:': this.decisionActivity.id },
@@ -305,7 +305,8 @@ export default class AgendaitemControls extends Component {
         );
         yield newBeslissingPiecePart.save();
         yield this.decisionReportGeneration.generateReplacementReport.perform(
-          report
+          report,
+          regenerateConcerns
         );
       }
     }
