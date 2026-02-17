@@ -1,17 +1,11 @@
-version: '3.4'
-
 services:
   frontend:
-    networks:
-      - default
-    build: ../.
-    user: ${HOST_UID_GID}
+    build:
+      context: ..
+      dockerfile: Dockerfile.ci
   identifier:
     environment:
       SESSION_COOKIE_SECURE: "false"
-  elasticsearch:
-    volumes:
-      - /usr/share/elasticsearch/data
   e2e-electron:
     image: "kanselarij/kaleidos-cypress:4.0.0"
     ipc: host
@@ -20,32 +14,34 @@ services:
     volumes:
       - ../cypress:/app/cypress
       - ../cypress.test.config.js:/app/cypress.config.js
+  database:
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+  mocklogin:
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-    user: ${HOST_UID_GID}
-  cache:
-    user: ${HOST_UID_GID}
-  forever-cache:
-    user: ${HOST_UID_GID}
-  resource:
-    user: ${HOST_UID_GID}
   database-healthcheck:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-    user: ${HOST_UID_GID}
   newsletter:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-    user: ${HOST_UID_GID}
   search:
-    user: ${HOST_UID_GID}
     environment:
       UPDATE_WAIT_INTERVAL_MINUTES: 0
+  elasticsearch:
+    volumes:
+      - /usr/share/elasticsearch/data
   # The DELTA_INTERVAL_MS is the value that yggdrasil waits between runs in milliseconds
   # Default is 5 minutes but results in 10 minutes between runs
   yggdrasil:
-    user: ${HOST_UID_GID}
     environment:
       DELTA_INTERVAL_MS: 10000
   # The RELEASE_CRON_PATTERN is the value that the service cron job runs for and defaults to once per minute.
@@ -59,8 +55,6 @@ services:
       ENABLE_RECENT_AGENDAS_CACHE: "false"
       ENABLE_LARGE_AGENDAS_CACHE: "false"
       ENABLE_CONCEPTS_CACHE: "true"
-  publication-report:
-    user: ${HOST_UID_GID}
   staatsblad-uuid-generation:
     image: lblod/sink-service:1.0.0
     restart: "no"
@@ -85,15 +79,6 @@ services:
   docx-conversion:
     # old version that uses libreoffice for conversion instead of azure
     image: kanselarij/docx-conversion-service:0.1.0
-    user: ${HOST_UID_GID}
-  decision-report-generation:
-    user: ${HOST_UID_GID}
-  decision-extraction:
-    user: ${HOST_UID_GID}
-  minutes-report-generation:
-    user: ${HOST_UID_GID}
-  file-bundling:
-    user: ${HOST_UID_GID}
   agenda-submission:
     environment:
       CACHE_CLEAR_TIMEOUT: 10000
@@ -109,17 +94,6 @@ services:
       SIGNINGHUB_API_URL: "https://fake.api.url"
       # mock login users are in a different graph and we check better if you are logged in.
       ACCOUNT_GRAPH: "http://mu.semte.ch/graphs/public"
-    user: ${HOST_UID_GID}
-  document-stamping:
-    user: ${HOST_UID_GID}
   agenda-approve:
     environment:
       SERVER_BUSY_TIMEOUT: 10
-  draft-file:
-    user: ${HOST_UID_GID}
-  draft-file-mover:
-    user: ${HOST_UID_GID}
-  pdf-signature-remover:
-    user: ${HOST_UID_GID}
-  pdf-flattener:
-    user: ${HOST_UID_GID}

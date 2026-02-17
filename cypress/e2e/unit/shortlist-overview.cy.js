@@ -496,6 +496,7 @@ context('signatures shortlist overview tests', () => {
       .click();
 
     // TODO test error `cy.parents()` failed because it requires a DOM element or document.
+    cy.wait(20000); // checking if waiting is enough for the signflow-status-sync
     cy.visit('ondertekenen/opstarten');
     // check succes
     cy.get(route.signatures.row.name).contains(files1[0].newFileName)
@@ -1047,7 +1048,8 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
 
     // check succes
-    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    // cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.wait(20000); // checking if waiting more is enough for the signflow-status-sync
     cy.reload(); // TODO this reload is only needed because jenkins is not finding a mu-session
     cy.log('failing tests. decisionTitle should be in list:', decisionTitle); // the next line fails sometimes
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
