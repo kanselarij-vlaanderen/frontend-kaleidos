@@ -131,10 +131,10 @@ context('Agendaitem document warning tests', () => {
     cy.addNewDocumentsInUploadModal([newFile], 'agendaitems');
     cy.wait('@patchAgendaitems1');
     cy.get(appuniversum.loader).should('not.exist');
-    cy.get(document.documentCard.name.value).contains(newFile.fileName);
+    cy.get(document.documentCard.name.value).contains(newFile.newFileName);
 
     // check upload new piece and cancel
-    clickNewPieceForFile(file.fileName);
+    clickNewPieceForFile(file.newFileName);
     cy.get(auk.auModal.body).contains(recentVersionAvailable);
     cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
@@ -142,16 +142,16 @@ context('Agendaitem document warning tests', () => {
     cy.get(auk.auModal.container).should('not.exist');
 
     // check upload new piece and confirm
-    addNewPieceWithConfirm(file.fileName, file, 'agendaitems', false);
-    cy.get(document.documentCard.name.value).contains(`${file.fileName} BIS`);
+    addNewPieceWithConfirm(file.newFileName, file, 'agendaitems', false);
+    cy.get(document.documentCard.name.value).contains(`${file.newFileName} BIS`);
 
     // new doc and BIS should not exist on B
     cy.changeSelectedAgenda('Agenda B');
     cy.openAgendaitemDocumentTab(agendaitemTitle, false, false);
-    cy.get(document.documentCard.name.value).contains(file.fileName);
-    cy.get(document.documentCard.name.value).contains(newFile.fileName)
+    cy.get(document.documentCard.name.value).contains(file.newFileName);
+    cy.get(document.documentCard.name.value).contains(newFile.newFileName)
       .should('not.exist');
-    cy.get(document.documentCard.name.value).contains(`${file.fileName} BIS`)
+    cy.get(document.documentCard.name.value).contains(`${file.newFileName} BIS`)
       .should('not.exist');
 
     // check warning and cancel on B (closed agenda)
@@ -172,17 +172,17 @@ context('Agendaitem document warning tests', () => {
     cy.get(auk.auModal.container).should('not.exist');
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(document.documentCard.name.value).should('have.length', 2);
-    cy.get(document.documentCard.name.value).contains(newFile.fileName);
+    cy.get(document.documentCard.name.value).contains(newFile.newFileName);
 
     // check upload new piece and cancel
-    clickNewPieceForFile(file.fileName);
+    clickNewPieceForFile(file.newFileName);
     cy.get(auk.auModal.body).contains(editDocsOnApproved);
     cy.get(auk.confirmationModal.footer.cancel).click();
     // uploadwindow should not appear, if it does test will fail
     cy.get(auk.auModal.container).should('not.exist');
 
     // check upload new piece and confirm
-    addNewPieceWithConfirm(file.fileName, file, 'agendaitems', false);
-    cy.get(document.documentCard.name.value).contains(`${file.fileName} TER`);
+    addNewPieceWithConfirm(file.newFileName, file, 'agendaitems', false);
+    cy.get(document.documentCard.name.value).contains(`${file.newFileName} TER`);
   });
 });
