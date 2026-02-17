@@ -1,0 +1,334 @@
+@use "settings";
+
+/* ==========================================================================
+  auk-button
+   ========================================================================== */
+
+/* Component
+   ========================================================================== */
+
+.auk-button {
+  font-family: settings.$global-base-font-family;
+  font-size: 1.6rem;
+  border: none;
+  appearance: none;
+  text-decoration: none;
+  align-items: center;
+  vertical-align: top;
+  padding: 0.75rem 1.2rem;
+  background-color: transparent;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: 500;
+  border-radius: .3rem;
+  cursor: pointer;
+
+  &:focus {
+    border-color: settings.$color-yellow-500;
+    outline: 0.3rem solid settings.$color-yellow-500;
+    outline-offset: 0.2rem;
+ }
+
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    pointer-events: none;
+  }
+}
+
+a.auk-button {
+  display: inline-flex;
+  justify-content: center;
+}
+
+.auk-button__label {
+  font-size: 1.6rem;
+  line-height: 2rem;
+  white-space: nowrap;
+}
+
+.auk-button {
+  .au-c-icon + .auk-button__label,
+  .auk-button__label + .au-c-icon {
+    margin-left: 0.6rem;
+  }
+}
+
+.auk-button__content {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.auk-button--icon {
+  padding: 0.75rem 0.85rem;
+}
+
+.auk-button--block {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+}
+
+.auk-button--icon img {
+  display: block;
+}
+
+/* Skins
+   ========================================================================== */
+
+.auk-button--primary {
+  background-color: settings.$color-blue-500;
+  color: #fff;
+  &:hover {
+    background-color: settings.$color-blue-700;
+  }
+  &:active {
+    background-color: settings.$color-blue-800;
+  }
+}
+
+.auk-button--secondary {
+  box-shadow: inset 0 0 0 0.2rem settings.$color-blue-500;
+  color: settings.$color-blue-500;
+  background-color: transparent;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    color: settings.$color-blue-700;
+    box-shadow: inset 0 0 0 0.2rem settings.$color-blue-700;
+  }
+
+  &:active {
+    color: settings.$color-blue-800;
+    background-color: settings.$color-blue-100;
+    box-shadow: inset 0 0 0 0.2rem settings.$color-blue-800;
+  }
+
+  &:focus {
+    box-shadow: inset 0 0 0 0.2rem settings.$color-blue-500;
+
+    &:hover {
+      box-shadow: inset 0 0 0 0.2rem settings.$color-blue-700;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 0.2rem settings.$color-blue-800;
+    }
+  }
+}
+
+.auk-button--tertiary {
+  box-shadow: inset 0 0 0 0.1rem settings.$color-gray-300;
+  color: settings.$color-blue-500;
+  background-color: transparent;
+
+  &:hover {
+    color: settings.$color-blue-500;
+    box-shadow: inset 0 0 0 0.1rem settings.$color-blue-500;
+  }
+
+  &:active {
+    color: settings.$color-blue-800;
+    box-shadow: inset 0 0 0 0.1rem settings.$color-blue-800;
+  }
+
+  &:focus {
+    box-shadow: inset 0 0 0 0.1rem settings.$color-gray-300;
+
+    &:hover {
+      box-shadow: inset 0 0 0 0.1rem settings.$color-blue-500;
+    }
+
+    &:active {
+      box-shadow: inset 0 0 0 0.1rem settings.$color-blue-800;
+    }
+  }
+}
+
+.auk-button--primary {
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: #fff;
+    background-color: settings.$color-gray-300;
+
+    .au-c-icon {
+      color: #fff;
+    }
+  }
+}
+
+.auk-button--secondary {
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: settings.$color-gray-700;
+    box-shadow: inset 0 0 0 0.2rem settings.$color-gray-600;
+    opacity: .3;
+    .au-c-icon {
+      color: settings.$color-gray-600;
+    }
+  }
+}
+
+.auk-button--tertiary {
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: settings.$color-gray-700;
+    box-shadow: inset 0 0 0 0.1rem settings.$color-gray-300;
+    opacity: .3;
+    .au-c-icon {
+      color: settings.$color-gray-600;
+    }
+  }
+}
+
+.auk-button--borderless {
+  color: settings.$color-blue-500;
+  background-color: transparent;
+  &:hover,
+  &:active {
+    color: settings.$color-blue-700;
+  }
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: settings.$color-gray-700;
+    opacity: .3;
+  }
+}
+
+.auk-button--muted-borderless {
+  color: settings.$color-gray-600;
+  &:hover,
+  &:active {
+    color: settings.$color-gray-800;
+  }
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: settings.$color-gray-700;
+    opacity: .3;
+  }
+}
+
+.auk-button--danger-primary {
+  color: #fff;
+  background-color: settings.$color-red-500;
+  &:hover,
+  &:active {
+    background-color: settings.$color-red-700;
+  }
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: #fff;
+    background-color: settings.$color-red-100;
+
+    .au-c-icon {
+      color: #fff;
+    }
+  }
+}
+
+.auk-button--danger-secondary {
+  box-shadow: inset 0 0 0 0.2rem settings.$color-red-500;
+  color: settings.$color-red-500;
+  background-color: transparent;
+  transition: box-shadow 0.2s;
+  &:hover,
+  &:active {
+    color: settings.$color-red-700;
+    box-shadow: inset 0 0 0 0.2rem settings.$color-red-700;
+  }
+}
+
+.auk-button--danger-borderless {
+  color: settings.$color-red-500;
+  &:hover,
+  &:active {
+    color: settings.$color-red-700;
+  }
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: settings.$color-red-500;
+    opacity: .3;
+  }
+}
+
+.auk-button--success-borderless {
+  color: settings.$color-green-500;
+  &:hover,
+  &:active {
+    color: settings.$color-green-700;
+  }
+  &.auk-button--disabled {
+    color: settings.$color-green-500;
+    opacity: .3;
+  }
+}
+
+.auk-button--danger-hover {
+  box-shadow: inset 0 0 0 0.1rem settings.$color-gray-600;
+  color: settings.$color-gray-700;
+  background-color: transparent;
+  &:hover,
+  &:active {
+    color: settings.$color-red-500;
+    border-color: settings.$color-red-500;
+  }
+  &[disabled],
+  &:disabled,
+  &.auk-button--disabled {
+    color: settings.$color-gray-700;
+    box-shadow: inset 0 0 0 0.1rem settings.$color-gray-300;
+    opacity: .3;
+    .au-c-icon {
+      color: settings.$color-gray-600;
+    }
+  }
+}
+
+.auk-button--disabled {
+  color: settings.$color-gray-500;
+  background-color: none;
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+/* Sizes
+   ========================================================================== */
+
+.auk-button--size-small {
+  padding: .5rem .8rem;
+
+  font-size: 1.5rem;
+
+  &.auk-button--icon {
+    padding: .5rem .6rem;
+  }
+}
+
+.auk-button--size-xsmall {
+  padding: .25rem .4rem;
+
+  font-size: 1.5rem;
+
+  &.auk-button--icon {
+    padding: .25rem .35rem;
+  }
+}
+
+
+/* Hide button with js
+   ========================================================================== */
+
+.js-auk-button--hide {
+  display: none;
+}

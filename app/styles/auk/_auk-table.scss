@@ -1,0 +1,308 @@
+@use "settings";
+
+@use "sass:math";
+
+/* ==========================================================================
+  auk-table
+   ========================================================================== */
+
+.auk-table {
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.auk-table td,
+.auk-table th {
+  vertical-align: middle;
+  padding: 1.2rem 1rem;
+  border-bottom: 0.1rem solid settings.$color-gray-300;
+}
+
+.auk-table tr td:first-child,
+.auk-table tr th:first-child {
+  padding-left: 1.2rem;
+}
+
+.auk-table tr td:last-child,
+.auk-table tr th:last-child {
+  padding-right: 1.2rem;
+}
+
+.auk-table th {
+  border-bottom-width: 0.2rem;
+  text-align: left;
+  font-weight: 500;
+  color: settings.$color-gray-600;
+  white-space: nowrap;
+}
+
+.auk-table--striped {
+  tbody tr:nth-child(odd) td {
+    background-color: settings.$color-gray-100;
+  }
+
+  .auk-table__row--expanded {
+    background: settings.$color-white;
+  }
+}
+
+.auk-table tr:last-child td {
+  border-bottom-width: 0;
+}
+
+.auk-table__header--actions,
+.auk-table__cell--actions {
+  width: 3rem;
+}
+
+.auk-table__cell--actions > button {
+  float: right;
+}
+
+.auk-table__cell--draggable {
+  padding: 1.75rem 1rem 1.2rem !important;
+}
+
+.auk-table__row--collapsed-content td {
+  background-color: settings.$color-gray-100;
+}
+
+.auk-table__row--disabled {
+  opacity: .7 !important;
+  cursor: not-allowed;
+
+  &:hover td {
+    background-color: transparent !important;
+  }
+}
+
+.auk-table {
+  // If button toolbar appears in first column
+  tr td:first-child .auk-button-toolbar {
+    justify-content: flex-start;
+  }
+  .auk-button-toolbar {
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    .auk-button {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.auk-table code {
+  background-color: #eee;
+  color: #905;
+  padding: 0.2rem 0.4rem;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  font-size: 1.3rem;
+}
+
+.auk-table .auk-table--vertical-align-top {
+  vertical-align: top;
+}
+
+.auk-table--advanced {
+  th {
+    color: settings.$color-gray-900;
+  }
+
+  .auk-table__cell--accent {
+    background-color: settings.$color-gray-100;
+  }
+}
+
+.auk-table tr .auk-table__cell--gray-100 {
+  background-color: settings.$color-gray-100;
+}
+
+/* Status cells
+  ========================================================================== */
+
+.auk-table tr .auk-table__cell--success {
+  background-color: settings.$color-green-100;
+  color: settings.$color-green-700;
+  text-align: center;
+}
+
+.auk-table tr .auk-table__cell--warning {
+  background-color: settings.$color-yellow-100;
+  color: settings.$color-yellow-700;
+  text-align: center;
+}
+
+/* Table columns
+  ========================================================================== */
+
+$tableColCount: 12;
+$i: 1;
+
+@while $i < $tableColCount {
+  .auk-table__col--#{$i} {
+    width: #{math.div($i, $tableColCount) * 100%};
+  }
+
+  $i: $i + 1;
+}
+
+
+/* Table with clickable rows
+   ========================================================================== */
+
+.auk-table tr[data-href]:hover {
+  background-color: settings.$color-gray-100;
+  cursor: pointer;
+}
+
+.auk-table--clickable-rows {
+  cursor: pointer;
+}
+
+.auk-table--clickable-rows tr:focus-within td {
+  background-color: settings.$color-gray-100;
+}
+
+/* Table with hoverable rows
+   ========================================================================== */
+
+.auk-table--hoverable {
+  tbody {
+    tr:hover {
+      td {
+        background-color: settings.$color-gray-100;
+      }
+    }
+  }
+
+  &.auk-table--striped {
+    tbody {
+      tr:hover {
+        td {
+          background-color: settings.$color-gray-200;
+        }
+      }
+    }
+  }
+}
+
+/* Table with batch edit
+   ========================================================================== */
+
+.auk-table--batch-edit td {
+  background-color: settings.$color-gray-100;
+}
+
+/* Table sorter
+   ========================================================================== */
+
+.auk-table-sorter {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+  appearance: none;
+  background: none;
+  border: none;
+  font-weight: inherit;
+  font-family: inherit;
+  font-size: inherit;
+
+  &:hover,
+  &:active {
+    color: settings.$color-blue-500;
+  }
+  &:focus {
+    outline: 0;
+    border-color: settings.$color-yellow-500;
+    box-shadow: inset 0 0 0 0.2rem settings.$color-yellow-500;
+  }
+}
+
+/* Table with sticky header
+
+  Remark:
+  Fixing the border-related issue (as seen here: https://stackoverflow.com/questions/50361698/border-style-do-not-work-with-sticky-position-element) caused by putting `position: sticky` on th's is done here by switching border-collapse to `separate`.
+  We can use this switch without creating visual issues because there are no consecutive borders within the auk-table styling.
+
+  If this should change in the future, we could also rely on the following fix:
+
+  th {
+    border-bottom-width: 0;
+    padding-bottom: 1.4rem;
+    box-shadow: inset 0 -2px 0 $gray-300;
+  }
+
+  ========================================================================== */
+
+.auk-table--sticky-header {
+  border-collapse: separate;
+
+  th {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+
+    background-color: #fff;
+  }
+}
+
+/* Table with sticky action column
+  ========================================================================== */
+
+.auk-table--sticky-action-column {
+  border-collapse: separate;
+
+  thead th:last-child,
+  tbody td:last-child {
+    position: sticky;
+    right: 0;
+
+    border-left: .1rem solid settings.$color-gray-200;
+    width: 0; // keep column as small as possible
+    background-color: #fff;
+  }
+
+  tbody td:last-child {
+    text-align: center;
+  }
+}
+
+/* Table actions
+  ========================================================================== */
+
+.auk-table__actions {
+  padding: 0 1rem 0 1rem;
+}
+
+.auk-table__actions--bottom {
+  border-top: 2px solid #cbd2da;
+}
+
+/* Table with list styling
+  ========================================================================== */
+
+.auk-table--list {
+  thead {
+    display: none;
+  }
+
+  td {
+    border-bottom: 0;
+  }
+
+  td,
+  tr td:first-child,
+  tr td:last-child {
+    padding: 0 0 1rem 0;
+  }
+
+  .auk-table--clickable-rows {
+    tr:focus-within td {
+      background-color: transparent;
+    }
+  }
+}

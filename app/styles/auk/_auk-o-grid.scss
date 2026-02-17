@@ -1,0 +1,164 @@
+@use "settings";
+@use "tools";
+
+/* ==========================================================================
+   Grid
+   ---
+   Basic grid system
+
+   @brenner-company (Karel Persoons): Some styling (regarding col-start & -end) is commented out for the moment because I'm not sure this is necessary at all and it generates a quite few extra Kilobytes. 
+   ========================================================================== */
+
+$grid-columns: 12 !default;
+$grid-column-gap: 1.5rem !default;
+  
+
+/* Grid columns (default)
+  ========================================================================== */
+
+.auk-o-grid {
+  display: grid;
+  gap: $grid-column-gap;
+}
+
+.auk-o-grid {
+  grid-template-columns: repeat($grid-columns, 1fr);
+
+  > * {
+    grid-column: span var(--auk-o-grid-col-span, $grid-columns) / span var(--auk-o-grid-col-span, $grid-columns);
+  }
+}
+
+@for $i from 1 through $grid-columns {
+  .auk-o-grid-col-#{$i} {
+    --auk-o-grid-col-span: #{$i};
+  
+  }
+
+  // .auk-o-grid-col-start-#{$i} {
+  //   grid-column-start: #{$i}; 
+  // }
+
+  // .auk-o-grid-col-end-#{$i+1} {
+  //   grid-column-end: #{$i+1};
+  // }
+}
+
+.auk-o-grid-col-start {
+  grid-column-start: 1;
+}
+
+.auk-o-grid-col-end {
+  grid-column-end: -1;
+}
+
+
+/* Automatic grid columns
+  ========================================================================== */
+
+.auk-o-grid-auto {
+  display: grid;
+  gap: $grid-column-gap;
+}
+
+.auk-o-grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+[class*="auk-o-grid-auto--"] {
+  grid-template-columns: repeat(auto-fit, minmax(var(--auk-o-grid-col-min-width), 1fr));
+}
+
+.auk-o-grid-auto--min-width-xsmall {
+  --auk-o-grid-col-min-width: 8rem;
+
+}
+.auk-o-grid-auto--min-width-small {
+  --auk-o-grid-col-min-width: 10rem;
+}
+
+.auk-o-grid-auto--min-width-medium {
+  --auk-o-grid-col-min-width: 15rem;
+}
+
+.auk-o-grid-auto--min-width-large {
+  --auk-o-grid-col-min-width: 20rem;
+}
+
+.auk-o-grid-auto--min-width-xlarge {
+  --auk-o-grid-col-min-width: 25rem;
+}
+
+
+/* Breakpoints
+  ========================================================================== */
+
+@each $breakpoint, $width in settings.$global-breakpoints {
+  @include tools.mixin-breakpoint($breakpoint) {
+    @for $i from 1 through $grid-columns {
+      .auk-o-grid-col-#{$i}\@#{$breakpoint} {
+        --auk-o-grid-col-span: #{$i};
+      }
+  
+      // .auk-o-grid-col-start-#{$i}\@#{$breakpoint} {
+      //   grid-column-start: #{$i};
+      // }
+  
+      // .auk-o-grid-col-end-#{$i+1}\@#{$breakpoint} {
+      //   grid-column-end: #{$i+1};
+      // }
+    }
+  
+    .auk-o-grid-auto\@#{$breakpoint} { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
+  
+    .auk-o-grid-auto--min-width-xsmall\@#{$breakpoint} {
+      --auk-o-grid-col-min-width: 8rem;
+    }
+
+    .auk-o-grid-auto--min-width-small\@#{$breakpoint} {
+      --auk-o-grid-col-min-width: 10rem;
+    }
+
+    .auk-o-grid-auto--min-width-medium\@#{$breakpoint} {
+      --auk-o-grid-col-min-width: 15rem;
+    }
+
+    .auk-o-grid-auto--min-width-large\@#{$breakpoint} {
+      --auk-o-grid-col-min-width: 20rem;
+    }
+
+    .auk-o-grid-auto--min-width-xlarge\@#{$breakpoint} {
+      --auk-o-grid-col-min-width: 25rem;
+    }
+  
+    // .auk-o-grid-col-start\@#{$breakpoint} { grid-column-start: 1; }
+    // .auk-o-grid-col-end\@#{$breakpoint}   { grid-column-end: -1; }
+    
+    // .auk-o-grid-col-start-auto\@#{$breakpoint} { grid-column-start: auto; }
+    // .auk-o-grid-col-end-auto\@#{$breakpoint}   { grid-column-end: auto; }
+  }
+}
+
+
+/* Grid columns (modifiers)
+  ========================================================================== */
+
+.auk-o-grid--no-gutter {
+  gap: 0;
+}
+
+.auk-o-grid--vertical-center {
+  align-items: center !important;
+}
+
+.auk-o-grid--align-start {
+  align-items: start !important;
+}
+
+.auk-o-grid--align-end {
+  align-items: end !important;
+}
+
+.auk-o-grid--align-baseline {
+  align-items: baseline !important;
+}

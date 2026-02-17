@@ -1,0 +1,32 @@
+/* ==========================================================================
+  Utilities: print
+  ========================================================================== */
+
+@media print {
+  .au-c-icon,
+  .auk-u-text-muted {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .auk-u-hidden\@print {
+    display: none !important;
+  }
+
+  .auk-u-non-breakable-group\@print {
+    break-inside: avoid;
+  }
+
+  .auk-u-on-fresh-page\@print {
+    page-break-before: always;
+  }
+
+  .auk-u-keep-colors\@print {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .auk-u-m-0\@print {
+    margin: 0 !important;
+  }
+}

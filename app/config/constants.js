@@ -221,7 +221,6 @@ export default {
     FIRST_ACTION: 'Eerste actie',
     COPY_SUBCASE_CLICK: 'Kopieer voorgaande procedurestap',
   },
-  // is this the right way?
   PRIVATE_COMMENT_TEMPLATE: {
     NOTA:
 `IF:
@@ -235,5 +234,9 @@ Def. check: `,
 `Co-agendering:
 
 Def. check: `
-  }
+  },
+  NEWSLETTER_THEMES: {
+    // there are more themes, we only need announcement to set automatically
+    ANNOUNCEMENT: "http://kanselarij.vo.data.gift/id/concept/thema-codes/59f3131e-cf44-4ee2-8258-70e3ac6303b1",
+  },
 };
