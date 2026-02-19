@@ -78,6 +78,12 @@ export default class DocumentService extends Service {
       `/document-stamping/agendas/${agendaId}/agendaitems/documents/stamp`,
       {
         method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/vnd.api+json',
+        // },
+        // body: JSON.stringify({
+        //   shouldRestamp : false,
+        // }),
       }
     );
     let data;
@@ -183,7 +189,7 @@ export default class DocumentService extends Service {
       setTimeout(() => {
         this.toaster.close(toasterToClose);
       }, 2000);
-      if (job.status === job.SUCCESS) {
+      if (job.status === job.SUCCESS && !job.message) {
         this.toaster.close(toasterToClose);
         this.toaster.success(
           this.intl.t(

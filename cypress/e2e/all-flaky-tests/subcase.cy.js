@@ -287,6 +287,7 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(cases.subcaseDescription.confidentialityPill);
+    cy.get(appuniversum.loader).should('not.exist'); // before finishing test
   });
 
   it('Changes to agenda item Themas propagate properly', () => {

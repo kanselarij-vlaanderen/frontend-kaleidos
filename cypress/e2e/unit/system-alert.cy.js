@@ -148,7 +148,8 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(agenda.editMeeting.meetingLocation).click();
 
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
-      .should('have.value', newDate.format('DD-MM-YYYY HH:mm'));
+      .should('have.value', newDate.format('DD-MM-YYYY HH:mm')); // 15-09-2023 12:05
+    cy.wait(100);
 
     // manual year down
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
@@ -169,6 +170,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     cy.get(agenda.editMeeting.meetingLocation).click();
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
       .should('have.value', manuallyEditedDateDown.format('DD-MM-YYYY HH:mm'));
+    cy.wait(100);
 
     // manual year up
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
@@ -189,6 +191,7 @@ context('Settings: Create a system-alert and verify if it gets shown and closes'
     // check edited date
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
       .should('have.value', newDate.format('DD-MM-YYYY HH:mm'));
+    cy.wait(100);
 
     // type full date
     cy.get(agenda.editMeeting.datepicker).find(auk.datepicker.datepicker)
