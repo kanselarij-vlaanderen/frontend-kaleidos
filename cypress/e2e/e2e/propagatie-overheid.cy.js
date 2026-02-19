@@ -128,7 +128,6 @@ context('Propagation to other graphs', () => {
       cy.get(appuniversum.pill).should('not.exist');
     });
 
-    cy.setFormalOkOnItemWithIndex(1);
     cy.approveAndCloseDesignAgenda();
     cy.agendaNameExists('A', false);
     cy.agendaNameExists('B', false);
