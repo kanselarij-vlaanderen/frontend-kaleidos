@@ -262,4 +262,79 @@ export default class DocumentService extends Service {
       );
     }
   }
+
+  async renamePiecesOfMeeting(meetingId, date_from, date_to) {
+    const response = await fetch(
+      `/document-naming/meeting/${meetingId}/change-dates`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/vnd.api+json' },
+        body: JSON.stringify({
+          from: date_from,
+          to: date_to
+        }),
+      }
+    );
+    try {
+      const json = await getJsonPayloadOrThrow(response);
+      if (!json?.data?.id) {
+        throw new Error(this.intl.t('error-while-searching-document-naming-job'));
+      }
+
+      const namingJob = await this.store.findRecord('job', json.data.id);
+      const namingToaster = this.toaster.loading(
+        this.intl.t('document-naming--toast-generating--message'),
+        null,
+        {
+          timeOut: 60000,
+          closable: false,
+        }
+      );
+      await this.handleNamingErrors(namingJob, namingToaster);
+      // list of pieces on agenda.
+      // Signed and flattened pieces have been renamed but are not stamped.
+      const allAgendaitemPiecesOfMeeting = await this.store.queryAll('piece', {
+        'filter[agendaitems][agenda][created-for][:id:]': meetingId,
+        'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+      });
+      const allRatficationsOfMeeting = await this.store.queryAll('piece', {
+        'filter[ratification-subcase][agenda-activities][agendaitems][agenda][created-for][:id:]' : meetingId,
+        'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+      });
+      const allPieces = [...allAgendaitemPiecesOfMeeting.slice(), ...allRatficationsOfMeeting.slice()];
+      await this.checkAndRestamp(allPieces);
+    } catch (error) {
+      const message = error?.message ? `: ${error?.message}` : '';
+      this.toaster.error(
+        this.intl.t('error-while-renaming-documents-of-meeting') + `${message}`,
+        this.intl.t('warning-title')
+      );
+    }
+  };
+
+  async handleNamingErrors(job, toasterToClose) {
+    await this.jobMonitor.register(job, async (job) => {
+      setTimeout(() => {
+        this.toaster.close(toasterToClose);
+      }, 2000);
+      if (job.status === job.SUCCESS) {
+        this.toaster.close(toasterToClose);
+        this.toaster.success(
+          this.intl.t('success-naming-documents'),
+        );
+      } else {
+        const message = this.intl.t('error-while-naming-document');
+        this.toaster.show(CopyErrorToClipboardToast, {
+          title: this.intl.t('warning-title'),
+          message: message,
+          errorContent: job.message,
+          showDatetime: true,
+          options: {
+            timeOut: 60 * 10 * 1000,
+          },
+        });
+        throw new Error(message);
+      }
+    });
+  }
 }
