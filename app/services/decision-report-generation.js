@@ -305,7 +305,7 @@ export default class DecisionReportGeneration extends Service {
   }
 
   _generateSinglePdf = task(async (report, urlBase, shouldRegenerateConcerns = false) => {
-    const response = await fetch(`/${urlBase}/${report.id}`, {
+    const response = await fetch(`/${urlBase}/${report.id}/generate`, {
       method: 'POST',
       headers: {
         Accept: 'application/vnd.api+json',
