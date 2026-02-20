@@ -367,7 +367,7 @@ context('Decision tests post digital agenda', () => {
     cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
     cy.intercept('POST', 'minutes').as('postMinutes');
     cy.intercept('POST', 'piece-parts').as('postPieceParts');
-    cy.intercept('POST', '/generate-minutes-report/*').as('generateMinutes');
+    cy.intercept('POST', '/generate-minutes-report/*/generate').as('generateMinutes');
     cy.get(route.agendaMinutes.editor.save).click()
       .wait('@createNewDocumentContainer')
       .wait('@postMinutes')
@@ -397,7 +397,7 @@ context('Decision tests post digital agenda', () => {
     cy.intercept('PATCH', '/decision-activities/**').as('patchDecisionActivities');
     cy.intercept('POST', 'generate-decision-report/generate-reports').as('generateBulkDecision');
     cy.intercept('PATCH', '/piece-parts/**').as('patchPieceParts'); // change secretary in table
-    cy.intercept('POST', '/generate-minutes-report/*').as('generateMinutes');
+    cy.intercept('POST', '/generate-minutes-report/*/generate').as('generateMinutes');
     cy.get(agenda.editMeeting.save).click();
     cy.wait('@patchMeetings');
     cy.wait('@patchDecisionActivities');
@@ -537,7 +537,7 @@ context('Decision tests post digital agenda', () => {
       .click();
     const randomInt = Math.floor(Math.random() * Math.floor(10000));
     cy.intercept('PATCH', 'decision-activities/**').as(`patchDecisionActivities_${randomInt}`);
-    cy.intercept('POST', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
+    cy.intercept('POST', '/generate-decision-report/*/generate').as(`generateReport_${randomInt}`);
     cy.get(agenda.agendaitemDecisionEdit.save).click();
     cy.wait(`@patchDecisionActivities_${randomInt}`);
     cy.wait(`@generateReport_${randomInt}`);
@@ -555,7 +555,7 @@ context('Decision tests post digital agenda', () => {
       .click();
     const randomInt2 = Math.floor(Math.random() * Math.floor(10000));
     cy.intercept('PATCH', 'decision-activities/**').as(`patchDecisionActivities_${randomInt2}`);
-    cy.intercept('POST', '/generate-decision-report/*').as(`generateReport_${randomInt2}`);
+    cy.intercept('POST', '/generate-decision-report/*/generate').as(`generateReport_${randomInt2}`);
     cy.get(agenda.agendaitemDecisionEdit.save).click();
     cy.wait(`@patchDecisionActivities_${randomInt2}`);
     cy.wait(`@generateReport_${randomInt2}`);
@@ -572,7 +572,7 @@ context('Decision tests post digital agenda', () => {
       .click();
     const randomInt3 = Math.floor(Math.random() * Math.floor(10000));
     cy.intercept('PATCH', 'decision-activities/**').as(`patchDecisionActivities_${randomInt3}`);
-    cy.intercept('POST', '/generate-decision-report/*', spy).as(`generateReport_${randomInt3}`);
+    cy.intercept('POST', '/generate-decision-report/*/generate', spy).as(`generateReport_${randomInt3}`);
     cy.get(agenda.agendaitemDecisionEdit.save).click();
     cy.wait(`@patchDecisionActivities_${randomInt3}`);
     cy.get(appuniversum.loader).should('not.exist');
