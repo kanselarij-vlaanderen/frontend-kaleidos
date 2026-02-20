@@ -479,7 +479,7 @@ function addNewPieceToGeneratedDecision(oldFileName) {
   cy.log('addNewPieceToGeneratedDecision');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('PATCH', '/decision-activities/*').as(`patchDecisionActivity_${randomInt}`);
-  cy.intercept('GET', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
+  cy.intercept('POST', '/generate-decision-report/*').as(`generateReport_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
@@ -511,7 +511,7 @@ function addNewPieceToGeneratedMinutes(oldFileName) {
   cy.log('addNewPieceToGeneratedMinutes');
   const randomInt = Math.floor(Math.random() * Math.floor(10000));
   cy.intercept('PATCH', '/meetings/*').as(`patchMeetings_${randomInt}`);
-  cy.intercept('GET', '/generate-minutes-report/*').as(`generateReport_${randomInt}`);
+  cy.intercept('POST', '/generate-minutes-report/*').as(`generateReport_${randomInt}`);
 
   cy.get(document.documentCard.name.value).contains(oldFileName)
     .parents(document.documentCard.card)
