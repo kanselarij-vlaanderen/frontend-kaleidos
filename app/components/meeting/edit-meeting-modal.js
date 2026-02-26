@@ -30,6 +30,7 @@ export default class MeetingEditMeetingComponent extends Component {
   @service decisionReportGeneration;
   @service intl;
   @service router;
+  @service documentService;
 
   @tracked isAnnexMeeting = false;
   @tracked isEditingNumberRepresentation = false;
@@ -352,7 +353,31 @@ export default class MeetingEditMeetingComponent extends Component {
           if (currentMeetingNumberRepresentation !== this.numberRepresentation) {
             regenerateReportNames = true;
           }
-          await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, regenerateReportNames);
+
+          let agendaitemsToRegenerateConcernFor = null;
+          if (currentPlannedStart.getDate() !== this.startDate.getDate() ||
+            currentPlannedStart.getMonth() !== this.startDate.getMonth() ||
+            currentPlannedStart.getFullYear() !== this.startDate.getFullYear()
+          ) {
+            // only approved agendaitem does not cover BIS documents.
+            // but BIS documents via submission will only be stamped (will they?) on agenda approval
+            // BIS added by secretarie gets stamped immediately
+            // this is only for regenerating the decisions, so new agendaitems don't need to count
+            const lastApprovedAgenda = await this.store.queryOne('agenda', {
+              'filter[created-for][:id:]': this.args.meeting.id,
+              'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
+              sort: '-created',
+            });
+            if (lastApprovedAgenda) {
+              const approvedAgendaItems = await this.store.queryAll('agendaitem', {
+                'filter[agenda][:id:]': lastApprovedAgenda.id,
+                'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
+              });
+              await this.documentService.renamePiecesOfMeeting(this.args.meeting.id, currentPlannedStart, this.startDate);
+              agendaitemsToRegenerateConcernFor = [...new Set(approvedAgendaItems?.map((agendaitem) => agendaitem.id))];
+            }
+          }
+          await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, regenerateReportNames, agendaitemsToRegenerateConcernFor);
           await this.regenerateMinutes();
         }
       }

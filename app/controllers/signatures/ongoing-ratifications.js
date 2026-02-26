@@ -58,6 +58,7 @@ export default class SignaturesOngoingRatificationsController extends Controller
     return [
       CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
       CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+      CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
     ].includes(accessLevel.get('uri'));
   }
 

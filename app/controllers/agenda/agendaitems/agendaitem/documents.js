@@ -325,11 +325,14 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
       submissionActivity.save(); // submission-act isn't needed further here. No await. Can run in background.
     }
 
-    // save formal ok change on agendaitem
+    // save formal ok change on agendaitem on design agendas
     // If the concurrency check failed you can overwrite the pieces list with stale data, effectively losing piece links to agendaitem
-    setNotYetFormallyOk(this.agendaitem);
+    const agenda = await this.agendaitem.agenda;
+    const agendaStatus = await agenda.belongsTo('status').reload();
+    if (agendaStatus.isDesignAgenda) {
+      setNotYetFormallyOk(this.agendaitem);
+    }
     await this.agendaitem.save();
-
     // Link piece to agendaitem
     for (const piece of pieces) {
       await addPieceToAgendaitem(this.agendaitem, piece);

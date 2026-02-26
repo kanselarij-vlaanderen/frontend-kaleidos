@@ -73,8 +73,6 @@ export default class AgendaitemCasePanelEdit extends Component {
   }
 
   saveChanges = task(async () => {
-    const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
-
     const trimmedTitle = trimText(this.args.agendaitem.title);
     const trimmedShortTitle = trimText(this.args.agendaitem.shortTitle);
 
@@ -94,7 +92,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       this.args.agendaitem,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      shouldResetFormallyOk,
+      false,
     );
     if (this.confidentialChanged && this.args.subcase?.confidential) {
       await this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);

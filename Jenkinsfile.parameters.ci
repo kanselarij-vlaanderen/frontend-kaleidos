@@ -16,14 +16,9 @@ pipeline {
         sh "npm run lint"
       }
     }
-    stage('Checkout backend project') {
+    stage('Checkout project') {
       steps {
-        // Try to checkout the same frontend branch for the backend.
-        // If that fails, just check out development
-        sh """
-          git clone --depth 1 -b ${env.GIT_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
-          git clone --depth 1 -b development https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}
-        """
+        sh "git clone --depth 1 -b ${params.BACKEND_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}"
       }
     }
     stage('Prepare for automated tests') {
@@ -35,6 +30,8 @@ pipeline {
 
           // Reset the contents of DB an search
           sh "unzip -o testdata.zip"
+          sh "unzip -o testdata-elasticsearch.zip"
+          sh "mv testdata-elasticsearch/* ./testdata"
           sh "rm -rf data/*"
           sh "cp -rf testdata/* data"
           sh "docker compose up -d triplestore migrations database cache forever-cache"
