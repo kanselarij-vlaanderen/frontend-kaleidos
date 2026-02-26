@@ -208,7 +208,11 @@ export default class AgendaitemControls extends Component {
     const agendaItemType = await agendaitem.type;
     const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
     if (this.isDeletable) {
-      await this.agendaService.deleteAgendaitem(agendaitem);
+      const keepDecisionAndNewsitem = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
+      if (keepDecisionAndNewsitem) {
+        await this.agendaService.keepDraftDecisionAndNewsItem(agendaitem, submission);
+      }
+      await this.agendaService.deleteAgendaitem(agendaitem, keepDecisionAndNewsitem);
     } else {
       // should be unreachable if there is a submission
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
@@ -234,7 +238,7 @@ export default class AgendaitemControls extends Component {
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'), true);
     yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
@@ -273,7 +277,7 @@ export default class AgendaitemControls extends Component {
   }
 
   @task
-  *updateDecisionPiecePart(message) {
+  *updateDecisionPiecePart(message, regenerateConcerns) {
     const report = yield this.store.queryOne('report', {
       filter: {
         'decision-activity': { ':id:': this.decisionActivity.id },
@@ -301,7 +305,8 @@ export default class AgendaitemControls extends Component {
         );
         yield newBeslissingPiecePart.save();
         yield this.decisionReportGeneration.generateReplacementReport.perform(
-          report
+          report,
+          regenerateConcerns
         );
       }
     }
@@ -327,24 +332,24 @@ export default class AgendaitemControls extends Component {
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
     yield this.decisionActivity.save();
-    if (
-      [
-        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
-        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-      ].includes(decisionResultCodeUri)
-    ) {
+    if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
       const pieces = yield this.args.agendaitem.pieces;
       for (const piece of pieces.slice()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
-          piece
+          piece,
         );
-        if (
-          decisionResultCodeUri ===
-          CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
-        ) {
+      }
+      return;
+    }
+    if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+      const pieces = yield this.args.agendaitem.pieces;
+        for (const piece of pieces.slice()) {
+          yield this.pieceAccessLevelService.strengthenAccessLevelToRetracted(
+            piece,
+          );
           yield this.signatureService.removeSignFlowForPiece(piece);
         }
-      }
+      return;
     }
   }
 }

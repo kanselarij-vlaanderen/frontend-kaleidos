@@ -4,46 +4,38 @@
 
 
 // Components
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-accordion';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-accordion-panel';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-avatar';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-brand';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-button-link';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-button-loading';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-button';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-color-badge';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-container';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-content';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-document-card';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-editor';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-empty-state';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-file-upload';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-filter-pill';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-form-help-text';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-hr';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-input-group';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-key-value';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-label';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-loadable-content';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-loader';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-modal';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-navbar';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-overline';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-pagination';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-panel-layout';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-panel';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-popover';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-progress-bar';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-scroll-wrapper';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-section-header';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-select';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-sidebar';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-skeleton';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-status-pill';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-table';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-tabs';
-// @use '@kanselarij-vlaanderen/au-kaleidos-css/auk-toolbar-complex';
-@use '@kanselarij-vlaanderen/au-kaleidos-css/auk-toolbar';
+@use 'auk-accordion';
+@use 'auk-accordion-panel';
+@use 'auk-avatar';
+@use 'auk-button-link';
+@use 'auk-button-loading';
+@use 'auk-button';
+@use 'auk-color-badge';
+@use 'auk-container';
+@use 'auk-content';
+@use 'auk-document-card';
+@use 'auk-editor';
+@use 'auk-empty-state';
+@use 'auk-file-upload';
+@use 'auk-filter-pill';
+@use 'auk-form-help-text';
+@use 'auk-hr';
+@use 'auk-input-group';
+@use 'auk-key-value';
+@use 'auk-loadable-content';
+@use 'auk-loader';
+@use 'auk-modal';
+@use 'auk-overline';
+@use 'auk-panel';
+@use 'auk-progress-bar';
+@use 'auk-scroll-wrapper';
+@use 'auk-section-header';
+@use 'auk-skeleton';
+@use 'auk-status-pill';
+@use 'auk-table';
+@use 'auk-toolbar';
+
+// Still uses '@import' for the moment
 
 // Local component overrides (responsive versions)
 @import 'auk-brand';
@@ -56,6 +48,7 @@
 @import 'auk-sidebar';
 @import 'auk-tabs';
 @import 'auk-toolbar-complex';
+@import 'auk-popover';
 
 // Local AUK extensions & additions
 @import 'auk-additions';

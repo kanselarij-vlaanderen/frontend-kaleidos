@@ -17,14 +17,25 @@
     </AuButton>
     <AuHr />
   {{/if}}
-  <AuLink
-    data-test-agenda-actions-navigate-to-newsletter
-    @route="newsletter"
-    @model={{@meeting.id}}
-    role="menuitem"
-  >
-    {{t "print-newsletter"}}
-  </AuLink>
+  {{#if (user-may "manage-news-items")}}
+    <AuLink
+      data-test-agenda-actions-navigate-to-newsletter
+      @route="newsletter"
+      @model={{@meeting.id}}
+      role="menuitem"
+    >
+      {{t "print-newsletter"}}
+    </AuLink>
+  {{else if this.decisionPublicationActivity.startDate}}
+    <AuLink
+      data-test-agenda-actions-navigate-to-newsletter
+      @route="newsletter.print"
+      @model={{@meeting.id}}
+      role="menuitem"
+    >
+      {{t "print-newsletter"}}
+    </AuLink>
+  {{/if}}
   {{#if this.showPrintButton}}
     <AuLink
       @route="agenda.agendaitems"
@@ -268,6 +279,8 @@
 {{#if this.showConfirmPublishThemis}}
   <ThemisPublications::PublishConfirmationModal
     @scope={{this.themisPublicationScopes}}
+    @loading={{this.checkConfidentiality.isRunning}}
+    @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishThemis}}
     @onConfirm={{perform this.publishThemis}}
   />
@@ -313,6 +326,25 @@
             as |Group|
           >
             {{#each this.downloadOptions as |option|}}
+            <Group.Radio
+              @value={{option.value}}
+              >
+              {{option.label}}
+            </Group.Radio>
+            {{/each}}
+          </AuRadioGroup>
+        </Fieldset.content>
+      </AuFieldset>
+      <AuFieldset as |Fieldset|>
+        <Fieldset.legend>{{t "download-documents-agenda-selection"}}</Fieldset.legend>
+        <Fieldset.content>
+          <AuRadioGroup
+            @alignment="inline"
+            @selected={{this.selectedNewDocumentsOnlyOptions}}
+            @onChange={{this.onChangeNewDocumentsOnlyOption}}
+            as |Group|
+          >
+            {{#each this.newDocumentsOnlyOptions as |option|}}
             <Group.Radio
               @value={{option.value}}
               >

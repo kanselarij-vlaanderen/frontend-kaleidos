@@ -13,18 +13,21 @@
       @signMarkingActivity={{this.signMarkingActivity}}
     />
     {{#if (user-may "remove-signatures")}}
-      <AuButton
-        data-test-signatures-tab-delete-signflow
-        @skin="naked"
-        @alert={{true}}
-        @icon="trash"
-        {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
-      >
-        {{t "delete-all-sign-flow-data"}}
-        <EmberTooltip @side="bottom" @tooltipClass="tooltip-custom">
+      <AuTooltip @placement="bottom" as |tooltip|>
+        <AuButton
+          {{tooltip.target}}
+          data-test-signatures-tab-delete-signflow
+          @skin="naked"
+          @alert={{true}}
+          @icon="trash"
+          {{on "click" (toggle "isOpenVerifyDeleteSignFlow" this)}}
+        >
+          {{t "delete-all-sign-flow-data"}}
+        </AuButton>
+        <tooltip.Content>
           {{t "delete-all-sign-flow-tooltip"}}
-        </EmberTooltip>
-      </AuButton>
+        </tooltip.Content>
+      </AuTooltip>
     {{/if}}
   </div>
 {{else if (not this.agendaitem this.decisionActivity this.meeting)}}

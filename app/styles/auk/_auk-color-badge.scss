@@ -1,0 +1,28 @@
+@use "settings";
+
+/* ==========================================================================
+    Component: Color badge
+   ========================================================================== */
+
+.auk-color-badge {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  border-radius: 0.2rem;
+}
+
+.auk-color-badge--default {
+  background-color: settings.$color-gray-500;
+}
+
+.auk-color-badge--warning {
+  background-color: settings.$color-yellow-500;
+}
+
+.auk-color-badge--error {
+  background-color: settings.$color-red-500;
+}
+
+.auk-color-badge--success {
+  background-color: settings.$color-green-500;
+}

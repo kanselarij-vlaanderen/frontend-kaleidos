@@ -1,6 +1,20 @@
 /* Appuniversum base
    ========================================================================== */
 
+// CSS variables (overrides & addons)
+:root {
+  --au-black: #000000;
+  --au-brand: var(--au-yellow-300);
+  --au-primary: var(--au-blue-700);
+  --au-text-color: var(--au-gray-900);
+  --au-muted: var(--au-gray-700);
+  --au-border-color: var(--au-gray-300);
+
+  // --au-yellow-500: #be920c;
+  --au-pink-500: #e86ab9;
+  --au-pink-600: #ca5ba0;
+}
+
 // SCSS variables (overrides & addons)
 $mq-breakpoints: (
   xsmall: 300px,
@@ -26,12 +40,12 @@ $au-region-breakpoint: large;
 
 // Global overrides & addons (merged from auk-base)
 body {
-  color: $au-gray-800;
+  color: var(--au-text-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: none; 
+  -webkit-text-size-adjust: none;
 }
-  
+
 p {
   word-break: break-word;
   white-space: normal;
@@ -42,21 +56,21 @@ p {
     }
   }
 }
-  
+
 a {
   color: var(--au-blue-700);
 }
-  
+
 i, em {
   font-style: italic;
 }
-  
+
 hr {
   border: none;
   border-top: .1rem solid $au-gray-300;
   margin: 0;
 }
-  
+
 abbr[title] {
   text-decoration: none;
 }

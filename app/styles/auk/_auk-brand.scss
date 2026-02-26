@@ -24,7 +24,7 @@
   height: 5rem;
   padding-left: .75rem;
   overflow: hidden;
-  background-color: auk.$color-brand;
+  background-color: var(--au-brand);
 
   svg {
     height: 100%;
@@ -53,7 +53,7 @@
   line-height: 1;
   position: relative;
   font-weight: 500;
-  color: auk.$color-gray-1000;
+  color: var(--au-gray-1000);
   margin-left: .6rem;
   transition: color 125ms cubic-bezier(.19,1,.22,1);
 

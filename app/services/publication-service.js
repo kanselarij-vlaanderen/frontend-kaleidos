@@ -188,16 +188,16 @@ export default class PublicationService extends Service {
   // earliest publication date of a decision linked to first started publication activity
   async getPublicationDate(publicationFlow) {
     const publicationSubcase = await publicationFlow.publicationSubcase;
-    const publicationActivities = (
-      await publicationSubcase.publicationActivities
-    ).sort((a1, a2) => a1.startDate - a2.startDate);
+    const publicationActivities = await publicationSubcase.publicationActivities;
+    const sortedPublicationActivities = publicationActivities?.slice().sort((a1, a2) => a1.startDate - a2.startDate);
     if (publicationActivities.length) {
-      for (let publicationActivity of publicationActivities) {
-        const publishedDecisions = (await publicationActivity.decisions).sort(
+      for (let publicationActivity of sortedPublicationActivities) {
+        const publishedDecisions = await publicationActivity.decisions;
+        const sortedPublishedDecisions = publishedDecisions?.slice().sort(
           (d1, d2) => d1.publicationDate - d2.publicationDate
         );
-        if (publishedDecisions.length) {
-          return publishedDecisions.at(0).publicationDate;
+        if (sortedPublishedDecisions.length) {
+          return sortedPublishedDecisions.at(0).publicationDate;
         }
       }
     }

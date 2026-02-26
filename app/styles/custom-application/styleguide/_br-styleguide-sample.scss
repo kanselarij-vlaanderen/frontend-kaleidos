@@ -10,7 +10,7 @@
 
 .br-styleguide-sample__sample {
   position: relative;
-  border: .1rem solid auk.$color-gray-300;
+  border: .1rem solid var(--au-gray-300);
   padding: 2.4rem;
   margin: 0 0 0.6rem;
 }

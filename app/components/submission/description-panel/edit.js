@@ -15,7 +15,6 @@ export default class SubmissionDescriptionPanelEditComponent extends Component {
   @service store;
   @service conceptStore;
   @service decisionReportGeneration;
-  @service agendaitemAndSubcasePropertiesSync;
   @service pieceAccessLevelService;
   @service currentSession;
 

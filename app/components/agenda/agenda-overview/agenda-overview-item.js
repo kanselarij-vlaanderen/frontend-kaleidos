@@ -6,6 +6,7 @@ import { timeout, dropTask, task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
+const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
 
 export default class AgendaOverviewItem extends AgendaSidebarItem {
   /**
@@ -32,6 +33,9 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   @tracked newAgendaitemDocuments;
 
   @tracked decisionActivity;
+  @tracked decisionActivityResultCode;
+  @tracked isPreliminaryPostponed = false;
+  @tracked isPreliminaryRetracted = false;
   @tracked isShowingAllDocuments = false;
   @tracked documentsAreVisible = false;
   @tracked showDocumentsAreVisibleAlert = false;
@@ -78,7 +82,6 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     const documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
     const documentPublicationStatus = yield documentPublicationActivity?.belongsTo('status').reload();
     const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
-    const decisionActivityResultCode = yield this.decisionActivity?.decisionResultCode;
 
     if (!decisionsAreReleased || this.args.currentAgenda.status.get('isDesignAgenda')) {
       this.documentsAreVisible = this.currentSession.may('view-documents-before-release');
@@ -86,8 +89,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     }
 
     // decisionsAreReleased
-    const { INGETROKKEN, UITGESTELD } = CONSTANTS.DECISION_RESULT_CODE_URIS;
-    if ([INGETROKKEN, UITGESTELD].includes(decisionActivityResultCode?.uri)) {
+    if ([INGETROKKEN, UITGESTELD].includes(this.decisionActivityResultCode?.uri)) {
       this.documentsAreVisible = this.currentSession.may('view-documents-postponed-and-retracted-on-agendaitem');
       this.showDocumentsAreVisibleAlert = this.documentsAreVisible;
       return;
@@ -99,7 +101,7 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     }
     // documentsAreReleased
     const { GOEDGEKEURD, KENNISNAME } = CONSTANTS.DECISION_RESULT_CODE_URIS;
-    if ([GOEDGEKEURD, KENNISNAME].includes(decisionActivityResultCode?.uri)) {
+    if ([GOEDGEKEURD, KENNISNAME].includes(this.decisionActivityResultCode?.uri)) {
       this.documentsAreVisible = true;
       return;
     }
@@ -130,7 +132,13 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
   *loadDecisionActivity() {
     const treatment = yield this.args.agendaitem.treatment;
     this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+    this.decisionActivityResultCode = yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+    if (!this.decisionActivity?.uri && this.currentSession.may('view-preliminary-decisions')) {
+      // get the preliminary decisionResultCode. Will only return something when postponed or retracted
+      this.decisionActivityResultCode = yield this.agendaService.getPreliminaryDecisionResultCode(this.args.agendaitem);
+      this.isPreliminaryPostponed = (this.decisionActivityResultCode?.uri == UITGESTELD);
+      this.isPreliminaryRetracted = (this.decisionActivityResultCode?.uri == INGETROKKEN);
+    }
     this.loadDocumentsPublicationStatus.perform();
   }
 

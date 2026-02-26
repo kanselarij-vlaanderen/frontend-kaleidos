@@ -44,6 +44,17 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     },
   ];
 
+  newDocumentsOnlyOptions = [
+    {
+      label: this.intl.t('download-documents-agenda-selection-all'),
+      value: false,
+    },
+    {
+      label: this.intl.t('download-documents-agenda-selection-current-only'),
+      value: true,
+    },
+  ];
+
   @tracked isAddingAgendaitems = false;
   @tracked isEditingMeeting = false;
   @tracked showConfirmApprovingAllAgendaitems = false;
@@ -58,6 +69,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked showVerifyDeleteDecisionsSignFlows = false;
   @tracked signFlowsToRemoveDoneCounter;
   @tracked signFlowsToRemoveTotalCounter;
+  @tracked hasConfidentialNewsletters;
 
   @tracked decisionPublicationActivity;
   @tracked documentPublicationActivity;
@@ -65,6 +77,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @tracked latestThemisPublicationActivity;
 
   @tracked downloadOption = this.downloadOptions[0].value;
+  @tracked newDocumentsOnlyOption = this.newDocumentsOnlyOptions[0].value;
 
   constructor() {
     super(...arguments);
@@ -73,6 +86,10 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   get selectedDownloadOption() {
     return this.downloadOption;
+  }
+
+  get selectedNewDocumentsOnlyOptions() {
+    return this.newDocumentsOnlyOption;
   }
 
   get showPrintButton() {
@@ -306,6 +323,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       timeOut: 60 * 10 * 1000,
     };
     const pdfOnly = this.downloadOption === 'pdf' ? true : false;
+    const newDocumentsOnly = this.newDocumentsOnlyOption;
     const namePromise = constructArchiveName(this.args.currentAgenda);
     debug('Checking if archive exists ...');
     const jobPromise = fetchArchivingJobForAgenda(
@@ -313,7 +331,8 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
       this.selectedMandatees,
       decisions,
       this.store,
-      pdfOnly
+      pdfOnly,
+      newDocumentsOnly
     );
     const [name, job] = await all([namePromise, jobPromise]);
     if (!job) {
@@ -429,6 +448,16 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
     return;
   });
 
+  checkConfidentiality = task(async () => {
+    const confidentialNewslettersCount = await this.store.count('news-item', {
+      'filter[agenda-item-treatment][agendaitems][agenda][:id:]': this.args.currentAgenda.id,
+      'filter[in-newsletter]': true,
+      'filter[agenda-item-treatment][agendaitems][agenda-activity][subcase][confidential]': true,
+      'filter[:has:modified]': `date-added-for-cache-busting-${new Date().toISOString()}`,
+    });
+    this.hasConfidentialNewsletters = confidentialNewslettersCount != 0;
+  });
+
   @action
   print() {
     window.print();
@@ -466,6 +495,7 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
 
   @action
   openConfirmPublishThemis() {
+    this.checkConfidentiality.perform();
     this.showConfirmPublishThemis = true;
   }
 
@@ -539,6 +569,11 @@ export default class AgendaAgendaHeaderAgendaActions extends Component {
   @action
   onChangeDownloadOption(selectedDownloadOption) {
     this.downloadOption = selectedDownloadOption;
+  }
+
+  @action
+  onChangeNewDocumentsOnlyOption(selectedDownloadOption) {
+    this.newDocumentsOnlyOption = selectedDownloadOption;
   }
 
   openConfirmEmptyInternalReviews = () => {

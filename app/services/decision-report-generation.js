@@ -227,7 +227,7 @@ export default class DecisionReportGeneration extends Service {
     return { alterableReports, unalterableReports };
   }
 
-  generateReplacementReport = task(async (report) => {
+  generateReplacementReport = task(async (report, regenerateConcerns) => {
     if (!(await this.canReplaceReport(report))) {
       this.toaster.error(
         this.intl.t('report-cannot-be-altered', {
@@ -237,7 +237,7 @@ export default class DecisionReportGeneration extends Service {
       return;
     }
     try {
-      await this._generateSinglePdf.perform(report, 'generate-decision-report');
+      await this._generateSinglePdf.perform(report, 'generate-decision-report', regenerateConcerns);
       await this.reloadFile(report);
       this.toaster.success(
         this.intl.t(
@@ -304,12 +304,21 @@ export default class DecisionReportGeneration extends Service {
     return !hasPreparationActivity;
   }
 
-  _generateSinglePdf = task(async (report, urlBase) => {
-    const response = await fetch(`/${urlBase}/${report.id}`);
+  _generateSinglePdf = task(async (report, urlBase, shouldRegenerateConcerns = false) => {
+    const response = await fetch(`/${urlBase}/${report.id}/generate`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/vnd.api+json',
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify({
+        shouldRegenerateConcerns,
+      }),
+    });
     return await getJsonPayloadOrThrow(response);
   });
 
-  _generateMultiplePdfs = task(async (reports, urlBase, shouldRegenerateConcerns=false) => {
+  _generateMultiplePdfs = task(async (reports, urlBase, shouldRegenerateConcerns = false) => {
     const response = await fetch(`/${urlBase}/generate-reports`, {
       method: 'POST',
       headers: {

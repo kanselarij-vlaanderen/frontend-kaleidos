@@ -453,6 +453,7 @@ export default class SubmissionHeaderComponent extends Component {
           mandatees: mandatees,
           requestedBy: requestedBy,
         };
+        // reset formally ok when accepting update submissions
         await this.agendaitemAndSubcasePropertiesSync.saveChanges(
           subcase,
           propertiesToSetOnAgendaitem,
@@ -482,7 +483,8 @@ export default class SubmissionHeaderComponent extends Component {
             meeting,
             subcase,
             formallyStatusUri,
-            privateComment
+            privateComment,
+            this.args.submission
           );
         } catch (error) {
           this.toaster.error(

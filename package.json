@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "9.8.0",
+  "version": "9.9.4",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -36,31 +36,30 @@
     "test:ember": "ember test",
     "start-cypress": "ember serve --environment=cypress-test --proxy=http://localhost:80",
     "cypress-local": "make open-cypress-tests",
-    "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be",
-    "release": "release-it"
+    "cypress-dev": "./node_modules/.bin/cypress open --config baseUrl=https://kaleidos-dev.vlaanderen.be"
   },
   "ember": {
     "edition": "octane"
   },
   "devDependencies": {
-    "@appuniversum/ember-appuniversum": "3.7.0",
-    "@babel/core": "^7.27.1",
-    "@babel/eslint-parser": "^7.27.1",
-    "@babel/plugin-proposal-decorators": "^7.27.1",
+    "@appuniversum/ember-appuniversum": "3.15.0",
+    "@babel/core": "^7.28.5",
+    "@babel/eslint-parser": "^7.28.5",
+    "@babel/plugin-proposal-decorators": "^7.28.0",
     "@codemirror/basic-setup": "^0.20.0",
     "@codemirror/lang-html": "^0.20.0",
     "@codemirror/lang-xml": "^0.20.0",
-    "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.2.0",
     "@ember/render-modifiers": "^3.0.0",
     "@ember/string": "^4.0.1",
     "@ember/test-helpers": "^5.4.0",
     "@embroider/macros": "^1.19.2",
+    "@floating-ui/dom": "^1.7.4",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@kanselarij-vlaanderen/au-kaleidos-css": "4.0.1",
     "@lblod/ember-acmidm-login": "^2.3.0",
-    "@lblod/ember-mock-login": "^0.14.0",
+    "@lblod/ember-mock-login": "^0.9.0",
     "@lblod/ember-rdfa-editor": "10.7.0",
     "@ljharb/eslint-config": "^21.2.0",
     "@nullvoxpopuli/ember-composable-helpers": "^5.3.0",
@@ -69,7 +68,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-funnel": "^3.0.8",
     "broccoli-sass-source-maps": "^4.3.0",
-    "cypress": "^12.17.4",
+    "cypress": "^15.6.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.18",
     "ember-async-data": "^2.0.1",
@@ -92,13 +91,14 @@
     "ember-cli-string-helpers": "^8.0.1",
     "ember-cli-terser": "^4.0.2",
     "ember-code-snippet": "^3.0.0",
-    "ember-concurrency": "^2.3.7",
+    "ember-concurrency": "^3.1.1",
     "ember-copy": "^2.0.1",
     "ember-data": "~5.3.13",
     "ember-element-helper": "^0.8.8",
     "ember-fetch": "^8.1.2",
     "ember-file-upload": "^9.5.0",
     "ember-flatpickr": "^8.0.1",
+    "ember-focus-trap": "^1.1.1",
     "ember-in-viewport": "git+https://github.com/ValenberghsSven/ember-in-viewport.git#04342ad6a1f923a2c0deb2b5f81be43e1ae9747d",
     "ember-intl": "^7.4.1",
     "ember-load-initializers": "^3.0.1",
@@ -124,7 +124,6 @@
     "ember-template-lint": "^6.1.0",
     "ember-template-lint-plugin-prettier": "^5.0.0",
     "ember-test-selectors": "^7.1.0",
-    "ember-tooltips": "^4.0.0",
     "ember-unused-components": "git+https://github.com/MikiDi/ember-unused-components.git#9163900f1975a7ac03994b8af9ef2f7a2f534d4f",
     "ember-useragent": "^0.12.0",
     "eslint": "^8.57.1",
@@ -141,13 +140,13 @@
     "lodash.invert": "^4.3.0",
     "lodash.merge": "^4.6.2",
     "marked": "^16.4.1",
+    "merge-anything": "^6.0.6",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "prettier-plugin-ember-template-tag": "^2.0.5",
     "qunit": "^2.24.1",
     "qunit-dom": "^3.4.0",
     "reactiveweb": "^1.9.0",
-    "release-it": "^15.6.0",
     "sanitize-filename": "^1.6.3",
     "sanitize-html": "^2.17.0",
     "sass": "^1.93.2",
@@ -160,17 +159,24 @@
   },
   "overrides": {
     "@appuniversum/ember-appuniversum": {
-      "ember-file-upload": "9.5.0",
-      "tracked-built-ins": "^4.0.0"
+      "ember-concurrency": "^3.1.1"
     },
     "@lblod/ember-rdfa-editor": {
-      "tracked-built-ins": "^4.0.0"
+      "tracked-built-ins": "^4.0.0",
+      "ember-source": "6.4.0"
     },
     "ember-flatpickr": {
+      "ember-source": "6.4.0",
       "@ember/test-helpers": {
         "@ember/test-waiters": "^4.1.1"
       },
       "@ember/test-waiters": "^4.1.1"
+    },
+    "@ember/render-modifiers": {
+      "ember-source": "6.4.0"
+    },
+    "ember-pdfjs-wrapper": {
+      "ember-cli-babel": "7.26.11"
     }
   }
 }

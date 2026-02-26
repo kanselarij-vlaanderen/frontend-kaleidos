@@ -6,6 +6,7 @@ import { task } from 'ember-concurrency';
 
 export default class NewsItemPrintComponent extends Component {
   @service newsletterService;
+  @service currentSession;
 
   @tracked proposalText;
   @tracked themes;
@@ -25,18 +26,20 @@ export default class NewsItemPrintComponent extends Component {
   }
 
   @action
-  openEdit() {
+  async openEdit() {
+    await this.args.newsItem?.preEditOrSaveCheck();
     this.isEditing = true;
   }
 
   @action
-  closeEdit() {
+  async closeEdit() {
+    await this.args.newsItem?.stopEditingOnCancel(this.currentSession.user);
     this.isEditing = false;
   }
 
   @action
   async save() {
-    await this.args.onSave();
-    this.closeEdit();
+    await this.args.onSave(this.args.newsItem);
+    this.isEditing = false;
   }
 }

@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
-import { maxDate } from 'date-fns';
+import { max as maxDate } from 'date-fns';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;

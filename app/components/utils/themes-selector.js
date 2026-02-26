@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
@@ -9,6 +10,8 @@ import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
  */
 export default class ThemesSelector extends Component {
   @service store;
+
+  @tracked themes;
 
   constructor() {
     super(...arguments);

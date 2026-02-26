@@ -88,7 +88,6 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
 
   @action
   async saveChanges() {
-    const resetFormallyOk = true;
     this.isSaving = true;
 
     const trimmedTitle = trimText(this.args.subcase.title);
@@ -109,7 +108,7 @@ export default class SubcaseBekrachtigingDescriptionPanelEdit extends Component 
       this.args.subcase,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubCase,
-      resetFormallyOk
+      false
     );
 
     // ratifications shouldn't realistically be confidential

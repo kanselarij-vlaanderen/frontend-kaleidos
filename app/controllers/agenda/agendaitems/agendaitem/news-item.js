@@ -6,6 +6,8 @@ import { service } from '@ember/service';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
   @service router;
+  @service currentSession;
+  @service preventUnload;
 
   @tracked agendaitem;
   @tracked notaModifiedTime;
@@ -20,6 +22,16 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
 
   get showNotaModificationWarning() {
     return !this.hideNotaModificationWarning && this.notaHasChanged;
+  }
+
+  get showBeingEditedByWarning() {
+    return (
+      this.currentSession.may('manage-news-items') &&
+      !this.isEditing &&
+      this.model &&
+      this.model.isBeingEditedBy?.id &&
+      this.model.isBeingEditedBy.id != this.currentSession.user.id
+    );
   }
 
   @action
@@ -37,17 +49,35 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   }
 
   @action
-  closeEdit(wasNewsItemNew) {
+  async stopEditing() {
+    if (!this.model) {
+      // there is no model here on first creation.
+      const agendaitemTreatment = await this.agendaitem.treatment;
+      const newsItem = await agendaitemTreatment.belongsTo('newsItem').reload();
+      await newsItem?.stopEditingOnCancel(this.currentSession.user);
+    } else {
+      await this.model.stopEditingOnCancel(this.currentSession.user);
+    }
     this.isEditing = false;
+    this.preventUnload.disable();
+    this.router.refresh('agenda.agendaitems.agendaitem.news-item');
+  }
+
+  @task
+  *closeEdit(wasNewsItemNew) {
     if (wasNewsItemNew) {
+      this.isEditing = false;
       this.router.refresh('agenda.agendaitems.agendaitem.news-item');
+    } else {
+      yield this.stopEditing();
     }
   }
 
   @task
   *saveNewsItem(newsItem, wasNewsItemNew) {
-    yield newsItem.save();
+    yield newsItem.stopEditingOnSave();
     this.isEditing = false;
+    this.preventUnload.disable();
     if (wasNewsItemNew) {
       this.router.refresh('agenda.agendaitems.agendaitem.news-item');
     }

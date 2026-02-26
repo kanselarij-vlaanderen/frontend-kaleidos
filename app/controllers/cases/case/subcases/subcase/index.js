@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import {
   keepLatestTask,
@@ -79,7 +78,6 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
       'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.DESIGN,
     });
     await Promise.all(agendaitemsOnDesignAgendaToEdit.map(async (agendaitem) => {
-      setNotYetFormallyOk(agendaitem);
       return agendaitem.save();
     }));
   }
