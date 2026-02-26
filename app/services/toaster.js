@@ -48,7 +48,7 @@ export default class ToasterService extends AuToasterService {
 
   loading(message, title, options = {}) {
     options.icon = 'renew';
-    options.closable = false;
+    options.closable = options.closable || false;
     if (typeof options.timeOut === 'undefined') {
       options.timeOut = 10000;
     }

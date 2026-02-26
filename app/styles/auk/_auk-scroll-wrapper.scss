@@ -1,0 +1,24 @@
+/* ==========================================================================
+  auk-scroll-wrapper
+   ========================================================================== */
+
+.auk-scroll-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.auk-scroll-wrapper__body {
+  overflow: auto;
+  flex: 1;
+  height: 100%;
+}
+
+.auk-scroll-wrapper__body--horizontal {
+  overflow-y: hidden;
+}
+
+.auk-scroll-wrapper__body--vertical {
+  overflow-x: hidden;
+}

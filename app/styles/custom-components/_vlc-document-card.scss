@@ -12,7 +12,7 @@
 
 .vlc-document-card {
   display: block;
-  border: 0.1rem solid auk.$color-border;
+  border: 0.1rem solid var(--au-border-color);
   padding: 0;
 
   .auk-h4 {
@@ -53,7 +53,7 @@
 
 .vlc-document-card-content__meta {
   font-size: 1.4rem;
-  color: auk.$color-gray-600;
+  color: var(--au-gray-600);
 }
 
 .vlc-document-card__actions {
@@ -71,8 +71,8 @@
   .auk-accordion__item .auk-accordion__content {
     margin: 0;
     padding: 1rem 1.8rem;
-    background: auk.$color-gray-100;
-    border-top: 1px solid auk.$color-border;
+    background: var(--au-gray-100);
+    border-top: 1px solid var(--au-border-color);
   }
 }
 
@@ -82,7 +82,7 @@
 
   &:before {
     content: "";
-    background: auk.$color-gray-300;
+    background: var(--au-gray-300);
     height: calc(100% - 1.5rem);
     width: 1px;
     position: absolute;

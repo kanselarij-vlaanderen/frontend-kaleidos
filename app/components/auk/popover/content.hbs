@@ -1,0 +1,47 @@
+{{#if @isShown}}
+  <div
+    class="auk-popover {{if @isWide "auk-popover--wide"}}"
+    role="tooltip"
+    {{this.floatingUi
+      @targetElement
+      this.arrowElement
+      defaultPlacement=@placement
+    }}
+    {{this.closeOnEscapePress}}
+    {{focus-trap
+      shouldSelfFocus=true
+      focusTrapOptions=(hash
+        clickOutsideDeactivates=this.clickOutsideDeactivates
+      )
+    }}
+  >
+    <div {{this.arrow}} class="auk-popover__arrow"></div>
+    <div class="auk-popover__header">
+      <Auk::Toolbar as |Toolbar|>
+        {{#if @title}}
+          <Toolbar.Group @position="left" as |Group|>
+            <Group.Item>
+              <h4 class="auk-toolbar__title">{{@title}}</h4>
+            </Group.Item>
+          </Toolbar.Group>
+        {{/if}}
+        <Toolbar.Group @position="right" as |Group|>
+          <Group.Item>
+            <AuButton
+              data-test-auk-popover-close
+              @skin="naked"
+              @icon="x"
+              @hideText={{true}}
+              {{on "click" @hide}}
+            >
+              {{t "close"}}
+            </AuButton>
+          </Group.Item>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </div>
+    <div class="auk-popover__content">
+      {{yield}}
+    </div>
+  </div>
+{{/if}}

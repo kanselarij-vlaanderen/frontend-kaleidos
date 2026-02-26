@@ -1,0 +1,42 @@
+{{#unless this.loadInitialData.isRunning}}
+  <div>
+    {{#if (user-may "manage-news-items")}}
+      {{#if (and this.isReleasedThemisNewsitemPublicationActivity (not this.isRetractedThemisNewsitemPublicationActivity))}}
+        <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+          {{t
+            "newsitems-were-published-to-website-at"
+            date=(date this.latestThemisNewsitemPublicationActivity.plannedDate)
+            time=(time this.latestThemisNewsitemPublicationActivity.plannedDate)
+          }}
+        </AuPill>
+      {{/if}}
+      {{#if this.isRetractedThemisNewsitemPublicationActivity}}
+        <AuPill @skin="default" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+          {{t
+            "newsitems-were-unpublished-from-website-at"
+            date=(date this.retractedThemisNewsitemPublicationActivity.plannedDate)
+            time=(time this.retractedThemisNewsitemPublicationActivity.plannedDate)
+          }}
+        </AuPill>
+      {{/if}}
+      {{#if this.latestBelgaPublication.isSent}}
+        <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+          {{t
+            "newsitems-were-published-to-belga-at"
+            date=(date this.latestBelgaPublication.sentAt)
+            time=(time this.latestBelgaPublication.sentAt)
+          }}
+        </AuPill>
+      {{/if}}
+      {{#if this.mailCampaign.isSent}}
+        <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+          {{t
+            "newsitems-were-published-to-mail-at"
+            date=(date this.mailCampaign.sentAt)
+            time=(time this.mailCampaign.sentAt)
+          }}
+        </AuPill>
+      {{/if}}
+    {{/if}}
+  </div>
+{{/unless}}

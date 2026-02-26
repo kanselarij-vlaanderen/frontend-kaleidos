@@ -42,6 +42,8 @@
           <div value={{first.number}}>
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
               @item={{first}}
+              @isNew={{includes first @newAgendaitems}}
+              @newNumberMappings={{@newNumberMappings}}
             />
           </div>
         </div>
@@ -68,11 +70,15 @@
                   @pieces={{pieces}}
                   @fileNameMappings={{@fileNameMappings}}
                   @isBekrachtiging={{this.isBekrachtiging}}
+                  @highlightedPieces={{@highlightedPieces}}
                 />
               {{/if}}
             {{/if}}
           {{/let}}
         {{/let}}
+        <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Comment
+          @item={{first}}
+        />
       </div>
     {{/if}}
   {{/let}}
@@ -85,6 +91,8 @@
           <div class="auk-u-non-breakable-group@print">
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
               @item={{agendaitem}}
+              @isNew={{includes agendaitem @newAgendaitems}}
+              @newNumberMappings={{@newNumberMappings}}
             />
           </div>
           {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}
@@ -110,11 +118,15 @@
                     @pieces={{pieces}}
                     @fileNameMappings={{@fileNameMappings}}
                     @isBekrachtiging={{this.isBekrachtiging}}
+                    @highlightedPieces={{@highlightedPieces}}
                   />
                 {{/if}}
               {{/if}}
             {{/let}}
           {{/let}}
+          <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Comment
+            @item={{agendaitem}}
+          />
         </div>
       </div>
     {{/if}}

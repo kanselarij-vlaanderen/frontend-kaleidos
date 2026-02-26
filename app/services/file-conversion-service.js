@@ -4,6 +4,7 @@ import {
   DOCUMENT_CONVERSION_SUPPORTED_EXTENSIONS,
   DOCUMENT_CONVERSION_SUPPORTED_MIME_TYPES,
 } from 'frontend-kaleidos/config/config';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class FileConversionService extends Service {
   @service store;
@@ -51,7 +52,7 @@ export default class FileConversionService extends Service {
             await oldDerivedFile.save();
             await oldDerivedFile.destroyRecord();
           }
-          const result = await response.json();
+          const result = await getJsonPayloadOrThrow(response);
           const modelName = sourceFile.constructor.modelName;
           const derivedFile = await this.store.findRecord(modelName, result.data[0].id);
           sourceFile.derived = derivedFile;

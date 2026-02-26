@@ -778,6 +778,7 @@ context('Submission happy flows', () => {
     cy.intercept('POST', '/submission-status-change-activities')
       .as(`createNewSubmissionStatusChangeActivity${randomInt}`);
     cy.intercept('PATCH', '/submissions/*').as(`patchSubmission${randomInt}`);
+    cy.intercept('POST', '/meetings/*/submit-submission').as(`submitSubmission${randomInt}`);
 
     cy.login('Kabinetdossierbeheerder');
     cy.openSubmission(submissionNewCase.shortTitle);
@@ -898,7 +899,9 @@ context('Submission happy flows', () => {
     // save the form
     cy.get(submissions.proposableAgendas.save).click();
     cy.wait(`@createNewSubmissionStatusChangeActivity${randomInt}`);
+    cy.wait(`@submitSubmission${randomInt}`);
     cy.wait(`@patchSubmission${randomInt}`);
+    // TODO Is this patchSubmission skipped due to earlier patches? maybe visual confirmation that data was saved here?
   });
 
   it('check the submissions table after resubmitting', () => {

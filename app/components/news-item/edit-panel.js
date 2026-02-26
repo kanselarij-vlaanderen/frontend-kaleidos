@@ -8,6 +8,8 @@ import { action } from '@ember/object';
 export default class NewsItemEditPanelComponent extends Component {
   @service newsletterService;
   @service agendaitemNota;
+  @service preventUnload;
+  @service currentSession;
 
   editorController;
   @tracked newsItem;
@@ -35,6 +37,15 @@ export default class NewsItemEditPanelComponent extends Component {
     return this.isFullscreen ? 'fullscreen' : this.args.size;
   }
 
+  get showBeingEditedByWarning() {
+    return (
+      this.currentSession.may('manage-news-items') &&
+      this.ensureNewsItem.isIdle &&
+      this.newsItem.isBeingEditedBy?.id &&
+      this.newsItem.isBeingEditedBy?.id != this.currentSession.user.id
+    );
+  }
+
   @task
   *ensureNewsItem() {
     this.newsItem = this.args.newsItem;
@@ -43,11 +54,15 @@ export default class NewsItemEditPanelComponent extends Component {
       this.newsItem = yield this.newsletterService.createNewsItemForAgendaitem(this.args.agendaitem);
       if (this.newsItem) {
         // If the service call returned a newsItem, it is new and we save immediately to avoid concurrency issues
-        yield this.newsItem.save();
+        yield this.newsItem.startEditingByUser(this.currentSession.user, this.newsItemIsNew);
+        this.preventUnload.enable();
       } else {
         // If the service call returned nothing, it means someone else created a newsitem and we have to refresh
-        return this.args.onCancel(this.newsItemIsNew);
+        return this.args.onCancel(null, this.newsItemIsNew);
       }
+    } else {
+      yield this.newsItem.startEditingByUser(this.currentSession.user);
+      this.preventUnload.enable();
     }
 
     this.title = this.newsItem.title;
@@ -116,12 +131,15 @@ export default class NewsItemEditPanelComponent extends Component {
     } catch {
       // pass
     }
+    this.preventUnload.disable();
     yield this.args.onSave(this.newsItem, this.newsItemIsNew);
     this.isOpenMissingThemesModal = false;
   }
 
   @action
-  cancelSave() {
+  async cancel() {
+    this.preventUnload.disable();
+    await this.args.onCancel(this.newsItem, this.newsItemIsNew);
     this.isOpenMissingThemesModal = false;
   }
 

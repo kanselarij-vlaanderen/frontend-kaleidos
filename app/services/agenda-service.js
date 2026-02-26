@@ -5,6 +5,8 @@ import fetch from 'fetch';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
+import { deleteDocumentContainer } from 'frontend-kaleidos/utils/document-delete-helpers';
 
 export default class AgendaService extends Service {
   @service store;
@@ -34,7 +36,7 @@ export default class AgendaService extends Service {
     endpoint.search = queryParams.toString();
     const response = await fetch(endpoint);
     if (response.ok) {
-      const result = await response.json();
+      const result = await getJsonPayloadOrThrow(response);
       this.addedPieces = result.addedDocuments;
       this.addedAgendaitems = result.addedAgendaitems;
     }
@@ -43,7 +45,7 @@ export default class AgendaService extends Service {
   async newAgendaItems(currentAgendaId, comparedAgendaId) {
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-items`;
     const response = await fetch(url);
-    const payload = await response.json();
+    const payload = await getJsonPayloadOrThrow(response);
     const itemsFromStore = [];
     for (const item of payload.data) {
       let itemFromStore = this.store.peekRecord(
@@ -67,7 +69,7 @@ export default class AgendaService extends Service {
       ','
     )}`;
     const response = await fetch(url);
-    const payload = await response.json();
+    const payload = await getJsonPayloadOrThrow(response);
     const itemsFromStore = [];
     for (const item of payload.data) {
       let itemFromStore = this.store.peekRecord(
@@ -91,7 +93,7 @@ export default class AgendaService extends Service {
     }
     const url = `/agendas/${currentAgendaId}/compare/${comparedAgendaId}/agenda-item/${agendaItemId}/pieces`;
     const response = await fetch(url);
-    const payload = await response.json();
+    const payload = await getJsonPayloadOrThrow(response);
     const piecesFromStore = [];
     for (const piece of payload.data) {
       let pieceFromStore = this.store.peekRecord(
@@ -130,10 +132,7 @@ export default class AgendaService extends Service {
       headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
     });
     if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        })}`);
+      await getJsonPayloadOrThrow(response);
     }
     await agenda.hasMany('agendaitems').reload();
   }
@@ -148,7 +147,8 @@ export default class AgendaService extends Service {
     meeting,
     subcase,
     formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
-    privateComment = null
+    privateComment = null,
+    submission = null
   ) {  
     const internalReview = await subcase.internalReview;
     if (!internalReview?.id) {
@@ -161,26 +161,10 @@ export default class AgendaService extends Service {
       body: JSON.stringify({
         subcase: subcase.uri,
         formallyOkStatus: formallyStatusUri,
+        submission: submission?.uri,
       })
     });
-    let json;
-    try {
-      json = await response.json();
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-    if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     const agendaitem = await this.store.findRecord('agendaitem', json.data.id);
     await subcase.hasMany('agendaActivities').reload();
     await subcase.hasMany('submissionActivities').reload();
@@ -219,6 +203,37 @@ export default class AgendaService extends Service {
         }
       }
     }
+    if (json.data.didRestoreFromSubmission) {
+      // There may be a decision now with stale name or content.
+      const report = await this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[:has:piece-parts]': true,
+        'filter[decision-activity][treatment][agendaitems][:id:]': agendaitem.id,
+      });
+      if (report) {
+        const documentContainer = await report.documentContainer;
+        const pieces = await documentContainer.pieces;
+        const newName = await generateReportName(agendaitem, meeting, pieces.length);
+        if (report.name !== newName) {
+          report.name = newName;
+          await report.belongsTo('file').reload();
+          await report.save();
+        }
+        await this.decisionReportGeneration.generateReplacementReport.perform(report);
+
+        // since we have a "restored" report, we also need a decision result.
+        // approved is the only logical one (nota and not postponed/retracted yet)
+        const decisionActivity = await this.store.queryOne('decision-activity', {
+          'filter[treatment][agendaitems][:id:]': agendaitem.id,
+        });
+        const decisionResultCode = await this.store.findRecordByUri(
+          'concept',
+          CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD
+        );
+        decisionActivity.decisionResultCode = decisionResultCode;
+        await decisionActivity.save();
+      }
+    }
     return agendaitem;
   }
 
@@ -241,10 +256,7 @@ export default class AgendaService extends Service {
     });
     await submission.belongsTo('meeting').reload();
     if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${response.statusText}`);
+      await getJsonPayloadOrThrow(response);
     }
   }
 
@@ -257,25 +269,21 @@ export default class AgendaService extends Service {
       method: 'GET',
       headers: { 'Accept': 'application/vnd.api+json' },
     });
-    let json;
-    try {
-      json = await response.json();
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-    if (!response.ok) {
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
-    }
+    const json = await getJsonPayloadOrThrow(response);
     return json;
+  }
+
+  async getPreliminaryDecisionResultCode(agendaitem) {
+    if (!agendaitem?.id) {
+      return;
+    }
+    const url = `/agendaitem/${agendaitem.id}/preliminary-decision-result-code`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 'Accept': 'application/vnd.api+json' },
+    });
+    const json = await getJsonPayloadOrThrow(response);
+    return json.data;
   }
 
   async getAgendaAndMeetingForSubmission(submission) {
@@ -284,43 +292,47 @@ export default class AgendaService extends Service {
       method: 'GET',
       headers: { 'Accept': 'application/vnd.api+json' },
     });
-    let json;
     try {
-      json = await response.json();      
+      const json = await getJsonPayloadOrThrow(response);
+      const agenda = {
+        id: json.data.attributes.agendaId,
+        uri: json.data.attributes.agenda,
+        serialnumber: json.data.attributes.serialnumber,
+        createdFor: {
+          id: json.data.id,
+          uri: json.data.attributes.uri,
+          plannedStart: new Date(json.data.attributes.plannedStart),
+          kind: {
+            uri: json.data.attributes.kind,
+            label: json.data.attributes.type,
+          }
+        },
+      };
+      return agenda;
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-    if (!response.ok) {
-      this.toaster.error(
-        this.intl.t('error-with-message', { message: JSON.stringify(json) }),
+       this.toaster.error(
+        this.intl.t('error-with-message', { message: error?.message }),
         this.intl.t('warning-title'),
       );
-      throw new Error(
-        `Backend response contained an error (status: ${
-          response.status
-        }): ${JSON.stringify(json)}`);
     }
-    const agenda = {
-      id: json.data.attributes.agendaId,
-      uri: json.data.attributes.agenda,
-      serialnumber: json.data.attributes.serialnumber,
-      createdFor: {
-        id: json.data.id,
-        uri: json.data.attributes.uri,
-        plannedStart: new Date(json.data.attributes.plannedStart),
-        kind: {
-          uri: json.data.attributes.kind,
-          label: json.data.attributes.type,
-        }
-      },
-    };
-    return agenda;
+  }
+
+  /**
+   * @argument agendaitem
+   * @argument submission
+   */
+  async keepDraftDecisionAndNewsItem(agendaitem, submission) {
+    const url = `/submissions/${submission.id}/keep-draft-decision-and-news-item`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/vnd.api+json', 'Content-Type': 'application/vnd.api+json' },
+      body: JSON.stringify({
+        agendaitem: agendaitem.uri,
+      })
+    });
+    if (!response.ok) {
+      await getJsonPayloadOrThrow(response);
+    }
   }
 
   /* No API */
@@ -359,7 +371,7 @@ export default class AgendaService extends Service {
     );
   }
 
-  async deleteAgendaitem(agendaitem) {
+  async deleteAgendaitem(agendaitem, keepDecisionAndNewsItem = false) {
     const agendaitemToDelete = await this.store.findRecord(
       'agendaitem',
       agendaitem.get('id'),
@@ -378,13 +390,17 @@ export default class AgendaService extends Service {
       if (treatment) {
         const decisionActivity = await treatment.decisionActivity;
         const newsItem = await treatment.newsItem;
-        if (newsItem) {
+        if (newsItem && !keepDecisionAndNewsItem) {
           await newsItem.destroyRecord();
         }
         if (decisionActivity) {
+          const report = await decisionActivity.belongsTo('report').reload();
           await decisionActivity.destroyRecord();
+          if (report && !keepDecisionAndNewsItem) {
+            const documentContainer = await report.documentContainer;
+            await deleteDocumentContainer(documentContainer);
+          }
         }
-        // TODO DELETE REPORT !
         await treatment.destroyRecord();
       }
       await Promise.all(

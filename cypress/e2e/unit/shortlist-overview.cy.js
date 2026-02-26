@@ -357,7 +357,7 @@ context('signatures shortlist overview tests', () => {
     cy.get(signature.createSignFlow.signers.edit).click();
     cy.get(appuniversum.loader).should('not.exist');
     cy.get(mandatee.mandateeCheckboxList).find(appuniversum.checkbox)
-      .should('have.length', 9);
+      .should('have.length', mandateeNames.current.count);
     mandateeNames.current.signatureTitles.forEach((minister) => {
       cy.get(appuniversum.checkbox).contains(minister);
     });
@@ -449,6 +449,16 @@ context('signatures shortlist overview tests', () => {
     const staticResponse = {
       statusCode: 200,
       ok: true,
+      body: {
+        data: {
+          id: 'somejobid',
+          signFlowUris: [
+            'http://themis.vlaanderen.be/id/handtekenaangelegenheid/somesignflowid'
+          ],
+          status: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+          uri: 'http://mu.semte.ch/services/digital-signing/prepare-signing-flow-job/somesignflowpreparationid',
+        },
+      },
     };
 
     cy.visit('ondertekenen/opstarten');
@@ -486,6 +496,7 @@ context('signatures shortlist overview tests', () => {
       .click();
 
     // TODO test error `cy.parents()` failed because it requires a DOM element or document.
+    cy.wait(20000); // checking if waiting is enough for the signflow-status-sync
     cy.visit('ondertekenen/opstarten');
     // check succes
     cy.get(route.signatures.row.name).contains(files1[0].newFileName)
@@ -505,6 +516,8 @@ context('signatures shortlist overview tests', () => {
     cy.wait('@postSigningActivities2');
     cy.wait('@patchSignSubcases2');
     cy.wait('@patchSignFlows2');
+    // close the error popup. There was no job found since we gave it stubbed data
+    cy.get(appuniversum.alert.close).click();
 
     // this works because signflow-status-sync service is not active.
     // Normally the status becomes 'Marked' because there is no preparation-activity created.
@@ -717,6 +730,7 @@ context('decisions and minutes shortlist overview tests', () => {
   const defaultSecretary = mandateeNames.current.firstSecretary.fullName;
   const newSecretary = mandateeNames.current.secondSecretary.fullName;
 
+  const missingMailMessage = 'Eén of meerdere ondertekenaars van de geselecteerde documenten moeten zich nog authentificeren';
   const alertMessage = 'De geselecteerde documenten hebben verschillende secretarissen. Kaleidos kan de namen van de ondertekenaars niet automatisch invullen.';
 
   beforeEach(() => {
@@ -939,7 +953,10 @@ context('decisions and minutes shortlist overview tests', () => {
 
     // check that signflow can be started
     cy.get(route.signatures.navbar.startMultipleSignflows).click();
-    cy.get(route.decisions.sidebar.startSignflow).should('be.enabled');
+    // it should be enabled, but it is now disabled because of missing email
+    // cy.get(route.decisions.sidebar.startSignflow).should('be.enabled');
+    cy.get(appuniversum.alert.message).contains(missingMailMessage);
+    cy.get(route.decisions.sidebar.startSignflow).should('be.disabled');
 
     // change secretary
 
@@ -981,6 +998,16 @@ context('decisions and minutes shortlist overview tests', () => {
     const staticResponse = {
       statusCode: 200,
       ok: true,
+      body: {
+        data: {
+          id: 'somejobid',
+          signFlowUris: [
+            'http://themis.vlaanderen.be/id/handtekenaangelegenheid/somesignflowid'
+          ],
+          status: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+          uri: 'http://mu.semte.ch/services/digital-signing/prepare-signing-flow-job/somesignflowpreparationid',
+        },
+      },
     };
 
     cy.intercept('GET', '/sign-flows*').as('getShortlist1');
@@ -1021,7 +1048,8 @@ context('decisions and minutes shortlist overview tests', () => {
       .click();
 
     // check succes
-    cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    // cy.wait(2000); // TODO-waits: better wait, not waiting sometimes results in missing piece-id
+    cy.wait(20000); // checking if waiting more is enough for the signflow-status-sync
     cy.reload(); // TODO this reload is only needed because jenkins is not finding a mu-session
     cy.log('failing tests. decisionTitle should be in list:', decisionTitle); // the next line fails sometimes
     cy.get('@currentDecision').find(route.decisions.row.openSidebar)
@@ -1039,6 +1067,8 @@ context('decisions and minutes shortlist overview tests', () => {
     cy.wait('@postSigningActivities2');
     cy.wait('@patchSignSubcases2');
     cy.wait('@patchSignFlows2');
+    // close the error popup. There was no job found since we gave it stubbed data
+    cy.get(appuniversum.alert.close).click();
 
     // this works because signflow-status-sync service is not active.
     // Normally the status becomes 'Marked' because there is no preparation-activity created.

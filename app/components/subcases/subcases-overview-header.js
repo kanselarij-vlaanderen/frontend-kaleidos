@@ -61,7 +61,7 @@ export default class SubCasesOverviewHeader extends Component {
     this.publicationFlows = yield this.case.publicationFlows;
     yield this.loadLinkedMandatees.perform();
     this.hasFilesToDownload = (yield this.store.count('piece', {
-      'filter[submission-activity][subcase][decisionmaking-flow][:id:]': this.args.decisionmakingFlow.id,
+      'filter[submission-activities][subcase][decisionmaking-flow][:id:]': this.args.decisionmakingFlow.id,
       'filter[:has:file]': true,
     })) > 0;
   }

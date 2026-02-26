@@ -1,0 +1,13 @@
+@use "settings";
+
+/* ==========================================================================
+  Overline
+   ========================================================================== */
+
+.auk-overline {
+  text-transform: uppercase;
+  font-weight: 500;
+  color: settings.$color-gray-600;
+  letter-spacing: 0.05em;
+  font-size: 1.3rem;
+}

@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { formatDistanceToNow } from 'date-fns';
 import fetch from 'fetch';
 import ModifiedOldDataError from 'frontend-kaleidos/errors/modified-old-data-error';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 /**
  * Abstract model which implements a form of optimistic locking for the record,
@@ -79,7 +80,7 @@ export default class ModelWithModifier extends Model {
       const userId =
         oldModelData.data[0].relationships['modified-by'].links.self;
       const userData = await fetch(userId);
-      const userDataFields = await userData.json();
+      const userDataFields = await getJsonPayloadOrThrow(userData);
       const vals = userDataFields.data.attributes;
       const errorMessage = this.intl.t('changes-could-not-be-saved-message', {
         modelName: this.intl.t(this.constructor.modelName),

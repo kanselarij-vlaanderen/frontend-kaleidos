@@ -3,6 +3,7 @@ import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import CopyErrorToClipboardToast from 'frontend-kaleidos/components/utils/toaster/copy-error-to-clipboard-toast';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class DecisionReportGeneration extends Service {
   @service toaster;
@@ -60,6 +61,7 @@ export default class DecisionReportGeneration extends Service {
       this.intl.t('decision-report-bundle-generation--toast-generating--title'),
       {
         timeOut: 10 * 60 * 1000,
+        closable: true,
       }
     );
     try {
@@ -129,6 +131,7 @@ export default class DecisionReportGeneration extends Service {
         this.intl.t('decision-report-generation--toast-generating--title'),
         {
           timeOut: 10 * 60 * 1000,
+          closable: true,
         }
       );
       try {
@@ -224,7 +227,7 @@ export default class DecisionReportGeneration extends Service {
     return { alterableReports, unalterableReports };
   }
 
-  generateReplacementReport = task(async (report) => {
+  generateReplacementReport = task(async (report, regenerateConcerns) => {
     if (!(await this.canReplaceReport(report))) {
       this.toaster.error(
         this.intl.t('report-cannot-be-altered', {
@@ -234,7 +237,7 @@ export default class DecisionReportGeneration extends Service {
       return;
     }
     try {
-      await this._generateSinglePdf.perform(report, 'generate-decision-report');
+      await this._generateSinglePdf.perform(report, 'generate-decision-report', regenerateConcerns);
       await this.reloadFile(report);
       this.toaster.success(
         this.intl.t(
@@ -263,6 +266,7 @@ export default class DecisionReportGeneration extends Service {
       this.intl.t('minutes-report-generation--toast-generating--title'),
       {
         timeOut: 3 * 60 * 1000,
+        closable: true,
       }
     );
     try {
@@ -300,142 +304,55 @@ export default class DecisionReportGeneration extends Service {
     return !hasPreparationActivity;
   }
 
-  _generateSinglePdf = task(async (report, urlBase) => {
-    let response;
-    try {
-      response = await fetch(`/${urlBase}/${report.id}`);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `Backend response contained an error (status: ${
-            response.status
-          }): ${JSON.stringify(data)}`
-        );
-      }
-      return data;
-    } catch (error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down. If so,
-      // throw a nice error that only contains the
-      // response status.
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
+  _generateSinglePdf = task(async (report, urlBase, shouldRegenerateConcerns = false) => {
+    const response = await fetch(`/${urlBase}/${report.id}/generate`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/vnd.api+json',
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify({
+        shouldRegenerateConcerns,
+      }),
+    });
+    return await getJsonPayloadOrThrow(response);
   });
 
-  _generateMultiplePdfs = task(async (reports, urlBase, shouldRegenerateConcerns=false) => {
-    let response;
-    try {
-      response = await fetch(`/${urlBase}/generate-reports`, {
+  _generateMultiplePdfs = task(async (reports, urlBase, shouldRegenerateConcerns = false) => {
+    const response = await fetch(`/${urlBase}/generate-reports`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/vnd.api+json',
+        'Content-Type': 'application/vnd.api+json',
+      },
+      body: JSON.stringify({
+        reports: reports.map((report) => report.uri),
+        shouldRegenerateConcerns,
+      }),
+    });
+    return await getJsonPayloadOrThrow(response);
+  });
+
+  _generateReportBundle = task(async (meeting) => {
+    const response = await fetch(
+      `/generate-decision-report/generate-reports-bundle`,
+      {
         method: 'POST',
         headers: {
           Accept: 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
         },
         body: JSON.stringify({
-          reports: reports.map((report) => report.uri),
-          shouldRegenerateConcerns,
+          meetingId: meeting.id,
         }),
-      });
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw new Error(
-          `Backend response contained an error (status: ${
-            response.status
-          }): ${JSON.stringify(data)}`
-        );
       }
-      return data;
-    } catch (error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down. If so,
-      // throw a nice error that only contains the
-      // response status.
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
-  });
-
-  _generateReportBundle = task(async (meeting) => {
-    let response;
-    try {
-      response = await fetch(
-        `/generate-decision-report/generate-reports-bundle`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/vnd.api+json',
-            'Content-Type': 'application/vnd.api+json',
-          },
-          body: JSON.stringify({
-            meetingId: meeting.id,
-          }),
-        }
-      );
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw new Error(
-          `Backend response contained an error (status: ${
-            response.status
-          }): ${JSON.stringify(data)}`
-        );
-      }
-      return data;
-    } catch (error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down. If so,
-      // throw a nice error that only contains the
-      // response status.
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
+    );
+    return await getJsonPayloadOrThrow(response);
   });
 
   getJob = task(async (job, urlBase) => {
-    let response;
-    try {
-      response = await fetch(`/${urlBase}/job/${job.id}?date=${Date.now()}`);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(
-          `Backend response contained an error (status: ${
-            response.status
-          }): ${JSON.stringify(data)}`
-        );
-      }
-      return data;
-    } catch (error) {
-      // Errors returned from services *should* still
-      // be valid JSON(:API), but we could encounter
-      // non-JSON if e.g. a service is down. If so,
-      // throw a nice error that only contains the
-      // response status.
-      if (error instanceof SyntaxError) {
-        throw new Error(
-          `Backend response contained an error (status: ${response.status})`
-        );
-      } else {
-        throw error;
-      }
-    }
+    const response = await fetch(`/${urlBase}/job/${job.id}?date=${Date.now()}`);
+    return await getJsonPayloadOrThrow(response);
   });
 
   async reloadFiles(reports) {

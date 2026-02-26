@@ -1,5 +1,6 @@
 import fetch from 'fetch';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
+import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 function registerJobToStore(job, store) {
   store.pushPayload(job);
@@ -21,8 +22,8 @@ async function constructArchiveName(agenda) {
   return `VR_zitting_${formattedDate}_${agendaName}_alle_punten.zip`;
 }
 
-async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly) {
-  let url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive?decisions=${decisions}&pdfOnly=${pdfOnly}`;
+async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly, newDocumentsOnly) {
+  let url = `/agendas/${agenda.id}/agendaitems/pieces/files/archive?decisions=${decisions}&pdfOnly=${pdfOnly}&newDocumentsOnly=${newDocumentsOnly}`;
   if (mandateeIds.length) {
     url += '&' + (new URLSearchParams({ mandateeIds }).toString());
   }
@@ -36,12 +37,12 @@ async function fetchArchivingJob(agenda, mandateeIds, decisions= false, pdfOnly)
   if (fetchedJob.status > 201) {
     return null;
   }
-  return fetchedJob.json();
+  return await getJsonPayloadOrThrow(fetchedJob);
 }
 
-async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly) {
+async function fetchArchivingJobForAgenda(agenda, mandateeIds, decisions, store, pdfOnly, newDocumentsOnly) {
   // pdfOnly is not applicable to decisions since KAS-5059
-  const job = await fetchArchivingJob(agenda, mandateeIds, decisions, pdfOnly);
+  const job = await fetchArchivingJob(agenda, mandateeIds, decisions, pdfOnly ,newDocumentsOnly);
   if (job) {
     return registerJobToStore(job, store);
   }
@@ -82,7 +83,7 @@ async function fetchGenericArchivingJob(path, pdfOnly) {
   if (fetchedJob.status > 201) {
     return null;
   }
-  return fetchedJob.json();
+  return await getJsonPayloadOrThrow(fetchedJob);
 }
 
 export {

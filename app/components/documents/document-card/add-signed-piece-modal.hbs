@@ -1,0 +1,45 @@
+<ConfirmationModal
+  @modalOpen={{true}}
+  @title={{t "upload-signed-file"}}
+  @onConfirm={{perform this.saveEdit}}
+  @onCancel={{this.cancelEdit}}
+  @confirmMessage={{t "save"}}
+  @loading={{this.saveEdit.isRunning}}
+  @disabled={{this.isDisabled}}
+>
+  <:body>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="name">{{t "name-document"}}</AuLabel>
+          <div class="au-u-flex au-u-flex--spaced-small">
+            <span>
+              {{@piece.name}}
+            </span>
+          </div>
+        </div>
+      </c.content>
+    </AuCard>
+    <AuCard @size="small" class="au-u-margin-top-small" as |c|>
+      <c.content>
+        <div class="auk-form-group">
+          <AuLabel for="type">{{t "upload-signed-file"}}</AuLabel>
+          {{!-- {{#if this.replacementFile}} --}}
+            <AuAlert @skin="warning" @icon="alert-triangle">
+              <p>{{t "replace-signed-document-warning"}}</p>
+              <p>{{t "replace-signed-document-warning-extra"}}</p>
+              <p>{{t "action-cannot-be-undone"}}</p>
+            </AuAlert>
+          {{!-- {{/if}} --}}
+          <Auk::FileUploader
+            @multiple={{false}}
+            @onUpload={{set this "replacementFile"}}
+            @onQueueUpdate={{this.handleReplacementFileUploadQueue}}
+            @validateFile={{this.validateFile}}
+            @dropzoneMessage="document-accepted-only-pdf"
+          />
+        </div>
+      </c.content>
+    </AuCard>
+  </:body>
+</ConfirmationModal>

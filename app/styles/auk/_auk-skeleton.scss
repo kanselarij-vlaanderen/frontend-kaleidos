@@ -1,0 +1,16 @@
+@use "settings";
+
+/* ==========================================================================
+   auk-skeleton
+   ========================================================================== */
+
+.auk-skeleton {
+  position: relative;
+  display: inline-block;
+  background-color: settings.$color-gray-300;
+}
+
+.auk-skeleton--rectangle {
+  height: 1.6rem;
+  width: 100px;
+}

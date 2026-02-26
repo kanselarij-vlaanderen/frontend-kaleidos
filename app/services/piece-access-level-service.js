@@ -40,6 +40,7 @@ export default class PieceAccessLevelService extends Service {
   async updatePreviousAccessLevel(piece) {
     const internSecretarie = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
     const vertrouwelijk = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
+    const ingetrokken = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INGETROKKEN);
     const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
 
     const accessLevel = await piece.accessLevel;
@@ -59,6 +60,16 @@ export default class PieceAccessLevelService extends Service {
       return false;
     }
 
+    if (
+      previousAccessLevel.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN &&
+      ![
+        CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+      ].includes(accessLevel.uri)
+    ) {
+      return false;
+    }
+
     let accessLevelToSet;
     switch (accessLevel.uri) {
       case CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE:
@@ -67,12 +78,16 @@ export default class PieceAccessLevelService extends Service {
       case CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK:
         accessLevelToSet = vertrouwelijk;
         break;
+      case CONSTANTS.ACCESS_LEVELS.INGETROKKEN:
+        accessLevelToSet = ingetrokken;
+        break;
       default:
         accessLevelToSet = internRegering;
     }
     if (previousAccessLevel.uri !== accessLevelToSet.uri) {
       previousPiece.accessLevel = accessLevelToSet;
       await previousPiece.save();
+      await this.updateSignedPieceAccessLevels(previousPiece);
     }
     return true;
   }
@@ -100,6 +115,7 @@ export default class PieceAccessLevelService extends Service {
       ![
         CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
         CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+        CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
         CONSTANTS.ACCESS_LEVELS.INTERN_REGERING,
       ].includes(accessLevel.uri)
     ) {
@@ -109,6 +125,7 @@ export default class PieceAccessLevelService extends Service {
       );
       piece.accessLevel = internRegering;
       await piece.save();
+      await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
   }
@@ -129,6 +146,32 @@ export default class PieceAccessLevelService extends Service {
       const confidential = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
       piece.accessLevel = confidential;
       await piece.save();
+      await this.updateSignedPieceAccessLevels(piece);
+      await this.updatePreviousAccessLevels(piece);
+    }
+  }
+
+  /**
+   * Strengthen the access level of the piece to ingetrokken (unless the
+   * access level was already this level or higher) and then update all the previous access
+   * levels.
+   */
+  async strengthenAccessLevelToRetracted(piece) {
+    const accessLevel = await piece.accessLevel;
+    if (
+      ![
+        CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+        CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+        CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
+      ].includes(accessLevel.uri)
+    ) {
+      const ingetrokken = await this.store.findRecordByUri(
+        'concept',
+        CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
+      );
+      piece.accessLevel = ingetrokken;
+      await piece.save();
+      await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
   }
@@ -157,13 +200,77 @@ export default class PieceAccessLevelService extends Service {
 
   async updateSubmissionAccessLevelOfSubcase(subcase) {
     const pieces = await this.store.queryAll('piece', {
-      'filter[submission-activity][subcase][:id:]': subcase.id,
+      'filter[submission-activities][subcase][:id:]': subcase.id,
       'filter[:has-no:next-piece]': true,
     });
     
     await Promise.all(pieces.slice().map(async (piece) => {
       await this.strengthenAccessLevelToConfidential(piece);
     }));
+  }
+
+  /**
+   * Ensures that the signedPieceCopy of a piece always has the correct accessLevel
+   * Either the same accessLevel or at be at least "intern overheid"
+   * !this is one of the rare occurences where weakening accessLevel is OK, since it reflects the main piece
+   */
+  async _updateSignedPieceCopyOfPiece(piece) {
+    const accessLevel = await piece.accessLevel;
+    const signedPieceCopy = await piece.belongsTo('signedPieceCopy').reload();
+    if (!signedPieceCopy) {
+      return;
+    }
+    let accessLevelToSet;
+    const signedPieceCopyAccessLevel = await signedPieceCopy.accessLevel;
+    if (accessLevel.uri == CONSTANTS.ACCESS_LEVELS.PUBLIEK) {
+      const internOverheid = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID);
+      accessLevelToSet = internOverheid;
+    } else {
+      accessLevelToSet = accessLevel;
+    }
+    if (signedPieceCopyAccessLevel.uri !== accessLevelToSet.uri) {
+      signedPieceCopy.accessLevel = accessLevelToSet;
+      await signedPieceCopy.save();
+    }
+  }
+
+  /**
+   * Ensures that the signedPieceCopy of a piece always has the correct accessLevel
+   * Either the same accessLevel or be at least "intern regering"
+   * !this is one of the rare occurences where weakening accessLevel is OK, since it reflects the main piece
+   */
+  async _updateSignedPieceOfPiece(piece) {
+    const accessLevel = await piece.accessLevel;
+    const signedPiece = await piece.belongsTo('signedPiece').reload();
+    if (!signedPiece) {
+      return;
+    }
+    let accessLevelToSet;
+    const signedPieceAccessLevel = await signedPiece.accessLevel;
+    if (
+      [
+        CONSTANTS.ACCESS_LEVELS.PUBLIEK,
+        CONSTANTS.ACCESS_LEVELS.INTERN_OVERHEID,
+      ].includes(accessLevel.uri)
+    ) {
+      const internRegering = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.INTERN_REGERING);
+      accessLevelToSet = internRegering;
+    } else {
+      accessLevelToSet = accessLevel;
+    }
+    if (signedPieceAccessLevel.uri !== accessLevelToSet.uri) {
+      signedPiece.accessLevel = accessLevelToSet;
+      await signedPiece.save();
+    }
+  }
+
+  /**
+   * Update signedPiece and signedPieceCopy based on updates on main piece
+   * strengthening or weakening accordingly
+   */ 
+  async updateSignedPieceAccessLevels(piece) {
+    await this._updateSignedPieceOfPiece(piece);
+    await this._updateSignedPieceCopyOfPiece(piece);
   }
 
   /*
@@ -186,8 +293,11 @@ export default class PieceAccessLevelService extends Service {
       if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE) {
         // no propagation required, so never in draft
         return false;
-      } else if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
-        // draft iff:
+      } else if (
+        accessLevel.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK ||
+        accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN
+      ) {
+        // draft if:
         // - design-agenda without previous version
         // - new document on an agendaitem of a design agenda with a previous version
         const isDesignAgenda = (await agenda.status).isDesignAgenda;
@@ -241,7 +351,8 @@ export default class PieceAccessLevelService extends Service {
     );
     if (
       mayViewConfidentialPiece &&
-      accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
+      (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK ||
+        accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN)
     ) {
       const submissionActivity = await this.store.queryOne('submission-activity', {
         filter: {
@@ -293,18 +404,23 @@ export default class PieceAccessLevelService extends Service {
       }
     } else {
       // careful with submissions access/permissions, all confidential files are in the submissions graph
+      // retracted documents treated similar to confidential
       const mayViewAllConfidentialPieces = this.currentSession.may(
         'view-all-confidential-documents'
       );
       // TODO will there ever be intern secretarie document in the submissions??
-      if (!mayViewAllConfidentialPieces && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) {
-        // specifically cabinet medewerker needs this for submission graph docs, other profiles don't have confidential in their graph
+      if (
+        !mayViewAllConfidentialPieces &&
+        (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK ||
+          accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN)
+      ) {
+        // specifically cabinet medewerker needs this for submission graph docs, other profiles don't have confidential (or retracted) in their graph
         return false;
       }
       // default to standard behaviour (if non confidential doc is in your graph it can be accessed normally)
       return true;
     }
-    // dossierbeheerder looking at a confidential doc that is not theirs
+    // dossierbeheerder looking at a confidential/retracted doc that is not theirs
     return false;
   }
 }

@@ -129,7 +129,7 @@ export default class AgendaAgendaitemsController extends Controller {
     this.router.refresh('agenda.agendaitems');
   }
 
-  @task
+  @task({ maxConcurrency: 1, restartable: true })
   *groupNotasOnGroupName() {
     const agendaitemsArray = this.model.notas.slice();
     const agendaitemGroups = [];

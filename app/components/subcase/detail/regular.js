@@ -38,7 +38,7 @@ export default class SubcaseDetailRegular extends Component {
     }
     // need at least 1 file before we show the download button
     this.hasFilesToDownload = (yield this.store.count('piece', {
-      'filter[submission-activity][subcase][:id:]': this.args.subcase.id,
+      'filter[submission-activities][subcase][:id:]': this.args.subcase.id,
       'filter[:has:file]': true,
     })) > 0;
   }

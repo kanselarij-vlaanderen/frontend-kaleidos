@@ -208,6 +208,7 @@ export default class BatchDocumentsDetailsModal extends Component {
           ) {
             // - "draft-pieces" have "pieces" as previous. we update those in a later step.
             // - some profiles are allowed to edit "draft-piece" but not "piece" so this could error
+            await this.pieceAccessLevelService.updateSignedPieceAccessLevels(piece);
             await this.pieceAccessLevelService.updatePreviousAccessLevels(piece);
           }
           changedPieces.push(piece);

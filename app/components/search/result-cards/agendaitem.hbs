@@ -42,12 +42,14 @@
   </c.header>
   {{#if @title}}
     <c.content>
-      <p data-test-route-search-result-cards-agendaitem-title>
-        <SanitizeHtml
-          @raw={{true}}
-          @value={{@title}}
-        />
-      </p>
+      <AuContent>
+        <p data-test-route-search-result-cards-agendaitem-title>
+          <SanitizeHtml
+            @raw={{true}}
+            @value={{@title}}
+          />
+        </p>
+      </AuContent>
     </c.content>
   {{/if}}
   <c.footer>

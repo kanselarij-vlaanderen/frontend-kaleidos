@@ -18,11 +18,11 @@
 }
 
 .auk-toolbar-complex--gray-100 {
-  background-color: auk.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 .auk-toolbar-complex--border-bottom {
-  border-bottom: 0.1rem solid auk.$color-gray-300;
+  border-bottom: 0.1rem solid var(--au-gray-300);
 }
 
 .auk-toolbar-complex--large {
@@ -42,7 +42,7 @@
   font-weight: 400;
   margin: 0 0 1.5rem;
   line-height: 1.6;
-  color: auk.$color-gray-800;
+  color: var(--au-gray-800);
 }
 
 .auk-toolbar-complex__title--small {

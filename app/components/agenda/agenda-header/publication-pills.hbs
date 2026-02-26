@@ -10,6 +10,15 @@
           }}
         </AuPill>
       {{/if}}
+      {{#if (and this.isReleasedThemisNewsitemPublicationActivity (not this.isRetractedThemisNewsitemPublicationActivity))}}
+        <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
+          {{t
+            "newsitems-were-published-at"
+            date=(date this.latestThemisNewsitemPublicationActivity.plannedDate)
+            time=(time this.latestThemisNewsitemPublicationActivity.plannedDate)
+          }}
+        </AuPill>
+      {{/if}}
     {{/if}}
     {{#if (user-may "manage-document-publications")}}
       {{#if this.internalDocumentPublicationActivity.startDate}}
@@ -33,20 +42,20 @@
       {{/if}}
     {{/if}}
     {{#if (user-may "manage-themis-publications")}}
-      {{#if (and this.isReleasedThemisPublicationActivity this.themisPublicationIncludesDocuments)}}
+      {{#if (and this.isReleasedThemisDocumentPublicationActivity (not this.isRetractedThemisDocumentPublicationActivity))}}
         <AuPill @skin="success" @icon="check" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "documents-were-published-at"
-            date=(date this.latestThemisPublicationActivity.plannedDate)
-            time=(time this.latestThemisPublicationActivity.plannedDate)
+            date=(date this.latestThemisDocumentPublicationActivity.plannedDate)
+            time=(time this.latestThemisDocumentPublicationActivity.plannedDate)
           }}
         </AuPill>
-      {{else if this.isConfirmedThemisPublicationActivity}}
+      {{else if this.isConfirmedThemisDocumentPublicationActivity}}
         <AuPill @skin="default" @icon="clock" class="auk-u-mr-2 auk-u-mt-2">
           {{t
             "documents-are-planned-to-publish-at"
-            date=(date this.latestThemisPublicationActivity.plannedDate)
-            time=(time this.latestThemisPublicationActivity.plannedDate)
+            date=(date this.latestThemisDocumentPublicationActivity.plannedDate)
+            time=(time this.latestThemisDocumentPublicationActivity.plannedDate)
           }}
         </AuPill>
       {{/if}}

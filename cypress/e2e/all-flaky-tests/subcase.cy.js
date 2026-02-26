@@ -287,6 +287,7 @@ context('Subcase tests', () => {
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
     // Check if saving on agendaitem did not trigger a change in confidentiality (came up during fixing)
     cy.get(cases.subcaseDescription.confidentialityPill);
+    cy.get(appuniversum.loader).should('not.exist'); // before finishing test
   });
 
   it('Changes to agenda item Themas propagate properly', () => {
@@ -575,6 +576,7 @@ context('Subcase tests', () => {
     // check that subcasename shows capitalized with css but is really not.
     cy.get(cases.subcaseDescription.subcaseName).contains(nonCapital);
     // .should('have.class', 'auk-u-text-capitalize'); //this is no longer done by added class but by text-transform: uppercase on p element
+    cy.wait(2000); // other data is still loading so wait before ending
   });
 
   it('check submission activities', () => {
@@ -623,5 +625,7 @@ context('Subcase tests', () => {
     cy.get(document.documentCard.card).should('have.length', 2)
       .find(document.documentCard.name.value)
       .contains(`${file.newFileName} BIS`);
+    cy.get(appuniversum.loader).should('not.exist');
+    cy.wait(2000); // other data is still loading so wait before ending
   });
 });

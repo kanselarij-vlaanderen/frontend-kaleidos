@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 /**
  *
- * @argument skin {String}: Possible values are: (empty, default), "succes", "warning", "error"
+ * @argument skin {String}: Possible values are: (empty, default), "success", "warning", "error"
  */
 export default class ColorBadge extends Component {
   get skin() {

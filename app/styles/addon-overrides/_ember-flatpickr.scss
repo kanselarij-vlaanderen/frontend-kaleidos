@@ -23,7 +23,7 @@ $calendarWidth: $daysWidth;
 
   box-shadow: auk.$shadow-small;
   border-radius: .3rem;
-  background: auk.$color-white;
+  background: var(--au-white);
 
   font-family: flanders-sans, sans-serif;
 
@@ -42,18 +42,18 @@ $calendarWidth: $daysWidth;
 
     border-radius: 50%;
 
-    color: auk.$color-gray-600;
+    color: var(--au-gray-600);
 
     &:hover {
-      background-color: auk.$color-gray-100;
+      background-color: var(--au-gray-100);
 
-      color: auk.$color-gray-700;
+      color: var(--au-gray-700);
     }
 
     &:active {
-      background-color: auk.$color-gray-200;
+      background-color: var(--au-gray-200);
 
-      color: auk.$color-gray-800;
+      color: var(--au-gray-800);
     }
   }
 
@@ -94,14 +94,14 @@ $calendarWidth: $daysWidth;
     padding: 0;
 
     &:hover {
-      border-color: auk.$color-gray-300;
-      background-color: auk.$color-white;
+      border-color: var(--au-gray-300);
+      background-color: var(--au-white);
     }
 
     &:focus {
-      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
       outline: 0;
-      border-color: auk.$color-yellow-500;
+      border-color: var(--au-outline-color);
     }
 
     option {
@@ -114,14 +114,14 @@ $calendarWidth: $daysWidth;
     border-radius: .3rem;
 
     &:hover {
-      border-color: auk.$color-gray-300;
+      border-color: var(--au-gray-300);
       background-color: transparent;
     }
 
     &:focus-within {
-      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
       outline: 0;
-      border-color: auk.$color-yellow-500;
+      border-color: var(--au-outline-color);
     }
 
     input.cur-year {
@@ -133,10 +133,10 @@ $calendarWidth: $daysWidth;
 .numInputWrapper {
   span {
     border: 0.1rem solid transparent;
-    border-left-color: auk.$color-gray-300;
+    border-left-color: var(--au-gray-300);
     padding: 0.1rem 0 0 0.1rem;
 
-    color: auk.$color-gray-600;
+    color: var(--au-gray-600);
     font-size: 1rem;
 
     &:after {
@@ -144,15 +144,15 @@ $calendarWidth: $daysWidth;
     }
 
     &:hover {
-      background-color: auk.$color-gray-100;
+      background-color: var(--au-gray-100);
 
-      color: auk.$color-gray-700;
+      color: var(--au-gray-700);
     }
 
     &:active {
-      background-color: auk.$color-gray-200;
+      background-color: var(--au-gray-200);
 
-      color: auk.$color-gray-800;
+      color: var(--au-gray-800);
     }
 
     &.arrowUp {
@@ -164,7 +164,7 @@ $calendarWidth: $daysWidth;
     &.arrowDown {
       @include au-background-icon('dash', 1rem);
 
-      border-top-color: auk.$color-gray-300;
+      border-top-color: var(--au-gray-300);
       border-bottom-right-radius: .3rem;
     }
   }
@@ -175,7 +175,7 @@ $calendarWidth: $daysWidth;
 }
 
 span.flatpickr-weekday {
-  color: auk.$color-gray-600;
+  color: var(--au-gray-600);
   font-size: 1.3rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -196,20 +196,20 @@ span.flatpickr-weekday {
   max-width: $daySize;
   height: $daySize;
 
-  color: auk.$color-gray-800;
+  color: var(--au-gray-800);
   font-size: 1.5rem;
   line-height: $daySize - 2px; // offset for better vertical center
 
   &:hover {
-    border-color: auk.$color-blue-100;
-    background-color: auk.$color-blue-100;
+    border-color: var(--au-blue-100);
+    background-color: var(--au-blue-100);
   }
 
   &:focus {
-    box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+    box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
     outline: 0;
-    border-color: auk.$color-yellow-500;
-    background-color: auk.$color-blue-100;
+    border-color: var(--au-outline-color);
+    background-color: var(--au-blue-100);
   }
 
   &.flatpickr-disabled,
@@ -219,78 +219,78 @@ span.flatpickr-weekday {
   &.notAllowed,
   &.notAllowed.prevMonthDay,
   &.notAllowed.nextMonthDay {
-    color: auk.$color-gray-400;
+    color: var(--au-gray-400);
   }
 
   &.prevMonthDay,
   &.nextMonthDay {
     &:hover {
-      border-color: auk.$color-gray-100;
-      background-color: auk.$color-gray-100;
+      border-color: var(--au-gray-100);
+      background-color: var(--au-gray-100);
     }
 
     &:focus {
-      background-color: auk.$color-gray-100;
+      background-color: var(--au-gray-100);
     }
 
     &:active {
-      border-color: auk.$color-gray-200;
-      background-color: auk.$color-gray-200;
+      border-color: var(--au-gray-200);
+      background-color: var(--au-gray-200);
     }
   }
 
   &.today {
-    border-color: auk.$color-blue-500;
+    border-color: var(--au-blue-700);
 
     &:hover {
-      border-color: auk.$color-blue-500;
-      background-color: auk.$color-blue-100;
+      border-color: var(--au-blue-700);
+      background-color: var(--au-blue-100);
 
-      color: auk.$color-gray-800;
+      color: var(--au-gray-800);
     }
 
     &.prevMonthDay,
     &.nextMonthDay {
-      border-color: auk.$color-gray-500;
+      border-color: var(--au-gray-500);
 
       &:hover {
-        border-color: auk.$color-gray-500;
-        background-color: auk.$color-gray-100;
+        border-color: var(--au-gray-500);
+        background-color: var(--au-gray-100);
 
-        color: auk.$color-gray-400;
+        color: var(--au-gray-400);
       }
     }
   }
 
   &.selected {
-    background: auk.$color-blue-500;
-    border-color: auk.$color-blue-500;
+    background: var(--au-blue-700);
+    border-color: var(--au-blue-700);
 
-    color: auk.$color-white;
+    color: var(--au-white);
 
     &:hover {
-      background: auk.$color-blue-700;
-      border-color: auk.$color-blue-700;
+      background: var(--au-blue-800);
+      border-color: var(--au-blue-800);
 
-      color: auk.$color-white;
+      color: var(--au-white);
     }
 
     &:focus {
-      background-color: auk.$color-blue-700;
+      background-color: var(--au-blue-800);
     }
 
     &.prevMonthDay,
     &.nextMonthDay {
-      background: auk.$color-gray-500;
-      border-color: auk.$color-gray-500;
+      background: var(--au-gray-500);
+      border-color: var(--au-gray-500);
 
       &:hover {
-        background: auk.$color-gray-600;
-        border-color: auk.$color-gray-600;
+        background: var(--au-gray-600);
+        border-color: var(--au-gray-600);
       }
 
       &:focus {
-        background-color: auk.$color-gray-600;
+        background-color: var(--au-gray-600);
       }
     }
   }
@@ -304,9 +304,9 @@ span.flatpickr-weekday {
   &.selected.prevMonthDay,
   &.selected.nextMonthDay {
     &:focus {
-      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
       outline: 0;
-      border-color: auk.$color-yellow-500;
+      border-color: var(--au-outline-color);
     }
   }
 }
@@ -324,7 +324,7 @@ span.flatpickr-weekday {
     float: none;
 
     height: auto;
-    border: 0.1rem solid auk.$color-gray-300;
+    border: 0.1rem solid var(--au-gray-300);
     border-radius: .3rem;
 
     &:hover {
@@ -332,9 +332,9 @@ span.flatpickr-weekday {
     }
 
     &:focus-within {
-      box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+      box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
       outline: 0;
-      border-color: auk.$color-yellow-500;
+      border-color: var(--au-outline-color);
     }
 
     span {
@@ -347,7 +347,7 @@ span.flatpickr-weekday {
   input {
     padding: .7rem;
 
-    color: auk.$color-gray-800;
+    color: var(--au-gray-800);
     font-family: flanders-sans, sans-serif;
     font-size: 1.5rem;
     text-align: left;

@@ -17,6 +17,9 @@ export default class AgendaitemCasePanelEdit extends Component {
   @service pieceAccessLevelService;
   @service agendaitemAndSubcasePropertiesSync;
   @service currentSession;
+  @service decisionReportGeneration;
+  @service store;
+  @service preventUnload;
 
   @tracked filter = Object.freeze({
     type: 'subcase-name',
@@ -35,6 +38,7 @@ export default class AgendaitemCasePanelEdit extends Component {
     this.isEditingSubcaseName = this.subcaseName?.length;
     this.loadInternalReview.perform();
     this.loadSubcaseType.perform();
+    this.preventUnload.enable();
   }
 
   get newsItem() {
@@ -65,26 +69,13 @@ export default class AgendaitemCasePanelEdit extends Component {
 
   @action
   cancelEditing() {
-    if (this.args.agendaitem.hasDirtyAttributes) {
-      this.args.agendaitem.rollbackAttributes();
-    }
-    // We change the value of confidental directly on subcase, so we should also roll it back
-    if (this.args.subcase?.hasDirtyAttributes) {
-      this.args.subcase.rollbackAttributes();
-    }
-    if (this.newsItem && this.newsItem.hasDirtyAttributes) {
-      this.newsItem.rollbackAttributes();
-    }
-    if (this.internalReview?.hasDirtyAttributes) {
-      this.internalReview.rollbackAttributes();
-    }
+    this.rollbackDirtyAttributes();
+    this.preventUnload.disable();
     this.args.onCancel();
   }
 
   @task
   *saveChanges() {
-    const shouldResetFormallyOk = this.args.agendaitem.hasDirtyAttributes;
-
     const trimmedTitle = trimText(this.args.agendaitem.title);
     const trimmedShortTitle = trimText(this.args.agendaitem.shortTitle);
 
@@ -104,11 +95,20 @@ export default class AgendaitemCasePanelEdit extends Component {
       this.args.agendaitem,
       propertiesToSetOnAgendaitem,
       propertiesToSetOnSubcase,
-      shouldResetFormallyOk,
+      false,
     );
-    if (this.confidentialChanged && (this.args.subcase && this.args.subcase.confidential)) {
+    if (this.confidentialChanged && this.args.subcase?.confidential) {
       yield this.pieceAccessLevelService.updateDecisionsAccessLevelOfSubcase(this.args.subcase);
       yield this.pieceAccessLevelService.updateSubmissionAccessLevelOfSubcase(this.args.subcase);
+      // update report contents
+      const report = yield this.store.queryOne('report', {
+        'filter[:has-no:next-piece]': true,
+        'filter[:has:piece-parts]': true,
+        'filter[decision-activity][treatment][agendaitems][:id:]': this.args.agendaitem.id,
+      });
+      if (report) {
+        yield this.decisionReportGeneration.generateReplacementReport.perform(report);
+      }
     }
 
     if (this.newsItem) {
@@ -127,6 +127,7 @@ export default class AgendaitemCasePanelEdit extends Component {
       yield this.internalReview.hasMany('submissions').reload();
       yield this.internalReview.save();
     }
+    this.preventUnload.disable();
     this.args.onSave();
   }
 
@@ -153,5 +154,26 @@ export default class AgendaitemCasePanelEdit extends Component {
 
   pasteIntoTitle = (pasteEvent) => {
     this.args.agendaitem.title = cleanPasteInputForTextarea(pasteEvent, 'title-agendaitem', this.args.agendaitem.title);
+  }
+
+  rollbackDirtyAttributes = () => {
+    if (this.args.agendaitem.hasDirtyAttributes) {
+      this.args.agendaitem.rollbackAttributes();
+    }
+    // We change the value of confidental directly on subcase, so we should also roll it back
+    if (this.args.subcase?.hasDirtyAttributes) {
+      this.args.subcase.rollbackAttributes();
+    }
+    if (this.newsItem?.hasDirtyAttributes) {
+      this.newsItem.rollbackAttributes();
+    }
+    if (this.internalReview?.hasDirtyAttributes) {
+      this.internalReview.rollbackAttributes();
+    }
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.rollbackDirtyAttributes();
   }
 }
