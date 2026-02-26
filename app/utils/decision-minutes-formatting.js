@@ -48,6 +48,7 @@ async function generateBetreft(
   documents,
   subcaseName = null,
   agendaitemType,
+  isRetracted = false
 ) {
   const documentsForBetreft = await Promise.all(documents.map(async (document) => {
     const accessLevel = await document.accessLevel;
@@ -61,7 +62,7 @@ async function generateBetreft(
     // these accessLevels should not be shown in the documents list
     if (
       accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE ||
-      accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN
+      (!isRetracted && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN)
     ) {
       return null;
     }
