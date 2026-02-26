@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { task } from 'ember-concurrency';
 
