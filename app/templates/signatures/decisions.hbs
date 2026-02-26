@@ -124,12 +124,7 @@
           />
         </div>
         <div data-test-route-signatures-decisions-sidebar-info class="auk-sidebar__body">
-          {{#if
-            (and
-              this.allSignersHaveEmail.isResolved
-              (not this.allSignersHaveEmail.value)
-            )
-          }}
+          {{#if (not this.allSignersHaveEmail.value)}}
             <AuAlert
               @title={{t "cannot-start-signing"}}
               @skin="warning"
