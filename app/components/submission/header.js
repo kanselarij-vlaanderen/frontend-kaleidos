@@ -453,6 +453,7 @@ export default class SubmissionHeaderComponent extends Component {
           mandatees: mandatees,
           requestedBy: requestedBy,
         };
+        // reset formally ok when accepting update submissions
         await this.agendaitemAndSubcasePropertiesSync.saveChanges(
           subcase,
           propertiesToSetOnAgendaitem,

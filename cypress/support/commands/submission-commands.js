@@ -54,7 +54,7 @@ function createSubmission(submission) {
   cy.intercept('POST', '/emails').as('createMails');
   cy.intercept('POST', '/meetings/*/submit-submission').as('submitSubmission');
   cy.intercept('GET', '/mandatees**').as(`getMandatees${randomInt}`);
-  cy.intercept('GET', '/government-bodies**')
+  cy.intercept('GET', '/government-bodies?filter**')
     .as(`getGovernmentBodies${randomInt}`);
 
   if (submission.caseShortTitle) {

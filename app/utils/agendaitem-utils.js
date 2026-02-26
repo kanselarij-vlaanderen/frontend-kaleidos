@@ -4,12 +4,13 @@ import generateReportName from './generate-report-name';
 import { equalContentArrays } from './array-helpers';
 
 /**
- * @description Zet een agendaitem of subcase naar nog niet formeel ok
- * @param subcaseOrAgendaitem De agendaitem of subcae waarvan de formaliteit gereset dient te worden naar nog niet formeel ok
+ * @description Sets the agendaitem to "formally not yet ok".
+ * Should only be done when the agenda status is a design agenda
+ * @param agendaitem
  */
-export const setNotYetFormallyOk = (subcaseOrAgendaitem) => {
-  if (subcaseOrAgendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK) {
-    subcaseOrAgendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
+export const setNotYetFormallyOk = (agendaitem) => {
+  if (agendaitem.get('formallyOk') !== CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK) {
+    agendaitem.set('formallyOk', CONSTANTS.ACCEPTANCE_STATUSSES.NOT_YET_OK);
   }
 };
 

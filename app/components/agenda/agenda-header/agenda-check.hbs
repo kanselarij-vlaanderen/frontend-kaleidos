@@ -67,6 +67,7 @@
                     <Agenda::PrintableAgenda::ListSection::ItemGroup
                       @items={{notaGroup}}
                       @fileNameMappings={{this.fileNameMap}}
+                      @newNumberMappings={{this.agendaitems.value.newNumberMappings}}
                       @hideNotFormallyOk={{true}}
                       @newAgendaitems={{this.newAgendaitems.value}}
                       @highlightedPieces={{this.newPieces.value}}
@@ -93,6 +94,7 @@
                         <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
                           @item={{announcement}}
                           @isNew={{includes announcement this.newAgendaitems.value}}
+                          @newNumberMappings={{this.agendaitems.value.newNumberMappings}}
                         />
                       </div>
                       {{#let (await announcement.pieces) as |pieces|}}
