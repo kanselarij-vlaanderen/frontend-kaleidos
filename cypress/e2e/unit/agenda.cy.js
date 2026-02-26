@@ -473,7 +473,7 @@ context('Agenda tests', () => {
     cy.visit('vergadering/62B06E87EC3CB8277FF058E9/agenda/62B06E89EC3CB8277FF058EA/agendapunten/62B06EECEC3CB8277FF058F3/documenten?anchor=62B06EECEC3CB8277FF058F3');
 
     const file = {
-      folder: 'files', fileName: 'test', fileExtension: 'docx', newFileName: 'test wordfile for download all filetypes',
+      folder: 'files', fileName: 'test', fileExtension: 'docx', newFileName: 'VR 2022 2004 DOC.0002-06 propagatie vertrouwelijk extra',
     };
 
     // setup

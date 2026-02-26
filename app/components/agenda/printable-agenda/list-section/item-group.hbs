@@ -43,6 +43,7 @@
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
               @item={{first}}
               @isNew={{includes first @newAgendaitems}}
+              @newNumberMappings={{@newNumberMappings}}
             />
           </div>
         </div>
@@ -91,6 +92,7 @@
             <Agenda::PrintableAgenda::ListSection::ItemGroup::Item::Content
               @item={{agendaitem}}
               @isNew={{includes agendaitem @newAgendaitems}}
+              @newNumberMappings={{@newNumberMappings}}
             />
           </div>
           {{#let (await (this.getPiecesForAgendaitem agendaitem)) as |pieces|}}

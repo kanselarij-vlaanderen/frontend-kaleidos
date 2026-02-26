@@ -281,6 +281,7 @@ context('rdfa editor tests', () => {
       cy.get(newsletter.buttonToolbar.edit).eq(0)
         .click();  // a patch happens here
       cy.wait('@patchNewsItems1');
+      cy.wait(500); // cy.click() could not be issued because this element is currently animating. Could force: true instead of waiting
       cy.get(auk.expand).scrollIntoView()
         .click();
       cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown).scrollIntoView()

@@ -26,7 +26,6 @@ context('Formally ok/nok tests', () => {
     cy.get(utils.formallyOkPill.pill).should('not.exist');
   });
 
-  // TODO-agendaheader this test belongs with other agenda-header tests
   it('should show warning when trying to approve agenda with "not yet formally ok" items', () => {
     cy.visitAgendaWithLink('/vergadering/5EBAB9B1BDF1690009000001/agenda/1d4f8091-51cf-4d3c-b776-1c07cc263e59/agendapunten');
     cy.get(utils.formallyOkPill.pill).contains('Formeel OK');
@@ -46,7 +45,7 @@ context('Formally ok/nok tests', () => {
     cy.get(utils.formallyOkPill.pill).contains('Formeel OK');
   });
 
-  it('should change formally ok after changing beleidsveld', () => {
+  it('should not change formally ok after changing beleidsveld', () => {
     const type = 'Nota';
     const shortSubcaseTitle = 'Cypress test: formally ok change';
     const labelName1 = 'Cultuur, Jeugd, Sport en Media';
@@ -68,6 +67,9 @@ context('Formally ok/nok tests', () => {
 
     // Change government domains
     cy.openDetailOfAgendaitem(shortSubcaseTitle);
+    // verify both are formally ok
+    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
+
     cy.intercept('GET', '/concepts**').as('getConceptSchemes');
     cy.get(utils.governmentAreasPanel.edit).click();
     // await retrieval of government-fields in multiple pages
@@ -81,13 +83,10 @@ context('Formally ok/nok tests', () => {
       .click();
     cy.get(utils.editGovernmentFieldsModal.save).click();
 
-    // Verify formally ok is reset
-    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 1);
-    cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 1);
+    // Verify formally ok is not reset
+    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
 
-    cy.get(agenda.agendaTabs.tabs).contains('Overzicht')
-      .click();
-    cy.setFormalOkOnItemWithIndex(1, true, 'Formeel OK');
+    // edit via subcase views
     cy.openDetailOfAgendaitem(shortSubcaseTitle);
     cy.get(agenda.agendaitemTitlesView.linkToSubcase).click();
 
@@ -105,8 +104,7 @@ context('Formally ok/nok tests', () => {
     cy.get(utils.editGovernmentFieldsModal.save).click();
 
     cy.get(cases.subcaseDescription.agendaLink).click();
-    // Verify formally ok is reset
-    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 1);
-    cy.get(agenda.agendaDetailSidebarItem.status.notYetFormallyOk).should('have.length', 1);
+    // Verify formally ok is not reset
+    cy.get(agenda.agendaDetailSidebarItem.status.formallyOk).should('have.length', 2);
   });
 });
