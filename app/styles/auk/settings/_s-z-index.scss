@@ -1,0 +1,14 @@
+/* ==========================================================================
+   Z-index
+   ========================================================================== */
+
+$drag: 1000;
+$dropdown: 1100;
+$sticky: 1200;
+$fixed: 1300;
+$modal-backdrop: 1400;
+$offcanvas: 1500;
+$modal: 1600;
+$popover: 1700;
+
+$modal-additive: 1000; // This is used to apply the correct stack order for element placed inside, for example, a modal. Lets say you want to place a popover inside a modal: `$modal-additive + $popover`

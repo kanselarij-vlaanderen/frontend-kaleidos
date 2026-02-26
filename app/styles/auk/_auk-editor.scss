@@ -1,0 +1,30 @@
+@use "settings";
+
+/* ==========================================================================
+  auk-editor
+   ========================================================================== */
+
+.auk-editor {
+  width: 100%;
+}
+
+.auk-editor__header {
+  .auk-editor--fullscreen & {
+    padding: 1rem;
+    flex-grow: 0;
+  }
+}
+
+.auk-editor--fullscreen {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  top: .5rem;
+  left: .5rem;
+  height: calc(100% - 1rem);
+  width: calc(100% - 1rem);
+  z-index: 1;
+  background-color: settings.$color-white;
+  box-shadow: settings.$shadow-small;
+}

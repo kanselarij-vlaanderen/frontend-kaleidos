@@ -55,7 +55,7 @@
 // Workaround for popover exiting view window on small display for search legend
 @media screen and (max-width: 780px) {
   .l-search-legend .auk-popover {
-    transform: translate3d(10px, 64px, 0px) !important;
+    max-width: calc(100vw - (2 * 6px)); // 6px is the default placement padding of the popover
   }
 }
 

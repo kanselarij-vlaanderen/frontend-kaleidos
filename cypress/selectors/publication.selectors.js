@@ -72,7 +72,6 @@ const selectors = {
 
   // overview-table-display-config-modal
   tableDisplayConfig: {
-    close: '[data-test-publications-table-display-config-close]',
     option: 'data-test-overview-table-display-config-option-checkbox=',
   },
 

@@ -119,7 +119,7 @@ export default class SubcaseDescriptionEdit extends Component {
 
   @action
   async saveChanges() {
-    const resetFormallyOk = true;
+    let resetFormallyOk = false;
     this.isSaving = true;
     let reportNeedsReplacing = false;
 
@@ -142,6 +142,7 @@ export default class SubcaseDescriptionEdit extends Component {
 
     const agendaitemTypeChanged = this.agendaItemType.uri !== oldAgendaItemType.uri;
     if (agendaitemTypeChanged) {
+      resetFormallyOk = true;
       const agendaitemNumber = await this.calculateAgendaitemNumber();
       if (agendaitemNumber) {
         propertiesToSetOnAgendaitem.number = agendaitemNumber;

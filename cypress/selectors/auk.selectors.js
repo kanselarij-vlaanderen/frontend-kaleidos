@@ -82,6 +82,10 @@ const selectors = {
     body: '.auk-panel__body',
   },
 
+  popover: {
+    close: '[data-test-auk-popover-close]',
+  },
+
   /** Section single selector AUK components **/
 
   loader: '.auk-loader',

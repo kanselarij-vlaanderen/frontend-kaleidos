@@ -8,6 +8,15 @@
     data-test-table-row-news-item-row-title-content
     class="auk-table__col--7"
   >
+    {{#if this.subcase.confidential}}
+      <AuPill
+        @size="small"
+        @skin="warning"
+        @icon="lock-closed"
+      >
+        {{t "limited-access"}}
+      </AuPill>
+    {{/if}}
     {{#if @newsItem}}
       <div class="auk-u-mb-2">
         <p class="auk-u-text-bold">

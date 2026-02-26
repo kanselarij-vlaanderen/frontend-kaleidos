@@ -15,6 +15,10 @@ export default class AgendaPrintableAgendaListSectionItemGroupItemDocumentListDo
 
   get showAccessLevel() {
     const accessLevelUri = this.args.accessLevel.get('uri');
-    return (accessLevelUri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK) || (accessLevelUri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE);
+    return (
+      accessLevelUri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK ||
+      accessLevelUri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE ||
+      accessLevelUri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN
+    );
   }
 }

@@ -53,25 +53,6 @@
 }
 
 
-// File uploader
-
-.auk-file-upload input[type="file"] {
-  &:hover,
-  &:focus,
-  &:active {
-    &:not([disabled]) ~ .auk-file-upload__content {
-      .auk-file-upload__action-button {
-        box-shadow: none;
-
-        color: $au-button-secondary-hover-color;
-        background-color: transparent;
-        border-color: $au-button-secondary-hover-color;
-      }
-    }
-  }
-}
-
-
 // Help text + Errors on forms
 
 .auk-form-help-text {
@@ -85,38 +66,10 @@
 
 
 // Responsive tables
+// TODO: refactor
 
 .auk-table__col--8 {
   @include mq($until: medium) {
     min-width: 20rem;
   }
-}
-
-// Text utilities
-
-.auk-u-text-hyphenate-breaking-words {
-  white-space: normal;
-  overflow-wrap: break-word;
-  hyphens: auto;
-}
-
-// Values list
-
-.auk-key-values-list {
-  display: flex;
-  flex-direction: column;
-  gap: $au-unit-medium;
-}
-
-.auk-key-value-item {
-  margin-bottom: 0;
-}
-
-// Radio control group
-
-.au-c-control-group--error {
-  background-color: $au-alert-error-background-color;
-  border: 0.1rem solid $au-input-border-color;
-  border-color: $au-alert-error-border-color;
-  border-radius: $au-input-border-radius;
 }

@@ -87,28 +87,28 @@
         />
       </Auk::Toolbar::Item>
       <Auk::Toolbar::Item>
-        <AuButton
-          data-test-route-publications-index-config-modal-icon
-          id="config-panel-popover"
-          @skin="naked"
-          @icon="gear"
-          @hideText={{true}}
+        <Auk::Popover
+          @title={{t "publications-setting-show-columns-modal-title"}}
+          @placement="top"
+          as |popover|
         >
-          {{t "config"}}
-        </AuButton>
-        <EmberPopover
-          @targetId="config-panel-popover"
-          @tooltipClass="auk-popover"
-          @side="bottom-end"
-          @event="click"
-          @isShown={{this.isColumnsDisplayConfigPanelShown}}
-        >
-          <Publications::Overview::PublicationsTableDisplayConfigModal
-            @tableConfig={{@tableConfig}}
-            @didChange={{@didChangeColumnsDisplayConfig}}
-            @onClose={{this.closeColumnsDisplayConfigPanel}}
-          />
-        </EmberPopover>
+          <AuButton
+            {{popover.target}}
+            data-test-route-publications-index-config-modal-icon
+            id="config-panel-popover"
+            @skin="naked"
+            @icon="gear"
+            @hideText={{true}}
+          >
+            {{t "config"}}
+          </AuButton>
+          <popover.Content>
+            <Publications::Overview::PublicationsTableDisplayConfigModal
+              @tableConfig={{@tableConfig}}
+              @didChange={{@didChangeColumnsDisplayConfig}}
+            />
+          </popover.Content>
+        </Auk::Popover>
       </Auk::Toolbar::Item>
     </Auk::Toolbar::Group>
   </Auk::Toolbar>

@@ -285,14 +285,14 @@ context('Cancel editing tests on new submission form for new case', () => {
       .find(utils.checkboxTree.toggleSingle)
       .parent()
       .find(':checked')
-      .should('have.length', 9);
+      .should('have.length', mandateeNames.current.count);
 
     // all mandatees in list, 1 checked, all disabled
-    cy.get('@listItems').should('have.length', 9);
+    cy.get('@listItems').should('have.length', mandateeNames.current.count);
     cy.get('@listItems').find(':checked')
       .and('have.length', 1); // only 1 is checked
     cy.get('@listItems').find(':disabled')
-      .and('have.length', 9); // all are disabled
+      .and('have.length', mandateeNames.current.count); // all are disabled
 
     // remove all mandatees
     cy.get(utils.checkboxTree.toggleAll)

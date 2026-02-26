@@ -1,0 +1,104 @@
+def getBranchName(branch) {
+  return "${branch}".replaceAll("/", "-").replaceAll(" ", "-").toLowerCase()
+}
+
+pipeline {
+  agent any
+
+  environment {
+    backendProjectDir = "app-kaleidos-${getBranchName(env.GIT_BRANCH)}-${env.BUILD_NUMBER}"
+  }
+
+  stages {
+    stage('Linting') {
+      steps {
+        sh "npm install"
+        sh "npm run lint"
+      }
+    }
+    stage('Checkout project') {
+      steps {
+        sh "git clone --depth 1 -b ${params.BACKEND_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}"
+      }
+    }
+    stage('Prepare for automated tests') {
+      steps {
+        dir("${backendProjectDir}") {
+          sh "cp ${env.WORKSPACE}/ci/docker-compose.override.yml ."
+          sh "docker compose pull"
+          sh "docker compose build"
+
+          // Reset the contents of DB an search
+          sh "unzip -o testdata.zip"
+          sh "unzip -o testdata-elasticsearch.zip"
+          sh "mv testdata-elasticsearch/* ./testdata"
+          sh "rm -rf data/*"
+          sh "cp -rf testdata/* data"
+          sh "docker compose up -d triplestore migrations database cache forever-cache"
+          sh "sleep 30"
+          sh "docker compose up -d"
+          timeout(time: 5, unit: 'MINUTES') {
+            sh '''
+              SEARCH_CONTAINER_IP=$(docker inspect $(docker compose ps -q search) --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')
+              until curl -s -o /dev/null -w "%{http_code}" \
+                http://${SEARCH_CONTAINER_IP}/agendaitems/search | grep -q "200"; do
+                echo "Waiting for 200 OK from mu-search... (sleeping 5s)"
+                sleep 5
+              done
+              echo "Stack is ready for tests"
+            '''
+          }
+        }
+      }
+    }
+    stage('Automated tests: Cypress') {
+      steps {
+        dir("${backendProjectDir}") {
+          sh "docker compose exec -T e2e-electron cypress run"
+          // run specific specs example
+          // sh "docker compose exec -T e2e-electron cypress run --spec '**/e2e/e2e/propagatie-overheid.cy.js'"
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      // Cypress reports and screenshots
+      sh "mkdir -p ${WORKSPACE}/reports/cypress_screenshots/"
+      sh "touch ${WORKSPACE}/reports/cypress_screenshots/test.png"
+      sh "cp -rf ${WORKSPACE}/cypress/screenshots ${WORKSPACE}/reports/cypress_screenshots || true"
+
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/cypress_screenshots/**/*.png'
+      publishHTML([
+        allowMissing: false,
+        alwaysLinkToLastBuild: false,
+        keepAll: false,
+        reportDir: 'reports',
+        reportFiles: 'index.html',
+        reportName: 'Build Reports',
+        reportTitles: 'Build report'
+      ])
+
+      dir("${backendProjectDir}") {
+        // Stack service logs
+        sh "ls -l ./data/files"
+        sh "mkdir -p ${WORKSPACE}/service-logs"
+        sh '''
+        for container_name in $(docker compose ps | awk '{print $1}' | tail -n +3)
+        do
+        docker logs -t $container_name > $WORKSPACE/service-logs/$container_name.log 2>&1
+        done
+        '''
+      }
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'service-logs/*.log'
+    }
+    cleanup {
+      dir("${backendProjectDir}") {
+        sh "docker compose down"
+        sh "docker network prune -f"
+      }
+      cleanWs()
+    }
+  }
+}
