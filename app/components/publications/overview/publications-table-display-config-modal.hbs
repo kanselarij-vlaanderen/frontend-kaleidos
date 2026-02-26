@@ -1,59 +1,32 @@
-<div class="auk-popover__header">
-  <Auk::Toolbar>
-    <Auk::Toolbar::Group @position="left">
-      <Auk::Toolbar::Item>
-        <h4 class="auk-toolbar__title">
-          {{t "publications-setting-show-columns-modal-title"}}
-        </h4>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-    <Auk::Toolbar::Group @position="right">
-      <Auk::Toolbar::Item>
-        <AuButton
-          data-test-publications-table-display-config-close
-          @skin="naked"
-          @icon="x"
-          @hideText={{true}}
-          disabled={{@closeDisabled}}
-          {{on "click" @onClose}}
-        >
-          {{t "close"}}
-        </AuButton>
-      </Auk::Toolbar::Item>
-    </Auk::Toolbar::Group>
-  </Auk::Toolbar>
-</div>
-<div class="auk-popover__body">
-  <AuCheckboxGroup
-    @selected={{this.selectedOptions}}
-    @onChange={{this.onChangeOptions}}
-    as |Group|
-  >
-    {{#each this.options as |option|}}
-      <Group.Checkbox
-        data-test-overview-table-display-config-option-checkbox={{option.keyName}}
-        @value={{option}}
-      >
-        <span>
-          {{t option.translationKey}}
-          {{#if
-            (not-eq
-              (t option.translationKey) (t option.translationKeySmall)
-            )
-          }}
-            <span class="auk-u-text-size--small auk-u-text-muted">
-              ({{t option.translationKeySmall}})
-            </span>
-          {{/if}}
-        </span>
-      </Group.Checkbox>
-    {{/each}}
-  </AuCheckboxGroup>
-  <AuButton
-    class="auk-u-mt-2"
-    @skin="link-secondary"
-    {{on "click" this.reset}}
-  >
-    {{t "reset-display"}}
-  </AuButton>
-</div>
+<AuCheckboxGroup
+  @selected={{this.selectedOptions}}
+  @onChange={{this.onChangeOptions}}
+  as |Group|
+>
+  {{#each this.options as |option|}}
+    <Group.Checkbox
+      data-test-overview-table-display-config-option-checkbox={{option.keyName}}
+      @value={{option}}
+    >
+      <span>
+        {{t option.translationKey}}
+        {{#if
+          (not-eq
+            (t option.translationKey) (t option.translationKeySmall)
+          )
+        }}
+          <span class="auk-u-text-size--small auk-u-text-muted">
+            ({{t option.translationKeySmall}})
+          </span>
+        {{/if}}
+      </span>
+    </Group.Checkbox>
+  {{/each}}
+</AuCheckboxGroup>
+<AuButton
+  class="auk-u-mt-2"
+  @skin="link-secondary"
+  {{on "click" this.reset}}
+>
+  {{t "reset-display"}}
+</AuButton>

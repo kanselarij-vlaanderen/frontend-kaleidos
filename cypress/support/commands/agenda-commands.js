@@ -822,7 +822,7 @@ function generateDecision(concerns, decision) {
   cy.intercept('POST', 'document-containers').as('createNewDocumentContainer');
   cy.intercept('POST', 'piece-parts').as('createNewPiecePart');
   cy.intercept('PATCH', 'decision-activities/**').as('patchDecisionActivities');
-  cy.intercept('GET', '/generate-decision-report/*').as('generateReport');
+  cy.intercept('POST', '/generate-decision-report/*/generate').as('generateReport');
   cy.get(agenda.agendaitemDecision.save).should('not.be.disabled')
     .click();
   cy.wait('@createNewDocumentContainer');

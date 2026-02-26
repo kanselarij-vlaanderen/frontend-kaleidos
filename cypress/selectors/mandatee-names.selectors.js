@@ -2,6 +2,7 @@ const selectors = {
   // all current mandatee name for specs who create new data with future dates so names have to be dynamic
   // titles are case sensitive in some views, can be circumvented by using {matchCase: false}.
   current: {
+    count: 10,
     first: {
       firstName: 'Matthias',
       lastName: 'Diependaele',
@@ -10,9 +11,9 @@ const selectors = {
       searchTitle: 'Minister-president',
     },
     second: {
-      firstName: 'Melissa',
-      lastName: 'Depraetere',
-      fullName: 'Melissa Depraetere',
+      firstName: 'Hans',
+      lastName: 'Bonte',
+      fullName: 'Hans Bonte',
       title: 'viceminister-president',
       searchTitle: 'Vlaams minister',
     },
@@ -60,19 +61,26 @@ const selectors = {
       fullName: 'Cieltje Van Achter',
       title: 'Vlaams minister',
     },
+    tenth: {
+      firstName: 'Melissa',
+      lastName: 'Depraetere',
+      fullName: 'Melissa Depraetere',
+      title: 'Vlaams minister',
+    },
     // up to eleventh is possible, but is the minimum ninth? update: Eight is possible, don't use ninth in tests
     // list of titles as shown when adding mandatees to signatures, only needed for current
     // if you update the length also update `have.length` where this list is checked
     signatureTitles: [
       'Matthias Diependaele, Vlaams minister van Economie, Innovatie en Industrie, Buitenlandse Zaken, Digitalisering en Facilitair Management',
-      'Melissa Depraetere, Vlaams minister van Wonen, Energie en Klimaat, Toerisme en Jeugd',
+      'Hans Bonte, Vlaams minister van Wonen, Energie en Klimaat, Toerisme en Jeugd',
       'Hilde Crevits, Vlaams minister van Binnenland, Steden- en Plattelandsbeleid, Samenleven, Integratie en Inburgering, Bestuurszaken, Sociale Economie en Zeevisserij',
       'Ben Weyts, Vlaams minister van Begroting en Financiën, Vlaamse Rand, Onroerend Erfgoed en Dierenwelzijn',
       'Zuhal Demir, Vlaams minister van Onderwijs, Justitie en Werk',
       'Caroline Gennez, Vlaams minister van Welzijn en Armoedebestrijding, Cultuur en Gelijke Kansen',
       'Jo Brouns, Vlaams minister van Omgeving en Landbouw',
       'Annick De Ridder, Vlaams minister van Mobiliteit, Openbare Werken, Havens en Sport',
-      'Cieltje Van Achter, Vlaams minister van Brussel en Media'
+      'Cieltje Van Achter, Vlaams minister van Brussel en Media',
+      'Melissa Depraetere, Vlaams minister Melissa Depraetere'
     ],
     firstSecretary: {
       fullName: 'Maarten Vanholle',
@@ -94,6 +102,10 @@ const selectors = {
   },
 
   // older governmentbody data used in tests (will/should not change)
+
+  // currently unused
+  // mandatees between 01082024 - 30092024
+  // mandatees between 20092024 - 21012026
   // currently unused
   '09112023-01082024': {
     first: {

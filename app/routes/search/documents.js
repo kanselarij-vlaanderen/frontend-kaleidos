@@ -92,6 +92,7 @@ export default class SearchDocumentsRoute extends Route {
       filter[':terms:accessLevel'] = [
         CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
         CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
+        CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
       ];
     }
 

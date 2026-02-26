@@ -1,0 +1,23 @@
+@use "settings";
+
+/* ==========================================================================
+  auk-empty-state
+  ========================================================================== */
+
+.auk-empty-state {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.auk-empty-state--bordered {
+  background: #FFF;
+  border: .1rem solid #C6CDD3;
+  border-radius: .3rem;
+  overflow: hidden;
+  padding: 3rem;
+}
+
+.auk-empty-state__content {
+  color: settings.$color-gray-600;
+}
