@@ -17,8 +17,7 @@
         data-test-agendaitem-postponed-latest-meeting
         @icon="chevron-right"
         @iconAlignment="right"
-        @route="agenda.agendaitems.agendaitem"
-        @models={{this.modelsForProposedAgenda}}
+        {{on "click" this.transitionToProposedAgenda}}
       >
         {{t "open-agenda"}}
         {{date-phrase this.latestMeeting.plannedStart}}

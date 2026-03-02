@@ -15,9 +15,8 @@
     <AuButton
       @icon="chevron-right"
       @iconAlignment="right"
-      @route="cases.case.subcases"
-      @model={{this.decisionmakingFlow.id}}
       class="auk-u-ml-2"
+      {{on "click" this.transitionToCase}}
     >
       {{t "view-case"}}
     </AuButton>
@@ -27,9 +26,8 @@
       <AuButton
         @icon="chevron-right"
         @iconAlignment="right"
-        @route="agenda.agendaitems.agendaitem"
-        @models={{this.modelsForProposedAgenda}}
         class="auk-u-ml-2"
+        {{on "click" this.transitionToRetractedAgenda}}
       >
         {{t "open-agenda"}}
         {{date-phrase this.latestMeeting.plannedStart}}
