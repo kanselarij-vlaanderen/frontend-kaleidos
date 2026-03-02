@@ -10,7 +10,7 @@
 }
 
 .auk-content strong {
-  color: #000;
+  color: var(--au-gray-1000);
 }
 
 .auk-heading,
@@ -19,7 +19,7 @@
 .auk-content h3, .auk-h3,
 .auk-content h4, .auk-h4,
 .auk-content h5, .auk-h5 {
-  color: settings.$color-heading;
+  color: var(--au-gray-900);
   font-weight: 500;
 }
 
@@ -80,7 +80,7 @@
   }
 
   pre {
-    background-color: settings.$color-gray-100;
+    background-color: var(--au-gray-100);
     padding: 1.5rem;
     margin: 0 0 1rem;
     font-size: 75%;
@@ -96,10 +96,10 @@
   p > code,
   li > code {
     font-size: 85%;
-    background-color: settings.$color-gray-100;
+    background-color: var(--au-gray-100);
     padding: 0.2rem;
     border-radius: 0.2rem;
-    color: settings.$color-red-500;
+    color: var(--au-red-500);
   }
 
   table {
@@ -112,14 +112,14 @@
     padding: 0.8rem;
     vertical-align: middle;
     padding: 1.2rem 1rem;
-    border-bottom: .1rem solid settings.$color-gray-300;
+    border-bottom: .1rem solid var(--au-gray-300);
   }
 
   table th {
     border-bottom-width: .2rem;
     text-align: left;
     font-weight: 500;
-    color: settings.$color-gray-600;
+    color: var(--au-gray-600);
   }
 
   table tr:last-child td {
@@ -127,6 +127,6 @@
   }
 
   table td {
-    border-bottom: .1rem solid settings.$color-gray-300;
+    border-bottom: .1rem solid var(--au-gray-300);
   }
 }

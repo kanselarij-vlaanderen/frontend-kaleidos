@@ -1,8 +1,6 @@
-@use "settings";
-
 /* ==========================================================================
-  auk-avatar
-  ========================================================================== */
+   auk-avatar
+   ========================================================================== */
 
 .auk-avatar {
   width: 3rem;
@@ -20,7 +18,7 @@
 .auk-avatar--small {
   width: 2rem;
   height: 2rem;
-  
+
   .au-c-icon {
     --au-icon-size: 1.2rem;
   }
@@ -30,8 +28,8 @@
    ========================================================================== */
 
 .auk-avatar--default {
-  background-color: settings.$color-gray-200;
-  color: #666;
+  background-color: var(--au-gray-200);
+  color: var(--au-gray-700);
 }
 
 /* Image variant

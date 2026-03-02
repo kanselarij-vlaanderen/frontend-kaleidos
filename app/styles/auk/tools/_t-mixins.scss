@@ -11,8 +11,8 @@
 @mixin element-focus {
    &:focus {
       outline: 0;
-      border-color: settings.$color-yellow-500;
-      box-shadow: inset 0 0 0 0.1rem settings.$color-yellow-500;
+      border-color: var(--au-yellow-400);
+      box-shadow: inset 0 0 0 0.1rem var(--au-yellow-400);
    }
 }
 

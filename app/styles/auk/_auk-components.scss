@@ -4,52 +4,48 @@
 
 
 // Components
-@use 'auk-accordion';
-@use 'auk-accordion-panel';
-@use 'auk-avatar';
-@use 'auk-button-link';
-@use 'auk-button-loading';
-@use 'auk-button';
-@use 'auk-color-badge';
-@use 'auk-container';
-@use 'auk-content';
-@use 'auk-document-card';
-@use 'auk-editor';
-@use 'auk-empty-state';
-@use 'auk-file-upload';
-@use 'auk-filter-pill';
-@use 'auk-form-help-text';
-@use 'auk-hr';
-@use 'auk-input-group';
-@use 'auk-key-value';
-@use 'auk-loadable-content';
-@use 'auk-loader';
-@use 'auk-modal';
-@use 'auk-overline';
-@use 'auk-panel';
-@use 'auk-progress-bar';
-@use 'auk-scroll-wrapper';
-@use 'auk-section-header';
-@use 'auk-skeleton';
-@use 'auk-status-pill';
-@use 'auk-table';
-@use 'auk-toolbar';
-
-// Still uses '@import' for the moment
-
-// Local component overrides (responsive versions)
-@import 'auk-brand';
-@import 'auk-mobile-filters';
-@import 'auk-mobile-sidebar';
-@import 'auk-navbar';
-@import 'auk-pagination';
-@import 'auk-panel-layout';
-@import 'auk-select';
-@import 'auk-sidebar';
-@import 'auk-tabs';
-@import 'auk-toolbar-complex';
-@import 'auk-popover';
+@import "auk-accordion";
+@import "auk-accordion-panel";
+@import "auk-avatar";
+@import "auk-brand";
+@import "auk-button";
+@import "auk-button-link";
+@import "auk-button-loading";
+@import "auk-color-badge";
+@import "auk-container";
+@import "auk-content";
+@import "auk-document-card";
+@import "auk-editor";
+@import "auk-empty-state";
+@import "auk-file-upload";
+@import "auk-filter-pill";
+@import "auk-form-help-text";
+@import "auk-hr";
+@import "auk-input-group";
+@import "auk-key-value";
+@import "auk-loadable-content";
+@import "auk-loader";
+@import "auk-mobile-filters";
+@import "auk-mobile-sidebar";
+@import "auk-modal";
+@import "auk-navbar";
+@import "auk-overline";
+@import "auk-pagination";
+@import "auk-panel";
+@import "auk-panel-layout";
+@import "auk-popover";
+@import "auk-progress-bar";
+@import "auk-scroll-wrapper";
+@import "auk-section-header";
+@import "auk-select";
+@import "auk-sidebar";
+@import "auk-skeleton";
+@import "auk-status-pill";
+@import "auk-table";
+@import "auk-tabs";
+@import "auk-toolbar";
+@import "auk-toolbar-complex";
 
 // Local AUK extensions & additions
-@import 'auk-additions';
+@import "auk-additions";
 
