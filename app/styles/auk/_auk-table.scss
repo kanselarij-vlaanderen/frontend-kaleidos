@@ -83,7 +83,9 @@
   .auk-button-toolbar {
     justify-content: flex-end;
     flex-wrap: nowrap;
-    .auk-button {
+
+    .au-c-button,
+    .au-c-link {
       margin-top: 0;
       margin-bottom: 0;
     }
