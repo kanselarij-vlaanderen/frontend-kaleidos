@@ -62,58 +62,58 @@
    ========================================================================== */
 
 .auk-status-pill--in-progress {
-  background-color: settings.$color-blue-100;
+  background-color: var(--au-blue-100);
 
-  color: settings.$color-blue-700;
+  color: var(--au-blue-700);
 
   .au-c-icon {
-    color: settings.$color-blue-700;
+    color: var(--au-blue-700);
   }
 
   > * + * {
-    border-left-color: settings.color-tint(settings.$color-blue-500, 70%);
+    border-left-color: settings.color-tint($au-blue-500, 70%);
   }
 }
 
 .auk-status-pill--success {
-  background-color: settings.color-tint(settings.$color-green-500, 85%);
+  background-color: settings.color-tint($au-green-500, 85%);
 
-  color: settings.$color-green-700;
+  color: var(--au-green-700);
 
   .au-c-icon {
-    color: settings.$color-green-700;
+    color: var(--au-green-700);
   }
 
   > * + * {
-    border-left-color: settings.color-tint(settings.$color-green-500, 70%);
+    border-left-color: settings.color-tint($au-green-500, 70%);
   }
 }
 
 .auk-status-pill--error {
-  background-color: settings.$color-red-100;
+  background-color: var(--au-red-100);
 
-  color: settings.$color-red-700;
+  color: var(--au-red-700);
 
   .au-c-icon {
-    color: settings.$color-red-700;
+    color: var(--au-red-700);
   }
 
   > * + * {
-    border-left-color: settings.color-tint(settings.$color-red-500, 70%);
+    border-left-color: settings.color-tint($au-red-500, 70%);
   }
 }
 
 .auk-status-pill--paused {
-  background-color: settings.$color-gray-200;
+  background-color: var(--au-gray-200);
 
-  color: settings.$color-gray-700;
+  color: var(--au-gray-700);
 
   .au-c-icon {
-    color: settings.$color-gray-700;
+    color: var(--au-gray-700);
   }
 
   > * + * {
-    border-left-color: settings.color-tint(settings.$color-gray-500, 65%);
+    border-left-color: settings.color-tint($au-gray-500, 65%);
   }
 }
 
@@ -132,7 +132,7 @@
 .auk-status-pill--actionable {
   appearance: none;
 
-  font-family: settings.$global-base-font-family;
+  font-family: $au-font;
   line-height: 1.6;
 
   cursor: pointer;
@@ -140,7 +140,7 @@
 
   &:focus {
     outline: 0;
-    box-shadow: 0 0 0 0.2rem settings.$color-yellow-500;
+    box-shadow: 0 0 0 0.2rem var(--au-yellow-400);
  }
 }
 
@@ -148,15 +148,15 @@
   &.auk-status-pill--in-progress {
     &:hover {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-blue-500, 75%);
-        border-left-color: settings.color-tint(settings.$color-blue-500, 65%);
+        background-color: settings.color-tint($au-blue-500, 75%);
+        border-left-color: settings.color-tint($au-blue-500, 65%);
       }
     }
-  
+
     &:active {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-blue-500, 70%);
-        border-left-color: settings.color-tint(settings.$color-blue-500, 60%);
+        background-color: settings.color-tint($au-blue-500, 70%);
+        border-left-color: settings.color-tint($au-blue-500, 60%);
       }
     }
   }
@@ -164,15 +164,15 @@
   &.auk-status-pill--success {
     &:hover {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-green-500, 75%);
-        border-left-color: settings.color-tint(settings.$color-green-500, 65%);
+        background-color: settings.color-tint($au-green-500, 75%);
+        border-left-color: settings.color-tint($au-green-500, 65%);
       }
     }
-  
+
     &:active {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-green-500, 70%);
-        border-left-color: settings.color-tint(settings.$color-green-500, 60%);
+        background-color: settings.color-tint($au-green-500, 70%);
+        border-left-color: settings.color-tint($au-green-500, 60%);
       }
     }
   }
@@ -180,15 +180,15 @@
   &.auk-status-pill--error {
     &:hover {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-red-500, 70%);
-        border-left-color: settings.color-tint(settings.$color-red-500, 65%);
+        background-color: settings.color-tint($au-red-500, 70%);
+        border-left-color: settings.color-tint($au-red-500, 65%);
       }
     }
-  
+
     &:active {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-red-500, 65%);
-        border-left-color: settings.color-tint(settings.$color-red-500, 60%);
+        background-color: settings.color-tint($au-red-500, 65%);
+        border-left-color: settings.color-tint($au-red-500, 60%);
       }
     }
   }
@@ -196,15 +196,15 @@
   &.auk-status-pill--paused {
     &:hover {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-gray-500, 65%);
-        border-left-color: settings.color-tint(settings.$color-gray-500, 60%);
+        background-color: settings.color-tint($au-gray-500, 65%);
+        border-left-color: settings.color-tint($au-gray-500, 60%);
       }
     }
-  
+
     &:active {
       .auk-status-pill__action {
-        background-color: settings.color-tint(settings.$color-gray-500, 60%);
-        border-left-color: settings.color-tint(settings.$color-gray-500, 55%);
+        background-color: settings.color-tint($au-gray-500, 60%);
+        border-left-color: settings.color-tint($au-gray-500, 55%);
       }
     }
   }

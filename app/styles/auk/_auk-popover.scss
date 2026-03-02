@@ -1,13 +1,10 @@
-@use "../auk";
-
 /* ==========================================================================
    auk-popover
    ========================================================================== */
 
 $auk-popover-border: var(--au-gray-300);
 $auk-popover-border-width: 1px;
-$auk-popover-shadow-color: #333332;
-$auk-popover-shadow: 0 0 2rem 0 rgba($auk-popover-shadow-color, 0.15);
+$auk-popover-shadow: 0 0 2rem 0 rgba($au-gray-900, 0.15);
 
 $auk-popover-caret-size: 0.5rem !default;
 $auk-popover-translate: ($auk-popover-caret-size + 0.3rem);

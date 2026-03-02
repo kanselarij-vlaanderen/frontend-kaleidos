@@ -115,13 +115,15 @@
           <h4 class="auk-toolbar-complex__title">
             {{t "start-signing"}}
           </h4>
-          <Auk::Button
+          <AuButton
             data-test-route-signatures-decisions-sidebar-close
+            @skin="naked"
             @icon="x"
-            @skin="borderless"
-            @layout="icon-only"
+            @hideText={{true}}
             {{on "click" this.closeSidebar}}
-          />
+          >
+            {{t "close"}}
+          </AuButton>
         </div>
         <div data-test-route-signatures-decisions-sidebar-info class="auk-sidebar__body">
           {{#if (not this.allSignersHaveEmail.value)}}
@@ -142,10 +144,9 @@
             <h5 class="auk-h4">{{this.piece.name}}</h5>
             <div class="auk-o-flex auk-o-flex--spaced-wide auk-u-mt-1">
               {{! TODO async data issue possible, @model should never be undefined but it happens}}
-              {{#if this.piece.id}} 
+              {{#if this.piece.id}}
                 <AuLink
                   data-test-route-signatures-decisions-sidebar-preview
-                  @skin="naked"
                   @icon="book"
                   @route="document"
                   @model={{this.piece.id}}
@@ -156,7 +157,6 @@
               {{#if (and this.meeting.id this.agenda.id this.agendaitem.id)}}
                 <AuLink
                   data-test-route-signatures-decisions-sidebar-consult-decision
-                  @skin="naked"
                   @icon="document"
                   @route="agenda.agendaitems.agendaitem.decisions"
                   @models={{array this.meeting.id this.agenda.id this.agendaitem.id}}
@@ -166,7 +166,6 @@
               {{else if (and this.meeting.id this.agenda.id)}}
                 <AuLink
                   data-test-route-signatures-decisions-sidebar-consult-minutes
-                  @skin="naked"
                   @icon="document"
                   @route="agenda.minutes"
                   @models={{array this.meeting.id this.agenda.id}}

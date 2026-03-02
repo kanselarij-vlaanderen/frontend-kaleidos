@@ -68,37 +68,12 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="tertiary" @icon="pencil">Button label</Auk::Button>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-      </Auk::Toolbar>
-    </Auk::Panel::Header>
-    <Auk::Panel::Body>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus massa leo, consequat at tortor a, pretium efficitur diam. Praesent mollis euismod elit, quis consequat nulla lacinia a. Nulla facilisi. Vestibulum volutpat et urna in auctor. Pellentesque pulvinar volutpat quam at egestas. Maecenas mattis velit lacus, in gravida elit bibendum a. </p>
-    </Auk::Panel::Body>
-  </Auk::Panel>
-  {{!-- END-SNIPPET --}}
-</StyleguideSample>
-
-<StyleguideSample
-        @title="Panel with header and 2 actions"w
-        @snippet="panel-with-header-and-2-actions.hbs"
->
-  {{!-- BEGIN-SNIPPET panel-with-header-and-2-actions --}}
-  <Auk::Panel>
-    <Auk::Panel::Header>
-      <Auk::Toolbar>
-        <Auk::Toolbar::Group @position="left">
-          <Auk::Toolbar::Item>
-            <h4 class="auk-panel__title">Panel title</h4>
-          </Auk::Toolbar::Item>
-        </Auk::Toolbar::Group>
-        <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <Auk::Button @skin="tertiary" @icon="pencil">Button label</Auk::Button>
-          </Auk::Toolbar::Item>
-          <Auk::Toolbar::Item>
-            <Auk::Button @skin="tertiary" @icon="three-dots" @layout="icon-only">Button label</Auk::Button>
+            <AuButton
+              @skin="naked"
+              @icon="pencil"
+            >
+              Button label
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>
@@ -184,10 +159,14 @@
       <Auk::Toolbar>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="borderless">Annuleren</Auk::Button>
+            <AuButton @skin="naked">
+              Annuleren
+            </AuButton>
           </Auk::Toolbar::Item>
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="primary">Opslaan</Auk::Button>
+            <AuButton>
+              Opslaan
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>

@@ -67,7 +67,9 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button @icon="plus" @skin="primary">Toevoegen</Auk::Button>
+          <AuButton @icon="plus">
+            Toevoegen
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
@@ -82,7 +84,9 @@
     <Auk::Toolbar>
       <Auk::Toolbar::Group @position="left">
         <Auk::Toolbar::Item>
-          <Auk::Button @layout="icon-only" @skin="borderless" @icon="chevron-left">Ga terug</Auk::Button>
+          <AuButton @skin="naked" @icon="chevron-left" @hideText={{true}}>
+            Ga terug
+          </AuButton>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <h2 class="auk-toolbar__title">Titel</h2>
@@ -90,7 +94,9 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button @skin="primary">Opslaan</Auk::Button>
+          <AuButton>
+            Opslaan
+          </AuButton>
         </Auk::Toolbar::Item>
       </Auk::Toolbar::Group>
     </Auk::Toolbar>
@@ -120,7 +126,9 @@
       </Auk::Toolbar::Group>
       <Auk::Toolbar::Group @position="right">
         <Auk::Toolbar::Item>
-          <Auk::Button @skin="primary">Ontwerpagenda goedkeuren</Auk::Button>
+          <AuButton>
+            Ontwerpagenda goedkeuren
+          </AuButton>
         </Auk::Toolbar::Item>
         <Auk::Toolbar::Item>
           <AuDropdown
@@ -174,7 +182,9 @@
         </Auk::Toolbar::Group>
         <Auk::Toolbar::Group @position="right">
           <Auk::Toolbar::Item>
-            <Auk::Button @skin="tertiary" @icon="pencil">Button label</Auk::Button>
+            <AuButton @skin="naked" @icon="pencil">
+              Button label
+            </AuButton>
           </Auk::Toolbar::Item>
         </Auk::Toolbar::Group>
       </Auk::Toolbar>

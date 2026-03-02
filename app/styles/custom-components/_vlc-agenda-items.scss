@@ -34,14 +34,14 @@ a.vlc-agenda-items__sub-item--active,
 a.vlc-agenda-items__sub-item--active:hover,
 a.vlc-agenda-items__sub-item--active:active {
   background: var(--au-primary);
-  color: #fff;
+  color: var(--au-white);
 
   span {
-    color: #fff;
+    color: var(--au-white);
   }
 
   .vlc-agenda-items__status--positive {
-    color: #fff;
+    color: var(--au-white);
   }
 
   .ember-power-select-selected-item {
@@ -87,7 +87,7 @@ a.vlc-agenda-items__sub-item--active:focus {
 .vlc-agenda-items__sub-item--active a:hover,
 .vlc-agenda-items__sub-item--active a:active {
   background: var(--au-primary);
-  color: #FFF;
+  color: var(--au-white);
 }
 
 .vlc-agenda-items__sub-item--active a:focus {
@@ -146,7 +146,7 @@ $i: 0;
   display: flex;
   flex-direction: row;
   padding: 2rem;
-  background-color: #FFF;
+  background-color: var(--au-white);
   border-bottom: .1rem solid var(--au-border-color);
 
   // Override HR spacing

@@ -1,7 +1,5 @@
-@use "settings";
-
 /* ==========================================================================
-  auk-file-upload
+   auk-file-upload
    ========================================================================== */
 
 .auk-file-upload {
@@ -25,7 +23,7 @@
 }
 
 .auk-file-upload__content {
-  border: 0.1rem dashed settings.$color-gray-300;
+  border: 0.1rem dashed var(--au-gray-300);
   border-radius: .3rem;
   width: 100%;
   padding: 3rem;
@@ -41,21 +39,21 @@
 
 .auk-file-upload--gray-100 {
   .auk-file-upload__content {
-    background-color: settings.$color-gray-100;
+    background-color: var(--au-gray-100);
   }
 }
 
 .auk-file-upload--success {
   .auk-file-upload__content {
-    background-color: settings.$color-green-100;
-    border-color: settings.$color-green-300;
+    background-color: var(--au-green-100);
+    border-color: var(--au-green-300);
   }
 }
 
 .auk-file-upload--error {
   .auk-file-upload__content {
-    background-color: settings.$color-red-50;
-    border-color: settings.$color-red-300;
+    background-color: var(--au-red-50);
+    border-color: var(--au-red-300);
   }
 }
 
@@ -75,11 +73,11 @@
 .auk-file-upload input[type="file"]:focus:not([disabled]) ~ .auk-file-upload__content {
   outline: 0;
   border-color: transparent;
-  box-shadow: inset 0 0 0 0.2rem settings.$color-yellow-500;
+  box-shadow: inset 0 0 0 0.2rem var(--au-yellow-400);
 }
 
 .auk-file-upload input[type="file"]:hover:not([disabled]) ~ .auk-file-upload__content {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 .auk-file-upload__action-button {

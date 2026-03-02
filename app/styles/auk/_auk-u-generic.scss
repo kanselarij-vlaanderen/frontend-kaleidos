@@ -45,7 +45,7 @@
 }
 
 .auk-u-bg-alt {
-  background-color: settings.$color-gray-100 !important;
+  background-color: var(--au-gray-100) !important;
 }
 
 .auk-u-opacity--1\/2 {
@@ -57,19 +57,19 @@
 }
 
 .auk-u-border-top {
-  border-top: .1rem solid settings.$color-gray-300 !important;
+  border-top: .1rem solid var(--au-gray-300) !important;
 }
 
 .auk-u-border-right {
-  border-right: .1rem solid settings.$color-gray-300 !important;
+  border-right: .1rem solid var(--au-gray-300) !important;
 }
 
 .auk-u-border-bottom {
-  border-bottom: .1rem solid settings.$color-gray-300 !important;
+  border-bottom: .1rem solid var(--au-gray-300) !important;
 }
 
 .auk-u-border-left {
-  border-left: .1rem solid settings.$color-gray-300 !important;
+  border-left: .1rem solid var(--au-gray-300) !important;
 }
 
 .auk-u-position-relative {
