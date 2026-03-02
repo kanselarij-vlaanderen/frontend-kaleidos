@@ -65,32 +65,29 @@ export default class SearchMinisterFilterComponent extends Component {
     this.args.onChange?.([...this.selectedCurrentMinisterIds, ...this.selectedPastMinisterIds]);
   }
 
-  @task
-  *prepareMinisters() {
-    yield this.prepareCurrentMinisters.perform();
+  prepareMinisters = task(async () => {
+    await this.prepareCurrentMinisters.perform();
     if (this.args.showPastMinisters) {
-      yield this.preparePastMinisters.perform();
+      await this.preparePastMinisters.perform();
     }
-  }
+  });
 
-  @task
-  *prepareCurrentMinisters() {
-    const currentMandatees = yield this.mandatees.getMandateesActiveOn.perform(startOfDay(new Date()));
+  prepareCurrentMinisters = task(async () => {
+    const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(startOfDay(new Date()));
     const sortedMandatees = currentMandatees
           .sort((m1, m2) => m1.priority - m2.priority)
-    const sortedMinisters = yield Promise.all(
+    const sortedMinisters = await Promise.all(
       sortedMandatees.map((m) => m.person)
     );
     this.currentMinisters = [...new Set(sortedMinisters)];
     this.selectedCurrentMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.currentMinisters.find((minister) => minister.id === ministerId));
-  }
+  });
 
-  @task
-  *preparePastMinisters() {
-    const visibleRoles = yield Promise.all(
+  preparePastMinisters = task(async () => {
+    const visibleRoles = await Promise.all(
       this.visibleRoleUris.map((role) => this.store.findRecordByUri('role', role))
     );
-    const allMinisters = yield this.store.queryAll('person', {
+    const allMinisters = await this.store.queryAll('person', {
       'filter[:has:mandatees]': true,
       'filter[mandatees][mandate][role][:id:]': visibleRoles
       .map((role) => role.id)
@@ -101,5 +98,5 @@ export default class SearchMinisterFilterComponent extends Component {
       .filter((minister) => !this.currentMinisters.includes(minister))
       .filter((minister) => minister.uri.startsWith('http://themis.vlaanderen.be'));
     this.selectedPastMinisterIds = this.selectedMinisterIds.filter((ministerId) => this.pastMinisters.find((minister) => minister.id === ministerId));
-  }
+  });
 }

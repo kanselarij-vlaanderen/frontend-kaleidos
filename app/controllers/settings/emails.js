@@ -42,13 +42,12 @@ export default class SettingsEmailController extends Controller {
     get(this.validators, property).enableError();
   };
 
-  @task
-  *save() {
+  save = task(async () => {
     if (this.validators.areValid) {
-      yield this.model.save();
+      await this.model.save();
       this.router.transitionTo('settings');
     }
-  }
+  });
 
   validateEmail = (emailProp) => {
     const empty = isEmpty(emailProp);

@@ -14,8 +14,7 @@ export default class ThemisPublicationsPublishConfirmationModalComponent extends
     }
   }
 
-  @task
-  *confirmPublish() {
-    yield this.args.onConfirm(this.args.scope);
-  }
+  confirmPublish = task(async () => {
+    await this.args.onConfirm(this.args.scope);
+  });
 }

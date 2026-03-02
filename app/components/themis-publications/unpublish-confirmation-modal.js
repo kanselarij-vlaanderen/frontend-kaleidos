@@ -33,8 +33,7 @@ export default class ThemisPublicationsUnpublishConfirmationModalComponent exten
     this.selectedOption = selectedOption;
   }
 
-  @task
-  *confirmUnpublish() {
-    yield this.args.onConfirm(this.selectedOption.scope);
-  }
+  confirmUnpublish = task(async () => {
+    await this.args.onConfirm(this.selectedOption.scope);
+  });
 }

@@ -18,10 +18,9 @@ export default class DecisionResultPill extends Component {
     this.loadDecisionResultCode.perform();
   }
 
-  @task
-  *loadDecisionResultCode() {
-    yield this.args.decisionResultCode;
-  }
+  loadDecisionResultCode = task(async () => {
+    await this.args.decisionResultCode;
+  });
 
   get skin() {
     const codes = CONSTANTS.DECISION_RESULT_CODE_URIS;

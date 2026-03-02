@@ -94,16 +94,15 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     this.isEditingPill = !this.isEditingPill;
   }
 
-  @task
-  *updateNewsItem() {
-    const resultCode = yield this.args.decisionActivity.decisionResultCode;
+  updateNewsItem = task(async () => {
+    const resultCode = await this.args.decisionActivity.decisionResultCode;
     if ([
       CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
       CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
     ].includes(resultCode?.uri)) {
-      yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+      await this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
     }
-  }
+  });
 
   onCreateNewVersion = task(async () => {
     const report = await this.attachNewReportVersion(this.report);

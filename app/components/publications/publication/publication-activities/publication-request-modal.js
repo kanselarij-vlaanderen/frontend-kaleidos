@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { publicationRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
@@ -66,11 +66,10 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     return [...this.transferredPieces, ...this.uploadedPieces];
   }
 
-  @task
-  *loadProofPieces() {
+  loadProofPieces = task(async () => {
     let proofingActivity = this.args.proofingActivity;
     if (proofingActivity) {
-      let generatedPieces = yield proofingActivity.generatedPieces;
+      let generatedPieces = await proofingActivity.generatedPieces;
       generatedPieces = generatedPieces
         .slice()
         .sort(
@@ -81,7 +80,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     } else {
       this.transferredPieces = new TrackedArray([]);
     }
-  }
+  });
 
   initValidators() {
     this.validators = new ValidatorSet({
@@ -91,32 +90,29 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     });
   }
 
-  @task
-  *save() {
-    yield this.args.onSave({
+  save = task(async () => {
+    await this.args.onSave({
       subject: this.subject,
       message: this.message,
       pieces: this.pieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
-  }
+  });
 
-  @dropTask
-  *cancel() {
-    yield Promise.all(
+  cancel = task({ drop: true }, async () => {
+    await Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
       )
     );
     this.args.onCancel();
-  }
+  });
 
-  @task
-  *setEmailFields() {
+  setEmailFields = task(async () => {
     const publicationFlow = this.args.publicationFlow;
-    const threadId = yield publicationFlow.threadId;
+    const threadId = await publicationFlow.threadId;
     const [identification, numacNumbers, publicationSubcase, urgencyLevel] =
-      yield Promise.all([
+      await Promise.all([
         publicationFlow.identification,
         publicationFlow.numacNumbers,
         publicationFlow.publicationSubcase,
@@ -134,7 +130,7 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     const mailTemplate = publicationRequestEmail(mailParams);
     this.message = mailTemplate.message;
     this.subject = mailTemplate.subject;
-  }
+  });
 
   @action
   async uploadPiece(file) {
@@ -142,11 +138,10 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRequ
     this.uploadedPieces.push(piece);
   }
 
-  @task
-  *deleteUploadedPiece(piece) {
-    yield this.publicationService.deletePiece(piece);
+  deleteUploadedPiece = task(async (piece) => {
+    await this.publicationService.deletePiece(piece);
     removeObject(this.uploadedPieces, piece);
-  }
+  });
 
   @action
   unlinkTransferredPiece(piece) {

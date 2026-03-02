@@ -79,7 +79,7 @@
         (and this.saveSubmissionAndSubmitToAgenda.isRunning this.selectedAgenda)
       }}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.saveSubmissionAndSubmitToAgenda)}}
+      {{on "click" this.saveSubmissionAndSubmitToAgenda.perform}}
     >
       {{t "propose-for-agenda"}}
     </AuButton>

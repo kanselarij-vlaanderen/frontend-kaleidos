@@ -43,33 +43,31 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
 
   // Seperate task to make a distinction in the template
   // between the initial data loading  and subsequent (background) data reloads
-  @task
-  *loadInitialData() {
-    yield this.loadPublicationActivities.perform();
-  }
+  loadInitialData = task(async () => {
+    await this.loadPublicationActivities.perform();
+  });
 
-  @task
-  *loadPublicationActivities() {
+  loadPublicationActivities = task(async () => {
     if (!this.currentSession.may('manage-news-items')) {
       return;
     }
-    yield timeout(500); // some cache calls could be still incorrect after publishing
+    await timeout(500); // some cache calls could be still incorrect after publishing
 
     // there should only be one mail-campaign
-    this.mailCampaign = yield this.store.queryOne('mail-campaign', {
+    this.mailCampaign = await this.store.queryOne('mail-campaign', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       sort: '-sent-at',
     });
 
     // there should only be one belga-publication
-    this.latestBelgaPublication = yield this.store.queryOne('belga-publication', {
+    this.latestBelgaPublication = await this.store.queryOne('belga-publication', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       sort: '-sent-at',
     });
 
     // this also contains the double scoped one. which will not be released yet.
     // sorting on undefined startDate yields unexpected results
-    const allThemisNewsitemPublicationActivities = yield this.store.queryAll('themis-publication-activity', {
+    const allThemisNewsitemPublicationActivities = await this.store.queryAll('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[scope]': 'newsitems',
       include: 'status',
@@ -81,7 +79,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
       .at(-1);
 
     // check if the newsitems weren't retracted at a later time
-    this.retractedThemisNewsitemPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+    this.retractedThemisNewsitemPublicationActivity = await this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[:has-no:scope]': 't',
       sort: '-start-date',
@@ -89,5 +87,5 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     });
 
     this.schedulePublicationActivitiesRefresh();
-  }
+  });
 }

@@ -52,15 +52,13 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
     this.args.onChange?.([...this.selectedCurrentGovernmentAreasIds, ...this.selectedDeprecatedGovernmentAreaIds])
   }
 
-  @task
-  *prepareGovernmentAreas() {
-    yield this.prepareCurrentGovernmentAreas.perform();
-    yield this.prepareDeprecatedGovernmentAreas.perform();
-  }
+  prepareGovernmentAreas = task(async () => {
+    await this.prepareCurrentGovernmentAreas.perform();
+    await this.prepareDeprecatedGovernmentAreas.perform();
+  });
 
-  @task
-  *prepareCurrentGovernmentAreas() {
-    const currentGovernmentAreas = yield this.store.queryAll('concept', {
+  prepareCurrentGovernmentAreas = task(async () => {
+    const currentGovernmentAreas = await this.store.queryAll('concept', {
       'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[deprecated]': false,
       sort: 'label',
@@ -68,11 +66,10 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
     this.currentGovernmentAreas = currentGovernmentAreas.slice();
   
     this.selectedCurrentGovernmentAreasIds = this.selectedGovernmentAreasIds.filter((governmentAreaId) => this.currentGovernmentAreas.find((governmentArea) => governmentArea.id === governmentAreaId));
-  }
+  });
 
-  @task
-  *prepareDeprecatedGovernmentAreas() {
-    const deprecatedGovernmentAreas = yield this.store.queryAll('concept', {
+  prepareDeprecatedGovernmentAreas = task(async () => {
+    const deprecatedGovernmentAreas = await this.store.queryAll('concept', {
       'filter[concept-schemes][:uri:]': CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[deprecated]': true,
       sort: 'label',
@@ -80,8 +77,5 @@ export default class SearchGovernmentAreaFilterComponent extends Component {
     this.deprecatedGovernmentAreas = deprecatedGovernmentAreas.slice();
 
     this.selectedDeprecatedGovernmentAreaIds = this.selectedGovernmentAreasIds.filter((governmentAreaId) => this.deprecatedGovernmentAreas.find((governmentArea) => governmentArea.id === governmentAreaId));
-  }
-
-
-
+  });
 }

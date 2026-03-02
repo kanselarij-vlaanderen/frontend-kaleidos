@@ -27,13 +27,12 @@ export default class AgendaitemPostponed extends Component {
     this.loadProposedStatus.perform();
   }
 
-  @task
-  *loadProposedStatus() {
+  loadProposedStatus = task(async () => {
     // If any agenda-activities exist that are created after this one we can assume the subcase is already proposed again.
     // Filtering on agenda-activities that are more recent than the agenda-activity of the postponed agendaitem
     let latestAgendaActivity;
     if (this.args.subcase) {
-      latestAgendaActivity = yield this.store.queryOne('agenda-activity', {
+      latestAgendaActivity = await this.store.queryOne('agenda-activity', {
         'filter[subcase][:id:]': this.args.subcase.id,
         'filter[:gt:start-date]':
           this.args.agendaActivity.startDate.toISOString(),
@@ -44,13 +43,13 @@ export default class AgendaitemPostponed extends Component {
     if (latestAgendaActivity) {
       // we have to generate a link to the latest meeting
       // The subcase could be postponed on multipe meetings, but we show only the latest one
-      const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+      const latestAgendaitem = await this.store.queryOne('agendaitem', {
         'filter[agenda-activity][:id:]': latestAgendaActivity.id,
         'filter[:has-no:next-version]': 't',
         sort: '-created',
       });
-      const agenda = yield latestAgendaitem.agenda;
-      const meeting = yield agenda.createdFor;
+      const agenda = await latestAgendaitem.agenda;
+      const meeting = await agenda.createdFor;
       this.latestMeeting = meeting;
       this.modelsForProposedAgenda = [
         meeting.id,
@@ -58,13 +57,13 @@ export default class AgendaitemPostponed extends Component {
         latestAgendaitem.id,
       ];
     } else {
-      yield this.loadProposableMeetings.perform();
+      await this.loadProposableMeetings.perform();
     }
-  }
-  @task
-  *loadProposableMeetings() {
+  });
+
+  loadProposableMeetings = task(async () => {
     const aWeekAgo = subDays(new Date(), 7, this.args.meeting.plannedStart);
-    const meetings = yield this.store.query('meeting', {
+    const meetings = await this.store.query('meeting', {
       filter: {
         ':gt:planned-start': aWeekAgo.toISOString(),
         ':has-no:agenda': true
@@ -75,13 +74,12 @@ export default class AgendaitemPostponed extends Component {
     // filter our own meeting if present
     removeObject(allRecentMeetings, this.args.meeting);
     return allRecentMeetings;
-  }
+  });
 
-  @task
-  *reProposeForMeeting(meeting) {
+  reProposeForMeeting = task(async (meeting) => {
     this.closeProposingForOtherMeetingModal();
     try {
-      yield this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
+      await this.agendaService.putSubmissionOnAgenda(meeting, this.args.subcase);
     } catch (error) {
       this.router.refresh();
       this.toaster.error(
@@ -89,8 +87,8 @@ export default class AgendaitemPostponed extends Component {
         this.intl.t('warning-title')
       );
     }
-    yield this.loadProposedStatus.perform();
-  }
+    await this.loadProposedStatus.perform();
+  });
 
   transitionToProposedAgenda = async() => {
     this.router.transitionTo('agenda.agendaitems.agendaitem', ...this.modelsForProposedAgenda);

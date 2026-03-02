@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 
 export default class SubcaseTimeline extends Component {
@@ -25,10 +25,9 @@ export default class SubcaseTimeline extends Component {
     return textToShow;
   };
 
-  @dropTask
-  *loadSubcasePhases() {
+  loadSubcasePhases = task({ drop: true }, async () => {
     const phases = [];
-    const sortedAgendaActivities = yield this.store.queryAll(
+    const sortedAgendaActivities = await this.store.queryAll(
       'agenda-activity',
       {
         'filter[subcase][:id:]': this.args.subcase.id,
@@ -45,7 +44,7 @@ export default class SubcaseTimeline extends Component {
         });
       }
       // phase 2: Is the subcase on an approved agenda or design agenda (for editors)
-      const latestAgendaitemOfActivity = yield this.store.queryOne(
+      const latestAgendaitemOfActivity = await this.store.queryOne(
         'agendaitem',
         {
           'filter[agenda-activity][:id:]': activity.id,
@@ -53,10 +52,10 @@ export default class SubcaseTimeline extends Component {
           sort: '-created',
         }
       );
-      const agenda = yield latestAgendaitemOfActivity.agenda;
+      const agenda = await latestAgendaitemOfActivity.agenda;
       const previousAgendaitem =
-        yield latestAgendaitemOfActivity.previousVersion;
-      const agendaStatus = yield agenda.belongsTo('status').reload();
+        await latestAgendaitemOfActivity.previousVersion;
+      const agendaStatus = await agenda.belongsTo('status').reload();
       const agendaType =
         agendaStatus.isDesignAgenda && !previousAgendaitem
           ? 'ontwerpagenda'
@@ -65,7 +64,7 @@ export default class SubcaseTimeline extends Component {
         'activity-phase-approved-on-agenda-suffix',
         { agenda: agendaType }
       );
-      const meeting = yield agenda.createdFor;
+      const meeting = await agenda.createdFor;
       // this includes a link to design or approved agenda
       phases.push({
         label: this.intl.t('activity-phase-approved-on-agenda'),
@@ -82,11 +81,11 @@ export default class SubcaseTimeline extends Component {
 
       // phase 3: if on approved agenda at least once, what is the decision if a result has been set
       if (!agendaStatus.isDesignAgenda || previousAgendaitem) {
-        const treatment = yield latestAgendaitemOfActivity.treatment;
-        const decisionActivity = yield treatment?.decisionActivity;
+        const treatment = await latestAgendaitemOfActivity.treatment;
+        const decisionActivity = await treatment?.decisionActivity;
 
         if (decisionActivity) {
-          const decisionResultCode = yield decisionActivity
+          const decisionResultCode = await decisionActivity
             .belongsTo('decisionResultCode')
             .reload();
           // legacy subcases might not have a decisionResultCode. In that case we don't show anything in the timeline.
@@ -102,5 +101,5 @@ export default class SubcaseTimeline extends Component {
       }
     }
     this.phases = phases.reverse();
-  }
+  });
 }

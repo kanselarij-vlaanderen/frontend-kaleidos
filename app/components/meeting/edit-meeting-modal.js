@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { task, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addBusinessDays, setHours, setMinutes } from 'date-fns';
@@ -166,24 +166,21 @@ export default class MeetingEditMeetingComponent extends Component {
     }
   });
 
-  @task
-  *initializeMainMeeting() {
-    this.selectedMainMeeting = yield this.args.meeting.mainMeeting;
-  }
+  initializeMainMeeting = task(async () => {
+    this.selectedMainMeeting = await this.args.meeting.mainMeeting;
+  });
 
-  @task
-  *initializeKind() {
-    this.selectedKind = yield this.args.meeting.kind;
-    this.selectedKind ??= yield this.store.findRecordByUri(
+  initializeKind = task(async () => {
+    this.selectedKind = await this.args.meeting.kind;
+    this.selectedKind ??= await this.store.findRecordByUri(
       'concept',
       CONSTANTS.MEETING_KINDS.MINISTERRAAD
     );
-    const broader = yield this.selectedKind?.broader;
+    const broader = await this.selectedKind?.broader;
     this.isAnnexMeeting = broader?.uri === CONSTANTS.MEETING_KINDS.ANNEX;
-  }
+  });
 
-  @dropTask
-  *initializeMeetingNumber(startDateChanged) {
+  initializeMeetingNumber = task({ drop: true }, async (startDateChanged) => {
     if (this.args.meeting.number) {
       this.meetingNumber = this.args.meeting.number;
     } else {
@@ -192,7 +189,7 @@ export default class MeetingEditMeetingComponent extends Component {
         selectedYear = this.startDate?.getFullYear() || this.currentYear;
         this.meetingYear = selectedYear; // only numberRepresentation getter uses meetingYear
       }
-      const meeting = yield this.store.queryOne('meeting', {
+      const meeting = await this.store.queryOne('meeting', {
         filter: {
           ':gte:planned-start': new Date(selectedYear, 0, 1).toISOString(),
           ':lt:planned-start': new Date(
@@ -207,29 +204,28 @@ export default class MeetingEditMeetingComponent extends Component {
       const id = meeting?.number ?? 0;
       this.meetingNumber = id + 1;
     }
-  }
+  });
 
-  @task
-  *initializePublicationModels() {
+  initializePublicationModels = task(async () => {
     if (this.isNew) {
-      this.decisionPublicationActivity = yield this.args.meeting
+      this.decisionPublicationActivity = await this.args.meeting
         .internalDecisionPublicationActivity;
-      this.documentPublicationActivity = yield this.args.meeting
+      this.documentPublicationActivity = await this.args.meeting
         .internalDocumentPublicationActivity;
-      const themisPublicationActivities = yield this.args.meeting
+      const themisPublicationActivities = await this.args.meeting
         .themisPublicationActivities;
       this.themisPublicationActivity = themisPublicationActivities.at(0);
     } else {
       // Ensure we get fresh data to avoid concurrency conflicts
-      this.decisionPublicationActivity = yield this.args.meeting
+      this.decisionPublicationActivity = await this.args.meeting
         .belongsTo('internalDecisionPublicationActivity')
         .reload();
-      this.documentPublicationActivity = yield this.args.meeting
+      this.documentPublicationActivity = await this.args.meeting
         .belongsTo('internalDocumentPublicationActivity')
         .reload();
       // Documents can be published multiple times to Themis.
       // We're only interested in the first (earliest) publication of documents.
-      this.themisPublicationActivity = yield this.store.queryOne(
+      this.themisPublicationActivity = await this.store.queryOne(
         'themis-publication-activity',
         {
           'filter[meeting][:uri:]': this.args.meeting.uri,
@@ -245,7 +241,7 @@ export default class MeetingEditMeetingComponent extends Component {
     this.plannedDocumentPublicationDate =
       this.documentPublicationActivity.plannedDate;
 
-    const documentPublicationStatuses = yield Promise.all([
+    const documentPublicationStatuses = await Promise.all([
       this.documentPublicationActivity.status,
       this.themisPublicationActivity.status,
     ]);
@@ -255,14 +251,13 @@ export default class MeetingEditMeetingComponent extends Component {
       documentPublicationStatuses.some(
         (status) => status.uri != CONSTANTS.RELEASE_STATUSES.PLANNED
       );
-  }
+  });
 
-  @task
-  *saveMeeting() {
+  saveMeeting = task(async () => {
     const now = new Date();
 
-    const currentMeetingSecretary = yield this.args.meeting.secretary;
-    const currentKind = yield this.args.meeting.kind;
+    const currentMeetingSecretary = await this.args.meeting.secretary;
+    const currentKind = await this.args.meeting.kind;
     const currentPlannedStart = this.args.meeting.plannedStart;
     const currentMeetingNumberRepresentation = this.args.meeting.numberRepresentation;
 
@@ -285,7 +280,7 @@ export default class MeetingEditMeetingComponent extends Component {
       this.plannedDocumentPublicationDate;
 
     try {
-      yield this.args.meeting.save();
+      await this.args.meeting.save();
       const saveActivities = [
         this.themisPublicationActivity.save(),
         this.documentPublicationActivity.save(),
@@ -295,7 +290,7 @@ export default class MeetingEditMeetingComponent extends Component {
       }
 
       // Check if an annex meeting exists, if so update its planned start
-      const annexMeeting = yield this.store.queryOne('meeting', {
+      const annexMeeting = await this.store.queryOne('meeting', {
         filter: {
           'main-meeting': {
             ':id:': this.args.meeting.id,
@@ -310,7 +305,7 @@ export default class MeetingEditMeetingComponent extends Component {
         saveActivities.push(annexMeeting.save());
       }
 
-      yield Promise.all(saveActivities);
+      await Promise.all(saveActivities);
 
       if (annexMeeting?.id) {
         this.toaster.success(this.intl.t('annex-meeting-was-saved',
@@ -334,7 +329,7 @@ export default class MeetingEditMeetingComponent extends Component {
           currentMeetingNumberRepresentation !== this.numberRepresentation
         ) {
           if (currentMeetingSecretary?.uri !== this.secretary?.uri) {
-            const decisionActivities = yield this.store.queryAll(
+            const decisionActivities = await this.store.queryAll(
               'decision-activity',
               {
                 'filter[treatment][agendaitems][agenda][created-for][:id:]':
@@ -345,7 +340,7 @@ export default class MeetingEditMeetingComponent extends Component {
             // if so, all decisionActivities have to be saved before we generate the reports again.
             // any chance we can set the secretary in backend and reload in frontend?
             // we might have some concurrency issues here with every save of decisionActivity
-            yield Promise.all(
+            await Promise.all(
               decisionActivities.map(async (decisionActivity) => {
                 decisionActivity.secretary = this.secretary;
                 await decisionActivity.save();
@@ -366,31 +361,31 @@ export default class MeetingEditMeetingComponent extends Component {
             // but BIS documents via submission will only be stamped (will they?) on agenda approval
             // BIS added by secretarie gets stamped immediately
             // this is only for regenerating the decisions, so new agendaitems don't need to count
-            const lastApprovedAgenda = yield this.store.queryOne('agenda', {
+            const lastApprovedAgenda = await this.store.queryOne('agenda', {
               'filter[created-for][:id:]': this.args.meeting.id,
               'filter[status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
               sort: '-created',
             });
             if (lastApprovedAgenda) {
-              const approvedAgendaItems = yield this.store.queryAll('agendaitem', {
+              const approvedAgendaItems = await this.store.queryAll('agendaitem', {
                 'filter[agenda][:id:]': lastApprovedAgenda.id,
                 'filter[agenda][status][:uri:]': CONSTANTS.AGENDA_STATUSSES.APPROVED,
               });
-              yield this.documentService.renamePiecesOfMeeting(this.args.meeting.id, currentPlannedStart, this.startDate);
+              await this.documentService.renamePiecesOfMeeting(this.args.meeting.id, currentPlannedStart, this.startDate);
               agendaitemsToRegenerateConcernFor = [...new Set(approvedAgendaItems?.map((agendaitem) => agendaitem.id))];
             }
           }
-          yield this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, regenerateReportNames, agendaitemsToRegenerateConcernFor);
-          yield this.regenerateMinutes();
+          await this.decisionReportGeneration.regenerateDecisionReportsForMeeting.perform(this.args.meeting, regenerateReportNames, agendaitemsToRegenerateConcernFor);
+          await this.regenerateMinutes();
         }
       }
     } catch (err) {
       console.error(err);
       this.toaster.error();
     } finally {
-      yield this.args.didSave();
+      await this.args.didSave();
     }
-  }
+  });
 
   async regenerateMinutes() {
     const minutes = await this.args.meeting.minutes;

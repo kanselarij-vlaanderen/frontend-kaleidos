@@ -13,20 +13,18 @@ export default class PublicationsTranslationTranslationReceivedPanelComponent ex
   @tracked isOpenTranslationEditModal = false;
   @tracked isOpenProofRequestModal = false;
 
-  @task
-  *editTranslationActivity(data) {
-    yield this.args.onEditTranslationActivity({
+  editTranslationActivity = task(async (data) => {
+    await this.args.onEditTranslationActivity({
       translationActivity: this.args.translationActivity,
       receivedDate: data.receivedDate,
     });
     this.closeTranslationEditModal();
-  }
+  });
 
-  @task
-  *createProofRequest(proofRequestArgs) {
-    yield this.args.onCreateProofRequest(proofRequestArgs);
+  createProofRequest = task(async (proofRequestArgs) => {
+    await this.args.onCreateProofRequest(proofRequestArgs);
     this.isOpenProofRequestModal = false;
-  }
+  });
 
   @action
   openTranslationEditModal() {

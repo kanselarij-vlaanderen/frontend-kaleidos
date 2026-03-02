@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
@@ -11,9 +12,11 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   @service router;
   @service store;
 
-  get firstAgendaitem() {
-    return this.loadFirstAgendaitem.lastSuccessful?.value;
-  }
+  // TODO KAS-5171 which solution for lastValue
+  // get firstAgendaitem() {
+  //   return this.loadFirstAgendaitem.lastSuccessful?.value;
+  // }
+  @tracked firstAgendaitem = null;
 
   constructor() {
     super(...arguments);
@@ -28,17 +31,17 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
     return isEnabledCabinetSubmissions();
   }
 
-  @task
-  *loadFirstAgendaitem() {
+  loadFirstAgendaitem = task(async () => {
     if (this.args.currentAgenda) {
       // sorting on type prevents defaulting to an announcement when there are notas
-      return yield this.store.queryOne('agendaitem', {
+      this.firstAgendaitem = await this.store.queryOne('agendaitem', {
         'filter[agenda][:id:]': this.args.currentAgenda.id,
         sort: 'type.position,number',
       });
+      return;
     }
-    return null;
-  }
+    this.firstAgendaitem = null;
+  });
 
   get modelsForDetailRoute() {
     return [this.args.currentMeeting.id, this.args.currentAgenda.id, this.currentAgendaItemId || this.firstAgendaitem?.id];

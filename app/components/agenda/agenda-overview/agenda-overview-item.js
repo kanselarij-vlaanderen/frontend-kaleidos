@@ -2,7 +2,7 @@ import AgendaSidebarItem from 'frontend-kaleidos/components/agenda/agenda-detail
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { timeout, dropTask, task } from 'ember-concurrency';
+import { timeout, task } from 'ember-concurrency';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import CONFIG from 'frontend-kaleidos/utils/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -64,23 +64,21 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
     return this.agendaitemDocuments.length > this.documentListSize;
   }
 
-  @task
-  *setFormallyOkStatus(status) {
-    yield this.args.setFormallyOkAction(status.uri);
-  }
+  setFormallyOkStatus = task(async (status) => {
+    await this.args.setFormallyOkAction(status.uri);
+  });
 
-  @task
-  *loadDocumentsPublicationStatus() {
+  loadDocumentsPublicationStatus = task(async () => {
     this.showDocumentsAreVisibleAlert = false;
     // Additional failsafe check on document visibility.
     // retracted and postponed documents are hidden for non admin because
     // we cannot match the "historic name" of the documents due to resubmitting
-    const decisionPublicationActivity = yield this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
-    const decisionPublicationStatus = yield decisionPublicationActivity?.belongsTo('status').reload();
+    const decisionPublicationActivity = await this.args.meeting.belongsTo('internalDecisionPublicationActivity').reload();
+    const decisionPublicationStatus = await decisionPublicationActivity?.belongsTo('status').reload();
     const decisionsAreReleased = decisionPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
 
-    const documentPublicationActivity = yield this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
-    const documentPublicationStatus = yield documentPublicationActivity?.belongsTo('status').reload();
+    const documentPublicationActivity = await this.args.meeting.belongsTo('internalDocumentPublicationActivity').reload();
+    const documentPublicationStatus = await documentPublicationActivity?.belongsTo('status').reload();
     const documentsAreReleased = documentPublicationStatus?.uri === CONSTANTS.RELEASE_STATUSES.RELEASED;
 
     if (!decisionsAreReleased || this.args.currentAgenda.status.get('isDesignAgenda')) {
@@ -113,53 +111,49 @@ export default class AgendaOverviewItem extends AgendaSidebarItem {
       this.documentsAreVisible = true;
     }
     return;
-  }
+  });
 
-  @task
-  *loadDocuments() {
-    let pieces = yield this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
+  loadDocuments = task(async () => {
+    let pieces = await this.throttledLoadingService.loadPieces.perform(this.args.agendaitem);
     pieces = pieces.slice();
-    this.agendaitemDocuments = yield sortPieces(
+    this.agendaitemDocuments = await sortPieces(
       pieces,
       {
         isApproval: this.args.agendaitem.isApproval,
         isPreKaleidos: this.args.meeting.isPreKaleidos,
       }
     );
-  }
+  });
 
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    this.decisionActivityResultCode = yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+  loadDecisionActivity = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
+    this.decisionActivityResultCode = await this.decisionActivity?.belongsTo('decisionResultCode').reload();
     if (!this.decisionActivity?.uri && this.currentSession.may('view-preliminary-decisions')) {
       // get the preliminary decisionResultCode. Will only return something when postponed or retracted
-      this.decisionActivityResultCode = yield this.agendaService.getPreliminaryDecisionResultCode(this.args.agendaitem);
+      this.decisionActivityResultCode = await this.agendaService.getPreliminaryDecisionResultCode(this.args.agendaitem);
       this.isPreliminaryPostponed = (this.decisionActivityResultCode?.uri == UITGESTELD);
       this.isPreliminaryRetracted = (this.decisionActivityResultCode?.uri == INGETROKKEN);
     }
     this.loadDocumentsPublicationStatus.perform();
-  }
+  });
 
-  @dropTask
-  *lazyLoadSideData() {
-    yield timeout(350);
+  lazyLoadSideData = task({ drop: true }, async () => {
+    await timeout(350);
     const tasks = [
       this.loadNewsItemVisibility,
       this.loadSubcase,
       this.loadNewDocuments
     ].filter((task) => task.performCount === 0);
-    yield Promise.all(tasks.map((task) => task.perform()));
-  }
+    await Promise.all(tasks.map((task) => task.perform()));
+  });
 
-  @task
-  *loadNewDocuments() { // Documents to be highlighted
+  loadNewDocuments = task(async () => { // Documents to be highlighted
     if (this.args.previousAgenda) { // Highlighting everything on the first agenda-version as "new" doesn't add a lot of value.
-      this.newAgendaitemDocuments = yield this.agendaService.changedPieces(this.args.currentAgenda.id,
+      this.newAgendaitemDocuments = await this.agendaService.changedPieces(this.args.currentAgenda.id,
         this.args.previousAgenda.id, this.args.agendaitem.id);
     }
-  }
+  });
 
 
   @action

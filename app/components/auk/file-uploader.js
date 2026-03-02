@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
-import { enqueueTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { isEnabledCabinetSubmissions } from '../../utils/feature-flag';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
@@ -60,9 +60,7 @@ export default class FileUploader extends Component {
     };
   }
 
-  @enqueueTask({
-    maxConcurrency: 3,
-  }) *uploadFileTask(file) {
+  uploadFileTask = task({ maxConcurrency: 3, enqueue: true }, async (file) => {
     try {
       const uppercasePDFIndex = file?.name?.lastIndexOf('.PDF');
       if (uppercasePDFIndex === file?.name?.length - 4) {
@@ -72,12 +70,12 @@ export default class FileUploader extends Component {
       this.args.onQueueUpdate?.(this.queueInfo);
       let body;
       try {
-        const response = yield file.upload(
+        const response = await file.upload(
           (this.args.isSubmission && isEnabledCabinetSubmissions())
             ? '/draft-files'
             : '/files'
         );
-        body = yield getJsonPayloadOrThrow(response);
+        body = await getJsonPayloadOrThrow(response);
       } catch (error) {
         this.toaster.error(
           this.intl.t('could-not-upload-file', {name: file.name, error: error.message}),
@@ -87,7 +85,7 @@ export default class FileUploader extends Component {
         this.fileQueue.remove(file);
         throw error;
       }
-      const fileFromStore = yield this.store.findRecord(
+      const fileFromStore = await this.store.findRecord(
         (this.args.isSubmission && isEnabledCabinetSubmissions())
           ? 'draft-file'
           : 'file',
@@ -102,7 +100,7 @@ export default class FileUploader extends Component {
       console.warn('An exception occurred', exception);
       this.args.onQueueUpdate?.(this.queueInfo);
     }
-  }
+  });
 
   @action
   validateFile(file) {

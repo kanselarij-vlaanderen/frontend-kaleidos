@@ -112,7 +112,7 @@
             {{#each this.reverseSortedPieceHistory as |piece|}}
               <div
                 class="vlc-document-holder"
-                {{did-update (perform this.loadData) piece}}
+                {{did-update this.loadData.perform piece}}
               >
                 <div class="vlc-document-card-item" data-test-vl-document-piece>
                   <div class="vlc-document-card-item__title">

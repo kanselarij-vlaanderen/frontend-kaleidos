@@ -17,9 +17,8 @@ export default class SubcaseVersionsPanel extends Component {
     this.loadAgendaData.perform();
   }
 
-  @task
-  *loadAgendaData() {
-    const agendaActivities = yield this.args.subcase.hasMany('agendaActivities').reload();
+  loadAgendaData = task(async () => {
+    const agendaActivities = await this.args.subcase.hasMany('agendaActivities').reload();
     this.hasAgendaitems = agendaActivities?.length > 0;
-  }
+  });
 }

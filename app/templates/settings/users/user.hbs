@@ -241,7 +241,8 @@
           {{on
             "click"
             (queue
-              (perform this.blockMembership) (toggle "showBlockMembership" this)
+              this.blockMembership.perform
+              (toggle "showBlockMembership" this)
             )
           }}
         >
@@ -290,7 +291,7 @@
           {{on
             "click"
             (queue
-              (perform this.unblockMembership)
+              this.unblockMembership.perform
               (toggle "showUnblockMembership" this)
             )
           }}
@@ -335,7 +336,7 @@
           @loadingMessage={{t "loading"}}
           {{on
             "click"
-            (queue (perform this.blockUser) (toggle "showBlockUser" this))
+            (queue this.blockUser.perform (toggle "showBlockUser" this))
           }}
         >
           {{t "block-user"}}
@@ -382,7 +383,7 @@
           @loadingMessage={{t "loading"}}
           {{on
             "click"
-            (queue (perform this.unblockUser) (toggle "showUnblockUser" this))
+            (queue this.unblockUser.perform (toggle "showUnblockUser" this))
           }}
         >
           {{t "unblock-user"}}

@@ -137,7 +137,7 @@
         data-test-route-cases--new-submission-cancel
         @skin="secondary"
         @disabled={{or this.createSubmission.isRunning}}
-        {{on "click" (perform this.cancelForm)}}
+        {{on "click" this.cancelForm.perform}}
       >
         {{t "cancel"}}
       </AuButton>
@@ -156,8 +156,8 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenPieceUploadModal}}
   @title={{t "document-add"}}
-  @onConfirm={{perform this.savePieces}}
-  @onCancel={{perform this.cancelUploadPieces}}
+  @onConfirm={{this.savePieces.perform}}
+  @onCancel={{this.cancelUploadPieces.perform}}
   @confirmMessage={{t "documents-add"}}
   @disabled={{eq this.newPieces.length 0}}
   @loading={{this.savePieces.isRunning}}
@@ -194,13 +194,13 @@
   {{#if this.isForPostponedSubcase}}
     <Cases::Submissions::ProposableAgendasModal
       @onCancel={{this.cancelCreateSubmission}}
-      @onConfirm={{perform this.createSubmission}}
+      @onConfirm={{this.createSubmission.perform}}
     />
   {{else}}
     <ConfirmationModal
       @modalOpen={{this.isOpenCreateSubmissionModal}}
       @title={{t "new-submission"}}
-      @onConfirm={{perform this.createSubmission}}
+      @onConfirm={{this.createSubmission.perform}}
       @onCancel={{this.cancelCreateSubmission}}
       @confirmMessage={{t "new-submission"}}
       @disabled={{this.createSubmission.isRunning}}

@@ -30,40 +30,36 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.loadMandatees.perform();
   }
 
-  @task
-  *loadPieces() {
+  loadPieces = task(async () => {
     // ensure all related records are loaded to prevent extra calls from template for each piece individually
-    yield this.store.query('piece', {
+    await this.store.query('piece', {
       'filter[agendaitems][:id:]': this.args.agendaitem.id,
       'page[size]': this.args.pieces.length,
       include:
         'document-container,document-container.type,file,publication-flow,publication-flow.identification',
     });
-  }
+  });
 
-  @task
-  *loadCase() {
-    this.case = yield this.store.queryOne('case', {
+  loadCase = task(async () => {
+    this.case = await this.store.queryOne('case', {
       'filter[decisionmaking-flow][subcases][agenda-activities][agendaitems][:id:]':
         this.args.agendaitem.id,
     });
-  }
+  });
 
-  @task
-  *loadMandatees() {
-    this.mandatees = yield this.args.agendaitem.mandatees;
-  }
+  loadMandatees = task(async () => {
+    this.mandatees = await this.args.agendaitem.mandatees;
+  });
 
-  @task
-  *loadDecisionActivity() {
-    this.decisionActivity = yield this.store.queryOne(
+  loadDecisionActivity = task(async () => {
+    this.decisionActivity = await this.store.queryOne(
       'decision-activity',
       {
         'filter[treatment][agendaitems][:id:]': this.args.agendaitem.id,
         sort: '-start-date',
       }
     );
-  }
+  });
 
   @action
   openNewPublicationModal(piece) {
@@ -77,13 +73,12 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     this.isOpenNewPublicationModal = false;
   }
 
-  @task
-  *saveNewPublication(publicationProperties) {
-    yield this.performSaveNewPublication(publicationProperties);
+  saveNewPublication = task(async (publicationProperties) => {
+    await this.performSaveNewPublication(publicationProperties);
 
     this.referenceDocument = null;
     this.isOpenNewPublicationModal = false;
-  }
+  });
 
   // separate method: prevent incomplete save
   async performSaveNewPublication(publicationProperties) {

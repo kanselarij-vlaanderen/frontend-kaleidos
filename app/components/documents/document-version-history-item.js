@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { keepLatestTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 export default class DocumentsDocumentVersionHistoryItemComponent extends Component {
   @service pieceAccessLevelService;
@@ -31,18 +31,16 @@ export default class DocumentsDocumentVersionHistoryItemComponent extends Compon
     return this.args.piece.modified;
   }
 
-  @keepLatestTask
-  *loadData() {
-    const accessLevel = yield this.args.piece.accessLevel;
+  loadData = task({ keepLatest: true }, async () => {
+    const accessLevel = await this.args.piece.accessLevel;
     const context = this.args.agendaContext || {};
-    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.args.piece);
-  }
+    this.isDraftAccessLevel = await this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.args.piece);
+  });
 
-  @keepLatestTask
-  *loadFiles() {
-    const sourceFile = yield this.args.piece.file;
-    yield sourceFile?.derived;
-  }
+  loadFiles = task({ keepLatest: true }, async () => {
+    const sourceFile = await this.args.piece.file;
+    await sourceFile?.derived;
+  });
 
   @action
   changeAccessLevel(accessLevel) {

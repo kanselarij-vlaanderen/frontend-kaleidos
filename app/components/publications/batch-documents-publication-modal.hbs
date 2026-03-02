@@ -62,6 +62,6 @@
   <Publications::NewPublicationModal
     @agendaitem={{@agendaitem}}
     @decisionActivity={{this.decisionActivity}}
-    @onSave={{perform this.saveNewPublication}}
+    @onSave={{this.saveNewPublication.perform}}
     @onCancel={{this.cancelNewPublication}} />
 {{/if}}

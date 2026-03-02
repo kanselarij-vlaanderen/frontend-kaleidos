@@ -68,8 +68,7 @@ export default class MandateesService extends Service {
     }
   );
 
-  @task
-  *fetchGovernmentBodies(referenceDateFrom, referenceDateTo) {
+  fetchGovernmentBodies = task(async (referenceDateFrom, referenceDateTo) => {
     const governmentBodies = [];
     const closedInRange = this.store.queryAll('government-body', {
       'filter[is-timespecialization-of][:has:is-timespecialization-of]': 'yes',
@@ -82,7 +81,7 @@ export default class MandateesService extends Service {
       'filter[:has-no:invalidation]': 'yes',
     });
 
-    const [closedBodies, activeBody] = yield Promise.all([
+    const [closedBodies, activeBody] = await Promise.all([
       closedInRange,
       activeRange,
     ]);
@@ -92,17 +91,16 @@ export default class MandateesService extends Service {
     }
 
     return governmentBodies;
-  }
+  });
 
-  @task
-  *fetchMandateesForGovernmentBody(
+  fetchMandateesForGovernmentBody = task(async (
     governmentBody,
     referenceDateFrom,
     referenceDateTo,
     searchText,
     visibleRoles
-  ) {
-    yield this.loadRoles.last; // Make sure visible roles are loaded
+  ) => {
+    await this.loadRoles.last; // Make sure visible roles are loaded
     // If no referenceDate is specified, all mandatees within the given governmentBody.
     // Can be multiple versions (see documentation on https://themis-test.vlaanderen.be/docs/catalogs#ministers ,
     // 2.2.4 mandatarissen)
@@ -125,7 +123,7 @@ export default class MandateesService extends Service {
       // mu-cl-resources doesn't have :has-no:-capability for simple properties (which end-date is)
       // That's why we do some filtering client-side (see below)
     }
-    let mandatees = yield this.store.queryAll('mandatee', queryOptions);
+    let mandatees = await this.store.queryAll('mandatee', queryOptions);
     // We need to filter out the mandatees that are in the body
     // but have an end date before the range starts or active mandatees (i.e. no end date)
     if (referenceDateFrom) {
@@ -140,10 +138,9 @@ export default class MandateesService extends Service {
     // sorting on both "start" and "priority" yields incomplete results. Thus part of the sort in frontend
     mandatees = mandatees.sort((m1, m2) => m1.priority - m2.priority);
     return mandatees;
-  }
+  });
 
-  @task
-  *fetchMandateesByName(nameSearchTerm, referenceDate) {
+  fetchMandateesByName = task(async (nameSearchTerm, referenceDate) => {
     const queryOptions = {
       'filter[person][last-name]': nameSearchTerm,
       'filter[:has:government-body]': 'yes',
@@ -164,13 +161,13 @@ export default class MandateesService extends Service {
       this.store.query('mandatee', preOptions),
       this.store.query('mandatee', postOptions),
     ];
-    const [preMandatees, postMandatees] = yield Promise.all(requests);
+    const [preMandatees, postMandatees] = await Promise.all(requests);
     const mandatees = [...preMandatees.slice(), ...postMandatees.slice()];
     const sortedMandatees = mandatees.sort((a, b) =>
       sortByDeltaToRef(referenceDate)(a.start, b.start)
     );
     return sortedMandatees;
-  }
+  });
 
   async getApplicationSecretary(referenceDateFrom = new Date()) {
     const [applicationSecretary] =

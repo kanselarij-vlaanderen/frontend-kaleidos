@@ -38,11 +38,10 @@ export default class PublicationDetailsModal extends Component {
     this.mustUpdatePublicationStatus = checked;
   }
 
-  @task
-  *save() {
-    yield this.args.onSave({
+  save = task(async () => {
+    await this.args.onSave({
       publicationDate: this.publicationDate,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
-  }
+  });
 }
