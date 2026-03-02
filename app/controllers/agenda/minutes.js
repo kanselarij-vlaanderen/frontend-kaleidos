@@ -70,6 +70,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   const treatment = await agendaitem.treatment;
   const decisionActivity = await treatment?.decisionActivity;
   const decisionResultCode = await decisionActivity?.decisionResultCode;
+  const isRetracted = (decisionResultCode?.uri === constants.DECISION_RESULT_CODE_URIS.INGETROKKEN);
   const agendaActivity = await agendaitem.agendaActivity;
   const subcase = await agendaActivity?.subcase;
   await subcase?.type;
@@ -133,6 +134,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
       ratification ? [...sortedPieces, ratification] : sortedPieces,
       null,
       agendaitemType,
+      isRetracted,
     );
   } else {
     betreft = await generateBetreft(
@@ -142,6 +144,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
       sortedPieces,
       subcase?.subcaseName,
       agendaitemType,
+      isRetracted,
     );
   }
   return `

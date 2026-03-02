@@ -15,6 +15,16 @@
   --au-pink-600: #ca5ba0;
 }
 
+
+// Imports
+// sourced from '@appuniversum/ember-appuniversum' npm package
+@import '@appuniversum/ember-appuniversum/styles/a-settings';
+@import '@appuniversum/ember-appuniversum/styles/a-tools';
+@import '@appuniversum/ember-appuniversum/styles/a-generic';
+@import '@appuniversum/ember-appuniversum/styles/a-elements';
+@import '@appuniversum/ember-appuniversum/styles/a-objects';
+
+
 // SCSS variables (overrides & addons)
 $mq-breakpoints: (
   xsmall: 300px,
@@ -28,14 +38,51 @@ $mq-breakpoints: (
 $au-layout-breakpoint: large;
 $au-region-breakpoint: large;
 
+$au-white: #ffffff;
 
-// Imports
-// sourced from '@appuniversum/ember-appuniversum' npm package
-@import '@appuniversum/ember-appuniversum/styles/a-settings';
-@import '@appuniversum/ember-appuniversum/styles/a-tools';
-@import "@appuniversum/ember-appuniversum/styles/a-generic";
-@import "@appuniversum/ember-appuniversum/styles/a-elements";
-@import "@appuniversum/ember-appuniversum/styles/a-objects";
+$au-gray-100: #f7f9fc;
+$au-gray-200: #e8ebee;
+$au-gray-300: #cfd5dd;
+$au-gray-400: #afb9c5;
+$au-gray-500: #8695a8;
+$au-gray-600: #7f8b99;
+$au-gray-700: #687483;
+$au-gray-800: #4f5864;
+$au-gray-900: #333332;
+$au-gray-1000: #000000;
+
+$au-blue-100: #f4f7fb;
+$au-blue-200: #e4ebf5;
+$au-blue-300: #b2ccef;
+$au-blue-500: #5990de;
+$au-blue-600: #3779d7;
+$au-blue-700: #0055cc;
+$au-blue-800: #004ab2;
+$au-blue-900: #003b8e;
+
+$au-yellow-100: #fff9d5;
+$au-yellow-200: #fff29b;
+$au-yellow-300: #ffe615;
+$au-yellow-400: #ffc515;
+$au-yellow-600: #7f6e3b;
+$au-yellow-900: #473d21;
+
+$au-red-100: #fdf7f7;
+$au-red-200: #fbeded;
+$au-red-300: #f4c8c9;
+$au-red-400: #f1aeae;
+$au-red-500: #e77474;
+$au-red-600: #d2373c;
+$au-red-700: #aa2729;
+$au-red-900: #470000;
+
+$au-green-100: #f8fcf9;
+$au-green-200: #ecf6ee;
+$au-green-300: #c5e5cc;
+$au-green-400: #b1dcbb;
+$au-green-500: #009e47;
+$au-green-700: #007a37;
+$au-green-900: #323d08;
 
 
 // Global overrides & addons (merged from auk-base)

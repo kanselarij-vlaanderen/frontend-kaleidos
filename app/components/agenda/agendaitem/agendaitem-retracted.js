@@ -101,6 +101,14 @@ export default class AgendaitemRetracted extends Component {
     yield this.loadProposedStatus.perform();
   }
 
+  transitionToCase = async() => {
+    this.router.transitionTo('cases.case.subcases', this.decisionmakingFlow.id);
+  }
+
+  transitionToRetractedAgenda = async() => {
+    this.router.transitionTo('agenda.agendaitems.agendaitem', ...this.modelsForProposedAgenda);
+  }
+
   @action
   openProposingForOtherMeetingModal() {
     this.isProposingForOtherMeeting = true;

@@ -92,6 +92,10 @@ export default class AgendaitemPostponed extends Component {
     yield this.loadProposedStatus.perform();
   }
 
+  transitionToProposedAgenda = async() => {
+    this.router.transitionTo('agenda.agendaitems.agendaitem', ...this.modelsForProposedAgenda);
+  }
+
   @action
   openProposingForOtherMeetingModal() {
     this.isProposingForOtherMeeting = true;
