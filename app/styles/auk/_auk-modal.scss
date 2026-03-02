@@ -1,7 +1,7 @@
 @use "settings";
 
 /* ==========================================================================
-  auk-modal
+   auk-modal
    ========================================================================== */
 
 /* Variables
@@ -10,12 +10,12 @@
 $modal-padding-horizontal: 2.4rem !default;
 $modal-padding-vertical: 2.4rem !default;
 $modal-border-radius: 0.3rem !default;
-$modal-color: settings.$color-gray-600 !default;
+$modal-color: var(--au-gray-600) !default;
 
-$modal-header-bg-color: #fff !default;
-$modal-footer-bg-color: #fff !default;
-$modal-header-border-color: settings.$color-gray-300 !default;
-$modal-footer-border-color: settings.$color-gray-300 !default;
+$modal-header-bg-color: var(--au-white) !default;
+$modal-footer-bg-color: var(--au-white) !default;
+$modal-header-border-color: var(--au-gray-300) !default;
+$modal-footer-border-color: var(--au-gray-300) !default;
 
 /* Component
   ========================================================================== */
@@ -82,7 +82,7 @@ $modal-footer-border-color: settings.$color-gray-300 !default;
 }
 
 .auk-modal__header--bordered {
-  border-bottom: 0.1rem solid settings.$color-gray-300;
+  border-bottom: 0.1rem solid var(--au-gray-300);
 }
 
 .auk-modal__body {
@@ -95,13 +95,13 @@ $modal-footer-border-color: settings.$color-gray-300 !default;
 }
 
 .auk-modal__footer--bordered {
-  border-top: 0.1rem solid settings.$color-gray-300;
+  border-top: 0.1rem solid var(--au-gray-300);
 }
 
 .auk-modal__header,
 .auk-modal__body,
 .auk-modal__footer {
-  background: #fff;
+  background: var(--au-white);
 }
 
 .auk-modal__header,
@@ -170,7 +170,7 @@ $modal-footer-border-color: settings.$color-gray-300 !default;
   width: 100%;
   height: 100%;
   opacity: 0;
-  background: rgba(settings.$color-gray-900, 0.2);
+  background: rgba($au-gray-900, 0.2);
   transition: visibility 0s linear 0.2s, opacity 0.2s linear;
   visibility: hidden;
   z-index: settings.$z-index-modal-backdrop;
@@ -183,5 +183,5 @@ $modal-footer-border-color: settings.$color-gray-300 !default;
 }
 
 .auk-modal-context + .auk-modal-context {
-  background: rgba(settings.$color-gray-900, 0.2);
+  background: rgba($au-gray-900, 0.2);
 }

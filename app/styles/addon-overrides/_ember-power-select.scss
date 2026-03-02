@@ -17,7 +17,7 @@
 
   border: 0.1rem solid var(--au-gray-300);
   border-radius: .3rem;
-  background-color: #fff;
+  background-color: var(--au-white);
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3e%3cpath d='M0.42,9.77a3.27,3.27,0,0,1,.91-2.21,3.12,3.12,0,0,1,4.41,0L16,17.82,26.25,7.56A3.12,3.12,0,0,1,30.67,12L18.2,24.44a3.12,3.12,0,0,1-4.41,0L1.33,12A3.17,3.17,0,0,1,.42,9.77'/%3e%3ctext y='90'%3e' %26apos; %23 %25 %26amp; %c2%bf %f0%9f%94%a3%3c/text%3e%3c/svg%3e"); // sass-lint:disable-line max-line-length
   background-repeat: no-repeat;
   background-size: 1.1rem;
@@ -89,7 +89,7 @@
 
   border: none;
   border-radius: 0.3rem;
-  background-color: #FFF;
+  background-color: var(--au-white);
   box-shadow: auk.$shadow-medium;
 }
 
@@ -139,7 +139,7 @@
 
   border: 0.1rem solid var(--au-gray-300);
   border-radius: .3rem;
-  background: #fff;
+  background: var(--au-white);
   padding: 0 1rem;
 
   color: var(--au-text-color);

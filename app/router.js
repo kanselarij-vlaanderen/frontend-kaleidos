@@ -145,7 +145,6 @@ Router.map(function() {
     this.route('avatar');
     this.route('brand');
     this.route('checkbox-tree');
-    this.route('colors');
     this.route('color-badge');
     this.route('datepicker');
     this.route('empty-state');

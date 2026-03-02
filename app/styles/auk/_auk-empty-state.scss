@@ -1,5 +1,3 @@
-@use "settings";
-
 /* ==========================================================================
   auk-empty-state
   ========================================================================== */
@@ -11,13 +9,13 @@
 }
 
 .auk-empty-state--bordered {
-  background: #FFF;
-  border: .1rem solid #C6CDD3;
+  background: var(--au-white);
+  border: .1rem solid var(--au-border-color);
   border-radius: .3rem;
   overflow: hidden;
   padding: 3rem;
 }
 
 .auk-empty-state__content {
-  color: settings.$color-gray-600;
+  color: var(--au-gray-600);
 }

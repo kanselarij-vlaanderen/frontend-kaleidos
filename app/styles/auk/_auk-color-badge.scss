@@ -1,7 +1,5 @@
-@use "settings";
-
 /* ==========================================================================
-    Component: Color badge
+   auk-color-badge
    ========================================================================== */
 
 .auk-color-badge {
@@ -12,17 +10,17 @@
 }
 
 .auk-color-badge--default {
-  background-color: settings.$color-gray-500;
+  background-color: var(--au-gray-500);
 }
 
 .auk-color-badge--warning {
-  background-color: settings.$color-yellow-500;
+  background-color: var(--au-yellow-400);
 }
 
 .auk-color-badge--error {
-  background-color: settings.$color-red-500;
+  background-color: var(--au-red-500);
 }
 
 .auk-color-badge--success {
-  background-color: settings.$color-green-500;
+  background-color: var(--au-green-500);
 }

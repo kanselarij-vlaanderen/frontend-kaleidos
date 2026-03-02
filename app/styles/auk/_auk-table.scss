@@ -1,9 +1,7 @@
-@use "settings";
-
 @use "sass:math";
 
 /* ==========================================================================
-  auk-table
+   auk-table
    ========================================================================== */
 
 .auk-table {
@@ -16,7 +14,7 @@
 .auk-table th {
   vertical-align: middle;
   padding: 1.2rem 1rem;
-  border-bottom: 0.1rem solid settings.$color-gray-300;
+  border-bottom: 0.1rem solid var(--au-gray-300);
 }
 
 .auk-table tr td:first-child,
@@ -33,17 +31,17 @@
   border-bottom-width: 0.2rem;
   text-align: left;
   font-weight: 500;
-  color: settings.$color-gray-600;
+  color: var(--au-gray-600);
   white-space: nowrap;
 }
 
 .auk-table--striped {
   tbody tr:nth-child(odd) td {
-    background-color: settings.$color-gray-100;
+    background-color: var(--au-gray-100);
   }
 
   .auk-table__row--expanded {
-    background: settings.$color-white;
+    background: var(--au-white);
   }
 }
 
@@ -65,7 +63,7 @@
 }
 
 .auk-table__row--collapsed-content td {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 .auk-table__row--disabled {
@@ -108,30 +106,30 @@
 
 .auk-table--advanced {
   th {
-    color: settings.$color-gray-900;
+    color: var(--au-gray-900);
   }
 
   .auk-table__cell--accent {
-    background-color: settings.$color-gray-100;
+    background-color: var(--au-gray-100);
   }
 }
 
 .auk-table tr .auk-table__cell--gray-100 {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 /* Status cells
   ========================================================================== */
 
 .auk-table tr .auk-table__cell--success {
-  background-color: settings.$color-green-100;
-  color: settings.$color-green-700;
+  background-color: var(--au-green-100);
+  color: var(--au-green-700);
   text-align: center;
 }
 
 .auk-table tr .auk-table__cell--warning {
-  background-color: settings.$color-yellow-100;
-  color: settings.$color-yellow-700;
+  background-color: var(--au-yellow-100);
+  color: var(--au-yellow-600);
   text-align: center;
 }
 
@@ -154,7 +152,7 @@ $i: 1;
    ========================================================================== */
 
 .auk-table tr[data-href]:hover {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
   cursor: pointer;
 }
 
@@ -163,7 +161,7 @@ $i: 1;
 }
 
 .auk-table--clickable-rows tr:focus-within td {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 /* Table with hoverable rows
@@ -173,7 +171,7 @@ $i: 1;
   tbody {
     tr:hover {
       td {
-        background-color: settings.$color-gray-100;
+        background-color: var(--au-gray-100);
       }
     }
   }
@@ -182,7 +180,7 @@ $i: 1;
     tbody {
       tr:hover {
         td {
-          background-color: settings.$color-gray-200;
+          background-color: var(--au-gray-200);
         }
       }
     }
@@ -193,7 +191,7 @@ $i: 1;
    ========================================================================== */
 
 .auk-table--batch-edit td {
-  background-color: settings.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 /* Table sorter
@@ -215,12 +213,12 @@ $i: 1;
 
   &:hover,
   &:active {
-    color: settings.$color-blue-500;
+    color: var(--au-blue-500);
   }
   &:focus {
     outline: 0;
-    border-color: settings.$color-yellow-500;
-    box-shadow: inset 0 0 0 0.2rem settings.$color-yellow-500;
+    border-color: var(--au-yellow-400);
+    box-shadow: inset 0 0 0 0.2rem var(--au-yellow-400);
   }
 }
 
@@ -248,7 +246,7 @@ $i: 1;
     z-index: 1;
     top: 0;
 
-    background-color: #fff;
+    background-color: var(--au-white);
   }
 }
 
@@ -263,9 +261,9 @@ $i: 1;
     position: sticky;
     right: 0;
 
-    border-left: .1rem solid settings.$color-gray-200;
+    border-left: .1rem solid var(--au-gray-200);
     width: 0; // keep column as small as possible
-    background-color: #fff;
+    background-color: var(--au-white);
   }
 
   tbody td:last-child {
@@ -281,7 +279,7 @@ $i: 1;
 }
 
 .auk-table__actions--bottom {
-  border-top: 2px solid #cbd2da;
+  border-top: 2px solid var(--au-gray-300);
 }
 
 /* Table with list styling
