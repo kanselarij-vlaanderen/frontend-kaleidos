@@ -109,8 +109,22 @@
         <td>Data punt</td>
         <td>Data punt</td>
         <td class="auk-u-text-align--right">
-          <Auk::Button @skin="borderless" @icon="pencil" @layout="icon-only" @route="styleguide">Edit item</Auk::Button>
-          <Auk::Button @skin="borderless" @icon="trash" @layout="icon-only" @route="styleguide">Delete item</Auk::Button>
+          <AuButton
+            @skin="naked"
+            @icon="pencil"
+            @hideText={{true}}
+            @route="styleguide"
+          >
+            Edit item
+          </AuButton>
+          <AuButton
+            @skin="naked"
+            @icon="trash"
+            @hideText={{true}}
+            @route="styleguide"
+          >
+            Delete item
+          </AuButton>
         </td>
       </tr>
     {{/each}}

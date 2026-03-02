@@ -212,7 +212,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
       default:
         break;
     }
-    if (newBeslissingHtmlContent !== this.beslissingPiecePart.htmlContent) {
+    if (regenerateConcerns || newBeslissingHtmlContent !== this.beslissingPiecePart.htmlContent) {
       const now = new Date();
       const newBeslissingPiecePart = await this.store.createRecord('piece-part', {
         title: 'Beslissing',
@@ -313,6 +313,8 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
     const subcase = await agendaActivity?.subcase;
     await subcase?.type;
     const agendaitemType = await this.args.agendaitem.type;
+    const decisionResultCode = await this.args.decisionActivity?.decisionResultCode;
+    const isRetracted = (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
     let newBetreftContent;
     if (subcase?.isBekrachtiging) {
       const ratification = await subcase.ratification;
@@ -323,6 +325,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         ratification ? [...documents, ratification] : documents,
         null, // This seems unused on ratifications
         agendaitemType,
+        isRetracted,
       );
     } else {
       newBetreftContent = await generateBetreft(
@@ -332,6 +335,7 @@ export default class AgendaAgendaitemDecisionDigitalComponent extends Component 
         documents,
         subcase?.subcaseName,
         agendaitemType,
+        isRetracted,
       );
     }
     if (newBetreftContent) {

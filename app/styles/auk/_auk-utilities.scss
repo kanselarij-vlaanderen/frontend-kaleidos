@@ -2,15 +2,14 @@
    Kaleidos utilities
    ========================================================================== */
 
-
 // Utilities
-@use 'auk-u-cursors';
-@use 'auk-u-dimensions';
-@use 'auk-u-generic';
-@use 'auk-u-print';
-@use 'auk-u-scroll';
-@use 'auk-u-spacer';
-@use 'auk-u-text';
+@import "auk-u-cursors";
+@import "auk-u-dimensions";
+@import "auk-u-generic";
+@import "auk-u-print";
+@import "auk-u-scroll";
+@import "auk-u-spacer";
+@import "auk-u-text";
 
 // Custom
 // Hide dropdown text on mobile: exception for the m-header help dropdown

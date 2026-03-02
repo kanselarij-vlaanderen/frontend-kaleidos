@@ -144,18 +144,13 @@ Router.map(function() {
     this.route('accordion-panel');
     this.route('avatar');
     this.route('brand');
-    this.route('button-loading');
-    this.route('button-skins');
-    this.route('button-types');
     this.route('checkbox-tree');
-    this.route('colors');
     this.route('color-badge');
     this.route('datepicker');
     this.route('empty-state');
     this.route('layout-grid');
     this.route('heading');
     this.route('key-value');
-    this.route('link-button');
     this.route('loader');
     this.route('panel');
     this.route('pager');

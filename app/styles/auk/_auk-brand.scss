@@ -1,7 +1,5 @@
-@use "../auk";
-
 /* ==========================================================================
-  auk-brand
+   auk-brand
    ========================================================================== */
 
 .auk-brand {
@@ -37,7 +35,7 @@
     position: absolute;
     right: -.1rem;
     bottom: -.3rem;
-    border-top: 9rem solid #FFF;
+    border-top: 9rem solid var(--au-white);
     border-left: 3.07818rem solid
     transparent;
   }
@@ -62,4 +60,3 @@
     margin-left: 0;
   }
 }
-
