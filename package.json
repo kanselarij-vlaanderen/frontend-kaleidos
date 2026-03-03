@@ -91,7 +91,7 @@
     "ember-cli-string-helpers": "^8.0.1",
     "ember-cli-terser": "^4.0.2",
     "ember-code-snippet": "^3.0.0",
-    "ember-concurrency": "^5.0.0",
+    "ember-concurrency": "^3.1.1",
     "ember-copy": "^2.0.1",
     "ember-data": "~5.3.13",
     "ember-element-helper": "^0.8.8",
@@ -158,6 +158,9 @@
     "node": ">= 20"
   },
   "overrides": {
+    "@appuniversum/ember-appuniversum": {
+      "ember-concurrency": "^3.1.1"
+    },
     "@lblod/ember-rdfa-editor": {
       "tracked-built-ins": "^4.0.0",
       "ember-source": "6.4.0"
