@@ -1,10 +1,6 @@
-@use "../auk";
-
 /* ==========================================================================
-  Component: navbar
-  ---
-  A container for navigational elements
-  ========================================================================== */
+   auk-navbar
+   ========================================================================== */
 
 .auk-navbar {
   display: flex;
@@ -29,7 +25,7 @@
 }
 
 .auk-navbar--white {
-  background: #FFF;
+  background: var(--au-white);
 }
 
 .auk-navbar--no-pad {
@@ -37,22 +33,22 @@
 }
 
 .auk-navbar--gray-100 {
-  background-color: auk.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 .auk-navbar--gray-200 {
-  background-color: auk.$color-gray-200;
+  background-color: var(--au-gray-200);
 }
 
 /* Bordered equivalents
   ========================================================================== */
 
 .auk-navbar--bordered-top {
-  border-top: .1rem solid auk.$color-gray-300;
+  border-top: .1rem solid var(--au-gray-300);
 }
 
 .auk-navbar--bordered-bottom {
-  border-bottom: .1rem solid auk.$color-gray-300;
+  border-bottom: .1rem solid var(--au-gray-300);
 }
 
 /* Sizes

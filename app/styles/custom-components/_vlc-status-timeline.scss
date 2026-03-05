@@ -17,7 +17,7 @@
 
   &:before {
     content: " ";
-    background: auk.$color-border;
+    background: var(--au-border-color);
     height: 100%;
     width: 1px;
     position: absolute;
@@ -31,15 +31,15 @@
   @include au-font-size($au-base);
 
   .vlc-status-timeline__item--positive & {
-    color: #8CAE2C; // Not auk.$color-green-500
+    color: #8CAE2C; // Not var(--au-green-500)
   }
 
   .vlc-status-timeline__item--neutral & {
-    color: auk.$color-gray-600;
+    color: var(--au-gray-600);
   }
 
   .vlc-status-timeline__item--in-progress & {
-    color: auk.$color-primary;
+    color: var(--au-primary);
   }
 }
 
@@ -53,15 +53,15 @@
   margin-right: $au-unit-tiny * 1.2;
 
   .vlc-status-timeline__item--positive & {
-    background: #8CAE2C;// Not auk.$color-green-500
+    background: #8CAE2C;// Not var(--au-green-500)
   }
 
   .vlc-status-timeline__item--neutral & {
-    background: auk.$color-gray-600;
+    background: var(--au-gray-600);
   }
 
   .vlc-status-timeline__item--in-progress & {
-    background: auk.$color-primary;
+    background: var(--au-primary);
   }
 
   .vlc-status-timeline__item + .vlc-status-timeline__item & {

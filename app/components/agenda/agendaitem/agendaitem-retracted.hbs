@@ -12,30 +12,26 @@
     </div>
   </div>
   {{#if this.decisionmakingFlow}}
-    <Auk::Button
-      @skin="primary"
-      @layout="icon-right"
+    <AuButton
       @icon="chevron-right"
-      @route="cases.case.subcases"
-      @model={{this.decisionmakingFlow.id}}
+      @iconAlignment="right"
       class="auk-u-ml-2"
+      {{on "click" this.transitionToCase}}
     >
       {{t "view-case"}}
-    </Auk::Button>
+    </AuButton>
   {{/if}}
   {{#if this.loadProposedStatus.isIdle}}
     {{#if this.modelsForProposedAgenda}}
-      <Auk::Button
-        @skin="primary"
-        @layout="icon-right"
+      <AuButton
         @icon="chevron-right"
-        @route="agenda.agendaitems.agendaitem"
-        @models={{this.modelsForProposedAgenda}}
+        @iconAlignment="right"
         class="auk-u-ml-2"
+        {{on "click" this.transitionToRetractedAgenda}}
       >
         {{t "open-agenda"}}
         {{date-phrase this.latestMeeting.plannedStart}}
-      </Auk::Button>
+      </AuButton>
     {{else}}
       {{#if (user-may "manage-retracted-agendaitems")}}
         {{!-- template-lint-disable require-context-role --}}

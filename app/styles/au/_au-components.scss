@@ -47,6 +47,7 @@ $au-unit-medium: 1.6rem;
 @import '@appuniversum/ember-appuniversum/styles/components/c-textarea';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toaster';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toolbar';
+@import '@appuniversum/ember-appuniversum/styles/components/c-tooltip';
 @import '@appuniversum/ember-appuniversum/styles/components/c-toggle-switch';
 
 
@@ -151,7 +152,7 @@ $au-unit-medium: 1.6rem;
 
 .au-c-content {
   @include au-font-size(1.5rem, 1.6); // default font size in Kaleidos
-  color: $au-gray-800; // default text color in Kaleidos
+  color: var(--au-text-color); // default text color in Kaleidos
 
   h1, h2, h3, h4, h5, h6, // default heading styling in Kaleidos
   .au-c-heading--1,
@@ -160,7 +161,7 @@ $au-unit-medium: 1.6rem;
   .au-c-heading--4,
   .au-c-heading--5,
   .au-c-heading--6 {
-    color: $au-gray-900;
+    color: var(--au-text-color)0;
     font-weight: 500;
   }
 
@@ -359,26 +360,26 @@ $au-unit-medium: 1.6rem;
   &.au-c-button--muted {
     &,
     &:visited {
-      color: auk.$color-gray-600;
+      color: var(--au-gray-600);
     }
 
     &:hover,
     &:focus-visible,
     &:active {
-      color: auk.$color-gray-800;
+      color: var(--au-gray-800);
     }
 
     &.is-disabled,
     &.is-disabled:hover,
     &.is-disabled:focus-visible,
     &.is-disabled:active {
-      color: auk.$color-gray-700;
+      color: var(--au-gray-700);
     }
 
     &.is-loading,
     &.is-loading:hover,
     &.is-loading:focus-visible {
-      color: auk.$color-gray-700;
+      color: var(--au-gray-700);
     }
   }
 }
@@ -527,6 +528,13 @@ $au-unit-medium: 1.6rem;
       @include auk.mixin-style-warning('Nested control groups can\'t be used when the parent group has @layout \'inline\' defined.');
     }
   }
+}
+
+.au-c-control-group--error {
+  background-color: $au-alert-error-background-color;
+  border: 0.1rem solid $au-input-border-color;
+  border-color: $au-alert-error-border-color;
+  border-radius: $au-input-border-radius;
 }
 
 // Alert
@@ -889,4 +897,17 @@ $au-unit-medium: 1.6rem;
 
     outline-offset: calc(var(--au-outline-offset) * -1);
   }
+}
+
+// Tooltip
+
+.au-c-tooltip {
+  white-space: normal;
+}
+
+.au-c-tooltip--large {
+  padding: 1.2rem 1.6rem;
+
+  font-size: 1.4rem;
+  line-height: 1.3;
 }

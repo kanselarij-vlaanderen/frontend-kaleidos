@@ -59,6 +59,7 @@ const {
 // - view-document-version-info: View info related to document versioning. Is this this a recent addition? Older versions, ...
 // - view-documents-before-release: allow the viewing of documents before they are released internally
 // - view-decisions-before-release: allow the viewing of decisions before they are released internally
+// - view-preliminary-decisions: allow the viewing of postponed and retracted decision results before they are propagated
 // - view-all-confidential-documents: allow the viewing of confidential documents in your graph
 // - view-only-specific-confidential-documents: allow the viewing of a restricted selection of confidential documents.
 // - view-ratification-before-release: See ratification info before the agenda is finalized
@@ -86,6 +87,7 @@ const {
 // - remove-piece-from-parliament
 // - manage-agendaitems-with-parliament-flow
 // - add-signed-piece: replacing a main piece or derived piece with a signed pdf and run strip/flatten
+// - restore-submissions: removing the treated status from submission so it's treatable again
 
 const groups = [
   {
@@ -99,6 +101,7 @@ const groups = [
         'view-document-version-info',
         'view-documents-before-release',
         'view-decisions-before-release',
+        'view-preliminary-decisions',
         'view-all-confidential-documents',
         'view-ratification-before-release',
         'search-confidential-cases',
@@ -152,6 +155,7 @@ const groups = [
         'manage-agendaitems-with-parliament-flow',
         'edit-draft-document-access-levels',
         'add-signed-piece',
+        'restore-submissions'
       ]
     }
   },
@@ -166,6 +170,7 @@ const groups = [
       'view-document-version-info',
       'view-documents-before-release',
       'view-decisions-before-release',
+      'view-preliminary-decisions',
       'view-all-confidential-documents',
       'view-ratification-before-release',
       'search-confidential-cases',
@@ -201,6 +206,7 @@ const groups = [
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
         'edit-draft-document-access-levels',
+        'restore-submissions',
       ]
     }
   },
@@ -214,6 +220,7 @@ const groups = [
         'view-document-version-info',
         'view-documents-before-release',
         'view-decisions-before-release',
+        'view-preliminary-decisions',
         'view-all-confidential-documents',
         'search-confidential-cases',
         'search-confidential-documents',
@@ -247,6 +254,7 @@ const groups = [
         'create-subcases-from-submissions',
         'upload-any-submission-document-extension',
         'edit-draft-document-access-levels',
+        'restore-submissions',
       ]
     }
   },
@@ -260,6 +268,7 @@ const groups = [
         'view-document-version-info',
         'view-documents-before-release',
         'view-decisions-before-release',
+        'view-preliminary-decisions',
         'view-all-confidential-documents',
         'view-ratification-before-release',
         'search-confidential-cases',
@@ -284,6 +293,7 @@ const groups = [
         'view-document-version-info',
         'view-documents-before-release',
         'view-decisions-before-release',
+        'view-preliminary-decisions',
         'view-all-confidential-documents',
         'view-ratification-before-release',
         'view-documents-postponed-and-retracted',
@@ -304,6 +314,7 @@ const groups = [
       readOnly: [
         'view-document-version-info',
         'view-documents-before-release',
+        'view-preliminary-decisions',
         'view-documents-postponed-and-retracted',
         'view-all-confidential-documents',
         'view-submissions',
@@ -330,6 +341,7 @@ const groups = [
       readOnly: [
         'view-document-version-info',
         'view-documents-before-release',
+        'view-preliminary-decisions',
         'view-only-specific-confidential-documents',
         'view-documents-postponed-and-retracted',
         'view-submissions',

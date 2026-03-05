@@ -1,0 +1,77 @@
+@use "settings";
+
+/* ==========================================================================
+  Utilities: generic (no category)
+  ========================================================================== */
+
+.auk-u-hidden {
+  display: none !important;
+}
+
+.auk-u-inline-block {
+  display: inline-block !important;
+}
+
+.auk-u-block {
+  display: block !important;
+}
+
+.auk-u-inline {
+  display: inline !important;
+}
+
+.auk-u-align-middle {
+  vertical-align: middle !important;
+}
+
+.auk-u-sr-only {
+  position: absolute !important;
+  left: -10000px !important;
+  top: auto !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+}
+
+.auk-u-sr-only-table-cell {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+.auk-u-overflow-hidden {
+  overflow: hidden !important;
+}
+
+.auk-u-bg-alt {
+  background-color: var(--au-gray-100) !important;
+}
+
+.auk-u-opacity--1\/2 {
+  opacity: 0.5 !important;
+}
+
+.auk-u-opacity--1\/3 {
+  opacity: 0.33 !important;
+}
+
+.auk-u-border-top {
+  border-top: .1rem solid var(--au-gray-300) !important;
+}
+
+.auk-u-border-right {
+  border-right: .1rem solid var(--au-gray-300) !important;
+}
+
+.auk-u-border-bottom {
+  border-bottom: .1rem solid var(--au-gray-300) !important;
+}
+
+.auk-u-border-left {
+  border-left: .1rem solid var(--au-gray-300) !important;
+}
+
+.auk-u-position-relative {
+  position: relative !important;
+}

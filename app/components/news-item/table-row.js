@@ -9,22 +9,18 @@ export default class NewsItemTableRowComponent extends Component {
   @service toaster;
   @service intl;
   @service agendaitemNota;
+  @service currentSession;
 
   @tracked isOpenEditView = false;
   @tracked notaOrVisieNota;
   @tracked decisionActivity;
+  @tracked subcase;
 
   constructor() {
     super(...arguments);
     this.loadNotaOrVisienota.perform();
     this.loadDecisionActivity.perform();
-  }
-
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+    this.loadSubcase.perform();
   }
 
   get class() {
@@ -36,9 +32,22 @@ export default class NewsItemTableRowComponent extends Component {
   }
 
   @task
+  *loadDecisionActivity() {
+    const treatment = yield this.args.agendaitem.treatment;
+    this.decisionActivity = yield treatment?.decisionActivity;
+    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
+  }
+
+  loadSubcase = task(async () => {
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
+    this.subcase = await agendaActivity?.subcase;
+  })
+
+  @task
   *saveNewsItem(newsItem, wasNewsItemNew) {
-    yield this.args.onSave(newsItem, wasNewsItemNew);
-    this.closeEditView();
+    yield newsItem.stopEditingOnSave();
+    yield this.args.onSave(wasNewsItemNew);
+    this.isOpenEditView = false;
   }
 
   @task
@@ -51,7 +60,8 @@ export default class NewsItemTableRowComponent extends Component {
   @task
   *toggleInNewsletterFlag(checked) {
     this.args.newsItem.inNewsletter = checked;
-    yield this.saveNewsItem.perform(this.args.newsItem);
+    yield this.args.newsItem.save(); // not setting/unsetting isbeingEditedBy
+    yield this.args.onSave();
   }
 
   @action
@@ -68,7 +78,8 @@ export default class NewsItemTableRowComponent extends Component {
   }
 
   @action
-  closeEditView(wasNewsItemNew) {
+  async closeEditView(newsItem, wasNewsItemNew) {
+    await newsItem?.stopEditingOnCancel(this.currentSession.user);
     this.args.onCancel(wasNewsItemNew);
     this.isOpenEditView = false;
   }

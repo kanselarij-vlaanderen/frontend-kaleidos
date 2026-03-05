@@ -32,7 +32,7 @@
 
 .vlc-agenda-meta__status--positive {
   opacity: 1;
-  color: auk.$color-green-700;
+  color: var(--au-green-700);
 }
 
 .vlc-agenda-meta__status--warning {
@@ -44,7 +44,7 @@
 .vlc-agenda-items__sub-item--active a:hover,
 .vlc-agenda-items__sub-item--active a:active {
   .vlc-agenda-meta__status {
-    color: #FFF;
+    color: var(--au-white);
   }
 }
 

@@ -222,11 +222,12 @@ function checkColumnsIfUnchecked(columnKeyNames) {
       .then((checked) => {
         if (!checked) {
           cy.get(`[${publication.tableDisplayConfig.option}${columnKeyName}]`).parent(appuniversum.checkbox)
-            .click();
+            .forceClick();
         }
       });
   });
-  cy.get(publication.tableDisplayConfig.close).forceClick(); // close button may be out of view top right
+  cy.get(auk.popover.close)
+    .forceClick(); // close button may be out of view top right
 }
 
 /**

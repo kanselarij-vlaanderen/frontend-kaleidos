@@ -1,0 +1,31 @@
+/* ==========================================================================
+   auk-key-value
+   ========================================================================== */
+
+.auk-key-values-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem; // $au-unit-medium
+}
+
+.auk-key-value-item__label {
+  color: var(--au-muted);
+  font-weight: 500;
+  max-width: 22rem;
+  margin-bottom: 0.5rem;
+}
+
+.auk-key-value-item {
+  margin-bottom: 0;
+}
+
+.auk-key-value-item--horizontal {
+  display: flex;
+  align-items: center;
+  height: 3.5rem;
+
+  .auk-key-value-item__label {
+    width: 45%;
+    margin-bottom: 0;
+  }
+}

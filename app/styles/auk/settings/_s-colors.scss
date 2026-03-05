@@ -1,0 +1,17 @@
+@use "sass:color";
+
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+
+// Tint & shade helper functions
+// ---
+// Makes a color lighter
+@function tint($color, $percent) {
+  @return color.mix(#fff, $color, $percent);
+}
+
+// Makes a color darker
+@function shade($color, $percent) {
+  @return color.mix(#000, $color, $percent);
+}

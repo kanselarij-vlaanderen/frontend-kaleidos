@@ -15,30 +15,30 @@
   min-height: 3.4rem;
   // overflow-y: hidden;
 
-  border: 0.1rem solid auk.$color-gray-300;
+  border: 0.1rem solid var(--au-gray-300);
   border-radius: .3rem;
-  background-color: #fff;
+  background-color: var(--au-white);
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3e%3cpath d='M0.42,9.77a3.27,3.27,0,0,1,.91-2.21,3.12,3.12,0,0,1,4.41,0L16,17.82,26.25,7.56A3.12,3.12,0,0,1,30.67,12L18.2,24.44a3.12,3.12,0,0,1-4.41,0L1.33,12A3.17,3.17,0,0,1,.42,9.77'/%3e%3ctext y='90'%3e' %26apos; %23 %25 %26amp; %c2%bf %f0%9f%94%a3%3c/text%3e%3c/svg%3e"); // sass-lint:disable-line max-line-length
   background-repeat: no-repeat;
   background-size: 1.1rem;
   background-position: calc(100% - 1.5rem) 50%;
   padding: .7rem 6rem .7rem .7rem;
 
-  color: auk.$color-gray-800;
+  color: var(--au-gray-800);
   font-family: flanders-sans, sans-serif;
   font-size: 1.5rem;
   line-height: normal;
   text-decoration: none;
 
   &[aria-disabled=true] {
-    color: auk.$color-gray-500;
-    background-color: auk.$color-gray-100;
+    color: var(--au-gray-500);
+    background-color: var(--au-gray-100);
   }
 
   &:focus {
     outline: 0;
-    border-color: auk.$color-yellow-500;
-    box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+    border-color: var(--au-outline-color);
+    box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
   }
 
   &[multiple] {
@@ -63,7 +63,7 @@
 .ember-power-select-placeholder {
   margin-left: 0;
 
-  color: auk.$color-gray-500;
+  color: var(--au-gray-500);
 }
 
 .ember-power-select-status-icon {
@@ -89,7 +89,7 @@
 
   border: none;
   border-radius: 0.3rem;
-  background-color: #FFF;
+  background-color: var(--au-white);
   box-shadow: auk.$shadow-medium;
 }
 
@@ -106,28 +106,28 @@
   width: 100%;
   padding: 0.7rem 0 0.5rem 1rem;
 
-  color: auk.$color-gray-800;
+  color: var(--au-gray-800);
   font-size: 1.5rem;
 
   &:hover,
   &[aria-selected=true],
   &[aria-current=true] {
-    color: auk.$color-gray-800;
+    color: var(--au-gray-800);
   }
 
   &[aria-current=true] {
     position: relative;
 
-    background-color: auk.$color-gray-100;
+    background-color: var(--au-gray-100);
   }
 
   &[aria-selected=true] {
-    background-color: auk.$color-gray-200;
+    background-color: var(--au-gray-200);
   }
 }
 
 .ember-power-select-search {
-  border-bottom: 0.1rem solid auk.$color-gray-200;
+  border-bottom: 0.1rem solid var(--au-gray-200);
 }
 
 .ember-power-select-search-input {
@@ -137,12 +137,12 @@
   height: unset !important;
   -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
 
-  border: 0.1rem solid auk.$color-gray-300;
+  border: 0.1rem solid var(--au-gray-300);
   border-radius: .3rem;
-  background: #fff;
+  background: var(--au-white);
   padding: 0 1rem;
 
-  color: auk.$color-text;
+  color: var(--au-text-color);
   font-family: $au-font;
   font-size: 1.6rem;
   line-height: 3.5rem;
@@ -154,12 +154,12 @@
   &:focus,
   &--focus {
     outline: none;
-    border-color: auk.$color-yellow-500;
-    box-shadow: inset 0 0 0 0.1rem auk.$color-yellow-500;
+    border-color: var(--au-outline-color);
+    box-shadow: inset 0 0 0 0.1rem var(--au-outline-color);
   }
 
   &::placeholder {
-    color: auk.$color-gray-500;
+    color: var(--au-gray-500);
   }
 
   &::-webkit-search-cancel-button {
@@ -207,7 +207,7 @@
     font-size: 0;
 
     &:before {
-      color: auk.$color-gray-600;
+      color: var(--au-gray-600);
     }
 
     &:not(:hover) {

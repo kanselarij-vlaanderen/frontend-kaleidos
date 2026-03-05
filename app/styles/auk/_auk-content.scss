@@ -1,0 +1,132 @@
+@use "settings";
+
+/* ==========================================================================
+  auk-content
+   ========================================================================== */
+
+.auk-content p {
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.auk-content strong {
+  color: var(--au-gray-1000);
+}
+
+.auk-heading,
+.auk-content h1, .auk-h1,
+.auk-content h2, .auk-h2,
+.auk-content h3, .auk-h3,
+.auk-content h4, .auk-h4,
+.auk-content h5, .auk-h5 {
+  color: var(--au-gray-900);
+  font-weight: 500;
+}
+
+.auk-heading--jumbo {
+  font-size: 4.8rem;
+  margin: 0 0 4.8rem;
+}
+
+.auk-content h1, .auk-h1 {
+  font-size: 3.2rem;
+  margin: 0 0 3.2rem;
+}
+
+.auk-content h2, .auk-h2 {
+  font-size: 2.6rem;
+  margin: 0 0 2.6rem;
+}
+
+.auk-content h3, .auk-h3 {
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+}
+
+.auk-content h4, .auk-h4 {
+  font-size: 1.6rem;
+  margin: 0 0 1.6rem;
+}
+
+.auk-content h5, .auk-h5 {
+  font-size: 1.3rem;
+  margin: 0 0 1.3rem;
+}
+
+.auk-content p small, .auk-body-2 {
+  font-size: 1.3rem;
+}
+
+.auk-ul {
+  list-style: inside;
+}
+
+.auk-content {
+  ol,
+  ul {
+    list-style: revert;
+    padding-inline-start: 2rem;
+  }
+
+  ol,
+  ul {
+    margin-block-start: 0;
+    margin-block-end: 1.5rem;
+
+    ol,
+    ul {
+      margin-block-end: 0;
+    }
+  }
+
+  pre {
+    background-color: var(--au-gray-100);
+    padding: 1.5rem;
+    margin: 0 0 1rem;
+    font-size: 75%;
+    white-space: pre-wrap;
+  }
+
+  pre,
+  code {
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  }
+
+  > code,
+  p > code,
+  li > code {
+    font-size: 85%;
+    background-color: var(--au-gray-100);
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+    color: var(--au-red-500);
+  }
+
+  table {
+    width: 100%;
+    margin: 1.5rem 0;
+  }
+
+  table td,
+  table th {
+    padding: 0.8rem;
+    vertical-align: middle;
+    padding: 1.2rem 1rem;
+    border-bottom: .1rem solid var(--au-gray-300);
+  }
+
+  table th {
+    border-bottom-width: .2rem;
+    text-align: left;
+    font-weight: 500;
+    color: var(--au-gray-600);
+  }
+
+  table tr:last-child td {
+    border-bottom-width: 0
+  }
+
+  table td {
+    border-bottom: .1rem solid var(--au-gray-300);
+  }
+}

@@ -29,10 +29,12 @@
     <accordionPanel.Header @title="Panel title" as |header|>
       <header.Actions as |actions|>
         <actions.Item>
-          <Auk::Button @skin="tertiary" @icon="pencil">Button label</Auk::Button>
-        </actions.Item>
-        <actions.Item>
-          <Auk::Button @skin="tertiary" @icon="three-dots" @layout="icon-only">More</Auk::Button>
+          <AuButton
+            @skin="naked"
+            @icon="pencil"
+          >
+            Button label
+          </AuButton>
         </actions.Item>
       </header.Actions>
     </accordionPanel.Header>

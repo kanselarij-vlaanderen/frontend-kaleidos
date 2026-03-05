@@ -217,7 +217,11 @@
     <Auk::Modal::Body>
       {{#let (await @submission.pieces) as |pieces|}}
         {{#if pieces.length}}
-          <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesMovedCounter total=pieces.length)}} />
+          {{#if (eq this.piecesMovedCounter pieces.length)}}
+            <Auk::Loader @message={{concat (t "save-in-progress") " " (t "dont-close-the-page")}} />
+          {{else}}
+            <Auk::Loader @message={{concat (t "save-in-progress") " " (t "documents-creating-progress-message" count=this.piecesMovedCounter total=pieces.length)}} />
+          {{/if}}
         {{else}}
           <Auk::Loader @message={{t "save-in-progress"}} />
         {{/if}}

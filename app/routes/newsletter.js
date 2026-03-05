@@ -4,6 +4,8 @@ import { inject as service } from '@ember/service';
 export default class NewsletterRoute extends Route {
   @service('session') simpleAuthSession;
   @service store;
+  @service currentSession;
+  @service router;
 
   beforeModel(transition) {
     this.simpleAuthSession.requireAuthentication(transition, this.simpleAuthSession.unauthenticatedRouteName);
@@ -20,5 +22,11 @@ export default class NewsletterRoute extends Route {
       meeting,
       agenda: latestAgenda,
     };
+  }
+  
+  afterModel() {
+    if (!this.currentSession.may('manage-news-items')) {
+      this.router.replaceWith('newsletter.print');
+    }
   }
 }

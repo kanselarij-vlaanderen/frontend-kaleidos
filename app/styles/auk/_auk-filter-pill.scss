@@ -1,0 +1,66 @@
+/* ==========================================================================
+   auk-filter-pill
+   ========================================================================== */
+
+.auk-filter-pill {
+  font-family: var(--au-font);
+  font-size: 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 .5rem 0 .6rem;
+  border-radius: .5rem;
+  height: 2.4rem;
+  color: var(--au-gray-600);
+  background-color: var(--au-gray-100);
+  border: .1rem solid var(--au-gray-300);
+}
+
+.auk-filter-pill__action {
+  position: relative;
+  width: 1.8rem;
+  height: 1.8rem;
+  padding-left: .5rem;
+  margin-left: .5rem;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: -0.2rem;
+    height: 2.2rem;
+    width: 0.1rem;
+    background-color: var(--au-gray-300);
+    color: var(--au-gray-600);
+  }
+}
+
+.auk-filter-pill__second-label {
+  font-weight: 400;
+  margin-left: .5rem;
+}
+
+.auk-filter-pill__multiple-labels {
+  font-weight: 400;
+  font-size: 1.2rem;
+  background-color: var(--au-gray-600);
+  color: var(--au-white);
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: .5rem;
+}
+
+/* auk-pill-list
+  ========================================================================== */
+
+.auk-filter-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  line-height: normal;
+}

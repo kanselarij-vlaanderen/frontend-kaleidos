@@ -1,0 +1,21 @@
+/* ==========================================================================
+  auk-empty-state
+  ========================================================================== */
+
+.auk-empty-state {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.auk-empty-state--bordered {
+  background: var(--au-white);
+  border: .1rem solid var(--au-border-color);
+  border-radius: .3rem;
+  overflow: hidden;
+  padding: 3rem;
+}
+
+.auk-empty-state__content {
+  color: var(--au-gray-600);
+}

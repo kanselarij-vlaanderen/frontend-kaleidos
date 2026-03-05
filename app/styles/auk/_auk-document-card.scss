@@ -1,0 +1,68 @@
+/* ==========================================================================
+   auk-document-card
+   ========================================================================== */
+
+.auk-document-card {
+  position: relative;
+  padding: 2rem;
+  border: .1rem solid var(--au-gray-300);
+  display: flex;
+  align-items: center;
+}
+
+.auk-document-card + .auk-document-card {
+  border-top: none;
+}
+
+.auk-document-card {
+  &.active {
+    background-color: var(--au-gray-100);
+    &:after {
+      content: "";
+      height: calc(100% + 2px);
+      left: -1px;
+      top: -1px;
+      bottom: -1px;
+      width: 0.4rem;
+      position: absolute;
+      background-color: var(--au-blue-500);
+    }
+  }
+}
+
+.auk-document-card__content {
+  flex: 1 1 auto;
+}
+
+.auk-document-card__details {
+  margin-bottom: 0.5rem;
+}
+
+.auk-document-card__title {
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.auk-document-card__meta {
+  color: var(--au-gray-600);
+  display: flex;
+  align-items: flex-start;
+
+}
+
+.auk-document-card__actions {
+  flex: 0 0 auto;
+
+  .auk-button-toolbar {
+    flex-wrap: nowrap;
+  }
+}
+
+.auk-document-card--clickable {
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: var(--au-gray-100);
+  }
+}

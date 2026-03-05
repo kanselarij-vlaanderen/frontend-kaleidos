@@ -13,7 +13,7 @@ export default class VRNotulenName {
 
   static get regex() {
     const regexGroup = VRNotulenName.regexGroups;
-    return new RegExp(`^${regexGroup.context} PV ${regexGroup.year}/${regexGroup.sessionNr}${regexGroup.versionSuffix}?$`);
+    return new RegExp(`^${regexGroup.context} PV ${regexGroup.year}/${regexGroup.sessionNr}(.*?)${regexGroup.versionSuffix}?$`);
   }
 
   constructor(name) {

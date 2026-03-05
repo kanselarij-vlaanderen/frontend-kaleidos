@@ -1,0 +1,23 @@
+@use "sass:map";
+
+@use "../settings";
+
+/* ==========================================================================
+   Mixins
+   ---
+   Global SCSS mixins
+   ========================================================================== */
+
+@mixin element-focus {
+   &:focus {
+      outline: 0;
+      border-color: var(--au-yellow-400);
+      box-shadow: inset 0 0 0 0.1rem var(--au-yellow-400);
+   }
+}
+
+@mixin breakpoint($breakpoint) {
+   @media (min-width: map.get($map: settings.$global-breakpoints, $key: $breakpoint)) {
+      @content;
+   }
+}

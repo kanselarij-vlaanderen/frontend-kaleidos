@@ -15,6 +15,6 @@ export default class PrintNewsletterController extends Controller {
 
   @task
   *saveNewsItem(newsItem) {
-    yield newsItem.save();
+    yield newsItem.stopEditingOnSave();
   }
 }

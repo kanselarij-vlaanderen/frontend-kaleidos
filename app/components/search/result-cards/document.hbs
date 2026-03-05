@@ -34,9 +34,11 @@
   </c.header>
   {{#if @contentHighlight}}
     <c.content>
-      <p>
-        …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
-      </p>
+      <AuContent>
+        <p>
+          …<SanitizeHtml @raw={{true}} @value={{object-at 0 @contentHighlight}} />…
+        </p>
+      </AuContent>
     </c.content>
   {{/if}}
   <c.footer>

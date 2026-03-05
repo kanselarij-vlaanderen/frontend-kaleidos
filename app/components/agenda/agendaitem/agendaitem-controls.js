@@ -2,8 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, all } from 'ember-concurrency';
-import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -27,6 +26,7 @@ export default class AgendaitemControls extends Component {
   @service newsletterService;
   @service cabinetMail;
   @service draftSubmissionService;
+  @service subcaseService;
 
   @tracked isVerifying = false;
   @tracked isVerifyingSendBack = false;
@@ -208,7 +208,11 @@ export default class AgendaitemControls extends Component {
     const agendaItemType = await agendaitem.type;
     const previousNumber = agendaitem.number > 1 ? agendaitem.number - 1 : agendaitem.number;
     if (this.isDeletable) {
-      await this.agendaService.deleteAgendaitem(agendaitem);
+      const keepDecisionAndNewsitem = agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
+      if (keepDecisionAndNewsitem) {
+        await this.agendaService.keepDraftDecisionAndNewsItem(agendaitem, submission);
+      }
+      await this.agendaService.deleteAgendaitem(agendaitem, keepDecisionAndNewsitem);
     } else {
       // should be unreachable if there is a submission
       await this.agendaService.deleteAgendaitemFromMeeting(agendaitem);
@@ -216,29 +220,7 @@ export default class AgendaitemControls extends Component {
     // If decisionmaking flow & case are new & they don't have other subcases
     //  → Delete
     const subcase = await submission.subcase; // could this ever be stale? get subcase from agendaitem instead?
-    if (submission.decisionmakingFlowTitle) {
-      const decisionmakingFlow = await submission.belongsTo('decisionmakingFlow').reload();
-      const subcases = await decisionmakingFlow.hasMany('subcases').reload();
-      if (subcases.length === 1 && subcases.at(0).id === subcase.id) {
-        const _case = await decisionmakingFlow.case;
-        await _case.destroyRecord();
-        await decisionmakingFlow.destroyRecord();
-      }
-    }
-    // Delete subcase
-    await subcase.destroyRecord();
-    // Delete submission activity
-    const submissionActivities = await submission.submissionActivities;
-    await Promise.all((submissionActivities.map((activity) => activity.destroyRecord())));
-    // submission still has acceptedPieces connected to draftPieces, but are we always allowed to delete the acceptedpieces?
-    const acceptedPiecesOfSubmission = await this.store.queryAll('piece', {
-      'filter[draft-piece][submission][:id:]': submission.id,
-    });
-
-    const savePromises = acceptedPiecesOfSubmission.map(async (piece) => {
-      await deletePiece(piece, false);
-    });
-    await all(savePromises);
+    await this.subcaseService.deleteSubcaseFullyForSubmission(subcase, submission);
 
     if (this.args.onDeleteAgendaitem) {
       await this.args.onDeleteAgendaitem(agendaItemType, previousNumber);
@@ -256,7 +238,7 @@ export default class AgendaitemControls extends Component {
   @task
   *retractAgendaitem() {
     yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'));
+    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'), true);
     yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
   }
 
@@ -295,7 +277,7 @@ export default class AgendaitemControls extends Component {
   }
 
   @task
-  *updateDecisionPiecePart(message) {
+  *updateDecisionPiecePart(message, regenerateConcerns) {
     const report = yield this.store.queryOne('report', {
       filter: {
         'decision-activity': { ':id:': this.decisionActivity.id },
@@ -323,7 +305,8 @@ export default class AgendaitemControls extends Component {
         );
         yield newBeslissingPiecePart.save();
         yield this.decisionReportGeneration.generateReplacementReport.perform(
-          report
+          report,
+          regenerateConcerns
         );
       }
     }
@@ -349,24 +332,24 @@ export default class AgendaitemControls extends Component {
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
     yield this.decisionActivity.save();
-    if (
-      [
-        CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD,
-        CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN,
-      ].includes(decisionResultCodeUri)
-    ) {
+    if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
       const pieces = yield this.args.agendaitem.pieces;
       for (const piece of pieces.slice()) {
         yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
-          piece
+          piece,
         );
-        if (
-          decisionResultCodeUri ===
-          CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN
-        ) {
+      }
+      return;
+    }
+    if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
+      const pieces = yield this.args.agendaitem.pieces;
+        for (const piece of pieces.slice()) {
+          yield this.pieceAccessLevelService.strengthenAccessLevelToRetracted(
+            piece,
+          );
           yield this.signatureService.removeSignFlowForPiece(piece);
         }
-      }
+      return;
     }
   }
 }

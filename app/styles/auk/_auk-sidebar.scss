@@ -1,13 +1,11 @@
-@use "../auk";
-
 /* ==========================================================================
-  Component: sidebar
-  ========================================================================== */
+   auk-sidebar
+   ========================================================================== */
 
 .auk-sidebar {
   width: 24rem;
   height: 100%;
-  background-color: auk.$color-gray-100;
+  background-color: var(--au-gray-100);
 
   [data-sidebar-collapsed-only] {
     display: none;
@@ -37,11 +35,11 @@
   ========================================================================== */
 
 .auk-sidebar--left {
-  border-right: 0.1rem solid auk.$color-gray-300;
+  border-right: 0.1rem solid var(--au-gray-300);
 }
 
 .auk-sidebar--right {
-  border-left: 0.1rem solid auk.$color-gray-300;
+  border-left: 0.1rem solid var(--au-gray-300);
 }
 
 /* Sidebar sizes
@@ -70,7 +68,7 @@
   display: block;
   text-decoration: none;
   padding: 1rem 2rem;
-  color: auk.$color-text;
+  color: var(--au-text-color);
   transition: background-color 200ms;
 
   .auk-sidebar--left[data-collapsed="true"] & {
@@ -82,7 +80,7 @@
   }
 
   &:hover {
-    background-color: auk.$color-gray-200;
+    background-color: var(--au-gray-200);
   }
 }
 
@@ -92,12 +90,12 @@
 
 .auk-sidebar__sublabel {
   font-size: 1.3rem;
-  color: auk.$color-muted;
+  color: var(--au-muted);
 }
 
 .auk-sidebar__item--active a {
-  background-color: auk.$color-gray-200;
-  color: auk.$color-gray-800;
+  background-color: var(--au-gray-200);
+  color: var(--au-gray-800);
 }
 
 .auk-sidebar__item--styled {
@@ -113,7 +111,7 @@
       bottom: 0;
       left: 0;
       width: 0.4rem;
-      background-color: auk.$color-primary;
+      background-color: var(--au-primary);
       height: 100%;
     }
   }
@@ -123,24 +121,24 @@
   ========================================================================== */
 
 .auk-sidebar--gray-100 {
-  background-color: auk.$color-gray-100;
+  background-color: var(--au-gray-100);
 }
 
 .auk-sidebar--gray-200 {
-  background-color: auk.$color-gray-200;
+  background-color: var(--au-gray-200);
 
   .auk-sidebar__item a:hover {
-      background-color: auk.$color-gray-300;
+      background-color: var(--au-gray-300);
   }
 
   .auk-sidebar__item a.active,
   .auk-sidebar__item--active a {
-    background-color: auk.$color-gray-300;
+    background-color: var(--au-gray-300);
   }
 }
 
 .auk-sidebar--white {
-  background: #fff;
+  background: var(--au-white);
 }
 
 /* Responsive panel layout
@@ -181,8 +179,8 @@ $scroll-sidebar-width: 50rem;
     position: relative;
     height: 100%;
     width: #{$scroll-sidebar-width};
-    background-color: auk.$color-gray-100;
-    border-left: .1rem solid auk.$color-gray-300;
+    background-color: var(--au-gray-100);
+    border-left: .1rem solid var(--au-gray-300);
   }
 
   .auk-sidebar {
@@ -197,7 +195,7 @@ $scroll-sidebar-width: 50rem;
   ========================================================================== */
 
 .auk-sidebar__header {
-  border-bottom: .2rem solid auk.$color-gray-300;
+  border-bottom: .2rem solid var(--au-gray-300);
   padding: .7rem 1.2rem;
   display: flex;
   justify-content: space-between;
@@ -211,7 +209,7 @@ $scroll-sidebar-width: 50rem;
 }
 
 .auk-sidebar__footer {
-  border-top: .1rem solid auk.$color-gray-300;
+  border-top: .1rem solid var(--au-gray-300);
   min-height: 5rem;
   padding: .9rem 1.2rem;
 }

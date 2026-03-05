@@ -1,0 +1,26 @@
+/* ==========================================================================
+   auk-color-badge
+   ========================================================================== */
+
+.auk-color-badge {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  border-radius: 0.2rem;
+}
+
+.auk-color-badge--default {
+  background-color: var(--au-gray-500);
+}
+
+.auk-color-badge--warning {
+  background-color: var(--au-yellow-400);
+}
+
+.auk-color-badge--error {
+  background-color: var(--au-red-500);
+}
+
+.auk-color-badge--success {
+  background-color: var(--au-green-500);
+}

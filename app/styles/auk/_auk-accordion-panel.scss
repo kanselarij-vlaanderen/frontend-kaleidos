@@ -1,0 +1,63 @@
+/* ==========================================================================
+   auk-panel-accordion
+   ========================================================================== */
+
+.auk-accordion-panel {
+  background: var(--au-white);
+  border: .1rem solid var(--au-gray-300);
+  border-radius: .3rem;
+  overflow: hidden;
+
+  .auk-accordion-panel__item {
+    .auk-toolbar-complex__left .au-c-icon:first-child {
+      transform: rotate(90deg);
+      transition: .150s ease-in-out;
+    }
+
+    .auk-accordion-panel__content {
+      padding: 2rem;
+      margin-left: 0;
+      border-top: .1rem solid var(--au-gray-300);
+    }
+
+    &.auk-accordion-panel__item--closed {
+      .auk-accordion-panel__content {
+        display: none;
+      }
+
+      .auk-toolbar-complex__left .au-c-icon:first-child {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+
+.auk-accordion-panel__header {
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.auk-accordion-panel__header--regular {
+  height: 5.5rem;
+}
+
+.auk-accordion-panel__header--large {
+  height: 7.5rem;
+}
+
+.auk-accordion-panel__title-container {
+  padding: 0;
+}
+
+.auk-accordion-panel__title {
+  margin: 0;
+
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.auk-accordion-panel__title--small {
+  font-size: 1.6rem;
+}

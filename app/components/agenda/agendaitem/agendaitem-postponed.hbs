@@ -13,18 +13,15 @@
   </div>
   {{#if (and @meeting.internalDecisionPublicationActivity.startDate this.loadProposedStatus.isIdle)}}
     {{#if this.modelsForProposedAgenda}}
-      <Auk::Button
+      <AuButton
         data-test-agendaitem-postponed-latest-meeting
-        @skin="primary"
-        @layout="icon-right"
         @icon="chevron-right"
-        @route="agenda.agendaitems.agendaitem"
-        @models={{this.modelsForProposedAgenda}}
-        class="auk-u-ml-2"
+        @iconAlignment="right"
+        {{on "click" this.transitionToProposedAgenda}}
       >
         {{t "open-agenda"}}
         {{date-phrase this.latestMeeting.plannedStart}}
-      </Auk::Button>
+      </AuButton>
     {{else}}
       {{#if (user-may "manage-agendaitems")}}
         {{!-- template-lint-disable require-context-role --}}

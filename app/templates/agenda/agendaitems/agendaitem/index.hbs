@@ -14,6 +14,22 @@
       @subcase={{this.subcase}}
       @agendaActivity={{this.agendaActivity}}
     />
+  {{else if this.isPreliminaryPostponed}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "agendaitem-preliminary-postponed--title"}}
+    >
+      {{t "agendaitem-preliminary-postponed--message"}}
+    </AuAlert>
+  {{else if this.isPreliminaryRetracted}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @title={{t "agendaitem-preliminary-retracted--title"}}
+    >
+      {{t "agendaitem-preliminary-retracted--message"}}
+    </AuAlert>
   {{/if}}
 {{/let}}
 

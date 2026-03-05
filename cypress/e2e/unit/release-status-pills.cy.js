@@ -66,8 +66,7 @@ context('Testing internal and themis document release pills', () => {
     cy.wait('@patchThemisActivity');
     cy.get(agenda.publicationPills.container).within(() => {
       cy.get(appuniversum.pill).contains(`Publicatie documenten gepland op ${newReleaseDate.format('DD-MM-YYYY')}`);
-      // cy.get(appuniversum.pill).eq(1)
-      //   .contains(`Publicatie documenten gepland op ${newReleaseDate.format('DD-MM-YYYY')}`);
+      cy.get(appuniversum.pill).contains(`Vrijgave van documenten gepland op ${newReleaseDate.format('DD-MM-YYYY')}`);
     });
   });
 });
