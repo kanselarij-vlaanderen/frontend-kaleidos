@@ -113,6 +113,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       true,
     );
     this.agendaitemsController.groupNotasOnGroupName.perform();
+    // refresh mainly for formally OK pill
+    this.router.refresh('agenda.agendaitems.agendaitem.index');
   }
 
   @action
