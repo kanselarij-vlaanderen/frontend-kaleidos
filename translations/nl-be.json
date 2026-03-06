@@ -1570,5 +1570,6 @@
   "agendaitems-confidential-warning-message": "Er zijn agendapunten met beperkte toegang opgenomen in het kort bestek, Deze zullen mee gepubliceerd worden als u bevestigt.",
   "download-documents-agenda-selection": "Selectie documenten",
   "download-documents-agenda-selection-all": "Alle documenten op deze agendaversie",
-  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie"
+  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie",
+  "deprecated-themes": "Legacy thema's"
 }

@@ -12,6 +12,7 @@ export default class ThemesSelector extends Component {
   @service store;
 
   @tracked themes;
+  @tracked deprecatedThemes;
 
   constructor() {
     super(...arguments);
@@ -24,6 +25,12 @@ export default class ThemesSelector extends Component {
       filter: { deprecated: false },
       sort: 'label',
     });
+    if (this.args.selectedThemes?.some((theme) => theme.deprecated)) {
+      this.deprecatedThemes = yield this.store.queryAll('theme', {
+        filter: { deprecated: true },
+        sort: 'label',
+      });
+    }
   }
 
   @action
