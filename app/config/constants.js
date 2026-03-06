@@ -78,12 +78,6 @@ export default {
     SUCCESS: 'http://redpencil.data.gift/id/concept/JobStatus/success',
     FAILED: 'http://redpencil.data.gift/id/concept/JobStatus/failed',
   },
-  DECISION_REPORT_JOB_STATUSSES: {
-      SCHEDULED: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/scheduled',
-      ONGOING: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/ongoing',
-      SUCCESS: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/success',
-      FAILURE: 'http://data.kaleidos.vlaanderen.be/report-generation-job-statuses/failure',
-  },
   SIGN_FLOW_JOB_STATUSSES: {
       SCHEDULED: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
       BUSY: 'http://redpencil.data.gift/id/concept/JobStatus/busy',
