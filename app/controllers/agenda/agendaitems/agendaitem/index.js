@@ -2,7 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { reorderAgendaitemsOnAgenda, setNotYetFormallyOk } from 'frontend-kaleidos/utils/agendaitem-utils';
+import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
 import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -113,6 +113,8 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
       true,
     );
     this.agendaitemsController.groupNotasOnGroupName.perform();
+    // refresh mainly for formally OK pill
+    this.router.refresh('agenda.agendaitems.agendaitem.index');
   }
 
   @action
@@ -136,7 +138,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
     governmentAreas.length = 0;
     governmentAreas.push(...newGovernmentAreas);
     await this.subcase.save();
-    setNotYetFormallyOk(this.model);
     await this.model.save();
   }
 }

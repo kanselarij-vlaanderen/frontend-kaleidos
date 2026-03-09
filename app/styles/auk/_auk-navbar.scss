@@ -1,10 +1,6 @@
-@use "../auk";
-
 /* ==========================================================================
-  Component: navbar
-  ---
-  A container for navigational elements
-  ========================================================================== */
+   auk-navbar
+   ========================================================================== */
 
 .auk-navbar {
   display: flex;
@@ -29,7 +25,7 @@
 }
 
 .auk-navbar--white {
-  background: #FFF;
+  background: var(--au-white);
 }
 
 .auk-navbar--no-pad {

@@ -1,4 +1,8 @@
-@use "../auk";
+@use "settings";
+
+/* ==========================================================================
+   auk-mobile-sidebar
+   ========================================================================== */
 
 .auk-mobile-sidebar__panel {
   @include mq($until:medium) {
@@ -11,7 +15,7 @@
     width: 90vw;
     height: 100%;
     overflow: hidden;
-    z-index: auk.$z-index-dropdown;
+    z-index: settings.$z-index-dropdown;
     background-color: var(--au-white);
     box-shadow:
       0 0 12px rgba($au-gray-900, 0.15),

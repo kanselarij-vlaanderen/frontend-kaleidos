@@ -33,8 +33,12 @@ function formatDocuments(pieceRecords, isApproval) {
       continue;
     }
   }
-  const formatter = new Intl.ListFormat('nl-be');
-  return `(${formatter.format(simplifiedNames)})`;
+  if (simplifiedNames.length) {
+    const formatter = new Intl.ListFormat('nl-be');
+    return `(${formatter.format(simplifiedNames)})`;
+  }
+  // no documents or all rectracted
+  return '';
 }
 
 async function generateBetreft(
@@ -44,22 +48,28 @@ async function generateBetreft(
   documents,
   subcaseName = null,
   agendaitemType,
+  isRetracted = false
 ) {
-  const documentsWithoutBijlageTerInzageOrSecretarie = await Promise.all(documents.map(async (document) => {
+  const documentsForBetreft = await Promise.all(documents.map(async (document) => {
     const accessLevel = await document.accessLevel;
     const documentContainer = await document.documentContainer;
     // it is possible to concurrently change the type, need to reload just in case
     const type = await documentContainer.belongsTo('type').reload();
+    // this document type should not be shown in the documents list
     if (type?.uri === CONSTANTS.DOCUMENT_TYPES.BIJLAGE_TER_INZAGE) {
       return null;
     }
-    if (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE) {
+    // these accessLevels should not be shown in the documents list
+    if (
+      accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE ||
+      (!isRetracted && accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN)
+    ) {
       return null;
     }
     return document;
   }))
   const isNota = agendaitemType?.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA;
-  const filteredDocuments = documentsWithoutBijlageTerInzageOrSecretarie.filter((document) => document !== null);
+  const filteredDocuments = documentsForBetreft.filter((document) => document !== null);
   let betreft = '';
   betreft += `${shortTitle}`;
   betreft += title ? `<br/>${title}` : '';

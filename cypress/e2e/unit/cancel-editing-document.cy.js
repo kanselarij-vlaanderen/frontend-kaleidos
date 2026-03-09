@@ -402,7 +402,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(1)
       .find(document.documentDetailsRow.accessLevel)
       .click();
-    cy.get(dependency.emberPowerSelect.option).eq(4)
+    cy.get(dependency.emberPowerSelect.option).contains(accesLevelOption3)
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces');
     cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers');
@@ -420,7 +420,7 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(0)
       .find(document.documentDetailsRow.type)
       .click();
-    cy.get(dependency.emberPowerSelect.option).eq(2)
+    cy.get(dependency.emberPowerSelect.option).contains(typeOption)
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
     cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers2');
@@ -439,13 +439,13 @@ context('Tests for cancelling CRUD operations on document and pieces', () => {
     cy.get(document.documentDetailsRow.row).eq(1)
       .find(document.documentDetailsRow.type)
       .click();
-    cy.get(dependency.emberPowerSelect.option).eq(1)
+    cy.get(dependency.emberPowerSelect.option).contains(typeOption2)
       .click();
     cy.wait(500); // minor wait between ember power selects to ensure the previous one closed
     cy.get(document.documentDetailsRow.row).eq(0)
       .find(document.documentDetailsRow.type)
       .click();
-    cy.get(dependency.emberPowerSelect.option).eq(1)
+    cy.get(dependency.emberPowerSelect.option).contains(typeOption2)
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces3');
     cy.intercept('PATCH', '/document-containers/**').as('patchdocumentContainers3');

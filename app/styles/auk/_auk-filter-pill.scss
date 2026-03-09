@@ -1,20 +1,18 @@
-@use "settings";
-
 /* ==========================================================================
-  auk-filter-pill
+   auk-filter-pill
    ========================================================================== */
 
 .auk-filter-pill {
-  font-family: settings.$global-base-font-family;
+  font-family: var(--au-font);
   font-size: 1.4rem;
   display: inline-flex;
   align-items: center;
   padding: 0 .5rem 0 .6rem;
   border-radius: .5rem;
   height: 2.4rem;
-  color: settings.$color-gray-600;
-  background-color: settings.$color-gray-100;
-  border: .1rem solid settings.$color-gray-300;
+  color: var(--au-gray-600);
+  background-color: var(--au-gray-100);
+  border: .1rem solid var(--au-gray-300);
 }
 
 .auk-filter-pill__action {
@@ -32,8 +30,8 @@
     top: -0.2rem;
     height: 2.2rem;
     width: 0.1rem;
-    background-color: settings.$color-gray-300;
-    color: settings.$color-gray-600;
+    background-color: var(--au-gray-300);
+    color: var(--au-gray-600);
   }
 }
 
@@ -45,8 +43,8 @@
 .auk-filter-pill__multiple-labels {
   font-weight: 400;
   font-size: 1.2rem;
-  background-color: settings.$color-gray-600;
-  color: #fff;
+  background-color: var(--au-gray-600);
+  color: var(--au-white);
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 100%;

@@ -1,19 +1,17 @@
-@use "settings";
-
 /* ==========================================================================
-  Text utilities
+   Text utilities
    ========================================================================== */
 
 .auk-u-text-muted {
-  color: settings.$color-gray-600 !important;
+  color: var(--au-gray-600) !important;
 }
 
 .auk-u-text-success {
-  color: settings.$color-green-700 !important;
+  color: var(--au-green-700) !important;
 }
 
 .auk-u-text-error {
-  color: settings.$color-red-700 !important;
+  color: var(--au-red-700) !important;
 }
 
 .auk-u-italic {
@@ -101,7 +99,7 @@
 }
 
 .auk-u-text-family-serif {
-  font-family: flanders-serif, serif !important;
+  font-family: var(--au-font) !important;
 }
 
 .auk-u-overflow-wrap-anywhere {

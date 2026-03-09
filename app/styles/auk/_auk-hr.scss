@@ -1,12 +1,10 @@
-@use "settings";
-
 /* ==========================================================================
   auk-hr
    ========================================================================== */
 
 .auk-hr {
   margin: 2.4rem 0;
-  border-bottom: .1rem solid settings.$color-gray-300;
+  border-bottom: .1rem solid var(--au-gray-300);
   hr {
     display: none;
   }

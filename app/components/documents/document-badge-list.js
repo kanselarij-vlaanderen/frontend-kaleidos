@@ -9,7 +9,8 @@ export default class DcoumentsDocumentBadgeListComponent extends Component {
   shouldShowAccessLevel(accessLevel) {
     return [
       CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK,
-      CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE
+      CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE,
+      CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
     ].includes(accessLevel?.uri);
   }
 }

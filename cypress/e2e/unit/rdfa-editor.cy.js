@@ -17,24 +17,15 @@ function pressRdfaButton(buttonTitle) {
     .click();
 }
 
-function checkCSS(row, printableNewsletter) {
+function checkCSS(row) {
   cy.get(row).find('strong')
     .should('have.css', 'font-weight', '500');
   cy.get(row).find('em')
     .should('have.css', 'font-style', 'italic');
-  if (printableNewsletter) {
-    // --au-text-color inherited from .l-printable-newsletter p
-    cy.get(row).find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(51, 51, 50)');
-    cy.get(row).find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(51, 51, 50)');
-  } else {
-    // --grey-800 inherited from au-c-content
-    cy.get(row).find('u')
-      .should('have.css', 'text-decoration', 'underline solid rgb(42, 45, 49)');
-    cy.get(row).find('del')
-      .should('have.css', 'text-decoration', 'line-through solid rgb(42, 45, 49)');
-  }
+  cy.get(row).find('u')
+    .should('have.css', 'text-decoration', 'underline solid rgb(51, 51, 50)');
+  cy.get(row).find('del')
+    .should('have.css', 'text-decoration', 'line-through solid rgb(51, 51, 50)');
 
   cy.get(row).find('sub')
     .should('have.css', 'vertical-align', 'sub');
@@ -229,12 +220,12 @@ context('rdfa editor tests', () => {
     cy.clickReverseTab('Klad');
     cy.get(newsletter.newsletterPrint.htmlContent).eq(0)
       .as('firstRowKlad');
-    checkCSS('@firstRowKlad', true);
+    checkCSS('@firstRowKlad');
 
     cy.clickReverseTab('Definitief');
     cy.get(newsletter.newsletterPrint.htmlContent).eq(0)
       .as('firstRowDefinitief');
-    checkCSS('@firstRowDefinitief', true);
+    checkCSS('@firstRowDefinitief');
 
     cy.visitAgendaWithLink('/vergadering/5EBA94D7751CF70008000001/agenda/5EBA94D8751CF70008000002/agendapunten/5EBA9512751CF70008000008/kort-bestek');
     cy.get(newsletter.agendaitemNewsItem.content).as('agendaitemNewsItemContent');
@@ -290,6 +281,7 @@ context('rdfa editor tests', () => {
       cy.get(newsletter.buttonToolbar.edit).eq(0)
         .click();  // a patch happens here
       cy.wait('@patchNewsItems1');
+      cy.wait(500); // cy.click() could not be issued because this element is currently animating. Could force: true instead of waiting
       cy.get(auk.expand).scrollIntoView()
         .click();
       cy.get(newsletter.newsletterHeaderOverview.newsletterActions.optionsDropdown).scrollIntoView()

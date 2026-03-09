@@ -1,6 +1,6 @@
 {
   "name": "frontend-kaleidos",
-  "version": "9.9.3",
+  "version": "10.0.1",
   "private": true,
   "description": "Frontend of the Kaleidos application",
   "repository": {
@@ -70,7 +70,7 @@
     "broccoli-asset-rev": "^3.0.0",
     "broccoli-funnel": "^3.0.8",
     "broccoli-sass-source-maps": "^4.3.0",
-    "cypress": "^12.17.4",
+    "cypress": "^15.6.0",
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.13",
     "ember-async-data": "^1.0.3",
