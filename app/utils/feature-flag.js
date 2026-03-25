@@ -28,9 +28,17 @@ function isDisabledSessionPolling() {
   );
 }
 
+function isEnabledDataMonitoring() {
+  return (
+    ENV.APP.ENABLE_DATA_MONITORING === 'true' ||
+    ENV.APP.ENABLE_DATA_MONITORING === true
+  );
+}
+
 export {
   isEnabledVlaamsParlement,
   isEnabledImpersonation,
   isEnabledCabinetSubmissions,
   isDisabledSessionPolling,
+  isEnabledDataMonitoring,
 }
