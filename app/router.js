@@ -132,6 +132,10 @@ Router.map(function() {
     });
     this.route('emails', { path: '/emailberichten', });
   });
+  this.route('monitoring',  function() {
+    // this.route('data-propagation', { path: '/data-propagatie', });
+    this.route('newsletter', { path: '/publicaties', });
+  });
 
   this.route('document', { path: '/document/:piece_id', });
 

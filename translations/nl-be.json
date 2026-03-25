@@ -1570,5 +1570,15 @@
   "agendaitems-confidential-warning-message": "Er zijn agendapunten met beperkte toegang opgenomen in het kort bestek, Deze zullen mee gepubliceerd worden als u bevestigt.",
   "download-documents-agenda-selection": "Selectie documenten",
   "download-documents-agenda-selection-all": "Alle documenten op deze agendaversie",
-  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie"
+  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie",
+  "monitoring": "Monitoring",
+  "data-propagation": "Data-propagatie",
+  "started-on": "Gestart op",
+  "publication-for-agenda": "Publicatie van agenda",
+  "release-plan": "Vrijgave planning",
+  "themis-export": "Export Kaleidos",
+  "ttl-to-delta": "Ttl naar Delta",
+  "themis-sync": "Sync op Themis",
+  "themis-release-task": "Release op Themis",
+  "themis-dataset": "Dataset op Themis"
 }

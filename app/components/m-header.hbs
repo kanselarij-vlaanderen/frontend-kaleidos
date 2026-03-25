@@ -63,6 +63,13 @@
                 {{t "settings"}}
               </Auk::Tab>
             {{/if}}
+            {{#if (user-may "view-monitoring")}}
+              <Auk::Tab
+                @route="monitoring"
+              >
+                {{t "monitoring"}}
+              </Auk::Tab>
+            {{/if}}
           </Auk::Tabs>
         </Auk::Toolbar::Item>
       {{/if}}

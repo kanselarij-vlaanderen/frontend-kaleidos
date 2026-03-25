@@ -1,0 +1,193 @@
+{{page-title (t "newsletter")}}
+<AuBodyContainer>
+  <div class="auk-scroll-wrapper">
+    <div class="auk-scroll-wrapper__body">
+      {{#if @model.length}}
+        <div>
+          <table
+            class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header"
+          >
+            <thead>
+              <tr>
+                <Utils::ThSortable
+                  class="auk-table__col--2 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="meeting.planned-start"
+                  @label={{t "publication-for-agenda"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__col--1 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="start-date"
+                  @label={{t "started-on"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <th class="auk-table__col--1 auk-table__header-title">{{t "content"}}</th>
+                <Utils::ThSortable
+                  class="auk-table__col--1 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="status"
+                  @label={{t "release-plan"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <th class="auk-table__col--1 auk-table__header-title">{{t "themis-export"}}</th>
+                <th class="auk-table__col--1 auk-table__header-title">{{t "ttl-to-delta"}}</th>
+                <th class="auk-table__col--1 auk-table__header-title">{{t "themis-sync"}}</th>
+                <th class="auk-table__col--1 auk-table__header-title">{{t "themis-release-task"}}</th>
+                <th class="auk-table__col--2 auk-table__header-title">{{t "themis-dataset"}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each @model as |themisPubActivity|}}
+                <tr>
+                  <td class="auk-u-text-capitalize">
+                    {{#if (is-pending themisPubActivity.meeting.kind)}}
+                      <div
+                        class="auk-skeleton auk-skeleton--rectangle"
+                        role="alert"
+                        aria-busy="true"
+                      ></div>
+                    {{else}}
+                      {{kind-print-label themisPubActivity.meeting.kind}}
+                      {{t "of"}}
+                      {{date themisPubActivity.meeting.plannedStart}}
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{datetime themisPubActivity.startDate}}
+                  </td>
+                  <td>
+                    {{#if (includes 'newsitems' themisPubActivity.scope)}}
+                      <AuTooltip @placement="top" as |tooltip|>
+                        <AuPill
+                          {{tooltip.target}}
+                          @size="small"
+                          @skin="border"
+                          @icon="website"
+                        ></AuPill>
+                        <tooltip.Content>
+                          {{t "newsletter"}}
+                        </tooltip.Content>
+                      </AuTooltip>
+                      {{#if (includes 'documents' themisPubActivity.scope)}}
+                        <AuTooltip @placement="top" as |tooltip|>
+                          <AuPill
+                            {{tooltip.target}}
+                            @size="small"
+                            @skin="border"
+                            @icon="document"
+                          ></AuPill>
+                          <tooltip.Content>
+                            {{t "documents"}}
+                          </tooltip.Content>
+                        </AuTooltip>
+                        {{/if}}
+                    {{else}}
+                      <AuTooltip @placement="top" as |tooltip|>
+                        <AuPill
+                          {{tooltip.target}}
+                          @size="small"
+                          @skin="border"
+                          @icon="clock-rewind"
+                        ></AuPill>
+                        <tooltip.Content>
+                          {{t "retract-from-public"}}
+                        </tooltip.Content>
+                      </AuTooltip>
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{themisPubActivity.status.label}}
+                  </td>
+                  <td>
+                    {{#let (await (this.getThemisExportStatus themisPubActivity)) as |themisExportJobStatus|}}
+                      {{#if themisExportJobStatus}}
+                        <MonitoringStatusPill @status={{themisExportJobStatus.status}}/>
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
+                  </td>
+                  <td>
+                    {{#let (await (this.getTtlTaskStatus themisPubActivity)) as |ttlTask|}}
+                      {{#if ttlTask}}
+                        <MonitoringStatusPill @status={{ttlTask.status}}/>
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
+                  </td>
+                  <td>
+                    {{#let (await (this.getThemisSyncTask themisPubActivity)) as |syncTask|}}
+                      {{#if syncTask}}
+                        <MonitoringStatusPill @status={{syncTask.status}}/>
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
+                  </td>
+                  <td>
+                    {{#let (await (this.getThemisReleaseTask themisPubActivity)) as |releaseTask|}}
+                      {{#if releaseTask}}
+                        <MonitoringStatusPill @status={{releaseTask.status}}/>
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
+                  </td>
+                  <td>
+                    {{#let (await (this.getThemisDataset themisPubActivity)) as |themisDataset|}}
+                      {{#if themisDataset}}
+                        <AuLinkExternal href={{themisDataset.uri}}>{{themisDataset.id}}</AuLinkExternal>
+                      {{else}}
+                        -
+                      {{/if}}
+                    {{/let}}
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{else}}
+        <div class="auk-u-responsive-margin">
+          <Auk::EmptyState
+            @bordered={{true}}
+            @message={{t "no-results-found"}}
+          />
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <hr />
+  </div>
+  <div class="auk-u-mx-4">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Pagination
+            @page={{this.page}}
+            @size={{this.size}}
+            @nbOfItems={{@model.length}}
+            @total={{@model.meta.count}}
+            @onNextPage={{this.nextPage}}
+            @onPreviousPage={{this.prevPage}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{t "amount-per-page"}}
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <WebComponents::AuPageSize
+            @selectedSize={{this.size}}
+            @onChange={{fn (mut this.size)}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </div>
+</AuBodyContainer>
