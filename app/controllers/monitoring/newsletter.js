@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 import fetch from 'fetch';

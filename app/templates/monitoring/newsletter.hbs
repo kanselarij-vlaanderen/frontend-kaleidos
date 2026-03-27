@@ -101,9 +101,12 @@
                     {{themisPubActivity.status.label}}
                   </td>
                   <td>
-                    {{#let (await (this.getThemisExportStatus themisPubActivity)) as |themisExportJobStatus|}}
-                      {{#if themisExportJobStatus}}
-                        <MonitoringStatusPill @status={{themisExportJobStatus.status}}/>
+                    {{#let (await (this.getThemisExportStatus themisPubActivity)) as |themisExportJob|}}
+                      {{#if themisExportJob}}
+                        <MonitoringStatusPill
+                          @status={{themisExportJob.status}}
+                          @message={{themisExportJob.message}}
+                        />
                       {{else}}
                         -
                       {{/if}}
@@ -112,7 +115,10 @@
                   <td>
                     {{#let (await (this.getTtlTaskStatus themisPubActivity)) as |ttlTask|}}
                       {{#if ttlTask}}
-                        <MonitoringStatusPill @status={{ttlTask.status}}/>
+                        <MonitoringStatusPill
+                          @status={{ttlTask.status}}
+                          @message={{ttlTask.message}}
+                        />
                       {{else}}
                         -
                       {{/if}}
@@ -121,7 +127,10 @@
                   <td>
                     {{#let (await (this.getThemisSyncTask themisPubActivity)) as |syncTask|}}
                       {{#if syncTask}}
-                        <MonitoringStatusPill @status={{syncTask.status}}/>
+                        <MonitoringStatusPill
+                          @status={{syncTask.status}}
+                          @message={{syncTask.message}}
+                        />
                       {{else}}
                         -
                       {{/if}}
@@ -130,7 +139,10 @@
                   <td>
                     {{#let (await (this.getThemisReleaseTask themisPubActivity)) as |releaseTask|}}
                       {{#if releaseTask}}
-                        <MonitoringStatusPill @status={{releaseTask.status}}/>
+                        <MonitoringStatusPill
+                          @status={{releaseTask.status}}
+                          @message={{releaseTask.message}}
+                        />
                       {{else}}
                         -
                       {{/if}}

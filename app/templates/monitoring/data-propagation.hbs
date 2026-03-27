@@ -1,2 +1,143 @@
 {{page-title "DataPropagation"}}
-{{outlet}}
+<AuBodyContainer>
+  <div class="auk-scroll-wrapper">
+    <div class="auk-scroll-wrapper__body">
+      {{#if @model.length}}
+        <div>
+          <table
+            class="auk-table auk-table--agenda auk-table--hoverable auk-table--sticky-header"
+          >
+            <thead>
+              <tr>
+                <th class="auk-table__col--2 auk-table__header-title">Job</th>
+                <th class="auk-table__col--2 auk-table__header-title">{{t
+                    "agendas"
+                  }}</th>
+                <Utils::ThSortable
+                  class="auk-table__col--1 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="created"
+                  @label={{t "created-on"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__col--1 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="time-started"
+                  @label={{t "started-on"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__col--1 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="time-ended"
+                  @label={{t "ended-on"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+                <Utils::ThSortable
+                  class="auk-table__col--1 auk-table__header-title"
+                  @currentSorting={{this.sort}}
+                  @field="status"
+                  @label={{t "status"}}
+                  @onChange={{fn (mut this.sort)}}
+                />
+              </tr>
+            </thead>
+            <tbody>
+              {{#each @model as |distributorJob|}}
+                <tr>
+                  <td>
+                    {{await (this.getTargetGraphLabel distributorJob)}}
+                  </td>
+                  <td>
+                    {{#if distributorJob.agendas}}
+                      {{#let
+                        (await (this.getMeetingsForJob distributorJob))
+                        as |meetings|
+                      }}
+                        {{#each meetings as |meeting|}}
+                          <AuLink @route="meeting" @model={{meeting.id}}>
+                            {{kind-print-label meeting.kind}}
+                            {{t "of"}}
+                            {{date meeting.plannedStart}}
+                          </AuLink>
+                          <br />
+                        {{/each}}
+                      {{/let}}
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{datetime distributorJob.created}}
+                  </td>
+                  <td>
+                    {{#if distributorJob.timeStarted}}
+                      {{datetime distributorJob.timeStarted}}
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{#if distributorJob.timeEnded}}
+                      {{datetime distributorJob.timeEnded}}
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                  <td>
+                    {{#if distributorJob.status}}
+                      <MonitoringStatusPill
+                        @status={{distributorJob.status}}
+                        @message={{distributorJob.message}}
+                      />
+                    {{else}}
+                      -
+                    {{/if}}
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{else}}
+        <div class="auk-u-responsive-margin">
+          <Auk::EmptyState
+            @bordered={{true}}
+            @message={{t "no-results-found"}}
+          />
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <hr />
+  </div>
+  <div class="auk-u-mx-4">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Pagination
+            @page={{this.page}}
+            @size={{this.size}}
+            @nbOfItems={{@model.length}}
+            @total={{@model.meta.count}}
+            @onNextPage={{this.nextPage}}
+            @onPreviousPage={{this.prevPage}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+      <Auk::Toolbar::Group @position="right">
+        <Auk::Toolbar::Item>
+          {{t "amount-per-page"}}
+        </Auk::Toolbar::Item>
+        <Auk::Toolbar::Item>
+          <WebComponents::AuPageSize
+            @selectedSize={{this.size}}
+            @onChange={{fn (mut this.size)}}
+          />
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </div>
+</AuBodyContainer>

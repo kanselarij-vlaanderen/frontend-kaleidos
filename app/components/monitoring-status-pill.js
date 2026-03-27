@@ -51,6 +51,15 @@ export default class MonitoringStatusPill extends Component {
         return success;
       case CONSTANTS.THEMIS_RELEASE_TASK_STATUSES.FAILED:
         return failed;
+      // yggdrasil distributor job
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.SCHEDULED:
+        return scheduled;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.BUSY:
+        return busy;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.SUCCESS:
+        return success;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.FAILED:
+        return failed;
       default:
         return 'default';
     }
@@ -101,6 +110,14 @@ export default class MonitoringStatusPill extends Component {
       case CONSTANTS.THEMIS_RELEASE_TASK_STATUSES.SUCCESS:
         return success;
       case CONSTANTS.THEMIS_RELEASE_TASK_STATUSES.FAILED:
+        return failed;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.SCHEDULED:
+        return scheduled;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.BUSY:
+        return busy;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.SUCCESS:
+        return success;
+      case CONSTANTS.DISTRIBUTOR_JOB_STATUSES.FAILED:
         return failed;
       default:
         return 'Status Unknown';
