@@ -282,7 +282,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   async saveAccessLevelOfSignedPiece(pieceOrPromise) {
     const piece = await pieceOrPromise;
     if (piece) {
-      await piece.save();
+      await piece.saveModifiedAccessLevel();
     }
   }
 }

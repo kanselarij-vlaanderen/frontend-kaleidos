@@ -17,6 +17,7 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
   @tracked isFullscreen = false;
 
   get notaHasChanged() {
+    // TODO KAS-5131 check after use of separate save override where modified is not changed on pure access level changes
     return this.notaModifiedTime && this.model?.modified && this.model?.modified < this.notaModifiedTime;
   }
 

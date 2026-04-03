@@ -140,17 +140,31 @@ export default class Piece extends Model {
     });
   }
 
-  save() {
+  save(accessLevelModified = false) {
     const dirtyType = this.dirtyType;
     if (dirtyType != 'deleted') {
       const now = new Date();
       this.modified = now;
-      this.accessLevelLastModified = now;
+      if (accessLevelModified) {
+        // TODO KAS-5131 did we cover all locations where accessLevel can change?
+        // Bulk edit, document-viewer TODO, any other?
+        this.accessLevelLastModified = now;
+      }
       if (dirtyType == 'created') {
         // When saving a newly created record force the creation date to equal
         // the modified date.
         this.created = now;
       }
+    }
+    return super.save(...arguments);
+  }
+
+  saveModifiedAccessLevel() {
+    // TODO KAS-5131 double check if any other attribute is dirty? use save in that case
+    const dirtyType = this.dirtyType;
+    if (dirtyType != 'deleted') {
+      const now = new Date();
+      this.accessLevelLastModified = now;
     }
     return super.save(...arguments);
   }

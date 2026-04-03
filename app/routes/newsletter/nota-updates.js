@@ -50,9 +50,10 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       'filter[:has-no:next-piece]': 'yes', // enkel laatste versie
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-      include: 'agendaitems',
-      'fields[agendaitems]': 'id,number,short-title',
-      'fields[piece]': 'id,name,modified',
+      include: 'agendaitems,file',
+      // TODO KAS-5131 it seems this can go, we included agendaitem and piece is the model we queried
+      // 'fields[agendaitems]': 'id,number,short-title',
+      // 'fields[piece]': 'id,name,modified,access-level-last-modified',
       sort: params.sort,
     });
     for (const nota of notas.slice()) { // proxyarray to native JS array
@@ -88,7 +89,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       const agendaitemNumber = agendaitemOnLatestAgenda.get('number');
       const agendaitemId = agendaitemOnLatestAgenda.get('id');
       const agendaitemShortTitle = agendaitemOnLatestAgenda.get('shortTitle');
-      const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(nota);
+      const pieceData = await this.getPieceData(nota);
       const processedNota =  {
         meetingId,
         agendaId,
@@ -102,14 +103,22 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     return processedNotas;
   }
 
-  static async getPieceData(piece) {
+  async getPieceData(piece) {
+    // TODO KAS-5131 do we even need .get here
     const name = piece.get('name');
     const documentId = piece.get('id');
+    const created = piece.get('created');
     const modified = piece.get('modified');
+    const accessLevelLastModified = piece.get('accessLevelLastModified');
+    const file = await piece.belongsTo('file').reload();
+    const fileCreated = file.get('created');
     return {
-      documentId: documentId,
-      name: name,
-      modified: modified,
+      documentId,
+      name,
+      created,
+      modified,
+      accessLevelLastModified,
+      fileCreated,
     };
   }
 

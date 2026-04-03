@@ -200,7 +200,7 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
         if (hasChanged) {
           await piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
-          await piece.save();
+          await piece.save(accessLevelHasChanged);
           await documentContainer.save();
           if (
             accessLevelHasChanged &&
