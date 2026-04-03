@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, lastValue, all, animationFrame } from 'ember-concurrency';
+import { task, lastValue, all, timeout } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
   AgendaitemGroup
@@ -23,7 +23,7 @@ export default class AgendaAgendaitemsController extends Controller {
       },
     },
   ];
-  
+
   @service store;
   @service router;
   @service intl;
@@ -135,7 +135,7 @@ export default class AgendaAgendaitemsController extends Controller {
     const agendaitemGroups = [];
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
-      yield animationFrame(); // Computationally heavy task. This keeps the interface alive
+      yield timeout(0); // Computationally heavy task. This keeps the interface alive
       const agendaActivity = yield agendaitem.agendaActivity;
       const subcase = yield agendaActivity?.subcase;
       yield subcase?.type;
