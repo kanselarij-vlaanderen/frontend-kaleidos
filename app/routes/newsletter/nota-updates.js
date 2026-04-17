@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import {
-  task, timeout
-} from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
@@ -51,9 +49,6 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[:has-no:next-piece]': 'yes', // enkel laatste versie
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
       include: 'agendaitems,file',
-      // TODO KAS-5131 it seems this can go, we included agendaitem and piece is the model we queried
-      // 'fields[agendaitems]': 'id,number,short-title',
-      // 'fields[piece]': 'id,name,modified,access-level-last-modified',
       sort: params.sort,
     });
     for (const nota of notas.slice()) { // proxyarray to native JS array
@@ -90,7 +85,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       const agendaitemId = agendaitemOnLatestAgenda.get('id');
       const agendaitemShortTitle = agendaitemOnLatestAgenda.get('shortTitle');
       const pieceData = await this.getPieceData(nota);
-      const processedNota =  {
+      const processedNota = {
         meetingId,
         agendaId,
         agendaitemId,
@@ -104,14 +99,13 @@ export default class NewsletterNotaUpdatesRoute extends Route {
   }
 
   async getPieceData(piece) {
-    // TODO KAS-5131 do we even need .get here
-    const name = piece.get('name');
-    const documentId = piece.get('id');
-    const created = piece.get('created');
-    const modified = piece.get('modified');
-    const accessLevelLastModified = piece.get('accessLevelLastModified');
+    const name = piece.name;
+    const documentId = piece.id;
+    const created = piece.created;
+    const modified = piece.modified;
+    const accessLevelLastModified = piece.accessLevelLastModified;
     const file = await piece.belongsTo('file').reload();
-    const fileCreated = file.get('created');
+    const fileCreated = file?.created;
     return {
       documentId,
       name,

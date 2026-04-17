@@ -146,8 +146,7 @@ export default class Piece extends Model {
       const now = new Date();
       this.modified = now;
       if (accessLevelModified) {
-        // TODO KAS-5131 did we cover all locations where accessLevel can change?
-        // Bulk edit, document-viewer TODO, any other?
+        // new pieces don't get accessLevelModified yet.
         this.accessLevelLastModified = now;
       }
       if (dirtyType == 'created') {
@@ -160,7 +159,12 @@ export default class Piece extends Model {
   }
 
   saveModifiedAccessLevel() {
-    // TODO KAS-5131 double check if any other attribute is dirty? use save in that case
+    // If any other change in properties is present we default to the regular save
+    const changedAttributes = this.changedAttributes();
+    if (Object.keys(changedAttributes).length !== 0) {
+      return this.save(true);
+    }
+
     const dirtyType = this.dirtyType;
     if (dirtyType != 'deleted') {
       const now = new Date();
