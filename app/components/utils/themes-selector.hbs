@@ -1,6 +1,32 @@
 {{#if this.findAll.isRunning}}
   <Auk::Loader @message={{t "themes-loading-text"}} />
 {{else}}
+  {{#if this.deprecatedThemes}}
+    <AuAlert
+      @skin="warning"
+      @icon="alert-triangle"
+      @size="small"
+    >
+      <AuLabel>{{t "deprecated-themes"}}</AuLabel>
+      <div class="auk-o-grid">
+        {{#each this.deprecatedThemes as |theme|}}
+          <div class="auk-o-grid-col-4">
+            <div class="auk-u-mb">
+              {{#let (includes theme @selectedThemes) as |checked|}}
+                <AuCheckbox
+                  @checked={{checked}}
+                  @onChange={{fn this.toggleTheme theme}}
+                  @disabled={{not checked}}
+                >
+                  {{theme.label}}
+                </AuCheckbox>
+              {{/let}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </AuAlert>
+  {{/if}}
   <div class="auk-o-grid">
     {{#each this.themes as |theme|}}
       <div class="auk-o-grid-col-4">
