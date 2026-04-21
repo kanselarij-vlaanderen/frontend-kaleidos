@@ -31,10 +31,70 @@
                   @label={{t "release-plan"}}
                   @onChange={{fn (mut this.sort)}}
                 />
-                <th class="auk-table__col--1 auk-table__header-title">{{t "themis-export"}}</th>
-                <th class="auk-table__col--1 auk-table__header-title">{{t "ttl-to-delta"}}</th>
-                <th class="auk-table__col--1 auk-table__header-title">{{t "themis-sync"}}</th>
-                <th class="auk-table__col--1 auk-table__header-title">{{t "themis-release-task"}}</th>
+                <th class="auk-table__col--1 auk-table__header-title">
+                  <span>{{t "themis-export-label"}}</span>
+                  <AuTooltip @placement="top" as |tooltip|>
+                    <AuButton
+                      {{tooltip.target}}
+                      @size="small"
+                      @skin="link-secondary"
+                      @icon="circle-info"
+                      @hideText="true"
+                      class="au-u-padding-none"
+                    ></AuButton>
+                    <tooltip.Content>
+                      {{t "themis-export-description"}}
+                    </tooltip.Content>
+                  </AuTooltip>
+                </th>
+                <th class="auk-table__col--1 auk-table__header-title">
+                  <span>{{t "ttl-to-delta-label"}}</span>
+                  <AuTooltip @placement="top" as |tooltip|>
+                    <AuButton
+                      {{tooltip.target}}
+                      @size="small"
+                      @skin="link-secondary"
+                      @icon="circle-info"
+                      @hideText="true"
+                      class="au-u-padding-none"
+                    ></AuButton>
+                    <tooltip.Content>
+                      {{t "ttl-to-delta-description"}}
+                    </tooltip.Content>
+                  </AuTooltip>
+                </th>
+                <th class="auk-table__col--1 auk-table__header-title">
+                  <span>{{t "themis-sync-label"}}</span>
+                  <AuTooltip @placement="top" as |tooltip|>
+                    <AuButton
+                      {{tooltip.target}}
+                      @size="small"
+                      @skin="link-secondary"
+                      @icon="circle-info"
+                      @hideText="true"
+                      class="au-u-padding-none"
+                    ></AuButton>
+                    <tooltip.Content>
+                      {{t "themis-sync-description"}}
+                    </tooltip.Content>
+                  </AuTooltip>
+                </th>
+                <th class="auk-table__col--1 auk-table__header-title">
+                  <span>{{t "themis-release-task-label"}}</span>
+                  <AuTooltip @placement="top" as |tooltip|>
+                    <AuButton
+                      {{tooltip.target}}
+                      @size="small"
+                      @skin="link-secondary"
+                      @icon="circle-info"
+                      @hideText="true"
+                      class="au-u-padding-none"
+                    ></AuButton>
+                    <tooltip.Content>
+                      {{t "themis-release-task-description"}}
+                    </tooltip.Content>
+                  </AuTooltip>
+                </th>
                 <th class="auk-table__col--2 auk-table__header-title">{{t "themis-dataset"}}</th>
               </tr>
             </thead>

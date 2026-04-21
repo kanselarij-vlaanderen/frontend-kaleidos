@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { subWeeks } from 'date-fns';
+import { subMonths } from 'date-fns';
 
 export default class MonitoringNewsletterRoute extends Route {
   @service conceptStore;
@@ -22,9 +22,9 @@ export default class MonitoringNewsletterRoute extends Route {
   };
 
   async model(params) {
-    const pastDate = subWeeks(new Date(), 3).toISOString();
+    const pastDate = subMonths(new Date(), 1).toISOString();
     const options = {
-      'filter[meeting][:gte:planned-start]': pastDate,
+      'filter[:gte:planned-date]': pastDate,
       include: 'meeting.kind',
       sort: params.sort,
       page: {
