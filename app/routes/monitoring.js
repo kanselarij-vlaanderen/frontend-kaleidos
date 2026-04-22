@@ -13,5 +13,8 @@ export default class MonitoringRoute extends Route {
     if (isEnabledDataMonitoring() && isAuthenticated && !this.currentSession.may('view-monitoring')) {
       return this.router.transitionTo('index');
     }
+    if (transition.to.name != 'monitoring.newsletter') {
+      this.router.replaceWith('monitoring.data-propagation');
+    }
   }
 }
