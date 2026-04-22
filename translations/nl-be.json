@@ -1570,5 +1570,20 @@
   "agendaitems-confidential-warning-message": "Er zijn agendapunten met beperkte toegang opgenomen in het kort bestek, Deze zullen mee gepubliceerd worden als u bevestigt.",
   "download-documents-agenda-selection": "Selectie documenten",
   "download-documents-agenda-selection-all": "Alle documenten op deze agendaversie",
-  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie"
+  "download-documents-agenda-selection-current-only": "Enkel nieuwe documenten op deze agendaversie",
+  "monitoring": "Monitoring",
+  "data-propagation": "Data-propagatie",
+  "started-on": "Gestart op",
+  "ended-on": "Beëindigd op",
+  "publication-for-agenda": "Publicatie van agenda",
+  "release-plan": "Vrijgave status",
+  "themis-export-label": "Voorbereiden",
+  "themis-export-description": "In deze stap wordt de publieke agenda aangemaakt in de themis-export service op Kaleidos",
+  "ttl-to-delta-label": "Publiceren op Kaleidos",
+  "ttl-to-delta-description": "In deze stap wordt een delta file gepubliceerd door de ttl-to-delta service",
+  "themis-sync-label": "Consumeren op Themis",
+  "themis-sync-description": "In deze stap gaat de themis-publication-consumer service de delta's van Kaleidos binnen halen.",
+  "themis-release-task-label": "Publiceren op Themis",
+  "themis-release-task-description": "In deze stap gaat de dcat-dataset-publication service op Themis de publieke DCAT dataset publiceren",
+  "themis-dataset": "Dataset op Themis"
 }

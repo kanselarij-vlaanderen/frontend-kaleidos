@@ -4,7 +4,11 @@ import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledImpersonation, isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import {
+  isEnabledImpersonation,
+  isEnabledCabinetSubmissions,
+  isEnabledDataMonitoring
+} from 'frontend-kaleidos/utils/feature-flag';
 
 const environmentNames = {
   localhost: 'LOCAL',
@@ -38,6 +42,10 @@ export default class MHeader extends Component {
   }
   get isEnabledCabinetSubmissions() {
     return isEnabledCabinetSubmissions();
+  }
+
+  get isEnabledDataMonitoring() {
+    return isEnabledDataMonitoring();
   }
 
   get canImpersonate() {
