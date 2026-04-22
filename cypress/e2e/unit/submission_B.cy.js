@@ -142,6 +142,7 @@ context('Submission happy flows', () => {
       {
         name: 'Welzijn, Volksgezondheid en Gezin',
         selected: true,
+        // these fields are no longer active, they should not be added on submission creation
         fields: ['Welzijn', 'Gezondheids- en woonzorg'],
       }
     ],
@@ -377,14 +378,16 @@ context('Submission happy flows', () => {
     cy.get('@listItemsAreas').should('have.length', 1, {
       timeout: 5000,
     });
+    // the domain from previous subcase is NOT deprecated, so they are added on submission creation
     cy.get('@listItemsAreas')
       .eq(0)
       .find(utils.governmentAreasPanel.row.label)
       .should('contain', previousSubcaseInfo.domains[0].name);
+    // the fields from previous subcase are OUTSIDE active range, so they are NOT added on submission creation
     cy.get('@listItemsAreas')
       .eq(0)
       .find(utils.governmentAreasPanel.row.fields)
-      .should('contain', previousSubcaseInfo.domains[0].fields[(0, 1)]);
+      .should('not.contain', previousSubcaseInfo.domains[0].fields[(0, 1)]);
 
     // emails
     cy.get(submissions.notificationsPanel.edit).should('not.exist');
