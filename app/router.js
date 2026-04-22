@@ -134,7 +134,7 @@ Router.map(function() {
   });
   if (isEnabledDataMonitoring()) {
     this.route('monitoring',  function() {
-      // this.route('data-propagation', { path: '/data-propagatie', });
+      this.route('data-propagation', { path: '/data-propagatie', });
       this.route('newsletter', { path: '/publicaties', });
     });
   }

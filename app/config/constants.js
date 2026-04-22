@@ -270,4 +270,10 @@ Def. check: `
     SUCCESS: 'http://kanselarij.vo.data.gift/release-task-statuses/success',
     FAILED: 'http://kanselarij.vo.data.gift/release-task-statuses/failed'
   },
+  DISTRIBUTOR_JOB_STATUSES: {
+    SCHEDULED: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+    BUSY: 'http://redpencil.data.gift/id/concept/JobStatus/busy',
+    SUCCESS: 'http://redpencil.data.gift/id/concept/JobStatus/success',
+    FAILED: 'http://redpencil.data.gift/id/concept/JobStatus/failed',
+  },
 };

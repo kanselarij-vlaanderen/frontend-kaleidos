@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { subMonths } from 'date-fns';
 
 export default class MonitoringNewsletterRoute extends Route {
