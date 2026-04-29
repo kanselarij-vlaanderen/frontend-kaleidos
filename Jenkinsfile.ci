@@ -2,6 +2,10 @@ def getBranchName(branch) {
   return "${branch}".replaceAll("/", "-").replaceAll(" ", "-").toLowerCase()
 }
 
+def getBranchNameWithoutOrigin(branch) {
+  return "${branch}".replaceAll("origin/", "")
+}
+
 pipeline {
   agent any
 
@@ -21,7 +25,7 @@ pipeline {
         // Try to checkout the same frontend branch for the backend.
         // If that fails, just check out development
         sh """
-          git clone --depth 1 -b ${env.GIT_BRANCH} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
+          git clone --depth 1 -b ${getBranchNameWithoutOrigin(env.GIT_BRANCH)} https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir} ||
           git clone --depth 1 -b development https://github.com/kanselarij-vlaanderen/app-kaleidos.git ${backendProjectDir}
         """
       }
