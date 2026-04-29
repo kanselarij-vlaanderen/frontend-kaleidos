@@ -201,9 +201,14 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       }
       this.args.onChangeFile();
     }
+    let changedAccessLevel = false;
+    const currentAccessLevel = await this.args.piece.accessLevel;
+    if (currentAccessLevel?.uri !== this.accessLevel?.uri) {
+      changedAccessLevel = true;
+    }
     this.args.piece.accessLevel = this.accessLevel;
     this.args.piece.name = this.args.piece.name?.trim();
-    await this.args.piece.save();
+    await this.args.piece.save(changedAccessLevel);
     await this.pieceAccessLevelService.updateSignedPieceAccessLevels(this.args.piece);
     await this.pieceAccessLevelService.updatePreviousAccessLevels(
       this.args.piece
@@ -276,7 +281,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
   async saveAccessLevelOfSignedPiece(pieceOrPromise) {
     const piece = await pieceOrPromise;
     if (piece) {
-      await piece.save();
+      await piece.saveModifiedAccessLevel();
     }
   }
 }

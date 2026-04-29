@@ -45,9 +45,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       'filter[:has:previous-piece]': 'yes', // "Enkel bissen, ter'en, etc" ...
       'filter[:has-no:next-piece]': 'yes', // enkel laatste versie
       'filter[:has:created]': `date-added-for-cache-busting-${new Date().toISOString()}`,
-      include: 'agendaitems',
-      'fields[agendaitems]': 'id,number,short-title',
-      'fields[piece]': 'id,name,modified',
+      include: 'agendaitems,file',
       sort: params.sort,
     });
     for (const nota of notas.slice()) { // proxyarray to native JS array
@@ -83,8 +81,8 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       const agendaitemNumber = agendaitemOnLatestAgenda.get('number');
       const agendaitemId = agendaitemOnLatestAgenda.get('id');
       const agendaitemShortTitle = agendaitemOnLatestAgenda.get('shortTitle');
-      const pieceData = await NewsletterNotaUpdatesRoute.getPieceData(nota);
-      const processedNota =  {
+      const pieceData = await this.getPieceData(nota);
+      const processedNota = {
         meetingId,
         agendaId,
         agendaitemId,
@@ -98,14 +96,21 @@ export default class NewsletterNotaUpdatesRoute extends Route {
     return processedNotas;
   }
 
-  static async getPieceData(piece) {
-    const name = piece.get('name');
-    const documentId = piece.get('id');
-    const modified = piece.get('modified');
+  async getPieceData(piece) {
+    const name = piece.name;
+    const documentId = piece.id;
+    const created = piece.created;
+    const modified = piece.modified;
+    const accessLevelLastModified = piece.accessLevelLastModified;
+    const file = await piece.belongsTo('file').reload();
+    const fileCreated = file?.created;
     return {
-      documentId: documentId,
-      name: name,
-      modified: modified,
+      documentId,
+      name,
+      created,
+      modified,
+      accessLevelLastModified,
+      fileCreated,
     };
   }
 

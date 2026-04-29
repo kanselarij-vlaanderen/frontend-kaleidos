@@ -23,6 +23,7 @@ module.exports = function (environment) {
       ENABLE_VLAAMS_PARLEMENT: '{{ENABLE_VLAAMS_PARLEMENT}}',
       ENABLE_CABINET_SUBMISSIONS: '{{ENABLE_CABINET_SUBMISSIONS}}',
       DISABLE_SESSION_POLLING: '{{DISABLE_SESSION_POLLING}}',
+      ENABLE_DATA_MONITORING: '{{ENABLE_DATA_MONITORING}}',
       // Here you can pass flags/options to your application instance
       // when it is created
     },
@@ -57,6 +58,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_DEBUG = true;
     ENV.APP.ENABLE_VLAAMS_PARLEMENT = true;
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
+    ENV.APP.ENABLE_DATA_MONITORING = true;
     
     ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
     // ENV.APP.LOG_RESOLVER = true;
@@ -76,6 +78,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_IMPERSONATION = true;
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     ENV.APP.ENABLE_DEBUG = true;
+    ENV.APP.ENABLE_DATA_MONITORING = false;
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
   }
@@ -89,6 +92,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     ENV.APP.ENABLE_DEBUG = false;
     ENV.APP.DISABLE_SESSION_POLLING = true;
+    ENV.APP.ENABLE_DATA_MONITORING = false;
     ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
   }
 

@@ -184,7 +184,6 @@ export default class BatchDocumentsDetailsModal extends Component {
           }
         }
         if (piece.accessLevel !== row.accessLevel) {
-          hasChanged = true;
           accessLevelHasChanged = true;
           piece.accessLevel = row.accessLevel;
         }
@@ -196,9 +195,13 @@ export default class BatchDocumentsDetailsModal extends Component {
           const signFlow = await signSubcase?.signFlow;
           await this.signatureService.removeSignFlow(signFlow);
         }
-        if (hasChanged) {
+        if (hasChanged || accessLevelHasChanged) {
           await piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
-          await piece.save();
+          if (hasChanged) {
+            await piece.save(accessLevelHasChanged);
+          } else {
+            await piece.saveModifiedAccessLevel();
+          }
           await documentContainer.save();
           if (
             accessLevelHasChanged &&

@@ -81,14 +81,7 @@ export default class CasesNewSubmissionComponent extends Component {
       this.title = this.latestSubcase.title;
       this.subcaseName = this.latestSubcase.subcaseName;
       this.governmentAreas = await this.latestSubcase.governmentAreas;
-      for (const governmentArea of this.governmentAreas) {
-        await governmentArea.broader;
-        if (governmentArea.broader) {
-          this.selectedGovernmentFields.push(governmentArea);
-        } else {
-          this.selectedGovernmentDomains.push(governmentArea);
-        }
-      }
+      // the governmentAreas will be date filtered into selected fields and domains by the governmentAreasPanel
     }
   })
 

@@ -1,0 +1,15 @@
+<div class="auk-o-flex auk-o-flex--vertical-center auk-o-flex--spaced">
+  {{#if @status}}
+    <AuPill @size="small" @skin={{this.skin}}>
+      {{this.label}}
+    </AuPill>
+  {{/if}}
+  {{#if @message}}
+    <AuTooltip @placement="bottom" as |tooltip|>
+      <AuPill {{tooltip.target}} @size="small" @icon="info-circle" />
+      <tooltip.Content>
+        {{@message}}
+      </tooltip.Content>
+    </AuTooltip>
+  {{/if}}
+</div>

@@ -14,9 +14,6 @@ export default class EditGovernmentAreasModal extends Component {
   constructor() {
     super(...arguments);
     this.loadGovernmentAreas.perform();
-    this.selectedGovernmentFields = this.args.governmentFields?.slice(0) || []; // making a copy
-    this.selectedGovernmentDomains =
-      this.args.governmentDomains?.slice(0) || []; // making a copy
   }
 
   loadGovernmentAreas = task(async () => {
@@ -33,14 +30,43 @@ export default class EditGovernmentAreasModal extends Component {
       }
     }
     this.governmentFields = governmentFields;
-  });
+    await this.loadSelectedAreas.perform();
+  })
 
   save = task(async () => {
     await this.args.onSave(
       this.selectedGovernmentDomains,
       this.selectedGovernmentFields
     );
-  });
+  })
+
+  loadSelectedAreas = task(async () => {
+    // problem solved here: if the government areas were inherited they could be outside the "active" range
+    // they are not shown in checkboxes and can't be deselected manually
+    // to solve this we remove all inactive fields and domains on save (based on referenceDate)
+
+    // get the active domains, in a set
+    let activeGovernmentDomains = await Promise.all(
+      this.governmentFields.slice().map((c) => c.broader)
+    );
+    const uniqueGovernmentDomains = activeGovernmentDomains
+      .filter((value, index, array) => array.indexOf(value) === index) // like .uniq()
+      .sort((d1, d2) => d1.label.localeCompare(d2.label));
+
+    const governmentFieldsFromArgs = this.args.governmentFields?.slice(0) || []; // making a copy
+    const governmentDomainsFromArgs = this.args.governmentDomains?.slice(0) || []; // making a copy
+
+    for (const governmentField of governmentFieldsFromArgs) {
+      if (this.governmentFields.includes(governmentField)) {
+        this.selectedGovernmentFields.push(governmentField);
+      }
+    }
+    for (const governmentDomain of governmentDomainsFromArgs) {
+      if (uniqueGovernmentDomains.includes(governmentDomain)) {
+        this.selectedGovernmentDomains.push(governmentDomain);
+      }
+    }
+  })
 
   @action
   selectField(selectedFields) {
