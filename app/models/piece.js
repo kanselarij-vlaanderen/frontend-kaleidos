@@ -140,17 +140,35 @@ export default class Piece extends Model {
     });
   }
 
-  save() {
+  save(accessLevelModified = false) {
     const dirtyType = this.dirtyType;
     if (dirtyType != 'deleted') {
       const now = new Date();
       this.modified = now;
-      this.accessLevelLastModified = now;
+      if (accessLevelModified) {
+        // new pieces don't get accessLevelModified yet.
+        this.accessLevelLastModified = now;
+      }
       if (dirtyType == 'created') {
         // When saving a newly created record force the creation date to equal
         // the modified date.
         this.created = now;
       }
+    }
+    return super.save(...arguments);
+  }
+
+  saveModifiedAccessLevel() {
+    // If any other change in properties is present we default to the regular save
+    const changedAttributes = this.changedAttributes();
+    if (Object.keys(changedAttributes).length !== 0) {
+      return this.save(true);
+    }
+
+    const dirtyType = this.dirtyType;
+    if (dirtyType != 'deleted') {
+      const now = new Date();
+      this.accessLevelLastModified = now;
     }
     return super.save(...arguments);
   }

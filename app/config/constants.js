@@ -241,4 +241,39 @@ Def. check: `
     // there are more themes, we only need announcement to set automatically
     ANNOUNCEMENT: "http://kanselarij.vo.data.gift/id/concept/thema-codes/59f3131e-cf44-4ee2-8258-70e3ac6303b1",
   },
+
+  // Data monitoring
+  // TODO KAS-4883 job refactor means themis-export statuses need to change here
+  THEMIS_EXPORT_JOB_STATUSES: {
+    SCHEDULED: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/scheduled',
+    BUSY: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/busy',
+    SUCCESS: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/success',
+    FAILED: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/failed',
+  },
+  TTL_TO_DELTA_TASK_STATUSES: {
+    SCHEDULED: 'http://redpencil.data.gift/ttl-to-delta-tasks/8C7E9155-B467-49A4-B047-7764FE5401F7',
+    BUSY: 'http://redpencil.data.gift/ttl-to-delta-tasks/B9418001-7DFE-40EF-8950-235349C2C7D1',
+    SUCCESS: 'http://redpencil.data.gift/ttl-to-delta-tasks/89E2E19A-91D0-4932-9720-4D34E62B89A1',
+    FAILED: 'http://redpencil.data.gift/ttl-to-delta-tasks/B740E2A0-F8CC-443E-A6BE-248393A0A9AE',
+  },
+  THEMIS_SYNC_TASK_STATUSES: {
+    SCHEDULED: 'http://kanselarij.vo.data.gift/services/themis-publication-consumer/sync-task-statuses/not-started',
+    BUSY: 'http://kanselarij.vo.data.gift/services/themis-publication-consumer/sync-task-statuses/ongoing',
+    SUCCESS: 'http://kanselarij.vo.data.gift/services/themis-publication-consumer/sync-task-statuses/success',
+    FAILED: 'http://kanselarij.vo.data.gift/services/themis-publication-consumer/sync-task-statuses/failed'
+  },
+  THEMIS_RELEASE_TASK_STATUSES: {
+    NOT_STARTED: 'http://kanselarij.vo.data.gift/release-task-statuses/not-started',
+    PREPARING_RELEASE: 'http://kanselarij.vo.data.gift/release-task-statuses/preparing-release',
+    READY_FOR_RELEASE: 'http://kanselarij.vo.data.gift/release-task-statuses/ready-for-release',
+    RELEASING: 'http://kanselarij.vo.data.gift/release-task-statuses/releasing',
+    SUCCESS: 'http://kanselarij.vo.data.gift/release-task-statuses/success',
+    FAILED: 'http://kanselarij.vo.data.gift/release-task-statuses/failed'
+  },
+  DISTRIBUTOR_JOB_STATUSES: {
+    SCHEDULED: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
+    BUSY: 'http://redpencil.data.gift/id/concept/JobStatus/busy',
+    SUCCESS: 'http://redpencil.data.gift/id/concept/JobStatus/success',
+    FAILED: 'http://redpencil.data.gift/id/concept/JobStatus/failed',
+  },
 };

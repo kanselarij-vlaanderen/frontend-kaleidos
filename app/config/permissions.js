@@ -88,6 +88,7 @@ const {
 // - manage-agendaitems-with-parliament-flow
 // - add-signed-piece: replacing a main piece or derived piece with a signed pdf and run strip/flatten
 // - restore-submissions: removing the treated status from submission so it's treatable again
+// - view-monitoring: view monitoring tab
 
 const groups = [
   {
@@ -113,6 +114,7 @@ const groups = [
         'view-access-level-pill-when-postponed',
         'view-submissions',
         'view-all-submissions',
+        'view-monitoring'
       ],
       full: [
         'remove-approved-agendaitems',

@@ -1,0 +1,26 @@
+{{page-title "Monitoring"}}
+<div class="auk-u-maximize-height auk-scroll-wrapper">
+  <Auk::Navbar @skin="gray-100">
+    <Auk::Toolbar>
+      <Auk::Toolbar::Group @position="left">
+        <Auk::Toolbar::Item>
+          <Auk::Tabs @responsive={{true}} @responsiveBreakpoint="small">
+            <Auk::Tab
+              @route="monitoring.data-propagation"
+            >
+              {{t "data-propagation"}}
+            </Auk::Tab>
+            <Auk::Tab
+              @route="monitoring.newsletter"
+            >
+              {{t "newsletter"}}
+            </Auk::Tab>
+          </Auk::Tabs>
+        </Auk::Toolbar::Item>
+      </Auk::Toolbar::Group>
+    </Auk::Toolbar>
+  </Auk::Navbar>
+  <div class="auk-scroll-wrapper__body">
+    {{outlet}}
+  </div>
+</div>
