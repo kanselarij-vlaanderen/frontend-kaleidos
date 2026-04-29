@@ -47,13 +47,42 @@
               </p>
             </td>
             <td>
-              <p>
-                {{t
-                  "newsletter-update-notas-edited-text"
-                  date=(date row.modified)
-                  time=(time row.modified)
-                }}
-              </p>
+              {{#if (gt row.modified row.created)}}
+                <p>
+                  {{t
+                    "newsletter-update-notas-edited-text"
+                    date=(date row.modified)
+                    time=(time row.modified)
+                  }}
+                </p>
+              {{else}}
+                <p>
+                  {{t
+                    "newsletter-update-notas-created-text"
+                    date=(date row.modified)
+                    time=(time row.modified)
+                  }}
+                </p>
+              {{/if}}
+              {{#if (and row.accessLevelLastModified (gt row.accessLevelLastModified row.modified))}}
+                <p>
+                  {{t
+                    "access-level-last-modified-text"
+                    date=(date row.accessLevelLastModified)
+                    time=(time row.accessLevelLastModified)
+                  }}
+                </p>
+              {{/if}}
+              {{! if the file is newer than the piece it was replaced}}
+              {{#if (and row.fileCreated (gt row.fileCreated row.created))}}
+                <p>
+                  {{t
+                    "file-last-changed-text"
+                    date=(date row.fileCreated)
+                    time=(time row.fileCreated)
+                  }}
+                </p>
+              {{/if}}
             </td>
             <td class="auk-u-text-align--right">
               <AuButton

@@ -59,8 +59,7 @@ export default class GovernmentAreasPanel extends Component {
 
     let uniqueDomains = domainsFromAvailableFields
       .filter((value, index, array) => array.indexOf(value) === index) // like .uniq()
-      .slice()
-      .sort((d1, d2) => d1.label - d2.label);
+      .sort((d1, d2) => d1.label.localeCompare(d2.label));
 
     // process args.governmentAreas into domains and fields
     const selectedDomains = [];
@@ -100,7 +99,6 @@ export default class GovernmentAreasPanel extends Component {
       if (isSelected) {
         this.args.onSelectDomains([domain]);
       }
-
       return new DomainSelection(
         domain,
         isSelected,

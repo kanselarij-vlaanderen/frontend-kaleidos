@@ -29,7 +29,7 @@ export default class PieceAccessLevelService extends Service {
  * | Publiek                                      | Intern Regering                          |
  * | Intern Overheid                              | Intern Regering                          |
  * | Intern Regering                              | Intern Regering                          |
- * | Vertrouwelijk                                | Vertrouwelijk                             |
+ * | Vertrouwelijk                                | Vertrouwelijk                            |
  * | Intern Secretarie                            | Intern Secretarie                        |
  * +----------------------------------------------+------------------------------------------+
  *
@@ -86,7 +86,7 @@ export default class PieceAccessLevelService extends Service {
     }
     if (previousAccessLevel.uri !== accessLevelToSet.uri) {
       previousPiece.accessLevel = accessLevelToSet;
-      await previousPiece.save();
+      await previousPiece.saveModifiedAccessLevel();
       await this.updateSignedPieceAccessLevels(previousPiece);
     }
     return true;
@@ -124,7 +124,7 @@ export default class PieceAccessLevelService extends Service {
         CONSTANTS.ACCESS_LEVELS.INTERN_REGERING
       );
       piece.accessLevel = internRegering;
-      await piece.save();
+      await piece.saveModifiedAccessLevel();
       await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
@@ -145,7 +145,7 @@ export default class PieceAccessLevelService extends Service {
     ) {
       const confidential = await this.store.findRecordByUri('concept', CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK);
       piece.accessLevel = confidential;
-      await piece.save();
+      await piece.saveModifiedAccessLevel();
       await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
@@ -170,7 +170,7 @@ export default class PieceAccessLevelService extends Service {
         CONSTANTS.ACCESS_LEVELS.INGETROKKEN,
       );
       piece.accessLevel = ingetrokken;
-      await piece.save();
+      await piece.saveModifiedAccessLevel();
       await this.updateSignedPieceAccessLevels(piece);
       await this.updatePreviousAccessLevels(piece);
     }
@@ -230,7 +230,7 @@ export default class PieceAccessLevelService extends Service {
     }
     if (signedPieceCopyAccessLevel.uri !== accessLevelToSet.uri) {
       signedPieceCopy.accessLevel = accessLevelToSet;
-      await signedPieceCopy.save();
+      await piece.saveModifiedAccessLevel();
     }
   }
 
@@ -260,7 +260,7 @@ export default class PieceAccessLevelService extends Service {
     }
     if (signedPieceAccessLevel.uri !== accessLevelToSet.uri) {
       signedPiece.accessLevel = accessLevelToSet;
-      await signedPiece.save();
+      await signedPiece.saveModifiedAccessLevel();
     }
   }
 

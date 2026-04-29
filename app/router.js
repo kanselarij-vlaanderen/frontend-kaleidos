@@ -1,6 +1,6 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
+import { isEnabledCabinetSubmissions, isEnabledDataMonitoring } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -132,6 +132,12 @@ Router.map(function() {
     });
     this.route('emails', { path: '/emailberichten', });
   });
+  if (isEnabledDataMonitoring()) {
+    this.route('monitoring',  function() {
+      this.route('data-propagation', { path: '/data-propagatie', });
+      this.route('newsletter', { path: '/publicaties', });
+    });
+  }
 
   this.route('document', { path: '/document/:piece_id', });
 

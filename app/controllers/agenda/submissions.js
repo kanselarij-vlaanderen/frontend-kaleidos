@@ -29,6 +29,9 @@ export default class AgendaSubmissionsController extends Controller {
   @tracked size = PAGINATION_SIZES[2];
   @tracked sort = 'title';
 
+  nextPage = () => (this.page += 1);
+  prevPage = () => (this.page -= 1);
+
   navigateToSubmission = (submission) => {
     this.router.transitionTo(
       'cases.submissions.submission',

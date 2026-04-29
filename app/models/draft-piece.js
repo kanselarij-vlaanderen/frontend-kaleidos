@@ -48,4 +48,9 @@ export default class DraftPiece extends Model {
     }
     return super.save(...arguments);
   }
+
+  saveModifiedAccessLevel() {
+    // fallback if saveModifiedAccessLevel is ever used on a draft-piece instead of piece model
+    return this.save();
+  }
 }
