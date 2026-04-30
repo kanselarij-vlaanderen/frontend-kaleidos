@@ -195,6 +195,11 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     ];
     yield Promise.all(reloads);
 
+    // cancel setting publication number tasks
+    this.setPublicationNumber.cancelAll();
+    this.setPublicationNumberSuffix.cancelAll();
+    this.setStructuredIdentifier.cancelAll();
+
     this.identification.rollbackAttributes();
     this.structuredIdentifier.rollbackAttributes();
     this.decisionActivity?.rollbackAttributes();
