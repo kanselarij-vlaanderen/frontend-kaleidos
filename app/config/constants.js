@@ -246,9 +246,9 @@ Def. check: `
   // TODO KAS-4883 job refactor means themis-export statuses need to change here
   THEMIS_EXPORT_JOB_STATUSES: {
     SCHEDULED: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/scheduled',
-    BUSY: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/busy',
+    BUSY: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/ongoing',
     SUCCESS: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/success',
-    FAILED: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/failed',
+    FAILED: 'http://data.kaleidos.vlaanderen.be/public-export-job-statuses/failure',
   },
   TTL_TO_DELTA_TASK_STATUSES: {
     SCHEDULED: 'http://redpencil.data.gift/ttl-to-delta-tasks/8C7E9155-B467-49A4-B047-7764FE5401F7',
@@ -270,6 +270,7 @@ Def. check: `
     SUCCESS: 'http://kanselarij.vo.data.gift/release-task-statuses/success',
     FAILED: 'http://kanselarij.vo.data.gift/release-task-statuses/failed'
   },
+  // TODO KAS-4883 deduplicate
   DISTRIBUTOR_JOB_STATUSES: {
     SCHEDULED: 'http://redpencil.data.gift/id/concept/JobStatus/scheduled',
     BUSY: 'http://redpencil.data.gift/id/concept/JobStatus/busy',
