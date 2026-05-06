@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SettingsOrganizationsOrganizationController extends Controller {

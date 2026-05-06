@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { trackedFunction } from 'reactiveweb/function';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { groupBySubcaseName } from 'frontend-kaleidos/utils/vp';
 
 export default class SentToVpModalComponent extends Component {

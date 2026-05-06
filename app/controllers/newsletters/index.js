@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import bind from 'frontend-kaleidos/utils/bind';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 

@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import { SUBMISSION_ALLOWED_MIME_TYPES, SUBMISSION_ALLOWED_EXTENSION } from 'frontend-kaleidos/config/config';

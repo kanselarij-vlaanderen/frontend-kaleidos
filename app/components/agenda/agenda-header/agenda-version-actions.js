@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout, all } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { sortPieces } from 'frontend-kaleidos/utils/documents';
 import {

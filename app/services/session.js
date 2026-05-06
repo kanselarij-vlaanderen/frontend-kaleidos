@@ -1,5 +1,5 @@
 import SessionService from 'ember-simple-auth/services/session';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ExtendedSessionService extends SessionService {

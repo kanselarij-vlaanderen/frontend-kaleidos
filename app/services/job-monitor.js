@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 
 export default class JobMonitorService extends Service {

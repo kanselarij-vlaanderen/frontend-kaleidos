@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import fetch from 'fetch';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 export default class PublicationsOverviewShortlistRoute extends Route {

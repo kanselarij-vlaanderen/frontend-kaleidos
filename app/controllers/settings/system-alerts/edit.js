@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class EditSystemAlertsController extends Controller {
   @service router;

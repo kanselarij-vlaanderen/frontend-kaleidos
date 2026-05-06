@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import search from 'frontend-kaleidos/utils/mu-search';

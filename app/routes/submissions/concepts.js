@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { startOfDay, endOfDay } from 'date-fns';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';

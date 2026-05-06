@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { trackedFunction } from 'reactiveweb/function';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { dateFormat } from 'frontend-kaleidos/utils/date-format';
 import { action } from '@ember/object';

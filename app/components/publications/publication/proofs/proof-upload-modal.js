@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 

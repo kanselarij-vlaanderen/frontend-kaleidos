@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import { tracked } from '@glimmer/tracking';

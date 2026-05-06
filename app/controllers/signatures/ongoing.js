@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 
 export default class SignaturesOngoingController extends Controller {

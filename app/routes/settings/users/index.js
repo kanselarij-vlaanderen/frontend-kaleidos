@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';

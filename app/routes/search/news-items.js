@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { parse, startOfDay, endOfDay } from 'date-fns';
 import search from 'frontend-kaleidos/utils/mu-search';
 import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';

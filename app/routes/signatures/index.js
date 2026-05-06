@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { TrackedArray } from 'tracked-built-ins';

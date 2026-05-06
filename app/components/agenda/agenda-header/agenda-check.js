@@ -4,7 +4,7 @@ import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task, all } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { getNotaGroups } from 'frontend-kaleidos/utils/agendaitem-utils';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 /**

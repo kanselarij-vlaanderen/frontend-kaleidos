@@ -6,7 +6,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { task, dropTask } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { EMAIL_ATTACHMENT_MAX_SIZE } from 'frontend-kaleidos/config/config';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
