@@ -107,7 +107,7 @@
               data-test-details-tab-cancel
               @skin="naked"
               @disabled={{this.isProcessing}}
-              {{on "click" (perform this.cancelEditDetails)}}
+              {{on "click" this.cancelEditDetails.perform}}
             >
               {{t "cancel"}}
             </AuButton>
@@ -121,7 +121,7 @@
               @disabled={{this.isProcessing}}
               @loading={{this.saveDetails.isRunning}}
               @loadingMessage={{t "loading"}}
-              {{on "click" (perform this.saveDetails)}}
+              {{on "click" this.saveDetails.perform}}
             >
               {{t "save"}}
             </AuButton>
@@ -323,7 +323,7 @@
                   @isEditable={{user-may "manage-document-access-levels"}}
                   @onChangeAccessLevel={{fn this.changeAccessLevelOfSignedPiece this.signedPieceCopy}}
                   @onConfirmChangeAccessLevel={{fn this.saveAccessLevelOfSignedPiece this.signedPieceCopy}}
-                  @onCancelChangeAccessLevel={{perform this.loadSignedPieces}}
+                  @onCancelChangeAccessLevel={{this.loadSignedPieces.perform}}
                 />
               </div>
             </dd>

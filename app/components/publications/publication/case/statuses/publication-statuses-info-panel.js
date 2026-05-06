@@ -18,12 +18,11 @@ export default class PublicationsPublicationCaseStatusesPublicationStatusesInfoP
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    const publicationSubcase = yield this.args.publicationFlow.publicationSubcase;
-    this.publicationActivities = yield publicationSubcase?.publicationActivities;
-    this.proofingActivities = yield publicationSubcase?.proofingActivities;
-    const translationSubcase = yield this.args.publicationFlow.translationSubcase;
-    this.translationActivities = yield translationSubcase?.translationActivities;
-  }
+  loadData = task(async () => {
+    const publicationSubcase = await this.args.publicationFlow.publicationSubcase;
+    this.publicationActivities = await publicationSubcase?.publicationActivities;
+    this.proofingActivities = await publicationSubcase?.proofingActivities;
+    const translationSubcase = await this.args.publicationFlow.translationSubcase;
+    this.translationActivities = await translationSubcase?.translationActivities;
+  });
 }

@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask, all } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
@@ -239,7 +239,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  createSubmission = dropTask(async (_meeting) => {
+  createSubmission = task({ drop: true }, async (_meeting) => {
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(

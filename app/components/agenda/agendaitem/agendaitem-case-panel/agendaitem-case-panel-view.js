@@ -28,19 +28,17 @@ export default class AgendaitemCasePanelView extends Component {
     this.loadDecisionActivity.perform();
   }
 
-  @task
-  *loadDecisionmakingFlow() {
+  loadDecisionmakingFlow = task(async () => {
     if (this.args.subcase) {
-      this.decisionmakingFlow = yield this.args.subcase.decisionmakingFlow;
+      this.decisionmakingFlow = await this.args.subcase.decisionmakingFlow;
     }
-  }
+  });
 
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
-  }
+  loadDecisionActivity = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.belongsTo('decisionResultCode').reload();
+  });
 
   @action
   async setAndSaveFormallyOkStatus(newFormallyOkUri) {

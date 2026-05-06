@@ -19,16 +19,15 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     this.loadDecision.perform();
   }
 
-  @task
-  *loadDecision() {
+  loadDecision = task(async () => {
     // Currently only 1 publication-activity and decision are assumed
     // per publication-subcase
-    this.decision = yield this.store.queryOne('decision', {
+    this.decision = await this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]':
         this.args.publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
-  }
+  });
 
   @action
   openEditingPanel() {
@@ -53,12 +52,11 @@ export default class PublicationsPublicationPublicationActivitiesPublicationInfo
     );
   }
 
-  @task
-  *save() {
-    yield this.args.publicationSubcase.save();
+  save = task(async () => {
+    await this.args.publicationSubcase.save();
     if (this.decision?.hasDirtyAttributes) {
-      yield this.decision.save();
+      await this.decision.save();
     }
     this.isEditing = false;
-  }
+  });
 }

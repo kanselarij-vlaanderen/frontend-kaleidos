@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 /**
  * @argument doc Piece to show in the badge:
@@ -19,10 +19,9 @@ export default class DcoumentsDocumentBadgeComponent extends Component {
     this.loadData.perform();
   }
 
-  @keepLatestTask
-  *loadData() {
-    const accessLevel = yield this.args.doc.accessLevel;
+  loadData = task({ keepLatest: true }, async () => {
+    const accessLevel = await this.args.doc.accessLevel;
     const context = this.args.agendaContext || {};
-    this.isDraftAccessLevel = yield this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.args.doc);
-  }
+    this.isDraftAccessLevel = await this.pieceAccessLevelService.isDraftAccessLevel(accessLevel, context, this.args.doc);
+  });
 }

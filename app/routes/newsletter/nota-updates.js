@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { task, timeout } from 'ember-concurrency';
+import { later, cancel } from '@ember/runloop';
+import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 
@@ -13,18 +14,14 @@ export default class NewsletterNotaUpdatesRoute extends Route {
 
   @service store;
 
-  @task
-  *pollModel() {
-    while (true) {
-      yield timeout(3 * 60000);
-      this.refresh();
-    }
+  willDestroy() {
+    super.willDestroy(...arguments);
+    cancel(this.scheduledRefresh);
   }
 
-  constructor() {
-    super(...arguments);
-    this.pollModel.perform();
-  }
+  pollModel = task(async () => {
+    this.refresh();
+  });
 
   async model(params) {
     const nota = await this.store.findRecordByUri(
@@ -95,6 +92,7 @@ export default class NewsletterNotaUpdatesRoute extends Route {
       };
       processedNotas.push(processedNota);
     }
+    this.scheduledRefresh = later(this, () => this.pollModel.perform(), 3 * 60000);
     return processedNotas;
   }
 

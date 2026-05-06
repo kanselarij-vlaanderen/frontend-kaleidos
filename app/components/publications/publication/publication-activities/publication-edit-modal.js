@@ -33,10 +33,9 @@ export default class PublicationEditModal extends Component {
     this.validators.publicationDate.enableError();
   }
 
-  @task
-  *save() {
-    yield this.args.onSave({
+  save = task(async () => {
+    await this.args.onSave({
       publicationDate: this.publicationDate,
     });
-  }
+  });
 }

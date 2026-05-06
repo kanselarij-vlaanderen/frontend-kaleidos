@@ -13,8 +13,7 @@ export default class NewsItemViewPanelComponent extends Component {
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
-  }
+  loadData = task(async () => {
+    this.proposalText = await this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
+  });
 }

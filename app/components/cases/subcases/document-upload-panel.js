@@ -44,10 +44,9 @@ export default class DocumentUploadPlanel extends Component {
     this.args.onAddPiece(piece);
   }
 
-  @task
-  *deletePiece(piece) {
-    yield this.args.onDeletePiece(piece);
-  }
+  deletePiece = task(async (piece) => {
+    await this.args.onDeletePiece(piece);
+  });
 
   onDidUpdate = task(async () => {
     if (this.args.confidential && this.args.pieces.length) {

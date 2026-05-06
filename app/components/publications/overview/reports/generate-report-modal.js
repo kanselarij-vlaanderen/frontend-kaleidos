@@ -130,9 +130,8 @@ export default class GenerateReportModalComponent extends Component {
     throw new Error('NOT IMPLEMENTED'); // for linter
   }
 
-  @task
-  *loadGovernmentDomains() {
-    let governmentDomains = yield this.store.queryAll('concept', {
+  loadGovernmentDomains = task(async () => {
+    let governmentDomains = await this.store.queryAll('concept', {
       'filter[top-concept-schemes][:uri:]':
         CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
       'filter[:has-no:broader]': true, // only top-level government-domains
@@ -146,7 +145,7 @@ export default class GenerateReportModalComponent extends Component {
       .sort((d1, d2) => d1.label.localeCompare(d2.label));
     // everything selected by default
     this.selectedGovernmentDomains = this.governmentDomains.slice(0);
-  }
+  });
 
   @action
   onInputPublicationYear(event) {
@@ -165,17 +164,16 @@ export default class GenerateReportModalComponent extends Component {
     this.selectedGovernmentDomains = selectedGovernmentDomains;
   }
 
-  @task // @task: for consistency with other loadData tasks
-  *loadRegulationTypes() {
+  // for consistency with other loadData tasks
+  loadRegulationTypes = task(async () => {
     let regulationTypes = this.store.peekAll('regulation-type');
     regulationTypes = regulationTypes
       .slice()
       .sort((c1, c2) => c1.position - c2.position);
     this.regulationTypes = regulationTypes;
-    yield; // for linter
     // everything selected by default
     this.selectedRegulationTypes = this.regulationTypes.slice(0);
-  }
+  });
 
   @action
   onChangeRegulationTypes(selectedRegulationTypes) {

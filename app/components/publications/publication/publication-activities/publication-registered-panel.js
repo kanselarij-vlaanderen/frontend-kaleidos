@@ -13,11 +13,10 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRegi
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    const decisions = yield this.args.publicationActivity.decisions;
+  loadData = task(async () => {
+    const decisions = await this.args.publicationActivity.decisions;
     this.decisions = decisions.slice();
-  }
+  });
 
   get latestDecision() {
     return this.decisions
@@ -36,14 +35,13 @@ export default class PublicationsPublicationPublicationActivitiesPublicationRegi
     );
   }
 
-  @task
-  *editPublication(data) {
-    yield this.args.onEditPublicationActivity({
+  editPublication = task(async (data) => {
+    await this.args.onEditPublicationActivity({
       decision: this.latestDecision,
       publicationDate: data.publicationDate,
     });
     this.closePublicationEditModal();
-  }
+  });
 
   @action
   openPublicationEditModal() {

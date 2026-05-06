@@ -64,12 +64,11 @@ export default class UsersSettingsController extends Controller {
     this.selectedOrganizations = organizations;
   }
 
-  @task
-  *setRoles(roles) {
-    yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
+  setRoles = task(async (roles) => {
+    await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     this.roles = roles.map((role) => role.id);
     this.selectedRoles = roles;
-  }
+  });
 
   @action
   search(e) {
@@ -77,15 +76,13 @@ export default class UsersSettingsController extends Controller {
     this.filter = this.searchTextBuffer;
   }
 
-  @task
-  *loadSelectedOrganizations() {
-    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
-  }
+  loadSelectedOrganizations = task(async () => {
+    this.selectedOrganizations = (await Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
+  });
 
-  @task
-  *loadSelectedRoles() {
-    this.selectedRoles = (yield Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).slice();
-  }
+  loadSelectedRoles = task(async () => {
+    this.selectedRoles = (await Promise.all(this.roles.map((id) => this.store.findRecord('role', id)))).slice();
+  });
 
   @action
   toggleShowBlockMembershipsConfirmationModal() {

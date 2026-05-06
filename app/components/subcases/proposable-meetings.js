@@ -21,8 +21,7 @@ export default class ProposableMeetings extends Component {
     this.loadMeetings.perform();
   }
 
-  @task
-  *loadMeetings() {
+  loadMeetings = task(async () => {
     const queryParams = {
       filter: {
         ':has-no:agenda': true
@@ -30,9 +29,9 @@ export default class ProposableMeetings extends Component {
       sort: 'planned-start',
       include: 'kind',
     };
-    this.meetings = yield this.store.queryAll('meeting', queryParams);
+    this.meetings = await this.store.queryAll('meeting', queryParams);
     this.datesToEnable = this.meetings.map((meeting) => meeting.plannedStart);
-  }
+  });
 
   @action
   selectPlannedStart(selectedDate) {

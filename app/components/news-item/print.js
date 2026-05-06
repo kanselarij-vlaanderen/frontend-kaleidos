@@ -17,13 +17,12 @@ export default class NewsItemPrintComponent extends Component {
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     if (this.args.newsItem) {
-      this.proposalText = yield this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
-      this.themes = yield this.args.newsItem.themes;
+      this.proposalText = await this.newsletterService.generateNewsItemMandateeProposalText(this.args.newsItem);
+      this.themes = await this.args.newsItem.themes;
     }
-  }
+  });
 
   @action
   async openEdit() {

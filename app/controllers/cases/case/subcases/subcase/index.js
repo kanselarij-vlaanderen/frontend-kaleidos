@@ -4,11 +4,7 @@ import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import {
-  keepLatestTask,
-  task,
-  all,
-} from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import { findDocType } from 'frontend-kaleidos/utils/document-type';
@@ -120,9 +116,8 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
     this.newPieces.push(piece);
   }
 
-  @task
-  *savePieces() {
-    const typesRequired = yield this.documentService.enforceDocType(this.newPieces);
+  savePieces = task(async () => {
+    const typesRequired = await this.documentService.enforceDocType(this.newPieces);
     if (typesRequired) return;
 
     const savePromises = this.sortedNewPieces.map(async(piece, index) => {
@@ -133,80 +128,75 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
         throw error;
       }
     });
-    yield all(savePromises);
-    yield this.handleSubmittedPieces.perform(this.newPieces);
+    await all(savePromises);
+    await this.handleSubmittedPieces.perform(this.newPieces);
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
     this.router.refresh('cases.case.subcases.subcase');
-  }
+  });
 
   /**
    * Save a new document container and the piece it wraps
   */
-  @task
-  *savePiece(piece, index) {
-    const documentContainer = yield piece.documentContainer;
-    const containerCount = yield this.store.count('document-container', {
+  savePiece = task(async (piece, index) => {
+    const documentContainer = await piece.documentContainer;
+    const containerCount = await this.store.count('document-container', {
       'filter[pieces][submission-activities][subcase][id]': this.model.subcase.id,
     });
     documentContainer.position = index + 1 + (containerCount ?? 0);
-    yield documentContainer.save();
+    await documentContainer.save();
     piece.name = piece.name.trim();
-    yield piece.save();
+    await piece.save();
     try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
         this.intl.t('warning-title'),
       );
     }
-  }
+  });
 
   /**
    * Add new piece to an existing document container
   */
-  @task
-  *addPiece(piece) {
+  addPiece = task(async (piece) => {
     // TODO KAS-4104 WHY DO WE ADD case to piece.cases, we have a service that does this automatically. This is asking for concurrency issues
-    // const cases = yield piece.cases;
+    // const cases = await piece.cases;
     // cases.push(this.case);
-    yield piece.save();
-    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+    await piece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
         this.intl.t('warning-title'),
       );
     }
-    yield this.handleSubmittedPieces.perform([piece]);
+    await this.handleSubmittedPieces.perform([piece]);
     this.router.refresh('cases.case.subcases.subcase');
-  }
+  });
 
-  @task
-  *cancelUploadPieces() {
+  cancelUploadPieces = task(async () => {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
-    yield all(deletePromises);
+    await all(deletePromises);
     this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
-  }
+  });
 
-  @task
-  *deletePiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
+  deletePiece = task(async (piece) => {
+    const file = await piece.file;
+    await file.destroyRecord();
     removeObject(this.newPieces, piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
-  }
+    const documentContainer = await piece.documentContainer;
+    await documentContainer.destroyRecord();
+    await piece.destroyRecord();
+  });
 
-  @keepLatestTask
-  *ensureFreshData() {
+  ensureFreshData = task({ keepLatest: true }, async () => {
     // piece is linked to a case at the piece-side,
     // so we don't need to reload this.model._case and this.model._case.pieces
 
@@ -216,30 +206,28 @@ export default class CasesCaseSubcasesSubcaseIndexController extends Controller 
 
     // we don't need to reload subcase.agendaActivities nor subcase.submissionActivities
     // since we query them from the backend on addition of new pieces
-  }
+  });
 
-  @task
-  *handleSubmittedPieces(pieces) {
-    yield this.ensureFreshData.perform();
+  handleSubmittedPieces = task(async (pieces) => {
+    await this.ensureFreshData.perform();
 
     // Attach pieces to submission activity and on open agendaitem (if any)
-    const agendaActivity = yield this.pieceUpload.getAgendaActivity(this.model.subcase);
+    const agendaActivity = await this.pieceUpload.getAgendaActivity(this.model.subcase);
     if (agendaActivity) { // Item is already on open agenda; adding extra pieces
-      yield this.pieceUpload.createSubmissionActivity(pieces, this.model.subcase, agendaActivity);
-      yield this.updateRelatedAgendaitems.perform(pieces);
+      await this.pieceUpload.createSubmissionActivity(pieces, this.model.subcase, agendaActivity);
+      await this.updateRelatedAgendaitems.perform(pieces);
     } else { // Preparing pieces for subcase that is not yet on agenda
-      yield this.pieceUpload.updateSubmissionActivity(pieces, this.model.subcase);
+      await this.pieceUpload.updateSubmissionActivity(pieces, this.model.subcase);
     }
-  }
+  });
 
-  @task
-  *updateRelatedAgendaitems(pieces) {
-    yield this.pieceUpload.updateRelatedAgendaitems.perform(
+  updateRelatedAgendaitems = task(async (pieces) => {
+    await this.pieceUpload.updateRelatedAgendaitems.perform(
       pieces,
       this.model.subcase
     );
     this.router.refresh('cases.case.subcases.subcase');
-  }
+  });
 
   @action
   async openBatchDetails() {

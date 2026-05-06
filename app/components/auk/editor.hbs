@@ -30,7 +30,7 @@
               @loading={{@onSaveTask.isRunning}}
               @loadingMessage={{t "loading"}}
               @disabled={{@fullScreenSaveDisabled}}
-              {{on "click" (perform @onSaveTask)}}
+              {{on "click" @onSaveTask.perform}}
             >
               {{t "save"}}
             </AuButton>

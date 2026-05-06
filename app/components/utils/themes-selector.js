@@ -18,13 +18,12 @@ export default class ThemesSelector extends Component {
     this.findAll.perform();
   }
 
-  @task
-  *findAll() {
-    this.themes = yield this.store.queryAll('theme', {
+  findAll = task(async () => {
+    this.themes = await this.store.queryAll('theme', {
       filter: { deprecated: false },
       sort: 'label',
     });
-  }
+  });
 
   @action
   toggleTheme(theme, checked) {

@@ -106,23 +106,21 @@ export default class AccessLevelPillComponent extends Component {
     this.changedAccessLevel = true;
   }
 
-  @task
-  *confirmChangeAccessLevel(accessLevel) {
+  confirmChangeAccessLevel = task(async(accessLevel) => {
     if (this.args.onConfirmChangeAccessLevel) {
       if (this.changedAccessLevel) {
-        yield this.args.onConfirmChangeAccessLevel(accessLevel);
+        await this.args.onConfirmChangeAccessLevel(accessLevel);
       }
     }
     this.isEditing = false;
     this.changedAccessLevel = false;
-  }
+  });
 
-  @task
-  *cancelChangeAccessLevel() {
+  cancelChangeAccessLevel = task(async () => {
     if (this.args.onCancelChangeAccessLevel) {
-      yield this.args.onCancelChangeAccessLevel();
+      await this.args.onCancelChangeAccessLevel();
     }
     this.isEditing = false;
     this.changedAccessLevel = false;
-  }
+  });
 }

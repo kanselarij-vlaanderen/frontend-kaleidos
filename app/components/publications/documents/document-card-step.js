@@ -18,13 +18,11 @@ export default class PublicationsDocumentsDocumentCardStepComponent extends Comp
     return hasPermission && this.signMarkingActivity;
   }
 
-  @task
-  *deletePiece() {
-    yield this.args.onDelete();
-  }
+  deletePiece = task(async () => {
+    await this.args.onDelete();
+  });
 
-  @task
-  *loadSignatureRelatedData() {
-    this.signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
-  }
+  loadSignatureRelatedData = task(async () => {
+    this.signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
+  });
 }

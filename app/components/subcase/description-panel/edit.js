@@ -48,41 +48,36 @@ export default class SubcaseDescriptionEdit extends Component {
     this.loadInternalReview.perform();
   }
 
-  @task
-  *loadSubcaseType() {
-    this.subcaseType = yield this.args.subcase.type;
-  }
+  loadSubcaseType = task(async () => {
+    this.subcaseType = await this.args.subcase.type;
+  });
 
-  @task
-  *loadAgendaItemType() {
-    this.agendaItemType = yield this.args.subcase.agendaItemType;
-  }
+  loadAgendaItemType = task(async () => {
+    this.agendaItemType = await this.args.subcase.agendaItemType;
+  });
 
-  @task
-  *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+  loadAgendaItemTypes = task(async () => {
+    this.agendaItemTypes = await this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
-  }
+  });
 
-  @task
-  *loadInternalReview() {
+  loadInternalReview = task(async () => {
     if (this.currentSession.may('manage-agendaitems')) {
-      this.internalReview = yield this.args.subcase.internalReview;
+      this.internalReview = await this.args.subcase.internalReview;
     }
-  }
+  });
 
-  @task
-  *updateNewsItem() {
-    const latestAgendaitem = yield this.store.queryOne('agendaitem', {
+  updateNewsItem = task(async () => {
+    const latestAgendaitem = await this.store.queryOne('agendaitem', {
       'filter[agenda-activity][subcase][:id:]': this.args.subcase.id,
       'filter[:has-no:next-version]': 't',
       sort: '-created',
     });
     if (latestAgendaitem) {
-      yield this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
+      await this.newsletterService.updateNewsItemVisibility(latestAgendaitem);
     }
-  }
+  });
 
   @action
   selectSubcaseName(shortcut) {

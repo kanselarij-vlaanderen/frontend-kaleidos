@@ -31,38 +31,34 @@ export default class NewsItemTableRowComponent extends Component {
     return classes.join(' ');
   }
 
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
-  }
+  loadDecisionActivity = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.belongsTo('decisionResultCode').reload();
+  });
 
   loadSubcase = task(async () => {
     const agendaActivity = await this.args.agendaitem.agendaActivity;
     this.subcase = await agendaActivity?.subcase;
   })
 
-  @task
-  *saveNewsItem(newsItem, wasNewsItemNew) {
-    yield newsItem.stopEditingOnSave();
-    yield this.args.onSave(wasNewsItemNew);
+  saveNewsItem = task(async (newsItem, wasNewsItemNew) => {
+    await newsItem.stopEditingOnSave();
+    await this.args.onSave(wasNewsItemNew);
     this.isOpenEditView = false;
-  }
+  });
 
-  @task
-  *loadNotaOrVisienota() {
-    this.notaOrVisieNota = yield this.agendaitemNota.notaOrVisieNota(
+  loadNotaOrVisienota = task(async () => {
+    this.notaOrVisieNota = await this.agendaitemNota.notaOrVisieNota(
       this.args.agendaitem
     );
-  }
+  });
 
-  @task
-  *toggleInNewsletterFlag(checked) {
+  toggleInNewsletterFlag = task(async (checked) => {
     this.args.newsItem.inNewsletter = checked;
-    yield this.args.newsItem.save(); // not setting/unsetting isbeingEditedBy
-    yield this.args.onSave();
-  }
+    await this.args.newsItem.save(); // not setting/unsetting isbeingEditedBy
+    await this.args.onSave();
+  });
 
   @action
   async openNota() {

@@ -28,15 +28,13 @@ export default class OrganizationFilterComponent extends Component {
     this.args.onChange?.(this.selected);
   }
 
-  @task
-  *search(query) {
+  search = task(async (query) => {
     if (query) {
-      yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
+      await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     }
-
-    return (yield this.store.query('user-organization', {
+    return (await this.store.query('user-organization', {
       filter: query,
       sort: 'identifier',
     })).filter((organization) => !this.selected.includes(organization));
-  }
+  });
 }

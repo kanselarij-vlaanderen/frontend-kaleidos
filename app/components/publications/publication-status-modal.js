@@ -32,8 +32,7 @@ export default class PublicationStatusModal extends Component {
     this.publicationStatus = status;
   }
 
-  @task
-  *savePublicationStatus() {
-    yield this.args.onSave(this.publicationStatus, new Date());
-  }
+  savePublicationStatus = task(async () => {
+    await this.args.onSave(this.publicationStatus, new Date());
+  });
 }

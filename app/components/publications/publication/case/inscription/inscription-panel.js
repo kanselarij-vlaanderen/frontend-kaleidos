@@ -57,12 +57,11 @@ export default class PublicationsPublicationCaseInscriptionPanelComponent extend
     this.isEnabledErrorDisplay = true;
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     this.args.publicationFlow.shortTitle = this.shortTitle;
     this.args.publicationFlow.longTitle = this.longTitle;
     // no try-catch: don't exit edit-mode if save didn't work
-    yield this.args.publicationFlow.save();
+    await this.args.publicationFlow.save();
     this.isEditing = false;
-  }
+  });
 }

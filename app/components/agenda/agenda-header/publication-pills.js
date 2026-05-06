@@ -65,25 +65,23 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
 
   // Seperate task to make a distinction in the template
   // between the initial data loading  and subsequent (background) data reloads
-  @task
-  *loadInitialData() {
-    yield this.loadPublicationActivities.perform();
-  }
+  loadInitialData = task(async () => {
+    await this.loadPublicationActivities.perform();
+  });
 
-  @task
-  *loadPublicationActivities() {
-    this.internalDocumentPublicationActivity = yield this.store.queryOne('internal-document-publication-activity', {
+  loadPublicationActivities = task(async () => {
+    this.internalDocumentPublicationActivity = await this.store.queryOne('internal-document-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       include: 'status',
     });
 
-    this.internalDecisionPublicationActivity = yield this.store.queryOne('internal-decision-publication-activity', {
+    this.internalDecisionPublicationActivity = await this.store.queryOne('internal-decision-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       include: 'status',
     });
 
     // sorting on undefined startDate yields unexpected results
-    const allThemisNewsitemPublicationActivities = yield this.store.queryAll('themis-publication-activity', {
+    const allThemisNewsitemPublicationActivities = await this.store.queryAll('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[scope]': 'newsitems',
       include: 'status',
@@ -95,7 +93,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
       .at(-1);
 
     // sorting on undefined startDate yields unexpected results
-    const allThemisDocumentPublicationActivities = yield this.store.queryAll('themis-publication-activity', {
+    const allThemisDocumentPublicationActivities = await this.store.queryAll('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[scope]': 'documents',
       include: 'status',
@@ -112,7 +110,7 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
 
     // check if the newsitems weren't retracted at a later time
     // sorting on undefined startDate here is fine, since scopeless activities always have a startDate
-    this.retractedThemisNewsitemPublicationActivity = yield this.store.queryOne('themis-publication-activity', {
+    this.retractedThemisNewsitemPublicationActivity = await this.store.queryOne('themis-publication-activity', {
       'filter[meeting][:uri:]': this.args.meeting.uri,
       'filter[:has-no:scope]': 't',
       sort: '-start-date',
@@ -120,5 +118,5 @@ export default class AgendaAgendaHeaderPublicationPillsComponent extends Compone
     });
 
     this.schedulePublicationActivitiesRefresh();
-  }
+  });
 }

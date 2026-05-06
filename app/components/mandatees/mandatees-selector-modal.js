@@ -17,10 +17,9 @@ export default class MandateesMandateesSelectorModalComponent extends Component 
     return !!this.selectedMandatee || this.onAdd.isRunning;
   }
 
-  @task
-  *onAdd() {
-    yield this.args.onAdd(this.selectedMandatee);
-  }
+  onAdd = task(async () => {
+    await this.args.onAdd(this.selectedMandatee);
+  });
 
   @action
   setOpenSearch(checked) {

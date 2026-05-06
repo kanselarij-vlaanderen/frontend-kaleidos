@@ -26,8 +26,8 @@
     </Auk::Toolbar>
   </Auk::Panel::Header>
   <Auk::Panel::Body
-    {{did-update (perform this.onDidUpdate) @confidential}}
-    {{did-update (perform this.onDidUpdate) @hasConfidentialPieces}}
+    {{did-update this.onDidUpdate.perform @confidential}}
+    {{did-update this.onDidUpdate.perform @hasConfidentialPieces}}
   >
     <Utils::LoadableContent
       @isLoading={{this.loadEmailSettings.isRunning}}
@@ -228,7 +228,7 @@
               @loading={{this.saveNotificationData.isRunning}}
               @loadingMessage={{t "loading"}}
               @disabled={{this.saveNotificationData.isRunning}}
-              {{on "click" (perform this.saveNotificationData)}}
+              {{on "click" this.saveNotificationData.perform}}
             >
               {{t "save"}}
             </AuButton>

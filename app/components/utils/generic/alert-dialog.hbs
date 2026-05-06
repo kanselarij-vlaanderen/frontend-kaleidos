@@ -11,7 +11,7 @@
   <Auk::Modal::Footer
     @bordered={{false}}
     @cancelDisabled={{this.isLoading}}
-    @onCancel={{perform this.cancel}}
+    @onCancel={{this.cancel.perform}}
   >
     <AuButton
       data-test-alert-dialog-confirm
@@ -21,7 +21,7 @@
       @disabled={{this.isLoading}}
       @loading={{this.confirm.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.confirm)}}
+      {{on "click" this.confirm.perform}}
     >
       {{this.confirmText}}
     </AuButton>

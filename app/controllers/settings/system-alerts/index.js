@@ -14,12 +14,11 @@ export default class SystemAlertsController extends Controller {
     this.selectedAlert = alert;
   }
 
-  @task
-  *remove(model) {
-    yield model.destroyRecord();
+  remove = task(async (model) => {
+    await model.destroyRecord();
     this.selectedAlert = null;
     return model;
-  }
+  });
 
   @action
   cancel() {

@@ -26,7 +26,7 @@
     <Publications::Documents::DocumentListSteps
       @pieces={{this.model}}
       @isViaCouncilOfMinisters={{this.isViaCouncilOfMinisters}}
-      @onDeletePiece={{perform this.deletePiece}}
+      @onDeletePiece={{this.deletePiece.perform}}
     />
   </Auk::Panel::Body>
 </Auk::Panel>
@@ -34,7 +34,7 @@
 {{#if this.isOpenReferenceDocumentUploadModal}}
   <Publications::Documents::ReferenceDocumentUploadModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveReferenceDocuments}}
+    @onSave={{this.saveReferenceDocuments.perform}}
     @onCancel={{this.closeReferenceDocumentUploadModal}}
   />
 {{/if}}

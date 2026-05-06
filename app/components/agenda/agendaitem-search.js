@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { dropTask, restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { isEmpty } from '@ember/utils';
 
@@ -35,16 +35,14 @@ export default class AgendaItemSearch extends Component {
     }
   }
 
-  @restartableTask
-  *debouncedSearch() {
-    yield timeout(500);
-    yield this.search.perform();
-  }
+  debouncedSearch = task({ restartable: true }, async () => {
+    await timeout(500);
+    await this.search.perform();
+  });
 
-  @dropTask
-  *search() {
+  search = task({ drop: true }, async () => {
     if (this.args.onSearch) {
-      yield this.args.onSearch(this.searchText);
+      await this.args.onSearch(this.searchText);
     }
-  }
+  });
 }

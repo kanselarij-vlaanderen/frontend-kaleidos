@@ -32,8 +32,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     return this.model.filter((activity) => activity.isShown)
   }
 
-  @task
-  *saveProofUpload(proofUpload) {
+  saveProofUpload = task(async (proofUpload) => {
     let proofingActivity = this.latestProofingActivity;
 
     if (!proofingActivity) {
@@ -45,7 +44,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
 
     proofingActivity.endDate = proofUpload.receivedDate;
-    yield proofingActivity.save();
+    await proofingActivity.save();
 
     const pieceSaves = [];
     for (let piece of proofUpload.pieces) {
@@ -62,7 +61,7 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
 
     if (proofUpload.mustUpdatePublicationStatus) {
-      yield this.publicationService.updatePublicationStatus(
+      await this.publicationService.updatePublicationStatus(
         this.publicationFlow,
         CONSTANTS.PUBLICATION_STATUSES.PROOF_RECEIVED,
         proofUpload.receivedDate
@@ -72,30 +71,28 @@ export default class PublicationsPublicationProofsController extends Controller 
       publicationSubcaseSave = this.publicationSubcase.save();
     }
 
-    yield Promise.all([
+    await Promise.all([
       ...pieceSaves,
       publicationSubcaseSave,
     ]);
 
     this.router.refresh('publications.publication.proofs.index');
     this.showProofUploadModal = false;
-  }
+  });
 
-  @task
-  *saveProofRequest(proofRequest) {
-    yield this.publicationService.createProofRequest(
+  saveProofRequest = task(async (proofRequest) => {
+    await this.publicationService.createProofRequest(
       proofRequest,
       this.publicationFlow
     );
 
     this.router.refresh('publications.publication.proofs.index');
     this.showProofRequestModal = false;
-  }
+  });
 
-  @task
-  *deleteReceivedPiece(proofReceivedEvent, piece) {
-    yield this.performDeleteReceivedPiece(proofReceivedEvent, piece);
-  }
+  deleteReceivedPiece = task(async (proofReceivedEvent, piece) => {
+    await this.performDeleteReceivedPiece(proofReceivedEvent, piece);
+  });
 
   async performDeleteReceivedPiece(proofReceivedEvent, piece) {
     await this.publicationService.deletePiece(piece);
@@ -108,20 +105,19 @@ export default class PublicationsPublicationProofsController extends Controller 
     }
   }
 
-  @task
-  *deleteRequest(requestActivity) {
-    const proofingActivity = yield requestActivity.proofingActivity;
-    yield proofingActivity.destroyRecord();
+  deleteRequest = task(async (requestActivity) => {
+    const proofingActivity = await requestActivity.proofingActivity;
+    await proofingActivity.destroyRecord();
 
-    const mail = yield requestActivity.email;
+    const mail = await requestActivity.email;
     // legacy activities may not have an email so only try to delete if one exists
-    yield mail?.destroyRecord();
+    await mail?.destroyRecord();
 
-    const pieces = yield requestActivity.usedPieces;
+    const pieces = await requestActivity.usedPieces;
     for (const piece of pieces.slice()) {
       // The pieces that are used in a translationActivity can not be deleted
       const [translationActivitiesUsedBy, translationActivityGeneratedBy] =
-        yield Promise.all([
+        await Promise.all([
           piece.translationActivitiesUsedBy,
           piece.translationActivityGeneratedBy,
         ]);
@@ -130,15 +126,14 @@ export default class PublicationsPublicationProofsController extends Controller 
         // non-existent model relationships resolve to null
         !!translationActivityGeneratedBy;
       if (!isLinkedToTranslation) {
-        yield this.publicationService.deletePiece(piece);
+        await this.publicationService.deletePiece(piece);
       }
     }
-    yield requestActivity.destroyRecord();
+    await requestActivity.destroyRecord();
     this.router.refresh('publications.publication.proofs.index');
-  }
+  });
 
-  @task
-  *editProofingActivity(proofEdit) {
+  editProofingActivity = task(async (proofEdit) => {
     const saves = [];
 
     const proofingActivity = proofEdit.proofingActivity;
@@ -148,19 +143,18 @@ export default class PublicationsPublicationProofsController extends Controller 
     this.publicationSubcase.proofPrintCorrector = proofEdit.proofPrintCorrector;
     saves.push(this.publicationSubcase.save());
 
-    yield Promise.all(saves);
+    await Promise.all(saves);
     this.router.refresh('publications.publication.proofs.index');
-  }
+  });
 
-  @task
-  *savePublicationRequest(publicationRequest) {
-    yield this.publicationService.createPublicationRequest(
+  savePublicationRequest = task(async (publicationRequest) => {
+    await this.publicationService.createPublicationRequest(
       publicationRequest,
       this.publicationFlow
     );
 
     this.router.transitionTo('publications.publication.publication-activities');
-  }
+  });
 
   @action
   openProofUploadModal() {

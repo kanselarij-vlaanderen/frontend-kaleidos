@@ -31,22 +31,20 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     this.organizations = this.loadOrganizations('');
   }
 
-  @task
-  *searchOrganizations(searchTerm) {
-    yield timeout(300);
+  searchOrganizations = task(async (searchTerm) => {
+    await timeout(300);
     return this.loadOrganizations(searchTerm);
-  }
+  });
 
-  @task
-  *save() {
+  save = task(async () => {
     const contactPersonProperties = {
       firstName: this.firstName,
       lastName: this.lastName,
       email: isPresent(this.email) ? this.email : undefined,
       organization: this.organization,
     };
-    yield this.args.onSave(contactPersonProperties);
-  }
+    await this.args.onSave(contactPersonProperties);
+  });
 
   @action
   onInputFirstName(event) {

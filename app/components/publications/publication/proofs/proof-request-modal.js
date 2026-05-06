@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { proofRequestEmail } from 'frontend-kaleidos/utils/publication-email';
 import { ValidatorSet, Validator } from 'frontend-kaleidos/utils/validators';
 import { service } from '@ember/service';
@@ -70,13 +70,12 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     return [...this.transferredPieces, ...this.uploadedPieces];
   }
 
-  @task
-  *loadTranslationPieces() {
+  loadTranslationPieces = task(async () => {
     let translationActivity = this.args.translationActivity;
 
     if (!translationActivity) {
       // Fetch latest finished translation-activity
-      translationActivity = yield this.store.queryOne('translation-activity', {
+      translationActivity = await this.store.queryOne('translation-activity', {
         'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
         // Filter on end-date is a workaround to ensure end date exists
         'filter[:gte:end-date]': '1302-07-11',
@@ -92,7 +91,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     }
 
     if (translationActivity) {
-      const [usedPieces, generatedPieces] = yield Promise.all([
+      const [usedPieces, generatedPieces] = await Promise.all([
         translationActivity.usedPieces,
         translationActivity.generatedPieces,
       ]);
@@ -105,7 +104,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     } else {
       this.transferredPieces = new TrackedArray([]);
     }
-  }
+  });
 
   initValidators() {
     this.validators = new ValidatorSet({
@@ -115,32 +114,29 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     });
   }
 
-  @task
-  *save() {
-    yield this.args.onSave({
+  save = task(async () => {
+    await this.args.onSave({
       subject: this.subject,
       message: this.message,
       pieces: this.pieces,
       mustUpdatePublicationStatus: this.mustUpdatePublicationStatus,
     });
-  }
+  });
 
-  @dropTask
-  *cancel() {
-    yield Promise.all(
+  cancel = task({ drop: true }, async () => {
+    await Promise.all(
       this.uploadedPieces.map((piece) =>
         this.deleteUploadedPiece.perform(piece)
       )
     );
     this.args.onCancel();
-  }
+  });
 
-  @task
-  *setEmailFields() {
+  setEmailFields = task(async () => {
     const publicationFlow = this.args.publicationFlow;
-    const identification = yield publicationFlow.identification;
-    const urgencyLevel = yield publicationFlow.urgencyLevel;
-    const threadId = yield publicationFlow.threadId;
+    const identification = await publicationFlow.identification;
+    const urgencyLevel = await publicationFlow.urgencyLevel;
+    const threadId = await publicationFlow.threadId;
     const mailParams = {
       identifier: identification.idName,
       shortTitle: publicationFlow.shortTitle,
@@ -155,7 +151,7 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
 
     this.message = mailTemplate.message;
     this.subject = mailTemplate.subject;
-  }
+  });
 
   @action
   async uploadPiece(file) {
@@ -163,11 +159,10 @@ export default class PublicationsPublicationProofsProofRequestModalComponent ext
     this.uploadedPieces.push(piece);
   }
 
-  @task
-  *deleteUploadedPiece(piece) {
-    yield this.publicationService.deletePiece(piece);
+  deleteUploadedPiece = task(async (piece) => {
+    await this.publicationService.deletePiece(piece);
     removeObject(this.uploadedPieces, piece);
-  }
+  });
 
   @action
   unlinkTransferredPiece(piece) {

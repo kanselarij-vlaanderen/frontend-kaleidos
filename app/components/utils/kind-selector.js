@@ -24,11 +24,10 @@ export default class UtilsKindSelector extends Component {
     return this.args.isLoading || this.loadKinds.isRunning;
   }
 
-  @task
-  *loadKinds() {
-    this.options = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+  loadKinds = task(async () => {
+    this.options = await this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
       'filter[:has-no:narrower]': true,
       include: 'broader',
     });
-  }
+  });
 }

@@ -20,9 +20,8 @@ export default class PublicationsPublicationTranslationsTranslationsInfoPanelCom
     this.args.translationSubcase.rollbackAttributes();
   }
 
-  @task
-  *save() {
-    yield this.args.translationSubcase.save();
+  save = task(async () => {
+    await this.args.translationSubcase.save();
     this.isEditing = false;
-  }
+  });
 }

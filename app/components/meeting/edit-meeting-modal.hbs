@@ -154,7 +154,7 @@
       @disabled={{this.savingIsDisabled}}
       @loading={{this.saveMeeting.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.saveMeeting)}}
+      {{on "click" this.saveMeeting.perform}}
     >
       {{#if this.isNew}}
         {{t "add"}}

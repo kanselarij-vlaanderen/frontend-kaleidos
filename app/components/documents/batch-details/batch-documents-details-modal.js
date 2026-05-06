@@ -82,11 +82,10 @@ export default class BatchDocumentsDetailsModal extends Component {
     return this.args.allowEditing || this.currentSession.may('manage-documents');
   }
 
-  @task
-  *initRows() {
+  initRows = task(async () => {
     const documentsByContainer = new Map();
     for (const piece of this.args.pieces) {
-      const container = yield piece.documentContainer;
+      const container = await piece.documentContainer;
       if (documentsByContainer.has(container)) {
         documentsByContainer.get(container).push(piece);
       } else {
@@ -105,7 +104,7 @@ export default class BatchDocumentsDetailsModal extends Component {
       latestDocs.push(docs[0]);
     }
 
-    this.rows = yield Promise.all(
+    this.rows = await Promise.all(
       latestDocs.map(async (piece) => {
         const row = new Row();
         row.piece = piece;
@@ -125,7 +124,7 @@ export default class BatchDocumentsDetailsModal extends Component {
       })
     );
     this.reorderableRows = this.rows.slice();
-  }
+  });
 
   get areAllSelected() {
     return this.rows.length === this.selectedRows.length;
@@ -152,10 +151,9 @@ export default class BatchDocumentsDetailsModal extends Component {
     }
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     const changedPieces = [];
-    yield all(this.reorderableRows.map(async (row, index) => {
+    await all(this.reorderableRows.map(async (row, index) => {
       const piece = row.piece;
       const documentContainer = row.documentContainer;
       if (row.isToBeDeleted) {
@@ -218,9 +216,9 @@ export default class BatchDocumentsDetailsModal extends Component {
         }
       }
     }));
-    yield this.documentService.checkAndRestamp(changedPieces);
+    await this.documentService.checkAndRestamp(changedPieces);
     this.args.onSave();
-  }
+  });
 
   @action
   onReorderPieces(rows, _movedRow) {

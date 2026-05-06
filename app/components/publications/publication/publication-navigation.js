@@ -15,14 +15,13 @@ export default class PublicationNavigation extends Component {
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     const { publicationFlow } = this.args;
 
-    this.numberOfDocuments = yield this.store.count('piece', {
+    this.numberOfDocuments = await this.store.count('piece', {
       'filter[publication-flow][:id:]': publicationFlow.id,
     });
 
     this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
-  }
+  });
 }

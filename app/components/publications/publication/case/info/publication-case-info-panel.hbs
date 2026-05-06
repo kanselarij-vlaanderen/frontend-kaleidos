@@ -67,14 +67,14 @@
                     type="number"
                     value={{this.publicationNumber}}
                     @error={{this.publicationNumberErrorTranslationKey}}
-                    {{on "input" (perform this.setPublicationNumber)}}
+                    {{on "input" this.setPublicationNumber.perform}}
                   />
                   <AuInput
                     data-test-publication-case-info-panel-edit-publication-number-suffix
                     class="auk-input-group--w-xsmall auk-u-ml" {{! TODO: replace `auk-input-group--w-xsmall` with matching @width argument when it is implemented }}
                     value={{this.publicationNumberSuffix}}
                     @error={{this.publicationNumberErrorTranslationKey}}
-                    {{on "input" (perform this.setPublicationNumberSuffix)}}
+                    {{on "input" this.setPublicationNumberSuffix.perform}}
                   />
                   <Utils::Generic::TooltipHelp class="auk-u-ml">
                     {{t "publication-flow-publication-number-help"}}
@@ -390,7 +390,7 @@
               @loading={{this.closeEditingPanel.isRunning}}
               @loadingMessage={{t "loading"}}
               @disabled={{this.save.isRunning}}
-              {{on "click" (perform this.closeEditingPanel)}}
+              {{on "click" this.closeEditingPanel.perform}}
             >
               {{t "cancel"}}
             </AuButton>
@@ -407,7 +407,7 @@
                 (not this.isValid)
                 this.closeEditingPanel.isRunning
               }}
-              {{on "click" (perform this.save)}}
+              {{on "click" this.save.perform}}
             >
               {{t "save"}}
             </AuButton>

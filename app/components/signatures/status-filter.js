@@ -22,9 +22,8 @@ export default class SignaturesStatusFilterComponent extends Component {
     this.loadStatuses.perform();
   }
 
-  @task
-  *loadStatuses() {
-    const statuses = yield this.store.queryAll('concept', {
+  loadStatuses = task(async () => {
+    const statuses = await this.store.queryAll('concept', {
       filter: {
         'concept-schemes': {
           ':uri:': CONSTANTS.CONCEPT_SCHEMES.SIGNFLOW_STATUSES,
@@ -48,7 +47,7 @@ export default class SignaturesStatusFilterComponent extends Component {
         }
       }
     }
-  }
+  });
 
   @action
   onChangeStatus(selectedItems) {

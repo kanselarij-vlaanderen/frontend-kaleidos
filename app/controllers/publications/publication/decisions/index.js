@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { dropTask, task } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 
 export default class PublicationsPublicationDecisionsIndexController extends Controller {
   @service publicationService;
@@ -22,18 +22,16 @@ export default class PublicationsPublicationDecisionsIndexController extends Con
     this.isOpenReferenceDocumentUploadModal = false;
   }
 
-  @task
-  *saveReferenceDocuments(pieces) {
+  saveReferenceDocuments = task(async (pieces) => {
     pieces.forEach((piece) => piece.publicationFlow = this.publicationFlow);
-    yield Promise.all(pieces.map((piece) => piece.save()));
+    await Promise.all(pieces.map((piece) => piece.save()));
 
     this.router.refresh('publications.publication.decisions.index');
     this.closeReferenceDocumentUploadModal();
-  }
+  });
 
-  @dropTask
-  *deletePiece(piece) {
-    yield this.publicationService.deletePiece(piece);
+  deletePiece = task({ drop: true }, async (piece) => {
+    await this.publicationService.deletePiece(piece);
     this.router.refresh('publications.publication.decisions.index');
-  }
+  });
 }

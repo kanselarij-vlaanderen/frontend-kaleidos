@@ -22,15 +22,14 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
     this.initValidators();
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     const organization = this.store.createRecord('organization', {
       name: this.name,
       identifier: isPresent(this.identifier) ? this.identifier : undefined,
     });
-    yield organization.save();
+    await organization.save();
     this.args.onSave(organization);
-  }
+  });
 
   initValidators() {
     this.validators = new ValidatorSet({

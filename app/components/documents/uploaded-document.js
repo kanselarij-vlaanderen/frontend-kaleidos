@@ -17,14 +17,13 @@ export default class UploadedDocument extends Component {
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     if (this.args.allowDocumentContainerEdit) {
-      this.documentTypes = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
-      this.documentContainer = yield this.args.piece.documentContainer;
-      this.selectedDocumentType = yield this.documentContainer.type;
+      this.documentTypes = await this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES);
+      this.documentContainer = await this.args.piece.documentContainer;
+      this.selectedDocumentType = await this.documentContainer.type;
     }
-  }
+  });
 
   get sortedDocumentTypes() {
     return this.documentTypes

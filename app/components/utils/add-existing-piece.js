@@ -1,10 +1,6 @@
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import {
-  task,
-  timeout,
-  restartableTask,
-} from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
@@ -45,21 +41,19 @@ export default class AddExistingPiece extends Component {
     return options;
   }
 
-  @task
-  *findAll() {
-    yield timeout(300);
-    this.pieces = yield this.store.query('piece', this.queryOptions);
-    yield timeout(100);
+  findAll = task(async () => {
+    await timeout(300);
+    this.pieces = await this.store.query('piece', this.queryOptions);
+    await timeout(100);
     this.selected = [];
-  }
+  });
 
-  @restartableTask
-  *searchTask() {
-    yield timeout(300);
-    this.pieces = yield this.store.query('piece', this.queryOptions);
+  searchTask = task({ restartable: true }, async () => {
+    await timeout(300);
+    this.pieces = await this.store.query('piece', this.queryOptions);
     this.page = 0;
-    yield timeout(100);
-  }
+    await timeout(100);
+  });
 
   @action
   onInputFilter(event) {

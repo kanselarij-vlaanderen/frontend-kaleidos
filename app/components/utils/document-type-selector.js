@@ -25,11 +25,10 @@ export default class UtilsDocumentTypeSelectorComponent extends Component {
     return this.args.isLoading || this.loadDocumentTypes.isRunning;
   }
 
-  @task
-  *loadDocumentTypes() {
-    this.options = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES, {
+  loadDocumentTypes = task(async () => {
+    this.options = await this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.DOCUMENT_TYPES, {
       'filter[:has-no:narrower]': true,
       include: 'broader',
     });
-  }
+  });
 }

@@ -49,21 +49,18 @@ export default class PublicationsBatchDocumentsPublicationRowComponent extends C
     );
   }
 
-  @task
-  *selectLinkModeOption(option) {
+  selectLinkModeOption = task(async (option) => {
     this.selectedLinkModeOption = option;
-
     if (!option.isEnabledLink) {
-      yield this.args.onUnlinkPublicationFlow(this.args.piece);
+      await this.args.onUnlinkPublicationFlow(this.args.piece);
     }
-  }
+  });
 
-  @task
-  *selectPublicationFlow(publicationFlow) {
+  selectPublicationFlow = task(async (publicationFlow) => {
     if (publicationFlow) {
-      yield this.args.onLinkPublicationFlow(this.args.piece, publicationFlow);
+      await this.args.onLinkPublicationFlow(this.args.piece, publicationFlow);
     } else {
-      yield this.args.onUnlinkPublicationFlow(this.args.piece);
+      await this.args.onUnlinkPublicationFlow(this.args.piece);
     }
-  }
+  });
 }

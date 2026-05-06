@@ -21,9 +21,8 @@ export default class CasesSubmissionsProposableAgendasModalComponent extends Com
     this.loadAgendas.perform();
   }
 
-  @task
-  *loadAgendas() {
-    this.agendas = (yield this.agendaService.getOpenMeetings()).data.map(
+  loadAgendas = task(async () => {
+    this.agendas = (await this.agendaService.getOpenMeetings()).data.map(
       (meeting) => ({
         id: meeting.attributes.agendaId,
         uri: meeting.attributes.agenda,
@@ -38,16 +37,15 @@ export default class CasesSubmissionsProposableAgendasModalComponent extends Com
         },
       })
     );
-  }
+  });
 
-  @task
-  *saveSubmissionAndSubmitToAgenda() {
-    const meeting = yield this.selectedAgenda.createdFor;
-    // don't yield onConfirm here or the task will be aborted on destruction of this component
+  saveSubmissionAndSubmitToAgenda = task(async () => {
+    const meeting = await this.selectedAgenda.createdFor;
+    // don't await onConfirm here or the task will be aborted on destruction of this component
     this.args.onConfirm(meeting, this.remarks);
-  }
+  });
 
-@action
+  @action
   saveSubcase() {
     this.args.onConfirm(false);
   }
