@@ -39,15 +39,13 @@ export default class MonitoringDataPropagationController extends Controller {
     const meetings = [];
     for (const agenda of agendas) {
       const meeting = await agenda.createdFor;
-      if (!meetings.includes(meeting)) {
+      if (!meetings.map(m => m.id).includes(meeting.id)) {
         meetings.push(meeting);
       }
     }
 
     const sortedMeetings = meetings
-      ?.slice()
-      .sort((a1, a2) => a1.plannedStart - a2.plannedStart)
-      .reverse();
+      .sort((a1, a2) => a2.get('plannedStart') - a1.get('plannedStart'));
     return sortedMeetings;
   };
 }
