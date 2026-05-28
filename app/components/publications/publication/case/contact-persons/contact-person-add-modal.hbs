@@ -7,58 +7,6 @@
   <Auk::Modal::Body>
     <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
       <div class="au-c-form">
-        <div class="auk-o-grid">
-          <div class="auk-o-grid-col-6">
-            <AuFormRow>
-              <AuLabel
-                for="firstNameInput"
-                @required={{true}}
-                @error={{this.validators.firstName.showError}}
-              >
-                {{t "first-name"}}
-              </AuLabel>
-              <AuInput
-                data-test-contact-person-add-first-name
-                id="firstNameInput"
-                value={{this.firstName}}
-                @width="block"
-                @error={{this.validators.firstName.showError}}
-                {{on "input" this.onInputFirstName}}
-              />
-            </AuFormRow>
-          </div>
-          <div class="auk-o-grid-col-6">
-            <AuFormRow>
-              <AuLabel
-                for="lastNameInput"
-                @required={{true}}
-                @error={{this.validators.lastName.showError}}
-              >
-                {{t "last-name"}}
-              </AuLabel>
-              <AuInput
-                data-test-contact-person-add-last-name
-                id="lastNameInput"
-                value={{this.lastName}}
-                @width="block"
-                @error={{this.validators.lastName.showError}}
-                {{on "input" this.onInputLastName}}
-              />
-            </AuFormRow>
-          </div>
-        </div>
-        <AuFormRow>
-          <AuLabel for="emailInput">
-            {{t "email"}}
-          </AuLabel>
-          <AuInput
-            data-test-contact-person-add-email
-            id="emailInput"
-            value={{this.email}}
-            @width="block"
-            {{on "input" (pick "target.value" (set this "email"))}}
-          />
-        </AuFormRow>
         <AuFormRow>
           <AuLabel for="organizationInput">
             {{t "organization"}}
@@ -66,16 +14,20 @@
           <div data-test-contact-person-select-organization class="auk-o-flex">
             <PowerSelect
               @options={{this.organizations}}
-              @selected={{this.organization}}
+              @selected={{this.organizationSelection}}
               @searchEnabled={{true}}
               @search={{perform this.searchOrganizations}}
               @noMatchesMessage={{t "organizations-empty-result"}}
               @placeholder={{t "search-organization"}}
               @onChange={{this.setOrganization}}
-              @allowClear={{true}}
+              @allowClear={{false}}
               @triggerId="organizationInput"
               as |organization|>
-              {{ organization.name }}
+              {{#if organization.isNoOrganization}}
+                <em>{{t "person-without-organisation"}}</em>
+              {{else}}
+                {{ organization.name }}
+              {{/if}}
             </PowerSelect>
             <AuButton
               data-test-contact-person-add-organization
@@ -89,6 +41,112 @@
             </AuButton>
           </div>
         </AuFormRow>
+
+        {{#if this.hasOrganizationSelection}}
+          {{#unless this.isCreatingNewPerson}}
+            <AuFormRow>
+              <AuLabel
+                for="contactPersonInput"
+                @required={{true}}
+                @error={{this.validators.person.showError}}
+              >
+                {{t "contact-person"}}
+              </AuLabel>
+              <div data-test-contact-person-select-person class="auk-o-flex">
+                <PowerSelect
+                  @options={{this.persons}}
+                  @selected={{this.selectedPerson}}
+                  @searchEnabled={{true}}
+                  @search={{perform this.searchPersons}}
+                  @noMatchesMessage={{t "contact-persons-empty-result"}}
+                  @placeholder={{t "search-contact-person"}}
+                  @onChange={{this.selectPerson}}
+                  @allowClear={{true}}
+                  @triggerId="contactPersonInput"
+                  as |person|>
+                  {{person.fullName}}
+                  {{#if person.contactPerson.email}}
+                    <span class="auk-u-text-muted auk-u-text-size--small auk-u-ml-1">
+                      {{person.contactPerson.email}}
+                    </span>
+                  {{/if}}
+                </PowerSelect>
+                <AuButton
+                  data-test-contact-person-add-new-person
+                  @skin="primary"
+                  @icon="plus"
+                  @hideText={{true}}
+                  class="auk-o-flex__item--fix auk-u-ml-2"
+                  {{on "click" this.startCreatingNewPerson}}
+                >
+                  {{t "create-new-contact-person"}}
+                </AuButton>
+              </div>
+            </AuFormRow>
+          {{/unless}}
+
+          {{#if this.isCreatingNewPerson}}
+            <div class="auk-o-grid">
+              <div class="auk-o-grid-col-6">
+                <AuFormRow>
+                  <AuLabel
+                    for="firstNameInput"
+                    @required={{true}}
+                    @error={{this.validators.person.showError}}
+                  >
+                    {{t "first-name"}}
+                  </AuLabel>
+                  <AuInput
+                    data-test-contact-person-add-first-name
+                    id="firstNameInput"
+                    value={{this.firstName}}
+                    @width="block"
+                    @error={{this.validators.person.showError}}
+                    {{on "input" this.onInputFirstName}}
+                  />
+                </AuFormRow>
+              </div>
+              <div class="auk-o-grid-col-6">
+                <AuFormRow>
+                  <AuLabel
+                    for="lastNameInput"
+                    @required={{true}}
+                    @error={{this.validators.person.showError}}
+                  >
+                    {{t "last-name"}}
+                  </AuLabel>
+                  <AuInput
+                    data-test-contact-person-add-last-name
+                    id="lastNameInput"
+                    value={{this.lastName}}
+                    @width="block"
+                    @error={{this.validators.person.showError}}
+                    {{on "input" this.onInputLastName}}
+                  />
+                </AuFormRow>
+              </div>
+            </div>
+            <AuFormRow>
+              <AuLabel for="emailInput">
+                {{t "email"}}
+              </AuLabel>
+              <AuInput
+                data-test-contact-person-add-email
+                id="emailInput"
+                value={{this.email}}
+                @width="block"
+                {{on "input" (pick "target.value" (set this "email"))}}
+              />
+            </AuFormRow>
+            <AuButton
+              @skin="link"
+              @icon="cross"
+              {{on "click" this.cancelCreatingNewPerson}}
+            >
+              {{t "cancel"}}
+            </AuButton>
+          {{/if}}
+        {{/if}}
       </div>
     </Utils::LoadableContent>
   </Auk::Modal::Body>

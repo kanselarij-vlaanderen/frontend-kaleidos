@@ -28,8 +28,7 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
       name: this.name,
       identifier: isPresent(this.identifier) ? this.identifier : undefined,
     });
-    yield organization.save();
-    this.args.onSave(organization);
+    yield this.args.onSave(organization);
   }
 
   initValidators() {

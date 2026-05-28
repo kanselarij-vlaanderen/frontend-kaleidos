@@ -21,8 +21,8 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
       (await this.args.publicationFlow.contactPersons)
         ?.slice()
         ?.sort((p1, p2) =>
-          get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
-            || get(p1, 'person.firstName').localeCompare(get(p2, 'person.firstName')))
+          (get(p1, 'person.lastName') ?? '').localeCompare(get(p2, 'person.lastName') ?? '')
+            || (get(p1, 'person.firstName') ?? '').localeCompare(get(p2, 'person.firstName') ?? ''))
         ?.forEach((p) => contactPersons.push(p));
     };
     calculateContactPersons();
@@ -42,35 +42,40 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
 
   @action
   async save(contactPersonProperties) {
-    const {
-      firstName,
-      lastName,
-      email,
-      organization,
-    } = contactPersonProperties;
-
-    const person = this.store.createRecord('person', {
-      firstName: firstName,
-      lastName: lastName,
-      organization: organization,
-    });
-    await person.save();
-
     const publicationFlow = this.args.publicationFlow;
-    const contactPerson = this.store.createRecord('contact-person', {
-      email: email,
-      person: person,
-      publicationFlow: publicationFlow,
-    });
+    let contactPerson = contactPersonProperties.contactPerson;
+    if (contactPerson) {
+      const publicationFlows = await contactPerson.publicationFlows;
+      publicationFlows.push(publicationFlow);
+    } else {
+      let person = contactPersonProperties.person;
+      if (!person) {
+        person = this.store.createRecord('person', {
+          firstName: contactPersonProperties.firstName,
+          lastName: contactPersonProperties.lastName,
+          organization: contactPersonProperties.organization,
+        });
+        await person.save();
+      }
+      contactPerson = this.store.createRecord('contact-person', {
+        email: contactPersonProperties.email,
+        person: person,
+        publicationFlows: [publicationFlow],
+      });
+    }
     await contactPerson.save();
 
     this.isOpenAddModal = false;
   }
 
   @action
-  async delete(contactPerson) {
-    const person = await contactPerson.person;
-    await contactPerson.destroyRecord();
-    await person.destroyRecord();
+  async unlink(contactPerson) {
+    const publicationFlow = this.args.publicationFlow;
+    const publicationFlows = await contactPerson.publicationFlows;
+    const idx = publicationFlows.indexOf(publicationFlow);
+    if (idx >= 0) {
+      publicationFlows.splice(idx, 1);
+    }
+    await contactPerson.save();
   }
 }
