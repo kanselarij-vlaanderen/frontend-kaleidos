@@ -20,6 +20,7 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked isArchivingCase = false;
   @tracked hasOngoingSubmissions = false;
   @tracked currentSubmission;
+  @tracked mayViewCurrentSubmission = false;
   @tracked isOpenDownloadDocumentsModal = false;
   @tracked hasFilesToDownload;
 
@@ -68,6 +69,7 @@ export default class SubCasesOverviewHeader extends Component {
 
   loadSubmissionsData = task(async () => {
     this.currentSubmission = null;
+    this.mayViewCurrentSubmission = false;
     if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
       const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
       if (!latestSubmission?.id) {
@@ -82,6 +84,7 @@ export default class SubCasesOverviewHeader extends Component {
         // submission for new subcase is ongoing
         this.hasOngoingSubmissions = true;
         this.currentSubmission = latestSubmission;
+        this.mayViewCurrentSubmission = await this.canViewSubmission(latestSubmission);
         return;
       }
       const relatedAgendas = await this.subcaseService.getRelatedAgendas(subcase);
@@ -100,6 +103,32 @@ export default class SubCasesOverviewHeader extends Component {
       }
     }
   });
+
+  async canViewSubmission(submission) {
+    if (submission.isConcept) {
+      // Concept submissions may only be visible to users of the submitting cabinet(s)
+      const mandatees = await submission.mandatees;
+      if (mandatees.length) {
+        const currentUserOrganization = await this.currentSession.organization;
+        const currentUserOrganizationMandatees = await currentUserOrganization?.mandatees;
+        const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
+        const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+
+        for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
+          if (mandateeUris.includes(orgMandateeUri)) {
+            return true;
+          }
+        }
+
+        return false;
+      } else {
+        // No mandatees attached to the submission. Not very likely.
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
 
   @action
   openEditCaseModal() {
@@ -164,7 +193,7 @@ export default class SubCasesOverviewHeader extends Component {
   openDownloadDocumentsModal = () => {
     this.isOpenDownloadDocumentsModal = true;
   }
-  
+
   closeDownloadDocumentsModal = () => {
     this.isOpenDownloadDocumentsModal = false;
   }
