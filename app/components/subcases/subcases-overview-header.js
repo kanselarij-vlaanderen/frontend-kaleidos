@@ -104,34 +104,30 @@ export default class SubCasesOverviewHeader extends Component {
     }
   });
 
-  // Concept submissions must stay hidden from other cabinets — only show when
-  // the user's organization shares a mandatee with the submission.
   async canViewSubmission(submission) {
-    if (!submission.isConcept) {
+    if (submission.isConcept) {
+      // Concept submissions may only be visible to users of the submitting cabinet(s)
+      const mandatees = await submission.mandatees;
+      if (mandatees.length) {
+        const currentUserOrganization = await this.currentSession.organization;
+        const currentUserOrganizationMandatees = await currentUserOrganization?.mandatees;
+        const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
+        const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+
+        for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
+          if (mandateeUris.includes(orgMandateeUri)) {
+            return true;
+          }
+        }
+
+        return false;
+      } else {
+        // No mandatees attached to the submission. Not very likely.
+        return false;
+      }
+    } else {
       return true;
     }
-    const mandatees = await submission.mandatees;
-    if (!mandatees?.length) {
-      return false;
-    }
-
-    const currentUserOrganization = await this.currentSession.organization;
-    const currentUserOrganizationMandatees = await currentUserOrganization?.mandatees;
-    if (!currentUserOrganizationMandatees?.length) {
-      return false;
-    }
-
-    const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
-    const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
-
-    for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
-      if (mandateeUris.includes(orgMandateeUri)) {
-        return true;
-      }
-    }
-
-    return false;
-
   }
 
   @action
