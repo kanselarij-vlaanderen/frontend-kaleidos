@@ -1,5 +1,5 @@
 import JSONAPIAdapter from '@ember-data/adapter/json-api';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { later } from '@ember/runloop';
 import minimalInclude from 'frontend-kaleidos/utils/minimal-include';
 

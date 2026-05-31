@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 
 export default class SubmissionService extends Service {

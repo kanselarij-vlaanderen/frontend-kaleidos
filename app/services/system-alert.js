@@ -1,11 +1,10 @@
 /* eslint-disable class-methods-use-this */
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 import { startOfDay } from 'date-fns';
 import { tracked } from '@glimmer/tracking';
 import { later } from '@ember/runloop';
-import { action } from '@ember/object';
-import { set } from '@ember/object';
+import { action, set } from '@ember/object';
 
 export default class SystemAlertService extends Service {
   @service store;
@@ -69,7 +68,6 @@ export default class SystemAlertService extends Service {
     const prevConfirmedAlerts = alerts.filter((alert) =>
       confirmedAlertIds.includes(alert.id)
     );
-    // setEach might be deprecated, test this
     prevConfirmedAlerts.forEach(alert => {
       set(alert, 'confirmed', true);
     });

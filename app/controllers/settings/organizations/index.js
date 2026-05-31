@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -32,35 +32,31 @@ export default class SettingsOrganizationsIndexController extends Controller {
     this.selectedOrganizations = organizations;
   }
 
-  @task
-  *loadSelectedOrganizations() {
-    this.selectedOrganizations = (yield Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
-  }
+  loadSelectedOrganizations = task(async () => {
+    this.selectedOrganizations = (await Promise.all(this.organizations.map((id) => this.store.findRecord('user-organization', id)))).slice();
+  });
 
-  @task
-  *blockOrganization() {
-    const blocked = yield this.store.findRecordByUri(
+  blockOrganization = task(async () => {
+    const blocked = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.BLOCKED
     );
-    yield this.updateOrganizationStatus.perform(blocked);
-  }
+    await this.updateOrganizationStatus.perform(blocked);
+  });
 
-  @task
-  *unblockOrganization() {
-    const allowed = yield this.store.findRecordByUri(
+  unblockOrganization = task(async () => {
+    const allowed = await this.store.findRecordByUri(
       'concept',
       CONSTANTS.USER_ACCESS_STATUSES.ALLOWED
     );
-    yield this.updateOrganizationStatus.perform(allowed);
-  }
+    await this.updateOrganizationStatus.perform(allowed);
+  });
 
-  @task
-  *updateOrganizationStatus(status) {
+  updateOrganizationStatus = task(async (status) => {
     this.organizationBeingBlocked.status = status;
-    yield this.organizationBeingBlocked.save();
+    await this.organizationBeingBlocked.save();
 
-    const memberships = yield this.store.queryAll('membership', {
+    const memberships = await this.store.queryAll('membership', {
       filter: {
         organization: {
           ':id:': this.organizationBeingBlocked.id,
@@ -70,7 +66,7 @@ export default class SettingsOrganizationsIndexController extends Controller {
 
     // Block all memberships, 10 at a time, except for the membership used to log
     // in. We don't want to let users block themselves from the system accidentally.
-    yield Promise.all(
+    await Promise.all(
       memberships
         .slice()
         .filter((membership) => membership.id != this.currentSession.membership.id)
@@ -78,11 +74,10 @@ export default class SettingsOrganizationsIndexController extends Controller {
           this.updateMembershipStatus.perform(membership, status)
         )
     );
-  }
+  });
 
-  @task({ maxConcurrency: 10, enqueue: true })
-  *updateMembershipStatus(membership, status) {
+  updateMembershipStatus = task({ maxConcurrency: 10, enqueue: true }, async (membership, status) => {
     membership.status = status;
-    yield membership.save();
-  }
+    await membership.save();
+  });
 }

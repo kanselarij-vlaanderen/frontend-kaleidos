@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
@@ -28,20 +28,19 @@ export default class SubcaseDetailRegular extends Component {
     return `/subcases/${this.args.subcase.id}/pieces/files/archive`;
   }
 
-  @task
-  *loadLatestDecisionActivity() {
-    this.latestDecisionActivity = yield this.subcaseService.getLatestDecisionActivity(this.args.subcase);
+  loadLatestDecisionActivity = task(async () => {
+    this.latestDecisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
     if (this.latestDecisionActivity &&
       ((this.latestDecisionActivity.isRetracted || this.latestDecisionActivity.isPostponed) &&
       !this.currentSession.may('view-access-level-pill-when-postponed'))) {
       this.hideAccessLevel = true;
     }
     // need at least 1 file before we show the download button
-    this.hasFilesToDownload = (yield this.store.count('piece', {
+    this.hasFilesToDownload = (await this.store.count('piece', {
       'filter[submission-activities][subcase][:id:]': this.args.subcase.id,
       'filter[:has:file]': true,
     })) > 0;
-  }
+  });
 
   loadSubmissionData = task(async () => {
     if (!isEnabledCabinetSubmissions()) {

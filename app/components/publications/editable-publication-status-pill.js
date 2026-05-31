@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import {
@@ -24,20 +24,18 @@ export default class PublicationStatusPill extends Component {
     this.loadStatus.perform();
   }
 
-  @task
-  *loadDecision() {
-    const publicationSubcase = yield this.args.publicationFlow
+  loadDecision = task(async () => {
+    const publicationSubcase = await this.args.publicationFlow
       .publicationSubcase;
-    this.decision = yield this.store.queryOne('decision', {
+    this.decision = await this.store.queryOne('decision', {
       'filter[publication-activity][subcase][:id:]': publicationSubcase.id,
       sort: 'publication-activity.start-date,publication-date',
     });
-  }
+  });
 
-  @task
-  *loadStatus() {
-    this.publicationStatus = yield this.args.publicationFlow.status;
-  }
+  loadStatus = task(async () => {
+    this.publicationStatus = await this.args.publicationFlow.status;
+  });
 
   get publicationStatusPillKey() {
     return getPublicationStatusPillKey(this.publicationStatus);
@@ -64,11 +62,10 @@ export default class PublicationStatusPill extends Component {
     this.showStatusSelector = false;
   }
 
-  @task
-  *savePublicationStatus(status, changeDate) {
+  savePublicationStatus = task(async (status, changeDate) => {
     const previousStatus = this.publicationStatus;
     if (previousStatus != status) {
-      yield this.publicationService.updatePublicationStatus(
+      await this.publicationService.updatePublicationStatus(
         this.args.publicationFlow,
         status.uri,
         changeDate
@@ -78,5 +75,5 @@ export default class PublicationStatusPill extends Component {
       this.args.onChange();
     }
     this.closeStatusSelector();
-  }
+  });
 }

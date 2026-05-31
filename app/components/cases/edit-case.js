@@ -24,11 +24,10 @@ export default class EditCase extends Component {
     );
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     this.args.case.shortTitle = this.shortTitle;
-    yield this.args.onSave(this.args.case);
-  }
+    await this.args.onSave(this.args.case);
+  });
 
   @action
   close() {

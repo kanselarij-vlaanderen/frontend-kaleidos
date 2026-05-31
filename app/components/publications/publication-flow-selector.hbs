@@ -6,7 +6,7 @@
   @searchMessage={{t "publication-search-message"}}
   @searchPlaceholder={{t "search-placeholder"}}
   @searchEnabled={{true}}
-  @search={{perform this.debouncedSearch}}
+  @search={{this.debouncedSearch.perform}}
   @allowClear={{true}}
   @onChange={{@onChange}}
   as |publicationFlow|

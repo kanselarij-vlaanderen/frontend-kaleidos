@@ -95,7 +95,7 @@
             {{/if}}
             <Documents::DocumentCardList
               @pieces={{@pieces}}
-              @onAddPiece={{perform @addPiece}}
+              @onAddPiece={{@addPiece.perform}}
               @didDeleteContainer={{@refresh}}
               @isEditable={{true}}
               @hideAccessLevel={{this.hideAccessLevel}}
@@ -146,8 +146,8 @@
 <ConfirmationModal
   @modalOpen={{@isOpenPieceUploadModal}}
   @title={{t "document-add"}}
-  @onConfirm={{perform @savePieces}}
-  @onCancel={{perform @cancelUploadPieces}}
+  @onConfirm={{@savePieces.perform}}
+  @onCancel={{@cancelUploadPieces.perform}}
   @confirmMessage={{t "documents-add"}}
   @disabled={{eq @newPieces.length 0}}
   @loading={{@savePieces.isRunning}}
@@ -168,7 +168,7 @@
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @documentTypeRequired={{true}}
-            @onDelete={{perform @deletePiece piece}}
+            @onDelete={{fn @deletePiece.perform piece}}
           />
         {{/each}}
       </div>

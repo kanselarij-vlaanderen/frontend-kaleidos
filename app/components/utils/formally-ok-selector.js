@@ -36,10 +36,9 @@ export default class UtilsFormallyOkSelector extends Component {
     return this.formallyOkStatus || this.defaultOption;
   }
 
-  @task
-  *onChange(newStatus) {
+  onChange = task(async (newStatus) => {
     if (this.args.onChange) {
-      yield this.args.onChange(newStatus.uri);
+      await this.args.onChange(newStatus.uri);
     }
-  }
+  });
 }

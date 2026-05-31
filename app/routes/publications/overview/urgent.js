@@ -1,6 +1,6 @@
 import PublicationsOverviewBaseRoute from './_base';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class PublicationsOverviewUrgentRoute extends PublicationsOverviewBaseRoute {
   @service store;

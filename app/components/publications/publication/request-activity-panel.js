@@ -22,9 +22,8 @@ export default class PublicationsPublicationRequestActivityPanel extends Compone
     this.isOpenConfirmDeleteAlert = false;
   }
 
-  @task
-  *delete() {
-    yield this.args.onDeleteRequest();
+  delete = task(async () => {
+    await this.args.onDeleteRequest();
     this.closeConfirmDeleteAlert();
-  }
+  });
 }

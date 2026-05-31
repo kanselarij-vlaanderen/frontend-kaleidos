@@ -37,12 +37,11 @@ export default class DocumentsDocumentListComponent extends Component {
     return latestDocs;
   }
 
-  @task
-  *groupDocumentsByContainer() {
+  groupDocumentsByContainer = task(async () => {
     const documentsByContainer = new Map();
     // support ember-data record array
     for (const doc of this.documents) {
-      const container = yield doc.documentContainer;
+      const container = await doc.documentContainer;
       if (documentsByContainer.has(container)) {
         documentsByContainer.get(container).push(doc);
       } else {
@@ -59,5 +58,5 @@ export default class DocumentsDocumentListComponent extends Component {
     }
     // eslint-disable-next-line
     this.documentsByContainer = documentsByContainer; // re-assign array to trigger getter
-  }
+  });
 }

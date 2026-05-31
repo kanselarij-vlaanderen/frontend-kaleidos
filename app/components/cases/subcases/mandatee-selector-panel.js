@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { startOfDay } from 'date-fns';
@@ -82,9 +82,9 @@ export default class MandateeSelectorPanel extends Component {
     }
   }
 
-  @task // run once
-  *prepareCurrentMinisters() {
-    const currentMandatees = yield this.mandatees.getMandateesActiveOn.linked().perform(
+  // run once
+  prepareCurrentMinisters = task(async () => {
+    const currentMandatees = await this.mandatees.getMandateesActiveOn.perform(
       startOfDay(new Date())
     );
     // filter out the MP's other role as a MINISTER
@@ -102,16 +102,16 @@ export default class MandateeSelectorPanel extends Component {
     this.currentMandatees = filteredMandatees.sort(
       (m1, m2) => m1.priority - m2.priority
     );
-    const sortedMinisters = yield Promise.all(
+    const sortedMinisters = await Promise.all(
       this.currentMandatees.map((m) => m.person)
     );
     this.currentMinisters = [...new Set(sortedMinisters)];
     this.setExcludedMandatees();
     this.loadArgsMinister.perform();
-  }
+  });
 
-  @task // run once
-  *loadArgsMinister() {
+  // run once
+  loadArgsMinister = task(async () => {
     if (this.args.mandatees?.length) {
       let selectedMandatees = [];
       // Only select args mandatees if they are still active
@@ -125,7 +125,7 @@ export default class MandateeSelectorPanel extends Component {
           selectedMandatees.push(mandatee);
         } else {
           // best effort to match the mandatee person to a current one
-          const oldMandateePerson = yield oldMandatee.person;
+          const oldMandateePerson = await oldMandatee.person;
           const minister = this.currentMinisters.find(
             (currentMinister) => currentMinister.get('id') === oldMandateePerson.id
           )
@@ -146,16 +146,16 @@ export default class MandateeSelectorPanel extends Component {
         }
       }
       let ministersToSelect = [];
-      // yield Promise.all(selectedMandatees?.map ... starting throwing "void(0) is not a function
+      // await Promise.all(selectedMandatees?.map ... starting throwing "void(0) is not a function
       if (selectedMandatees) {
-        ministersToSelect = yield Promise.all(
+        ministersToSelect = await Promise.all(
           selectedMandatees.map((m) => m.person)
         );
       }
       // Try to match the args.submitter to an entry from the mandatees list
       if (this.showSubmitter) {
         // First try to select the active mandatee of the submitter person
-        const argsSubmitterPerson = yield this.args.submitter?.person;
+        const argsSubmitterPerson = await this.args.submitter?.person;
         const submitterMandatee = this.currentMandatees.find(
           (currentMandatee) =>
             currentMandatee.person.get('id') === argsSubmitterPerson.id
@@ -174,7 +174,7 @@ export default class MandateeSelectorPanel extends Component {
         }
       }
       if (ministersToSelect?.length) {
-        yield this.onChangeSelectedCurrentMinisters(ministersToSelect);
+        await this.onChangeSelectedCurrentMinisters(ministersToSelect);
       } else if (this.selectedPastMandatees.length && this.currentSession.may('add-past-mandatees')) {
         this.setAllMandatees();
         this.setExcludedMandatees();
@@ -183,7 +183,7 @@ export default class MandateeSelectorPanel extends Component {
         this.args.setMandatees([]);
       }
     }
-  }
+  });
 
   @action
   onChangeSubmitter(mandatee) {

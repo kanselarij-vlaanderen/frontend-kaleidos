@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import search from 'frontend-kaleidos/utils/mu-search';
@@ -134,6 +134,7 @@ export default class AgendaAgendaitemsRoute extends Route {
     if (isExiting) {
       // isExiting would be false if only the route's model was changing
       controller.set('filter', null);
+      controller.set('isEditingOverview', false);
       // cancel the task to group notas to prevent this task from completing with incorrect notas
       // when rapidly switching to an agenda with 0 notas
       controller.groupNotasOnGroupName.cancelAll();

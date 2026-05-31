@@ -40,7 +40,7 @@
       @alert={{or @warningMessage @showConfidentialWarning}}
       @loading={{or this.confirmPublish.isRunning @loading}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.confirmPublish)}}
+      {{on "click" this.confirmPublish.perform}}
     >
       {{t (if (or @warningMessage @showConfidentialWarning)  "publish-anyway" "publish-to-public")}}
     </AuButton>

@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
@@ -44,10 +44,9 @@ export default class DocumentUploadPlanel extends Component {
     this.args.onAddPiece(piece);
   }
 
-  @task
-  *deletePiece(piece) {
-    yield this.args.onDeletePiece(piece);
-  }
+  deletePiece = task(async (piece) => {
+    await this.args.onDeletePiece(piece);
+  });
 
   onDidUpdate = task(async () => {
     if (this.args.confidential && this.args.pieces.length) {

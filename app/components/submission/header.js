@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, dropTask, enqueueTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
@@ -286,7 +286,7 @@ export default class SubmissionHeaderComponent extends Component {
     }
   });
 
-  movePiece = enqueueTask({ maxConcurrency: 5 }, async (draftPiece) => {
+  movePiece = task({ maxConcurrency: 5, enqueue: true }, async (draftPiece) => {
     const now = new Date();
     const previousPiece = await draftPiece.previousPiece;
     const accessLevel = await draftPiece.accessLevel;
@@ -346,7 +346,7 @@ export default class SubmissionHeaderComponent extends Component {
     return piece;
   });
 
-  createSubcase = dropTask(
+  createSubcase = task({ drop: true }, 
     async (
       _fullCopy = false, // unused
       meeting = null,

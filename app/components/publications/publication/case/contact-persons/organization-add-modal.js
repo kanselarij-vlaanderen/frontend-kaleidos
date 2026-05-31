@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import {
   Validator, ValidatorSet
@@ -22,15 +22,14 @@ export default class PublicationsPublicationCaseOrganizationAddModalComponent ex
     this.initValidators();
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     const organization = this.store.createRecord('organization', {
       name: this.name,
       identifier: isPresent(this.identifier) ? this.identifier : undefined,
     });
-    yield organization.save();
+    await organization.save();
     this.args.onSave(organization);
-  }
+  });
 
   initValidators() {
     this.validators = new ValidatorSet({

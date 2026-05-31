@@ -121,7 +121,7 @@
           data-test-cases-new-submission-form-cancel
           @skin="naked"
           @disabled={{or this.createSubmission.isRunning this.isUploadingFiles}}
-          {{on "click" (perform this.cancelForm)}}
+          {{on "click" this.cancelForm.perform}}
         >
           {{t "cancel"}}
         </AuButton>
@@ -129,7 +129,7 @@
           data-test-cases-new-submission-form-save-concept
           @skin="secondary"
           @disabled={{this.saveConceptIsDisabled}}
-          {{on "click" (perform this.createConceptSubmission)}}
+          {{on "click" this.createConceptSubmission.perform}}
         >
           {{t "save-as-concept"}}
         </AuButton>
@@ -137,7 +137,7 @@
           data-test-cases-new-submission-form-save
           @skin="primary"
           @disabled={{this.saveIsDisabled}}
-          {{on "click" (perform this.openProposableAgendaModal)}}
+          {{on "click" this.openProposableAgendaModal.perform}}
         >
           {{#if this.selectedDecisionmakingFlow}}
             {{t "submit-new-agendaitem"}}
@@ -152,7 +152,7 @@
 {{#if this.showProposableAgendaModal}}
   <Cases::Submissions::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
-    @onConfirm={{perform this.createSubmission}}
+    @onConfirm={{this.createSubmission.perform}}
   />
 {{/if}}
 

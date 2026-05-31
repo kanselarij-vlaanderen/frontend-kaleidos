@@ -210,7 +210,7 @@
   @modalOpen={{this.isOpenMissingThemesModal}}
   @title={{t "no-themes-selected"}}
   @message={{t "no-themes-selected-message"}}
-  @onConfirm={{perform this.confirmSave}}
+  @onConfirm={{this.confirmSave.perform}}
   @onCancel={{this.cancel}}
   @confirmMessage={{t "save"}}
   @loading={{this.confirmSave.isRunning}}

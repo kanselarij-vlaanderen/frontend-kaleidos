@@ -71,17 +71,16 @@ export default class MandateesMandateesPanelEditComponent extends Component {
     this.showSelectMandateeModal = false;
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     if (this.args.onSave) {
-      yield this.args.onSave({
+      await this.args.onSave({
         mandatees: this.mandateesBuffer,
         submitter: this.submitterBuffer,
       });
     }
     this.isEditing = false;
     this.initBuffers();
-  }
+  });
 
   @action cancel() {
     if (this.args.onCancel) {

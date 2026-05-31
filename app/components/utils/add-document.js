@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
@@ -48,10 +48,9 @@ export default class UtilsAddDocument extends Component {
     );
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     if (this.args.onSave) {
-      yield this.args.onSave(this.pieceInCreation);
+      await this.args.onSave(this.pieceInCreation);
     }
-  }
+  });
 }

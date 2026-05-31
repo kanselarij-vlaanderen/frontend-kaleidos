@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class PublicationNavigation extends Component {
   @service store;
@@ -15,14 +15,13 @@ export default class PublicationNavigation extends Component {
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     const { publicationFlow } = this.args;
 
-    this.numberOfDocuments = yield this.store.count('piece', {
+    this.numberOfDocuments = await this.store.count('piece', {
       'filter[publication-flow][:id:]': publicationFlow.id,
     });
 
     this.isViaCouncilOfMinisters = this.publicationService.getIsViaCouncilOfMinisters(publicationFlow);
-  }
+  });
 }

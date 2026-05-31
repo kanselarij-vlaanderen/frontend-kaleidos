@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default class AlertDialog extends Component {
@@ -50,13 +50,11 @@ export default class AlertDialog extends Component {
     return undefined;
   }
 
-  @task
-  *cancel() {
-    yield this.args.onCancel();
-  }
+  cancel = task(async () => {
+    await this.args.onCancel();
+  });
 
-  @task
-  *confirm() {
-    yield this.args.onConfirm();
-  }
+  confirm = task(async () => {
+    await this.args.onConfirm();
+  });
 }

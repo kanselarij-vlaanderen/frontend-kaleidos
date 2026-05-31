@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
@@ -32,8 +32,7 @@ export default class PublicationStatusModal extends Component {
     this.publicationStatus = status;
   }
 
-  @task
-  *savePublicationStatus() {
-    yield this.args.onSave(this.publicationStatus, new Date());
-  }
+  savePublicationStatus = task(async () => {
+    await this.args.onSave(this.publicationStatus, new Date());
+  });
 }

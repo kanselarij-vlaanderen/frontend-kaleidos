@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask, all } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 import { addObject, removeObject } from 'frontend-kaleidos/utils/array-helpers';
 import VRCabinetDocumentName from 'frontend-kaleidos/utils/vr-cabinet-document-name';
 import VRDocumentName from 'frontend-kaleidos/utils/vr-document-name';
@@ -10,7 +10,7 @@ import { findDocType } from 'frontend-kaleidos/utils/document-type';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText } from 'frontend-kaleidos/utils/trim-util';
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay } from 'date-fns';
 
 export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Controller {
   @service cabinetMail;
@@ -239,7 +239,7 @@ export default class CasesCaseSubcasesSubcaseNewSubmissionController extends Con
     this.notificationComment = newNotificationData.notificationComment;
   };
 
-  createSubmission = dropTask(async (_meeting) => {
+  createSubmission = task({ drop: true }, async (_meeting) => {
     this.isOpenCreateSubmissionModal = false;
 
     const submitted = await this.store.findRecordByUri(

@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { task } from 'ember-concurrency';
 
@@ -14,8 +14,7 @@ export default class ThemisPublicationsPublishConfirmationModalComponent extends
     }
   }
 
-  @task
-  *confirmPublish() {
-    yield this.args.onConfirm(this.args.scope);
-  }
+  confirmPublish = task(async () => {
+    await this.args.onConfirm(this.args.scope);
+  });
 }

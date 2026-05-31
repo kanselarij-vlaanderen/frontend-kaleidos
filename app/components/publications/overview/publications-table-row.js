@@ -1,10 +1,10 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { getPublicationStatusPillKey, getPublicationStatusPillStep } from 'frontend-kaleidos/utils/publication-auk';
-import maxDate from 'date-fns/max';
+import { max as maxDate } from 'date-fns';
 
 export default class PublicationsTableRowComponent extends Component {
   @service router;
@@ -25,32 +25,30 @@ export default class PublicationsTableRowComponent extends Component {
     }
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     if (this.args.tableColumnDisplayOptions.source) {
       this.isViaCouncilOfMinisters =
-      yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
+      await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
     }
     if (this.args.tableColumnDisplayOptions.translationRequestDate) {
-      this.translationRequestDate = yield this.getTranslationRequestDate(this.args.publicationFlow);
+      this.translationRequestDate = await this.getTranslationRequestDate(this.args.publicationFlow);
     }
     if (this.args.tableColumnDisplayOptions.proofRequestDate) {
-      this.proofRequestDate = yield this.getProofRequestDate(this.args.publicationFlow);
+      this.proofRequestDate = await this.getProofRequestDate(this.args.publicationFlow);
     }
     if (this.args.tableColumnDisplayOptions.proofReceivedDate) {
-      this.proofReceivedDate = yield this.getProofReceivedDate(this.args.publicationFlow);
+      this.proofReceivedDate = await this.getProofReceivedDate(this.args.publicationFlow);
     }
     if (this.args.tableColumnDisplayOptions.publicationDate) {
-      this.publicationDate = yield this.publicationService.getPublicationDate(
+      this.publicationDate = await this.publicationService.getPublicationDate(
         this.args.publicationFlow
       );
     }
-  }
+  });
 
-  @task
-  *loadPublicationStatus() {
-    this.publicationStatus = yield this.args.publicationFlow.status;
-  }
+  loadPublicationStatus = task(async () => {
+    this.publicationStatus = await this.args.publicationFlow.status;
+  });
 
   get publicationStatusPillKey() {
     return this.publicationStatus && getPublicationStatusPillKey(this.publicationStatus);

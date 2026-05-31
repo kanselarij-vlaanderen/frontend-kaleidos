@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { format } from "date-fns";
@@ -24,18 +24,17 @@ export default class PublicationsPublicationCaseInfoImprovedPublicationCaseInfoP
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    this.isViaCouncilOfMinisters = yield this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
+  loadData = task(async () => {
+    this.isViaCouncilOfMinisters = await this.publicationService.getIsViaCouncilOfMinisters(this.args.publicationFlow);
 
-    const identification = yield this.args.publicationFlow.identification;
-    const structuredIdentifier = yield identification.structuredIdentifier;
-    this.publicationNumber = yield structuredIdentifier?.localIdentifier;
+    const identification = await this.args.publicationFlow.identification;
+    const structuredIdentifier = await identification.structuredIdentifier;
+    this.publicationNumber = await structuredIdentifier?.localIdentifier;
 
-    this.numacNumbers = yield this.args.publicationFlow.numacNumbers;
-    const publicationStatus = yield this.args.publicationFlow.status
+    this.numacNumbers = await this.args.publicationFlow.numacNumbers;
+    const publicationStatus = await this.args.publicationFlow.status
     if (publicationStatus.isPublished) {
-      const publicationActivity = yield this.store.queryOne('publication-activity', {
+      const publicationActivity = await this.store.queryOne('publication-activity', {
         'filter[subcase][publication-flow][:id:]': this.args.publicationFlow.id,
         sort: '-end-date'
       });
@@ -58,8 +57,5 @@ export default class PublicationsPublicationCaseInfoImprovedPublicationCaseInfoP
         }
       }
     }
-  }
-
-
-
+  });
 }

@@ -42,7 +42,7 @@
                 <AuButton
                   data-test-agendaitem-postponed-proposable-meeting
                   @skin="link"
-                  {{on "click" (perform this.reProposeForMeeting meeting)}}
+                  {{on "click" (fn this.reProposeForMeeting.perform meeting)}}
                   role="menuitem"
                 >
                   {{t "agenda-for"}}
@@ -82,7 +82,7 @@
 {{#if this.isProposingForOtherMeeting}}
   <Subcases::ProposableMeetings
     @meeting={{@meeting}}
-    @onProposeForMeeting={{perform this.reProposeForMeeting}}
+    @onProposeForMeeting={{this.reProposeForMeeting.perform}}
     @onCancel={{this.closeProposingForOtherMeetingModal}}
   />
 {{/if}}

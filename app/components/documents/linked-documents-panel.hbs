@@ -1,4 +1,4 @@
-<div class="auk-u-mb-4" {{did-update (perform this.loadData) @agendaitemOrSubcase}} ...attributes>
+<div class="auk-u-mb-4" {{did-update this.loadData.perform @agendaitemOrSubcase}} ...attributes>
   <Auk::Panel>
     <Auk::Panel::Header>
       <Auk::Toolbar>
@@ -17,7 +17,7 @@
       {{#unless this.loadData.isRunning}}
         <Documents::LinkedDocumentList
           @linkedPieces={{this.linkedPieces}}
-          @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
+          @onUnlinkDocumentContainer={{this.unlinkDocumentContainer.perform}} />
       {{/unless}}
     </Auk::Panel::Body>
     {{#if (user-may "manage-documents")}}
@@ -39,7 +39,7 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenLinkedPieceModal}}
   @title={{t "document-link-old"}}
-  @onConfirm={{perform this.saveLinkedPieces}}
+  @onConfirm={{this.saveLinkedPieces.perform}}
   @onCancel={{this.cancelLinkPieces}}
   @confirmMessage={{t "document-link-old"}}
   @disabled={{eq this.newLinkedPieces.length 0}}

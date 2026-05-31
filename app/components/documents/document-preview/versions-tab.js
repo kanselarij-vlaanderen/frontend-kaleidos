@@ -11,15 +11,14 @@ export default class DocumentsDocumentPreviewVersionsTabComponent extends Compon
     this.loadVersionsData.perform();
   }
 
-  @task
-  *loadVersionsData() {
+  loadVersionsData = task(async () => {
     if (this.args.documentContainer?.id) {
-      const pieces = yield this.args.documentContainer.hasMany('pieces').reload();
+      const pieces = await this.args.documentContainer.hasMany('pieces').reload();
       this.versions = pieces.slice();
     } else {
       this.versions = [];
     }
-  }
+  });
 
   get sortedVersions() {
     return sortPieceVersions(this.versions);

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
@@ -73,24 +73,23 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     )
   }
 
-  @task
-  *loadData() {
-    this.submissions = yield this.args.subcase.hasMany('submissions').reload();
-    const activities = yield this.args.subcase.hasMany('agendaActivities').reload();
+  loadData = task(async () => {
+    this.submissions = await this.args.subcase.hasMany('submissions').reload();
+    const activities = await this.args.subcase.hasMany('agendaActivities').reload();
     this.canPropose = !(activities?.length || this.isAssigningToAgenda || this.isLoading);
     this.canDelete = (this.canPropose && !this.isAssigningToAgenda);
-    this.canSubmitNewDocuments = yield this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
+    this.canSubmitNewDocuments = await this.draftSubmissionService.canSubmitNewDocumentsOnSubcase(this.args.subcase);
     if (!this.canSubmitNewDocuments && this.currentSession.may('view-submissions')) {
-      this.currentSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
+      this.currentSubmission = await this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
     }
-    this.parliamentRetrievalActivity = yield this.args.subcase.parliamentRetrievalActivity;
-    const decisionActivity = yield this.subcaseService.getLatestDecisionActivity(this.args.subcase);
-    const decisionResultCode = yield decisionActivity?.belongsTo('decisionResultCode').reload();
+    this.parliamentRetrievalActivity = await this.args.subcase.parliamentRetrievalActivity;
+    const decisionActivity = await this.subcaseService.getLatestDecisionActivity(this.args.subcase);
+    const decisionResultCode = await decisionActivity?.belongsTo('decisionResultCode').reload();
     if (decisionResultCode?.uri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
       // Check whether this subcase is already on a design agenda
-      this.isForPostponedSubcase = !(yield this.subcaseService.isOnDesignAgenda(this.args.subcase));
+      this.isForPostponedSubcase = !(await this.subcaseService.isOnDesignAgenda(this.args.subcase));
     }
-  }
+  });
 
   triggerDeleteCaseDialog() {
     this.promptDeleteCase = true;
@@ -112,15 +111,14 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   }
 
   // TODO KAS-3256 We should take another look of the deleting case feature in light of publications also using cases.
-  @task
-  *deleteCase(_case) {
-    const decisionmakingFlow = yield _case.decisionmakingFlow;
-    yield _case.destroyRecord();
-    yield decisionmakingFlow.destroyRecord();
+  deleteCase = task(async (_case) => {
+    const decisionmakingFlow = await _case.decisionmakingFlow;
+    await _case.destroyRecord();
+    await decisionmakingFlow.destroyRecord();
     this.promptDeleteCase = false;
     this.caseToDelete = null;
     this.router.transitionTo('cases.index');
-  }
+  });
 
   @action
   cancel() {
@@ -153,12 +151,11 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
    * @param {boolean} formallyStatusUri
    * @param {string} privatecomment
    */
-  @task
-  *proposeForAgenda(_fullCopy, meeting, formallyStatusUri, privateComment) {
+  proposeForAgenda = task(async (_fullCopy, meeting, formallyStatusUri, privateComment) => {
     this.isAssigningToAgenda = false;
     this.isLoading = true;
     try {
-      yield this.agendaService.putSubmissionOnAgenda(
+      await this.agendaService.putSubmissionOnAgenda(
         meeting,
         this.args.subcase,
         formallyStatusUri,
@@ -172,9 +169,9 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
       );
     }
     this.toggleAllPropertiesBackToDefault();
-    yield this.loadData.perform();
+    await this.loadData.perform();
     this.args.onProposedForAgenda();
-  }
+  });
 
   @action
   async deleteSubcase() {
