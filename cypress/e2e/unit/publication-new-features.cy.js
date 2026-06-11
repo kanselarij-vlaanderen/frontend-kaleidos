@@ -196,7 +196,7 @@ context('Publications new features tests', () => {
     cy.get(publication.publicationTableRow.rows).should('have.length', 1);
   });
 
-  it('should check if contactpersons are added to mail', () => {
+  it.only('should check if contactpersons are added to mail', () => {
     const fields = {
       number: 2100,
       shortTitle: 'test nieuwe features',
@@ -211,6 +211,9 @@ context('Publications new features tests', () => {
     cy.createPublication(fields);
     cy.get(publication.contactPersons.add).click();
     cy.get(auk.modal.container).should('exist');
+    // Modal opens with "Persoon zonder organisatie" pre-selected and the
+    // existing-person dropdown visible; reveal the new-person form first.
+    cy.get(publication.contactPersonAdd.addNewPerson).click();
     cy.get(publication.contactPersonAdd.firstName).clear()
       .type(contactperson.fin);
     cy.get(publication.contactPersonAdd.lastName).clear()

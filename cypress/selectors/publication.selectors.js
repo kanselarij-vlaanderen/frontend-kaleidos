@@ -129,6 +129,8 @@ const selectors = {
     email: '[data-test-contact-person-add-email]',
     selectOrganization: '[data-test-contact-person-select-organization]',
     addOrganization: '[data-test-contact-person-add-organization]',
+    selectPerson: '[data-test-contact-person-select-person]',
+    addNewPerson: '[data-test-contact-person-add-new-person]',
     submit: '[data-test-contact-person-add-submit]',
   },
 
