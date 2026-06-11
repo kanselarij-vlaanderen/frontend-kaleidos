@@ -280,7 +280,7 @@ context('Publications tests', () => {
     cy.get(auk.emptyState.message).contains(noGovernmentFields);
   });
 
-  it.only('publications:dossier: Add and delete contact person', () => {
+  it('publications:dossier: Add and delete contact person', () => {
     const noContactPersons = 'Er zijn nog geen contactpersonen toegevoegd';
     const contactperson = {
       fin: 'Donald',

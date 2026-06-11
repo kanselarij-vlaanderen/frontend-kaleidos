@@ -196,7 +196,7 @@ context('Publications new features tests', () => {
     cy.get(publication.publicationTableRow.rows).should('have.length', 1);
   });
 
-  it.only('should check if contactpersons are added to mail', () => {
+  it('should check if contactpersons are added to mail', () => {
     const fields = {
       number: 2100,
       shortTitle: 'test nieuwe features',
