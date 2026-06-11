@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action  } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
@@ -28,15 +28,13 @@ export default class OrganizationFilterComponent extends Component {
     this.args.onChange?.(this.selected);
   }
 
-  @task
-  *search(query) {
+  search = task(async (query) => {
     if (query) {
-      yield timeout(LIVE_SEARCH_DEBOUNCE_TIME);
+      await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     }
-
-    return (yield this.store.query('user-organization', {
+    return (await this.store.query('user-organization', {
       filter: query,
       sort: 'identifier',
     })).filter((organization) => !this.selected.includes(organization));
-  }
+  });
 }

@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { all, task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
@@ -46,16 +46,15 @@ export default class LinkedDocumentList extends Component {
     return sortedHistories;
   });
 
-  @task
-  *loadData() {
-    const linkedPieces = yield this.args.linkedPieces;
+  loadData = task(async () => {
+    const linkedPieces = await this.args.linkedPieces;
     const linkedPieceIds = linkedPieces.map((piece) => piece.get('id'));
 
     // Get a list of unique document containers of the pieces
     const uniqueDocumentContainers = new Set();
     for (let idx = 0; idx < linkedPieces.length; idx = idx + batchSize) {
       const batch = linkedPieceIds.slice(idx, idx + batchSize);
-      const documentContainers = yield this.store.query('document-container', {
+      const documentContainers = await this.store.query('document-container', {
         'filter[pieces][id]': batch.join(','),
         include: 'type,pieces.access-level,pieces.previous-piece,pieces.next-piece',
         page: {
@@ -66,19 +65,18 @@ export default class LinkedDocumentList extends Component {
     }
 
     // For each document container, determine the lastest version to display
-    this.documentHistories = yield all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, linkedPieces)));
-  }
+    this.documentHistories = await all([...uniqueDocumentContainers].map((container) => this.createDocumentHistory.perform(container, linkedPieces)));
+  });
 
-  @task
-  *createDocumentHistory(documentContainer, allPieces) {
+  createDocumentHistory = task(async (documentContainer, allPieces) => {
     const history = new DocumentHistory();
     history.documentContainer = documentContainer;
 
-    const containerPieces = yield documentContainer.pieces;
+    const containerPieces = await documentContainer.pieces;
 
     const heads = [];
     for (const piece of containerPieces.slice()) {
-      const previousPiece = yield piece.previousPiece;
+      const previousPiece = await piece.previousPiece;
       if (!previousPiece) {
         heads.push(piece);
       }
@@ -96,7 +94,7 @@ export default class LinkedDocumentList extends Component {
       let next = heads[0];
       while (next) {
         sortedContainerPieces.push(next);
-        next = yield next.nextPiece;
+        next = await next.nextPiece;
       }
     }
 
@@ -112,5 +110,5 @@ export default class LinkedDocumentList extends Component {
     }
 
     return history;
-  }
+  });
 }

@@ -3,7 +3,7 @@
     <h4 class="auk-panel__title">{{t "documents"}}</h4>
   </Auk::Panel::Header>
   <Auk::Panel::Body
-    {{did-update (perform this.onDidUpdate) @confidential}}
+    {{did-update this.onDidUpdate.perform @confidential}}
   >
     <Auk::FileUploader
       @multiple={{true}}
@@ -18,7 +18,7 @@
           @piece={{piece}}
           @allowDocumentContainerEdit={{true}}
           @documentTypeRequired={{true}}
-          @onDelete={{perform this.deletePiece piece}}
+          @onDelete={{fn this.deletePiece.perform piece}}
         />
       {{/each}}
     </div>

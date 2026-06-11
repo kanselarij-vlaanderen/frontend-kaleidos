@@ -1,5 +1,5 @@
 import Model, { belongsTo, attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { formatDistanceToNow } from 'date-fns';
 import fetch from 'fetch';
 import ModifiedOldDataError from 'frontend-kaleidos/errors/modified-old-data-error';

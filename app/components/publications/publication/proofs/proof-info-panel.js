@@ -20,9 +20,8 @@ export default class PublicationsPublicationProofsProofInfoPanelComponent extend
     this.args.publicationSubcase.rollbackAttributes();
   }
 
-  @task
-  *save() {
-    yield this.args.publicationSubcase.save();
+  save = task(async () => {
+    await this.args.publicationSubcase.save();
     this.isEditing = false;
-  }
+  });
 }

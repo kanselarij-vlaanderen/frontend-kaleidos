@@ -50,7 +50,7 @@
               @title={{t "requested-proof"}}
               @requestActivity={{event.activity}}
               @isDisabledDelete={{event.activity.proofingActivity.isFinished}}
-              @onDeleteRequest={{perform this.deleteRequest event.activity}}
+              @onDeleteRequest={{fn this.deleteRequest.perform event.activity}}
             />
           </Utils::Timeline::Event>
         {{else if event.isProofingActivity}}
@@ -64,14 +64,12 @@
               @proofingActivity={{event.activity}}
               @publicationFlow={{this.publicationFlow}}
               @proofPrintCorrector={{this.publicationSubcase.proofPrintCorrector}}
-              @onEditProofingActivity={{perform this.editProofingActivity}}
+              @onEditProofingActivity={{this.editProofingActivity.perform}}
               @onDeletePiece={{if
                 event.canDeletePieces
-                (perform this.deleteReceivedPiece event)
+                (fn this.deleteReceivedPiece.perform event)
               }}
-              @onCreatePublicationRequest={{perform
-                this.savePublicationRequest
-              }}
+              @onCreatePublicationRequest={{this.savePublicationRequest.perform}}
               @isCreatePublicationRequestDisabled={{this.isCreatePublicationRequestDisabled}}
             />
           </Utils::Timeline::Event>
@@ -86,14 +84,14 @@
 {{#if this.showProofRequestModal}}
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveProofRequest}}
+    @onSave={{this.saveProofRequest.perform}}
     @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}
 
 {{#if this.showProofUploadModal}}
   <Publications::Publication::Proofs::ProofUploadModal
-    @onSave={{perform this.saveProofUpload}}
+    @onSave={{this.saveProofUpload.perform}}
     @onCancel={{this.closeProofUploadModal}}
   />
 {{/if}}

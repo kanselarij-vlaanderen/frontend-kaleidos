@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
@@ -19,9 +19,8 @@ export default class LinkedDocumentLink extends Component {
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    const containerPieces = yield this.args.documentContainer.pieces;
+  loadData = task(async () => {
+    const containerPieces = await this.args.documentContainer.pieces;
     const sortedContainerPieces = containerPieces
       .slice()
       .sort((p1, p2) => p1.created - p2.created);
@@ -31,12 +30,12 @@ export default class LinkedDocumentLink extends Component {
     } else {
       this.sortedPieces = sortedContainerPieces;
     }
-    this.accessLevel = yield this.lastPiece.accessLevel;
-    const file = yield this.lastPiece.file;
-    this.derived = yield file?.derived;
-    const signedPieceCopy = yield this.lastPiece.signedPieceCopy;
-    yield signedPieceCopy?.file;
-  }
+    this.accessLevel = await this.lastPiece.accessLevel;
+    const file = await this.lastPiece.file;
+    this.derived = await file?.derived;
+    const signedPieceCopy = await this.lastPiece.signedPieceCopy;
+    await signedPieceCopy?.file;
+  });
 
   get lastPiece() {
     return this.sortedPieces.length && this.sortedPieces.at(-1);

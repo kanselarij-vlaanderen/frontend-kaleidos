@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { service } from '@ember/service';
+import { task, timeout } from 'ember-concurrency';
 import { LIVE_SEARCH_DEBOUNCE_TIME } from 'frontend-kaleidos/config/config';
 
 /**
@@ -32,7 +32,7 @@ export default class TextFilter extends Component {
     this.debouncedSetFilter.perform();
   }
 
-  debouncedSetFilter = restartableTask(async () => {
+  debouncedSetFilter = task({ restartable: true }, async () => {
     await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     this.args.onSetFilter(this.filterText);
   });

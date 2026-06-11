@@ -80,7 +80,7 @@
     "format-date",
     "format-message",
     "format-number",
-    "format-relative",
+    "format-relative-time",
     "format-time",
     "t",
     "link",

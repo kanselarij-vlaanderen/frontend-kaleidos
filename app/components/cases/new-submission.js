@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { task, dropTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import { containsConfidentialPieces } from 'frontend-kaleidos/utils/documents';
 import {
@@ -241,7 +241,7 @@ export default class CasesNewSubmissionComponent extends Component {
     await this.draftSubmissionService.createStatusChange(this.submission, status.uri, comment);
   }
 
-  createSubmission = dropTask(async (meeting, comment) => {
+  createSubmission = task({ drop: true }, async (meeting, comment) => {
     this.showProposableAgendaModal = false;
     const submitted = await this.store.findRecordByUri(
       'concept',

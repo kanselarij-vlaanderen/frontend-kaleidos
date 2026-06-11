@@ -1,5 +1,5 @@
 import AuToasterService from '@appuniversum/ember-appuniversum/services/toaster';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class ToasterService extends AuToasterService {

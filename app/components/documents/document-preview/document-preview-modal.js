@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import sanitize from 'sanitize-filename';
 
 export default class DocumentsDocumentPreviewDocumentPreviewModal extends Component {
@@ -49,13 +49,12 @@ export default class DocumentsDocumentPreviewDocumentPreviewModal extends Compon
     localStorage.setItem('documentViewerSidebar',JSON.stringify(this.sidebarIsOpen));
   }
 
-  @task
-  *loadFile() {
+  loadFile = task(async () => {
     this.file = null;
-    const file = yield this.selectedVersion.file;
-    const derivedFile = yield file?.derived;
+    const file = await this.selectedVersion.file;
+    const derivedFile = await file?.derived;
     this.file = derivedFile || file;
-  }
+  });
 
   canViewConfidentialPiece = async () => {
     return await this.pieceAccessLevelService.canViewConfidentialPiece(this.selectedVersion);

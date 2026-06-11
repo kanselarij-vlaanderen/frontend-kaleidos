@@ -53,7 +53,7 @@
       @loading={{this.savePublicationStatus.isRunning}}
       @loadingMessage={{t "loading"}}
       @disabled={{this.isDisabledSave}}
-      {{on "click" (perform this.savePublicationStatus)}}
+      {{on "click" this.savePublicationStatus.perform}}
     >
       {{t "save"}}
     </AuButton>

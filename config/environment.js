@@ -11,6 +11,9 @@ module.exports = function (environment) {
       'editor-browser-delete': true,
     },
     EmberENV: {
+      EXTEND_PROTOTYPES: false,
+      // all array prototype methods we should no longer use are listed here
+      // https://deprecations.emberjs.com/id/deprecate-array-prototype-extensions
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
@@ -27,22 +30,18 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    torii: {
-      disableRedirectInitializer: true,
-      providers: {
-        'acmidm-oauth2': {
-          clientId: '{{OAUTH_CLIENT_ID}}',
-          baseUrl: '{{OAUTH_BASE_URL}}',
-          redirectUrl: '{{OAUTH_REDIRECT_URL}}',
-          logoutUrl: '{{OAUTH_LOGOUT_URL}}',
-          scope: [
-            'vo',
-            'profile',
-            'openid',
-            'dkbkaleidos'
-          ].join(' '),
-        },
-      },
+    // oauth2 config
+    acmidm: {
+      clientId: '{{OAUTH_CLIENT_ID}}',
+      baseUrl: '{{OAUTH_BASE_URL}}',
+      redirectUrl: '{{OAUTH_REDIRECT_URL}}',
+      logoutUrl: '{{OAUTH_LOGOUT_URL}}',
+      scope: [
+        'vo',
+        'profile',
+        'openid',
+        'dkbkaleidos'
+      ].join(' '),
     },
     'ember-plausible': {
       enabled: false,
@@ -60,7 +59,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_CABINET_SUBMISSIONS = true;
     ENV.APP.ENABLE_DATA_MONITORING = true;
     
-    ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
+    ENV.acmidm.logoutUrl = "/mock-login";
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
@@ -93,7 +92,7 @@ module.exports = function (environment) {
     ENV.APP.ENABLE_DEBUG = false;
     ENV.APP.DISABLE_SESSION_POLLING = true;
     ENV.APP.ENABLE_DATA_MONITORING = false;
-    ENV.torii.providers["acmidm-oauth2"].logoutUrl = "/mock-login";
+    ENV.acmidm.logoutUrl = "/mock-login";
   }
 
   return ENV;

@@ -49,7 +49,7 @@
               @title={{t "requested-publication"}}
               @requestActivity={{event.activity}}
               @isDisabledDelete={{event.activity.publicationActivity.isFinished}}
-              @onDeleteRequest={{perform this.deleteRequest event.activity}}
+              @onDeleteRequest={{fn this.deleteRequest.perform event.activity}}
             />
           </Utils::Timeline::Event>
         {{else if event.isPublicationActivity}}
@@ -75,14 +75,14 @@
 {{#if this.isOpenRequestModal}}
   <Publications::Publication::PublicationActivities::PublicationRequestModal
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveRequest}}
+    @onSave={{this.saveRequest.perform}}
     @onCancel={{this.closeRequestModal}}
   />
 {{/if}}
 
 {{#if this.isOpenRegistrationModal}}
   <Publications::Publication::PublicationActivities::PublicationRegistrationModal
-    @onSave={{perform this.registerPublication}}
+    @onSave={{this.registerPublication.perform}}
     @onCancel={{this.closeRegistrationModal}}
   />
 {{/if}}

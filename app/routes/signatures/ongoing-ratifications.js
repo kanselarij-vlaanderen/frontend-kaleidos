@@ -1,11 +1,10 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { isPresent } from '@ember/utils';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
-import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
+import { startOfDay, endOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 export default class SignaturesOngoingRatificationsRoute extends Route {

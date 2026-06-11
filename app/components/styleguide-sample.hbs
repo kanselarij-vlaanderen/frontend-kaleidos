@@ -33,17 +33,18 @@
       <CodeBlock
         class="br-styleguide-code-block"
         @code={{@code}}
-        @language="markup"
+        @language="js"
+        @theme="github-light"
       />
     {{/if}}
 
     {{#if @snippet}}
-
       {{#let (get-code-snippet @snippet) as |snippet|}}
         <CodeBlock
           class="br-styleguide-code-block"
           @code={{snippet.source}}
-          @language="markup"
+          @language="js"
+          @theme="github-light"
         />
       {{/let}}
 

@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import constants from 'frontend-kaleidos/config/constants';
@@ -151,7 +151,7 @@ async function getMinutesListItem(meeting, agendaitem, intl, store) {
   <h4 ${pagebreak}><u>${
     agendaitem.number
   }. ${betreft.toUpperCase().replace(/\n/g, '<br />')}</u></h4>
-  <p>${text}</p>`
+  <p>${text}</p>`;
 }
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

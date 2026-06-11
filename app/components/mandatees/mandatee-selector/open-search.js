@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, timeout } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { task, timeout } from 'ember-concurrency';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 
 /**
@@ -31,12 +31,11 @@ export default class MandateeSelector extends Component {
     }
   }
 
-  @restartableTask
-  *searchMandatee(searchTerm) {
+searchMandatee = task({ restartable: true }, async (searchTerm) => {
     this.mandateeOptions = [];
-    yield timeout(300);
-    const excludedMandatees = yield this.args.excludeMandatees;
-    const mandateeOptions = yield this.mandatees.fetchMandateesByName.perform(
+    await timeout(300);
+    const excludedMandatees = await this.args.excludeMandatees;
+    const mandateeOptions = await this.mandatees.fetchMandateesByName.perform(
       searchTerm,
       this.referenceDate
     );
@@ -44,7 +43,7 @@ export default class MandateeSelector extends Component {
     this.mandateeOptions = mandateeOptions.filter(
       (mandatee) => !excludedMandatees?.includes(mandatee)
     );
-  }
+  });
 
   @action
   onSelectMandatee(mandatee) {

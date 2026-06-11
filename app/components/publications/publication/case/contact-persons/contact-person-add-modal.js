@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { isPresent } from '@ember/utils';
 import { tracked } from '@glimmer/tracking';
 import { timeout, task } from 'ember-concurrency';
@@ -53,23 +53,22 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     this.setOrganization(NO_ORGANIZATION);
   }
 
-  @task
-  *searchOrganizations(searchTerm) {
-    yield timeout(300);
+  searchOrganizations = task(async (searchTerm) => {
+    await timeout(300);
     return this.loadOrganizations(searchTerm);
-  }
+  });
 
-  @task
-  *searchPersons(searchTerm) {
-    yield timeout(300);
+
+  searchPersons = task(async (searchTerm) => {
+    await timeout(300);
     return this.loadPersons(searchTerm);
-  }
+  });
 
-  @task
-  *save() {
+
+  save = task(async () => {
     let contactPersonProperties;
     if (this.selectedPerson) {
-      const existingContactPerson = yield this.selectedPerson.contactPerson;
+      const existingContactPerson = await this.selectedPerson.contactPerson;
       contactPersonProperties = {
         contactPerson: existingContactPerson,
       };
@@ -81,8 +80,8 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
         organization: this.organization,
       };
     }
-    yield this.args.onSave(contactPersonProperties);
-  }
+    await this.args.onSave(contactPersonProperties);
+  });
 
   @action
   onInputFirstName(event) {

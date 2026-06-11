@@ -111,7 +111,7 @@
                     @loading={{this.saveMinutes.isRunning}}
                     @loadingMessage={{t "loading"}}
                     @disabled={{this.saveDisabled}}
-                    {{on "click" (perform this.saveMinutes)}}
+                    {{on "click" this.saveMinutes.perform}}
                   >
                     {{t "save"}}
                   </AuButton>
@@ -131,7 +131,7 @@
                 @hideEdit={{true}}
                 @hideUpload={{true}}
                 @showCreateNewVersion={{true}}
-                @onCreateNewVersion={{perform this.onCreateNewVersion}}
+                @onCreateNewVersion={{this.onCreateNewVersion.perform}}
                 @bordered={{true}}
                 @didDeleteContainer={{this.didDeleteMinutes}}
                 @meeting={{this.meeting}}

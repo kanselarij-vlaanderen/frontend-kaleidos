@@ -1,4 +1,4 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import Component from '@glimmer/component';
@@ -89,11 +89,10 @@ export default class MHeader extends Component {
     window.location.reload();
   }
 
-  @task
-  *loadRoles() {
-    this.roles = yield this.store.queryAll('role', {
+  loadRoles = task(async () => {
+    this.roles = await this.store.queryAll('role', {
       'filter[concept-scheme]': CONSTANTS.CONCEPT_SCHEMES.USER_ROLES,
       sort: 'position'
     });
-  }
+  });
 }

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { task } from 'ember-concurrency';
 
@@ -33,8 +33,7 @@ export default class ThemisPublicationsUnpublishConfirmationModalComponent exten
     this.selectedOption = selectedOption;
   }
 
-  @task
-  *confirmUnpublish() {
-    yield this.args.onConfirm(this.selectedOption.scope);
-  }
+  confirmUnpublish = task(async () => {
+    await this.args.onConfirm(this.selectedOption.scope);
+  });
 }

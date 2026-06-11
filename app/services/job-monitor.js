@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { task, timeout } from 'ember-concurrency';
 
 export default class JobMonitorService extends Service {
@@ -27,13 +27,12 @@ export default class JobMonitorService extends Service {
     }
   }
 
-  @task
-  *monitorJobProgress(job, callbackFn) {
+  monitorJobProgress = task(async (job, callbackFn) => {
     while (!job.hasEnded) {
-      yield timeout(1000);
-      yield job.reload();
+      await timeout(1000);
+      await job.reload();
     }
-    yield callbackFn(job);
+    await callbackFn(job);
     return job;
-  }
+  });
 }
