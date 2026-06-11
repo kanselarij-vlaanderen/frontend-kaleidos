@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+import buildFuzzySearchFilter from 'frontend-kaleidos/utils/build-fuzzy-search-filter';
 import { startOfDay, endOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -80,7 +81,13 @@ export default class SettingsUsersIndexRoute extends Route {
     };
 
     if (isPresent(params.filter)) {
-      options['filter'] = params.filter;
+      // Search per word across these attributes so e.g. "Jan Delaure" matches a
+      // user whose first-name is "Jan" and last-name "Delaure", and so the
+      // search stays combinable (AND) with the structured filters below.
+      Object.assign(
+        options,
+        buildFuzzySearchFilter(params.filter, ['first-name', 'last-name', 'email', 'identifier'])
+      );
     }
 
     if (params.organizations.length) {
