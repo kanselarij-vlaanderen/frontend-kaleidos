@@ -3,7 +3,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
-import { cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
+import { cleanPasteInputForTextarea, trimText } from 'frontend-kaleidos/utils/trim-util';
 
 /**
   * @argument didSave: action, passes down the newly created decisionmakingFlow
@@ -24,7 +24,7 @@ export default class NewCase extends Component {
   createCase = task(async () => {
     const now = new Date();
     const _case = this.store.createRecord('case', {
-      shortTitle: this.shortTitle,
+      shortTitle: trimText(this.shortTitle),
       created: now,
     });
     await _case.save();
