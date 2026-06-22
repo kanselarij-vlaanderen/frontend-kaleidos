@@ -53,10 +53,10 @@ export default class AgendaService extends Service {
         item.id
       );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(
-          singularize(item.type),
-          item.id
-        );
+        const modelName = singularize(item.type);
+        itemFromStore = typeof item.id === 'string'
+          ? await this.store.findRecord(modelName, item.id)
+          : await this.store.queryRecord(modelName, item.id);
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -77,10 +77,10 @@ export default class AgendaService extends Service {
         item.id
       );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(
-          singularize(item.type),
-          item.id
-        );
+        const modelName = singularize(item.type);
+        itemFromStore = typeof item.id === 'string'
+          ? await this.store.findRecord(modelName, item.id)
+          : await this.store.queryRecord(modelName, item.id);
       }
       itemsFromStore.push(itemFromStore);
     }
@@ -101,10 +101,10 @@ export default class AgendaService extends Service {
         piece.id
       );
       if (!pieceFromStore) {
-        pieceFromStore = await this.store.queryRecord(
-          singularize(piece.type),
-          piece.id
-        );
+        const modelName = singularize(piece.type);
+        pieceFromStore = typeof piece.id === 'string'
+          ? await this.store.findRecord(modelName, piece.id)
+          : await this.store.queryRecord(modelName, piece.id);
       }
       piecesFromStore.push(pieceFromStore);
     }
