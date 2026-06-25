@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { TrackedArray } from 'tracked-built-ins';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import parseDate from 'frontend-kaleidos/utils/parse-date-search-param';
+import buildFuzzySearchFilter from 'frontend-kaleidos/utils/build-fuzzy-search-filter';
 import { startOfDay, endOfDay } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -80,7 +81,10 @@ export default class SettingsUsersIndexRoute extends Route {
     };
 
     if (isPresent(params.filter)) {
-      options['filter'] = params.filter;
+      Object.assign(
+        options,
+        buildFuzzySearchFilter(params.filter, ['first-name', 'last-name', 'email'])
+      );
     }
 
     if (params.organizations.length) {
