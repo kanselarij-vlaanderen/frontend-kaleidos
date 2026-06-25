@@ -81,12 +81,9 @@ export default class SettingsUsersIndexRoute extends Route {
     };
 
     if (isPresent(params.filter)) {
-      // Search per word across these attributes so e.g. "Jan Delaure" matches a
-      // user whose first-name is "Jan" and last-name "Delaure", and so the
-      // search stays combinable (AND) with the structured filters below.
       Object.assign(
         options,
-        buildFuzzySearchFilter(params.filter, ['first-name', 'last-name', 'email', 'identifier'])
+        buildFuzzySearchFilter(params.filter, ['first-name', 'last-name', 'email'])
       );
     }
 
