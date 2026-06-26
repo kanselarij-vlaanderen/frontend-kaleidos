@@ -2,6 +2,7 @@ import Service, { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { PUBLICATION_EMAIL } from 'frontend-kaleidos/config/config';
 import { isEmpty } from '@ember/utils';
+import { trimText } from 'frontend-kaleidos/utils/trim-util';
 
 export default class PublicationService extends Service {
   @service store;
@@ -74,7 +75,7 @@ export default class PublicationService extends Service {
       governmentAreas = await latestSubcase.governmentAreas;
     } else {
       _case = this.store.createRecord('case', {
-        shortTitle: publicationProperties.shortTitle,
+        shortTitle: trimText(publicationProperties.shortTitle),
         title: publicationProperties.longTitle,
         created: now,
       });

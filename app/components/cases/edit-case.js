@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
 import { task } from 'ember-concurrency';
-import { cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
+import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 
 /**
  * @param {Case} case
@@ -25,7 +25,7 @@ export default class EditCase extends Component {
   }
 
   save = task(async () => {
-    this.args.case.shortTitle = this.shortTitle;
+    this.args.case.shortTitle = trimText(this.shortTitle);
     await this.args.onSave(this.args.case);
   });
 
