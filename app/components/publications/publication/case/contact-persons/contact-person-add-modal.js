@@ -26,19 +26,11 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   @tracked firstName;
   @tracked lastName;
   @tracked email;
-  @tracked organizationSelection;
+  @tracked selectedOrganization;
   @tracked selectedPerson;
   @tracked isCreatingNewPerson = false;
 
   NO_ORGANIZATION = NO_ORGANIZATION;
-
-  get organization() {
-    return this.organizationSelection?.isNoOrganization ? null : this.organizationSelection;
-  }
-
-  get hasOrganizationSelection() {
-    return isPresent(this.organizationSelection);
-  }
 
   constructor() {
     super(...arguments);
@@ -51,6 +43,14 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     });
     this.organizations = this.loadOrganizations('');
     this.setOrganization(NO_ORGANIZATION);
+  }
+
+  get organization() {
+    return this.selectedOrganization?.isNoOrganization ? null : this.selectedOrganization;
+  }
+
+  get hasOrganizationSelection() {
+    return isPresent(this.selectedOrganization);
   }
 
   searchOrganizations = task(async (searchTerm) => {
@@ -97,7 +97,7 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
 
   @action
   async setOrganization(selection) {
-    this.organizationSelection = selection;
+    this.selectedOrganization = selection;
     this.selectedPerson = undefined;
     this.isCreatingNewPerson = false;
     this.firstName = undefined;
@@ -151,11 +151,11 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
         this.intl.t('organization-with-same-name-exists'),
         this.intl.t('warning-title')
       );
-      return;
+    } else {
+      await organization.save();
+      this.setOrganization(organization);
+      this.isOpenOrganizationAddModal = false;
     }
-    await organization.save();
-    this.setOrganization(organization);
-    this.isOpenOrganizationAddModal = false;
   }
 
   async loadOrganizations(searchTerm) {
@@ -179,36 +179,29 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   async loadPersons(searchTerm) {
-    if (!this.organizationSelection) {
+    if (!this.hasOrganizationSelection) {
       return [];
     }
-    const baseQuery = {
+    const query = {
       'page[size]': 40,
       sort: 'last-name,first-name',
       include: 'contact-person',
+
+      'filter[:has:contact-person]': true,
     };
-    if (this.organizationSelection.isNoOrganization) {
-      baseQuery['filter[:has-no:organization]'] = 'yes';
+    if (this.selectedOrganization.isNoOrganization) {
+      query['filter[:has-no:organization]'] = 'yes';
     } else {
-      baseQuery['filter[organization][:id:]'] = this.organizationSelection.id;
+      query['filter[organization][:id:]'] = this.selectedOrganization.id;
     }
-    let persons;
     if (searchTerm) {
-      const [byLast, byFirst] = await Promise.all([
-        this.store.query('person', { ...baseQuery, 'filter[last-name]': searchTerm }),
-        this.store.query('person', { ...baseQuery, 'filter[first-name]': searchTerm }),
-      ]);
-      const seen = new Set();
-      persons = [];
-      for (const p of [...byLast.slice(), ...byFirst.slice()]) {
-        if (!seen.has(p.id)) {
-          seen.add(p.id);
-          persons.push(p);
-        }
-      }
-    } else {
-      persons = (await this.store.query('person', baseQuery)).slice();
+      // OR-match on either first-name or last-name so a user typing part of
+      // either half of a name finds the person in a single round-trip.
+      query['filter[:or:][first-name]'] = searchTerm;
+      query['filter[:or:][last-name]'] = searchTerm;
     }
+    const persons = (await this.store.query('person', query)).slice();
+
     const linkedContactPersons = (await this.args.publicationFlow?.contactPersons) ?? [];
     const linkedContactPersonIds = new Set(linkedContactPersons.map((cp) => cp.id));
     const linkedNameKeys = new Set();
@@ -218,9 +211,8 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
         linkedNameKeys.add(personNameKey(person));
       }
     }
-    return persons.slice().filter((person) => {
+    return persons.filter((person) => {
       const contactPersonId = person.belongsTo('contactPerson').id();
-      if (!contactPersonId) return false;
       if (linkedContactPersonIds.has(contactPersonId)) return false;
       if (linkedNameKeys.has(personNameKey(person))) return false;
       return true;

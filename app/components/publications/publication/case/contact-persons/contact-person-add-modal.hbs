@@ -14,7 +14,7 @@
           <div data-test-contact-person-select-organization class="auk-o-flex">
             <PowerSelect
               @options={{this.organizations}}
-              @selected={{this.organizationSelection}}
+              @selected={{this.selectedOrganization}}
               @searchEnabled={{true}}
               @search={{this.searchOrganizations.perform}}
               @noMatchesMessage={{t "organizations-empty-result"}}
@@ -43,48 +43,6 @@
         </AuFormRow>
 
         {{#if this.hasOrganizationSelection}}
-          {{#unless this.isCreatingNewPerson}}
-            <AuFormRow>
-              <AuLabel
-                for="contactPersonInput"
-                @required={{true}}
-                @error={{this.validators.person.showError}}
-              >
-                {{t "contact-person"}}
-              </AuLabel>
-              <div data-test-contact-person-select-person class="auk-o-flex">
-                <PowerSelect
-                  @options={{this.persons}}
-                  @selected={{this.selectedPerson}}
-                  @searchEnabled={{true}}
-                  @search={{perform this.searchPersons}}
-                  @noMatchesMessage={{t "contact-persons-empty-result"}}
-                  @placeholder={{t "search-contact-person"}}
-                  @onChange={{this.selectPerson}}
-                  @allowClear={{true}}
-                  @triggerId="contactPersonInput"
-                  as |person|>
-                  {{person.fullName}}
-                  {{#if person.contactPerson.email}}
-                    <span class="auk-u-text-muted auk-u-text-size--small auk-u-ml-1">
-                      {{person.contactPerson.email}}
-                    </span>
-                  {{/if}}
-                </PowerSelect>
-                <AuButton
-                  data-test-contact-person-add-new-person
-                  @skin="primary"
-                  @icon="plus"
-                  @hideText={{true}}
-                  class="auk-o-flex__item--fix auk-u-ml-2"
-                  {{on "click" this.startCreatingNewPerson}}
-                >
-                  {{t "create-new-contact-person"}}
-                </AuButton>
-              </div>
-            </AuFormRow>
-          {{/unless}}
-
           {{#if this.isCreatingNewPerson}}
             <div class="auk-o-grid">
               <div class="auk-o-grid-col-6">
@@ -140,11 +98,51 @@
             </AuFormRow>
             <AuButton
               @skin="link"
-              @icon="cross"
+              @icon="chevron-left"
               {{on "click" this.cancelCreatingNewPerson}}
             >
-              {{t "cancel"}}
+              {{t "select-existing-contact-person"}}
             </AuButton>
+          {{else}}
+            <AuFormRow>
+              <AuLabel
+                for="contactPersonInput"
+                @required={{true}}
+                @error={{this.validators.person.showError}}
+              >
+                {{t "contact-person"}}
+              </AuLabel>
+              <div data-test-contact-person-select-person class="auk-o-flex">
+                <PowerSelect
+                  @options={{this.persons}}
+                  @selected={{this.selectedPerson}}
+                  @searchEnabled={{true}}
+                  @search={{perform this.searchPersons}}
+                  @noMatchesMessage={{t "contact-persons-empty-result"}}
+                  @placeholder={{t "search-contact-person"}}
+                  @onChange={{this.selectPerson}}
+                  @allowClear={{true}}
+                  @triggerId="contactPersonInput"
+                  as |person|>
+                  {{person.fullName}}
+                  {{#if person.contactPerson.email}}
+                    <span class="auk-u-text-muted auk-u-text-size--small auk-u-ml-1">
+                      {{person.contactPerson.email}}
+                    </span>
+                  {{/if}}
+                </PowerSelect>
+                <AuButton
+                  data-test-contact-person-add-new-person
+                  @skin="primary"
+                  @icon="plus"
+                  @hideText={{true}}
+                  class="auk-o-flex__item--fix auk-u-ml-2"
+                  {{on "click" this.startCreatingNewPerson}}
+                >
+                  {{t "create-new-contact-person"}}
+                </AuButton>
+              </div>
+            </AuFormRow>
           {{/if}}
         {{/if}}
       </div>

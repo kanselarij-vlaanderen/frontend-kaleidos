@@ -341,11 +341,10 @@ context('Publications tests', () => {
     cy.get(publication.contactPersons.row.organizationName).contains(contactperson.org);
     cy.get(publication.contactPersons.row.email).contains(contactperson.eml);
 
-    // Unlink the contact-person from this publication-flow. The contact-person
-    // and the underlying person stay in the database for reuse on other cases.
-    cy.intercept('PATCH', '/contact-persons/**').as('patchContactPerson');
+    // Unlink the contact-person from this publication-flow
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.contactPersons.row.delete).click();
-    cy.wait('@patchContactPerson');
+    cy.wait('@patchPublicationFlow');
 
     // assert unlinked content
     cy.get(publication.contactPersons.rows).should('not.exist');

@@ -44,10 +44,7 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   async save(contactPersonProperties) {
     const publicationFlow = this.args.publicationFlow;
     let contactPerson = contactPersonProperties.contactPerson;
-    if (contactPerson) {
-      const publicationFlows = await contactPerson.publicationFlows;
-      publicationFlows.push(publicationFlow);
-    } else {
+    if (!contactPerson) {
       let person = contactPersonProperties.person;
       if (!person) {
         person = this.store.createRecord('person', {
@@ -60,10 +57,14 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
       contactPerson = this.store.createRecord('contact-person', {
         email: contactPersonProperties.email,
         person: person,
-        publicationFlows: [publicationFlow],
       });
+      await contactPerson.save();
     }
-    await contactPerson.save();
+
+
+    const contactPersons = await publicationFlow.contactPersons;
+    contactPersons.push(contactPerson);
+    await publicationFlow.save();
 
     this.isOpenAddModal = false;
   }
@@ -71,11 +72,12 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @action
   async unlink(contactPerson) {
     const publicationFlow = this.args.publicationFlow;
-    const publicationFlows = await contactPerson.publicationFlows;
-    const idx = publicationFlows.indexOf(publicationFlow);
+    
+    const contactPersons = await publicationFlow.contactPersons;
+    const idx = contactPersons.indexOf(contactPerson);
     if (idx >= 0) {
-      publicationFlows.splice(idx, 1);
+      contactPersons.splice(idx, 1);
     }
-    await contactPerson.save();
+    await publicationFlow.save();
   }
 }
