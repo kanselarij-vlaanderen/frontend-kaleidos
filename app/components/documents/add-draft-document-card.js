@@ -29,9 +29,12 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   @service intl;
   @service pieceAccessLevelService;
   @service draftSubmissionService;
+  @service signatureService;
 
   @tracked piece;
   @tracked documentContainer;
+
+  @tracked hasStartedSignFlow = false;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -113,6 +116,11 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.modelName}`
       );
     }
+    if (this.piece?.constructor.modelName === 'piece') {
+      this.hasStartedSignFlow = await this.signatureService.hasStartedSignFlow(
+        this.piece
+      );
+    }
   });
 
   loadFiles = task(async () => {
@@ -142,7 +150,9 @@ export default class DocumentsAddDraftDocumentCardComponent extends Component {
   });
 
   get mayShowAddNewVersion() {
-    return this.piece.constructor.modelName === 'piece';
+    return (
+      this.piece.constructor.modelName === 'piece' && !this.hasStartedSignFlow
+    );
   }
 
   get mayShowDeleteDraftPiece() {

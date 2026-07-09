@@ -39,11 +39,35 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked selectedMeeting;
 
   @tracked isForPostponedSubcase = false;
+  @tracked piecesWithStartedSignFlow = [];
 
   constructor() {
     super(...arguments);
     this.loadAgenda.perform();
     this.loadRequestedByIsCurrentMandatee.perform();
+    this.loadStartedSignFlows.perform();
+  }
+
+  loadStartedSignFlows = task(async () => {
+    if (!this.isUpdate) {
+      return;
+    }
+    const draftPieces = await this.args.submission?.pieces;
+    const found = [];
+    for (const draftPiece of draftPieces?.slice() ?? []) {
+      const previousPiece = await draftPiece.previousPiece;
+      if (
+        previousPiece?.id &&
+        (await this.signatureService.hasStartedSignFlow(previousPiece))
+      ) {
+        found.push(previousPiece);
+      }
+    }
+    this.piecesWithStartedSignFlow = found;
+  });
+
+  get hasStartedSignFlowOnUpdatedPieces() {
+    return this.piecesWithStartedSignFlow.length > 0;
   }
 
   loadAgenda = task(async () => {
@@ -346,7 +370,7 @@ export default class SubmissionHeaderComponent extends Component {
     return piece;
   });
 
-  createSubcase = task({ drop: true }, 
+  createSubcase = task({ drop: true },
     async (
       _fullCopy = false, // unused
       meeting = null,
@@ -365,6 +389,13 @@ export default class SubmissionHeaderComponent extends Component {
       if (!this.canCreateSubcase) {
         return this.toaster.error(
           this.intl.t('submission-edited-concurrently'),
+          this.intl.t('warning-title')
+        );
+      }
+      await this.loadStartedSignFlows.perform();
+      if (this.hasStartedSignFlowOnUpdatedPieces) {
+        return this.toaster.error(
+          this.intl.t('cannot-accept-submission-with-started-sign-flow'),
           this.intl.t('warning-title')
         );
       }
