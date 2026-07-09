@@ -2,7 +2,7 @@ const selectors = {
   // all current mandatee name for specs who create new data with future dates so names have to be dynamic
   // titles are case sensitive in some views, can be circumvented by using {matchCase: false}.
   current: {
-    count: 10,
+    count: 9,
     first: {
       firstName: 'Matthias',
       lastName: 'Diependaele',
