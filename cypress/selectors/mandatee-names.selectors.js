@@ -65,8 +65,7 @@ const selectors = {
     // list of titles as shown when adding mandatees to signatures, only needed for current
     // if you update the length also update `have.length` where this list is checked
     signatureTitles: [
-      'Matthias Diependaele, Vlaams minister van Economie, Innovatie en Industrie, Buitenlandse Zaken, Digitalisering en Facilitair Management',
-      'Matthias Diependaele, Minister-president van de Vlaamse Regering',
+      'Matthias Diependaele, Vlaams minister van Economie, Innovatie en Industrie, Buitenlandse Zaken, Digitalisering en Facilitair Management, Minister-president van de Vlaamse Regering',
       'Melissa Depraetere, Vlaams minister van Wonen, Energie en Klimaat, Toerisme en Jeugd',
       'Hilde Crevits, Vlaams minister van Binnenland, Steden- en Plattelandsbeleid, Samenleven, Integratie en Inburgering, Bestuurszaken, Sociale Economie en Zeevisserij',
       'Ben Weyts, Vlaams minister van Begroting en Financiën, Vlaamse Rand, Onroerend Erfgoed en Dierenwelzijn',
