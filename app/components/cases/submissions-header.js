@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 /**
  * @argument onSetFilter
@@ -32,6 +31,6 @@ export default class SubmissionsHeader extends Component {
   });
 
   get mayCreateSubmissions() {
-    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length && isEnabledCabinetSubmissions();
+    return this.currentSession.may('create-submissions') && this.linkedMandatees?.length;
   }
 }
