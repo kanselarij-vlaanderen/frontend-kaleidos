@@ -13,7 +13,7 @@
           <Auk::Tab @route="submissions.ongoing">
             {{t "to-follow-up"}}
           </Auk::Tab>
-          {{#if (user-may "view-concept-submissions")}}
+          {{#if (or (user-may "view-concept-submissions") (user-may "view-all-concept-submissions"))}}
             <Auk::Tab @route="submissions.concepts">
               {{t "submissions-concepts"}}
             </Auk::Tab>

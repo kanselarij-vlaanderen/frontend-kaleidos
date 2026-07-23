@@ -26,6 +26,14 @@
               @onDateFromClear={{set this "dateFrom" undefined}}
               @onDateToClear={{set this "dateTo" undefined}}
             />
+            {{#if (user-may "view-all-concept-submissions")}}
+              <AuCheckbox
+                @checked={{this.showAllOrganizations}}
+                @onChange={{this.toggleShowAllOrganizations}}
+              >
+                {{t "show-other-organizations"}}
+              </AuCheckbox>
+            {{/if}}
           </div>
         </Auk::MobileFilters>
       </div>
