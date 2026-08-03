@@ -2,7 +2,6 @@ import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { singularize } from '@ember-data/request-utils/string'
 import fetch from 'fetch';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import generateReportName from 'frontend-kaleidos/utils/generate-report-name';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
@@ -233,9 +232,6 @@ export default class AgendaService extends Service {
    * @argument submission
    */
   async putDraftSubmissionOnAgenda(meeting, submission) {
-    if (!isEnabledCabinetSubmissions()) {
-      return;
-    }
     const url = `/meetings/${meeting.id}/submit-submission`;
     const response = await fetch(url, {
       method: 'POST',
@@ -252,9 +248,6 @@ export default class AgendaService extends Service {
   }
 
   async getOpenMeetings() {
-    if (!isEnabledCabinetSubmissions()) {
-      return;
-    }
     const url = `/meetings/open`;
     const response = await fetch(url, {
       method: 'GET',

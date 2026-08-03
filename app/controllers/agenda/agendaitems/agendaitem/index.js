@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { reorderAgendaitemsOnAgenda } from 'frontend-kaleidos/utils/agendaitem-utils';
 import { isPresent } from '@ember/utils';
-import { isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class IndexAgendaitemAgendaitemsAgendaController extends Controller {
   @service store;
@@ -32,10 +31,6 @@ export default class IndexAgendaitemAgendaitemsAgendaController extends Controll
 
   get isClosedMeeting() {
     return isPresent(this.meeting.agenda.get('id'));
-  }
-
-  get enableVlaamsParlement() {
-    return isEnabledVlaamsParlement();
   }
 
   async navigateToNeighbouringItem(agendaItemType, previousNumber) {
