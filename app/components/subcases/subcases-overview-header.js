@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import { isSameDay } from 'date-fns';
 
 export default class SubCasesOverviewHeader extends Component {
@@ -45,7 +44,6 @@ export default class SubCasesOverviewHeader extends Component {
 
   get mayCreateSubmissions() {
     return (
-      isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.loadSubmissionsData.isIdle &&
       this.currentSession.may('create-submissions') &&
@@ -69,7 +67,7 @@ export default class SubCasesOverviewHeader extends Component {
   loadSubmissionsData = task(async () => {
     this.currentSubmission = null;
     this.mayViewCurrentSubmission = false;
-    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
+    if (this.currentSession.may('create-submissions')) {
       const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
       if (!latestSubmission?.id) {
         this.hasOngoingSubmissions = false;

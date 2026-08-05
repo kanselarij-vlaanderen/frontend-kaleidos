@@ -1,6 +1,5 @@
 import EmberRouter from '@ember/routing/router';
 import config from './config/environment';
-import { isEnabledCabinetSubmissions, isEnabledDataMonitoring } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -34,40 +33,30 @@ Router.map(function() {
     });
     this.route('documents', { path: '/documenten', });
     this.route('minutes', { path: '/notulen', });
-    if (isEnabledCabinetSubmissions()) {
-      this.route('submissions', { path: '/indieningen', });
-    }
+    this.route('submissions', { path: '/indieningen', });
   });
 
   this.route('cases', { path: '/dossiers', }, function() {
-    if (isEnabledCabinetSubmissions()) {
-      this.route('new-submission', { path: '/nieuwe-indiening' });
-      this.route('submissions', { path: '/indieningen' }, function() {
-        this.route('submission', { path: ':submission_id' });
-      });
-    }
+    this.route('new-submission', { path: '/nieuwe-indiening' });
+    this.route('submissions', { path: '/indieningen' }, function() {
+      this.route('submission', { path: ':submission_id' });
+    });
     this.route('case', { path: ':id', }, function() {
       this.route('parliament-flow', { path: '/parlement'}, function() {});
       this.route('publication-flow', { path: '/publicatie/:publication_id'});
       this.route('subcases', { path: '/deeldossiers', }, function() {
         this.route('subcase', { path: ':subcase_id', }, function() {
-          if (isEnabledCabinetSubmissions()) {
-            this.route('new-submission', { path: '/nieuwe-indiening' });
-          }
+          this.route('new-submission', { path: '/nieuwe-indiening' });
         });
         this.route('add-subcase', { path: '/procedurestap-toevoegen',});
-        if (isEnabledCabinetSubmissions()) {
-          this.route('new-submission', { path: '/nieuwe-indiening' });
-        }
+        this.route('new-submission', { path: '/nieuwe-indiening' });
       });
     });
   });
-  if (isEnabledCabinetSubmissions()) {
-    this.route('submissions', { path: '/indieningen', }, function() {
-      this.route('ongoing', { path: '/opvolgen' });
-      this.route('concepts', { path: '/concepten' });
-    });
-  }
+  this.route('submissions', { path: '/indieningen', }, function() {
+    this.route('ongoing', { path: '/opvolgen' });
+    this.route('concepts', { path: '/concepten' });
+  });
 
   this.route('newsletters', { path: '/kort-bestek', }, function() {
     this.route('search', { path: '/zoeken', });
@@ -132,12 +121,10 @@ Router.map(function() {
     });
     this.route('emails', { path: '/emailberichten', });
   });
-  if (isEnabledDataMonitoring()) {
-    this.route('monitoring',  function() {
-      this.route('data-propagation', { path: '/data-propagatie', });
-      this.route('newsletter', { path: '/publicaties', });
-    });
-  }
+  this.route('monitoring',  function() {
+    this.route('data-propagation', { path: '/data-propagatie', });
+    this.route('newsletter', { path: '/publicaties', });
+  });
 
   this.route('document', { path: '/document/:piece_id', });
 

@@ -1,6 +1,5 @@
 import Service, { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 import { SUBMISSION_ALLOWED_MIME_TYPES, SUBMISSION_ALLOWED_EXTENSION } from 'frontend-kaleidos/config/config';
 
 export default class DraftSubmissionService extends Service {
@@ -176,7 +175,7 @@ export default class DraftSubmissionService extends Service {
   }
 
   canSubmitNewDocumentsOnSubcase = async(subcase) => {
-    if (!isEnabledCabinetSubmissions() || !this.currentSession.may('create-submissions')) {
+    if (!this.currentSession.may('create-submissions')) {
       return false;
     }
     const submitter = await subcase.requestedBy;

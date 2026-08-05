@@ -346,7 +346,7 @@ export default class SubmissionHeaderComponent extends Component {
     return piece;
   });
 
-  createSubcase = task({ drop: true }, 
+  createSubcase = task({ drop: true },
     async (
       _fullCopy = false, // unused
       meeting = null,
@@ -393,7 +393,7 @@ export default class SubmissionHeaderComponent extends Component {
         await decisionmakingFlow.save();
 
         const _case = this.store.createRecord('case', {
-          shortTitle: this.args.submission.decisionmakingFlowTitle,
+          shortTitle: trimText(this.args.submission.decisionmakingFlowTitle),
           created: this.args.submission.created,
           decisionmakingFlow,
         });

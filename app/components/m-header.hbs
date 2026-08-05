@@ -28,7 +28,7 @@
               data-test-m-header-cases>
               {{t "cases"}}
             </Auk::Tab>
-            {{#if (and (user-may "view-submissions") this.isEnabledCabinetSubmissions)}}
+            {{#if (user-may "view-submissions")}}
               <Auk::Tab
                 @route="submissions.ongoing"
                 @current-when="submissions cases.submissions cases.new-submission"
@@ -63,7 +63,7 @@
                 {{t "settings"}}
               </Auk::Tab>
             {{/if}}
-            {{#if (and (user-may "view-monitoring") this.isEnabledDataMonitoring)}}
+            {{#if (user-may "view-monitoring")}}
               <Auk::Tab
                 @route="monitoring"
               >
