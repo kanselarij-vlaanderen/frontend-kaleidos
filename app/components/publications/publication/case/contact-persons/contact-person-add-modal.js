@@ -49,10 +49,6 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     return this.selectedOrganization?.isNoOrganization ? null : this.selectedOrganization;
   }
 
-  get hasOrganizationSelection() {
-    return isPresent(this.selectedOrganization);
-  }
-
   searchOrganizations = task(async (searchTerm) => {
     await timeout(300);
     return this.loadOrganizations(searchTerm);
@@ -179,9 +175,6 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   async loadPersons(searchTerm) {
-    if (!this.hasOrganizationSelection) {
-      return [];
-    }
     const query = {
       'page[size]': 40,
       sort: 'last-name,first-name',
