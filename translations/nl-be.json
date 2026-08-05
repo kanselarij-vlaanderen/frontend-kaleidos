@@ -782,7 +782,7 @@
   "add-organization": "Organisatie toevoegen",
   "search-organization": "Zoek een organisatie",
   "organizations-empty-result": "Geen organisaties gevonden",
-  "organization-with-same-name-exists": "Er bestaat al een organisatie met dezelfde naam, gebruik die of kies een andere naam.",
+  "organization-with-same-name-exists": "Er bestaat al een organisatie met deze naam. Gelieve deze te gebruiken of een andere naam in te geven.",
   "search-contact-person": "Zoek een contactpersoon",
   "contact-persons-empty-result": "Geen contactpersonen gevonden",
   "create-new-contact-person": "Nieuwe contactpersoon aanmaken",
