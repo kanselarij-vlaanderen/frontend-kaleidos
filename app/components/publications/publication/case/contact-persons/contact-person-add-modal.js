@@ -41,8 +41,8 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
           || (this.isCreatingNewPerson && isPresent(this.firstName) && isPresent(this.lastName))
       ),
     });
-    this.organizations = this.loadOrganizations('');
-    this.setOrganization(NO_ORGANIZATION);
+    this.organizations = this.loadOrganizations();
+    this.selectOrganization(NO_ORGANIZATION);
   }
 
   get organization() {
@@ -92,7 +92,7 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   @action
-  async setOrganization(selection) {
+  async selectOrganization(selection) {
     this.selectedOrganization = selection;
     this.selectedPerson = undefined;
     this.isCreatingNewPerson = false;
@@ -149,7 +149,7 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
       );
     } else {
       await organization.save();
-      this.setOrganization(organization);
+      this.selectOrganization(organization);
       this.isOpenOrganizationAddModal = false;
     }
   }
