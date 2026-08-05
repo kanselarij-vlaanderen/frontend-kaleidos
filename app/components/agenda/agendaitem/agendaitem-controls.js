@@ -4,7 +4,6 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -58,18 +57,14 @@ export default class AgendaitemControls extends Component {
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
-      if (isEnabledVlaamsParlement()) {
-        if (this.currentSession.may('send-only-specific-cases-to-vp')) {
-          if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-            this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
-          } else {
-            this.canSendToVP = false;
-          }
-        } else if (this.currentSession.may('send-cases-to-vp')) {
+      if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+        if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
           this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
         } else {
           this.canSendToVP = false;
         }
+      } else if (this.currentSession.may('send-cases-to-vp')) {
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
       } else {
         this.canSendToVP = false;
       }
@@ -151,7 +146,7 @@ export default class AgendaitemControls extends Component {
   }
 
   get agendaItemWasSubmitted() {
-    return this.submissions?.length === 1 && isEnabledCabinetSubmissions();
+    return this.submissions?.length === 1;
   }
 
   get deleteWarningText() {

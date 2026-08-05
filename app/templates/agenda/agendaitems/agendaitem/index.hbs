@@ -57,12 +57,10 @@
   </Toolbar.Group>
 </Auk::Toolbar>
 
-{{#if this.enableVlaamsParlement}}
-  {{#if (and this.parliamentFlow (not this.parliamentFlow.isReceived))}}
-    <Vp::SubmissionsAlert
-      @parliamentFlow={{this.parliamentFlow}}
-    />
-  {{/if}}
+{{#if (and this.parliamentFlow (not this.parliamentFlow.isReceived))}}
+  <Vp::SubmissionsAlert
+    @parliamentFlow={{this.parliamentFlow}}
+  />
 {{/if}}
 
 <div class="auk-u-mb-8">

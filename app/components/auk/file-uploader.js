@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { task } from 'ember-concurrency';
-import { isEnabledCabinetSubmissions } from '../../utils/feature-flag';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
 /**
@@ -71,7 +70,7 @@ export default class FileUploader extends Component {
       let body;
       try {
         const response = await file.upload(
-          (this.args.isSubmission && isEnabledCabinetSubmissions())
+          this.args.isSubmission
             ? '/draft-files'
             : '/files'
         );
@@ -86,7 +85,7 @@ export default class FileUploader extends Component {
         throw error;
       }
       const fileFromStore = await this.store.findRecord(
-        (this.args.isSubmission && isEnabledCabinetSubmissions())
+        this.args.isSubmission
           ? 'draft-file'
           : 'file',
         body.data.id
