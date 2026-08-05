@@ -15,10 +15,7 @@ FROM semtech/static-file-service:0.2.0
 
 ENV EMBER_ENABLE_IMPERSONATION=""
 ENV EMBER_ENABLE_DEBUG=""
-ENV EMBER_ENABLE_VLAAMS_PARLEMENT=""
-ENV EMBER_ENABLE_CABINET_SUBMISSIONS=""
 ENV EMBER_DISABLE_SESSION_POLLING=""
-ENV EMBER_ENABLE_DATA_MONITORING=""
 
 COPY ./proxy/compression.conf /config/compression.conf
 COPY ./proxy/file-upload.conf /config/file-upload.conf

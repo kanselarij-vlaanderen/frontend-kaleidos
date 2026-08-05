@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
   /**
@@ -21,10 +20,6 @@ export default class AgendaAgendaHeaderAgendaTabsComponent extends Component {
 
   get responsiveBreakpoint() {
     return this.args.responsiveBreakpoint || 'small';
-  }
-
-  get isEnabledCabinetSubmissions() {
-    return isEnabledCabinetSubmissions();
   }
 
   loadFirstAgendaitem = task(async () => {
