@@ -7,6 +7,7 @@ import { timeout, task } from 'ember-concurrency';
 import {
   ValidatorSet, Validator
 } from 'frontend-kaleidos/utils/validators';
+import { LIVE_SEARCH_DEBOUNCE_TIME, PAGE_SIZE } from 'frontend-kaleidos/config/config';
 const NO_ORGANIZATION = Object.freeze({ isNoOrganization: true });
 
 function personNameKey(person) {
@@ -30,8 +31,6 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   @tracked selectedPerson;
   @tracked isCreatingNewPerson = false;
 
-  NO_ORGANIZATION = NO_ORGANIZATION;
-
   constructor() {
     super(...arguments);
 
@@ -50,13 +49,13 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   searchOrganizations = task(async (searchTerm) => {
-    await timeout(300);
+    await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     return this.loadOrganizations(searchTerm);
   });
 
 
   searchPersons = task(async (searchTerm) => {
-    await timeout(300);
+    await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     return this.loadPersons(searchTerm);
   });
 
@@ -163,23 +162,25 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
       // TODO need a better filter, add a boolean to model maybe ?
       query['filter[:gt:name]'] = ''; // workaround to filter on resources that have a 'name' attribute
     }
+
     const organizations = await this.store.query('organization', {
       ...query,
-      'page[size]': 40,
+      'page[size]': PAGE_SIZE.SELECT,
       sort: 'name',
     });
+
     if (searchTerm) {
       return organizations;
+    } else {
+      return [NO_ORGANIZATION, ...organizations.slice()];
     }
-    return [NO_ORGANIZATION, ...organizations.slice()];
   }
 
   async loadPersons(searchTerm) {
     const query = {
-      'page[size]': 40,
+      'page[size]': PAGE_SIZE.PERSONS_OF_ORGANIZATION,
       sort: 'last-name,first-name',
       include: 'contact-person',
-
       'filter[:has:contact-person]': true,
     };
     if (this.selectedOrganization.isNoOrganization) {
