@@ -203,7 +203,7 @@ export default class PieceAccessLevelService extends Service {
       'filter[submission-activities][subcase][:id:]': subcase.id,
       'filter[:has-no:next-piece]': true,
     });
-    
+
     await Promise.all(pieces.slice().map(async (piece) => {
       await this.strengthenAccessLevelToConfidential(piece);
     }));
@@ -267,7 +267,7 @@ export default class PieceAccessLevelService extends Service {
   /**
    * Update signedPiece and signedPieceCopy based on updates on main piece
    * strengthening or weakening accordingly
-   */ 
+   */
   async updateSignedPieceAccessLevels(piece) {
     await this._updateSignedPieceOfPiece(piece);
     await this._updateSignedPieceCopyOfPiece(piece);
@@ -351,8 +351,7 @@ export default class PieceAccessLevelService extends Service {
     );
     if (
       mayViewConfidentialPiece &&
-      (accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK ||
-        accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN)
+      accessLevel?.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
     ) {
       const submissionActivity = await this.store.queryOne('submission-activity', {
         filter: {
@@ -390,7 +389,7 @@ export default class PieceAccessLevelService extends Service {
         if (submission) {
           mandatees = await submission.mandatees;
         }
-      } 
+      }
       if (mandatees.length) {
         const currentUserOrganization = await this.currentSession.organization;
         const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
