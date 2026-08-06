@@ -70,9 +70,18 @@ export const sortDocumentContainers = async (
 };
 
 export const sortPieceVersions = (pieces) => {
-  // This function wraps sortPieces just so that the intent of calling it
-  // is more obvious, i.e. when calling this function you're passing in all
-  // the pieces that belong to a single document container.
+  // Sort by created date, if it's missing fallback to sorting by name
+  const createdAvailable = pieces.every((piece) => piece.created);
+  if (createdAvailable) {
+    return pieces.slice().sort(
+      (pieceA, pieceB) =>
+        pieceB.created - pieceA.created ||
+        compareFunction(
+          new VRDocumentName(pieceA.name),
+          new VRDocumentName(pieceB.name)
+        )
+    );
+  }
   return sortPiecesByName(pieces, VRDocumentName, compareFunction);
 };
 
