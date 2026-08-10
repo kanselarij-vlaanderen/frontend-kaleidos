@@ -17,9 +17,7 @@
       {{else}}
         {{#if @multiple}}
           {{#each @statusChangeActivities as |statusChangeActivityArray|}}
-            {{! resource attribute for debugging with SPARQL }}
             <div
-              resource={{get (object-at 0 statusChangeActivityArray) "submission.uri"}}
               class={{if (has-next statusChangeActivityArray @statusChangeActivities) "auk-u-mb-4"}}
             >
               {{#let (object-at (add statusChangeActivityArray.length -1) statusChangeActivityArray) as |creationActivity|}}
