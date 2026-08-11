@@ -39,6 +39,11 @@ export default class CasesSubmissionsConceptsController extends Controller {
       submissionFilter: {
         type: 'string',
       },
+    },
+    {
+      showAllOrganizations: {
+        type: 'boolean',
+      },
     }
   ];
 
@@ -50,6 +55,7 @@ export default class CasesSubmissionsConceptsController extends Controller {
   @tracked isLoadingModel;
   @tracked filtersOpen = false;
   @tracked submissionFilter = null;
+  @tracked showAllOrganizations = false;
 
   constructor() {
     super(...arguments);
@@ -69,6 +75,11 @@ export default class CasesSubmissionsConceptsController extends Controller {
 
   setDateFrom = (date) => (this.dateFrom = formatDate(date));
   setDateTo = (date) => (this.dateTo = formatDate(date));
+
+  toggleShowAllOrganizations = () => {
+    this.showAllOrganizations = !this.showAllOrganizations;
+    this.page = 0;
+  };
 
   navigateToSubmission = (submission) => {
     this.router.transitionTo(
