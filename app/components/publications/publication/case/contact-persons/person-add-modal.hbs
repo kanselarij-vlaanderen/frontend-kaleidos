@@ -1,0 +1,93 @@
+<Auk::Modal
+  @size="medium">
+  <Auk::Modal::Header
+    @title={{t "create-new-contact-person"}}
+    @onClose={{@onCancel}}
+    @closeDisabled={{this.save.isRunning}}/>
+  <Auk::Modal::Body>
+    <Utils::LoadableContent @isLoading={{this.save.isRunning}} @reserveSpace={{true}}>
+      <div class="au-c-form">
+        <AuFormRow>
+          <AuLabel for="organizationDisplayInput">
+            {{t "organization"}}
+          </AuLabel>
+          <AuInput
+            id="organizationDisplayInput"
+            @width="block"
+            @disabled={{true}}
+            value={{if @organization @organization.name (t "no-organization-select-option")}}
+          />
+        </AuFormRow>
+        <div class="auk-o-grid">
+          <div class="auk-o-grid-col-6">
+            <AuFormRow>
+              <AuLabel
+                for="firstNameInput"
+                @required={{true}}
+                @error={{this.validators.firstName.showError}}
+              >
+                {{t "first-name"}}
+              </AuLabel>
+              <AuInput
+                data-test-contact-person-add-first-name
+                id="firstNameInput"
+                value={{this.firstName}}
+                @width="block"
+                @error={{this.validators.firstName.showError}}
+                {{on "input" this.onInputFirstName}}
+              />
+            </AuFormRow>
+          </div>
+          <div class="auk-o-grid-col-6">
+            <AuFormRow>
+              <AuLabel
+                for="lastNameInput"
+                @required={{true}}
+                @error={{this.validators.lastName.showError}}
+              >
+                {{t "last-name"}}
+              </AuLabel>
+              <AuInput
+                data-test-contact-person-add-last-name
+                id="lastNameInput"
+                value={{this.lastName}}
+                @width="block"
+                @error={{this.validators.lastName.showError}}
+                {{on "input" this.onInputLastName}}
+              />
+            </AuFormRow>
+          </div>
+        </div>
+        <AuFormRow>
+          <AuLabel for="emailInput">
+            {{t "email"}}
+          </AuLabel>
+          <AuInput
+            data-test-contact-person-add-email
+            id="emailInput"
+            value={{this.email}}
+            @width="block"
+            {{on "input" (pick "target.value" (set this "email"))}}
+          />
+        </AuFormRow>
+      </div>
+    </Utils::LoadableContent>
+  </Auk::Modal::Body>
+  <Auk::Modal::Footer
+    @onCancel={{@onCancel}}
+    @cancelDisabled={{this.save.isRunning}}
+    data-test-person-add-cancel
+  >
+    <AuButton
+      data-test-person-add-submit
+      @skin="primary"
+      @icon="plus"
+      @disabled={{not this.validators.areValid}}
+      @loading={{this.save.isRunning}}
+      @loadingMessage={{t "loading"}}
+      {{on "click" this.save.perform}}
+    >
+      {{t "add"}}
+    </AuButton>
+  </Auk::Modal::Footer>
+</Auk::Modal>

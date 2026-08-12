@@ -16,29 +16,21 @@ function personNameKey(person) {
 
 export default class PublicationsPublicationCaseContactPersonAddModalComponent extends Component {
   @service store;
-  @service intl;
-  @service toaster;
 
   @tracked isOpenOrganizationAddModal = false;
+  @tracked isOpenPersonAddModal = false;
 
   @tracked organizations;
   @tracked persons = [];
 
-  @tracked firstName;
-  @tracked lastName;
-  @tracked email;
   @tracked selectedOrganization;
   @tracked selectedPerson;
-  @tracked isCreatingNewPerson = false;
 
   constructor() {
     super(...arguments);
 
     this.validators = new ValidatorSet({
-      person: new Validator(() =>
-        isPresent(this.selectedPerson)
-          || (this.isCreatingNewPerson && isPresent(this.firstName) && isPresent(this.lastName))
-      ),
+      person: new Validator(() => isPresent(this.selectedPerson)),
     });
     this.organizations = this.loadOrganizations();
     this.selectOrganization(NO_ORGANIZATION);
@@ -53,73 +45,29 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
     return this.loadOrganizations(searchTerm);
   });
 
-
   searchPersons = task(async (searchTerm) => {
     await timeout(LIVE_SEARCH_DEBOUNCE_TIME);
     return this.loadPersons(searchTerm);
   });
 
-
   save = task(async () => {
-    let contactPersonProperties;
-    if (this.selectedPerson) {
-      const existingContactPerson = await this.selectedPerson.contactPerson;
-      contactPersonProperties = {
-        contactPerson: existingContactPerson,
-      };
-    } else {
-      contactPersonProperties = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: isPresent(this.email) ? this.email : undefined,
-        organization: this.organization,
-      };
-    }
-    await this.args.onSave(contactPersonProperties);
+    const existingContactPerson = await this.selectedPerson.contactPerson;
+    await this.args.onSave({
+      contactPerson: existingContactPerson,
+    });
   });
-
-  @action
-  onInputFirstName(event) {
-    this.firstName = event.target.value;
-    this.validators.person.enableError();
-  }
-
-  @action
-  onInputLastName(event) {
-    this.lastName = event.target.value;
-    this.validators.person.enableError();
-  }
 
   @action
   async selectOrganization(selection) {
     this.selectedOrganization = selection;
     this.selectedPerson = undefined;
-    this.isCreatingNewPerson = false;
-    this.firstName = undefined;
-    this.lastName = undefined;
-    this.email = undefined;
     this.persons = await this.loadPersons();
   }
 
   @action
   selectPerson(person) {
     this.selectedPerson = person;
-    this.isCreatingNewPerson = false;
     this.validators.person.enableError();
-  }
-
-  @action
-  startCreatingNewPerson() {
-    this.selectedPerson = undefined;
-    this.isCreatingNewPerson = true;
-  }
-
-  @action
-  cancelCreatingNewPerson() {
-    this.isCreatingNewPerson = false;
-    this.firstName = undefined;
-    this.lastName = undefined;
-    this.email = undefined;
   }
 
   @action
@@ -133,24 +81,27 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
   }
 
   @action
-  async addOrganization(organization) {
-    const name = organization.name;
-    const existingOrganizations = await this.loadOrganizations(name);
-    const normalized = name?.trim().toLowerCase();
-    const duplicate = existingOrganizations.find(
-      (o) => o.id !== organization.id && o.name?.trim().toLowerCase() === normalized
-    );
-    if (duplicate) {
-      organization.rollbackAttributes();
-      this.toaster.error(
-        this.intl.t('organization-with-same-name-exists'),
-        this.intl.t('warning-title')
-      );
-    } else {
-      await organization.save();
-      this.selectOrganization(organization);
-      this.isOpenOrganizationAddModal = false;
-    }
+  addOrganization(organization) {
+    this.selectOrganization(organization);
+    this.isOpenOrganizationAddModal = false;
+  }
+
+  @action
+  openPersonAddModal() {
+    this.isOpenPersonAddModal = true;
+  }
+
+  @action
+  closePersonAddModal() {
+    this.isOpenPersonAddModal = false;
+  }
+
+  @action
+  async addPerson(person) {
+    this.selectPerson(person);
+    this.isOpenPersonAddModal = false;
+    // Refresh the persons dropdown so the newly-created person is visible
+    this.persons = await this.loadPersons();
   }
 
   async loadOrganizations(searchTerm) {
@@ -205,11 +156,13 @@ export default class PublicationsPublicationCaseContactPersonAddModalComponent e
         linkedNameKeys.add(personNameKey(person));
       }
     }
-    return persons.filter((person) => {
-      const contactPersonId = person.belongsTo('contactPerson').id();
-      if (linkedContactPersonIds.has(contactPersonId)) return false;
-      if (linkedNameKeys.has(personNameKey(person))) return false;
-      return true;
-    });
+    const filtered = [];
+    for (const person of persons) {
+      const contactPerson = await person.contactPerson;
+      if (linkedContactPersonIds.has(contactPerson?.id)) continue;
+      if (linkedNameKeys.has(personNameKey(person))) continue;
+      filtered.push(person);
+    }
+    return filtered;
   }
 }

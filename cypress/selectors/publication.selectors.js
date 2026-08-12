@@ -124,9 +124,6 @@ const selectors = {
 
   // contact-person-add-modal
   contactPersonAdd: {
-    firstName: '[data-test-contact-person-add-first-name]',
-    lastName: '[data-test-contact-person-add-last-name]',
-    email: '[data-test-contact-person-add-email]',
     selectOrganization: '[data-test-contact-person-select-organization]',
     addOrganization: '[data-test-contact-person-add-organization]',
     selectPerson: '[data-test-contact-person-select-person]',
@@ -139,6 +136,15 @@ const selectors = {
     name: '[data-test-organization-add-name]',
     cancel: '[data-test-organization-add-cancel]',
     submit: '[data-test-organization-add-submit]',
+  },
+
+  // person-add-modal
+  personAdd: {
+    firstName: '[data-test-contact-person-add-first-name]',
+    lastName: '[data-test-contact-person-add-last-name]',
+    email: '[data-test-contact-person-add-email]',
+    cancel: '[data-test-person-add-cancel]',
+    submit: '[data-test-person-add-submit]',
   },
 
   // inscription-panel

@@ -17,13 +17,18 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @use contactPersons = resource(() => {
     const contactPersons = new TrackedArray([]);
     const calculateContactPersons = async () => {
+      await this.args.publicationFlow.contactPersons;
+      const all = await this.store.queryAll('contact-person', {
+        'filter[publication-flows][:id:]': this.args.publicationFlow.id,
+        include: 'person.organization',
+      });
       contactPersons.length = 0;
-      (await this.args.publicationFlow.contactPersons)
-        ?.slice()
-        ?.sort((p1, p2) =>
+      all
+        .slice()
+        .sort((p1, p2) =>
           (get(p1, 'person.lastName') ?? '').localeCompare(get(p2, 'person.lastName') ?? '')
             || (get(p1, 'person.firstName') ?? '').localeCompare(get(p2, 'person.firstName') ?? ''))
-        ?.forEach((p) => contactPersons.push(p));
+        .forEach((p) => contactPersons.push(p));
     };
     calculateContactPersons();
     return contactPersons;
@@ -72,7 +77,6 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @action
   async unlink(contactPerson) {
     const publicationFlow = this.args.publicationFlow;
-    
     const contactPersons = await publicationFlow.contactPersons;
     const idx = contactPersons.indexOf(contactPerson);
     if (idx >= 0) {
