@@ -70,19 +70,43 @@ export const sortDocumentContainers = async (
 };
 
 export const sortPieceVersions = (pieces) => {
-  // Sort by created date, if it's missing fallback to sorting by name
-  const createdAvailable = pieces.every((piece) => piece.created);
-  if (createdAvailable) {
-    return pieces.slice().sort(
-      (pieceA, pieceB) =>
-        pieceB.created - pieceA.created ||
-        compareFunction(
-          new VRDocumentName(pieceA.name),
-          new VRDocumentName(pieceB.name)
-        )
-    );
+  const chainSorted = sortPieceVersionsByVersionChain(pieces);
+
+  if (chainSorted) {
+    return chainSorted;
   }
   return sortPiecesByName(pieces, VRDocumentName, compareFunction);
+};
+
+// Sort newest-first by following the previousPiece/nextPiece version chain.
+const sortPieceVersionsByVersionChain = (pieces) => {
+  if (pieces.length <= 1) {
+    return pieces.slice();
+  }
+  try {
+    const piecesById = new Map(pieces.map((piece) => [piece.id, piece]));
+    const oldest = pieces.filter(
+      (piece) => !piecesById.has(piece.belongsTo('previousPiece').id())
+    );
+    const newest = pieces.filter(
+      (piece) => !piecesById.has(piece.belongsTo('nextPiece').id())
+    );
+    if (oldest.length !== 1 || newest.length !== 1) {
+      return null;
+    }
+    const chain = [];
+    let current = oldest[0];
+    while (current && chain.length < pieces.length) {
+      chain.push(current);
+      current = piecesById.get(current.belongsTo('nextPiece').id());
+    }
+    if (chain.length !== pieces.length || chain.at(-1) !== newest[0]) {
+      return null;
+    }
+    return chain.reverse();
+  } catch {
+    return null;
+  }
 };
 
 export const sortPieces = async (

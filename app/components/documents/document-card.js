@@ -274,7 +274,10 @@ export default class DocumentsDocumentCardComponent extends Component {
   });
 
   loadVersionHistory = task(async () => {
-    const piecesFromModel = await this.documentContainer.hasMany('pieces').reload();
+    const piecesFromModel = await this.store.queryAll('piece', {
+      'filter[document-container][:id:]': this.documentContainer.id,
+      include: 'previous-piece,next-piece',
+    });
     this.pieces = piecesFromModel.slice();
     for (const piece of this.pieces) {
       await piece.belongsTo('accessLevel').reload();
