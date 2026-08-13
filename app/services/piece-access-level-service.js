@@ -290,12 +290,11 @@ export default class PieceAccessLevelService extends Service {
       // to an agenda so it will always be in non-draft status.
       return false;
     } else {
-      if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE) {
+      if (accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INTERN_SECRETARIE || accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN) {
         // no propagation required, so never in draft
         return false;
       } else if (
-        accessLevel.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK ||
-        accessLevel.uri === CONSTANTS.ACCESS_LEVELS.INGETROKKEN
+        accessLevel.uri === CONSTANTS.ACCESS_LEVELS.VERTROUWELIJK
       ) {
         // draft if:
         // - design-agenda without previous version
