@@ -35,7 +35,6 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   @service draftSubmissionService;
   @service fileConversionService;
   @service currentSession;
-  @service signatureService;
 
   @tracked isOpenUploadModal = false;
   @tracked isOpenVerifyDeleteModal = false;
@@ -53,8 +52,6 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
 
   @tracked sourceFile;
   @tracked derived;
-
-  @tracked hasStartedSignFlow = false;
 
   constructor() {
     super(...arguments);
@@ -93,11 +90,7 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
   }
 
   get mayShowAddNewVersion() {
-    return (
-      this.args.isEditable &&
-      this.piece.constructor.modelName === 'piece' &&
-      !this.hasStartedSignFlow
-    );
+    return this.args.isEditable && this.piece.constructor.modelName === 'piece';
   }
 
   get dateToShowLabel() {
@@ -164,11 +157,6 @@ export default class DocumentsDraftDocumentCardComponent extends Component {
     } else {
       throw new Error(
         `You should provide @piece or @documentContainer as an argument to ${this.constructor.modelName}`
-      );
-    }
-    if (this.piece?.constructor.modelName === 'piece') {
-      this.hasStartedSignFlow = await this.signatureService.hasStartedSignFlow(
-        this.piece
       );
     }
   });
