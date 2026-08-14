@@ -5,7 +5,8 @@ import fetch from 'fetch';
 import constants from 'frontend-kaleidos/config/constants';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 
-const { MARKED, PREPARED } = constants.SIGNFLOW_STATUSES;
+const { MARKED, PREPARED, TO_BE_APPROVED, TO_BE_SIGNED, SIGNED } =
+  constants.SIGNFLOW_STATUSES;
 
 export default class SignatureService extends Service {
   @service store;
@@ -281,6 +282,17 @@ export default class SignatureService extends Service {
     const signFlow = await signSubcase?.signFlow;
     const status = await signFlow?.belongsTo('status').reload();
     return status?.uri === MARKED;
+  }
+
+  // Check if a sign flow has been sent to signinghub and isn't refused/canceled yet
+  async hasStartedSignFlow(piece) {
+    const signMarkingActivity = await piece.belongsTo('signMarkingActivity').reload();
+    const signSubcase = await signMarkingActivity?.signSubcase;
+    const signFlow = await signSubcase?.signFlow;
+    const status = await signFlow?.belongsTo('status').reload();
+    return [PREPARED, TO_BE_APPROVED, TO_BE_SIGNED, SIGNED].includes(
+      status?.uri
+    );
   }
 
   async getSigningHubUrl(signFlow, piece) {

@@ -17,7 +17,9 @@
       {{else}}
         {{#if @multiple}}
           {{#each @statusChangeActivities as |statusChangeActivityArray|}}
-            <div class={{if (has-next statusChangeActivityArray @statusChangeActivities) "auk-u-mb-4"}}>
+            <div
+              class={{if (has-next statusChangeActivityArray @statusChangeActivities) "auk-u-mb-4"}}
+            >
               {{#let (object-at (add statusChangeActivityArray.length -1) statusChangeActivityArray) as |creationActivity|}}
                 <Submission::StatusChangeActivity
                   @activity={{creationActivity}}
