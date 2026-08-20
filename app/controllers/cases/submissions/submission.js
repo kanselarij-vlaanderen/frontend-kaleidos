@@ -22,6 +22,9 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   @service documentService;
   @service submissionService;
   @service draftSubmissionService;
+  @service cabinetMail;
+  @service agendaService;
+  @service subcaseService;
 
   @tracked isOpenPieceUploadModal = false;
   @tracked isOpenBatchDetailsModal = false;
@@ -71,6 +74,16 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       this.currentSession.may('edit-in-treatment-submissions') &&
       this.model.isInTreatment;
     return this.isUpdate ? (mayIfAdmin || mayIfSecretarie) : this.mayEdit;
+  }
+
+  get mayResendNotifications() {
+    // Secretarie (or admin) can edit the notification data while the
+    // submission is in treatment, so they may also resend the mails
+    return (
+      (this.currentSession.may('always-edit-submissions') ||
+        this.currentSession.may('edit-in-treatment-submissions')) &&
+      this.model.isInTreatment
+    );
   }
 
   get sortedNewPieces() {
@@ -141,6 +154,83 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       );
     }
   }
+
+  getMeetingForNotificationMails = async () => {
+    let meeting = await this.model.meeting;
+    if (!meeting?.id) {
+      // get meeting when not propagated yet
+      const agenda = await this.agendaService.getAgendaAndMeetingForSubmission(
+        this.model
+      );
+      meeting = await agenda?.createdFor;
+    }
+    return meeting;
+  };
+
+  getPostponedResendInfo = async () => {
+    let oldMeeting = null;
+    let isReSubmittingPostponed = false;
+    if (this.wasPostponed && this.subcase?.id) {
+      const decisionActivity =
+        await this.subcaseService.getLatestDecisionActivity(this.subcase);
+      const decisionResultCode = await decisionActivity?.decisionResultCode;
+      const relatedAgendas = await this.subcaseService.getRelatedAgendas(
+        this.subcase
+      );
+      if (
+        relatedAgendas.length &&
+        relatedAgendas[0].agenda.status.uri ===
+          CONSTANTS.AGENDA_STATUSSES.APPROVED &&
+        decisionResultCode?.uri ===
+          CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD
+      ) {
+        isReSubmittingPostponed = true;
+        oldMeeting = relatedAgendas[0].meeting;
+      }
+    }
+    return { oldMeeting, isReSubmittingPostponed };
+  };
+
+  resendNotificationMails = task({ drop: true }, async () => {
+    const meeting = await this.getMeetingForNotificationMails();
+    if (!meeting?.id) {
+      this.toaster.error(
+        this.intl.t('notification-mails-could-not-be-sent'),
+        this.intl.t('warning-title')
+      );
+      return;
+    }
+    const submitStatuses = [
+      CONSTANTS.SUBMISSION_STATUSES.INGEDIEND,
+      CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND,
+      CONSTANTS.SUBMISSION_STATUSES.UPDATE_INGEDIEND,
+      CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND,
+    ];
+    // resend the mails of the latest submit type status change
+    const latestSubmitActivity = this.statusChangeActivities?.find((activity) =>
+      submitStatuses.includes(activity.status?.get('uri'))
+    );
+    const statusUri = latestSubmitActivity?.status?.get('uri');
+    if (statusUri === CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND) {
+      await this.cabinetMail.sendResubmissionMails(
+        this.model,
+        latestSubmitActivity.comment,
+        meeting
+      );
+    } else if (this.isUpdate) {
+      const { oldMeeting, isReSubmittingPostponed } =
+        await this.getPostponedResendInfo();
+      await this.cabinetMail.sendUpdateSubmissionMails(
+        this.model,
+        meeting,
+        oldMeeting,
+        isReSubmittingPostponed
+      );
+    } else {
+      await this.cabinetMail.sendFirstSubmissionMails(this.model, meeting);
+    }
+    this.toaster.success(this.intl.t('notification-mails-resent'));
+  });
 
   disableMandatee = (mandatee) => {
     return this.model.requestedBy?.get('id') === mandatee.id ;

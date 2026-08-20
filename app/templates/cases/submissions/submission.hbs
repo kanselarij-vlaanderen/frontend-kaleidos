@@ -90,6 +90,8 @@
       @onNotificationDataChanged={{this.updateLocalNotificationData}}
       @onSaveNotificationData={{this.saveNotificationDataOnModel}}
       @onCancelNotificationData={{this.rollbackLocalNotificationData}}
+      @allowResending={{this.mayResendNotifications}}
+      @onResendNotifications={{this.resendNotificationMails.perform}}
     />
 
     <div id="documents" class="auk-u-mb-4">

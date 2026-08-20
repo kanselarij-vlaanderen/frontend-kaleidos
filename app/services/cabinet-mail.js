@@ -47,6 +47,13 @@ export default class CabinetMailService extends Service {
     );
   }
 
+  // Returns a function that builds a full url to view a (draft-)piece,
+  // used to add direct document links in the notification mails
+  getPieceUrlBuilder() {
+    const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
+    return (piece) => `${hostUrlPrefix}${this.router.urlFor('document', piece.id)}`;
+  }
+
   getSubmissionCaseTitle = async(submission) => {
     let title = submission.decisionmakingFlowTitle;
     if (!title) {
@@ -98,6 +105,7 @@ export default class CabinetMailService extends Service {
     const subcase = await submission?.subcase;
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      getPieceUrl: this.getPieceUrlBuilder(),
       caseName: caseTitle,
       resubmitted: true,
       isUpdate: subcase?.id,
@@ -171,6 +179,7 @@ export default class CabinetMailService extends Service {
 
     const params = {
       submissionUrl: `${hostUrlPrefix}${submissionUrl}`,
+      getPieceUrl: this.getPieceUrlBuilder(),
       caseName: caseTitle,
       approvalComment: submission.approvalComment,
       notificationComment: submission.notificationComment,
