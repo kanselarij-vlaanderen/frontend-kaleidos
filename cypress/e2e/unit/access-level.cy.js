@@ -151,10 +151,10 @@ context('Access level tests', () => {
     cy.get(dependency.emberPowerSelect.option).contains(accessConfidential)
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces1');
-    cy.intercept('GET', '/document-containers/**').as('getDocumentContainers1');
+    cy.intercept('GET', '/pieces?filter**document-container**').as('getContainerPieces1');
     cy.get(document.batchDocumentsDetails.save).click()
       .wait('@patchPieces1')
-      .wait('@getDocumentContainers1');
+      .wait('@getContainerPieces1');
 
     checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet BIS', accessConfidential);
     checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet.pdf', accessConfidential);
@@ -176,10 +176,10 @@ context('Access level tests', () => {
     cy.get(dependency.emberPowerSelect.option).contains(accessInternal)
       .click();
     cy.intercept('PATCH', '/pieces/**').as('patchPieces2');
-    cy.intercept('GET', '/document-containers/**').as('getDocumentContainers2');
+    cy.intercept('GET', '/pieces?filter**document-container**').as('getContainerPieces2');
     cy.get(document.batchDocumentsDetails.save).click()
       .wait('@patchPieces2')
-      .wait('@getDocumentContainers2');
+      .wait('@getContainerPieces2');
 
     checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet BIS', accessInternal);
     checkPreviousVersionAccesLevel('publicatieDecreet TER', 'publicatieDecreet.pdf', accessInternal);
