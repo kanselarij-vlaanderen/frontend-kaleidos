@@ -30,12 +30,13 @@ export default class SubCasesOverviewHeader extends Component {
   }
 
   loadLinkedMandatees = task(async () => {
-    this.linkedMandatees = await this.store.queryAll('mandatee', {
+    const linkedMandatees = await this.store.queryAll('mandatee', {
       'filter[user-organizations][:id:]': this.currentSession.organization.id,
       'filter[:has-no:end]': true,
       include: 'mandate.role',
       sort: 'start',
     });
+    this.linkedMandatees = linkedMandatees.slice().sort((m1, m2) => m1.priority - m2.priority);
   });
 
   get archivePath() {
