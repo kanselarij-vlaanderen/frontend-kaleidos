@@ -19,6 +19,7 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
   @service draftSubmissionService;
   @service parliamentService;
   @service subcaseService;
+  @service documentService;
 
   @tracked isAssigningToAgenda = false;
   @tracked isAssigningToOtherCase = false;
@@ -284,6 +285,8 @@ export default class SubcasesSubcaseHeaderComponent extends Component {
     this.isAssigningToOtherCase = false;
 
     const subcases = await oldDecisionmakingFlow.hasMany('subcases').reload();
+    await this.documentService.syncCaseDocuments(oldCase.id);
+    await this.documentService.syncCaseDocuments(newCase.id);
     if (subcases.length === 0) {
       const publicationFlow = await this.store.queryOne('publication-flow', {
         'filter[case][:id:]': oldCase.id,

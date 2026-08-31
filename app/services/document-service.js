@@ -337,4 +337,15 @@ export default class DocumentService extends Service {
       }
     });
   }
+
+  // case-documents-sync service
+  async syncCaseDocuments(caseId) {
+    const response = await fetch(`/case-documents-sync/cases/${caseId}/sync`, {
+      method: 'POST',
+      headers: { Accept: 'application/vnd.api+json' },
+    });
+    if (!response.ok) {
+      this.toaster.error(`Could not sync case documents`);
+    }
+  }
 }
