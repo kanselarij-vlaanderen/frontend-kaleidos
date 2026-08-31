@@ -13,6 +13,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
 
   @tracked showApprovalAddressModal = false;
   @tracked showNotificationAddressModal = false;
+  @tracked showResendNotificationsModal = false;
   @tracked emailSettings;
   @tracked isEditing = false;
   @tracked approvalAddresses;
@@ -50,7 +51,7 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
     }
   });
 
-  onDidUpdate = task({ maxConcurrency: 1, restartable: true}, async () => {  
+  onDidUpdate = task({ maxConcurrency: 1, restartable: true}, async () => {
     if (!this.emailSettings) {
       // this includes calling the updateDefaultAddresses
       return await this.loadEmailSettings.perform();
@@ -175,6 +176,11 @@ export default class CasesSubmissionsNotificationsComponent extends Component {
   saveNotificationData = task(async () => {
     await this.args.onSaveNotificationData?.(this.notificationData);
     this.isEditing = false;
+  });
+
+  resendNotifications = task(async () => {
+    await this.args.onResendNotifications?.();
+    this.showResendNotificationsModal = false;
   });
 
   @action

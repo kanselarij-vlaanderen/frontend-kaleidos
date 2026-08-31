@@ -9,18 +9,32 @@
           {{t "notifications-submission"}}
         </h4>
       </Toolbar.Group>
-      {{#if (and @allowEditing (not this.isEditing) (not @hideEditingControls))}}
+      {{#if (and (or @allowEditing @allowResending) (not this.isEditing) (not @hideEditingControls))}}
         <Auk::Toolbar::Group @position="right">
-          <Auk::Toolbar::Item>
-            <AuButton
-              data-test-submission-notifications-edit
-              @skin="naked"
-              @icon="pencil"
-              {{on "click" (toggle "isEditing" this)}}
-            >
-              {{t "edit"}}
-            </AuButton>
-          </Auk::Toolbar::Item>
+          {{#if @allowResending}}
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-submission-notifications-resend
+                @skin="naked"
+                @icon="mail"
+                {{on "click" (toggle "showResendNotificationsModal" this)}}
+              >
+                {{t "resend-notifications"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          {{/if}}
+          {{#if @allowEditing}}
+            <Auk::Toolbar::Item>
+              <AuButton
+                data-test-submission-notifications-edit
+                @skin="naked"
+                @icon="pencil"
+                {{on "click" (toggle "isEditing" this)}}
+              >
+                {{t "edit"}}
+              </AuButton>
+            </Auk::Toolbar::Item>
+          {{/if}}
         </Auk::Toolbar::Group>
       {{/if}}
     </Auk::Toolbar>
@@ -254,3 +268,13 @@
     @onCancel={{toggle "showNotificationAddressModal" this}}
   />
 {{/if}}
+
+<ConfirmationModal
+  @modalOpen={{this.showResendNotificationsModal}}
+  @title={{t "resend-notifications"}}
+  @message={{t "resend-notifications-confirmation-message"}}
+  @onConfirm={{this.resendNotifications.perform}}
+  @onCancel={{toggle "showResendNotificationsModal" this}}
+  @confirmMessage={{t "resend-notifications"}}
+  @loading={{this.resendNotifications.isRunning}}
+/>
