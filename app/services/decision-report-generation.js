@@ -87,9 +87,7 @@ export default class DecisionReportGeneration extends Service {
       'generate-decision-report'
     );
     if (jobResult) {
-      if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS
-      ) {
+      if (jobResult.status === CONSTANTS.JOB_STATUSES.SUCCESS) {
         this.toaster.close(generatingBundleToast);
         this.toaster.success(
           this.intl.t(
@@ -106,9 +104,7 @@ export default class DecisionReportGeneration extends Service {
         if (this.router.currentRouteName === 'agenda.documents') {
           this.router.refresh('agenda');
         }
-      } else if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE
-      ) {
+      } else if (jobResult.status === CONSTANTS.JOB_STATUSES.FAILED) {
         this.toaster.close(generatingBundleToast);
         this.toaster.error(
           this.intl.t('error-while-generating-report-bundle-no-reason')
@@ -165,9 +161,7 @@ export default class DecisionReportGeneration extends Service {
       'generate-decision-report'
     );
     if (jobResult) {
-      if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.SUCCESS
-      ) {
+      if (jobResult.status === CONSTANTS.JOB_STATUSES.SUCCESS) {
         await this.reloadFiles(reports);
         this.toaster.close(generatingPDFsToast);
         this.toaster.success(
@@ -185,9 +179,7 @@ export default class DecisionReportGeneration extends Service {
             timeOut: 10 * 60 * 1000,
           }
         );
-      } else if (
-        jobResult.status === CONSTANTS.DECISION_REPORT_JOB_STATUSSES.FAILURE
-      ) {
+      } else if (jobResult.status === CONSTANTS.JOB_STATUSES.FAILED) {
         this.toaster.close(generatingPDFsToast);
         this.toaster.error(
           this.intl.t('error-while-generating-report-pdfs-no-reason')

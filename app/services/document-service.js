@@ -137,7 +137,7 @@ export default class DocumentService extends Service {
       }
     );
     const json = await getJsonPayloadOrThrow(response);
-    // TODO: this only deals with successful jobs, we need to handle errors as well
+    // TODO: this only deals with successful jobs, we need to handle errors as well job.message
     if (json?.data?.id) {
       const job = await this.store.findRecord('job', json.data.id);
       if (mapping.size) {
@@ -189,7 +189,7 @@ export default class DocumentService extends Service {
       setTimeout(() => {
         this.toaster.close(toasterToClose);
       }, 2000);
-      if (job.status === job.SUCCESS && !job.message) {
+      if (job.isSuccess && !job.message) {
         this.toaster.close(toasterToClose);
         this.toaster.success(
           this.intl.t(
@@ -317,7 +317,7 @@ export default class DocumentService extends Service {
       setTimeout(() => {
         this.toaster.close(toasterToClose);
       }, 2000);
-      if (job.status === job.SUCCESS) {
+      if (job.isSuccess) {
         this.toaster.close(toasterToClose);
         this.toaster.success(
           this.intl.t('success-naming-documents'),

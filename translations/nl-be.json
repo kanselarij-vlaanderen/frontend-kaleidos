@@ -41,6 +41,7 @@
   "agenda-publish-planned": "Plan document publicatie",
   "agenda-version": "Agenda versie",
   "documents-download-ready": "Uw archiefbestand is klaar.",
+  "documents-download-failed": "Het aanmaken van het archiefbestand is mislukt.",
   "agendaitem-case": "Dossier",
   "agendaitem-decision": "Beslissing",
   "agendaitem-title": "Type dossiers & titels",

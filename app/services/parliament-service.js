@@ -137,7 +137,7 @@ export default class ParliamentService extends Service {
       return true;
     }
 
-    if (jobResult.status === CONSTANTS.VP_JOB_STATUSES.SUCCESS) {
+    if (jobResult.status === CONSTANTS.JOB_STATUSES.SUCCESS) {
       if (toast) {
         this.toaster.close(toast);
         this.toaster.success(
@@ -150,7 +150,7 @@ export default class ParliamentService extends Service {
         );
       }
       return true;
-    } else if (jobResult.status === CONSTANTS.VP_JOB_STATUSES.FAILED) {
+    } else if (jobResult.status === CONSTANTS.JOB_STATUSES.FAILED) {
       if (toast) {
         this.closeToastAndError(toast, jobResult.errorMessage);
       }
