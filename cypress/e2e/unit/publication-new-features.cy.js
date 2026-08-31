@@ -211,17 +211,24 @@ context('Publications new features tests', () => {
     cy.createPublication(fields);
     cy.get(publication.contactPersons.add).click();
     cy.get(auk.modal.container).should('exist');
-    cy.get(publication.contactPersonAdd.firstName).clear()
+    // Modal opens with "Persoon zonder organisatie" pre-selected and the
+    // existing-person dropdown visible. Open the person modal to create a
+    // fresh contact-person, then submit both modals in order.
+    cy.get(publication.contactPersonAdd.addNewPerson).click();
+    cy.get(publication.personAdd.firstName).clear()
       .type(contactperson.fin);
-    cy.get(publication.contactPersonAdd.lastName).clear()
+    cy.get(publication.personAdd.lastName).clear()
       .type(contactperson.lan);
-    cy.get(publication.contactPersonAdd.email).clear()
+    cy.get(publication.personAdd.email).clear()
       .type(contactperson.eml);
     cy.intercept('POST', '/persons').as('postPerson');
     cy.intercept('POST', '/contact-persons').as('postContactPerson');
-    cy.get(publication.contactPersonAdd.submit).click();
+    cy.get(publication.personAdd.submit).click();
     cy.wait('@postPerson');
     cy.wait('@postContactPerson');
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlowLink');
+    cy.get(publication.contactPersonAdd.submit).click();
+    cy.wait('@patchPublicationFlowLink');
 
     cy.get(publication.publicationNav.translations).click();
     cy.get(publication.translationsIndex.requestTranslation).click();

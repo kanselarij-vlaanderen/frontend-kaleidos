@@ -17,13 +17,18 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
   @use contactPersons = resource(() => {
     const contactPersons = new TrackedArray([]);
     const calculateContactPersons = async () => {
+      await this.args.publicationFlow.contactPersons;
+      const all = await this.store.queryAll('contact-person', {
+        'filter[publication-flows][:id:]': this.args.publicationFlow.id,
+        include: 'person.organization',
+      });
       contactPersons.length = 0;
-      (await this.args.publicationFlow.contactPersons)
-        ?.slice()
-        ?.sort((p1, p2) =>
-          get(p1, 'person.lastName').localeCompare(get(p2, 'person.lastName'))
-            || get(p1, 'person.firstName').localeCompare(get(p2, 'person.firstName')))
-        ?.forEach((p) => contactPersons.push(p));
+      all
+        .slice()
+        .sort((p1, p2) =>
+          (get(p1, 'person.lastName') ?? '').localeCompare(get(p2, 'person.lastName') ?? '')
+            || (get(p1, 'person.firstName') ?? '').localeCompare(get(p2, 'person.firstName') ?? ''))
+        .forEach((p) => contactPersons.push(p));
     };
     calculateContactPersons();
     return contactPersons;
@@ -42,35 +47,41 @@ export default class PublicationsPublicationCaseContactPersonsPanelComponent ext
 
   @action
   async save(contactPersonProperties) {
-    const {
-      firstName,
-      lastName,
-      email,
-      organization,
-    } = contactPersonProperties;
-
-    const person = this.store.createRecord('person', {
-      firstName: firstName,
-      lastName: lastName,
-      organization: organization,
-    });
-    await person.save();
-
     const publicationFlow = this.args.publicationFlow;
-    const contactPerson = this.store.createRecord('contact-person', {
-      email: email,
-      person: person,
-      publicationFlow: publicationFlow,
-    });
-    await contactPerson.save();
+    let contactPerson = contactPersonProperties.contactPerson;
+    if (!contactPerson) {
+      let person = contactPersonProperties.person;
+      if (!person) {
+        person = this.store.createRecord('person', {
+          firstName: contactPersonProperties.firstName,
+          lastName: contactPersonProperties.lastName,
+          organization: contactPersonProperties.organization,
+        });
+        await person.save();
+      }
+      contactPerson = this.store.createRecord('contact-person', {
+        email: contactPersonProperties.email,
+        person: person,
+      });
+      await contactPerson.save();
+    }
+
+
+    const contactPersons = await publicationFlow.contactPersons;
+    contactPersons.push(contactPerson);
+    await publicationFlow.save();
 
     this.isOpenAddModal = false;
   }
 
   @action
-  async delete(contactPerson) {
-    const person = await contactPerson.person;
-    await contactPerson.destroyRecord();
-    await person.destroyRecord();
+  async unlink(contactPerson) {
+    const publicationFlow = this.args.publicationFlow;
+    const contactPersons = await publicationFlow.contactPersons;
+    const idx = contactPersons.indexOf(contactPerson);
+    if (idx >= 0) {
+      contactPersons.splice(idx, 1);
+    }
+    await publicationFlow.save();
   }
 }

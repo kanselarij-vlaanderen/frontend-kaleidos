@@ -44,7 +44,7 @@ export default class PublicationFlow extends Model {
     async: true,
   })
   numacNumbers;
-  @hasMany('contact-person', { inverse: 'publicationFlow', async: true })
+  @hasMany('contact-person', { inverse: 'publicationFlows', async: true })
   contactPersons;
   @hasMany('mandatee', { inverse: 'publicationFlows', async: true }) mandatees;
   @hasMany('piece', { inverse: 'publicationFlow', async: true, polymorphic: true })
