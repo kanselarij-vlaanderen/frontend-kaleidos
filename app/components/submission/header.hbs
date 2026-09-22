@@ -18,6 +18,11 @@
               <AuButton
                 data-test-submission-header-action-create-subcase
                 @skin="naked"
+                @disabled={{this.hasStartedSignFlowOnUpdatedPieces}}
+                title={{if
+                  this.hasStartedSignFlowOnUpdatedPieces
+                  (t "cannot-accept-submission-with-started-sign-flow")
+                }}
                 {{on "click" (toggle "isOpenCreateSubcaseModal" this)}}
               >
                 {{#if this.isUpdate}}

@@ -38,6 +38,10 @@ export default class SubmissionsConceptsRoute extends Route {
       refreshModel: true,
       as: 'titel',
     },
+    showAllOrganizations: {
+      refreshModel: true,
+      as: 'alle-organisaties',
+    },
   };
 
   async beforeModel(transition) {
@@ -46,7 +50,10 @@ export default class SubmissionsConceptsRoute extends Route {
     if (isAuthenticated && !this.currentSession.may('view-submissions')) {
       this.router.transitionTo('cases.index');
     }
-    if (!this.currentSession.may('view-concept-submissions')) {
+    if (
+      !this.currentSession.may('view-concept-submissions') &&
+      !this.currentSession.may('view-all-concept-submissions')
+    ) {
       this.router.transitionTo('submissions.ongoing');
     }
   }
@@ -81,9 +88,17 @@ export default class SubmissionsConceptsRoute extends Route {
       CONSTANTS.SUBMISSION_STATUSES.CONCEPT
     );
     options['filter[status][:uri:]'] = conceptStatus.uri;
-    // only concepts for your own organization
-    options['filter[requested-by][user-organizations][:id:]'] =
-      this.currentSession.organization.id;
+    // only concepts for your own organization, unless the user may see all of
+    // them and opted in to do so
+    if (
+      !(
+        params.showAllOrganizations &&
+        this.currentSession.may('view-all-concept-submissions')
+      )
+    ) {
+      options['filter[requested-by][user-organizations][:id:]'] =
+        this.currentSession.organization.id;
+    }
 
     return this.store.query('submission', options);
   }
