@@ -67,7 +67,7 @@
                     @alert={{true}}
                     @icon="trash"
                     @hideText={{true}}
-                    {{on "click" (fn this.delete contactPerson)}}
+                    {{on "click" (fn this.unlink contactPerson)}}
                   >
                     {{t "delete"}}
                   </AuButton>
@@ -88,5 +88,6 @@
 {{#if this.isOpenAddModal}}
   <Publications::Publication::Case::ContactPersons::ContactPersonAddModal
     @onCancel={{this.closeAddModal}}
-    @onSave={{this.save}} />
+    @onSave={{this.save}}
+    @publicationFlow={{@publicationFlow}} />
 {{/if}}
