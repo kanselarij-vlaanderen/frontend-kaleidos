@@ -47,8 +47,6 @@ export default class CabinetMailService extends Service {
     );
   }
 
-  // Returns a function that builds a full url to view a (draft-)piece,
-  // used to add direct document links in the notification mails
   getPieceUrlBuilder() {
     const hostUrlPrefix = `${window.location.protocol}//${window.location.host}`;
     return (piece) => `${hostUrlPrefix}${this.router.urlFor('document', piece.id)}`;

@@ -77,8 +77,6 @@ export default class CasesSubmissionsSubmissionController extends Controller {
   }
 
   get mayResendNotifications() {
-    // Secretarie (or admin) can edit the notification data while the
-    // submission is in treatment, so they may also resend the mails
     return (
       (this.currentSession.may('always-edit-submissions') ||
         this.currentSession.may('edit-in-treatment-submissions')) &&
@@ -207,10 +205,16 @@ export default class CasesSubmissionsSubmissionController extends Controller {
       CONSTANTS.SUBMISSION_STATUSES.UITGESTELD_PUNT_INGEDIEND,
     ];
     // resend the mails of the latest submit type status change
-    const latestSubmitActivity = this.statusChangeActivities?.find((activity) =>
-      submitStatuses.includes(activity.status?.get('uri'))
-    );
-    const statusUri = latestSubmitActivity?.status?.get('uri');
+    let latestSubmitActivity;
+    let statusUri;
+    for (const activity of this.statusChangeActivities ?? []) {
+      const status = await activity.status;
+      if (submitStatuses.includes(status?.uri)) {
+        latestSubmitActivity = activity;
+        statusUri = status.uri;
+        break;
+      }
+    }
     if (statusUri === CONSTANTS.SUBMISSION_STATUSES.OPNIEUW_INGEDIEND) {
       await this.cabinetMail.sendResubmissionMails(
         this.model,

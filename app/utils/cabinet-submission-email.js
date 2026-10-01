@@ -186,7 +186,6 @@ Nieuwe documenten:
     }
     for (const piece of await sortPieces(pieces)) {
       const previousPiece = await piece.previousPiece;
-      // Direct link to the document, eases processing on mobile devices
       const pieceUrl = params.getPieceUrl?.(piece);
       const pieceLink = pieceUrl ? `\t\n  ${pieceUrl}` : '';
 
