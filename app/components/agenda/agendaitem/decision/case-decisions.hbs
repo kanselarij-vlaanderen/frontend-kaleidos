@@ -1,0 +1,52 @@
+<div {{did-update this.loadDecisions.perform @agendaitem}} ...attributes>
+{{#if this.hasDecisionmakingFlow}}
+  <Auk::Panel data-test-case-decisions-panel>
+    <Auk::Panel::Header>
+      <Auk::Toolbar @auto={{true}} as |Toolbar|>
+        <Toolbar.Group @position="left">
+          <h4 class="auk-toolbar__title">
+            {{t "decisions-in-case"}}
+          </h4>
+        </Toolbar.Group>
+      </Auk::Toolbar>
+    </Auk::Panel::Header>
+    <Auk::Panel::Body class="auk-u-bg-alt">
+      {{#if this.loadDecisions.isRunning}}
+        <Auk::Loader @message={{t "loading"}} />
+      {{else if this.decisions.length}}
+        <ul class="vlc-status-timeline">
+          {{#each this.decisions as |decision|}}
+            <li
+              class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
+              data-test-case-decisions-item
+            >
+              <div class="vlc-status-timeline__dot"></div>
+              <div class="vlc-status-timeline__text">
+                {{#if decision.resultLabel}}
+                  {{decision.resultLabel}}
+                  {{t "decision-in-case-on-the"}}
+                {{else}}
+                  {{t "activity-phase-approved-on-agenda-prefix"}}
+                {{/if}}
+                <AuLink
+                  data-test-case-decisions-item-link
+                  @route="agenda.agendaitems.agendaitem.decisions"
+                  @models={{array
+                    decision.meetingId
+                    decision.agendaId
+                    decision.agendaitemId
+                  }}
+                >
+                  {{decision.linkText}}
+                </AuLink>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{else}}
+        <Auk::EmptyState @message={{t "decisions-in-case-empty"}} />
+      {{/if}}
+    </Auk::Panel::Body>
+  </Auk::Panel>
+{{/if}}
+</div>
