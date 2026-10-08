@@ -11,8 +11,9 @@
           <AuLabel for="organizationInput">
             {{t "organization"}}
           </AuLabel>
-          <div data-test-contact-person-select-organization class="auk-o-flex">
+          <div data-test-contact-person-select-organization class="auk-o-flex auk-u-maximize-width">
             <PowerSelect
+              class="auk-o-flex__item"
               @options={{this.organizations}}
               @selected={{this.selectedOrganization}}
               @searchEnabled={{true}}
@@ -49,8 +50,9 @@
           >
             {{t "contact-person"}}
           </AuLabel>
-          <div data-test-contact-person-select-person class="auk-o-flex">
+          <div data-test-contact-person-select-person class="auk-o-flex auk-u-maximize-width">
             <PowerSelect
+              class="auk-o-flex__item"
               @options={{this.persons}}
               @selected={{this.selectedPerson}}
               @searchEnabled={{true}}
