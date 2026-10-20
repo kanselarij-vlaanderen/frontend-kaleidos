@@ -299,15 +299,10 @@ context('Publications tests', () => {
     // Assert empty.
     cy.get(auk.emptyState.message).contains(noContactPersons);
 
-    // Add contactperson data.
+    // Open the add modal. Modal opens with "Persoon zonder organisatie"
+    // pre-selected and the existing-person dropdown visible.
     cy.get(publication.contactPersons.add).click();
     cy.get(auk.modal.container).should('exist');
-    cy.get(publication.contactPersonAdd.firstName).clear()
-      .type(contactperson.fin);
-    cy.get(publication.contactPersonAdd.lastName).clear()
-      .type(contactperson.lan);
-    cy.get(publication.contactPersonAdd.email).clear()
-      .type(contactperson.eml);
 
     // Add organization, test rollback after cancel
     cy.get(publication.contactPersonAdd.addOrganization).click();
@@ -324,12 +319,26 @@ context('Publications tests', () => {
     cy.get(publication.organizationAdd.submit).click();
     cy.wait('@postOrganizations');
 
-    // Click submit.
+    // Open the new-person modal and fill it. Creating the person here saves
+    // the Person and its ContactPerson; the outer modal's submit only links
+    // the ContactPerson to this publication-flow.
+    cy.get(publication.contactPersonAdd.addNewPerson).click();
+    cy.get(publication.personAdd.firstName).clear()
+      .type(contactperson.fin);
+    cy.get(publication.personAdd.lastName).clear()
+      .type(contactperson.lan);
+    cy.get(publication.personAdd.email).clear()
+      .type(contactperson.eml);
     cy.intercept('POST', '/persons').as('postPerson');
     cy.intercept('POST', '/contact-persons').as('postContactPerson');
-    cy.get(publication.contactPersonAdd.submit).click();
+    cy.get(publication.personAdd.submit).click();
     cy.wait('@postPerson');
     cy.wait('@postContactPerson');
+
+    // Submit the outer modal — links the new ContactPerson to this PF.
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlowLink');
+    cy.get(publication.contactPersonAdd.submit).click();
+    cy.wait('@patchPublicationFlowLink');
     cy.get(publication.contactPersons.rows).should('have.length', 1);
 
     cy.get(publication.contactPersons.row.fullName).contains(contactperson.fin)
@@ -337,14 +346,12 @@ context('Publications tests', () => {
     cy.get(publication.contactPersons.row.organizationName).contains(contactperson.org);
     cy.get(publication.contactPersons.row.email).contains(contactperson.eml);
 
-    // Delete contact person
-    cy.intercept('DELETE', '/contact-persons/**').as('deleteContactPerson');
-    cy.intercept('DELETE', '/persons/**').as('deletePerson');
+    // Unlink the contact-person from this publication-flow
+    cy.intercept('PATCH', '/publication-flows/**').as('patchPublicationFlow');
     cy.get(publication.contactPersons.row.delete).click();
-    cy.wait('@deleteContactPerson');
-    cy.wait('@deletePerson');
+    cy.wait('@patchPublicationFlow');
 
-    // assert deleted content
+    // assert unlinked content
     cy.get(publication.contactPersons.rows).should('not.exist');
     cy.get(auk.emptyState.message).contains(noContactPersons);
   });
