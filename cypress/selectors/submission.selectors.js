@@ -33,6 +33,7 @@ const selectors = {
   notificationsPanel: {
     panel: '[data-test-submission-notifications-panel]',
     edit: '[data-test-submission-notifications-edit]',
+    resend: '[data-test-submission-notifications-resend]',
     approvers: {
       add: '[data-test-submission-notifications-approvers-add]',
       item: '[data-test-submission-notifications-approvers-item]',

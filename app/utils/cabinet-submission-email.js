@@ -186,18 +186,20 @@ Nieuwe documenten:
     }
     for (const piece of await sortPieces(pieces)) {
       const previousPiece = await piece.previousPiece;
+      const pieceUrl = params.getPieceUrl?.(piece);
+      const pieceLink = pieceUrl ? `\t\n  ${pieceUrl}` : '';
 
       if (previousPiece) {
         // BIS versions already have a proper VR name
         message += `
-- ${piece.name}
+- ${piece.name}${pieceLink}
 `;
       } else {
         // Craft a sensible doc name for users with position & type
         const documentContainer = await piece.documentContainer;
         const type = await documentContainer.type;
         message += `
-- ${documentContainer.position}. ${piece.name} - ${type.label}
+- ${documentContainer.position}. ${piece.name} - ${type.label}${pieceLink}
 `;
       }
     }
