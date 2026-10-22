@@ -57,12 +57,9 @@ export default class AgendaAgendaitemDecisionCaseDecisionsComponent extends Comp
       if (agendaStatus?.isDesignAgenda && !previousVersion) {
         continue;
       }
-      const treatment = await agendaitem.treatment;
-      const decisionActivity = await treatment?.decisionActivity;
-      const decisionResultCode = await decisionActivity?.decisionResultCode;
       const meeting = await agenda.createdFor;
       decisions.push({
-        resultLabel: decisionResultCode?.label,
+        agendaitem,
         meetingId: meeting.id,
         agendaId: agenda.id,
         agendaitemId: agendaitem.id,

@@ -22,12 +22,17 @@
             >
               <div class="vlc-status-timeline__dot"></div>
               <div class="vlc-status-timeline__text">
-                {{#if decision.resultLabel}}
-                  {{decision.resultLabel}}
-                  {{t "decision-in-case-on-the"}}
-                {{else}}
-                  {{t "activity-phase-approved-on-agenda-prefix"}}
-                {{/if}}
+                {{#let
+                  decision.agendaitem.treatment.decisionActivity.decisionResultCode
+                  as |resultCode|
+                }}
+                  {{#if resultCode.label}}
+                    {{resultCode.label}}
+                    {{t "decision-in-case-on-the"}}
+                  {{else}}
+                    {{t "activity-phase-approved-on-agenda-prefix"}}
+                  {{/if}}
+                {{/let}}
                 <AuLink
                   data-test-case-decisions-item-link
                   @route="agenda.agendaitems.agendaitem.decisions"
