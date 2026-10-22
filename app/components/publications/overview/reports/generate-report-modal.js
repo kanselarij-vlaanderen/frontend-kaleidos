@@ -3,8 +3,9 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { format } from 'date-fns';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import{ PUBLICATIONS_IN_KALEIDOS_START_DATE, PUBLICATION_REPORT_START_YEAR } from 'frontend-kaleidos/config/config';
+import { PUBLICATION_REPORT_START_YEAR } from 'frontend-kaleidos/config/config';
 
 /**
  * @argument title
@@ -28,6 +29,7 @@ import{ PUBLICATIONS_IN_KALEIDOS_START_DATE, PUBLICATION_REPORT_START_YEAR } fro
 export default class GenerateReportModalComponent extends Component {
   @service store;
   @service mandatees;
+  @service conceptStore;
 
   @tracked decisionDateRangeStart;
   // note: Date object representing the last date of the range
@@ -130,19 +132,48 @@ export default class GenerateReportModalComponent extends Component {
     throw new Error('NOT IMPLEMENTED'); // for linter
   }
 
-  loadGovernmentDomains = task(async () => {
-    let governmentDomains = await this.store.queryAll('concept', {
-      'filter[top-concept-schemes][:uri:]':
-        CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN,
-      'filter[:has-no:broader]': true, // only top-level government-domains
-      ...(this.publicationYear >=
-        PUBLICATIONS_IN_KALEIDOS_START_DATE.getFullYear() && {
-        'filter[deprecated]': false,
-      }), // Exclude deprecated government domains when generating modern reports
-    });
-    this.governmentDomains = governmentDomains
-      .slice()
+
+  loadGovernmentDomains = task({ restartable: true }, async () => {
+    if (this.publicationYear === undefined) {
+      this.governmentDomains = [];
+      this.selectedGovernmentDomains = [];
+      return;
+    }
+
+    const [rangeStart, rangeEnd] = convertYearToDateRange(this.publicationYear);
+
+    const LOCAL_DATETIME = "yyyy-MM-dd'T'HH:mm:ss";
+
+    const baseQuery = {
+      'filter[:lt:start-date]': format(rangeEnd, LOCAL_DATETIME),
+      include: 'broader',
+    };
+    const [endedDuringOrAfterYear, stillActive] = await Promise.all([
+      this.conceptStore.queryAllByConceptScheme(
+        CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+        {
+          ...baseQuery,
+          'filter[:gte:end-date]': format(rangeStart, LOCAL_DATETIME),
+        }
+      ),
+      this.conceptStore.queryAllByConceptScheme(
+        CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD,
+        { ...baseQuery, 'filter[:has-no:end-date]': true }
+      ),
+    ]);
+    const activeGovernmentFields = [
+      ...endedDuringOrAfterYear.slice(),
+      ...stillActive.slice(),
+    ];
+
+    const governmentDomains = await Promise.all(
+      activeGovernmentFields.map((field) => field.broader)
+    );
+    const uniqueGovernmentDomains = [...new Set(governmentDomains)]
+      .filter(Boolean)
       .sort((d1, d2) => d1.label.localeCompare(d2.label));
+
+    this.governmentDomains = uniqueGovernmentDomains;
     // everything selected by default
     this.selectedGovernmentDomains = this.governmentDomains.slice(0);
   });
