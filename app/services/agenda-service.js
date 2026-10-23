@@ -77,7 +77,7 @@ export default class AgendaService extends Service {
         item.id
       );
       if (!itemFromStore) {
-        itemFromStore = await this.store.queryRecord(
+        itemFromStore = await this.store.findRecord(
           singularize(item.type),
           item.id
         );
@@ -101,7 +101,7 @@ export default class AgendaService extends Service {
         piece.id
       );
       if (!pieceFromStore) {
-        pieceFromStore = await this.store.queryRecord(
+        pieceFromStore = await this.store.findRecord(
           singularize(piece.type),
           piece.id
         );
