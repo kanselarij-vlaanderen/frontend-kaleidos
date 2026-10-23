@@ -50,14 +50,25 @@
               />
             {{/if}}
             <AuButtonGroup class="auk-o-flex__item--fix">
-              <AuLinkExternal
-                @icon="download"
-                @hideText={{true}}
-                href={{piece.file.namedDownloadLink}}
-                download={{piece.file.downloadFilename}}
-              >
-                {{t "download"}}
-              </AuLinkExternal>
+              {{#if (this.isDeleting piece)}}
+                <AuButton
+                  @skin="naked"
+                  @icon="download"
+                  @hideText={{true}}
+                  @disabled={{true}}
+                >
+                  {{t "download"}}
+                </AuButton>
+              {{else}}
+                <AuLinkExternal
+                  @icon="download"
+                  @hideText={{true}}
+                  href={{piece.file.namedDownloadLink}}
+                  download={{piece.file.downloadFilename}}
+                >
+                  {{t "download"}}
+                </AuLinkExternal>
+              {{/if}}
               {{#if @viewable}}
                 <AuLinkExternal
                   @icon="book"
@@ -75,7 +86,8 @@
                   @alert={{true}}
                   @icon="trash"
                   @hideText={{true}}
-                  {{on "click" (fn @onDeletePiece piece)}}
+                  @disabled={{this.isDeleting piece}}
+                  {{on "click" (fn this.deletePiece.perform piece)}}
                 >
                   {{t "delete"}}
                 </AuButton>

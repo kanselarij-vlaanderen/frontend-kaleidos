@@ -4,8 +4,26 @@ import {
   EMAIL_ATTACHMENT_WARN_SIZE,
 } from 'frontend-kaleidos/config/config';
 import { trackedFunction } from 'reactiveweb/function';
+import { TrackedSet } from 'tracked-built-ins';
+import { task } from 'ember-concurrency';
 
 export default class PublicationsPublicationPublicationDocumentsList extends Component {
+  deletingPieces = new TrackedSet();
+
+  isDeleting = (piece) => this.deletingPieces.has(piece);
+
+  deletePiece = task(async (piece) => {
+    if (this.deletingPieces.has(piece)) {
+      return;
+    }
+    this.deletingPieces.add(piece);
+    try {
+      await this.args.onDeletePiece(piece);
+    } finally {
+      this.deletingPieces.delete(piece);
+    }
+  });
+
   fileSizePillSkin = (size) => {
     if (this.shouldWarnFileSize(size)) {
       return 'warning';
