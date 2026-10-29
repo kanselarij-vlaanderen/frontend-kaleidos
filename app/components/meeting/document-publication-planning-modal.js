@@ -1,13 +1,12 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { isBlank } from '@ember/utils';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { ESTIMATED_PUBLICATION_DURATION } from 'frontend-kaleidos/config/config';
-import subMilliseconds from 'date-fns/subMilliseconds';
-import isPast from 'date-fns/isPast';
+import { subMilliseconds, isPast } from 'date-fns';
 
 export default class MeetingDocumentPublicationPlanningModalComponent extends Component {
   @service currentSession;
@@ -21,20 +20,19 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
     this.ensureFreshData.perform();
   }
 
-  @task
-  *ensureFreshData() {
-    yield Promise.all([
+  ensureFreshData = task(async () => {
+    await Promise.all([
       this.args.themisPublicationActivity.reload(),
       this.args.documentPublicationActivity.reload(),
     ]);
-    yield Promise.all([
+    await Promise.all([
       this.args.themisPublicationActivity.belongsTo('status').reload(),
       this.args.documentPublicationActivity.belongsTo('status').reload(),
     ]);
 
     this.themisPublicationPlannedDate = this.args.themisPublicationActivity.plannedDate;
     this.documentPublicationPlannedDate = this.args.documentPublicationActivity.plannedDate;
-  }
+  });
 
   get estimatedThemisExecutionStart() {
     return subMilliseconds(this.args.themisPublicationActivity.plannedDate, ESTIMATED_PUBLICATION_DURATION);
@@ -78,8 +76,7 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
     this.themisPublicationPlannedDate = new Date();
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     this.args.themisPublicationActivity.plannedDate = this.themisPublicationPlannedDate;
     this.args.documentPublicationActivity.plannedDate = this.documentPublicationPlannedDate;
 
@@ -87,9 +84,9 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
     // either because current status is 'planned' and must be updated to 'confirmed'
     // or because current status is 'confirmed' but planned date has changed
     const plannedActivities = [];
-    const confirmedStatus = yield this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
+    const confirmedStatus = await this.store.findRecordByUri('concept', CONSTANTS.RELEASE_STATUSES.CONFIRMED);
 
-    const [documentPublicationStatus, themisPublicationStatus] = yield Promise.all([
+    const [documentPublicationStatus, themisPublicationStatus] = await Promise.all([
       this.args.documentPublicationActivity.status,
       this.args.themisPublicationActivity.status,
     ]);
@@ -106,6 +103,6 @@ export default class MeetingDocumentPublicationPlanningModalComponent extends Co
       plannedActivities.push(this.args.themisPublicationActivity);
     }
 
-    yield this.args.onSave(plannedActivities);
-  }
+    await this.args.onSave(plannedActivities);
+  });
 }

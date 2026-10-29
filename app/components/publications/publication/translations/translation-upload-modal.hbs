@@ -1,7 +1,7 @@
 <Auk::Modal>
   <Auk::Modal::Header
     @title={{t "upload-translation-document"}}
-    @onClose={{perform this.cancel}}
+    @onClose={{this.cancel.perform}}
     @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
@@ -13,7 +13,7 @@
       />
       <Publications::Publication::PublicationDocumentsList
         @pieces={{this.uploadedPieces}}
-        @onDeletePiece={{perform this.deleteUploadedPiece}}
+        @onDeletePiece={{this.deleteUploadedPiece.perform}}
       />
       <AuFormRow>
         <AuCheckbox
@@ -37,7 +37,7 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @onCancel={{perform this.cancel}}
+    @onCancel={{this.cancel.perform}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
     <AuButton
@@ -46,7 +46,7 @@
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.save)}}
+      {{on "click" this.save.perform}}
     >
       {{t "save"}}
     </AuButton>

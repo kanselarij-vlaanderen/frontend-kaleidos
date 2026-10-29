@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import fetch from 'fetch';
 import {
   DOCUMENT_CONVERSION_SUPPORTED_EXTENSIONS,

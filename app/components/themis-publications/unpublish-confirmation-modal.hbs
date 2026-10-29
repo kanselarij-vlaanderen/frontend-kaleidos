@@ -32,7 +32,7 @@
       @skin="primary"
       @loading={{this.confirmUnpublish.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.confirmUnpublish)}}
+      {{on "click" this.confirmUnpublish.perform}}
     >
       {{t "retract-from-public"}}
     </AuButton>

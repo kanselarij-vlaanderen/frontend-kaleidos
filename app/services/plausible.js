@@ -1,5 +1,5 @@
 import PlausibleService from 'ember-plausible/services/plausible';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class ExtendedPlausibleService extends PlausibleService {
   @service currentSession;

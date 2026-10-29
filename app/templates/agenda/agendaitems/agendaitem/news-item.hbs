@@ -61,8 +61,8 @@
     @newsItem={{this.model}}
     @agendaitem={{this.agendaitem}}
     @isFullscreen={{this.isFullscreen}}
-    @onCancel={{perform this.closeEdit}}
-    @onSave={{perform this.saveNewsItem}}
+    @onCancel={{this.closeEdit.perform}}
+    @onSave={{this.saveNewsItem.perform}}
   />
 {{else}}
   {{#if this.showBeingEditedByWarning}}

@@ -51,7 +51,7 @@ async function getSubject(params) {
   const meetingKind = await params.meeting.kind;
   let meetingDate = dateFormat(params.meeting.plannedStart, 'dd-MM-yyyy');
   const resubmitted = params.resubmitted ? 'aanpassing' : '';
-  const agendaitemText = await getAgendaitemText(params) ?? '';
+  const agendaitemText = (await getAgendaitemText(params)) ?? '';
   const titlePrefix = params.resubmitted
     ? ` ${resubmitted} ${agendaitemText}`
     : ` ${agendaitemText.charAt(0).toUpperCase() + agendaitemText.slice(1)}`;

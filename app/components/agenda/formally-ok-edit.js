@@ -31,11 +31,10 @@ export default class AgendaFormallyOkEdit extends Component {
     this.selectedFormallyOkOption = formallyOkOption;
   }
 
-  @task
-  *onSave() {
+  onSave = task(async () => {
     if (this.args.onSave) {
-      yield this.args.onSave(this.selectedFormallyOkOption.uri);
+      await this.args.onSave(this.selectedFormallyOkOption.uri);
     }
     this.args.cancelEdit();
-  }
+  });
 }

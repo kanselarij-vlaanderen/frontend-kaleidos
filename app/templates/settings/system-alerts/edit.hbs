@@ -1,7 +1,7 @@
 <ConfirmationModal
   @modalOpen={{true}}
   @title={{t "manage-alerts"}}
-  @onConfirm={{perform this.save this.model}}
+  @onConfirm={{fn this.save.perform this.model}}
   @onCancel={{this.cancel}}
   @confirmMessage={{t "save"}}
   @loading={{this.save.isRunning}}

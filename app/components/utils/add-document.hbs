@@ -1,7 +1,7 @@
 <ConfirmationModal
   @modalOpen={{true}}
   @title={{t "document-add"}}
-  @onConfirm={{perform this.save}}
+  @onConfirm={{this.save.perform}}
   @onCancel={{this.cancel}}
   @confirmMessage={{t "document-add"}}
   @disabled={{not this.pieceInCreation}}

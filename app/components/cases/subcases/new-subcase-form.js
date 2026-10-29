@@ -1,11 +1,11 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trimText, cleanPasteInputForTextarea } from 'frontend-kaleidos/utils/trim-util';
 import { TrackedArray } from 'tracked-built-ins';
-import { dropTask, task, all } from 'ember-concurrency';
+import { task, all } from 'ember-concurrency';
 import {
   addObject,
   addObjects,
@@ -112,15 +112,14 @@ export default class NewSubcaseForm extends Component {
     this.agendaItemType = selectedAgendaItemType;
   }
 
-  @task
-  *loadAgendaItemTypes() {
-    this.agendaItemTypes = yield this.conceptStore.queryAllByConceptScheme(
+  loadAgendaItemTypes = task(async () => {
+    this.agendaItemTypes = await this.conceptStore.queryAllByConceptScheme(
       CONSTANTS.CONCEPT_SCHEMES.AGENDA_ITEM_TYPES
     );
     this.agendaItemType = this.agendaItemTypes.find(
       (type) => type.uri === CONSTANTS.AGENDA_ITEM_TYPES.NOTA
     );
-  }
+  });
 
   @action
   selectSubcaseName(shortcut) {
@@ -140,36 +139,33 @@ export default class NewSubcaseForm extends Component {
     this.createSubcase.perform(true);
   }
 
-  @task
-  *cancelForm() {
-    yield this.deletePieces();
+  cancelForm = task(async () => {
+    await this.deletePieces();
     this.router.transitionTo('cases.case.index');
-  }
+  });
 
-  @task
-  *loadTitleData() {
+  loadTitleData = task(async () => {
     if (this.args.latestSubcase) {
       this.title = this.args.latestSubcase.title;
       this.shortTitle = this.args.latestSubcase.shortTitle;
       this.confidential = this.args.latestSubcase.confidential;
-      addObjects(this.mandatees, (yield this.args.latestSubcase.mandatees));
-      this.submitter = yield this.args.latestSubcase.requestedBy;
-      addObjects(this.governmentAreas, (yield this.args.latestSubcase.governmentAreas));
+      addObjects(this.mandatees, (await this.args.latestSubcase.mandatees));
+      this.submitter = await this.args.latestSubcase.requestedBy;
+      addObjects(this.governmentAreas, (await this.args.latestSubcase.governmentAreas));
     } else {
-      const _case = yield this.args.decisionmakingFlow.case;
+      const _case = await this.args.decisionmakingFlow.case;
       this.title = _case.title;
       this.shortTitle = _case.shortTitle;
       this.confidential = false;
     }
-  }
+  });
 
-  @dropTask
-  *createSubcase(
+  createSubcase = task({drop: true}, async (
     fullCopy = false,
     meeting = null,
     formallyStatusUri,
     privateComment = null
-  ) {
+  ) => {
     this.showProposableAgendaModal = false;
     const now = new Date();
     this.subcase = this.store.createRecord('subcase', {
@@ -188,10 +184,10 @@ export default class NewSubcaseForm extends Component {
     let piecesFromSubmissions;
     if (this.args.latestSubcase) {
       // Previous "versions" of this subcase exist
-      piecesFromSubmissions = yield this.subcaseService.loadSubcasePieces(
+      piecesFromSubmissions = await this.subcaseService.loadSubcasePieces(
         this.args.latestSubcase
       );
-      yield this.copySubcaseProperties(
+      await this.copySubcaseProperties(
         this.subcase,
         this.args.latestSubcase,
         fullCopy,
@@ -199,31 +195,31 @@ export default class NewSubcaseForm extends Component {
       );
     }
     // We save here in order to set the belongsTo relation between submission-activity and subcase
-    yield this.subcase.save();
+    await this.subcase.save();
     // reload the list of subcases on case, list is not updated automatically
-    yield this.args.decisionmakingFlow?.hasMany('subcases').reload();
+    await this.args.decisionmakingFlow?.hasMany('subcases').reload();
 
     if (this.args.latestSubcase && fullCopy) {
-      yield this.copySubcaseSubmissions(this.subcase, piecesFromSubmissions);
+      await this.copySubcaseSubmissions(this.subcase, piecesFromSubmissions);
     }
 
-    const mandatees = yield this.subcase.mandatees;
+    const mandatees = await this.subcase.mandatees;
     mandatees.length = 0;
     addObjects(mandatees, this.mandatees);
     this.subcase.requestedBy = this.submitter;
 
     const newGovernmentAreas = [...this.selectedGovernmentFields, ...this.selectedGovernmentDomains]
-    const governmentAreas = yield this.subcase.governmentAreas;
+    const governmentAreas = await this.subcase.governmentAreas;
     governmentAreas.length = 0;
     addObjects(governmentAreas, newGovernmentAreas);
-    yield this.subcase.save();
+    await this.subcase.save();
 
     if (this.pieces.length) {
-      yield this.savePieces.perform();
+      await this.savePieces.perform();
     }
     if (meeting) {
       try {
-        yield this.agendaService.putSubmissionOnAgenda(
+        await this.agendaService.putSubmissionOnAgenda(
           meeting,
           this.subcase,
           formallyStatusUri,
@@ -236,7 +232,7 @@ export default class NewSubcaseForm extends Component {
         );
       }
     } else {
-      yield this.agendaService.createInternalReview(this.subcase, null, privateComment);
+      await this.agendaService.createInternalReview(this.subcase, null, privateComment);
     }
 
     this.args.onCreateSubcase?.();
@@ -245,7 +241,7 @@ export default class NewSubcaseForm extends Component {
       this.args.decisionmakingFlow.id,
       this.subcase.id
     );
-  }
+  });
 
   @action
   async copySubcaseProperties(subcase, latestSubcase, fullCopy, pieces) {
@@ -291,7 +287,7 @@ export default class NewSubcaseForm extends Component {
     if (mandatees?.length) {
       this.mandatees = mandatees;
     } else {
-      this.mandatees.clear();
+      this.mandatees = new TrackedArray([]);
       this.submitter = null;
     }
   }
@@ -342,8 +338,7 @@ export default class NewSubcaseForm extends Component {
     addObject(this.pieces, piece);
   }
 
-  @task
-  *savePieces() {
+  savePieces = task(async () => {
     this.piecesCreatedCounter = 0;
     const savePromises = this.sortedPieces.map(async (piece, index) => {
       try {
@@ -353,42 +348,43 @@ export default class NewSubcaseForm extends Component {
         throw error;
       }
     });
-    yield all(savePromises);
-    yield this.createSubmissionActivity.perform(this.pieces);
+    await all(savePromises);
+    await this.createSubmissionActivity.perform(this.pieces);
     this.pieces = new TrackedArray([]);
-  }
+  });
 
-  @task({ maxConcurrency: 5, enqueue: true })
-  *savePiece(piece, index) {
-    const documentContainer = yield piece.documentContainer;
-    documentContainer.position = index + 1;
-    yield documentContainer.save();
-    // at this point in time, the piece already has an accessLevel
-    piece.name = piece.name.trim();
-    yield piece.save();
-    try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
-    } catch (error) {
-      this.toaster.error(
-        this.intl.t('error-convert-file', { message: error.message }),
-        this.intl.t('warning-title')
-      );
+  savePiece = task(
+    { maxConcurrency: 5, enqueue: true },
+    async (piece, index) => {
+      const documentContainer = await piece.documentContainer;
+      documentContainer.position = index + 1;
+      await documentContainer.save();
+      // at this point in time, the piece already has an accessLevel
+      piece.name = piece.name.trim();
+      await piece.save();
+      try {
+        const sourceFile = await piece.file;
+        await this.fileConversionService.convertSourceFile(sourceFile);
+      } catch (error) {
+        this.toaster.error(
+          this.intl.t('error-convert-file', { message: error.message }),
+          this.intl.t('warning-title')
+        );
+      }
+      this.piecesCreatedCounter++;
     }
-    this.piecesCreatedCounter++;
-  }
+  );
 
-  @task
-  *createSubmissionActivity(pieces) {
+  createSubmissionActivity = task(async (pieces) => {
     let submissionActivity = this.store.createRecord('submission-activity', {
       startDate: new Date(),
       subcase: this.subcase,
       pieces,
     });
 
-    submissionActivity = yield submissionActivity.save();
+    submissionActivity = await submissionActivity.save();
     return submissionActivity;
-  }
+  });
 
   @action
   async deletePieces() {
@@ -409,13 +405,12 @@ export default class NewSubcaseForm extends Component {
     await piece?.destroyRecord();
   }
 
-  @task
-  *openProposableAgendaModal() {
-    const typesRequired = yield this.documentService.enforceDocType(this.pieces);
+  openProposableAgendaModal = task(async () => {
+    const typesRequired = await this.documentService.enforceDocType(this.pieces);
     if (typesRequired) return;
 
     this.showProposableAgendaModal = true;
-  }
+  });
 
   pasteIntoShortTitle = (pasteEvent) => {
     this.shortTitle = cleanPasteInputForTextarea(pasteEvent, 'short-title-subcase', this.shortTitle);

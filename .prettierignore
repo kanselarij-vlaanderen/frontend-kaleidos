@@ -16,3 +16,6 @@
 /package.json.ember-try
 
 /app/utils/cabinet-submission-email.js
+/pnpm-lock.yaml
+ember-cli-update.json
+*.html

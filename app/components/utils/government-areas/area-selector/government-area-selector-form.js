@@ -20,13 +20,12 @@ export default class GovernmentAreaSelectorForm extends Component {
     this.calculateDomainSelections.perform();
   }
 
-  @task
-  *calculateDomainSelections() {
+  calculateDomainSelections = task(async () => {
     // Filter logic is applied in 2 steps, such that promises to fetch the domains can be executed using Promise.all
     // Step 1: create an array of domains, one for each selected field, using the same order as this.selectedFields
     // Step 2: use the array of step 1 to verify whether the domain fetched for the field is the current domain
     const availableFields = this.args.availableFields ?? [];
-    let domainsFromAvailableFields = yield Promise.all(
+    let domainsFromAvailableFields = await Promise.all(
       availableFields.map((c) => c.broader)
     );
 
@@ -35,7 +34,7 @@ export default class GovernmentAreaSelectorForm extends Component {
       .sort((d1, d2) => d1.label.localeCompare(d2.label));
 
     const selectedFields = this.args.selectedFields ?? [];
-    const domainsFromSelectedFields = yield Promise.all(
+    const domainsFromSelectedFields = await Promise.all(
       selectedFields.map((c) => c.broader)
     );
 
@@ -57,7 +56,7 @@ export default class GovernmentAreaSelectorForm extends Component {
         selectedFieldsForDomain
       );
     });
-  }
+  });
 
   @action
   toggleDomainSelection(domainSelection, checked) {

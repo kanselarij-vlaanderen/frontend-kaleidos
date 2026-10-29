@@ -68,7 +68,7 @@
               @options={{this.organizations}}
               @selected={{this.organization}}
               @searchEnabled={{true}}
-              @search={{perform this.searchOrganizations}}
+              @search={{this.searchOrganizations.perform}}
               @noMatchesMessage={{t "organizations-empty-result"}}
               @placeholder={{t "search-organization"}}
               @onChange={{this.setOrganization}}
@@ -100,7 +100,7 @@
       @disabled={{not this.validators.areValid}}
       @loading={{this.save.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.save)}}
+      {{on "click" this.save.perform}}
     >
       {{t "add"}}
     </AuButton>

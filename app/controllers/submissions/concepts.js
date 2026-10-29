@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import formatDate from 'frontend-kaleidos/utils/format-date-search-param';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 
@@ -39,6 +39,11 @@ export default class CasesSubmissionsConceptsController extends Controller {
       submissionFilter: {
         type: 'string',
       },
+    },
+    {
+      showAllOrganizations: {
+        type: 'boolean',
+      },
     }
   ];
 
@@ -50,6 +55,7 @@ export default class CasesSubmissionsConceptsController extends Controller {
   @tracked isLoadingModel;
   @tracked filtersOpen = false;
   @tracked submissionFilter = null;
+  @tracked showAllOrganizations = false;
 
   constructor() {
     super(...arguments);
@@ -69,6 +75,11 @@ export default class CasesSubmissionsConceptsController extends Controller {
 
   setDateFrom = (date) => (this.dateFrom = formatDate(date));
   setDateTo = (date) => (this.dateTo = formatDate(date));
+
+  toggleShowAllOrganizations = () => {
+    this.showAllOrganizations = !this.showAllOrganizations;
+    this.page = 0;
+  };
 
   navigateToSubmission = (submission) => {
     this.router.transitionTo(

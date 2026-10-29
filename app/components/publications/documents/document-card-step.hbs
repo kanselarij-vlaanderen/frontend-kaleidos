@@ -39,7 +39,7 @@
                   <AuButton
                     @skin="link"
                     @alert={{true}}
-                    {{on "click" (perform this.deletePiece)}}
+                    {{on "click" this.deletePiece.perform}}
                     role="menuitem"
                   >
                     {{t "document-delete"}}

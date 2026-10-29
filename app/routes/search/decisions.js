@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import { parse, startOfDay, endOfDay } from 'date-fns';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import filterStopWords from 'frontend-kaleidos/utils/filter-stopwords';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 

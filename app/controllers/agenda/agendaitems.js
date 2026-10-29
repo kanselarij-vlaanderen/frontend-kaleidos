@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { action, set } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, lastValue, all, timeout } from 'ember-concurrency';
+import { task, all, timeout } from 'ember-concurrency';
 import {
   setAgendaitemsNumber,
   AgendaitemGroup
@@ -31,7 +31,8 @@ export default class AgendaAgendaitemsController extends Controller {
   @service throttledLoadingService;
   @service toaster;
 
-  @lastValue('groupNotasOnGroupName') notaGroups = [];
+  @tracked notaGroups = [];
+
   @tracked meeting;
   @tracked agenda;
   @tracked previousAgenda;
@@ -97,9 +98,8 @@ export default class AgendaAgendaitemsController extends Controller {
     this.filter = value;
   }
 
-  @task
-  *assignNewPriorities(reorderedAgendaitems, agendaitemType) {
-    const agendaitemsCount = yield this.store.count('agendaitem', {
+  assignNewPriorities = task(async (reorderedAgendaitems, agendaitemType) => {
+    const agendaitemsCount = await this.store.count('agendaitem', {
       'filter[agenda][:id:]': this.agenda.id,
       'filter[type][:uri:]': agendaitemType,
     });
@@ -117,7 +117,7 @@ export default class AgendaAgendaitemsController extends Controller {
       this.announcementsHasChanged = false;
       return;
     }
-    yield setAgendaitemsNumber(
+    await setAgendaitemsNumber(
       reorderedAgendaitems,
       this.agenda,
       this.store,
@@ -127,33 +127,33 @@ export default class AgendaAgendaitemsController extends Controller {
     this.notasHasChanged = false;
     this.announcementsHasChanged = false;
     this.router.refresh('agenda.agendaitems');
-  }
+  });
 
-  @task({ maxConcurrency: 1, restartable: true })
-  *groupNotasOnGroupName() {
+  groupNotasOnGroupName = task({ maxConcurrency: 1, restartable: true }, async () => {
+    this.notaGroups = [];
     const agendaitemsArray = this.model.notas.slice();
     const agendaitemGroups = [];
     let currentAgendaitemGroup;
     for (const agendaitem of agendaitemsArray) {
-      yield timeout(0); // Computationally heavy task. This keeps the interface alive
-      const agendaActivity = yield agendaitem.agendaActivity;
-      const subcase = yield agendaActivity?.subcase;
-      yield subcase?.type;
+      await timeout(0); // Computationally heavy task. This keeps the interface alive
+      const agendaActivity = await agendaitem.agendaActivity;
+      const subcase = await agendaActivity?.subcase;
+      await subcase?.type;
       if (
         currentAgendaitemGroup &&
-        (yield currentAgendaitemGroup.itemBelongsToThisGroup(
+        (await currentAgendaitemGroup.itemBelongsToThisGroup(
           agendaitem, subcase?.isBekrachtiging
         ))
       ) {
         currentAgendaitemGroup.agendaitems.push(agendaitem);
       } else {
-        const mandatees = yield agendaitem.get('mandatees');
+        const mandatees = await agendaitem.get('mandatees');
         currentAgendaitemGroup = new AgendaitemGroup(mandatees.slice(), agendaitem, subcase?.isBekrachtiging);
         agendaitemGroups.push(currentAgendaitemGroup);
       }
     }
-    return agendaitemGroups;
-  }
+    this.notaGroups = agendaitemGroups;
+  });
 
   loadDocuments = task(async () => {
     const agendaitems = [...this.model.notas, ...this.model.announcements];

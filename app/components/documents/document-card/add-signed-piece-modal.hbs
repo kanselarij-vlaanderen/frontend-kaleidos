@@ -1,7 +1,7 @@
 <ConfirmationModal
   @modalOpen={{true}}
   @title={{t "upload-signed-file"}}
-  @onConfirm={{perform this.saveEdit}}
+  @onConfirm={{this.saveEdit.perform}}
   @onCancel={{this.cancelEdit}}
   @confirmMessage={{t "save"}}
   @loading={{this.saveEdit.isRunning}}

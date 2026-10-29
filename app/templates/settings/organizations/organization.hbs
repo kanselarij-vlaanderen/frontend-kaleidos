@@ -178,7 +178,7 @@
           {{on
             "click"
             (queue
-              (perform this.blockOrganization)
+              this.blockOrganization.perform
               (toggle "showBlockOrganization" this)
             )
           }}
@@ -227,7 +227,7 @@
           {{on
             "click"
             (queue
-              (perform this.unblockOrganization)
+              this.unblockOrganization.perform
               (toggle "showUnblockOrganization" this)
             )
           }}
@@ -273,7 +273,8 @@
           {{on
             "click"
             (queue
-              (perform this.unlinkMandatee) (toggle "showUnlinkMandatee" this)
+              this.unlinkMandatee.perform
+              (toggle "showUnlinkMandatee" this)
             )
           }}
         >

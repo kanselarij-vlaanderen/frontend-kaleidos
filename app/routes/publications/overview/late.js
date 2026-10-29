@@ -1,5 +1,5 @@
 import PublicationsOverviewBaseRoute from './_base';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class PublicationsOverviewLateRoute extends PublicationsOverviewBaseRoute {
   @service store;

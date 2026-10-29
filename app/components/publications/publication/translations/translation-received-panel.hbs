@@ -55,7 +55,7 @@
 {{#if this.isOpenTranslationEditModal}}
   <Publications::Publication::Translations::TranslationActivityEditModal
     @receivedDate={{@translationActivity.endDate}}
-    @onSave={{perform this.editTranslationActivity}}
+    @onSave={{this.editTranslationActivity.perform}}
     @onCancel={{this.closeTranslationEditModal}}
   />
 {{/if}}
@@ -64,7 +64,7 @@
   <Publications::Publication::Proofs::ProofRequestModal
     @publicationFlow={{@publicationFlow}}
     @translationActivity={{@translationActivity}}
-    @onSave={{perform this.createProofRequest}}
+    @onSave={{this.createProofRequest.perform}}
     @onCancel={{this.closeProofRequestModal}}
   />
 {{/if}}

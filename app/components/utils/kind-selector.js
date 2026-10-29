@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
@@ -24,11 +24,10 @@ export default class UtilsKindSelector extends Component {
     return this.args.isLoading || this.loadKinds.isRunning;
   }
 
-  @task
-  *loadKinds() {
-    this.options = yield this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
+  loadKinds = task(async () => {
+    this.options = await this.conceptStore.queryAllByConceptScheme(CONSTANTS.CONCEPT_SCHEMES.VERGADERACTIVITEIT, {
       'filter[:has-no:narrower]': true,
       include: 'broader',
     });
-  }
+  });
 }

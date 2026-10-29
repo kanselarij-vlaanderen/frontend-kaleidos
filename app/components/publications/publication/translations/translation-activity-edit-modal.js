@@ -15,10 +15,9 @@ export default class PublicationsPublicationTranslationsTranslationActivityEditM
     return isEmpty(this.receivedDate) || this.save.isRunning;
   }
 
-  @task
-  *save() {
-    yield this.args.onSave({
+  save = task(async () => {
+    await this.args.onSave({
       receivedDate: this.receivedDate
     });
-  }
+  });
 }

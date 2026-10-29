@@ -4,7 +4,7 @@
       "publication-request-modal-title"
       publication=@publicationFlow.identification.idName
     }}
-    @onClose={{perform this.cancel}}
+    @onClose={{this.cancel.perform}}
     @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
@@ -28,7 +28,7 @@
           />
           <Publications::Publication::PublicationDocumentsList
             @pieces={{this.uploadedPieces}}
-            @onDeletePiece={{perform this.deleteUploadedPiece}}
+            @onDeletePiece={{this.deleteUploadedPiece.perform}}
             class="au-u-margin-top-tiny"
           />
         </AuFormRow>
@@ -69,7 +69,7 @@
     </Utils::LoadableContent>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @onCancel={{perform this.cancel}}
+    @onCancel={{this.cancel.perform}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
     <AuButton
@@ -78,7 +78,7 @@
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.save)}}
+      {{on "click" this.save.perform}}
     >
       {{t "request-it"}}
     </AuButton>

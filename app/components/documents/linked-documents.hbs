@@ -1,4 +1,4 @@
-<div {{did-update (perform this.loadData) @agendaitemOrSubcase}}>
+<div {{did-update this.loadData.perform @agendaitemOrSubcase}}>
   <div class="auk-u-mb-4">
     <div class="auk-o-flex auk-o-flex--vertical-center">
       <h4 class="auk-h3 auk-u-m-0">
@@ -9,7 +9,7 @@
   {{#unless this.loadData.isRunning}}
     <Documents::LinkedDocumentList
       @linkedPieces={{this.linkedPieces}}
-      @onUnlinkDocumentContainer={{perform this.unlinkDocumentContainer}} />
+      @onUnlinkDocumentContainer={{this.unlinkDocumentContainer.perform}} />
   {{/unless}}
   {{#if (user-may "manage-documents")}}
     <div class="auk-u-mb-4">
@@ -28,7 +28,7 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenLinkedPieceModal}}
   @title={{t "document-link-old"}}
-  @onConfirm={{perform this.saveLinkedPieces}}
+  @onConfirm={{this.saveLinkedPieces.perform}}
   @onCancel={{this.cancelLinkPieces}}
   @confirmMessage={{t "document-link-old"}}
   @disabled={{eq this.newLinkedPieces.length 0}}

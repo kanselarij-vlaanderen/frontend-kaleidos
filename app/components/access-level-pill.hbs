@@ -44,7 +44,7 @@
         @skin="naked"
         @icon="check"
         @hideText={{true}}
-        {{on "click" (perform this.confirmChangeAccessLevel @accessLevel)}}
+        {{on "click" (fn this.confirmChangeAccessLevel.perform @accessLevel)}}
         class="auk-o-flex__item--fix auk-u-ml"
       >
         {{t "save"}}
@@ -54,7 +54,7 @@
         @skin="naked"
         @icon="x"
         @hideText={{true}}
-        {{on "click" (perform this.cancelChangeAccessLevel)}}
+        {{on "click" this.cancelChangeAccessLevel.perform}}
         class="auk-o-flex__item--fix"
       >
         {{t "cancel"}}

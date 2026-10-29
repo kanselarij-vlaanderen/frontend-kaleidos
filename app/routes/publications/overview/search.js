@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 import { isEmpty, isPresent } from '@ember/utils';
 import search from 'frontend-kaleidos/utils/mu-search';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import {
   getPublicationStatusPillKey,
   getPublicationStatusPillStep
@@ -12,8 +12,8 @@ import { PAGE_SIZE } from 'frontend-kaleidos/config/config';
 import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import parseDate from '../../../utils/parse-date-search-param';
-import startOfDay from 'date-fns/startOfDay';
-import endOfDay from 'date-fns/endOfDay';
+import { startOfDay, endOfDay } from 'date-fns';
+
 
 export default class PublicationsOverviewSearchRoute extends Route {
   @service store;

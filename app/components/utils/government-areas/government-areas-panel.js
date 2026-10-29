@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action, get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { keepLatestTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 
 class Row {
@@ -38,16 +38,15 @@ export default class GovernmentAreasPanel extends Component {
     this.groupGovernmentFieldsByDomain.perform();
   }
 
-  @keepLatestTask
-  *groupGovernmentFieldsByDomain() {
-    const governmentAreas = yield this.args.governmentAreas;
+  groupGovernmentFieldsByDomain = task({ keepLatest: true }, async () => {
+    const governmentAreas = await this.args.governmentAreas;
     if (!governmentAreas) {
       return;
     }
     const domains = [];
     const fields = [];
     for (let governmentArea of governmentAreas.slice()) {
-      const topConceptSchemes = yield governmentArea.topConceptSchemes;
+      const topConceptSchemes = await governmentArea.topConceptSchemes;
       if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSDOMEIN)) {
         domains.push(governmentArea);
       } else if (topConceptSchemes.some(scheme => scheme.uri === CONSTANTS.CONCEPT_SCHEMES.BELEIDSVELD)) {
@@ -55,7 +54,7 @@ export default class GovernmentAreasPanel extends Component {
       }
     }
 
-    const fieldsByDomain = yield groupBy(fields.slice(), 'broader', domains.slice());
+    const fieldsByDomain = await groupBy(fields.slice(), 'broader', domains.slice());
     this.rows = [...fieldsByDomain.entries()]
       .map(([domain, fields]) => new Row({
         governmentDomain: domain,
@@ -65,7 +64,7 @@ export default class GovernmentAreasPanel extends Component {
       .sort((r1, r2) => get(r1, 'governmentDomain.label').localeCompare(get(r2, 'governmentDomain.label')));
     this.governmentFields = fields;
     this.governmentDomains = domains;
-  }
+  });
 
   @action
   async save(governmentDomains, governmentFields) {

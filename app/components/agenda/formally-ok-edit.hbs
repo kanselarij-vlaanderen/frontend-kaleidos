@@ -27,7 +27,7 @@
     @hideText={{true}}
     @loading={{this.onSave.isRunning}}
     @loadingMessage={{t "loading"}}
-    {{on "click" (perform this.onSave)}}
+    {{on "click" this.onSave.perform}}
     class="auk-u-ml"
   >
     {{t "save"}}

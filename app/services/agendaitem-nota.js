@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { getJsonPayloadOrThrow } from 'frontend-kaleidos/utils/json-util';
 

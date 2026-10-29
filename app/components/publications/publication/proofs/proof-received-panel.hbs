@@ -56,7 +56,7 @@
   <Publications::Publication::PublicationActivities::PublicationRequestModal
     @publicationFlow={{@publicationFlow}}
     @proofingActivity={{@proofingActivity}}
-    @onSave={{perform this.createPublicationRequest}}
+    @onSave={{this.createPublicationRequest.perform}}
     @onCancel={{this.closePublicationRequestModal}}
   />
 {{/if}}
@@ -103,7 +103,7 @@
         @disabled={{this.isSaveDisabled}}
         @loading={{this.save.isRunning}}
         @loadingMessage={{t "loading"}}
-        {{on "click" (perform this.save)}}
+        {{on "click" this.save.perform}}
       >
         {{t "save"}}
       </AuButton>

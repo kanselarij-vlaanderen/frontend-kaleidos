@@ -1,5 +1,5 @@
 import SessionService from 'ember-simple-auth/services/session';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import ENV from 'frontend-kaleidos/config/environment';
 
 export default class ExtendedSessionService extends SessionService {
@@ -79,7 +79,7 @@ export default class ExtendedSessionService extends SessionService {
 
   async handleInvalidation() {
     await this.currentSession.clear();
-    const logoutUrl = ENV.torii.providers['acmidm-oauth2'].logoutUrl;
+    const logoutUrl = ENV.acmidm.logoutUrl;
     try {
       super.handleInvalidation(logoutUrl);
     } catch (error) { // eslint-disable-line no-unused-vars

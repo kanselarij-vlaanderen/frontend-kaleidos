@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { isPresent } from '@ember/utils';
@@ -85,42 +85,38 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     return undefined;
   }
 
-  @task
-  *loadSignatureRelatedData() {
+  loadSignatureRelatedData = task(async () => {
     if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {
-      const hasSignFlow = yield this.signatureService.hasSignFlow(this.args.piece);
-      const hasMarkedSignFlow = yield this.signatureService.hasMarkedSignFlow(this.args.piece);
+      const hasSignFlow = await this.signatureService.hasSignFlow(this.args.piece);
+      const hasMarkedSignFlow = await this.signatureService.hasMarkedSignFlow(this.args.piece);
       return this.canEditPieceWithSignFlow = !hasSignFlow || hasMarkedSignFlow;
     }
     return this.canEditPieceWithSignFlow = true;
-  }
+  });
 
-  @task
-  *loadSignedPieces() {
-    this.signedPieceCopy = yield this.args.piece?.signedPieceCopy;
-    yield this.signedPieceCopy?.belongsTo('accessLevel').reload();
-    yield this.signedPieceCopy?.belongsTo('file').reload();
-  }
+  loadSignedPieces = task(async () => {
+    this.signedPieceCopy = await this.args.piece?.signedPieceCopy;
+    await this.signedPieceCopy?.belongsTo('accessLevel').reload();
+    await this.signedPieceCopy?.belongsTo('file').reload();
+  });
 
-  @task
-  *loadDetailsData() {
-    this.documentType = yield this.args.documentContainer?.type;
-    this.accessLevel = yield this.args.piece.accessLevel;
-    this.isLastVersionOfPiece = !isPresent(yield this.args.piece.nextPiece);
-    this.retrievedPieces = yield this.args.piece.retrievedPieces;
-  }
+  loadDetailsData = task(async () => {
+    this.documentType = await this.args.documentContainer?.type;
+    this.accessLevel = await this.args.piece.accessLevel;
+    this.isLastVersionOfPiece = !isPresent(await this.args.piece.nextPiece);
+    this.retrievedPieces = await this.args.piece.retrievedPieces;
+  });
 
-  @task
-  *loadInternalReview() {
+  loadInternalReview = task(async () => {
     if (this.currentSession.may('manage-agendaitems')) {
-      const internalReviewOfSubcase = yield this.store.queryOne('submission-internal-review', {
+      const internalReviewOfSubcase = await this.store.queryOne('submission-internal-review', {
         'filter[subcase][submission-activities][pieces][:id:]': this.args.piece.id,
       })
       if (internalReviewOfSubcase?.id) {
         this.internalReview = internalReviewOfSubcase;
         return;
       }
-      const internalReviewOfSubmission = yield this.store.queryOne('submission-internal-review', {
+      const internalReviewOfSubmission = await this.store.queryOne('submission-internal-review', {
         'filter[submissions][pieces][:id:]': this.args.piece.id,
       })
       if (internalReviewOfSubmission?.id) {
@@ -128,7 +124,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
         return;
       }
     }
-  }
+  });
 
   @action
   handleReplacementFileUploadQueue({ uploadIsRunning, uploadIsCompleted}) {
@@ -140,33 +136,31 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isUploadingSourceFile = uploadIsRunning && !uploadIsCompleted;
   }
 
-  @task
-  *cancelEditDetails() {
+  cancelEditDetails = task(async () => {
     this.args.piece.rollbackAttributes(); // in case of piece name change
-    yield this.loadDetailsData.perform();
-    yield this.replacementSourceFile?.destroyRecord();
-    yield this.addedSourceFile?.destroyRecord();
+    await this.loadDetailsData.perform();
+    await this.replacementSourceFile?.destroyRecord();
+    await this.addedSourceFile?.destroyRecord();
     this.isReplacingSourceFile = false;
     this.replacementSourceFile = null;
     this.isAddingSourceFile = false;
     this.uploadedSourceFile = null;
     this.isEditingDetails = false;
-  }
+  });
 
-  @task
-  *saveDetails() {
+  saveDetails = task(async () => {
     let signMarkingActivity;
     if (this.args.piece.constructor.relationshipNames.belongsTo.includes('signMarkingActivity')) {
-      signMarkingActivity = yield this.args.piece.belongsTo('signMarkingActivity').reload();
+      signMarkingActivity = await this.args.piece.belongsTo('signMarkingActivity').reload();
     }
     if (signMarkingActivity) {
-      const signSubcase = yield signMarkingActivity?.signSubcase;
-      const signFlow = yield signSubcase?.signFlow;
-      const status = yield signFlow?.belongsTo('status').reload();
+      const signSubcase = await signMarkingActivity?.signSubcase;
+      const signFlow = await signSubcase?.signFlow;
+      const status = await signFlow?.belongsTo('status').reload();
       if (!this.currentSession.may('edit-documents-with-ongoing-signature')) {
         if (status?.uri !== CONSTANTS.SIGNFLOW_STATUSES.MARKED) {
-          yield this.cancelEditDetails.perform();
-          yield this.loadSignatureRelatedData.perform();
+          await this.cancelEditDetails.perform();
+          await this.loadSignatureRelatedData.perform();
           this.toaster.error(
             this.intl.t('sign-flow-was-sent-while-you-were-editing-could-not-edit'),
             this.intl.t('changes-could-not-be-saved-title'),
@@ -175,30 +169,30 @@ export default class DocumentsDocumentDetailsPanel extends Component {
         }
       }
     }
-    yield this.args.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
+    await this.args.piece.belongsTo('file').reload(); // concurrent edits of file are possible like when signatures are stripped
     if (this.uploadedSourceFile) {
       // use-case: we have a pdf and we want to add docx but keep our pdf
       // derived file does not exist yet in this case
-      const oldFile = yield this.args.piece.file;
+      const oldFile = await this.args.piece.file;
       this.uploadedSourceFile.derived = oldFile;
       this.args.piece.file = this.uploadedSourceFile;
-      yield Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
+      await Promise.all([oldFile.save(), this.uploadedSourceFile.save()]);
     }
     if (this.replacementSourceFile) {
-      const oldFile = yield this.args.piece.file;
+      const oldFile = await this.args.piece.file;
       // oldFile may not exist in rare cases where file is missing/not automatically generated, you should be able to replace
-      const derivedFile = yield oldFile?.derived;
+      const derivedFile = await oldFile?.derived;
       if (derivedFile) {
         oldFile.derived = null;
         this.replacementSourceFile.derived = derivedFile;
-        yield Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
+        await Promise.all([oldFile.save(), this.replacementSourceFile.save()]);
       }
-      yield oldFile?.destroyRecord();
+      await oldFile?.destroyRecord();
       this.args.piece.file = this.replacementSourceFile;
-      yield this.args.piece.save();
-      const sourceFile = yield this.args.piece.file;
+      await this.args.piece.save();
+      const sourceFile = await this.args.piece.file;
       try {
-        yield this.fileConversionService.convertSourceFile(sourceFile);
+        await this.fileConversionService.convertSourceFile(sourceFile);
       } catch (error) {
         this.toaster.error(
           this.intl.t('error-convert-file', { message: error.message }),
@@ -208,25 +202,25 @@ export default class DocumentsDocumentDetailsPanel extends Component {
       this.args.onChangeFile();
     }
     let changedAccessLevel = false;
-    const currentAccessLevel = yield this.args.piece.accessLevel;
+    const currentAccessLevel = await this.args.piece.accessLevel;
     if (currentAccessLevel?.uri !== this.accessLevel?.uri) {
       changedAccessLevel = true;
     }
     this.args.piece.accessLevel = this.accessLevel;
     this.args.piece.name = this.args.piece.name?.trim();
-    yield this.args.piece.save(changedAccessLevel);
-    yield this.pieceAccessLevelService.updateSignedPieceAccessLevels(this.args.piece);
-    yield this.pieceAccessLevelService.updatePreviousAccessLevels(
+    await this.args.piece.save(changedAccessLevel);
+    await this.pieceAccessLevelService.updateSignedPieceAccessLevels(this.args.piece);
+    await this.pieceAccessLevelService.updatePreviousAccessLevels(
       this.args.piece
     );
     this.args.documentContainer.type = this.documentType;
-    yield this.args.documentContainer.save();
+    await this.args.documentContainer.save();
     if (this.replacementSourceFile) {
       if (this.args.piece.stamp) {
-        yield this.documentService.stampDocuments([this.args.piece]);
+        await this.documentService.stampDocuments([this.args.piece]);
       }
     } else {
-      yield this.documentService.checkAndRestamp([this.args.piece]);
+      await this.documentService.checkAndRestamp([this.args.piece]);
     }
 
     this.isEditingDetails = false;
@@ -234,7 +228,7 @@ export default class DocumentsDocumentDetailsPanel extends Component {
     this.isReplacingSourceFile = false;
     this.uploadedSourceFile = null;
     this.isUploadingSourceFile = false;
-  }
+  });
 
   verifyDeleteSignFlow = task(async () => {
     await this.signatureService.removeSignFlowForPiece(this.args.piece, true);

@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
@@ -36,19 +36,17 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     return this.latestPublicationActivity?.isFinished;
   }
 
-  @task
-  *saveRequest(publicationRequest) {
-    yield this.publicationService.createPublicationRequest(
+  saveRequest = task(async (publicationRequest) => {
+    await this.publicationService.createPublicationRequest(
       publicationRequest,
       this.publicationFlow
     );
 
     this.router.refresh('publications.publication.publication-activities');
     this.closeRequestModal();
-  }
+  });
 
-  @task
-  *registerPublication(publication) {
+  registerPublication = task(async (publication) => {
     let publicationActivity = this.latestPublicationActivity;
     const publicationDate = publication.publicationDate;
     const saves = [];
@@ -64,7 +62,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       );
     }
     publicationActivity.endDate = publicationDate;
-    yield publicationActivity.save();
+    await publicationActivity.save();
 
     const decision = this.store.createRecord('decision', {
       publicationDate: publicationDate,
@@ -73,7 +71,7 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     // The decision (and the publicationActivity) must be saved
     //  before calling the publicationService.updatePublicationStatus method.
     //  otherwise that method creates duplicate Decisions and PublicationActivities
-    yield decision.save();
+    await decision.save();
 
     if (publication.mustUpdatePublicationStatus) {
       const statusUpdate = this.publicationService.updatePublicationStatus(
@@ -84,10 +82,10 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
       saves.push(statusUpdate);
     }
 
-    yield Promise.all(saves);
+    await Promise.all(saves);
     this.router.refresh('publications.publication.publication-activities');
     this.closeRegistrationModal();
-  }
+  });
 
   @action
   async editPublication(publication) {
@@ -100,13 +98,12 @@ export default class PublicationsPublicationPublicationActivitiesIndexController
     await Promise.all([decision.save(), publicationActivity.save()]);
   }
 
-  @task
-  *deleteRequest(requestActivityArgs) {
-    yield this.performDeleteRequest(requestActivityArgs);
+  deleteRequest = task(async (requestActivityArgs) => {
+    await this.performDeleteRequest(requestActivityArgs);
     // separate from this.performDeleteRequest(...):
     //    refresh is OK to be aborted
     this.router.refresh('publications.publication.publication-activities');
-  }
+  });
 
   // separate method to prevent ember-concurrency from saving only partially
   async performDeleteRequest(requestActivity) {

@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { isPresent } from '@ember/utils';
@@ -28,12 +28,11 @@ export default class AgendaHeader extends Component {
     this.loadAgendaIsFinal.perform();
   }
 
-  @task
-  *loadAgendaIsFinal() {
+  loadAgendaIsFinal = task(async () => {
     const meeting = this.args.meeting;
-    const agenda = yield meeting.agenda;
+    const agenda = await meeting.agenda;
     this.isFinalAgenda = isPresent(agenda?.id);
-  }
+  });
 
   /**
    * This method will toggle a modal component with a custom message

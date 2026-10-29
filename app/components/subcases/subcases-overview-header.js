@@ -2,10 +2,9 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay } from 'date-fns';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
@@ -45,7 +44,6 @@ export default class SubCasesOverviewHeader extends Component {
 
   get mayCreateSubmissions() {
     return (
-      isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.loadSubmissionsData.isIdle &&
       this.currentSession.may('create-submissions') &&
@@ -56,21 +54,20 @@ export default class SubCasesOverviewHeader extends Component {
     );
   }
 
-  @task
-  *loadData() {
-    this.case = yield this.args.decisionmakingFlow.case;
-    this.publicationFlows = yield this.case.publicationFlows;
-    yield this.loadLinkedMandatees.perform();
-    this.hasFilesToDownload = (yield this.store.count('piece', {
+  loadData = task(async () => {
+    this.case = await this.args.decisionmakingFlow.case;
+    this.publicationFlows = await this.case.publicationFlows;
+    await this.loadLinkedMandatees.perform();
+    this.hasFilesToDownload = (await this.store.count('piece', {
       'filter[submission-activities][subcase][decisionmaking-flow][:id:]': this.args.decisionmakingFlow.id,
       'filter[:has:file]': true,
     })) > 0;
-  }
+  });
 
   loadSubmissionsData = task(async () => {
     this.currentSubmission = null;
     this.mayViewCurrentSubmission = false;
-    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
+    if (this.currentSession.may('create-submissions')) {
       const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
       if (!latestSubmission?.id) {
         this.hasOngoingSubmissions = false;

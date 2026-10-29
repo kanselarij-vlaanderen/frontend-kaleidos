@@ -51,7 +51,7 @@
         @submission={{@model}}
         @mayEdit={{this.mayEditIfUpdate}}
         @isUpdate={{this.isUpdate}}
-        @onSave={{perform this.checkIfConfidentialChanged}}
+        @onSave={{this.checkIfConfidentialChanged.perform}}
       />
     </div>
 
@@ -131,7 +131,7 @@
               @isUpdate={{this.isUpdate}}
               @highlightedPieces={{this.newDraftPieces}}
               @didDeleteContainer={{this.updateDraftPiecePositions}}
-              @onSaveAccessLevel={{perform this.checkIfHasConfidentialPiecesChanged}}
+              @onSaveAccessLevel={{this.checkIfHasConfidentialPiecesChanged.perform}}
             />
           {{else}}
           {{!-- is this technically unreachable since we don't allow a submission to be created without docs? --}}
@@ -178,8 +178,8 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenPieceUploadModal}}
   @title={{t "document-add"}}
-  @onConfirm={{perform this.savePieces}}
-  @onCancel={{perform this.cancelUploadPieces}}
+  @onConfirm={{this.savePieces.perform}}
+  @onCancel={{this.cancelUploadPieces.perform}}
   @confirmMessage={{t "documents-add"}}
   @disabled={{eq this.newPieces.length 0}}
   @loading={{this.savePieces.isRunning}}

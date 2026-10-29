@@ -5,8 +5,8 @@
       this.deleteDocumentContainerWithUndo.isRunning
       'vlc-document--deleted-state'
     }}"
-  {{did-update (perform this.loadPieceRelatedData) @piece}}
-  {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
+  {{did-update this.loadPieceRelatedData.perform @piece}}
+  {{did-update this.loadPieceRelatedData.perform @documentContainer}}
   data-test-document-card
 >
   <div class="vlc-document-card__summary">
@@ -144,19 +144,19 @@
           <Group.Item
             class="auk-o-flex auk-o-flex--vertical-center"
             {{did-update
-              (perform this.loadAccessLevelRelatedData)
+              this.loadAccessLevelRelatedData.perform
               @agendaContext.meeting.internalDecisionPublicationActivity.status
             }}
             {{did-update
-              (perform this.loadAccessLevelRelatedData)
+              this.loadAccessLevelRelatedData.perform
               @agendaContext.meeting.internalDocumentPublicationActivity.status
             }}
             {{did-update
-              (perform this.loadAccessLevelRelatedData)
+              this.loadAccessLevelRelatedData.perform
               @agendaContext.agenda.status
             }}
             {{did-update
-              (perform this.loadAccessLevelRelatedData)
+              this.loadAccessLevelRelatedData.perform
               @agendaContext.agenda.previousVersion
             }}
           >
@@ -313,7 +313,7 @@
               {{#each this.visiblePieces as |piece|}}
                 <div
                   class="vlc-document-holder"
-                  {{did-update (perform this.loadPieceRelatedData) piece}}
+                  {{did-update this.loadPieceRelatedData.perform piece}}
                 >
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
@@ -344,15 +344,15 @@
     @documentContainer={{this.documentContainer}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
-    @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}
+    @onSave={{queue (toggle "isEditingPiece" this) this.loadPieceRelatedData.perform}}
   />
 {{/if}}
 
 <ConfirmationModal
   @modalOpen={{this.isOpenUploadModal}}
   @title={{t "new-document-piece"}}
-  @onConfirm={{perform this.addPiece}}
-  @onCancel={{perform this.cancelUploadPiece}}
+  @onConfirm={{this.addPiece.perform}}
+  @onCancel={{this.cancelUploadPiece.perform}}
   @confirmMessage={{t "add"}}
   @loading={{this.addPiece.isRunning}}
   @disabled={{not this.newPiece}}
@@ -367,11 +367,11 @@
       />
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
-        @onDelete={{perform this.deleteUploadedPiece}}
+        @onDelete={{this.deleteUploadedPiece.perform}}
         @loading={{this.addPiece.isRunning}}
       />
     {{else}}
-      <Auk::FileUploader @multiple={{false}} @onUpload={{perform this.uploadPiece}} />
+      <Auk::FileUploader @multiple={{false}} @onUpload={{this.uploadPiece.perform}} />
     {{/if}}
   </:body>
 </ConfirmationModal>
@@ -390,6 +390,6 @@
   <Documents::DocumentCard::AddSignedPieceModal
     @piece={{this.piece}}
     @onCancel={{this.cancelAddSignedPiece}}
-    @onSave={{queue (toggle "isAddingSignedPiece" this) (perform this.loadPieceRelatedData)}}
+    @onSave={{queue (toggle "isAddingSignedPiece" this) this.loadPieceRelatedData.perform}}
   />
 {{/if}}

@@ -1,6 +1,6 @@
 <AuCheckboxGroup
   data-test-government-area-selector-form
-  {{did-update (perform this.calculateDomainSelections) @selectedFields}}
+  {{did-update this.calculateDomainSelections.perform @selectedFields}}
 > {{!-- Just use the group component here as a styling method as also using the included functionality would unnecessarily overcomplicate things --}}
   {{#each this.domainSelections as |domainSelection index|}}
     {{! template-lint-disable simple-unless }}

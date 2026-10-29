@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, all } from 'ember-concurrency';
 import { TrackedArray } from 'tracked-built-ins';
@@ -44,8 +44,7 @@ export default class AgendaDocumentsController extends Controller {
     this.newPieces.push(piece);
   }
 
-  @task
-  *savePieces() {
+  savePieces = task(async () => {
     const savePromises = this.newPieces.map(async(piece, index) => {
       try {
         await this.savePiece.perform(piece, index);
@@ -54,47 +53,45 @@ export default class AgendaDocumentsController extends Controller {
         throw error;
       }
     });
-    yield all(savePromises);
+    await all(savePromises);
     this.isOpenPieceUploadModal = false;
     this.newPieces = new TrackedArray([]);
     this.router.refresh('agenda.documents');
-  }
+  });
 
   /**
    * Save a new document container and the piece it wraps
   */
-  @task
-  *savePiece(piece, index) {
-    const documentContainer = yield piece.documentContainer;
-    const containerCount = yield this.store.count('document-container', {
+  savePiece = task(async (piece, index) => {
+    const documentContainer = await piece.documentContainer;
+    const containerCount = await this.store.count('document-container', {
       'filter[pieces][meeting][id]': this.meeting.id,
     });
     documentContainer.position = index + 1 + (containerCount ?? 0);
-    yield documentContainer.save();
+    await documentContainer.save();
     piece.name = piece.name?.trim()
-    yield piece.save();
+    await piece.save();
     try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
         this.intl.t('warning-title'),
       );
     }
-  }
+  });
 
   /**
    * Add new piece to an existing document container
   */
-  @task
-  *addPiece(piece) {
+  addPiece = task(async (piece) => {
     piece.meeting = this.meeting;
-    yield piece.save();
-    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+    await piece.save();
+    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
@@ -102,25 +99,23 @@ export default class AgendaDocumentsController extends Controller {
       );
     }
     this.router.refresh('agenda.documents');
-  }
+  });
 
-  @task
-  *cancelUploadPieces() {
+  cancelUploadPieces = task(async () => {
     const deletePromises = this.newPieces.map((piece) => this.deletePiece.perform(piece));
-    yield all(deletePromises);
+    await all(deletePromises);
     this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
-  }
+  });
 
-  @task
-  *deletePiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
+  deletePiece = task(async (piece) => {
+    const file = await piece.file;
+    await file.destroyRecord();
     removeObject(this.newPieces, piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
-  }
+    const documentContainer = await piece.documentContainer;
+    await documentContainer.destroyRecord();
+    await piece.destroyRecord();
+  });
 
   @action
   openBatchDetails() {

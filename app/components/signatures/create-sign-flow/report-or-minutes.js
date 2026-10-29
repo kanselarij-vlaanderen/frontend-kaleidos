@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { trackedFunction } from 'reactiveweb/function';
 import { TrackedArray } from 'tracked-built-ins';
 import { tracked } from '@glimmer/tracking';
