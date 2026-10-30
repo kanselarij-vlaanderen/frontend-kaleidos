@@ -12,7 +12,16 @@
           {{@name}}
         </h6>
         <AuButtonGroup @inline={{true}}>
-          {{#if @downloadLink}}
+          {{#if this.delete.isRunning}}
+            <AuButton
+              @skin="naked"
+              @icon="download"
+              @hideText={{true}}
+              @disabled={{true}}
+            >
+              {{t "download"}}
+            </AuButton>
+          {{else if @downloadLink}}
             <AuLinkExternal
               @skin="button-naked"
               @icon="download"
@@ -30,8 +39,8 @@
               @alert={{true}}
               @icon="trash"
               @hideText={{true}}
-              @disabled={{@loading}}
-              {{on "click" @onDelete}}
+              @disabled={{this.isDisabled}}
+              {{on "click" this.delete.perform}}
             >
               {{t "delete"}}
             </AuButton>
