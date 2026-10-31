@@ -47,6 +47,15 @@ module.exports = async function (defaults) {
         },
       },
     },
+    // TODO enable for ember-concurrency upgrade
+    // babel: {
+    //   plugins: [
+    //     // ... any other plugins
+    //     require.resolve("ember-concurrency/async-arrow-task-transform"),
+
+    //     // NOTE: put any code coverage plugins last, after the transform.
+    //   ],
+    // },
     autoImport: {
       webpack: {
         plugins: [
@@ -59,6 +68,16 @@ module.exports = async function (defaults) {
       //   'ember-changeset',
       // ],
     },
+    emberData: {
+      deprecations: {
+        // New projects can safely leave this deprecation disabled.
+        // If upgrading, to opt-into the deprecated behavior, set this to true and then follow:
+        // https://deprecations.emberjs.com/id/ember-data-deprecate-store-extends-ember-object
+        // before upgrading to Ember Data 6.0
+        DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
+      },
+    },
+    // Add options here
   });
 
   setConfig(app, __dirname, {

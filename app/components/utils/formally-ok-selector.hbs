@@ -8,7 +8,7 @@
   <PowerSelect
     @options={{this.options}}
     @selected={{this.selectedStatus}}
-    @onChange={{perform this.onChange}}
+    @onChange={{this.onChange.perform}}
     @disabled={{this.onChange.isRunning}}
     @placeholder={{t "choose-formally-ok-status"}}
     class="auk-u-min-width-medium"

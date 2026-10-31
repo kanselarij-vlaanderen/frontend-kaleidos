@@ -1,11 +1,9 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
-import {
-  task, timeout, restartableTask
-} from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { PAGINATION_SIZES } from 'frontend-kaleidos/config/config';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
@@ -69,26 +67,23 @@ export default class CreateAgendaitem extends Component {
     }
   };
 
-  @task
-  *findAll() {
-    this.subcases = yield this.store.query('subcase', this.queryOptions);
-    yield timeout(100);
+  findAll = task(async () => {
+    this.subcases = await this.store.query('subcase', this.queryOptions);
+    await timeout(100);
     this.setFocus();
-  };
+  });
 
-  @restartableTask()
-  *searchTask() {
-    yield timeout(300);
-    yield this.findAll.perform();
-  };
+  searchTask = task({ restartable: true }, async () => {
+    await timeout(300);
+    await this.findAll.perform();
+  });
 
-  @task
-  *addSubcasesToAgenda() {
+  addSubcasesToAgenda = task(async () => {
     const subcasesToAdd = new Set([...this.selectedSubcases]);
     const agendaItems = [];
     for (const subcase of subcasesToAdd) {
       try {
-        const newItem = yield this.agendaService.putSubmissionOnAgenda(this.args.meeting, subcase);
+        const newItem = await this.agendaService.putSubmissionOnAgenda(this.args.meeting, subcase);
         agendaItems.push(newItem);
       } catch (error) {
         this.toaster.error(
@@ -99,7 +94,7 @@ export default class CreateAgendaitem extends Component {
     }
 
     this.args.onCreate(agendaItems);
-  };
+  });
 
   @action
   onInputFilter(event) {

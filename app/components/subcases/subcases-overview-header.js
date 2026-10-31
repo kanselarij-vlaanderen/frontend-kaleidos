@@ -2,10 +2,9 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledCabinetSubmissions } from 'frontend-kaleidos/utils/feature-flag';
-import isSameDay from 'date-fns/isSameDay';
+import { isSameDay } from 'date-fns';
 
 export default class SubCasesOverviewHeader extends Component {
   @service currentSession;
@@ -20,6 +19,7 @@ export default class SubCasesOverviewHeader extends Component {
   @tracked isArchivingCase = false;
   @tracked hasOngoingSubmissions = false;
   @tracked currentSubmission;
+  @tracked mayViewCurrentSubmission = false;
   @tracked isOpenDownloadDocumentsModal = false;
   @tracked hasFilesToDownload;
 
@@ -44,7 +44,6 @@ export default class SubCasesOverviewHeader extends Component {
 
   get mayCreateSubmissions() {
     return (
-      isEnabledCabinetSubmissions() &&
       this.loadData.isIdle &&
       this.loadSubmissionsData.isIdle &&
       this.currentSession.may('create-submissions') &&
@@ -55,20 +54,20 @@ export default class SubCasesOverviewHeader extends Component {
     );
   }
 
-  @task
-  *loadData() {
-    this.case = yield this.args.decisionmakingFlow.case;
-    this.publicationFlows = yield this.case.publicationFlows;
-    yield this.loadLinkedMandatees.perform();
-    this.hasFilesToDownload = (yield this.store.count('piece', {
+  loadData = task(async () => {
+    this.case = await this.args.decisionmakingFlow.case;
+    this.publicationFlows = await this.case.publicationFlows;
+    await this.loadLinkedMandatees.perform();
+    this.hasFilesToDownload = (await this.store.count('piece', {
       'filter[submission-activities][subcase][decisionmaking-flow][:id:]': this.args.decisionmakingFlow.id,
       'filter[:has:file]': true,
     })) > 0;
-  }
+  });
 
   loadSubmissionsData = task(async () => {
     this.currentSubmission = null;
-    if (isEnabledCabinetSubmissions() && this.currentSession.may('create-submissions')) {
+    this.mayViewCurrentSubmission = false;
+    if (this.currentSession.may('create-submissions')) {
       const latestSubmission = await this.draftSubmissionService.getLatestSubmissionForDecisionmakingFLow(this.args.decisionmakingFlow);
       if (!latestSubmission?.id) {
         this.hasOngoingSubmissions = false;
@@ -82,6 +81,7 @@ export default class SubCasesOverviewHeader extends Component {
         // submission for new subcase is ongoing
         this.hasOngoingSubmissions = true;
         this.currentSubmission = latestSubmission;
+        this.mayViewCurrentSubmission = await this.canViewSubmission(latestSubmission);
         return;
       }
       const relatedAgendas = await this.subcaseService.getRelatedAgendas(subcase);
@@ -100,6 +100,32 @@ export default class SubCasesOverviewHeader extends Component {
       }
     }
   });
+
+  async canViewSubmission(submission) {
+    if (submission.isConcept) {
+      // Concept submissions may only be visible to users of the submitting cabinet(s)
+      const mandatees = await submission.mandatees;
+      if (mandatees.length) {
+        const currentUserOrganization = await this.currentSession.organization;
+        const currentUserOrganizationMandatees = await currentUserOrganization?.mandatees;
+        const mandateeUris = mandatees.map((mandatee) => mandatee.uri);
+        const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
+
+        for (const orgMandateeUri of currentUserOrganizationMandateesUris) {
+          if (mandateeUris.includes(orgMandateeUri)) {
+            return true;
+          }
+        }
+
+        return false;
+      } else {
+        // No mandatees attached to the submission. Not very likely.
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
 
   @action
   openEditCaseModal() {
@@ -164,7 +190,7 @@ export default class SubCasesOverviewHeader extends Component {
   openDownloadDocumentsModal = () => {
     this.isOpenDownloadDocumentsModal = true;
   }
-  
+
   closeDownloadDocumentsModal = () => {
     this.isOpenDownloadDocumentsModal = false;
   }

@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { later, cancel } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { trackedTask } from 'reactiveweb/ember-concurrency';
 import { task } from 'ember-concurrency';

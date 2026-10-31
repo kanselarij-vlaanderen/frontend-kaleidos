@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { warn } from '@ember/debug';
 
 export class TimelineActivity {

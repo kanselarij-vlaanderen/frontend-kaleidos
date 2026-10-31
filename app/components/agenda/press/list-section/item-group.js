@@ -12,14 +12,13 @@ export default class AgendaPressListSectionItemGroupComponent extends Component 
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
+  loadData = task(async () => {
     const agendaitem = this.args.items.at(0);
-    const agendaActivity = yield agendaitem.agendaActivity;
-    const subcase = yield agendaActivity?.subcase;
-    yield subcase?.type;
+    const agendaActivity = await agendaitem.agendaActivity;
+    const subcase = await agendaActivity?.subcase;
+    await subcase?.type;
     this.isBekrachtiging = subcase?.isBekrachtiging;
-  }
+  });
 
   @use sortedMandateesFromFirst = resource(() => {
     const sortedMandatees = new TrackedArray([]);

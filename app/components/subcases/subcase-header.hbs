@@ -99,7 +99,7 @@
   @modalOpen={{this.promptDeleteCase}}
   @title={{t "delete-empty-case"}}
   @message={{t "delete-empty-case-confirmation" case=this.caseToDelete.shortTitle}}
-  @onConfirm={{perform this.deleteCase this.caseToDelete}}
+  @onConfirm={{fn this.deleteCase.perform this.caseToDelete}}
   @onCancel={{this.cancelDeleteCase}}
   @confirmMessage={{t "delete"}}
   @alert={{true}}
@@ -109,7 +109,7 @@
 <ConfirmationModal
   @modalOpen={{this.isAssigningToOtherCase}}
   @title={{t "move-subcase-to-other-case"}}
-  @onConfirm={{perform this.moveSubcase}}
+  @onConfirm={{this.moveSubcase.perform}}
   @onCancel={{this.cancel}}
   @confirmMessage={{t "move-subcase"}}
   @padding="none"
@@ -133,7 +133,7 @@
         {{/if}}
         <Utils::CaseSearch
           @excludedDecisionmakingFlow={{@decisionmakingFlow}}
-          @onSelect={{perform this.selectDecisionmakingFlow}}
+          @onSelect={{this.selectDecisionmakingFlow.perform}}
         />
       {{/if}}
     </div>
@@ -166,7 +166,7 @@
   <Cases::Subcases::ProposableAgendasModal
     @subcase={{@subcase}}
     @onCancel={{toggle "isAssigningToAgenda" this}}
-    @onConfirm={{perform this.proposeForAgenda}}
+    @onConfirm={{this.proposeForAgenda.perform}}
   />
 {{/if}}
 

@@ -39,7 +39,7 @@
       <div class="au-c-card au-o-box au-o-box--small">
         <UserRoleFilter
           @selected={{this.selectedRoles}}
-          @onChange={{perform this.setRoles}}
+          @onChange={{this.setRoles.perform}}
           @defaultEnableAllRoles={{is-empty this.selectedRoles}}
         />
       </div>
@@ -242,7 +242,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.showBlockMembershipsConfirmationModal}}
-  @onConfirm={{queue (perform this.blockMemberships) this.toggleShowBlockMembershipsConfirmationModal}}
+  @onConfirm={{queue this.blockMemberships.perform this.toggleShowBlockMembershipsConfirmationModal}}
   @onCancel={{this.toggleShowBlockMembershipsConfirmationModal}}
   @confirmMessage={{t "block-membership"}}
   @alert={{true}}
@@ -278,7 +278,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.showUnblockMembershipsConfirmationModal}}
-  @onConfirm={{queue (perform this.unblockMemberships) this.toggleShowUnblockMembershipsConfirmationModal}}
+  @onConfirm={{queue this.unblockMemberships.perform this.toggleShowUnblockMembershipsConfirmationModal}}
   @onCancel={{this.toggleShowUnblockMembershipsConfirmationModal}}
   @confirmMessage={{t "unblock-membership"}}
   @disabled={{is-empty this.membershipsBeingBlocked}}
@@ -313,7 +313,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.showBlockUserConfirmationModal}}
-  @onConfirm={{queue (perform this.blockUser) (toggle "showBlockUserConfirmationModal" this)}}
+  @onConfirm={{queue this.blockUser.perform (toggle "showBlockUserConfirmationModal" this)}}
   @onCancel={{toggle "showBlockUserConfirmationModal" this}}
   @confirmMessage={{t "block-user"}}
   @alert={{true}}
@@ -332,7 +332,7 @@
 
 <ConfirmationModal
   @modalOpen={{this.showUnblockUserConfirmationModal}}
-  @onConfirm={{queue (perform this.unblockUser) (toggle "showUnblockUserConfirmationModal" this)}}
+  @onConfirm={{queue this.unblockUser.perform (toggle "showUnblockUserConfirmationModal" this)}}
   @onCancel={{toggle "showUnblockUserConfirmationModal" this}}
   @confirmMessage={{t "unblock-user"}}
   @loading={{this.unblockUser.isRunning}}

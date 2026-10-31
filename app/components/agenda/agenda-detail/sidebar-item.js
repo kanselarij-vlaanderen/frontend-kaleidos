@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { timeout, dropTask, task } from 'ember-concurrency';
+import { timeout, task } from 'ember-concurrency';
 
 export default class SidebarItem extends Component {
   /**
@@ -53,42 +53,38 @@ export default class SidebarItem extends Component {
     return classes.join(' ');
   }
 
-  @dropTask
-  *lazyLoadSideData() {
-    yield timeout(350);
+  lazyLoadSideData = task({ drop: true }, async () => {
+    await timeout(350);
     const tasks = [
       this.loadNewsItemVisibility,
       this.loadSubcase,
       this.loadDecisionActivity
     ].filter((task) => task.performCount === 0);
-    yield Promise.all(tasks.map((task) => task.perform()));
-  }
+    await Promise.all(tasks.map((task) => task.perform()));
+  });
 
   @action
   cancelLazyLoad() {
     this.lazyLoadSideData.cancelAll();
   }
 
-  @task
-  *loadSubcase() {
-    const agendaActivity = yield this.args.agendaitem.agendaActivity;
+  loadSubcase = task(async () => {
+    const agendaActivity = await this.args.agendaitem.agendaActivity;
     // the approval agenda-item doesn't have agenda activity
-    this.subcase = yield agendaActivity?.subcase;
-  }
+    this.subcase = await agendaActivity?.subcase;
+  });
 
-  @task
-  *loadNewsItemVisibility() {
-    const treatment = yield this.args.agendaitem.treatment;
+  loadNewsItemVisibility = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
     // not all agendaitems have treatments (mainly in legacy)
-    this.newsItem = yield treatment?.newsItem;
-  }
+    this.newsItem = await treatment?.newsItem;
+  });
 
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.belongsTo('decisionResultCode').reload();
-  }
+  loadDecisionActivity = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.belongsTo('decisionResultCode').reload();
+  });
 
   @action
   conditionallyScrollIntoView(element) {

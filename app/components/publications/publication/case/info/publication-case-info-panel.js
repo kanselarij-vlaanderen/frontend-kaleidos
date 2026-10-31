@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { isBlank } from '@ember/utils';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { timeout, task, restartableTask } from 'ember-concurrency';
+import { timeout, task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { removeObject } from 'frontend-kaleidos/utils/array-helpers';
 
@@ -30,34 +30,33 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.initFields.perform();
   }
 
-  @task
-  *initFields() {
+  initFields = task(async () => {
     this.isViaCouncilOfMinisters =
-      yield this.publicationService.getIsViaCouncilOfMinisters(
+      await this.publicationService.getIsViaCouncilOfMinisters(
         this.args.publicationFlow
       );
     // Publication number
-    this.identification = yield this.args.publicationFlow.identification;
-    this.structuredIdentifier = yield this.identification.structuredIdentifier;
+    this.identification = await this.args.publicationFlow.identification;
+    this.structuredIdentifier = await this.identification.structuredIdentifier;
     // using local tracked values because validation of these fields is delayed.
     // identification and structured-identifier are only updated after validation succeeds
     this.publicationNumber = this.structuredIdentifier.localIdentifier;
     this.publicationNumberSuffix = this.structuredIdentifier.versionIdentifier;
     // Numac-nummers
-    this.numacNumbers = yield this.args.publicationFlow.numacNumbers;
+    this.numacNumbers = await this.args.publicationFlow.numacNumbers;
     // Thread ID
-    this.threadId = (yield this.args.publicationFlow.threadId)?.idName;
+    this.threadId = (await this.args.publicationFlow.threadId)?.idName;
     // Datum beslissing
-    this.decisionActivity = yield this.args.publicationFlow
+    this.decisionActivity = await this.args.publicationFlow
       .decisionActivity;
     // Limiet publicatie
-    this.publicationSubcase = yield this.args.publicationFlow
+    this.publicationSubcase = await this.args.publicationFlow
       .publicationSubcase;
     if (this.isViaCouncilOfMinisters && this.decisionActivity) {
       // get the models meeting/agenda/agendaitem for clickable link
-      this.modelsForAgendaitemRoute = yield this.publicationService.getModelsForAgendaitemFromDecisionActivity(this.decisionActivity);
+      this.modelsForAgendaitemRoute = await this.publicationService.getModelsForAgendaitemFromDecisionActivity(this.decisionActivity);
     }
-  }
+  });
 
   get publicationNumberErrorTranslationKey() {
     if (this.numberIsRequired) {
@@ -96,31 +95,28 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     this.args.publicationFlow.urgencyLevel = urgencyLevel;
   }
 
-  @restartableTask
-  *setPublicationNumber(event) {
+  setPublicationNumber = task({ restartable: true }, async (event) => {
     this.publicationNumber = event.target.value;
     const number = parseInt(this.publicationNumber, 10);
     if (isBlank(this.publicationNumber) || Object.is(NaN, number)) {
       this.numberIsRequired = true;
     } else {
       this.numberIsRequired = false;
-      yield this.setStructuredIdentifier.perform();
+      await this.setStructuredIdentifier.perform();
     }
-  }
+  });
 
-  @restartableTask
-  *setPublicationNumberSuffix(event) {
+  setPublicationNumberSuffix = task({ restartable: true }, async (event) => {
     this.publicationNumberSuffix = isBlank(event.target.value)
       ? undefined
       : event.target.value;
-    yield this.setStructuredIdentifier.perform();
-  }
+    await this.setStructuredIdentifier.perform();
+  });
 
-  @restartableTask
-  *setStructuredIdentifier() {
-    yield timeout(1000);
+  setStructuredIdentifier = task({ restartable: true }, async () => {
+    await timeout(1000);
     const isPublicationNumberTaken =
-      yield this.publicationService.publicationNumberAlreadyTaken(
+      await this.publicationService.publicationNumberAlreadyTaken(
         this.publicationNumber,
         this.publicationNumberSuffix,
         this.args.publicationFlow.id
@@ -136,7 +132,7 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
         : `${this.publicationNumber}`;
       this.numberIsAlreadyUsed = false;
     }
-  }
+  });
 
   @action
   addNumacNumber(newNumacNumber) {
@@ -181,39 +177,42 @@ export default class PublicationsPublicationCaseInfoPanelComponent extends Compo
     }
   }
 
-  @task
-  *closeEditingPanel() {
+  closeEditingPanel = task(async () => {
     // Remove locally created numac-numbers that are not yet persisted in the backend
     const newNumacNumbers = this.numacNumbers.filter((number) => number.isNew);
     newNumacNumbers.forEach((number) => number.deleteRecord());
     // Reset thread ID
-    this.threadId = (yield this.args.publicationFlow.threadId)?.idName;
+    this.threadId = (await this.args.publicationFlow.threadId)?.idName;
 
     const reloads = [
       this.args.publicationFlow.belongsTo('urgencyLevel').reload(),
       this.args.publicationFlow.hasMany('numacNumbers').reload(),
     ];
-    yield Promise.all(reloads);
+    await Promise.all(reloads);
+
+    // cancel setting publication number tasks
+    this.setPublicationNumber.cancelAll();
+    this.setPublicationNumberSuffix.cancelAll();
+    this.setStructuredIdentifier.cancelAll();
 
     this.identification.rollbackAttributes();
     this.structuredIdentifier.rollbackAttributes();
     this.decisionActivity?.rollbackAttributes();
     this.publicationSubcase.rollbackAttributes();
     this.args.publicationFlow.rollbackAttributes();
-    yield this.args.publicationFlow.belongsTo('mode').reload();
+    await this.args.publicationFlow.belongsTo('mode').reload();
 
     this.isEditing = false;
-  }
+  });
 
-  @task
-  *save() {
-    yield this.setStructuredIdentifier.last;
+  save = task(async () => {
+    await this.setStructuredIdentifier.last;
     if (!this.isValid) {
       return;
     }
-    yield this.performSave();
+    await this.performSave();
     this.isEditing = false;
-  }
+  });
 
   // separate method to prevent ember-concurrency from saving only partially
   async performSave() {

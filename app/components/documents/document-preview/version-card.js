@@ -10,8 +10,7 @@ export default class DocumentsDocumentPreviewVersionCardComponent extends Compon
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    this.accessLevel = yield this.args.piece.accessLevel;
-  }
+  loadData = task(async () => {
+    this.accessLevel = await this.args.piece.accessLevel;
+  });
 }

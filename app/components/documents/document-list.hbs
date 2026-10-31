@@ -1,5 +1,5 @@
 {{#let (element this.tag) as |Tag|}}
-  <Tag {{did-update (perform this.groupDocumentsByContainer) @pieces}}
+  <Tag {{did-update this.groupDocumentsByContainer.perform @pieces}}
     ...attributes>
     {{yield this.latestDocuments}}
   </Tag>

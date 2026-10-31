@@ -13,8 +13,7 @@ export default class PrintNewsletterController extends Controller {
 
   @tracked showDraft = false;
 
-  @task
-  *saveNewsItem(newsItem) {
-    yield newsItem.stopEditingOnSave();
-  }
+  saveNewsItem = task(async (newsItem) => {
+    await newsItem.stopEditingOnSave();
+  });
 }

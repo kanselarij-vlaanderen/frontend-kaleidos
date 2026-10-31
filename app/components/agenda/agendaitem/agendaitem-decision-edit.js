@@ -11,24 +11,22 @@ export default class AgendaitemDecisionEditComponent extends Component {
     this.loadDecisionActivityResult.perform();
   }
 
-  @task
-  *loadDecisionActivityResult() {
-    this.decisionResultCode = yield this.args.decisionActivity?.decisionResultCode;
-  }
+  loadDecisionActivityResult = task(async () => {
+    this.decisionResultCode = await this.args.decisionActivity?.decisionResultCode;
+  });
 
   @action
   changeDecisionResultCode(resultCode) {
     this.decisionResultCode = resultCode;
   }
 
-  @task
-  *saveDecisionActivity() {
+  saveDecisionActivity = task(async () => {
     this.args.decisionActivity.decisionResultCode = this.decisionResultCode;
-    yield this.args.decisionActivity.save();
+    await this.args.decisionActivity.save();
     if (this.args.onSave) {
       this.args.onSave();
     }
-  }
+  });
 
   @action
   cancelEdit() {

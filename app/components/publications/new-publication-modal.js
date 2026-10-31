@@ -1,7 +1,7 @@
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { task, restartableTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { isBlank } from '@ember/utils';
 
@@ -77,48 +77,43 @@ export default class NewPublicationModal extends Component {
     return this.isPublicationNumberValid && this.isShortTitleValid;
   }
 
-  @task
-  *initPublicationNumber() {
-    const latestPublication = yield this.store.queryOne('publication-flow', {
+  initPublicationNumber = task(async () => {
+    const latestPublication = await this.store.queryOne('publication-flow', {
       sort: '-identification.structured-identifier.local-identifier',
       include: 'identification.structured-identifier',
     });
     if (latestPublication) {
-      const identification = yield latestPublication.identification;
-      const structuredIdentifier = yield identification.structuredIdentifier;
+      const identification = await latestPublication.identification;
+      const structuredIdentifier = await identification.structuredIdentifier;
       this.number = structuredIdentifier.localIdentifier + 1;
     } else {
       this.number = 1;
     }
     // reset validation state. New number is valid.
     this.numberIsAlreadyUsed = false;
+  });
 
-  }
-
-  @restartableTask
-  *setPublicationNumber(event) {
+  setPublicationNumber = task({ restartable: true }, async (event) => {
     this.number = event.target.value;
     const number = parseInt(this.number, 10);
     if (isBlank(this.number) || Object.is(NaN, number)) {
       this.numberIsRequired = true;
     } else {
       this.numberIsRequired = false;
-      yield this.validateIsPublicationNumberAlreadyTaken.perform();
+      await this.validateIsPublicationNumberAlreadyTaken.perform();
     }
-  }
+  });
 
-  @restartableTask
-  *setPublicationNumberSuffix(event) {
+  setPublicationNumberSuffix = task({ restartable: true }, async (event) => {
     this.suffix = isBlank(event.target.value) ? undefined : event.target.value;
-    yield this.validateIsPublicationNumberAlreadyTaken.perform();
-  }
+    await this.validateIsPublicationNumberAlreadyTaken.perform();
+  });
 
-  @restartableTask
-  *preSaveValidation() {
-    yield this.validateIsPublicationNumberAlreadyTaken.perform();
+  preSaveValidation = task({ restartable: true }, async () => {
+    await this.validateIsPublicationNumberAlreadyTaken.perform();
     if (this.numberIsAlreadyUsed) {
       // another user was creating a publication at the same time, we suggest a new number and show a toast
-      yield this.initPublicationNumber.perform();
+      await this.initPublicationNumber.perform();
       this.toaster.warning(
         this.intl.t('publication-number-already-taken-new-number-created'),
         this.intl.t('warning-title')
@@ -127,13 +122,12 @@ export default class NewPublicationModal extends Component {
     } else {
       return false;
     }
-  }
+  });
 
-  @task
-  *save() {
-    const numberWasRecentlyUsed = yield this.preSaveValidation.perform();
+  save = task(async () => {
+    const numberWasRecentlyUsed = await this.preSaveValidation.perform();
     if (this.isValid && !numberWasRecentlyUsed) {
-      yield this.args.onSave({
+      await this.args.onSave({
         number: this.number,
         suffix: this.suffix,
         shortTitle: this.shortTitle,
@@ -143,17 +137,16 @@ export default class NewPublicationModal extends Component {
         publicationDueDate: this.publicationDueDate,
       });
     }
-  }
+  });
 
-  @restartableTask
-  *validateIsPublicationNumberAlreadyTaken() {
-    yield timeout(1000);
+  validateIsPublicationNumberAlreadyTaken = task({ restartable: true }, async () => {
+    await timeout(1000);
     this.numberIsAlreadyUsed =
-      yield this.publicationService.publicationNumberAlreadyTaken(
+      await this.publicationService.publicationNumberAlreadyTaken(
         this.number,
         this.suffix
       );
-  }
+  });
 
   @action
   enableErrorOnShortTitle() {

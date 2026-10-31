@@ -1,10 +1,9 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
-import { isEnabledCabinetSubmissions, isEnabledVlaamsParlement } from 'frontend-kaleidos/utils/feature-flag';
 
 export default class AgendaitemControls extends Component {
   /**
@@ -58,18 +57,14 @@ export default class AgendaitemControls extends Component {
       const currentUserOrganization = await this.currentSession.organization;
       const currentUserOrganizationMandatees = await currentUserOrganization.mandatees;
       const currentUserOrganizationMandateesUris = currentUserOrganizationMandatees.map((mandatee) => mandatee.uri);
-      if (isEnabledVlaamsParlement()) {
-        if (this.currentSession.may('send-only-specific-cases-to-vp')) {
-          if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
-            this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
-          } else {
-            this.canSendToVP = false;
-          }
-        } else if (this.currentSession.may('send-cases-to-vp')) {
+      if (this.currentSession.may('send-only-specific-cases-to-vp')) {
+        if (currentUserOrganizationMandateesUris.includes(submitter?.uri)) {
           this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
         } else {
           this.canSendToVP = false;
         }
+      } else if (this.currentSession.may('send-cases-to-vp')) {
+        this.canSendToVP = await this.parliamentService.isReadyForVp(this.args.agendaitem);
       } else {
         this.canSendToVP = false;
       }
@@ -151,7 +146,7 @@ export default class AgendaitemControls extends Component {
   }
 
   get agendaItemWasSubmitted() {
-    return this.submissions?.length === 1 && isEnabledCabinetSubmissions();
+    return this.submissions?.length === 1;
   }
 
   get deleteWarningText() {
@@ -164,27 +159,24 @@ export default class AgendaitemControls extends Component {
     return null;
   }
 
-  @task
-  *loadAgendaData() {
-    const status = yield this.args.currentAgenda.status;
+  loadAgendaData = task(async () => {
+    const status = await this.args.currentAgenda.status;
     this.isDesignAgenda = status.isDesignAgenda;
-  }
+  });
 
-  @task
-  *loadDecisionActivity() {
-    const treatment = yield this.args.agendaitem.treatment;
-    this.decisionActivity = yield treatment?.decisionActivity;
-    yield this.decisionActivity?.decisionResultCode;
-  }
+  loadDecisionActivity = task(async () => {
+    const treatment = await this.args.agendaitem.treatment;
+    this.decisionActivity = await treatment?.decisionActivity;
+    await this.decisionActivity?.decisionResultCode;
+  });
 
-  @task
-  *loadSubmissions() {
+  loadSubmissions = task(async () => {
     if (this.args.subcase?.id) {
-      this.submissions = yield this.args.subcase.submissions;
-      const ongoingSubmission = yield this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
+      this.submissions = await this.args.subcase.submissions;
+      const ongoingSubmission = await this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
       this.ongoingSubmissionId = ongoingSubmission?.id;
     }
-  }
+  });
 
   async deleteItem(agendaitem) {
     this.isVerifying = false;
@@ -228,19 +220,17 @@ export default class AgendaitemControls extends Component {
     this.showLoader = false;
   }
 
-  @task
-  *postponeAgendaitem() {
-    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
-    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
-  }
+  postponeAgendaitem = task(async () => {
+    await this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD);
+    await this.updateDecisionPiecePart.perform(this.intl.t('postponed-item-decision'));
+    await this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+  });
 
-  @task
-  *retractAgendaitem() {
-    yield this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
-    yield this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'), true);
-    yield this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
-  }
+  retractAgendaitem = task(async () => {
+    await this.setDecisionResultCode.perform(CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN);
+    await this.updateDecisionPiecePart.perform(this.intl.t('retracted-item-decision'), true);
+    await this.newsletterService.updateNewsItemVisibility(this.args.agendaitem);
+  });
 
   @action
   toggleIsVerifying() {
@@ -276,15 +266,14 @@ export default class AgendaitemControls extends Component {
     this.isSendingBackToSubmitter = false;
   }
 
-  @task
-  *updateDecisionPiecePart(message, regenerateConcerns) {
-    const report = yield this.store.queryOne('report', {
+  updateDecisionPiecePart = task(async (message, regenerateConcerns) => {
+    const report = await this.store.queryOne('report', {
       filter: {
         'decision-activity': { ':id:': this.decisionActivity.id },
       },
     });
     if (report) {
-      const beslissingPiecePart = yield this.store.queryOne('piece-part', {
+      const beslissingPiecePart = await this.store.queryOne('piece-part', {
         filter: {
           report: { ':id:': report.id },
           ':has-no:next-piece-part': true,
@@ -293,7 +282,7 @@ export default class AgendaitemControls extends Component {
       });
       if (beslissingPiecePart) {
         const now = new Date();
-        const newBeslissingPiecePart = yield this.store.createRecord(
+        const newBeslissingPiecePart = await this.store.createRecord(
           'piece-part',
           {
             title: 'Beslissing',
@@ -303,53 +292,51 @@ export default class AgendaitemControls extends Component {
             created: now,
           }
         );
-        yield newBeslissingPiecePart.save();
-        yield this.decisionReportGeneration.generateReplacementReport.perform(
+        await newBeslissingPiecePart.save();
+        await this.decisionReportGeneration.generateReplacementReport.perform(
           report,
           regenerateConcerns
         );
       }
     }
     return;
-  }
+  });
 
-  @task
-  *resetDecisionResultCode() {
-    const agendaItemType = yield this.args.agendaitem.type;
+  resetDecisionResultCode = task(async () => {
+    const agendaItemType = await this.args.agendaitem.type;
     const isAnnouncement =
       agendaItemType.uri === CONSTANTS.AGENDA_ITEM_TYPES.ANNOUNCEMENT;
     const defaultDecisionResultCodeUri = isAnnouncement
       ? CONSTANTS.DECISION_RESULT_CODE_URIS.KENNISNAME
       : CONSTANTS.DECISION_RESULT_CODE_URIS.GOEDGEKEURD;
-    yield this.setDecisionResultCode.perform(defaultDecisionResultCodeUri);
-  }
+    await this.setDecisionResultCode.perform(defaultDecisionResultCodeUri);
+  });
 
-  @task
-  *setDecisionResultCode(decisionResultCodeUri) {
-    const decisionResultCodeConcept = yield this.store.findRecordByUri(
+  setDecisionResultCode = task(async (decisionResultCodeUri) => {
+    const decisionResultCodeConcept = await this.store.findRecordByUri(
       'concept',
       decisionResultCodeUri
     );
     this.decisionActivity.decisionResultCode = decisionResultCodeConcept;
-    yield this.decisionActivity.save();
+    await this.decisionActivity.save();
     if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.UITGESTELD) {
-      const pieces = yield this.args.agendaitem.pieces;
+      const pieces = await this.args.agendaitem.pieces;
       for (const piece of pieces.slice()) {
-        yield this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
+        await this.pieceAccessLevelService.strengthenAccessLevelToInternRegering(
           piece,
         );
       }
       return;
     }
     if (decisionResultCodeUri === CONSTANTS.DECISION_RESULT_CODE_URIS.INGETROKKEN) {
-      const pieces = yield this.args.agendaitem.pieces;
+      const pieces = await this.args.agendaitem.pieces;
         for (const piece of pieces.slice()) {
-          yield this.pieceAccessLevelService.strengthenAccessLevelToRetracted(
+          await this.pieceAccessLevelService.strengthenAccessLevelToRetracted(
             piece,
           );
-          yield this.signatureService.removeSignFlowForPiece(piece);
+          await this.signatureService.removeSignFlowForPiece(piece);
         }
       return;
     }
-  }
+  });
 }

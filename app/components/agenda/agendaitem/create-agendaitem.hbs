@@ -119,7 +119,7 @@
       @loading={{this.addSubcasesToAgenda.isRunning}}
       @loadingMessage={{t "loading"}}
       @disabled={{this.isSaveDisabled}}
-      {{on "click" (perform this.addSubcasesToAgenda)}}
+      {{on "click" this.addSubcasesToAgenda.perform}}
     >
       {{t "add-to-agenda"}}
     </AuButton>

@@ -272,7 +272,7 @@
     @documentPublicationActivity={{this.documentPublicationActivity}}
     @themisPublicationActivity={{this.themisPublicationActivity}}
     @onCancel={{this.cancelPlanDocumentPublication}}
-    @onSave={{perform this.planDocumentPublication}}
+    @onSave={{this.planDocumentPublication.perform}}
   />
 {{/if}}
 
@@ -282,14 +282,14 @@
     @loading={{this.checkConfidentiality.isRunning}}
     @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishThemis}}
-    @onConfirm={{perform this.publishThemis}}
+    @onConfirm={{this.publishThemis.perform}}
   />
 {{/if}}
 
 {{#if this.showConfirmUnpublishThemis}}
   <ThemisPublications::UnpublishConfirmationModal
     @onCancel={{this.cancelUnpublishThemis}}
-    @onConfirm={{perform this.unpublishThemis}}
+    @onConfirm={{this.unpublishThemis.perform}}
   />
 {{/if}}
 

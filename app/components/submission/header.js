@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, dropTask, enqueueTask } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';
 import { isPresent } from '@ember/utils';
@@ -39,11 +39,35 @@ export default class SubmissionHeaderComponent extends Component {
   @tracked selectedMeeting;
 
   @tracked isForPostponedSubcase = false;
+  @tracked piecesWithStartedSignFlow = [];
 
   constructor() {
     super(...arguments);
     this.loadAgenda.perform();
     this.loadRequestedByIsCurrentMandatee.perform();
+    this.loadStartedSignFlows.perform();
+  }
+
+  loadStartedSignFlows = task(async () => {
+    if (!this.isUpdate) {
+      return;
+    }
+    const draftPieces = await this.args.submission?.pieces;
+    const found = [];
+    for (const draftPiece of draftPieces?.slice() ?? []) {
+      const previousPiece = await draftPiece.previousPiece;
+      if (
+        previousPiece?.id &&
+        (await this.signatureService.hasStartedSignFlow(previousPiece))
+      ) {
+        found.push(previousPiece);
+      }
+    }
+    this.piecesWithStartedSignFlow = found;
+  });
+
+  get hasStartedSignFlowOnUpdatedPieces() {
+    return this.piecesWithStartedSignFlow.length > 0;
   }
 
   loadAgenda = task(async () => {
@@ -286,7 +310,7 @@ export default class SubmissionHeaderComponent extends Component {
     }
   });
 
-  movePiece = enqueueTask({ maxConcurrency: 5 }, async (draftPiece) => {
+  movePiece = task({ maxConcurrency: 5, enqueue: true }, async (draftPiece) => {
     const now = new Date();
     const previousPiece = await draftPiece.previousPiece;
     const accessLevel = await draftPiece.accessLevel;
@@ -346,7 +370,7 @@ export default class SubmissionHeaderComponent extends Component {
     return piece;
   });
 
-  createSubcase = dropTask(
+  createSubcase = task({ drop: true },
     async (
       _fullCopy = false, // unused
       meeting = null,
@@ -365,6 +389,13 @@ export default class SubmissionHeaderComponent extends Component {
       if (!this.canCreateSubcase) {
         return this.toaster.error(
           this.intl.t('submission-edited-concurrently'),
+          this.intl.t('warning-title')
+        );
+      }
+      await this.loadStartedSignFlows.perform();
+      if (this.hasStartedSignFlowOnUpdatedPieces) {
+        return this.toaster.error(
+          this.intl.t('cannot-accept-submission-with-started-sign-flow'),
           this.intl.t('warning-title')
         );
       }
@@ -393,7 +424,7 @@ export default class SubmissionHeaderComponent extends Component {
         await decisionmakingFlow.save();
 
         const _case = this.store.createRecord('case', {
-          shortTitle: this.args.submission.decisionmakingFlowTitle,
+          shortTitle: trimText(this.args.submission.decisionmakingFlowTitle),
           created: this.args.submission.created,
           decisionmakingFlow,
         });

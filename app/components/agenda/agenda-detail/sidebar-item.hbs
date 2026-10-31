@@ -10,7 +10,7 @@
   <div data-test-agenda-detail-sidebar-item-container class="auk-o-flex"
     {{did-insert this.conditionallyScrollIntoView}}
     {{in-viewport
-      onEnter=(perform this.lazyLoadSideData)
+      onEnter=this.lazyLoadSideData.perform
       onExit=this.cancelLazyLoad
     }}
   >

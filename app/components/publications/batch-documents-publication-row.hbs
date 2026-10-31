@@ -15,7 +15,7 @@
         data-test-batch-documents-publication-row-link-option
         @selected={{this.selectedLinkModeOption}}
         @options={{this.linkModeOptions}}
-        @onChange={{perform this.selectLinkModeOption}}
+        @onChange={{this.selectLinkModeOption.perform}}
         as |option|
       >
         {{option.label}}
@@ -26,7 +26,7 @@
         <Publications::PublicationFlowSelector
           @selected={{this.selectedPublicationFlow}}
           @case={{@case}}
-          @onChange={{perform this.selectPublicationFlow}}
+          @onChange={{this.selectPublicationFlow.perform}}
         />
       {{else}}
         <AuButton

@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
@@ -35,10 +35,9 @@ export default class DocumentsDocumentPreviewDocumentPreviewSidebar extends Comp
     return hasPermission && canManageSignflow;
   }
 
-  @task
-  *loadPieceData() {
-    this.documentContainer = yield this.args.piece.documentContainer;
-  }
+  loadPieceData = task(async () => {
+    this.documentContainer = await this.args.piece.documentContainer;
+  });
 
   @action
   setTab(tabName) {

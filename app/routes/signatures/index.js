@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import Snapshot from 'frontend-kaleidos/utils/snapshot';
 import { TrackedArray } from 'tracked-built-ins';
@@ -63,15 +63,8 @@ export default class SignaturesIndexRoute extends Route {
       'sign-subcase': {
         'sign-marking-activity': {
           piece: {
-            agendaitems: {
-              agenda: {
-                meeting: {
-                  'internal-decision-publication-activity': {
-                    ':has:start-date': `date-added-for-cache-busting-${new Date().toISOString()}`,
-                  },
-                },
-              },
-            },
+            ':has:agendaitems': 'yes',
+            ':has-no:next-piece': 'yes'
           },
         },
         ':has-no:sign-preparation-activity': 'yes',
@@ -85,6 +78,17 @@ export default class SignaturesIndexRoute extends Route {
             CONSTANTS.DECISION_RESULT_CODE_IDS.GOEDGEKEURD,
             CONSTANTS.DECISION_RESULT_CODE_IDS.KENNISNAME,
           ].join(','),
+        },
+        treatment: {
+          agendaitems: {
+            agenda: {
+              meeting: {
+                'internal-decision-publication-activity': {
+                  ':has:start-date': `date-added-for-cache-busting-${new Date().toISOString()}`,
+                },
+              },
+            },
+          },
         },
       },
     };

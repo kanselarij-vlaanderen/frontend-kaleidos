@@ -76,6 +76,7 @@ const {
 // - view-submissions: Allow the viewing of submissions in general
 // - view-all-submissions: Allow the viewing of all submissions, regardless of the related mandatee
 // - view-concept-submissions: Allow the viewing of concept submissions
+// - view-all-concept-submissions: Allow the viewing of concept submissions of all organizations (for debugging purposes)
 // - always-edit-submissions: Allow editing submissions regardless of status
 // - edit-in-treatment-submissions: Allow editing submissions when they have the In treatment status
 // - edit-sent-back-submissions: Allow editing submission when they have the Sent back status
@@ -114,6 +115,7 @@ const groups = [
         'view-access-level-pill-when-postponed',
         'view-submissions',
         'view-all-submissions',
+        'view-all-concept-submissions',
         'view-monitoring'
       ],
       full: [

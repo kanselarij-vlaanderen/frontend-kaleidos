@@ -23,21 +23,19 @@ export default class PublicationsPublicationProofProofReceivedPanel extends Comp
     );
   }
 
-  @task
-  *save() {
-    yield this.args.onEditProofingActivity({
+  save = task(async () => {
+    await this.args.onEditProofingActivity({
       proofingActivity: this.args.proofingActivity,
       receivedDate: this.newReceivedDate,
       proofPrintCorrector: this.newProofPrintCorrector,
     });
     this.showEditProofModal = false;
-  }
+  });
 
-  @task
-  *createPublicationRequest(publicationRequestArgs) {
-    yield this.args.onCreatePublicationRequest(publicationRequestArgs);
+  createPublicationRequest = task(async (publicationRequestArgs) => {
+    await this.args.onCreatePublicationRequest(publicationRequestArgs);
     this.showPublicationRequestModal = false;
-  }
+  });
 
   @action
   openEditProofModal() {

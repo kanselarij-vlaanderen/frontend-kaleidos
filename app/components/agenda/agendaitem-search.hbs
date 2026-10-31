@@ -37,7 +37,7 @@
             @hideText={{@hideButtonText}}
             @loading={{this.search.isRunning}}
             @loadingMessage={{t "loading"}}
-            {{on "click" (perform this.search)}}
+            {{on "click" this.search.perform}}
           >
             {{t "search"}}
           </AuButton>

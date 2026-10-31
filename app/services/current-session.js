@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { get } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { isPresent } from '@ember/utils';
@@ -60,11 +60,11 @@ export default class CurrentSessionService extends Service {
   }
   /* eslint-enable ember/no-get */
 
-  clear() {
+  async clear() {
     this.user = null;
     this.role = null;
     this.organization = null;
-    this.impersonation.stopImpersonation();
+    await this.impersonation.stopImpersonation();
     this.isLoggedIn = false;
   }
 

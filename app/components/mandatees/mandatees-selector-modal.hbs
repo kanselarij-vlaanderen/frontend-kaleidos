@@ -55,7 +55,7 @@
       @disabled={{not this.canAdd}}
       @loading={{this.onAdd.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.onAdd)}}
+      {{on "click" this.onAdd.perform}}
     >
       {{t "add"}}
     </AuButton>

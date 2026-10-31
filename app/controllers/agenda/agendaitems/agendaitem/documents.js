@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { TrackedArray } from 'tracked-built-ins';
-import { keepLatestTask, task, all, timeout } from 'ember-concurrency';
+import { task, all, timeout } from 'ember-concurrency';
 import {
   addPieceToAgendaitem,
   restorePiecesFromPreviousAgendaitem,
@@ -82,16 +82,15 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     });
   }
 
-  @task
-  *loadNewPieces() {
+  loadNewPieces = task(async () => {
     if (this.previousAgenda) {
-      this.newAgendaitemPieces = yield this.agendaService.changedPieces(
+      this.newAgendaitemPieces = await this.agendaService.changedPieces(
         this.currentAgenda.id,
         this.previousAgenda.id,
         this.agendaitem.id
       );
     }
-  }
+  });
 
   @action
   async openPieceUploadModal() {
@@ -123,18 +122,17 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     return isAgendaDraftOrLegacy || this.hasConfirmedDocEditOnApproved;
   }
 
-  @task
-  *openWarnUploadOnApproved() {
+  openWarnUploadOnApproved = task(async () => {
     this.isOpenWarnDocEditOnApproved = true;
     this.hasConfirmedDocEditOnApproved = false;
     // The user has about 60 seconds to confirm
     for (let index = 0; index < 120; index++) {
       if (this.isOpenWarnDocEditOnApproved) {
-        yield timeout(500);
+        await timeout(500);
       }
     }
     this.isOpenWarnDocEditOnApproved = false;
-  }
+  });
 
   @action
   closeWarnDocEditOnApproved() {
@@ -201,38 +199,36 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
   /**
    * Save a new document container and the piece it wraps
    */
-  @task
-  *savePiece(piece, index) {
-    const documentContainer = yield piece.documentContainer;
-    const containerCount = yield this.store.count('document-container', {
+  savePiece = task(async (piece, index) => {
+    const documentContainer = await piece.documentContainer;
+    const containerCount = await this.store.count('document-container', {
       'filter[pieces][agendaitems][id]': this.agendaitem.id,
     });
     documentContainer.position = index + 1 + (containerCount ?? 0);
-    yield documentContainer.save();
+    await documentContainer.save();
     piece.name = piece.name.trim();
-    yield piece.save();
+    await piece.save();
     try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
         this.intl.t('warning-title'),
       );
     }
-  }
+  });
 
   /**
    * Add new piece to an existing document container
    */
-  @task
-  *addPiece(piece) {
-    yield piece.save();
-    yield this.signatureService.markNewPieceForSignature(null, piece, this.decisionActivity);
-    yield this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
+  addPiece = task(async (piece) => {
+    await piece.save();
+    await this.signatureService.markNewPieceForSignature(null, piece, this.decisionActivity);
+    await this.pieceAccessLevelService.updatePreviousAccessLevel(piece);
     try {
-      const sourceFile = yield piece.file;
-      yield this.fileConversionService.convertSourceFile(sourceFile);
+      const sourceFile = await piece.file;
+      await this.fileConversionService.convertSourceFile(sourceFile);
     } catch (error) {
       this.toaster.error(
         this.intl.t('error-convert-file', { message: error.message }),
@@ -242,45 +238,41 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
     // Stamp the new piece if needed
     if (this.model.pieces.some(piece => piece.stamp)) {
-      const previousPiece = yield piece.previousPiece;
+      const previousPiece = await piece.previousPiece;
       if (previousPiece.stamp) {
-        yield this.documentService.stampDocuments([piece]);
+        await this.documentService.stampDocuments([piece]);
       }
     }
-    yield this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
-  }
+    await this.updateRelatedAgendaitemsAndSubcase.perform([piece]);
+  });
 
-  @task
-  *cancelUploadPieces() {
+  cancelUploadPieces = task(async () => {
     const deletePromises = this.newPieces.map((piece) =>
       this.deletePiece.perform(piece)
     );
-    yield all(deletePromises);
+    await all(deletePromises);
     this.newPieces = new TrackedArray([]);
     this.isOpenPieceUploadModal = false;
-  }
+  });
 
-  @task
-  *cancelAddPiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
-    yield piece.destroyRecord();
-  }
+  cancelAddPiece = task(async (piece) => {
+    const file = await piece.file;
+    await file.destroyRecord();
+    await piece.destroyRecord();
+  });
 
-  @task
-  *deletePiece(piece) {
-    const file = yield piece.file;
-    yield file.destroyRecord();
+  deletePiece = task(async (piece) => {
+    const file = await piece.file;
+    await file.destroyRecord();
     removeObject(this.newPieces, piece);
-    const documentContainer = yield piece.documentContainer;
-    yield documentContainer.destroyRecord();
-    yield piece.destroyRecord();
-  }
+    const documentContainer = await piece.documentContainer;
+    await documentContainer.destroyRecord();
+    await piece.destroyRecord();
+  });
 
-  @keepLatestTask
-  *ensureFreshData() {
-    yield this.agendaitem.preEditOrSaveCheck();
-  }
+  ensureFreshData = task({ keepLatest: true }, async () => {
+    await this.agendaitem.preEditOrSaveCheck();
+  });
 
   @action
   async setPreviousPiecesFromAgendaitem(previousPiece) {
@@ -294,20 +286,19 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
     }
   }
 
-  @task
-  *updateRelatedAgendaitemsAndSubcase(pieces) {
-    yield this.ensureFreshData.perform(); // some other user could have saved agendaitem before we pressed save
+  updateRelatedAgendaitemsAndSubcase = task(async (pieces) => {
+    await this.ensureFreshData.perform(); // some other user could have saved agendaitem before we pressed save
     if (!this.hasConfirmedDocEditOnApproved) {
-      const canDocsBeEdited = yield this.checkIfDocumentsCanBeEdited();
+      const canDocsBeEdited = await this.checkIfDocumentsCanBeEdited();
       if (!canDocsBeEdited) {
         // delete without a warning, upload not allowed or confirmed
         if (this.newPieces.length) {
-          yield this.cancelUploadPieces.perform();
+          await this.cancelUploadPieces.perform();
         } else {
           const deletePromises = pieces.map(async (piece) => {
             await this.cancelAddPiece.perform(piece);
           });
-          yield all(deletePromises);
+          await all(deletePromises);
         }
         return;
       }
@@ -315,12 +306,12 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
 
     // Failsafe, if we got to a situation where the user has old pieces data when saving new pieces, we refresh the relation to avoid stale data
     // The improved concurrency check should be enough, but as long as we save here, the risk of saving old data exists
-    yield this.agendaitem.hasMany('pieces').reload();
+    await this.agendaitem.hasMany('pieces').reload();
     // Link pieces to subcase with activity
-    const agendaActivity = yield this.agendaitem.agendaActivity;
+    const agendaActivity = await this.agendaitem.agendaActivity;
     if (agendaActivity) {
       // There is no agendaActivity/subcase on isApproval agendaitems
-      const subcase = yield agendaActivity.subcase;
+      const subcase = await agendaActivity.subcase;
       // Create new submission activity for pieces added after initial submission
       const submissionActivity = this.store.createRecord(
         'submission-activity',
@@ -331,31 +322,31 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
           pieces,
         }
       );
-      submissionActivity.save(); // submission-act isn't needed further here. No yield. Can run in background.
+      submissionActivity.save(); // submission-act isn't needed further here. No await. Can run in background.
     }
 
     // save formal ok change on agendaitem on design agendas
     // If the concurrency check failed you can overwrite the pieces list with stale data, effectively losing piece links to agendaitem
-    const agenda = yield this.agendaitem.agenda;
-    const agendaStatus = yield agenda.belongsTo('status').reload();
+    const agenda = await this.agendaitem.agenda;
+    const agendaStatus = await agenda.belongsTo('status').reload();
     if (agendaStatus.isDesignAgenda) {
       setNotYetFormallyOk(this.agendaitem);
     }
-    yield this.agendaitem.save();
+    await this.agendaitem.save();
     // Link piece to agendaitem
     for (const piece of pieces) {
-      yield addPieceToAgendaitem(this.agendaitem, piece);
+      await addPieceToAgendaitem(this.agendaitem, piece);
     }
     // ensure the cache does not hold stale data + refresh our local store for future saves of agendaitem
     for (let index = 0; index < 10; index++) {
-      const agendaitemPieces = yield this.agendaitem.hasMany('pieces').reload();
+      const agendaitemPieces = await this.agendaitem.hasMany('pieces').reload();
       if (agendaitemPieces.includes(pieces[pieces.length - 1])) {
         // last added piece was found in the list from cache
         this.router.refresh('agenda.agendaitems.agendaitem.documents');
         break;
       } else {
         // list from cache is stale, wait with back-off strategy
-        yield timeout(500 + index * 500);
+        await timeout(500 + index * 500);
         if (index >= 9) {
           this.toaster.error(
             this.intl.t('documents-may-not-be-saved-message'),
@@ -367,7 +358,7 @@ export default class DocumentsAgendaitemsAgendaController extends Controller {
         }
       }
     }
-  }
+  });
 
   @action
   async openBatchDetails() {

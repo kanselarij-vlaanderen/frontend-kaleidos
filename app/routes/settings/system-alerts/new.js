@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { addDays } from 'date-fns';
 
 export default class NewSystemAlertsRoute extends Route {

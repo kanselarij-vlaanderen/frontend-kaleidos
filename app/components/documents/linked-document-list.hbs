@@ -1,4 +1,4 @@
-<div {{did-update (perform this.loadData) @linkedPieces}}>
+<div {{did-update this.loadData.perform @linkedPieces}}>
   {{#if this.loadData.isRunning}}
     <Auk::Loader @message={{t "documents-loading-text"}} />
   {{else}}

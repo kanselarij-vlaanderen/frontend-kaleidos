@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 /**
@@ -20,23 +20,22 @@ export default class PublicationsPublicationCaseGovernmentAreasGovernmnetAreasPa
     this.loadData.perform();
   }
 
-  @task
-  *loadData() {
-    this.governmentAreas = yield this.args.publicationFlow.governmentAreas;
+  loadData = task(async () => {
+    this.governmentAreas = await this.args.publicationFlow.governmentAreas;
     const isViaCouncilOfMinisters =
-      yield this.publicationService.getIsViaCouncilOfMinisters(
+      await this.publicationService.getIsViaCouncilOfMinisters(
         this.args.publicationFlow
       );
-    const decisionActivity = yield this.args.publicationFlow.decisionActivity;
+    const decisionActivity = await this.args.publicationFlow.decisionActivity;
     if (isViaCouncilOfMinisters && decisionActivity) {
       const [meetingId, agendaId] =
-        yield this.publicationService.getModelsForAgendaitemFromDecisionActivity(
+        await this.publicationService.getModelsForAgendaitemFromDecisionActivity(
           decisionActivity
         );
-      this.meeting = yield this.store.findRecord('meeting', meetingId);
-      this.agenda = yield this.store.findRecord('agenda', agendaId);
+      this.meeting = await this.store.findRecord('meeting', meetingId);
+      this.agenda = await this.store.findRecord('agenda', agendaId);
     }
-  }
+  });
 
   @action
   async saveGovernmentAreas(newGovernmentAreas) {

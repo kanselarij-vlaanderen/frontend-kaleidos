@@ -103,7 +103,7 @@
               @skin="primary"
               @loading={{this.save.isRunning}}
               @loadingMessage={{t "loading"}}
-              {{on "click" (perform this.save)}}
+              {{on "click" this.save.perform}}
             >
               {{t "save"}}
             </AuButton>

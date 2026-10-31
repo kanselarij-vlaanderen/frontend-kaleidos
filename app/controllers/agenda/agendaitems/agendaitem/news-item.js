@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class NewsItemAgendaitemAgendaitemsAgendaController extends Controller {
   @service router;
@@ -63,25 +63,23 @@ export default class NewsItemAgendaitemAgendaitemsAgendaController extends Contr
     this.router.refresh('agenda.agendaitems.agendaitem.news-item');
   }
 
-  @task
-  *closeEdit(wasNewsItemNew) {
+  closeEdit = task(async (wasNewsItemNew) => {
     if (wasNewsItemNew) {
       this.isEditing = false;
       this.router.refresh('agenda.agendaitems.agendaitem.news-item');
     } else {
-      yield this.stopEditing();
+      await this.stopEditing();
     }
-  }
+  });
 
-  @task
-  *saveNewsItem(newsItem, wasNewsItemNew) {
-    yield newsItem.stopEditingOnSave();
+  saveNewsItem = task(async (newsItem, wasNewsItemNew) => {
+    await newsItem.stopEditingOnSave();
     this.isEditing = false;
     this.preventUnload.disable();
     if (wasNewsItemNew) {
       this.router.refresh('agenda.agendaitems.agendaitem.news-item');
     }
-  }
+  });
 
   @action
   dismissNotaModifiedWarning() {

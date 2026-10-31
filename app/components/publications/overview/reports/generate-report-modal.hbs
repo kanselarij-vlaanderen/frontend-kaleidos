@@ -70,8 +70,8 @@
               value={{this.publicationYear}}
               @error={{not this.isPublicationYearValid}}
               {{on "input" this.onInputPublicationYear}}
-              {{on "focusout" (perform this.loadGovernmentDomains)}}
-              {{on "change" (perform this.loadGovernmentDomains)}}
+              {{on "focusout" this.loadGovernmentDomains.perform}}
+              {{on "change" this.loadGovernmentDomains.perform}}
             />
           </AuFormRow>
         {{/if}}

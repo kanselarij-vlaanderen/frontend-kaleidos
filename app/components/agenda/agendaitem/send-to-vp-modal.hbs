@@ -2,7 +2,7 @@
   @modalOpen={{true}}
   @closable={{this.sendToVP.isIdle}}
   @confirmMessage={{t "send-to-VP"}}
-  @onConfirm={{perform this.sendToVP}}
+  @onConfirm={{this.sendToVP.perform}}
   @onCancel={{@onCancel}}
   @loading={{this.sendToVP.isRunning}}
   @disabled={{this.nothingToBeSent}}

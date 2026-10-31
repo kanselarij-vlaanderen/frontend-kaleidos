@@ -30,7 +30,7 @@ context('Settings overview page tests', () => {
   });
 
   it('Should trigger search when clicking on search icon', () => {
-    cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
+    cy.intercept('GET', '/users?filter**Minister**').as('filterUsersMinister');
 
     cy.get(settings.settings.manageUsers).click();
     cy.url().should('include', 'instellingen/gebruikers');
@@ -41,7 +41,7 @@ context('Settings overview page tests', () => {
   });
 
   it('Should navigate to detailview from user', () => {
-    cy.intercept('GET', '/users?filter=Minister**').as('filterUsersMinister');
+    cy.intercept('GET', '/users?filter**Minister**').as('filterUsersMinister');
 
     cy.get(settings.settings.manageUsers).click();
     cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');

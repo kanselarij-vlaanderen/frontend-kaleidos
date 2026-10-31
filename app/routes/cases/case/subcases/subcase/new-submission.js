@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 import { addObjects } from 'frontend-kaleidos/utils/array-helpers';
 import { deletePiece } from 'frontend-kaleidos/utils/document-delete-helpers';

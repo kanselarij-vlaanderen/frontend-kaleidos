@@ -1,5 +1,5 @@
 import Model, { belongsTo, hasMany, attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import {
   KALEIDOS_START_DATE,
   DIGITAL_MINUTES_IN_KALEIDOS_START_DATE,

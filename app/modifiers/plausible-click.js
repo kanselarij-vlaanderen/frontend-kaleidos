@@ -1,6 +1,6 @@
 import Modifier from 'ember-modifier';
 import { registerDestructor } from '@ember/destroyable';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class PlausibleClickModifier extends Modifier {
   @service plausible;

@@ -49,7 +49,7 @@
               @skin="secondary"
               @alert={{true}}
               @icon="trash"
-              {{on "click" (perform this.remove this.selectedAlert)}}
+              {{on "click" (fn this.remove.perform this.selectedAlert)}}
             >
               {{t "delete"}}
             </AuButton>

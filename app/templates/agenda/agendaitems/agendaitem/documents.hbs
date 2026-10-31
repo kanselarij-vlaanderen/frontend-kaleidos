@@ -75,7 +75,7 @@
       @agendaitem={{this.agendaitem}}
       @agendaContext={{hash meeting=this.meeting agenda=this.currentAgenda agendaitem=this.agendaitem}}
       @onOpenUploadModal={{this.openUploadModalForNewPiece}}
-      @onAddPiece={{perform this.addPiece}}
+      @onAddPiece={{this.addPiece.perform}}
       @didDeleteContainer={{this.refresh}}
       @isEditable={{true}}
       @decisionActivity={{this.decisionActivity}}
@@ -141,8 +141,8 @@
 <ConfirmationModal
   @modalOpen={{this.isOpenPieceUploadModal}}
   @title={{t "document-add"}}
-  @onConfirm={{perform this.savePieces}}
-  @onCancel={{perform this.cancelUploadPieces}}
+  @onConfirm={{this.savePieces.perform}}
+  @onCancel={{this.cancelUploadPieces.perform}}
   @confirmMessage={{t "documents-add"}}
   @disabled={{eq this.newPieces.length 0}}
   @loading={{this.savePieces.isRunning}}
@@ -163,7 +163,7 @@
             @piece={{piece}}
             @allowDocumentContainerEdit={{true}}
             @documentTypeRequired={{true}}
-            @onDelete={{perform this.deletePiece piece}}
+            @onDelete={{fn this.deletePiece.perform piece}}
           />
         {{/each}}
       </div>

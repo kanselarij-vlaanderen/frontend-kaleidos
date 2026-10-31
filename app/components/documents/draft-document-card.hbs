@@ -6,8 +6,8 @@
       this.deleteDocumentContainerWithUndo.isRunning
       'vlc-document--deleted-state'
     }}"
-  {{did-update (perform this.loadPieceRelatedData) @piece}}
-  {{did-update (perform this.loadPieceRelatedData) @documentContainer}}
+  {{did-update this.loadPieceRelatedData.perform @piece}}
+  {{did-update this.loadPieceRelatedData.perform @documentContainer}}
 >
   <div class="vlc-document-card__summary">
     <div class="vlc-document-card__content">
@@ -190,7 +190,7 @@
               {{#each this.visiblePieces as |piece|}}
                 <div
                   class="vlc-document-holder"
-                  {{did-update (perform this.loadPieceRelatedData) piece}}
+                  {{did-update this.loadPieceRelatedData.perform piece}}
                 >
                   <Documents::DocumentVersionHistoryItem
                     @piece={{piece}}
@@ -212,15 +212,15 @@
     @documentContainer={{this.documentContainer}}
     @signFlow={{this.signFlow}}
     @onCancel={{this.cancelEditPiece}}
-    @onSave={{queue (toggle "isEditingPiece" this) (perform this.loadPieceRelatedData)}}
+    @onSave={{queue (toggle "isEditingPiece" this) this.loadPieceRelatedData.perform}}
   />
 {{/if}}
 
 <ConfirmationModal
   @modalOpen={{this.isOpenUploadModal}}
   @title={{t "new-document-piece"}}
-  @onConfirm={{perform this.addPiece}}
-  @onCancel={{perform this.cancelUploadPiece}}
+  @onConfirm={{this.addPiece.perform}}
+  @onCancel={{this.cancelUploadPiece.perform}}
   @confirmMessage={{t "add"}}
   @loading={{this.addPiece.isRunning}}
   @disabled={{not this.newPiece}}
@@ -235,7 +235,7 @@
       />
       <Documents::UploadedDocument
         @piece={{this.newPiece}}
-        @onDelete={{perform this.deleteUploadedPiece}}
+        @onDelete={{this.deleteUploadedPiece.perform}}
         @allowEditPieceAccessLevel={{true}}
         @simplifiedOptions={{true}}
         @documentTypeRequired={{true}}
@@ -245,7 +245,7 @@
       <Auk::FileUploader
         @isSubmission={{true}}
         @multiple={{false}}
-        @onUpload={{perform this.uploadPiece}}
+        @onUpload={{this.uploadPiece.perform}}
         @validateFile={{this.validateFile}}
         @dropzoneMessage={{if (not (user-may "upload-any-submission-document-extension")) "submission-document-accepted-types"}}
       />

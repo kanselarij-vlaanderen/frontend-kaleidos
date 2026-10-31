@@ -164,11 +164,19 @@ context('testing user and organization management', () => {
     });
 
     it('check filter by search', () => {
-      // can't search for both firstname and lastname combined
+      // search on a single name part
       cy.get(settings.usersIndex.searchInput).type('Admin');
       cy.get(settings.usersIndex.searchButton).click();
       cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
       cy.get(utils.numberPagination.container).contains('van 1');
+
+      // search on first name and last name combined
+      cy.get(settings.usersIndex.searchInput).clear()
+        .type('Admin Test');
+      cy.get(settings.usersIndex.searchButton).click();
+      cy.get(settings.usersIndex.table).should('not.contain', 'Aan het laden');
+      cy.get(settings.usersIndex.row.name).should('have.length', 1)
+        .and('contain', 'Admin Test');
     });
 
     it('test the datatable', () => {

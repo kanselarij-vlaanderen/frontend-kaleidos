@@ -5,7 +5,7 @@
       "request-translations-for-publication"
       publicationNumber=@publicationFlow.identification.idName
     }}
-    @onClose={{perform this.cancel}}
+    @onClose={{this.cancel.perform}}
     @closeDisabled={{this.isCancelDisabled}}
   />
   <Auk::Modal::Body>
@@ -38,7 +38,7 @@
                 value={{this.numberOfPages}}
                 @width="block"
                 {{on "input" (pick "target.value" (set this "numberOfPages"))}}
-                {{on "focusout" (perform this.setEmailFields)}}
+                {{on "focusout" this.setEmailFields.perform}}
               />
             </AuFormRow>
           </div>
@@ -57,7 +57,7 @@
                 value={{this.numberOfWords}}
                 @width="block"
                 {{on "input" (pick "target.value" (set this "numberOfWords"))}}
-                {{on "focusout" (perform this.setEmailFields)}}
+                {{on "focusout" this.setEmailFields.perform}}
               />
             </AuFormRow>
           </div>
@@ -72,7 +72,7 @@
         />
         <Publications::Publication::PublicationDocumentsList
           @pieces={{this.uploadedPieces}}
-          @onDeletePiece={{perform this.deleteUploadedPiece}}
+          @onDeletePiece={{this.deleteUploadedPiece.perform}}
           class="au-u-margin-top-tiny"
         />
       </AuFormRow>
@@ -112,7 +112,7 @@
     </div>
   </Auk::Modal::Body>
   <Auk::Modal::Footer
-    @onCancel={{perform this.cancel}}
+    @onCancel={{this.cancel.perform}}
     @cancelDisabled={{this.isCancelDisabled}}
   >
     <AuButton
@@ -121,7 +121,7 @@
       @disabled={{this.isSaveDisabled}}
       @loading={{this.save.isRunning}}
       @loadingMessage={{t "loading"}}
-      {{on "click" (perform this.save)}}
+      {{on "click" this.save.perform}}
     >
       {{t "request-it"}}
     </AuButton>

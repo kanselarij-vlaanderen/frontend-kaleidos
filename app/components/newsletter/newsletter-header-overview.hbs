@@ -135,7 +135,7 @@
             {{!--
             <AuButton
               @skin="link"
-              {{on "click" (perform this.loadNewsletterHTML)}}
+              {{on "click" this.loadNewsletterHTML.perform}}
               role="menuitem"
             >
               {{t "show-newsletter"}}
@@ -143,7 +143,7 @@
 
             <AuButton
               @skin="link"
-              {{on "click" (perform this.downloadBelgaXML)}}
+              {{on "click" this.downloadBelgaXML.perform}}
               role="menuitem"
             >
               {{t "generate-xml"}}
@@ -156,7 +156,7 @@
                 data-test-newsletter-header-actions-delete-campaign
                 @skin="link"
                 @alert={{true}}
-                {{on "click" (perform this.deleteCampaign)}}
+                {{on "click" this.deleteCampaign.perform}}
                 role="menuitem"
                 @disabled={{this.deleteCampaign.isRunning}}
               >
@@ -188,7 +188,7 @@
 <ConfirmationModal
   @modalOpen={{this.showConfirmPublishMail}}
   @title={{t "send-newsitem-to-mail"}}
-  @onConfirm={{perform this.publishToMail}}
+  @onConfirm={{this.publishToMail.perform}}
   @onCancel={{this.cancelPublishMail}}
   @confirmMessage={{t "send-newsitem-to-mail"}}
   @loading={{this.publishToMail.isRunning}}
@@ -228,7 +228,7 @@
 <ConfirmationModal
   @modalOpen={{this.showConfirmPublishBelga}}
   @title={{t "send-newsitem-to-belga"}}
-  @onConfirm={{perform this.publishToBelga}}
+  @onConfirm={{this.publishToBelga.perform}}
   @onCancel={{this.cancelPublishBelga}}
   @confirmMessage={{t "send-newsitem-to-belga"}}
   @loading={{this.publishToBelga.isRunning}}
@@ -272,13 +272,13 @@
     @loading={{this.areCalculateTasksRunning}}
     @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishThemis}}
-    @onConfirm={{perform this.publishThemis}}
+    @onConfirm={{this.publishThemis.perform}}
   />
 {{/if}}
 {{#if this.showConfirmUnpublishThemis}}
   <ThemisPublications::UnpublishConfirmationModal
     @onCancel={{this.cancelUnpublishThemis}}
-    @onConfirm={{perform this.unpublishThemis}}
+    @onConfirm={{this.unpublishThemis.perform}}
   />
 {{/if}}
 {{#if this.showConfirmPublishAll}}
@@ -289,7 +289,7 @@
     @loading={{this.areCalculateTasksRunning}}
     @showConfidentialWarning={{this.hasConfidentialNewsletters}}
     @onCancel={{this.cancelPublishAll}}
-    @onConfirm={{perform this.publishToAll}}
+    @onConfirm={{this.publishToAll.perform}}
   />
 {{/if}}
 

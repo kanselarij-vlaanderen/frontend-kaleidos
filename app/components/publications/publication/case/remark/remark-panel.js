@@ -22,11 +22,10 @@ export default class PublicationsPublicationCaseRemarkPanelComponent extends Com
     this.isEditing = false;
   }
 
-  @task
-  *save() {
+  save = task(async () => {
     this.args.publicationFlow.remark = this.remark;
     // no try-catch: don't exit edit-mode if save didn't work
-    yield this.args.publicationFlow.save();
+    await this.args.publicationFlow.save();
     this.isEditing = false;
-  }
+  });
 }

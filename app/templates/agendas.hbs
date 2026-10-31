@@ -31,7 +31,7 @@
           value={{this.filterAgendas}}
           @width="block"
           @icon="search"
-          {{on "input" (perform this.debouncedSetFilter)}}
+          {{on "input" this.debouncedSetFilter.perform}}
           {{on "keydown" this.onEnterKeyFilter}}
         />
       </Group.Item>

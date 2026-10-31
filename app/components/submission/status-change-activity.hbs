@@ -1,12 +1,17 @@
 {{#if @isHeader}}
-  <strong>{{this.label}}</strong>
+  <span resource={{@activity.submission.uri}}>
+    <span property="http://mu.semte.ch/vocabularies/ext/submissions/statusVerandering">
+      <strong>{{this.label}}</strong>
+    </span>
+  </span>
 {{else}}
   <li
     data-test-submission-status-change-activity-item
+    resource={{@activity.submission.uri}}
     class="vlc-status-timeline__item vlc-status-timeline__item--neutral"
   >
     <div class="vlc-status-timeline__dot"></div>
-    <div class="vlc-status-timeline__text">
+    <div class="vlc-status-timeline__text" property="http://mu.semte.ch/vocabularies/ext/submissions/statusVerandering">
       {{this.label}}
     </div>
   </li>

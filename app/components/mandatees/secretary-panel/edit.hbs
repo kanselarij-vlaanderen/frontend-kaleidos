@@ -37,7 +37,7 @@
             @loading={{this.save.isRunning}}
             @loadingMessage={{t "loading"}}
             @disabled={{not this.secretary}}
-            {{on "click" (perform this.save)}}
+            {{on "click" this.save.perform}}
           >
             {{t "save"}}
           </AuButton>

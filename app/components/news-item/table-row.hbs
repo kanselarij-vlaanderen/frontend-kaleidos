@@ -57,7 +57,7 @@
         this.saveNewsItem.isRunning
         (not (user-may "manage-news-items"))
       }}
-      @onChange={{perform this.toggleInNewsletterFlag}}
+      @onChange={{this.toggleInNewsletterFlag.perform}}
     />
   </td>
   <td>
@@ -147,7 +147,7 @@
           @newsItem={{@newsItem}}
           @agendaitem={{@agendaitem}}
           @onCancel={{this.closeEditView}}
-          @onSave={{perform this.saveNewsItem}}
+          @onSave={{this.saveNewsItem.perform}}
         />
       </div>
     </td>

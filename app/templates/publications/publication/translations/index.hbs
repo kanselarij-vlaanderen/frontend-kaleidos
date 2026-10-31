@@ -48,7 +48,7 @@
               @title={{t "requested-translation"}}
               @requestActivity={{event.activity}}
               @isDisabledDelete={{event.activity.translationActivity.isFinished}}
-              @onDeleteRequest={{perform this.deleteRequest event.activity}}
+              @onDeleteRequest={{fn this.deleteRequest.perform event.activity}}
             />
           </Utils::Timeline::Event>
         {{else if event.isTranslationActivity}}
@@ -59,14 +59,12 @@
             <Publications::Publication::Translations::TranslationReceivedPanel
               @translationActivity={{event.activity}}
               @publicationFlow={{this.publicationFlow}}
-              @onEditTranslationActivity={{perform
-                this.editTranslationActivity
-              }}
+              @onEditTranslationActivity={{this.editTranslationActivity.perform}}
               @onDeletePiece={{if
                 event.canDeletePieces
-                (perform this.deleteReceivedPiece event)
+                (fn this.deleteReceivedPiece.perform event)
               }}
-              @onCreateProofRequest={{perform this.saveProofRequest}}
+              @onCreateProofRequest={{this.saveProofRequest.perform}}
             />
           </Utils::Timeline::Event>
         {{/if}}
@@ -81,14 +79,14 @@
   <Publications::Publication::Translations::TranslationRequestModal
     @dueDate={{this.translationSubcase.dueDate}}
     @publicationFlow={{this.publicationFlow}}
-    @onSave={{perform this.saveTranslationRequest}}
+    @onSave={{this.saveTranslationRequest.perform}}
     @onCancel={{this.closeTranslationRequestModal}}
   />
 {{/if}}
 
 {{#if this.showTranslationUploadModal}}
   <Publications::Publication::Translations::TranslationUploadModal
-    @onSave={{perform this.saveTranslationUpload}}
+    @onSave={{this.saveTranslationUpload.perform}}
     @onCancel={{this.closeTranslationUploadModal}}
   />
 {{/if}}

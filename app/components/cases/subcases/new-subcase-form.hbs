@@ -198,7 +198,7 @@
         data-test-new-subcase-form-cancel
         @skin="naked"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
-        {{on "click" (perform this.cancelForm)}}
+        {{on "click" this.cancelForm.perform}}
       >
         {{t "cancel"}}
       </AuButton>
@@ -206,7 +206,7 @@
         data-test-new-subcase-form-save
         @skin="primary"
         @disabled={{or this.createSubcase.isRunning this.isUploadingFiles}}
-        {{on "click" (perform this.openProposableAgendaModal)}}
+        {{on "click" this.openProposableAgendaModal.perform}}
       >
         {{t "new-subcase"}}
       </AuButton>
@@ -217,7 +217,7 @@
 {{#if this.showProposableAgendaModal}}
   <Cases::Subcases::ProposableAgendasModal
     @onCancel={{toggle "showProposableAgendaModal" this}}
-    @onConfirm={{perform this.createSubcase}}
+    @onConfirm={{this.createSubcase.perform}}
     @agendaItemType={{this.agendaItemType}}
     @showSaveWithoutAgenda={{true}}
   />

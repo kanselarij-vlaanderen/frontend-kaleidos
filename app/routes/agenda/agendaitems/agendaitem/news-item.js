@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { warn } from '@ember/debug';
 import CONSTANTS from 'frontend-kaleidos/config/constants';
 

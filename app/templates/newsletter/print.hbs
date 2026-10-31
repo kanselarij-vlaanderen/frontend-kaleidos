@@ -21,7 +21,7 @@
             @newsItem={{nota.newsItem}}
             @agendaitem={{nota.agendaitem}}
             @isDraftView={{this.showDraft}}
-            @onSave={{perform this.saveNewsItem nota.newsItem}}
+            @onSave={{fn this.saveNewsItem.perform nota.newsItem}}
           />
         </div>
       {{else}}
@@ -44,7 +44,7 @@
               @newsItem={{announcement.newsItem}}
               @agendaitem={{announcement.agendaitem}}
               @isDraftView={{this.showDraft}}
-              @onSave={{perform this.saveNewsItem announcement.newsItem}}
+              @onSave={{fn this.saveNewsItem.perform announcement.newsItem}}
             />
           </div>
         {{/each}}
