@@ -38,6 +38,7 @@ export default class AgendaitemControls extends Component {
   @tracked isSendingBackToSubmitter = false;
   @tracked sendBackToSubmitterComment;
   @tracked ongoingSubmissionId;
+  @tracked ongoingSubmissionIsConcept = false;
   @tracked canProposeForOtherAgendaWithSubmission = false;
   @tracked subcaseIsOnMultipleAgendas = false;
 
@@ -175,6 +176,7 @@ export default class AgendaitemControls extends Component {
       this.submissions = await this.args.subcase.submissions;
       const ongoingSubmission = await this.draftSubmissionService.getOngoingSubmissionForSubcase(this.args.subcase);
       this.ongoingSubmissionId = ongoingSubmission?.id;
+      this.ongoingSubmissionIsConcept = !!ongoingSubmission?.isConcept;
     }
   });
 
