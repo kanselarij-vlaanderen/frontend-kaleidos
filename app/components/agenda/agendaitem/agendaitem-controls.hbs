@@ -67,7 +67,7 @@
           @model={{this.ongoingSubmissionId}}
           role="menuitem"
         >
-          {{t "open-current-submission"}}
+          {{t (if this.ongoingSubmissionIsConcept "open-current-concept" "open-current-submission")}}
         </AuLink>
       {{/if}}
       {{#if (and (user-may "manage-agendaitems") this.isDesignAgenda)}}
