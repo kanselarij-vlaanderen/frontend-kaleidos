@@ -104,8 +104,8 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
     let publicationFlowHasChanged = false;
 
     const _case = await publicationFlow.case;
+    const decisionActivity = await publicationFlow.decisionActivity;
     if (this.case.id != _case.id) {
-      const decisionActivity = await publicationFlow.decisionActivity;
       const agendaitem = await this.store.queryOne('agendaitem', {
         'filter[treatment][decision-activity][:id:]': decisionActivity.id
       });
@@ -132,6 +132,14 @@ export default class PublicationsBatchDocumentsPublicationModalComponent extends
         );
         return;
       }
+    } else if (
+      this.decisionActivity &&
+      decisionActivity?.id !== this.decisionActivity.id &&
+      (!decisionActivity?.startDate ||
+        this.decisionActivity.startDate > decisionActivity.startDate)
+    ) {
+      publicationFlow.decisionActivity = this.decisionActivity;
+      publicationFlowHasChanged = true;
     }
 
     const regulationType = await publicationFlow.regulationType;
