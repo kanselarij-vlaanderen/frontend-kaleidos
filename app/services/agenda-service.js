@@ -139,7 +139,7 @@ export default class AgendaService extends Service {
     formallyStatusUri = CONSTANTS.FORMALLY_OK_STATUSES.NOT_YET_FORMALLY_OK,
     privateComment = null,
     submission = null
-  ) {  
+  ) {
     const internalReview = await subcase.internalReview;
     if (!internalReview?.id) {
       await this.createInternalReview(subcase, null, privateComment);
