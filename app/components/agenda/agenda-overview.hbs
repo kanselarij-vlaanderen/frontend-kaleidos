@@ -154,7 +154,7 @@
               @onMove={{this.move}}
               @isFirst={{eq indexItems 0}}
               @isLast={{not (has-next announcement this.announcements)}}
-              @agendaitemIndex={{add indexItems 1}}
+              @agendaitemIndex={{announcement.number}}
             />
           </li>
         {{/each}}
