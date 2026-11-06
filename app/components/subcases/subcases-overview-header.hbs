@@ -158,7 +158,13 @@
                 @route="cases.submissions.submission"
                 @model={{this.currentSubmission.id}}
               >
-                {{t "open-current-submission"}}
+                {{t
+                  (if
+                    this.currentSubmission.isConcept
+                    "open-current-concept"
+                    "open-current-submission"
+                  )
+                }}
               </AuLink>
             </Auk::Toolbar::Item>
           {{/if}}
