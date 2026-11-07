@@ -7,7 +7,7 @@ module.exports = defineConfig({
   defaultCommandTimeout: 60000,
   requestTimeout: 60000,
   env: {
-    KALEIDOS_PROJECT: '../kaleidos-project',
+    KALEIDOS_PROJECT: '../app-kaleidos',
     CI: false,
   },
   viewportHeight: 720,
