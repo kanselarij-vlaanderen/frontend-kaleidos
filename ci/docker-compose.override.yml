@@ -27,9 +27,6 @@ services:
   login:
     entrypoint: "echo 'service disabled'"
     restart: "no"
-  database-healthcheck:
-    entrypoint: "echo 'service disabled'"
-    restart: "no"
   newsletter:
     entrypoint: "echo 'service disabled'"
     restart: "no"
