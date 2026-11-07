@@ -1,6 +1,15 @@
 include .env.cypress
 export $(shell sed 's/=.*//' .env.cypress)
 
+TESTDATA_RELEASE_URL := https://github.com/kanselarij-vlaanderen/app-kaleidos/releases/download/testdata-v1.0.0
+TESTDATA_ZIPS := testdata.zip testdata-elasticsearch.zip
+
+fetch-testdata: $(addprefix ${PROJECT_PATH}/,${TESTDATA_ZIPS})
+
+${PROJECT_PATH}/%.zip:
+	- mkdir -p $(dir $@)
+	- curl -fsSL -o "$@" ${TESTDATA_RELEASE_URL}/$(notdir $@)
+
 reset-cache-resource-only:
 	- docker-compose ${COMPOSE_FILE} kill cache resource cache-warmup forever-cache
 	- docker-compose ${COMPOSE_FILE} up -d cache resource forever-cache
@@ -8,7 +17,7 @@ reset-cache-resource-only:
 	- docker-compose ${COMPOSE_FILE} up -d cache-warmup
 	- sleep 5
 
-reset-cache:
+reset-cache: fetch-testdata
 	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore file cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync minutes-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata/db && rm -rf ${PROJECT_PATH}/testdata/files
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
@@ -17,7 +26,7 @@ reset-cache:
 	- docker-compose ${COMPOSE_FILE} up -d
 	- sleep 5
 
-reset-elastic-and-cache:
+reset-elastic-and-cache: fetch-testdata
 	- docker-compose ${COMPOSE_FILE} kill yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync minutes-report-generation
 	- docker-compose ${COMPOSE_FILE} rm -f yggdrasil triplestore elasticsearch search file file-bundling docx-conversion forever-cache cache resource migrations cache-warmup publication-report decision-report-generation vlaams-parlement-sync minutes-report-generation
 	- rm -rf ${PROJECT_PATH}/testdata
@@ -84,7 +93,7 @@ drc-restart-service:
 drc:
 	- docker-compose ${COMPOSE_FILE} ${args}
 
-new-zip-run-migrations:
+new-zip-run-migrations: fetch-testdata
 # start with a clean DB (no tests run yet / reset before test)
 # optional, make a backup of current zips (or discard changes if final zips are wrong)
 	- make drc-kill
