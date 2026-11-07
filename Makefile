@@ -1,8 +1,8 @@
 include .env.cypress
 export $(shell sed 's/=.*//' .env.cypress)
 
-TESTDATA_RELEASE_URL := https://github.com/kanselarij-vlaanderen/app-kaleidos/releases/download/testdata-v1.0.0
-TESTDATA_ZIPS := testdata.zip testdata-elasticsearch.zip
+TESTDATA_RELEASE_URL := https://github.com/kanselarij-vlaanderen/app-kaleidos/releases/download/testdata-v1.1.0
+TESTDATA_ZIPS := testdata.zip
 
 fetch-testdata: $(addprefix ${PROJECT_PATH}/,${TESTDATA_ZIPS})
 
@@ -32,9 +32,6 @@ reset-elastic-and-cache: fetch-testdata
 	- rm -rf ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
-	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
-	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
-	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- docker-compose ${COMPOSE_FILE} up -d triplestore database migrations cache forever-cache
 	-	sleep 20
 	- docker-compose ${COMPOSE_FILE} up -d
@@ -100,9 +97,6 @@ new-zip-run-migrations: fetch-testdata
 	- rm -rf ${PROJECT_PATH}/testdata
 	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- unzip -o ${PROJECT_PATH}/testdata.zip -d ${PROJECT_PATH}
-	- unzip -o ${PROJECT_PATH}/testdata-elasticsearch.zip -d ${PROJECT_PATH}
-	- mv ${PROJECT_PATH}/testdata-elasticsearch/* ${PROJECT_PATH}/testdata
-	- rm -rf ${PROJECT_PATH}/testdata-elasticsearch
 	- docker-compose ${COMPOSE_FILE} up -d triplestore migrations && docker-compose ${COMPOSE_FILE} logs -f migrations
 # instead of backup up the zips you could rename the current ones after this step
 # wait till migrations are done
@@ -125,12 +119,9 @@ new-zip-run-reindex:
 	- docker-compose ${COMPOSE_FILE} logs -f search
 # wait for search reindex to complete
 # testdata folder should now contain new index and new database.
-# put the elasticsearch folder in a folder named "testdata-elasticsearch" and zip it
-# keep the other folders in the testdata folder and zip the "testdata" folder.
-# these 2 should be the new zips
+# zip the "testdata" folder with subfolders "db", "files", "tika" and "elasticsearch".
+# this should be the new zip
 # run make reset-elastic-and-cache and verify
-# testdata.zip contains folder named "testdata" with subfolders "db", "files", "tika"
-# testdata-elasticsearch.zip contains folder named "testdata-elasticsearch" with subfolder "elasticsearch"
 
 
 new-database-move-dump:
