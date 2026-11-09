@@ -29,6 +29,8 @@ pipeline {
           sh "docker compose build"
 
           // Reset the contents of DB an search
+          sh "curl -fsSL -O https://github.com/kanselarij-vlaanderen/app-kaleidos/releases/download/testdata-v1.0.0/testdata.zip"
+          sh "curl -fsSL -O https://github.com/kanselarij-vlaanderen/app-kaleidos/releases/download/testdata-v1.0.0/testdata-elasticsearch.zip"
           sh "unzip -o testdata.zip"
           sh "unzip -o testdata-elasticsearch.zip"
           sh "mv testdata-elasticsearch/* ./testdata"

@@ -28,7 +28,7 @@ There are multiple make commands ready for you.
 Check the file `Makefile` for specifics.
 
 ### Auto test Requirements
-To make these tests work you will need checkout of the [project](https://github.com/kanselarij-vlaanderen/kaleidos-project) next to the frontend folder.
+To make these tests work you will need checkout of the [project](https://github.com/kanselarij-vlaanderen/app-kaleidos) next to the frontend folder.
 There you will need some customsations in your docker-compose.override.yml
 
 ```
