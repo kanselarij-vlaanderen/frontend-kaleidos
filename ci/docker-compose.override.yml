@@ -19,6 +19,9 @@ services:
       nofile:
         soft: 65536
         hard: 65536
+  database-healthcheck:
+    entrypoint: "echo 'service disabled'"
+    restart: "no"
   mocklogin:
     ulimits:
       nofile:
@@ -53,7 +56,7 @@ services:
       ENABLE_LARGE_AGENDAS_CACHE: "false"
       ENABLE_CONCEPTS_CACHE: "true"
   staatsblad-uuid-generation:
-    image: lblod/sink-service:1.0.0
+    image: lblod/sink-service:1.1.0
     restart: "no"
   staatsblad-import:
     entrypoint: "echo 'service disabled'"
@@ -62,10 +65,10 @@ services:
     entrypoint: "echo 'service disabled'"
     restart: "no"
   staatsblad-linking:
-    image: lblod/sink-service:1.0.0
+    image: lblod/sink-service:1.1.0
     restart: "no"
   delta-producer:
-    image: lblod/sink-service:1.0.0
+    image: lblod/sink-service:1.1.0
     restart: "no"
   lod-sbmb:
     entrypoint: "echo 'service disabled'"
